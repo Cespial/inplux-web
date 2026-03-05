@@ -1,27 +1,38 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+});
+
+const goodly = localFont({
+  src: [
+    { path: "../../public/fonts/Goodly-Light.woff", weight: "300", style: "normal" },
+    { path: "../../public/fonts/Goodly-Regular.woff", weight: "400", style: "normal" },
+    { path: "../../public/fonts/Goodly-Medium.woff", weight: "500", style: "normal" },
+    { path: "../../public/fonts/Goodly-Semibold.woff", weight: "600", style: "normal" },
+    { path: "../../public/fonts/Goodly-Bold.woff", weight: "700", style: "normal" },
+  ],
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = {
-  title: "INPLUX HUB // Ecosistema Tecnologico",
+  title: "Inplux | Consultoría Estratégica & Transformación Digital",
   description:
-    "Hub tecnologico que integra empresas de TI líderes. Innovacion, desarrollo de software, inteligencia artificial y transformacion digital bajo un mismo ecosistema.",
+    "Somos el socio estratégico que convierte desafíos complejos en resultados medibles. Consultoría financiera, transformación digital y optimización organizacional con más de 25 años de experiencia.",
   keywords: [
-    "hub tecnologico",
-    "empresas TI",
-    "desarrollo de software",
-    "inteligencia artificial",
-    "transformacion digital",
+    "consultoría estratégica",
+    "transformación digital",
+    "gestión financiera",
+    "sector público",
     "Colombia",
-    "Medellin",
+    "Medellín",
     "Inplux",
-    "ecosistema tech",
+    "consultoría empresarial",
   ],
 };
 
@@ -32,10 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body
-        className={`${inter.variable} antialiased`}
-        style={{ fontFamily: "var(--font-inter), 'Inter', system-ui, sans-serif" }}
-      >
+      <body className={`${dmSans.variable} ${goodly.variable} antialiased`}>
         {children}
       </body>
     </html>
