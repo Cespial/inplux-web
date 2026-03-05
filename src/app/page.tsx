@@ -135,23 +135,23 @@ function SvgComms() {
    ═══════════════════════════════════════ */
 const SERVICES = [
   { title: "Consultoría Estratégica y Financiera", desc: "Estructuramos la inteligencia financiera de su organización para convertirla en el motor de las decisiones estratégicas y el crecimiento sostenible.", features: ["Gestión financiera, contable y tributaria", "Planificación estratégica y del desarrollo", "Optimización fiscal y cobro de cartera"], svg: <SvgFinance /> },
-  { title: "Soluciones de Transformación Digital", desc: "Diseñamos y construimos los ecosistemas digitales que su organización necesita para operar con mayor eficiencia y generar ventajas competitivas.", features: ["Productos digitales y ecosistemas", "Infraestructura cloud y plataformas ERP", "Inteligencia de negocios, IA e IoT"], svg: <SvgDigital /> },
+  { title: "Soluciones de Transformación Digital", desc: "Diseñamos y construimos los ecosistemas digitales que su organización necesita para operar con mayor eficiencia y generar ventajas competitivas.", features: ["Plataformas de IA e inteligencia tributaria", "Infraestructura cloud y plataformas ERP", "Inteligencia de negocios, automatización e IoT"], svg: <SvgDigital /> },
   { title: "Optimización Organizacional", desc: "La estrategia solo genera valor a través de una ejecución impecable. Alineamos procesos, equipos y proyectos para resultados extraordinarios.", features: ["Gerencia de proyectos de alto impacto", "Auditoría e interventoría técnica", "Modernización y talento humano"], svg: <SvgOrg /> },
   { title: "Gestión Institucional y Comunicaciones", desc: "Construimos la narrativa y los canales para fortalecer la reputación y la confianza en su organización.", features: ["Modelos de gestión y gobernanza", "Comunicación estratégica", "Eventos y foros sectoriales"], svg: <SvgComms /> },
 ];
 
 const TIMELINE_EVENTS = [
-  { year: "2000", text: "Asesoría contable al Hospital San Camilo de Lelis y al Municipio de Vegachí." },
+  { year: "2000", text: "Inicio de asesoría contable al Hospital San Camilo de Lelis y al Municipio de Vegachí." },
   { year: "2002", text: "Expansión al Hospital San Vicente de Paúl de Pueblo Rico." },
   { year: "2004", text: "Reorganización financiera del Municipio de Segovia — primer gran hito." },
   { year: "2007", text: "Constitución de la ESP de Vegachí. Servicios a Yarumal, Valdivia, Yolombó, Andes." },
-  { year: "2010", text: "Asesor tributario de Sistemas Aries — alianza que continúa hoy." },
+  { year: "2010", text: "Asesor tributario de Sistemas Aries — alianza estratégica que continúa hoy." },
   { year: "2014", text: "Estructuración contable de 5 asociaciones de municipios para el Ministerio del Interior." },
   { year: "2016", text: "Reestructuración de pasivos (Ley 550) del Municipio de Cisneros — proyecto de 7 años." },
   { year: "2019", text: "Coordinación de 44 estatutos tributarios para la Gobernación de Antioquia." },
   { year: "2021", text: "Asesoría al Municipio de Caucasia, una de las entidades de mayor complejidad." },
-  { year: "2023", text: "Transformación a INPLUX S.A.S. Integración de consultoría con transformación digital." },
-  { year: "2025", text: "Lanzamiento de Tribai.co — plataforma de inteligencia tributaria con IA." },
+  { year: "2023", text: "Nace INPLUX S.A.S. como hub que integra consultoría, tecnología e inteligencia artificial." },
+  { year: "2025", text: "Lanzamiento de Tribai.co — plataforma de inteligencia tributaria con IA. Desarrollo de soluciones para el sector público." },
 ];
 
 const LOGOS = [
@@ -161,12 +161,13 @@ const LOGOS = [
   { src: "/logos/CIS.png", alt: "CIS" },
   { src: "/logos/Escudo.png", alt: "Escudo" },
   { src: "/logos/cropped-Logo_Alianza-IT-1.png", alt: "Alianza IT" },
-  { src: "/logos/logo-negro.png", alt: "Rotorr" },
   { src: "/logos/logo-think-oracle.png", alt: "Think Oracle" },
+  { src: "/logos/logo-provincia-b.svg", alt: "Provincia" },
   { src: "/logos/logo.png", alt: "Sistemas Aries" },
   { src: "/logos/logo_300.png", alt: "Prodepaz" },
   { src: "/logos/logoedu.png", alt: "EDU" },
   { src: "/logos/navarro-ospina-logo.png", alt: "Navarro Ospina" },
+  { src: "/logos/Think_It_Logo_Blanco.png", alt: "Think IT" },
 ];
 
 const HUB_COMPANIES = [
@@ -174,16 +175,22 @@ const HUB_COMPANIES = [
     name: "Tribai",
     domain: "tribai.co",
     focus: "Sector Privado",
-    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes.",
+    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes. Declaraciones de renta sugeridas y herramientas de consulta automatizada.",
     status: "Activo",
   },
   {
     name: "Sector Público",
     domain: "Próximamente",
     focus: "Sector Público",
-    desc: "Plataforma especializada en gestión financiera y tributaria para entidades del sector público. Herramientas de cumplimiento normativo, reportes y automatización.",
+    desc: "Plataforma de rendición de cuentas y gemelo digital para municipios. Integra datos de múltiples fuentes (DNP, ministerios, organismos de control) en un tablero centralizado. Automatiza reportes a la Contraloría, Contaduría y entidades CIAS.",
     status: "En desarrollo",
   },
+];
+
+const ECOSYSTEM = [
+  { name: "Think IT", role: "Ingeniería de software y consultoría tecnológica" },
+  { name: "Big Bang Data", role: "Analítica de datos y soluciones de información" },
+  { name: "Alianza IT", role: "Integración tecnológica y servicios TI" },
 ];
 
 /* ═══════════════════════════════════════
@@ -204,7 +211,7 @@ export default function Home() {
 
   const navLinks = [
     { label: "Servicios", href: "#servicios" },
-    { label: "Empresas", href: "#empresas" },
+    { label: "Ecosistema", href: "#empresas" },
     { label: "Trayectoria", href: "#trayectoria" },
     { label: "Nosotros", href: "#nosotros" },
     { label: "Contacto", href: "#contacto" },
@@ -245,15 +252,16 @@ export default function Home() {
       {/* ──── HERO ──── */}
       <section id="inicio" className="relative pt-[60px]">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8 py-24 md:py-36">
-          <div className="max-w-[680px]">
-            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría & tecnología</p>
+          <div className="max-w-[720px]">
+            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría, tecnología e inteligencia artificial</p>
             <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
               Convertimos complejidad en{" "}
               <em className="font-serif italic text-teal">resultados</em>
             </h1>
-            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[560px]">
+            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
               Más de 25 años integrando inteligencia financiera, consultoría tributaria y
               transformación digital para organizaciones públicas y privadas en Colombia.
+              Expertos en inteligencia artificial aplicada al sector tributario y de gobierno.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
               <a href="#servicios" className="btn-dark text-center">Explorar servicios</a>
@@ -303,7 +311,7 @@ export default function Home() {
               No ofrecemos servicios.<br /><em className="italic">Construimos capacidades.</em>
             </h2>
             <p className="text-gray-500 text-base md:text-lg max-w-lg leading-relaxed">
-              Integramos inteligencia financiera y poder tecnológico para diseñar, acelerar y escalar el futuro de su organización.
+              Integramos inteligencia financiera, poder tecnológico e inteligencia artificial para diseñar, acelerar y escalar el futuro de su organización.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-5 stagger">
@@ -326,19 +334,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──── HUB COMPANIES ──── */}
+      {/* ──── HUB / ECOSYSTEM ──── */}
       <section id="empresas" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Nuestras empresas</p>
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema Inplux</p>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
-              Un hub, dos <em className="italic">plataformas</em> especializadas.
+              Un hub de empresas de <em className="italic">tecnología y tributaria</em>
             </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-lg leading-relaxed">
-              Inplux integra empresas especializadas en tecnología e inteligencia tributaria bajo un mismo ecosistema.
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Inplux es la sombrilla que coordina un grupo de profesionales y empresas especializadas
+              en TI, inteligencia artificial y consultoría tributaria. Nuestras plataformas insignia
+              atienden al sector privado y público con soluciones a la medida.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-5 stagger">
+
+          {/* Flagship Platforms */}
+          <div className="grid md:grid-cols-2 gap-5 stagger mb-10">
             {HUB_COMPANIES.map((c) => (
               <div key={c.name} className="reveal card">
                 <div className="flex items-center justify-between mb-5">
@@ -357,6 +369,19 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          {/* Ecosystem Companies */}
+          <div className="reveal">
+            <p className="text-gray-400 text-[0.6875rem] font-bold tracking-[0.12em] uppercase mb-4">Empresas aliadas del ecosistema</p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {ECOSYSTEM.map((e) => (
+                <div key={e.name} className="border border-border rounded-xl p-5 transition-all duration-300 hover:shadow-sm hover:border-gray-200">
+                  <h4 className="text-ink font-semibold text-[0.9375rem] mb-1">{e.name}</h4>
+                  <p className="text-gray-500 text-[0.8125rem] leading-relaxed">{e.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -373,7 +398,7 @@ export default function Home() {
         </div>
         <div className="reveal timeline-scroll" ref={timelineRef}>
           <div className="timeline-track px-5 md:px-8 pb-4">
-            {TIMELINE_EVENTS.map((ev, i) => (
+            {TIMELINE_EVENTS.map((ev) => (
               <div key={ev.year} className="timeline-segment">
                 <div className="timeline-line" />
                 <div className="timeline-node" />
@@ -397,18 +422,23 @@ export default function Home() {
                 Socios estratégicos que construyen <em className="italic">legados</em>
               </h2>
               <p className="text-gray-600 text-base md:text-lg leading-[1.65] mb-5">
-                Somos <strong className="text-ink font-semibold">INPLUX S.A.S.</strong>, un hub que integra consultoría financiera,
-                inteligencia tributaria y transformación digital. Ayudamos a organizaciones
-                líderes — públicas, mixtas y privadas — a resolver desafíos complejos.
+                Somos <strong className="text-ink font-semibold">INPLUX S.A.S.</strong>, un hub que coordina un grupo de profesionales
+                con experiencia en consultoría financiera, inteligencia tributaria, transformación digital e inteligencia artificial.
+                Ayudamos a organizaciones líderes — públicas, mixtas y privadas — a resolver desafíos complejos.
+              </p>
+              <p className="text-gray-500 text-[0.9375rem] leading-[1.65] mb-5">
+                Nuestro recorrido abarca asesorías a más de 50 municipios, empresas de tecnología,
+                firmas de auditoría financiera multinacional y entidades del sector salud, educativo
+                y de servicios públicos. Combinamos ese recorrido con capacidades de frontera
+                en inteligencia artificial y desarrollo de software.
               </p>
               <p className="text-gray-500 text-[0.9375rem] leading-[1.65] mb-8">
-                Nuestro propósito es apoyar la gestión administrativa, técnica, financiera,
-                contable y jurídica de nuestros clientes. No solo optimizamos el presente;
-                diseñamos e implementamos soluciones innovadoras que aseguran relevancia
-                y competitividad en el futuro.
+                Hoy operamos como la sombrilla que conecta plataformas como Tribai.co, empresas
+                aliadas como Think IT, Big Bang Data y Alianza IT, y un equipo profesional, ético y transparente
+                dedicado a entregar productos — no horas — de la más alta calidad.
               </p>
               <div className="flex flex-wrap gap-2.5">
-                {["Medellín, Colombia", "+25 años", "Sector público & privado"].map((t) => (
+                {["Medellín, Colombia", "+25 años", "Sector público & privado", "Expertos en IA"].map((t) => (
                   <span key={t} className="text-[0.8125rem] font-medium text-gray-600 border border-border rounded-full px-4 py-1.5">{t}</span>
                 ))}
               </div>
@@ -417,7 +447,7 @@ export default function Home() {
               {[
                 { label: "Misión", text: "Acompañar a nuestros clientes en el logro de sus metas institucionales y empresariales, integrando servicios de consultoría de alta calidad con soluciones tecnológicas innovadoras que generan un impacto medible y sostenible." },
                 { label: "Visión", text: "Ser el socio estratégico referente en Colombia por la entrega de soluciones integrales que, a través de la estrategia y la tecnología, potencien la gestión y competitividad de las organizaciones." },
-                { label: "Compromiso", text: "Entregar servicios de la más alta calidad, apoyados en un equipo profesional, ético y transparente. Actuamos con eficacia, eficiencia y un profundo respeto hacia nuestros clientes." },
+                { label: "Compromiso", text: "Entregar servicios de la más alta calidad, apoyados en un equipo profesional, ético y transparente. Actuamos con eficacia, eficiencia y un profundo respeto hacia nuestros clientes. Trabajamos por productos, no por horas." },
               ].map((c) => (
                 <div key={c.label} className="reveal border border-border rounded-xl p-5 transition-all duration-300 hover:shadow-sm hover:border-gray-200">
                   <h3 className="text-ink text-[0.8125rem] font-bold tracking-[0.08em] uppercase mb-2">{c.label}</h3>
@@ -491,7 +521,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
               <span className="text-ink font-bold text-[0.9rem] tracking-[0.12em] uppercase block mb-3">INPLUX</span>
-              <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría estratégica y tecnología. Medellín, Colombia.</p>
+              <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría, tecnología e inteligencia artificial. Medellín, Colombia.</p>
             </div>
             <div>
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Navegación</h4>
@@ -502,10 +532,13 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Empresas</h4>
+              <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Ecosistema</h4>
               <ul className="space-y-2">
                 <li><a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Tribai.co</a></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Sector Público (pronto)</span></li>
+                <li><span className="text-gray-400 text-[0.8125rem]">Think IT</span></li>
+                <li><span className="text-gray-400 text-[0.8125rem]">Big Bang Data</span></li>
+                <li><span className="text-gray-400 text-[0.8125rem]">Alianza IT</span></li>
               </ul>
             </div>
             <div>
