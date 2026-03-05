@@ -1,143 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
-/* ════════════════════════════════════════════
-   DATA
-   ════════════════════════════════════════════ */
-
-const SERVICES = [
-  {
-    number: "01",
-    title: "Consultoría Estratégica y Financiera",
-    description:
-      "Estructuramos la inteligencia financiera de su organización para convertirla en el motor de las decisiones estratégicas y el crecimiento sostenible.",
-    features: [
-      "Gestión financiera, contable y tributaria",
-      "Planificación estratégica y del desarrollo",
-      "Optimización fiscal y cobro de cartera",
-    ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7">
-        <path d="M3 3v18h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M7 16l4-6 4 4 6-8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    number: "02",
-    title: "Soluciones de Transformación Digital",
-    description:
-      "Diseñamos y construimos los productos y ecosistemas digitales que su organización necesita para operar con mayor eficiencia y generar ventajas competitivas.",
-    features: [
-      "Desarrollo de productos y ecosistemas digitales",
-      "Infraestructura cloud y plataformas ERP",
-      "Inteligencia de negocios, IA e IoT",
-    ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7">
-        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-  },
-  {
-    number: "03",
-    title: "Optimización Organizacional y de Proyectos",
-    description:
-      "La estrategia solo genera valor a través de una ejecución impecable. Alineamos sus procesos, equipos y proyectos para garantizar resultados extraordinarios.",
-    features: [
-      "Gerencia de proyectos de alto impacto",
-      "Auditoría e interventoría técnica y financiera",
-      "Modernización y desarrollo del talento humano",
-    ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7">
-        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    number: "04",
-    title: "Gestión Institucional y Comunicaciones",
-    description:
-      "La buena gestión solo genera valor cuando se comunica de forma estratégica. Construimos la narrativa y los canales para fortalecer la reputación y la confianza.",
-    features: [
-      "Modelos de gestión y gobernanza (MIPG)",
-      "Comunicación estratégica y relacionamiento",
-      "Producción de eventos y foros sectoriales",
-    ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7">
-        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M4 22v-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-];
-
-const STATS = [
-  { value: "+25", label: "Años de experiencia", suffix: "" },
-  { value: "+50", label: "Municipios atendidos", suffix: "" },
-  { value: "+100", label: "Proyectos ejecutados", suffix: "" },
-  { value: "6", label: "Sectores de impacto", suffix: "" },
-];
-
-const SECTORS = [
-  "Innovación y Tecnología",
-  "Sector Público y Gobierno",
-  "Sector Educativo y Mixto",
-  "Sector Salud",
-  "Servicios Públicos",
-  "Sector Privado",
-];
-
-const CLIENT_LOGOS = [
-  { src: "/logos/21053_escudo-vegachi-pagina_200x200.png", alt: "Municipio de Vegachí" },
-  { src: "/logos/47914_logo-alcaldia--300-x-100-1_200x200.png", alt: "Alcaldía" },
-  { src: "/logos/54672_escudo-de-cisneros-antioquia-oficial-3x3_200x200.png", alt: "Municipio de Cisneros" },
-  { src: "/logos/CIS.png", alt: "CIS" },
-  { src: "/logos/Escudo.png", alt: "Escudo Municipal" },
-  { src: "/logos/Parque_Arví_Logo_Blanco.png", alt: "Parque Arví" },
-  { src: "/logos/Think_It_Logo_Blanco.png", alt: "Think It" },
-  { src: "/logos/cropped-Logo_Alianza-IT-1.png", alt: "Alianza IT" },
-  { src: "/logos/logo (1).png", alt: "Cliente" },
-  { src: "/logos/logo-negro.png", alt: "Rotorr" },
-  { src: "/logos/logo-provincia-b.svg", alt: "Provincia" },
-  { src: "/logos/logo-think-oracle.png", alt: "Think Oracle" },
-  { src: "/logos/logo.jpg", alt: "Cliente" },
-  { src: "/logos/logo.png", alt: "Sistemas Aries" },
-  { src: "/logos/logo_300.png", alt: "Prodepaz" },
-  { src: "/logos/logoedu.png", alt: "EDU" },
-  { src: "/logos/navarro-ospina-logo.png", alt: "Navarro Ospina" },
-];
-
-const PHILOSOPHY = [
-  {
-    title: "Misión",
-    text: "Acompañar a nuestros clientes en el logro de sus metas institucionales y empresariales, integrando servicios de consultoría de alta calidad con soluciones tecnológicas innovadoras que generan un impacto medible y sostenible.",
-    accent: "var(--teal)",
-  },
-  {
-    title: "Visión",
-    text: "Ser el socio estratégico referente en Colombia por la entrega de soluciones integrales que, a través de la estrategia y la tecnología, potencien la gestión y competitividad de las organizaciones.",
-    accent: "var(--lime)",
-  },
-  {
-    title: "Compromiso",
-    text: "Entregar servicios de la más alta calidad, apoyados en un equipo profesional, ético y transparente. Actuamos con eficacia, eficiencia y un profundo respeto hacia nuestros clientes.",
-    accent: "var(--teal-light)",
-  },
-];
-
-/* ════════════════════════════════════════════
-   HOOKS
-   ════════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   SCROLL REVEAL HOOK
+   ═══════════════════════════════════════ */
 function useScrollReveal() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -146,29 +14,193 @@ function useScrollReveal() {
           if (e.isIntersecting) e.target.classList.add("visible");
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
-    document.querySelectorAll(".reveal, .reveal-left").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".reveal,.reveal-left,.draw-on-scroll,.stat-animate").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
 
-/* ════════════════════════════════════════════
-   INPLUX LOGO SVG
-   ════════════════════════════════════════════ */
-function InpluxLogo({ className = "h-8" }: { className?: string }) {
+/* ═══════════════════════════════════════
+   ANIMATED COUNTER
+   ═══════════════════════════════════════ */
+function AnimatedStat({ value, label }: { value: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [display, setDisplay] = useState("0");
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          const num = parseInt(value.replace(/[^0-9]/g, ""));
+          const prefix = value.startsWith("+") ? "+" : "";
+          const duration = 1200;
+          const start = performance.now();
+          const step = (now: number) => {
+            const t = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - t, 3);
+            setDisplay(prefix + Math.round(num * ease).toString());
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value]);
+
   return (
-    <span className={`font-display font-bold text-xl tracking-tight ${className}`}>
-      <span className="text-teal">in</span>
-      <span className="text-lime">p</span>
-      <span className="text-text-white">lux</span>
-    </span>
+    <div ref={ref} className="stat-animate">
+      <div className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-0.03em] text-gray-950 mb-2">
+        {display}
+      </div>
+      <div className="text-gray-500 text-sm md:text-base font-medium">{label}</div>
+    </div>
   );
 }
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════
+   SVG ILLUSTRATIONS — hand-crafted style
+   ═══════════════════════════════════════ */
+function IllustrationFinance({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className={className}>
+      <rect x="10" y="70" width="16" height="40" rx="2" fill="#e5e5e5" />
+      <rect x="34" y="50" width="16" height="60" rx="2" fill="#d4d4d4" />
+      <rect x="58" y="30" width="16" height="80" rx="2" fill="#b0b0b0" />
+      <rect x="82" y="15" width="16" height="95" rx="2" fill="#171717" />
+      <path d="M18 68L42 48L66 28L90 13" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="18" cy="68" r="3.5" fill="#0d9488" />
+      <circle cx="42" cy="48" r="3.5" fill="#0d9488" />
+      <circle cx="66" cy="28" r="3.5" fill="#0d9488" />
+      <circle cx="90" cy="13" r="3.5" fill="#0d9488" />
+    </svg>
+  );
+}
+
+function IllustrationDigital({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className={className}>
+      <rect x="8" y="16" width="104" height="72" rx="6" stroke="#171717" strokeWidth="2" />
+      <rect x="8" y="16" width="104" height="12" rx="6" fill="#f5f5f5" />
+      <circle cx="18" cy="22" r="2.5" fill="#e5e5e5" />
+      <circle cx="26" cy="22" r="2.5" fill="#e5e5e5" />
+      <circle cx="34" cy="22" r="2.5" fill="#e5e5e5" />
+      <rect x="20" y="38" width="36" height="3" rx="1.5" fill="#d4d4d4" />
+      <rect x="20" y="46" width="28" height="3" rx="1.5" fill="#e5e5e5" />
+      <rect x="20" y="54" width="42" height="3" rx="1.5" fill="#d4d4d4" />
+      <rect x="20" y="62" width="20" height="3" rx="1.5" fill="#e5e5e5" />
+      <rect x="72" y="38" width="28" height="36" rx="4" fill="#0d9488" opacity="0.12" />
+      <path d="M80 50l6 6 10-12" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="40" y="96" width="40" height="8" rx="2" fill="#e5e5e5" />
+      <line x1="60" y1="88" x2="60" y2="96" stroke="#d4d4d4" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function IllustrationOrg({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className={className}>
+      <circle cx="60" cy="24" r="14" stroke="#171717" strokeWidth="2" />
+      <circle cx="60" cy="24" r="6" fill="#171717" />
+      <line x1="60" y1="38" x2="60" y2="58" stroke="#d4d4d4" strokeWidth="2" />
+      <line x1="60" y1="58" x2="28" y2="72" stroke="#d4d4d4" strokeWidth="2" />
+      <line x1="60" y1="58" x2="92" y2="72" stroke="#d4d4d4" strokeWidth="2" />
+      <circle cx="28" cy="80" r="12" stroke="#171717" strokeWidth="2" />
+      <circle cx="28" cy="80" r="5" fill="#0d9488" opacity="0.2" />
+      <circle cx="28" cy="80" r="2.5" fill="#0d9488" />
+      <circle cx="92" cy="80" r="12" stroke="#171717" strokeWidth="2" />
+      <circle cx="92" cy="80" r="5" fill="#0d9488" opacity="0.2" />
+      <circle cx="92" cy="80" r="2.5" fill="#0d9488" />
+      <line x1="28" y1="92" x2="28" y2="108" stroke="#d4d4d4" strokeWidth="2" />
+      <line x1="92" y1="92" x2="92" y2="108" stroke="#d4d4d4" strokeWidth="2" />
+      <rect x="16" y="108" width="24" height="6" rx="3" fill="#e5e5e5" />
+      <rect x="80" y="108" width="24" height="6" rx="3" fill="#e5e5e5" />
+    </svg>
+  );
+}
+
+function IllustrationComms({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className={className}>
+      <rect x="8" y="20" width="64" height="48" rx="8" stroke="#171717" strokeWidth="2" />
+      <rect x="18" y="32" width="32" height="3" rx="1.5" fill="#d4d4d4" />
+      <rect x="18" y="40" width="44" height="3" rx="1.5" fill="#e5e5e5" />
+      <rect x="18" y="48" width="24" height="3" rx="1.5" fill="#d4d4d4" />
+      <path d="M8 60l20 16V60H8z" fill="#171717" />
+      <rect x="52" y="52" width="56" height="40" rx="8" stroke="#0d9488" strokeWidth="2" />
+      <rect x="62" y="64" width="28" height="3" rx="1.5" fill="#0d9488" opacity="0.3" />
+      <rect x="62" y="72" width="36" height="3" rx="1.5" fill="#0d9488" opacity="0.2" />
+      <rect x="62" y="80" width="20" height="3" rx="1.5" fill="#0d9488" opacity="0.3" />
+      <circle cx="96" cy="16" r="10" fill="#0d9488" opacity="0.1" />
+      <path d="M92 16l3 3 5-6" stroke="#0d9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════ */
+const SERVICES = [
+  {
+    title: "Consultoría Estratégica y Financiera",
+    description: "Estructuramos la inteligencia financiera de su organización para convertirla en el motor de las decisiones estratégicas y el crecimiento sostenible.",
+    features: ["Gestión financiera, contable y tributaria", "Planificación estratégica y del desarrollo", "Optimización fiscal y cobro de cartera"],
+    illustration: <IllustrationFinance className="w-full h-32 md:h-36" />,
+  },
+  {
+    title: "Soluciones de Transformación Digital",
+    description: "Diseñamos y construimos los ecosistemas digitales que su organización necesita para operar con mayor eficiencia y generar ventajas competitivas.",
+    features: ["Desarrollo de productos y ecosistemas digitales", "Infraestructura cloud y plataformas ERP", "Inteligencia de negocios, IA e IoT"],
+    illustration: <IllustrationDigital className="w-full h-32 md:h-36" />,
+  },
+  {
+    title: "Optimización Organizacional y de Proyectos",
+    description: "La estrategia solo genera valor a través de una ejecución impecable. Alineamos sus procesos, equipos y proyectos para garantizar resultados extraordinarios.",
+    features: ["Gerencia de proyectos de alto impacto", "Auditoría e interventoría técnica y financiera", "Modernización y talento humano"],
+    illustration: <IllustrationOrg className="w-full h-32 md:h-36" />,
+  },
+  {
+    title: "Gestión Institucional y Comunicaciones",
+    description: "La buena gestión solo genera valor cuando se comunica de forma estratégica. Construimos la narrativa y los canales para fortalecer su reputación.",
+    features: ["Modelos de gestión y gobernanza (MIPG)", "Comunicación estratégica y relacionamiento", "Producción de eventos y foros sectoriales"],
+    illustration: <IllustrationComms className="w-full h-32 md:h-36" />,
+  },
+];
+
+const TIMELINE = [
+  { year: "2000", title: "Génesis", text: "Primeros contratos con el Hospital San Camilo de Lelis y el Municipio de Vegachí. Nace la visión de traducir complejidad en resultados." },
+  { year: "2004", title: "Punto de inflexión", text: "Reorganización financiera del Municipio de Segovia. El proyecto que nos posicionó como expertos en desafíos complejos." },
+  { year: "2014", title: "Escala nacional", text: "Estructuración contable de 5 asociaciones de municipios para el Ministerio del Interior. Arquitectura institucional a nivel regional." },
+  { year: "2019", title: "Liderazgo departamental", text: "Coordinación de 44 estatutos tributarios para la Gobernación de Antioquia con un equipo de 18 profesionales." },
+  { year: "2025", title: "Inplux S.A.S.", text: "Evolución hacia una firma que integra consultoría financiera con soluciones de transformación digital." },
+];
+
+const CLIENT_LOGOS = [
+  { src: "/logos/21053_escudo-vegachi-pagina_200x200.png", alt: "Municipio de Vegachí" },
+  { src: "/logos/47914_logo-alcaldia--300-x-100-1_200x200.png", alt: "Alcaldía" },
+  { src: "/logos/54672_escudo-de-cisneros-antioquia-oficial-3x3_200x200.png", alt: "Municipio de Cisneros" },
+  { src: "/logos/CIS.png", alt: "CIS" },
+  { src: "/logos/Escudo.png", alt: "Escudo Municipal" },
+  { src: "/logos/cropped-Logo_Alianza-IT-1.png", alt: "Alianza IT" },
+  { src: "/logos/logo (1).png", alt: "Cliente" },
+  { src: "/logos/logo-negro.png", alt: "Rotorr" },
+  { src: "/logos/logo-think-oracle.png", alt: "Think Oracle" },
+  { src: "/logos/logo.png", alt: "Sistemas Aries" },
+  { src: "/logos/logo_300.png", alt: "Prodepaz" },
+  { src: "/logos/logoedu.png", alt: "EDU" },
+  { src: "/logos/navarro-ospina-logo.png", alt: "Navarro Ospina" },
+];
+
+/* ═══════════════════════════════════════
    PAGE
-   ════════════════════════════════════════════ */
+   ═══════════════════════════════════════ */
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -183,118 +215,80 @@ export default function Home() {
 
   const navLinks = [
     { label: "Servicios", href: "#servicios" },
+    { label: "Trayectoria", href: "#trayectoria" },
     { label: "Nosotros", href: "#nosotros" },
-    { label: "Clientes", href: "#clientes" },
     { label: "Contacto", href: "#contacto" },
   ];
 
   return (
     <>
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          NAVIGATION
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 nav-blur transition-all duration-300 ${scrolled ? "scrolled" : ""}`}>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 flex items-center justify-between h-[68px]">
-          {/* Logo */}
-          <a href="#inicio" className="flex items-center gap-2">
-            <InpluxLogo />
+      {/* ──────── NAVIGATION ──────── */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 nav-wrap ${scrolled ? "scrolled" : ""}`}>
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8 flex items-center justify-between h-[64px]">
+          <a href="#inicio" className="font-display font-bold text-[1.3rem] tracking-tight text-gray-950">
+            inplux
           </a>
-
-          {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-text-muted hover:text-text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200"
-              >
-                {link.label}
+            {navLinks.map((l) => (
+              <a key={l.href} href={l.href} className="text-gray-500 hover:text-gray-900 text-[0.875rem] font-medium px-3.5 py-2 rounded-lg transition-colors">
+                {l.label}
               </a>
             ))}
           </div>
-
-          {/* CTA */}
           <div className="flex items-center gap-3">
-            <a href="#contacto" className="hidden md:inline-flex btn-teal text-sm !py-2.5 !px-6">
+            <a href="#contacto" className="hidden md:inline-flex btn-dark text-sm !py-2 !px-5">
               Hablemos
             </a>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-text-white p-2 cursor-pointer"
-              aria-label="Menú"
-            >
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-gray-900 p-2 cursor-pointer" aria-label="Menú">
               {mobileOpen ? (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
               ) : (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
               )}
             </button>
           </div>
         </div>
-
-        {/* Mobile menu */}
         <div className={`md:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"}`}>
-          <div className="px-5 py-4 border-t border-border-subtle space-y-1" style={{ background: "rgba(6, 13, 27, 0.95)" }}>
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="block text-text-muted hover:text-text-white text-sm font-medium py-2.5 px-3 rounded-lg transition-colors"
-              >
-                {link.label}
+          <div className="px-5 py-3 border-t border-border bg-white space-y-1">
+            {navLinks.map((l) => (
+              <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="block text-gray-600 hover:text-gray-900 text-sm font-medium py-2.5 px-3 rounded-lg transition-colors">
+                {l.label}
               </a>
             ))}
-            <a href="#contacto" onClick={() => setMobileOpen(false)} className="block btn-teal text-sm text-center !py-2.5 mt-2">
-              Hablemos
-            </a>
+            <a href="#contacto" onClick={() => setMobileOpen(false)} className="block btn-dark text-sm text-center !py-2.5 mt-2">Hablemos</a>
           </div>
         </div>
       </nav>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          HERO
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-[68px] hero-gradient dot-grid">
-        {/* Decorative orbs */}
-        <div className="orb w-[600px] h-[600px] -top-48 -left-48 opacity-30" style={{ background: "rgba(43, 188, 179, 0.2)" }} />
-        <div className="orb w-[400px] h-[400px] bottom-20 right-[-120px] opacity-20" style={{ background: "rgba(168, 216, 46, 0.15)" }} />
-
-        <div className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 w-full py-20 md:py-32">
-          <div className="max-w-[820px]">
-            {/* Badge */}
-            <div className="reveal badge-teal mb-8">
-              <span className="pulse-dot" style={{ width: 7, height: 7 }} />
-              +25 años transformando organizaciones
-            </div>
-
-            {/* Headline */}
-            <h1 className="reveal font-display text-[2.5rem] sm:text-[3.25rem] md:text-[4rem] lg:text-[4.75rem] font-bold leading-[1.08] tracking-[-0.02em] mb-6">
-              Convertimos desafíos{" "}
-              <span className="text-gradient-teal">complejos</span> en{" "}
-              <span className="text-gradient-lime">resultados</span>{" "}
-              medibles
-            </h1>
-
-            {/* Subtitle */}
-            <p className="reveal text-text-light text-base md:text-lg lg:text-xl leading-relaxed mb-10 max-w-[640px]">
-              Consultoría estratégica, transformación digital y optimización organizacional
-              para entidades públicas y privadas en Colombia.
+      {/* ──────── HERO ──────── */}
+      <section id="inicio" className="relative min-h-[90vh] flex items-center pt-[64px]">
+        <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+        <div className="relative z-10 max-w-[1120px] mx-auto px-5 md:px-8 w-full py-20 md:py-28">
+          <div className="max-w-[740px]">
+            <p className="reveal text-gray-500 text-sm font-semibold tracking-[0.08em] uppercase mb-6">
+              Consultoría estratégica & transformación digital
             </p>
-
-            {/* CTAs */}
-            <div className="reveal flex flex-col sm:flex-row gap-4">
-              <a href="#servicios" className="btn-teal text-center">
+            <h1 className="reveal font-display text-[2.5rem] sm:text-[3.25rem] md:text-[4rem] lg:text-[4.5rem] font-bold leading-[1.06] tracking-[-0.03em] text-gray-950 mb-7">
+              Convertimos complejidad en{" "}
+              <span className="relative">
+                resultados
+                <svg className="absolute -bottom-1 left-0 w-full h-[6px]" viewBox="0 0 200 6" preserveAspectRatio="none">
+                  <path d="M0 5C40 1 80 1 100 3C120 5 160 1 200 3" stroke="#0d9488" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                </svg>
+              </span>
+            </h1>
+            <p className="reveal text-gray-500 text-lg md:text-xl leading-relaxed mb-10 max-w-[600px]">
+              Más de 25 años construyendo la estabilidad financiera y la modernización
+              de organizaciones públicas y privadas en Colombia.
+            </p>
+            <div className="reveal flex flex-col sm:flex-row gap-3.5">
+              <a href="#servicios" className="btn-dark text-center">
                 Explorar servicios
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </a>
-              <a href="#contacto" className="btn-outline-light text-center">
+              <a href="#contacto" className="btn-ghost text-center">
                 Agendar sesión estratégica
               </a>
             </div>
@@ -302,33 +296,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          CLIENT LOGOS CAROUSEL
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section id="clientes" className="py-16 md:py-20 relative">
-        <div className="section-line" />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 pt-16 md:pt-20">
-          <p className="reveal text-center text-text-muted text-sm font-medium tracking-wider uppercase mb-10">
+      {/* ──────── CLIENT LOGOS ──────── */}
+      <section className="py-14 md:py-16 border-y border-border">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8 mb-8">
+          <p className="reveal text-center text-gray-400 text-xs font-semibold tracking-[0.1em] uppercase">
             Confían en nosotros
           </p>
         </div>
-
-        {/* Carousel */}
         <div className="reveal relative overflow-hidden">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 z-10" style={{ background: "linear-gradient(90deg, var(--navy-950), transparent)" }} />
-          <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 z-10" style={{ background: "linear-gradient(270deg, var(--navy-950), transparent)" }} />
-
-          <div className="logo-carousel-track">
-            {/* Duplicate logos for seamless infinite scroll */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: "linear-gradient(90deg, white, transparent)" }} />
+          <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: "linear-gradient(270deg, white, transparent)" }} />
+          <div className="logo-track">
             {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((logo, i) => (
               <Image
                 key={`${logo.alt}-${i}`}
                 src={logo.src}
                 alt={logo.alt}
-                width={120}
-                height={40}
-                className="logo-carousel-item"
+                width={100}
+                height={36}
+                className="logo-item"
                 style={{ objectFit: "contain", width: "auto" }}
                 unoptimized
               />
@@ -337,263 +323,177 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          STATS
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="py-16 md:py-24 relative">
-        <div className="section-line" />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 pt-16 md:pt-24">
-          <div className="reveal grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="text-center md:text-left">
-                <div className="stat-number text-4xl md:text-5xl lg:text-6xl text-gradient-teal mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-text-muted text-sm md:text-base">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+      {/* ──────── STATS ──────── */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16">
+            <AnimatedStat value="+25" label="Años de experiencia" />
+            <AnimatedStat value="+50" label="Municipios atendidos" />
+            <AnimatedStat value="+100" label="Proyectos ejecutados" />
+            <AnimatedStat value="6" label="Sectores de impacto" />
           </div>
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          SERVICES
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section id="servicios" className="py-20 md:py-28 relative">
-        <div className="section-line" />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 pt-20 md:pt-28">
-          {/* Section header */}
-          <div className="reveal text-center mb-16 md:mb-20">
-            <p className="text-teal text-sm font-semibold tracking-wider uppercase mb-4">Nuestros servicios</p>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-[3.25rem] font-bold tracking-[-0.02em] leading-tight mb-5">
-              No ofrecemos servicios,{" "}
-              <span className="text-gradient-teal">construimos capacidades</span>
+      {/* ──────── SERVICES ──────── */}
+      <section id="servicios" className="py-20 md:py-28 bg-alt">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 md:mb-18">
+            <p className="text-teal text-xs font-semibold tracking-[0.1em] uppercase mb-3">Servicios</p>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-[-0.02em] leading-tight text-gray-950 mb-4 max-w-xl">
+              No ofrecemos servicios. Construimos capacidades.
             </h2>
-            <p className="text-text-light text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Integramos inteligencia financiera y poder tecnológico para diseñar,
-              acelerar y escalar el futuro de su organización.
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Integramos inteligencia financiera y poder tecnológico para diseñar, acelerar y escalar el futuro de su organización.
             </p>
           </div>
-
-          {/* Service cards */}
           <div className="grid md:grid-cols-2 gap-5 stagger">
-            {SERVICES.map((service) => (
-              <div key={service.number} className="reveal service-card group">
-                <div className="relative z-10">
-                  {/* Card header */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-teal" style={{ background: "var(--teal-dim)" }}>
-                      {service.icon}
-                    </div>
-                    <span className="font-display text-2xl font-bold text-text-dim group-hover:text-teal/30 transition-colors">
-                      {service.number}
-                    </span>
-                  </div>
-
-                  {/* Title & description */}
-                  <h3 className="font-display text-xl md:text-[1.375rem] font-semibold text-text-white mb-3 leading-snug">
-                    {service.title}
-                  </h3>
-                  <p className="text-text-light text-[0.9375rem] leading-relaxed mb-5">
-                    {service.description}
-                  </p>
-
-                  {/* Feature list */}
-                  <ul className="space-y-2.5">
-                    {service.features.map((feat) => (
-                      <li key={feat} className="flex items-start gap-3 text-text-muted text-sm">
-                        <svg className="w-4 h-4 text-teal shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
-                        </svg>
-                        {feat}
-                      </li>
-                    ))}
-                  </ul>
+            {SERVICES.map((s) => (
+              <div key={s.title} className="reveal service-card group">
+                <div className="mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                  {s.illustration}
                 </div>
+                <h3 className="font-display text-lg md:text-xl font-semibold text-gray-900 mb-2.5 leading-snug">{s.title}</h3>
+                <p className="text-gray-500 text-[0.9375rem] leading-relaxed mb-5">{s.description}</p>
+                <ul className="space-y-2">
+                  {s.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-gray-600 text-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal mt-[7px] shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          ABOUT / PHILOSOPHY
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section id="nosotros" className="py-20 md:py-28 relative">
-        <div className="section-line" />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 pt-20 md:pt-28">
-          <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-start">
-            {/* Left */}
-            <div className="reveal-left">
-              <p className="text-teal text-sm font-semibold tracking-wider uppercase mb-4">Sobre Inplux</p>
-              <h2 className="font-display text-3xl md:text-4xl lg:text-[3.25rem] font-bold tracking-[-0.02em] leading-tight mb-6">
-                Socios estratégicos que{" "}
-                <span className="text-gradient-lime">construyen legados</span>
-              </h2>
-              <p className="text-text-light text-base md:text-lg leading-relaxed mb-6">
-                Durante más de 25 años, hemos sido la fuerza detrás de la estabilidad
-                financiera y la modernización de decenas de entidades públicas en Antioquia
-                y a nivel nacional. Hoy, como <strong className="text-text-white">INPLUX S.A.S.</strong>,
-                integramos nuestra profunda experiencia en consultoría financiera con
-                las soluciones de transformación digital que el futuro exige.
-              </p>
-              <p className="text-text-muted text-[0.9375rem] leading-relaxed mb-8">
-                Ayudamos a organizaciones líderes — públicas, mixtas y privadas — a resolver
-                desafíos complejos mediante la fusión de inteligencia financiera y poder
-                tecnológico. No solo optimizamos el presente; diseñamos, desarrollamos e
-                implementamos las soluciones innovadoras que aseguran su relevancia y
-                competitividad en el futuro.
-              </p>
+      {/* ──────── TIMELINE ──────── */}
+      <section id="trayectoria" className="py-20 md:py-28">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 md:mb-18">
+            <p className="text-teal text-xs font-semibold tracking-[0.1em] uppercase mb-3">Trayectoria</p>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-[-0.02em] leading-tight text-gray-950 mb-4 max-w-xl">
+              25 años de transformaciones
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              No contamos el tiempo en años, sino en transformaciones. Esta es nuestra historia.
+            </p>
+          </div>
+          <div className="relative pl-8 md:pl-10">
+            <div className="timeline-line" />
+            <div className="space-y-12 md:space-y-16">
+              {TIMELINE.map((item, i) => (
+                <div key={item.year} className="reveal relative flex gap-6 md:gap-8">
+                  <div className="flex flex-col items-center">
+                    <div className={`timeline-dot ${i === TIMELINE.length - 1 ? "active" : ""}`} />
+                  </div>
+                  <div className="pb-1 -mt-1">
+                    <span className="font-display font-bold text-2xl md:text-3xl text-gray-950 tracking-tight">{item.year}</span>
+                    <h3 className="font-display font-semibold text-lg text-gray-800 mt-1 mb-2">{item.title}</h3>
+                    <p className="text-gray-500 text-[0.9375rem] leading-relaxed max-w-lg">{item.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {/* Sectors */}
-              <div className="flex flex-wrap gap-2.5">
-                {SECTORS.map((sector) => (
-                  <span key={sector} className="sector-pill text-sm">
-                    {sector}
+      {/* ──────── ABOUT / PHILOSOPHY ──────── */}
+      <section id="nosotros" className="py-20 md:py-28 bg-alt">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+          <div className="grid lg:grid-cols-2 gap-14 md:gap-20 items-start">
+            <div className="reveal-left">
+              <p className="text-teal text-xs font-semibold tracking-[0.1em] uppercase mb-3">Sobre Inplux</p>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-[-0.02em] leading-tight text-gray-950 mb-6">
+                Socios estratégicos que construyen legados
+              </h2>
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-5">
+                Somos <strong className="text-gray-900 font-semibold">INPLUX S.A.S.</strong>, una consultora de soluciones integrales.
+                Ayudamos a organizaciones líderes — públicas, mixtas y privadas — a resolver
+                desafíos complejos mediante la fusión de inteligencia financiera y poder tecnológico.
+              </p>
+              <p className="text-gray-500 text-[0.9375rem] leading-relaxed mb-8">
+                Nuestro propósito es apoyar la gestión administrativa, técnica, financiera,
+                contable y jurídica de nuestros clientes. No solo optimizamos el presente;
+                diseñamos e implementamos las soluciones innovadoras que aseguran su relevancia
+                y competitividad en el futuro.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {["Medellín, Colombia", "+25 años", "Sector público & privado"].map((tag) => (
+                  <span key={tag} className="text-sm font-medium text-gray-600 bg-white border border-border rounded-full px-4 py-2">
+                    {tag}
                   </span>
                 ))}
               </div>
             </div>
-
-            {/* Right — Philosophy */}
             <div className="space-y-4 stagger">
-              {PHILOSOPHY.map((card) => (
-                <div key={card.title} className="reveal philosophy-card">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-1.5 h-8 rounded-full" style={{ background: card.accent }} />
-                    <h3 className="font-display text-text-white font-semibold text-lg">
-                      {card.title}
-                    </h3>
-                  </div>
-                  <p className="text-text-light text-[0.9375rem] leading-relaxed pl-[18px]">
-                    {card.text}
-                  </p>
+              {[
+                { title: "Misión", text: "Acompañar a nuestros clientes en el logro de sus metas institucionales y empresariales, integrando servicios de consultoría de alta calidad con soluciones tecnológicas innovadoras que generan un impacto medible y sostenible." },
+                { title: "Visión", text: "Ser el socio estratégico referente en Colombia por la entrega de soluciones integrales que, a través de la estrategia y la tecnología, potencien la gestión y competitividad de las organizaciones." },
+                { title: "Compromiso", text: "Entregar servicios de la más alta calidad, apoyados en un equipo profesional, ético y transparente. Actuamos con eficacia, eficiencia y un profundo respeto hacia nuestros clientes y sus usuarios." },
+              ].map((card) => (
+                <div key={card.title} className="reveal bg-white border border-border rounded-2xl p-6 transition-all duration-300 hover:shadow-md hover:border-gray-200">
+                  <h3 className="font-display font-semibold text-gray-950 text-[1.0625rem] mb-2.5">{card.title}</h3>
+                  <p className="text-gray-500 text-[0.9375rem] leading-relaxed">{card.text}</p>
                 </div>
               ))}
-
-              {/* Key values */}
-              <div className="reveal flex items-center gap-6 pt-4 pl-[18px]">
-                {["Integración", "Inteligencia", "Impulso"].map((val) => (
-                  <div key={val} className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-lime" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M13 7l5 5-5 5M6 7l5 5-5 5" />
-                    </svg>
-                    <span className="font-display font-semibold text-text-white text-sm">{val}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          CTA — HABLEMOS
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section id="contacto" className="py-20 md:py-28 relative">
-        <div className="section-line" />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 pt-20 md:pt-28">
-          <div className="grid lg:grid-cols-2 gap-12 md:gap-20">
-            {/* Left */}
+      {/* ──────── CTA / CONTACT ──────── */}
+      <section id="contacto" className="py-20 md:py-28">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+          <div className="grid lg:grid-cols-2 gap-14 md:gap-20">
             <div className="reveal-left">
-              <p className="text-teal text-sm font-semibold tracking-wider uppercase mb-4">Contacto</p>
-              <h2 className="font-display text-3xl md:text-4xl lg:text-[3.25rem] font-bold tracking-[-0.02em] leading-tight mb-6">
-                <span className="text-gradient-teal">¡Hablemos!</span>
+              <p className="text-teal text-xs font-semibold tracking-[0.1em] uppercase mb-3">Contacto</p>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-[-0.02em] leading-tight text-gray-950 mb-5">
+                Hablemos.
               </h2>
-              <p className="text-text-light text-base md:text-lg leading-relaxed mb-10">
+              <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-10">
                 El futuro de su organización empieza con la próxima decisión estratégica.
-                Permítanos mostrarle cómo la integración de finanzas y tecnología puede
-                generar el impulso que necesita.
+                Contáctenos para agendar una sesión estratégica.
               </p>
-
-              {/* Contact details */}
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {[
-                  {
-                    icon: (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                      </svg>
-                    ),
-                    label: "Dirección",
-                    value: "Calle 23 # 43 A 66, Local 141\nMedellín, Antioquia",
-                  },
-                  {
-                    icon: (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                      </svg>
-                    ),
-                    label: "Teléfono",
-                    value: "(+57) 313 889 36 15",
-                  },
-                  {
-                    icon: (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                      </svg>
-                    ),
-                    label: "Email",
-                    value: "gerencia@inplux.co",
-                  },
+                  { label: "Dirección", value: "Calle 23 # 43 A 66, Local 141\nMedellín, Antioquia" },
+                  { label: "Teléfono", value: "(+57) 313 889 36 15" },
+                  { label: "Email", value: "gerencia@inplux.co" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-start gap-4">
-                    <span className="text-teal shrink-0 mt-0.5">{item.icon}</span>
-                    <div>
-                      <span className="text-text-muted text-xs font-medium uppercase tracking-wider block mb-1">
-                        {item.label}
-                      </span>
-                      <span className="text-text-light text-sm whitespace-pre-line">
-                        {item.value}
-                      </span>
-                    </div>
+                  <div key={item.label}>
+                    <span className="text-gray-400 text-xs font-semibold tracking-[0.08em] uppercase block mb-1">{item.label}</span>
+                    <span className="text-gray-700 text-[0.9375rem] whitespace-pre-line">{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Right — Form */}
             <div className="reveal">
-              <div className="service-card !p-6 md:!p-8" style={{ background: "rgba(15, 26, 48, 0.7)" }}>
-                <h3 className="font-display text-text-white font-semibold text-lg mb-6">
-                  Enviar mensaje
-                </h3>
+              <div className="bg-gray-50 border border-border rounded-2xl p-6 md:p-8">
+                <h3 className="font-display font-semibold text-gray-950 text-lg mb-6">Enviar mensaje</h3>
                 <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
                   <div>
-                    <label className="text-text-muted text-xs font-medium uppercase tracking-wider mb-1.5 block">
-                      Nombre
-                    </label>
+                    <label className="text-gray-500 text-xs font-semibold tracking-wider uppercase mb-1.5 block">Nombre</label>
                     <input type="text" placeholder="Su nombre" className="form-input" required />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-text-muted text-xs font-medium uppercase tracking-wider mb-1.5 block">
-                        Email
-                      </label>
+                      <label className="text-gray-500 text-xs font-semibold tracking-wider uppercase mb-1.5 block">Email</label>
                       <input type="email" placeholder="correo@empresa.co" className="form-input" required />
                     </div>
                     <div>
-                      <label className="text-text-muted text-xs font-medium uppercase tracking-wider mb-1.5 block">
-                        Teléfono
-                      </label>
+                      <label className="text-gray-500 text-xs font-semibold tracking-wider uppercase mb-1.5 block">Teléfono</label>
                       <input type="tel" placeholder="+57 3XX XXX XXXX" className="form-input" />
                     </div>
                   </div>
                   <div>
-                    <label className="text-text-muted text-xs font-medium uppercase tracking-wider mb-1.5 block">
-                      Mensaje
-                    </label>
-                    <textarea
-                      rows={4}
-                      placeholder="Cuéntenos sobre su proyecto o desafío..."
-                      className="form-input resize-none"
-                      required
-                    />
+                    <label className="text-gray-500 text-xs font-semibold tracking-wider uppercase mb-1.5 block">Mensaje</label>
+                    <textarea rows={4} placeholder="Cuéntenos sobre su proyecto o desafío..." className="form-input resize-none" required />
                   </div>
-                  <button type="submit" className="btn-teal w-full sm:w-auto">
+                  <button type="submit" className="btn-dark w-full sm:w-auto">
                     Enviar mensaje
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
@@ -606,80 +506,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          FOOTER
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <footer className="py-14 md:py-20 border-t border-border-subtle">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8">
+      {/* ──────── FOOTER ──────── */}
+      <footer className="py-14 md:py-18 border-t border-border bg-gray-50">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
           <div className="grid md:grid-cols-4 gap-10 mb-14">
-            {/* Brand */}
-            <div className="md:col-span-1">
-              <InpluxLogo className="h-7 mb-4 block" />
-              <p className="text-text-muted text-sm leading-relaxed max-w-[240px]">
-                Consultoría estratégica y transformación digital con más de 25 años de experiencia.
+            <div>
+              <span className="font-display font-bold text-lg text-gray-950 tracking-tight block mb-3">inplux</span>
+              <p className="text-gray-500 text-sm leading-relaxed max-w-[220px]">
+                Consultoría estratégica y transformación digital. Medellín, Colombia.
               </p>
             </div>
-
-            {/* Quick links */}
             <div>
-              <h4 className="text-text-white font-semibold text-sm mb-4">Navegación</h4>
+              <h4 className="text-gray-900 font-semibold text-sm mb-4">Navegación</h4>
               <ul className="space-y-2.5">
-                {[{ label: "Inicio", href: "#inicio" }, ...navLinks].map((link) => (
-                  <li key={link.href}>
-                    <a href={link.href} className="text-text-muted hover:text-text-white text-sm transition-colors">
-                      {link.label}
-                    </a>
-                  </li>
+                {[{ label: "Inicio", href: "#inicio" }, ...navLinks].map((l) => (
+                  <li key={l.href}><a href={l.href} className="text-gray-500 hover:text-gray-900 text-sm transition-colors">{l.label}</a></li>
                 ))}
               </ul>
             </div>
-
-            {/* Services */}
             <div>
-              <h4 className="text-text-white font-semibold text-sm mb-4">Servicios</h4>
+              <h4 className="text-gray-900 font-semibold text-sm mb-4">Servicios</h4>
               <ul className="space-y-2.5">
-                {SERVICES.map((s) => (
-                  <li key={s.number}>
-                    <span className="text-text-muted text-sm">{s.title}</span>
-                  </li>
-                ))}
+                {SERVICES.map((s) => (<li key={s.title}><span className="text-gray-500 text-sm">{s.title}</span></li>))}
               </ul>
             </div>
-
-            {/* Contact */}
             <div>
-              <h4 className="text-text-white font-semibold text-sm mb-4">Contacto</h4>
-              <ul className="space-y-2.5 text-text-muted text-sm">
+              <h4 className="text-gray-900 font-semibold text-sm mb-4">Contacto</h4>
+              <ul className="space-y-2.5 text-gray-500 text-sm">
                 <li>Medellín, Antioquia</li>
                 <li>(+57) 313 889 36 15</li>
-                <li>
-                  <a href="mailto:gerencia@inplux.co" className="hover:text-teal transition-colors">
-                    gerencia@inplux.co
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:contacto@inplux.co" className="hover:text-teal transition-colors">
-                    contacto@inplux.co
-                  </a>
-                </li>
+                <li><a href="mailto:gerencia@inplux.co" className="hover:text-gray-900 transition-colors">gerencia@inplux.co</a></li>
+                <li><a href="mailto:contacto@inplux.co" className="hover:text-gray-900 transition-colors">contacto@inplux.co</a></li>
               </ul>
             </div>
           </div>
-
-          {/* Bottom bar */}
-          <div className="border-t border-border-subtle pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-text-dim text-xs">
-              &copy; {new Date().getFullYear()} INPLUX S.A.S. Todos los derechos reservados.
-            </p>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-dim hover:text-text-white transition-colors"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
+          <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-gray-400 text-xs">&copy; {new Date().getFullYear()} INPLUX S.A.S. Todos los derechos reservados.</p>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 transition-colors">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
             </a>
           </div>
         </div>
