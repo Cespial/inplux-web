@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
-import localFont from "next/font/local";
+import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -9,28 +8,27 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-body",
 });
 
-const goodly = localFont({
-  src: [
-    { path: "../../public/fonts/Goodly-Regular.woff", weight: "400", style: "normal" },
-    { path: "../../public/fonts/Goodly-Medium.woff", weight: "500", style: "normal" },
-    { path: "../../public/fonts/Goodly-Semibold.woff", weight: "600", style: "normal" },
-    { path: "../../public/fonts/Goodly-Bold.woff", weight: "700", style: "normal" },
-  ],
-  variable: "--font-display",
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
-  title: "Inplux — Consultoría Estratégica & Transformación Digital",
+  title: "INPLUX — Hub de Consultoría Estratégica & Tecnología",
   description:
-    "Somos el socio estratégico que convierte desafíos complejos en resultados medibles. +25 años de experiencia en consultoría financiera, transformación digital y optimización organizacional en Colombia.",
+    "Hub que integra consultoría financiera, inteligencia tributaria y transformación digital. +25 años de experiencia transformando organizaciones públicas y privadas en Colombia.",
   keywords: [
     "consultoría estratégica",
+    "inteligencia tributaria",
     "transformación digital",
-    "gestión financiera",
+    "hub tecnológico",
     "sector público",
     "Colombia",
     "Medellín",
     "Inplux",
+    "Tribai",
   ],
 };
 
@@ -41,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${jakarta.variable} ${goodly.variable} antialiased`}>
+      <body className={`${jakarta.variable} ${instrumentSerif.variable} antialiased`}>
         {children}
       </body>
     </html>
