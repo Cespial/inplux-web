@@ -309,70 +309,74 @@ export default function Home() {
 
           {/* SVG Ecosystem Map */}
           <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto min-w-[600px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
-              {/* Connection lines — drawn first so they sit behind */}
-              {/* INPLUX to Tribai */}
-              <line x1="450" y1="90" x2="280" y2="200" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 4" />
-              {/* INPLUX to Sector Público */}
-              <line x1="450" y1="90" x2="620" y2="200" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 4" />
-              {/* INPLUX to Fourier (thicker, prominent) */}
-              <line x1="450" y1="90" x2="450" y2="340" stroke="#0d7d74" strokeWidth="2" strokeDasharray="6 4" opacity="0.5" />
-              {/* Fourier to allies */}
-              <line x1="450" y1="380" x2="200" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
-              <line x1="450" y1="380" x2="450" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
-              <line x1="450" y1="380" x2="700" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
+            <svg viewBox="0 0 820 580" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[820px] mx-auto min-w-[580px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
+              {/* ═══ OUTER ORBIT — Allies circle ═══ */}
+              <circle cx="410" cy="310" r="260" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 6" fill="none" />
+              <text x="410" y="575" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">ECOSISTEMA DE ALIADOS TECNOLÓGICOS</text>
+
+              {/* Connection lines */}
+              {/* INPLUX down to Tribai */}
+              <line x1="340" y1="95" x2="270" y2="210" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" />
+              {/* INPLUX down to Sector Público */}
+              <line x1="480" y1="95" x2="550" y2="210" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" />
+              {/* Center vertical: INPLUX → Fourier */}
+              <line x1="410" y1="95" x2="410" y2="355" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.35" />
 
               {/* ═══ INPLUX — Top center ═══ */}
-              <rect x="340" y="24" width="220" height="68" rx="12" fill="#1a1918" />
-              <text x="450" y="58" textAnchor="middle" fill="white" fontSize="15" fontWeight="700" letterSpacing="3">INPLUX</text>
-              <text x="450" y="78" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="500" letterSpacing="1.5">HUB DE CONSULTORÍA & TECNOLOGÍA</text>
+              <rect x="305" y="24" width="210" height="72" rx="14" fill="#1a1918" />
+              <text x="410" y="57" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
+              <text x="410" y="78" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8.5" fontWeight="500" letterSpacing="1.5">HUB DE CONSULTORÍA & TECNOLOGÍA</text>
 
-              {/* ═══ TRIBAI — Left branch ═══ */}
-              <rect x="160" y="180" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-              <rect x="161" y="180" width="238" height="28" rx="12" fill="#e8f5f3" />
-              <text x="185" y="199" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
-              <circle cx="375" cy="194" r="6" fill="#0d7d74" />
-              <text x="375" y="197" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
-              <text x="280" y="232" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="700">Tribai</text>
-              <text x="280" y="250" textAnchor="middle" fill="#0d7d74" fontSize="11" fontWeight="500">tribai.co</text>
-              <text x="280" y="272" textAnchor="middle" fill="#8a8784" fontSize="9.5">Inteligencia tributaria con IA</text>
+              {/* ═══ TRIBAI — Left, under umbrella ═══ */}
+              <rect x="138" y="195" width="230" height="106" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+              <rect x="139" y="195" width="228" height="26" rx="12" fill="#e8f5f3" />
+              <text x="163" y="213" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
+              <circle cx="343" cy="208" r="6" fill="#0d7d74" />
+              <text x="343" y="211" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
+              <text x="253" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Tribai</text>
+              <text x="253" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">tribai.co</text>
+              <text x="253" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria con IA</text>
 
-              {/* ═══ SECTOR PÚBLICO — Right branch ═══ */}
-              <rect x="500" y="180" width="240" height="110" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-              <rect x="501" y="180" width="238" height="28" rx="12" fill="#f3f1ee" />
-              <text x="525" y="199" fill="#8a8784" fontSize="9" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
-              <rect x="700" y="188" width="24" height="14" rx="7" fill="#f3f1ee" stroke="#d1cfcc" strokeWidth="1" />
-              <text x="712" y="198" textAnchor="middle" fill="#a8a5a0" fontSize="7" fontWeight="600">...</text>
-              <text x="620" y="232" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="700">Sector Público</text>
-              <text x="620" y="250" textAnchor="middle" fill="#8a8784" fontSize="11" fontWeight="500">Próximamente</text>
-              <text x="620" y="272" textAnchor="middle" fill="#8a8784" fontSize="9.5">Gemelo digital & rendición de cuentas</text>
+              {/* ═══ SECTOR PÚBLICO — Right, under umbrella ═══ */}
+              <rect x="452" y="195" width="230" height="106" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
+              <rect x="453" y="195" width="228" height="26" rx="12" fill="#f3f1ee" />
+              <text x="477" y="213" fill="#8a8784" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
+              <text x="567" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Sector Público</text>
+              <text x="567" y="264" textAnchor="middle" fill="#8a8784" fontSize="10.5" fontWeight="500">Próximamente</text>
+              <text x="567" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Gemelo digital & rendición de cuentas</text>
 
-              {/* ═══ FOURIER — Center, prominent ═══ */}
-              <rect x="310" y="335" width="280" height="90" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
-              <rect x="311" y="335" width="278" height="26" rx="14" fill="#e8f5f3" />
-              <text x="335" y="353" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
-              <text x="450" y="383" textAnchor="middle" fill="#1a1918" fontSize="19" fontWeight="800" letterSpacing="0.5">Fourier</text>
-              <text x="450" y="402" textAnchor="middle" fill="#0d7d74" fontSize="11" fontWeight="500">fourier.dev</text>
-              <text x="450" y="416" textAnchor="middle" fill="#8a8784" fontSize="9">Arquitectura de software, cloud e infraestructura</text>
+              {/* ═══ FOURIER — Center, inside orbit, prominent ═══ */}
+              <rect x="280" y="355" width="260" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
+              <rect x="281" y="355" width="258" height="24" rx="14" fill="#e8f5f3" />
+              <text x="305" y="372" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
+              <text x="410" y="400" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="800" letterSpacing="0.5">Fourier</text>
+              <text x="410" y="418" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">fourier.dev</text>
+              <text x="410" y="434" textAnchor="middle" fill="#8a8784" fontSize="8.5">Arquitectura de software, cloud e infraestructura</text>
 
-              {/* ═══ Allied companies — Bottom row ═══ */}
-              {/* Think IT */}
-              <rect x="100" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="200" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Think IT</text>
-              <text x="200" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Ingeniería de software</text>
+              {/* ═══ Allies on the orbit circle ═══ */}
+              {/* Think IT — top-left of orbit */}
+              <rect x="52" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="127" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Think IT</text>
+              <text x="127" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Ingeniería de software</text>
+              {/* Node on orbit */}
+              <circle cx="152" cy="347" r="4" fill="#e5e3e0" />
+              <line x1="152" y1="351" x2="140" y2="365" stroke="#e5e3e0" strokeWidth="1" />
 
-              {/* Big Bang Data */}
-              <rect x="350" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="450" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Big Bang Data</text>
-              <text x="450" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Analítica de datos</text>
+              {/* Big Bang Data — bottom of orbit */}
+              <rect x="335" y="480" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="410" y="504" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Big Bang Data</text>
+              <text x="410" y="520" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Analítica de datos</text>
+              {/* Node on orbit */}
+              <circle cx="410" cy="570" r="4" fill="#e5e3e0" />
+              <line x1="410" y1="566" x2="410" y2="532" stroke="#e5e3e0" strokeWidth="1" />
 
-              {/* Alianza IT */}
-              <rect x="600" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="700" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Alianza IT</text>
-              <text x="700" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Integración tecnológica</text>
-
-              {/* Decorative: small label */}
-              <text x="450" y="516" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">EMPRESAS ALIADAS DEL ECOSISTEMA</text>
+              {/* Alianza IT — top-right of orbit */}
+              <rect x="618" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="693" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Alianza IT</text>
+              <text x="693" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Integración tecnológica</text>
+              {/* Node on orbit */}
+              <circle cx="668" cy="347" r="4" fill="#e5e3e0" />
+              <line x1="668" y1="351" x2="680" y2="365" stroke="#e5e3e0" strokeWidth="1" />
             </svg>
           </div>
 
