@@ -81,8 +81,15 @@ const SERVICES = [
   {
     tag: "04",
     title: "Hiperautomatización",
-    desc: "Calculadoras de precisión tributaria, declaraciones sugeridas, agentes de IA para auditoría. Lo que antes tomaba semanas, ahora lo ejecuta un sistema en minutos.",
-    features: ["Calculadoras tributarias de alta precisión", "Declaraciones sugeridas automatizadas", "Infraestructura cloud y plataformas ERP", "Agentes de IA para auditoría e interventoría"],
+    desc: "Un ecosistema completo de aplicaciones de IA que cubren todo el ciclo tributario y de gestión. Lo que antes tomaba semanas, ahora lo ejecuta un sistema en minutos.",
+    features: [
+      "35 calculadoras tributarias de alta precisión",
+      "Declaraciones de renta sugeridas automatizadas",
+      "Agentes de IA para auditoría e interventoría",
+      "Infraestructura cloud (Vercel, Supabase, Pinecone)",
+      "App móvil Tribai (próximamente en App Store)",
+      "APIs de integración para plataformas contables",
+    ],
     icon: "auto",
   },
 ];
@@ -275,26 +282,93 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* ──── HERO ──── */}
-      <section id="inicio" className="relative pt-[60px] overflow-hidden">
-        <div className="absolute inset-0 top-[60px] z-0">
-          <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-            <source src="/hero.webm" type="video/webm" />
-            <source src="/hero.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 hero-overlay" />
+      {/* ──── HERO — "El Estatuto Vivo" ──── */}
+      <section id="inicio" className="relative pt-[60px] overflow-hidden bg-off-white">
+        {/* Animated SVG Background — Estatuto being vectorized */}
+        <div className="absolute inset-0 top-[60px] z-0 overflow-hidden">
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ fontFamily: "Georgia, serif" }}>
+            {/* ═══ LEFT SIDE: Faded statutory text ═══ */}
+            <text x="40" y="80" fill="#1a1918" fontSize="11" className="hero-text-pulse" opacity="0.08">ARTÍCULO 5. El impuesto sobre la renta y complementarios se considera como un solo tributo</text>
+            <text x="60" y="110" fill="#1a1918" fontSize="10" className="hero-text-pulse-d1" opacity="0.06">y comprende: a) Para las personas naturales, sucesiones ilíquidas y bienes destinados</text>
+            <text x="40" y="145" fill="#1a1918" fontSize="12" className="hero-text-pulse-d2" opacity="0.09">ARTÍCULO 26. NIIF Grupo 2 — Los ingresos realizados fiscalmente son los ingresos devengados</text>
+            <text x="80" y="175" fill="#1a1918" fontSize="10" className="hero-text-pulse" opacity="0.06">contablemente en el año o período gravable que cumplan los requisitos señalados</text>
+            <text x="40" y="215" fill="#1a1918" fontSize="11" className="hero-text-pulse-d3" opacity="0.08">ARTÍCULO 241. Tarifa para las personas naturales residentes y asignaciones</text>
+            <text x="60" y="245" fill="#1a1918" fontSize="10" className="hero-text-pulse-d1" opacity="0.06">y asignaciones modales. El impuesto sobre la renta de las personas naturales residentes</text>
+            <text x="40" y="285" fill="#1a1918" fontSize="12" className="hero-text-pulse-d2" opacity="0.09">ARTÍCULO 330. Determinación cedular. Rentas de trabajo, pensiones, capital</text>
+            <text x="80" y="315" fill="#1a1918" fontSize="10" className="hero-text-pulse" opacity="0.06">La depuración de las rentas correspondientes a cada una de las cédulas</text>
+            <text x="40" y="355" fill="#1a1918" fontSize="11" className="hero-text-pulse-d3" opacity="0.08">ARTÍCULO 592. Quiénes deben presentar declaración de renta y complementarios</text>
+            <text x="60" y="385" fill="#1a1918" fontSize="10" className="hero-text-pulse-d1" opacity="0.06">Están obligados a presentar declaración del impuesto sobre la renta y complementarios</text>
+            <text x="40" y="425" fill="#1a1918" fontSize="12" className="hero-text-pulse" opacity="0.09">NIC 1 — Presentación de estados financieros. Marco conceptual para entidades</text>
+            <text x="80" y="455" fill="#1a1918" fontSize="10" className="hero-text-pulse-d2" opacity="0.06">del Grupo 1 de la norma internacional de información financiera plena</text>
+            <text x="40" y="495" fill="#1a1918" fontSize="11" className="hero-text-pulse-d3" opacity="0.08">ICA — Impuesto de industria y comercio, avisos y tableros. Base gravable municipal</text>
+            <text x="60" y="525" fill="#1a1918" fontSize="10" className="hero-text-pulse" opacity="0.06">El impuesto de industria y comercio recaerá, en cuanto a materia imponible</text>
+            <text x="40" y="565" fill="#1a1918" fontSize="12" className="hero-text-pulse-d1" opacity="0.09">RESOLUCIÓN DIAN 000022 — Especificaciones técnicas. Formato 2516 versión 4</text>
+            <text x="80" y="595" fill="#1a1918" fontSize="10" className="hero-text-pulse-d2" opacity="0.06">Reporte de conciliación fiscal para los contribuyentes obligados a llevar contabilidad</text>
+            <text x="40" y="640" fill="#1a1918" fontSize="11" className="hero-text-pulse-d3" opacity="0.08">LEY 550 — Reestructuración de pasivos. Régimen de insolvencia empresarial</text>
+
+            {/* ═══ CENTER: Scanning/vectorization line ═══ */}
+            <rect x="0" y="0" width="1200" height="2" fill="#0d7d74" opacity="0.4" className="hero-scan" />
+
+            {/* ═══ RIGHT SIDE: Vectorized particles flowing to nodes ═══ */}
+            {/* Data stream lines */}
+            <line x1="700" y1="150" x2="950" y2="150" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" className="hero-stream" />
+            <line x1="720" y1="250" x2="970" y2="250" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" className="hero-stream" />
+            <line x1="700" y1="350" x2="950" y2="350" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" className="hero-stream" />
+            <line x1="720" y1="450" x2="970" y2="450" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" className="hero-stream" />
+            <line x1="700" y1="550" x2="950" y2="550" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" className="hero-stream" />
+
+            {/* Floating particles */}
+            <circle cx="750" cy="150" r="2.5" fill="#0d7d74" opacity="0.3" className="hero-particle" />
+            <circle cx="780" cy="250" r="2" fill="#0d7d74" opacity="0.25" className="hero-particle-d1" />
+            <circle cx="740" cy="350" r="3" fill="#0d7d74" opacity="0.3" className="hero-particle-d2" />
+            <circle cx="770" cy="450" r="2" fill="#0d7d74" opacity="0.25" className="hero-particle-d3" />
+            <circle cx="750" cy="550" r="2.5" fill="#0d7d74" opacity="0.3" className="hero-particle" />
+            <circle cx="800" cy="180" r="1.5" fill="#0d7d74" opacity="0.2" className="hero-particle-d2" />
+            <circle cx="820" cy="320" r="1.5" fill="#0d7d74" opacity="0.2" className="hero-particle-d1" />
+            <circle cx="790" cy="500" r="1.5" fill="#0d7d74" opacity="0.2" className="hero-particle-d3" />
+
+            {/* Destination nodes — vectorized knowledge */}
+            <g className="hero-node-glow">
+              <circle cx="1020" cy="200" r="20" fill="white" stroke="#0d7d74" strokeWidth="1" opacity="0.4" />
+              <text x="1020" y="196" textAnchor="middle" fill="#0d7d74" fontSize="6" fontWeight="700" opacity="0.5">RAG</text>
+              <text x="1020" y="208" textAnchor="middle" fill="#0d7d74" fontSize="5" opacity="0.4">VECTOR</text>
+            </g>
+            <g className="hero-node-glow" style={{ animationDelay: "1s" }}>
+              <circle cx="1080" cy="350" r="24" fill="white" stroke="#0d7d74" strokeWidth="1" opacity="0.4" />
+              <text x="1080" y="346" textAnchor="middle" fill="#0d7d74" fontSize="6" fontWeight="700" opacity="0.5">TRIBAI</text>
+              <text x="1080" y="358" textAnchor="middle" fill="#0d7d74" fontSize="5" opacity="0.4">IA</text>
+            </g>
+            <g className="hero-node-glow" style={{ animationDelay: "2s" }}>
+              <circle cx="1020" cy="500" r="18" fill="white" stroke="#0d7d74" strokeWidth="1" opacity="0.4" />
+              <text x="1020" y="496" textAnchor="middle" fill="#0d7d74" fontSize="5" fontWeight="700" opacity="0.5">GEMELO</text>
+              <text x="1020" y="506" textAnchor="middle" fill="#0d7d74" fontSize="5" opacity="0.4">DIGITAL</text>
+            </g>
+
+            {/* Connection lines between nodes */}
+            <line x1="1020" y1="220" x2="1060" y2="330" stroke="#0d7d74" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.15" />
+            <line x1="1060" y1="370" x2="1020" y2="482" stroke="#0d7d74" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.15" />
+
+            {/* Subtle grid background */}
+            {Array.from({ length: 20 }).map((_, row) =>
+              Array.from({ length: 35 }).map((_, col) => (
+                <circle key={`hg-${row}-${col}`} cx={34 * col + 17} cy={35 * row + 17} r="0.4" fill="#d1cfcc" opacity="0.3" />
+              ))
+            )}
+          </svg>
         </div>
+
+        {/* Content */}
         <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-28 md:py-40">
-          <div className="max-w-[720px]">
-            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Consultoría · Tecnología · Inteligencia Artificial</p>
+          <div className="max-w-[680px]">
+            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Inteligencia Tributaria · Tecnología · IA</p>
             <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
               La norma la conocemos.<br />
               La tecnología la{" "}
               <em className="font-serif italic text-teal">construimos.</em>
             </h1>
-            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
+            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[580px]">
               Nacimos en la tributaria. Llevamos 25 años entre estatutos, NIC/NIIF y hacienda pública colombiana.
-              Hoy ese conocimiento corre sobre IA, gemelos digitales y automatización.
+              Hoy vectorizamos esa normativa y la convertimos en inteligencia artificial.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
               <a href="#servicios" className="btn-dark text-center">Ver capacidades</a>
@@ -376,6 +450,43 @@ export default function Home() {
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──── PRODUCTOS & APPS ──── */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 text-center">
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema de Apps</p>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
+              No vendemos horas.<br /><em className="italic">Construimos herramientas.</em>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 stagger">
+            {[
+              { name: "Tribai.co", status: "live", desc: "Asistente tributario con IA y citación de fuentes", tag: "Web App" },
+              { name: "Tribai Móvil", status: "dev", desc: "App nativa para consultas tributarias en campo", tag: "iOS · Android" },
+              { name: "Renta Sugerida", status: "dev", desc: "Declaración de renta automatizada conectada con la DIAN", tag: "Motor IA" },
+              { name: "Calculadoras", status: "live", desc: "35 calculadoras de precisión tributaria colombiana", tag: "Web App" },
+              { name: "Gemelo Municipal", status: "dev", desc: "Réplica digital del municipio con datos de múltiples fuentes", tag: "Dashboard" },
+              { name: "Rendición CIAS", status: "dev", desc: "Reportes automáticos a Contraloría, Contaduría y CIAS", tag: "Automatización" },
+              { name: "Estatuto RAG", status: "live", desc: "+1.294 artículos vectorizados con búsqueda semántica", tag: "Base Vectorial" },
+              { name: "API Tributaria", status: "dev", desc: "Endpoints para integrar inteligencia fiscal en cualquier plataforma", tag: "REST API" },
+            ].map((app) => (
+              <div key={app.name} className="reveal border border-border rounded-xl p-4 transition-all duration-300 hover:shadow-sm hover:border-gray-200 group">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[0.6rem] font-bold tracking-[0.1em] uppercase text-gray-400">{app.tag}</span>
+                  <span className={`w-2 h-2 rounded-full ${app.status === "live" ? "bg-teal" : "bg-gray-300"}`} title={app.status === "live" ? "En producción" : "En desarrollo"} />
+                </div>
+                <h4 className="text-ink text-[0.9rem] font-semibold mb-1">{app.name}</h4>
+                <p className="text-gray-500 text-[0.75rem] leading-relaxed">{app.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="reveal mt-8 flex items-center justify-center gap-6 text-[0.75rem] text-gray-400">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-teal" /> En producción</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-gray-300" /> En desarrollo</span>
           </div>
         </div>
       </section>

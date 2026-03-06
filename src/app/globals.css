@@ -137,7 +137,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* ═══════ HERO VIDEO ═══════ */
+/* ═══════ HERO ═══════ */
 .hero-overlay {
   background: linear-gradient(
     180deg,
@@ -151,6 +151,53 @@ body {
   background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.6) 40%, #ffffff 100%);
   pointer-events: none;
 }
+
+/* Hero SVG animations */
+@keyframes hero-scan-line {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(320px); opacity: 0; }
+}
+
+@keyframes hero-text-fade {
+  0%, 100% { opacity: 0.06; }
+  50% { opacity: 0.12; }
+}
+
+@keyframes hero-particle {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.7; }
+  100% { transform: translateX(180px); opacity: 0; }
+}
+
+@keyframes hero-node-glow {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(13, 125, 116, 0.1)); }
+  50% { filter: drop-shadow(0 0 8px rgba(13, 125, 116, 0.3)); }
+}
+
+@keyframes hero-pulse-ring {
+  0% { r: 4; opacity: 0.6; }
+  100% { r: 20; opacity: 0; }
+}
+
+@keyframes hero-data-stream {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -30; }
+}
+
+.hero-scan { animation: hero-scan-line 4s ease-in-out infinite; }
+.hero-text-pulse { animation: hero-text-fade 6s ease-in-out infinite; }
+.hero-text-pulse-d1 { animation: hero-text-fade 6s ease-in-out infinite; animation-delay: 1s; }
+.hero-text-pulse-d2 { animation: hero-text-fade 6s ease-in-out infinite; animation-delay: 2s; }
+.hero-text-pulse-d3 { animation: hero-text-fade 6s ease-in-out infinite; animation-delay: 3s; }
+.hero-particle { animation: hero-particle 3s ease-in-out infinite; }
+.hero-particle-d1 { animation: hero-particle 3.5s ease-in-out infinite; animation-delay: 0.8s; }
+.hero-particle-d2 { animation: hero-particle 2.8s ease-in-out infinite; animation-delay: 1.6s; }
+.hero-particle-d3 { animation: hero-particle 3.2s ease-in-out infinite; animation-delay: 2.4s; }
+.hero-node-glow { animation: hero-node-glow 3s ease-in-out infinite; }
+.hero-stream { animation: hero-data-stream 2s linear infinite; }
 
 /* ═══════ CARDS ═══════ */
 .card {
