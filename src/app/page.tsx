@@ -60,22 +60,22 @@ const SERVICES = [
   {
     tag: "01",
     title: "Inteligencia Tributaria",
-    desc: "Sabemos de estatuto tributario porque llevamos dos décadas aplicándolo en más de 50 municipios. NIC/NIIF en sus tres grupos, declaraciones de renta, ICA, estructuración fiscal — lo hacemos todos los días.",
+    desc: "Sabemos de estatuto tributario porque llevamos dos décadas aplicándolo en más de 50 municipios. NIC/NIIF en sus tres grupos (plenas, pymes, micro), declaraciones de renta, ICA, estructuración fiscal — lo hacemos todos los días.",
     features: ["Estatuto tributario e impuesto de renta", "Adopción NIC/NIIF (grupos 1, 2 y 3)", "Estructuración fiscal municipal y departamental", "44 estatutos tributarios coordinados para Antioquia"],
     icon: "tax",
   },
   {
     tag: "02",
     title: "IA Neuro-simbólica & RAG",
-    desc: "Vectorizamos toda la normativa colombiana y la ponemos a conversar con modelos de lenguaje. Así nació Tribai: un asistente que cita artículos, no inventa respuestas.",
-    features: ["Asistente tributario Tribai con citación de fuentes", "RAG sobre normativa colombiana completa", "Razonamiento simbólico + modelos de lenguaje", "Stack: Pinecone, Supabase, LLMs de última generación"],
+    desc: "Vectorizamos toda la normativa colombiana y la ponemos a conversar con modelos de lenguaje. Así nació Tribai: un asistente que cita artículos, no inventa respuestas. Declaraciones de renta sugeridas en camino.",
+    features: ["Asistente tributario Tribai con citación de fuentes", "RAG sobre normativa colombiana completa", "Razonamiento simbólico + modelos de lenguaje", "Declaraciones de renta sugeridas (próximamente)"],
     icon: "ai",
   },
   {
     tag: "03",
     title: "Gemelos Digitales & Gobernanza",
-    desc: "Un municipio colombiano reporta a Contraloría, Contaduría, DNP, ministerios y entidades CIAS. Construimos la réplica digital que centraliza todo eso en un solo tablero.",
-    features: ["Gemelo digital de la gestión municipal", "Rendición de cuentas automatizada (CIAS)", "Reportes integrados a organismos de control", "Seguimiento en tiempo real al plan de desarrollo"],
+    desc: "Un municipio colombiano reporta a Contraloría, Contaduría, DNP, ministerios y entidades CIAS. Construimos la réplica digital que centraliza todo eso en un solo tablero con alertas automáticas.",
+    features: ["Gemelo digital de la gestión municipal", "Rendición de cuentas automatizada ante organismos CIAS", "Reportes cruzados a Contraloría y Contaduría", "Seguimiento en tiempo real al plan de desarrollo"],
     icon: "twin",
   },
   {
@@ -108,21 +108,18 @@ function ServiceIcon({ type }: { type: string }) {
     case "ai":
       return (
         <svg viewBox="0 0 80 80" fill="none" className={base}>
-          {/* Neural network nodes */}
           <circle cx="15" cy="25" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse" />
           <circle cx="15" cy="40" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay1" />
           <circle cx="15" cy="55" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay2" />
           <circle cx="40" cy="30" r="5" fill="#0d7d74" opacity="0.8" className="eco-node-pulse-delay1" />
           <circle cx="40" cy="50" r="5" fill="#0d7d74" opacity="0.8" className="eco-node-pulse" />
           <circle cx="65" cy="40" r="6" fill="#0d7d74" className="eco-node-pulse-delay2" />
-          {/* Connections */}
           <line x1="19" y1="25" x2="35" y2="30" stroke="#0d7d74" strokeWidth="0.8" opacity="0.4" />
           <line x1="19" y1="40" x2="35" y2="30" stroke="#0d7d74" strokeWidth="0.8" opacity="0.4" />
           <line x1="19" y1="40" x2="35" y2="50" stroke="#0d7d74" strokeWidth="0.8" opacity="0.4" />
           <line x1="19" y1="55" x2="35" y2="50" stroke="#0d7d74" strokeWidth="0.8" opacity="0.4" />
           <line x1="45" y1="30" x2="59" y2="40" stroke="#0d7d74" strokeWidth="1" opacity="0.5" className="eco-dash-flow" strokeDasharray="3 3" />
           <line x1="45" y1="50" x2="59" y2="40" stroke="#0d7d74" strokeWidth="1" opacity="0.5" className="eco-dash-flow" strokeDasharray="3 3" />
-          {/* RAG label */}
           <rect x="22" y="62" width="36" height="12" rx="6" fill="#e8f5f3" />
           <text x="40" y="71" textAnchor="middle" fill="#0d7d74" fontSize="6" fontWeight="700" fontFamily="monospace">RAG</text>
         </svg>
@@ -130,24 +127,20 @@ function ServiceIcon({ type }: { type: string }) {
     case "twin":
       return (
         <svg viewBox="0 0 80 80" fill="none" className={base}>
-          {/* Real building */}
           <rect x="8" y="25" width="22" height="35" rx="2" stroke="#a8a5a0" strokeWidth="1" fill="none" />
           <rect x="12" y="30" width="4" height="4" rx="0.5" fill="#a8a5a0" opacity="0.4" />
           <rect x="20" y="30" width="4" height="4" rx="0.5" fill="#a8a5a0" opacity="0.4" />
           <rect x="12" y="38" width="4" height="4" rx="0.5" fill="#a8a5a0" opacity="0.4" />
           <rect x="20" y="38" width="4" height="4" rx="0.5" fill="#a8a5a0" opacity="0.4" />
           <rect x="15" y="50" width="8" height="10" rx="1" fill="#a8a5a0" opacity="0.3" />
-          {/* Mirror arrow */}
           <path d="M 34 40 L 46 40" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="3 2" className="eco-dash-flow" />
           <polygon points="46,37 52,40 46,43" fill="#0d7d74" opacity="0.6" />
-          {/* Digital twin */}
           <rect x="50" y="25" width="22" height="35" rx="2" stroke="#0d7d74" strokeWidth="1.5" fill="none" />
           <rect x="54" y="30" width="4" height="4" rx="0.5" fill="#0d7d74" opacity="0.6" className="eco-node-pulse" />
           <rect x="62" y="30" width="4" height="4" rx="0.5" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay1" />
           <rect x="54" y="38" width="4" height="4" rx="0.5" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay2" />
           <rect x="62" y="38" width="4" height="4" rx="0.5" fill="#0d7d74" opacity="0.6" className="eco-node-pulse" />
           <rect x="57" y="50" width="8" height="10" rx="1" fill="#0d7d74" opacity="0.4" />
-          {/* Live indicator */}
           <circle cx="68" cy="28" r="3" fill="#0d7d74" className="eco-node-pulse" />
           <text x="40" y="72" textAnchor="middle" fill="#a8a5a0" fontSize="5.5" fontWeight="600" letterSpacing="1">REAL → DIGITAL</text>
         </svg>
@@ -155,18 +148,14 @@ function ServiceIcon({ type }: { type: string }) {
     case "auto":
       return (
         <svg viewBox="0 0 80 80" fill="none" className={base}>
-          {/* Gear 1 */}
           <circle cx="28" cy="35" r="12" stroke="#0d7d74" strokeWidth="1.5" fill="none" strokeDasharray="4 3" className="eco-orbit" style={{ animationDuration: "6s" }} />
           <circle cx="28" cy="35" r="5" fill="#0d7d74" opacity="0.2" />
           <circle cx="28" cy="35" r="2" fill="#0d7d74" opacity="0.6" />
-          {/* Gear 2 */}
           <circle cx="52" cy="45" r="10" stroke="#0d7d74" strokeWidth="1.5" fill="none" strokeDasharray="3 3" className="eco-orbit" style={{ animationDuration: "5s", animationDirection: "reverse" }} />
           <circle cx="52" cy="45" r="4" fill="#0d7d74" opacity="0.2" />
           <circle cx="52" cy="45" r="1.5" fill="#0d7d74" opacity="0.6" />
-          {/* Flow arrows */}
           <path d="M 10 60 Q 25 55, 40 58 T 70 56" stroke="#0d7d74" strokeWidth="1" opacity="0.4" strokeDasharray="3 2" className="eco-dash-flow" fill="none" />
           <polygon points="70,53 74,56 70,59" fill="#0d7d74" opacity="0.4" />
-          {/* Speed indicator */}
           <text x="40" y="72" textAnchor="middle" fill="#a8a5a0" fontSize="5.5" fontWeight="600" letterSpacing="1">×100 FASTER</text>
         </svg>
       );
@@ -180,13 +169,13 @@ const TIMELINE_EVENTS = [
   { year: "2002", text: "Llegamos al Hospital San Vicente de Paúl de Pueblo Rico. El sector salud nos abrió las puertas." },
   { year: "2004", text: "Reorganización financiera de Segovia — nuestro primer caso de alto impacto." },
   { year: "2007", text: "Constituimos la ESP de Vegachí. Yarumal, Valdivia, Yolombó y Andes entraron al portafolio." },
-  { year: "2010", text: "Alianza con Sistemas Aries como asesores tributarios. Esa relación sigue vigente." },
+  { year: "2010", text: "Alianza con Sistemas Aries como asesores tributarios. Think IT y Big Bang Data se suman al ecosistema." },
   { year: "2014", text: "5 asociaciones de municipios estructuradas contablemente para el Ministerio del Interior." },
   { year: "2016", text: "Reestructuración de pasivos (Ley 550) de Cisneros. Un proyecto de 7 años." },
   { year: "2019", text: "44 estatutos tributarios coordinados para la Gobernación de Antioquia. El proyecto más grande hasta la fecha." },
   { year: "2021", text: "Asesoría a Caucasia, una de las entidades de mayor complejidad del departamento." },
-  { year: "2023", text: "Nace INPLUX S.A.S. — ya no solo consultoría, sino hub de tecnología e inteligencia artificial." },
-  { year: "2025", text: "Lanzamos Tribai.co: inteligencia tributaria con IA. Y arrancamos la plataforma de sector público." },
+  { year: "2023", text: "Nace INPLUX S.A.S. como hub que integra consultoría, tecnología e IA. Se formaliza el ecosistema con Fourier, Think IT, Big Bang Data y Alianza IT." },
+  { year: "2025", text: "Lanzamos Tribai.co: inteligencia tributaria con IA. Declaraciones de renta sugeridas en desarrollo. Arrancamos la plataforma de sector público." },
 ];
 
 const LOGOS = [
@@ -210,15 +199,17 @@ const HUB_COMPANIES = [
     name: "Tribai",
     domain: "tribai.co",
     focus: "Sector Privado",
-    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos del estatuto indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes. Declaraciones de renta sugeridas y consulta automatizada.",
+    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos del estatuto indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes. Declaraciones de renta sugeridas en desarrollo para la temporada de agosto.",
     status: "Activo",
+    upcoming: "Próximamente: declaraciones de renta sugeridas · app móvil",
   },
   {
     name: "Sector Público",
     domain: "Próximamente",
     focus: "Sector Público",
-    desc: "Gemelo digital y rendición de cuentas para municipios. Integra datos de múltiples fuentes (DNP, ministerios, organismos de control) en un tablero centralizado. Automatiza reportes a la Contraloría, Contaduría y entidades CIAS.",
+    desc: "Gemelo digital y rendición de cuentas para municipios. Integra automáticamente datos del DNP, ministerios, Contraloría, Contaduría y entidades CIAS en un tablero centralizado con alertas. El secretario de Hacienda ve todo en un solo panel.",
     status: "En desarrollo",
+    upcoming: "Rendición de cuentas ante CIAS · Seguimiento al plan de desarrollo · Reportes cruzados automáticos",
   },
 ];
 
@@ -235,7 +226,6 @@ const ECOSYSTEM = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const timelineRef = useRef<HTMLDivElement>(null);
 
   useScrollReveal();
 
@@ -287,21 +277,13 @@ export default function Home() {
 
       {/* ──── HERO ──── */}
       <section id="inicio" className="relative pt-[60px] overflow-hidden">
-        {/* Video Background */}
         <div className="absolute inset-0 top-[60px] z-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          >
+          <video autoPlay muted loop playsInline className="w-full h-full object-cover">
             <source src="/hero.webm" type="video/webm" />
             <source src="/hero.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 hero-overlay" />
         </div>
-        {/* Content */}
         <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-28 md:py-40">
           <div className="max-w-[720px]">
             <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Consultoría · Tecnología · Inteligencia Artificial</p>
@@ -320,7 +302,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Fade to white */}
         <div className="relative z-10 h-24 hero-fade-bottom" />
       </section>
 
@@ -399,8 +380,118 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ──── STACK TECNOLÓGICO ──── */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 text-center">
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Infraestructura</p>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
+              El stack detrás de <em className="italic">nuestros productos</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+              No usamos herramientas genéricas. Cada pieza de nuestra infraestructura tiene un propósito específico en la cadena: vectorizar normativa, razonar sobre ella y entregarla como producto.
+            </p>
+          </div>
+
+          <div className="reveal w-full overflow-x-auto">
+            <svg viewBox="0 0 900 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto min-w-[600px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
+              {/* Background subtle grid */}
+              {Array.from({ length: 9 }).map((_, row) =>
+                Array.from({ length: 25 }).map((_, col) => (
+                  <circle key={`sg-${row}-${col}`} cx={36 * col + 18} cy={38 * row + 10} r="0.5" fill="#e8e6e3" />
+                ))
+              )}
+
+              {/* Main flow line */}
+              <path d="M 60 170 L 840 170" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="6 4" />
+              <path d="M 60 170 L 840 170" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.3" className="eco-dash-flow" />
+
+              {/* ═══ PINECONE ═══ */}
+              <g className="eco-float">
+                <rect x="20" y="110" width="150" height="120" rx="12" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <rect x="21" y="110" width="148" height="24" rx="12" fill="#e8f5f3" />
+                <text x="95" y="126" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="700" letterSpacing="1.5">VECTORIZACIÓN</text>
+                <text x="95" y="157" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Pinecone</text>
+                <text x="95" y="177" textAnchor="middle" fill="#8a8784" fontSize="9">Base de datos vectorial</text>
+                <text x="95" y="193" textAnchor="middle" fill="#a8a5a0" fontSize="8">Indexa +1.294 artículos</text>
+                <text x="95" y="207" textAnchor="middle" fill="#a8a5a0" fontSize="8">del estatuto tributario</text>
+              </g>
+              <circle cx="170" cy="170" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse" />
+
+              {/* ═══ SUPABASE ═══ */}
+              <g className="eco-float-delay">
+                <rect x="200" y="110" width="150" height="120" rx="12" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <rect x="201" y="110" width="148" height="24" rx="12" fill="#f3f1ee" />
+                <text x="275" y="126" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="700" letterSpacing="1.5">BASE DE DATOS</text>
+                <text x="275" y="157" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Supabase</text>
+                <text x="275" y="177" textAnchor="middle" fill="#8a8784" fontSize="9">PostgreSQL + Auth + Storage</text>
+                <text x="275" y="193" textAnchor="middle" fill="#a8a5a0" fontSize="8">Usuarios, calculadoras,</text>
+                <text x="275" y="207" textAnchor="middle" fill="#a8a5a0" fontSize="8">historial de consultas</text>
+              </g>
+              <circle cx="350" cy="170" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse-delay1" />
+
+              {/* ═══ CLAUDE / OPENAI ═══ */}
+              <g className="eco-glow">
+                <rect x="380" y="100" width="170" height="140" rx="14" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <rect x="381" y="100" width="168" height="26" rx="14" fill="#e8f5f3" />
+                <text x="465" y="117" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="700" letterSpacing="1.5">RAZONAMIENTO IA</text>
+                <text x="465" y="150" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Claude + OpenAI</text>
+                <text x="465" y="170" textAnchor="middle" fill="#8a8784" fontSize="9">Modelos de lenguaje</text>
+                <text x="465" y="186" textAnchor="middle" fill="#a8a5a0" fontSize="8">Razonamiento neuro-simbólico</text>
+                <text x="465" y="200" textAnchor="middle" fill="#a8a5a0" fontSize="8">sobre normativa colombiana</text>
+                <text x="465" y="216" textAnchor="middle" fill="#a8a5a0" fontSize="8">Citación de fuentes verificable</text>
+              </g>
+              <circle cx="550" cy="170" r="5" fill="#0d7d74" className="eco-node-pulse-delay2" />
+
+              {/* ═══ VERCEL ═══ */}
+              <g className="eco-float">
+                <rect x="580" y="110" width="150" height="120" rx="12" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <rect x="581" y="110" width="148" height="24" rx="12" fill="#f3f1ee" />
+                <text x="655" y="126" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="700" letterSpacing="1.5">DESPLIEGUE</text>
+                <text x="655" y="157" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Vercel</text>
+                <text x="655" y="177" textAnchor="middle" fill="#8a8784" fontSize="9">Edge hosting global</text>
+                <text x="655" y="193" textAnchor="middle" fill="#a8a5a0" fontSize="8">Deploys automáticos</text>
+                <text x="655" y="207" textAnchor="middle" fill="#a8a5a0" fontSize="8">CDN y serverless functions</text>
+              </g>
+              <circle cx="730" cy="170" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse" />
+
+              {/* ═══ PRODUCTO FINAL ═══ */}
+              <g className="eco-float-delay">
+                <rect x="760" y="120" width="120" height="100" rx="12" fill="#1a1918" />
+                <text x="820" y="158" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">Tribai.co</text>
+                <text x="820" y="176" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="8">Sector Público</text>
+                <text x="820" y="195" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="600" letterSpacing="1">PRODUCTO FINAL</text>
+              </g>
+
+              {/* Flow arrows */}
+              <polygon points="193,167 199,170 193,173" fill="#0d7d74" opacity="0.4" />
+              <polygon points="373,167 379,170 373,173" fill="#0d7d74" opacity="0.4" />
+              <polygon points="553,167 559,170 553,173" fill="#0d7d74" opacity="0.4" />
+              <polygon points="733,167 739,170 733,173" fill="#0d7d74" opacity="0.4" />
+
+              {/* Labels below */}
+              <text x="95" y="260" textAnchor="middle" fill="#c8c5c1" fontSize="7" fontWeight="600" letterSpacing="1">PASO 1</text>
+              <text x="275" y="260" textAnchor="middle" fill="#c8c5c1" fontSize="7" fontWeight="600" letterSpacing="1">PASO 2</text>
+              <text x="465" y="260" textAnchor="middle" fill="#c8c5c1" fontSize="7" fontWeight="600" letterSpacing="1">PASO 3</text>
+              <text x="655" y="260" textAnchor="middle" fill="#c8c5c1" fontSize="7" fontWeight="600" letterSpacing="1">PASO 4</text>
+              <text x="820" y="260" textAnchor="middle" fill="#c8c5c1" fontSize="7" fontWeight="600" letterSpacing="1">RESULTADO</text>
+
+              <text x="95" y="274" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Indexar norma</text>
+              <text x="275" y="274" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Almacenar datos</text>
+              <text x="465" y="274" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Razonar con IA</text>
+              <text x="655" y="274" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Desplegar</text>
+              <text x="820" y="274" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Producto vivo</text>
+
+              {/* Top label */}
+              <rect x="310" y="40" width="280" height="30" rx="15" fill="#f8f8f7" stroke="#e5e3e0" strokeWidth="0.8" />
+              <text x="450" y="60" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600" letterSpacing="0.5">Normativa colombiana → IA → Producto en producción</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
       {/* ──── HUB / ECOSYSTEM ──── */}
-      <section id="empresas" className="py-20 md:py-28">
+      <section id="empresas" className="py-20 md:py-28 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14">
             <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema Inplux</p>
@@ -416,31 +507,27 @@ export default function Home() {
           {/* SVG Ecosystem Map */}
           <div className="reveal w-full overflow-x-auto">
             <svg viewBox="0 0 820 580" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[820px] mx-auto min-w-[580px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
-              {/* ═══ OUTER ORBIT — Allies circle (animated rotation) ═══ */}
               <circle cx="410" cy="310" r="260" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="6 5" fill="none" className="eco-orbit" />
-              {/* Secondary inner orbit ring */}
               <circle cx="410" cy="310" r="220" stroke="#d1cfcc" strokeWidth="0.8" strokeDasharray="3 7" fill="none" className="eco-orbit" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
               <text x="410" y="575" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">ECOSISTEMA DE ALIADOS TECNOLÓGICOS</text>
 
-              {/* Small decorative orbit dots */}
               <circle cx="220" cy="130" r="3" fill="#c8c5c1" className="eco-node-pulse" />
               <circle cx="630" cy="155" r="3" fill="#c8c5c1" className="eco-node-pulse-delay1" />
               <circle cx="160" cy="450" r="3" fill="#c8c5c1" className="eco-node-pulse-delay2" />
               <circle cx="690" cy="480" r="3" fill="#c8c5c1" className="eco-node-pulse" />
 
-              {/* Connection lines (animated dash flow) */}
               <line x1="340" y1="95" x2="270" y2="210" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
               <line x1="480" y1="95" x2="550" y2="210" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
               <line x1="410" y1="95" x2="410" y2="355" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.35" className="eco-dash-flow" />
 
-              {/* ═══ INPLUX — Top center ═══ */}
+              {/* INPLUX */}
               <g className="eco-glow">
                 <rect x="310" y="24" width="200" height="68" rx="14" fill="#1a1918" />
                 <text x="410" y="55" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
                 <text x="410" y="74" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="600" letterSpacing="1.5">HUB DE IA & TIC</text>
               </g>
 
-              {/* ═══ TRIBAI — Left, under umbrella ═══ */}
+              {/* TRIBAI */}
               <g className="eco-float">
                 <rect x="138" y="195" width="230" height="106" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                 <rect x="139" y="195" width="228" height="26" rx="12" fill="#e8f5f3" />
@@ -452,7 +539,7 @@ export default function Home() {
                 <text x="253" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria con IA</text>
               </g>
 
-              {/* ═══ SECTOR PÚBLICO — Right, under umbrella ═══ */}
+              {/* SECTOR PÚBLICO */}
               <g className="eco-float-delay">
                 <rect x="452" y="195" width="230" height="106" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
                 <rect x="453" y="195" width="228" height="26" rx="12" fill="#f3f1ee" />
@@ -462,7 +549,7 @@ export default function Home() {
                 <text x="567" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Gemelo digital & rendición de cuentas</text>
               </g>
 
-              {/* ═══ FOURIER — Center, inside orbit, prominent ═══ */}
+              {/* FOURIER */}
               <g className="eco-glow">
                 <rect x="280" y="355" width="260" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
                 <rect x="281" y="355" width="258" height="24" rx="14" fill="#e8f5f3" />
@@ -472,7 +559,6 @@ export default function Home() {
                 <text x="410" y="434" textAnchor="middle" fill="#8a8784" fontSize="8.5">Arquitectura de software, cloud e infraestructura</text>
               </g>
 
-              {/* ═══ Allies on the orbit circle ═══ */}
               {/* Think IT */}
               <g className="eco-float-delay2">
                 <rect x="52" y="365" width="150" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
@@ -502,7 +588,7 @@ export default function Home() {
             </svg>
           </div>
 
-          {/* Platform details below SVG */}
+          {/* Platform details */}
           <div className="grid md:grid-cols-2 gap-5 mt-12 stagger">
             {HUB_COMPANIES.map((c) => (
               <div key={c.name} className="reveal card">
@@ -512,7 +598,8 @@ export default function Home() {
                 </div>
                 <h3 className="font-serif text-[1.35rem] md:text-[1.5rem] text-ink mb-1">{c.name}</h3>
                 <p className="text-teal text-sm font-medium mb-3">{c.domain}</p>
-                <p className="text-gray-500 text-[0.875rem] leading-relaxed">{c.desc}</p>
+                <p className="text-gray-500 text-[0.875rem] leading-relaxed mb-3">{c.desc}</p>
+                <p className="text-gray-400 text-[0.75rem] italic">{c.upcoming}</p>
                 {c.status === "Activo" && (
                   <a href={`https://${c.domain}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-ink text-sm font-semibold mt-4 hover:text-teal transition-colors">
                     Visitar plataforma
@@ -526,7 +613,7 @@ export default function Home() {
       </section>
 
       {/* ──── TIMELINE (VERTICAL) ──── */}
-      <section id="trayectoria" className="py-20 md:py-28 bg-warm">
+      <section id="trayectoria" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14">
             <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Trayectoria</p>
@@ -535,21 +622,17 @@ export default function Home() {
             </h2>
           </div>
           <div className="relative">
-            {/* Vertical line */}
             <div className="absolute left-[22px] md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
             <div className="space-y-0">
               {TIMELINE_EVENTS.map((ev, i) => (
                 <div key={ev.year} className={`reveal relative flex items-start gap-6 md:gap-0 pb-8 last:pb-0 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                  {/* Content */}
                   <div className={`flex-1 md:w-1/2 ${i % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12 md:text-left"}`}>
                     <span className="font-serif text-xl md:text-2xl text-ink block mb-0.5">{ev.year}</span>
                     <p className="text-gray-500 text-[0.8125rem] leading-relaxed">{ev.text}</p>
                   </div>
-                  {/* Node */}
                   <div className="absolute left-[16px] md:left-1/2 md:-translate-x-1/2 top-1 z-10">
                     <div className={`w-[13px] h-[13px] rounded-full border-2 ${i === TIMELINE_EVENTS.length - 1 ? "border-teal bg-teal" : "border-gray-300 bg-white"} transition-all`} />
                   </div>
-                  {/* Spacer for the other side (desktop) */}
                   <div className="hidden md:block md:w-1/2" />
                 </div>
               ))}
@@ -559,102 +642,119 @@ export default function Home() {
       </section>
 
       {/* ──── MANIFESTO ──── */}
-      <section id="nosotros" className="py-20 md:py-28">
+      <section id="nosotros" className="py-20 md:py-28 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          {/* Manifesto Header */}
-          <div className="reveal mb-14 text-center">
+          {/* CEO + Narrative */}
+          <div className="reveal mb-16">
             <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Manifiesto</p>
-            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[700px] mx-auto">
+            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[700px]">
               Tributaristas que <em className="italic">escriben código</em>
             </h2>
+            <div className="max-w-[680px]">
+              <p className="text-gray-600 text-base md:text-lg leading-[1.65] mb-4">
+                Nuestro CEO lleva 25 años asesorando la hacienda pública de más de 50 municipios colombianos, coordinando 44 estatutos tributarios para la Gobernación de Antioquia y estructurando la contabilidad de hospitales, ESPs y asociaciones de municipios.
+              </p>
+              <p className="text-gray-500 text-[0.9375rem] leading-[1.65] mb-4">
+                De esa experiencia nació INPLUX: un hub donde el conocimiento fiscal profundo se traduce en tecnología. Fundó empresas de asesoría tributaria, formó alianzas con Think IT, Big Bang Data y Alianza IT, y hoy lidera el ecosistema que construye Tribai.co y la plataforma de sector público.
+              </p>
+              <p className="text-gray-500 text-[0.9375rem] leading-[1.65]">
+                No contratamos IA como servicio externo. La construimos internamente, la entrenamos con normativa colombiana real, y la desplegamos como producto. Esa es la diferencia entre una consultora que usa herramientas y un hub que las crea.
+              </p>
+            </div>
           </div>
 
-          {/* Animated Manifesto SVG */}
+          {/* Animated Manifesto SVG — larger viewBox, no text overlap */}
           <div className="reveal w-full mb-16">
-            <svg viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
+            <svg viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
               {/* Background grid dots */}
-              {Array.from({ length: 15 }).map((_, row) =>
+              {Array.from({ length: 17 }).map((_, row) =>
                 Array.from({ length: 25 }).map((_, col) => (
-                  <circle key={`dot-${row}-${col}`} cx={36 * col + 18} cy={28 * row + 10} r="0.6" fill="#e5e3e0" />
+                  <circle key={`dot-${row}-${col}`} cx={36 * col + 18} cy={30 * row + 20} r="0.6" fill="#e5e3e0" />
                 ))
               )}
 
+              {/* Top labels — CONOCIMIENTO FISCAL / TECNOLOGÍA DE FRONTERA */}
+              <text x="210" y="50" textAnchor="middle" fill="#a8a5a0" fontSize="9" fontWeight="600" letterSpacing="2" className="eco-float">CONOCIMIENTO FISCAL</text>
+              <line x1="90" y1="85" x2="210" y2="58" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="330" y1="85" x2="210" y2="58" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
+
+              <text x="690" y="50" textAnchor="middle" fill="#a8a5a0" fontSize="9" fontWeight="600" letterSpacing="2" className="eco-float-delay">TECNOLOGÍA DE FRONTERA</text>
+              <line x1="570" y1="85" x2="690" y2="58" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="810" y1="85" x2="690" y2="58" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
+
               {/* Flowing connection line through all nodes */}
               <path
-                d="M 90 200 C 180 200, 220 200, 290 200 S 400 200, 450 200 S 560 200, 610 200 S 720 200, 810 200"
+                d="M 90 240 C 180 240, 220 240, 290 240 S 400 240, 450 240 S 560 240, 610 240 S 720 240, 810 240"
                 stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 4" fill="none" opacity="0.35" className="eco-dash-flow"
               />
-              {/* Secondary flowing lines */}
               <path
-                d="M 90 200 C 200 140, 300 260, 450 200 S 600 140, 810 200"
+                d="M 90 240 C 200 170, 300 310, 450 240 S 600 170, 810 240"
                 stroke="#c8c5c1" strokeWidth="1" strokeDasharray="4 6" fill="none" opacity="0.4" className="eco-dash-flow-slow"
               />
 
               {/* ═══ NODE 1: NORMA ═══ */}
               <g className="eco-float">
-                <circle cx="90" cy="200" r="52" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-                <circle cx="90" cy="200" r="52" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="8 200" className="eco-orbit" style={{ animationDuration: "12s" }} />
-                <text x="90" y="190" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">NORMA</text>
-                <text x="90" y="206" textAnchor="middle" fill="#8a8784" fontSize="8.5">Estatuto tributario</text>
-                <text x="90" y="218" textAnchor="middle" fill="#8a8784" fontSize="8.5">NIC/NIIF · 44 estatutos</text>
+                <circle cx="90" cy="240" r="68" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <circle cx="90" cy="240" r="68" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 260" className="eco-orbit" style={{ animationDuration: "12s" }} />
+                <text x="90" y="222" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">NORMA</text>
+                <text x="90" y="244" textAnchor="middle" fill="#8a8784" fontSize="9.5">Estatuto tributario</text>
+                <text x="90" y="260" textAnchor="middle" fill="#8a8784" fontSize="9.5">NIC/NIIF (3 grupos)</text>
+                <text x="90" y="276" textAnchor="middle" fill="#a8a5a0" fontSize="8">44 estatutos coordinados</text>
               </g>
-              <circle cx="90" cy="200" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse" />
+              <circle cx="90" cy="240" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse" />
 
               {/* ═══ NODE 2: DATO ═══ */}
               <g className="eco-float-delay">
-                <circle cx="330" cy="200" r="52" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-                <circle cx="330" cy="200" r="52" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="8 200" className="eco-orbit" style={{ animationDuration: "15s", animationDirection: "reverse" }} />
-                <text x="330" y="190" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">DATO</text>
-                <text x="330" y="206" textAnchor="middle" fill="#8a8784" fontSize="8.5">+50 municipios</text>
-                <text x="330" y="218" textAnchor="middle" fill="#8a8784" fontSize="8.5">DNP · Contraloría · CIAS</text>
+                <circle cx="330" cy="240" r="68" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <circle cx="330" cy="240" r="68" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 260" className="eco-orbit" style={{ animationDuration: "15s", animationDirection: "reverse" }} />
+                <text x="330" y="222" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">DATO</text>
+                <text x="330" y="244" textAnchor="middle" fill="#8a8784" fontSize="9.5">+50 municipios</text>
+                <text x="330" y="260" textAnchor="middle" fill="#8a8784" fontSize="9.5">DNP · Contraloría</text>
+                <text x="330" y="276" textAnchor="middle" fill="#a8a5a0" fontSize="8">Entidades CIAS</text>
               </g>
-              <circle cx="330" cy="200" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay1" />
+              <circle cx="330" cy="240" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay1" />
 
               {/* ═══ NODE 3: ALGORITMO ═══ */}
               <g className="eco-float">
-                <circle cx="570" cy="200" r="52" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-                <circle cx="570" cy="200" r="52" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="8 200" className="eco-orbit" style={{ animationDuration: "18s" }} />
-                <text x="570" y="186" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">ALGORITMO</text>
-                <text x="570" y="202" textAnchor="middle" fill="#8a8784" fontSize="8.5">RAG · IA neuro-simbólica</text>
-                <text x="570" y="214" textAnchor="middle" fill="#8a8784" fontSize="8.5">Gemelos digitales</text>
+                <circle cx="570" cy="240" r="68" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <circle cx="570" cy="240" r="68" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 260" className="eco-orbit" style={{ animationDuration: "18s" }} />
+                <text x="570" y="218" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">ALGORITMO</text>
+                <text x="570" y="240" textAnchor="middle" fill="#8a8784" fontSize="9.5">RAG neuro-simbólico</text>
+                <text x="570" y="256" textAnchor="middle" fill="#8a8784" fontSize="9.5">Gemelos digitales</text>
+                <text x="570" y="272" textAnchor="middle" fill="#a8a5a0" fontSize="8">Claude + OpenAI</text>
               </g>
-              <circle cx="570" cy="200" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay2" />
+              <circle cx="570" cy="240" r="4" fill="#0d7d74" opacity="0.6" className="eco-node-pulse-delay2" />
 
               {/* ═══ NODE 4: IMPACTO ═══ */}
               <g className="eco-float-delay">
-                <circle cx="810" cy="200" r="52" fill="#1a1918" stroke="none" />
-                <circle cx="810" cy="200" r="52" fill="none" stroke="#0d7d74" strokeWidth="2.5" strokeDasharray="10 200" className="eco-orbit" style={{ animationDuration: "10s", animationDirection: "reverse" }} />
-                <text x="810" y="190" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">IMPACTO</text>
-                <text x="810" y="206" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="8.5">Productos, no horas</text>
-                <text x="810" y="218" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="8.5">Resultados medibles</text>
+                <circle cx="810" cy="240" r="68" fill="#1a1918" stroke="none" />
+                <circle cx="810" cy="240" r="68" fill="none" stroke="#0d7d74" strokeWidth="2.5" strokeDasharray="12 260" className="eco-orbit" style={{ animationDuration: "10s", animationDirection: "reverse" }} />
+                <text x="810" y="222" textAnchor="middle" fill="white" fontSize="15" fontWeight="700">IMPACTO</text>
+                <text x="810" y="244" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="9.5">Productos, no horas</text>
+                <text x="810" y="260" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="9.5">Resultados medibles</text>
+                <text x="810" y="276" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8">+100 proyectos</text>
               </g>
-              <circle cx="810" cy="200" r="5" fill="#0d7d74" className="eco-node-pulse" />
+              <circle cx="810" cy="240" r="5" fill="#0d7d74" className="eco-node-pulse" />
 
               {/* Arrow indicators between nodes */}
-              <polygon points="148,197 155,200 148,203" fill="#0d7d74" opacity="0.5" className="eco-float" />
-              <polygon points="388,197 395,200 388,203" fill="#0d7d74" opacity="0.5" className="eco-float-delay" />
-              <polygon points="628,197 635,200 628,203" fill="#0d7d74" opacity="0.5" className="eco-float-delay2" />
+              <polygon points="165,237 173,240 165,243" fill="#0d7d74" opacity="0.5" className="eco-float" />
+              <polygon points="405,237 413,240 405,243" fill="#0d7d74" opacity="0.5" className="eco-float-delay" />
+              <polygon points="645,237 653,240 645,243" fill="#0d7d74" opacity="0.5" className="eco-float-delay2" />
 
-              {/* Top manifesto phrases */}
-              <text x="210" y="115" textAnchor="middle" fill="#a8a5a0" fontSize="9" fontWeight="600" letterSpacing="1.5" className="eco-float">CONOCIMIENTO FISCAL</text>
-              <line x1="90" y1="148" x2="210" y2="122" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
-              <line x1="330" y1="148" x2="210" y2="122" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
-
-              <text x="690" y="115" textAnchor="middle" fill="#a8a5a0" fontSize="9" fontWeight="600" letterSpacing="1.5" className="eco-float-delay">TECNOLOGÍA DE FRONTERA</text>
-              <line x1="570" y1="148" x2="690" y2="122" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
-              <line x1="810" y1="148" x2="690" y2="122" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 3" />
-
-              {/* Bottom bar — manifesto text */}
-              <rect x="150" y="310" width="600" height="56" rx="28" fill="#f8f8f7" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="450" y="335" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600" letterSpacing="0.5">Donde la norma se encuentra con el algoritmo.</text>
-              <text x="450" y="352" textAnchor="middle" fill="#a8a5a0" fontSize="9">25 años de expertise fiscal → ejecutados con IA y automatización</text>
+              {/* Bottom manifesto pill */}
+              <rect x="150" y="380" width="600" height="60" rx="30" fill="#ffffff" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="450" y="407" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600" letterSpacing="0.5">Donde la norma se encuentra con el algoritmo.</text>
+              <text x="450" y="426" textAnchor="middle" fill="#a8a5a0" fontSize="9.5">25 años de expertise fiscal → ejecutados con IA y automatización</text>
 
               {/* Decorative pulsing dots */}
-              <circle cx="50" cy="80" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse" />
-              <circle cx="860" cy="320" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay1" />
-              <circle cx="450" cy="60" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay2" />
-              <circle cx="30" cy="350" r="2" fill="#c8c5c1" opacity="0.3" className="eco-node-pulse-delay1" />
-              <circle cx="870" cy="80" r="2" fill="#c8c5c1" opacity="0.3" className="eco-node-pulse" />
+              <circle cx="50" cy="30" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse" />
+              <circle cx="860" cy="400" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay1" />
+              <circle cx="450" cy="25" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay2" />
+              <circle cx="30" cy="420" r="2" fill="#c8c5c1" opacity="0.3" className="eco-node-pulse-delay1" />
+              <circle cx="870" cy="30" r="2" fill="#c8c5c1" opacity="0.3" className="eco-node-pulse" />
+
+              {/* Bottom tag */}
+              <text x="450" y="490" textAnchor="middle" fill="#d1cfcc" fontSize="7.5" fontWeight="600" letterSpacing="2">NORMA → DATO → ALGORITMO → IMPACTO</text>
             </svg>
           </div>
 
@@ -680,7 +780,7 @@ export default function Home() {
       </section>
 
       {/* ──── CONTACT ──── */}
-      <section id="contacto" className="py-20 md:py-28 bg-warm">
+      <section id="contacto" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="grid lg:grid-cols-2 gap-14 md:gap-20">
             <div className="reveal-left">
