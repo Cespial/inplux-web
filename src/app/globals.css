@@ -195,6 +195,11 @@ body {
   transform: translateY(-1px);
 }
 
+.hero-fade-bottom {
+  background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.85) 65%, #ffffff 100%);
+  pointer-events: none;
+}
+
 /* ═══════ CARDS ═══════ */
 .card {
   background: var(--white);

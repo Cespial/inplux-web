@@ -54,90 +54,33 @@ function AnimatedNumber({ value, label }: { value: string; label: string }) {
 }
 
 /* ═══════════════════════════════════════
-   SVG SERVICE ILLUSTRATIONS
-   ═══════════════════════════════════════ */
-function SvgFinance() {
-  return (
-    <svg viewBox="0 0 200 120" fill="none" className="w-full h-28">
-      <rect x="20" y="60" width="24" height="50" rx="3" fill="#e8e6e3" />
-      <rect x="56" y="42" width="24" height="68" rx="3" fill="#d1cfcc" />
-      <rect x="92" y="26" width="24" height="84" rx="3" fill="#a8a5a0" />
-      <rect x="128" y="10" width="24" height="100" rx="3" fill="#1a1918" />
-      <path d="M32 58L68 40L104 24L140 8" stroke="#0d7d74" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="32" cy="58" r="4" fill="white" stroke="#0d7d74" strokeWidth="2" />
-      <circle cx="68" cy="40" r="4" fill="white" stroke="#0d7d74" strokeWidth="2" />
-      <circle cx="104" cy="24" r="4" fill="white" stroke="#0d7d74" strokeWidth="2" />
-      <circle cx="140" cy="8" r="4" fill="#0d7d74" />
-      <line x1="164" y1="10" x2="164" y2="110" stroke="#e8e6e3" strokeWidth="1" strokeDasharray="3 3" />
-      <text x="164" y="118" textAnchor="middle" fontSize="8" fill="#a8a5a0" fontFamily="system-ui">META</text>
-    </svg>
-  );
-}
-
-function SvgDigital() {
-  return (
-    <svg viewBox="0 0 200 120" fill="none" className="w-full h-28">
-      <rect x="16" y="10" width="168" height="86" rx="8" stroke="#d1cfcc" strokeWidth="1.5" />
-      <rect x="16" y="10" width="168" height="16" rx="8" fill="#f3f1ee" />
-      <circle cx="30" cy="18" r="3" fill="#e8e6e3" />
-      <circle cx="40" cy="18" r="3" fill="#e8e6e3" />
-      <circle cx="50" cy="18" r="3" fill="#e8e6e3" />
-      <rect x="30" y="36" width="60" height="4" rx="2" fill="#e8e6e3" />
-      <rect x="30" y="46" width="44" height="4" rx="2" fill="#f3f1ee" />
-      <rect x="30" y="56" width="52" height="4" rx="2" fill="#e8e6e3" />
-      <rect x="30" y="66" width="36" height="4" rx="2" fill="#f3f1ee" />
-      <rect x="110" y="36" width="56" height="44" rx="6" fill="#e8f5f3" />
-      <path d="M128 52l8 8 14-18" stroke="#0d7d74" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="72" y="102" width="56" height="8" rx="3" fill="#f3f1ee" />
-      <line x1="100" y1="96" x2="100" y2="102" stroke="#e8e6e3" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function SvgOrg() {
-  return (
-    <svg viewBox="0 0 200 120" fill="none" className="w-full h-28">
-      <circle cx="100" cy="22" r="16" stroke="#1a1918" strokeWidth="1.5" />
-      <circle cx="100" cy="22" r="7" fill="#1a1918" />
-      <line x1="100" y1="38" x2="100" y2="56" stroke="#d1cfcc" strokeWidth="1.5" />
-      <line x1="100" y1="56" x2="48" y2="72" stroke="#d1cfcc" strokeWidth="1.5" />
-      <line x1="100" y1="56" x2="152" y2="72" stroke="#d1cfcc" strokeWidth="1.5" />
-      <circle cx="48" cy="80" r="14" stroke="#d1cfcc" strokeWidth="1.5" />
-      <circle cx="48" cy="80" r="6" fill="#e8f5f3" stroke="#0d7d74" strokeWidth="1.5" />
-      <circle cx="152" cy="80" r="14" stroke="#d1cfcc" strokeWidth="1.5" />
-      <circle cx="152" cy="80" r="6" fill="#e8f5f3" stroke="#0d7d74" strokeWidth="1.5" />
-      <rect x="28" y="102" width="40" height="8" rx="4" fill="#f3f1ee" />
-      <rect x="132" y="102" width="40" height="8" rx="4" fill="#f3f1ee" />
-    </svg>
-  );
-}
-
-function SvgComms() {
-  return (
-    <svg viewBox="0 0 200 120" fill="none" className="w-full h-28">
-      <rect x="12" y="14" width="88" height="56" rx="10" stroke="#1a1918" strokeWidth="1.5" />
-      <rect x="26" y="28" width="48" height="4" rx="2" fill="#d1cfcc" />
-      <rect x="26" y="38" width="60" height="4" rx="2" fill="#e8e6e3" />
-      <rect x="26" y="48" width="36" height="4" rx="2" fill="#d1cfcc" />
-      <path d="M12 62l24 18V62H12z" fill="#1a1918" />
-      <rect x="100" y="40" width="84" height="52" rx="10" stroke="#0d7d74" strokeWidth="1.5" />
-      <rect x="114" y="54" width="40" height="4" rx="2" fill="#0d7d74" opacity="0.25" />
-      <rect x="114" y="64" width="56" height="4" rx="2" fill="#0d7d74" opacity="0.15" />
-      <rect x="114" y="74" width="32" height="4" rx="2" fill="#0d7d74" opacity="0.25" />
-      <circle cx="170" cy="28" r="12" fill="#e8f5f3" />
-      <path d="M165 28l4 4 7-8" stroke="#0d7d74" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-/* ═══════════════════════════════════════
    DATA
    ═══════════════════════════════════════ */
 const SERVICES = [
-  { title: "Consultoría Estratégica y Financiera", desc: "Estructuramos la inteligencia financiera de su organización para convertirla en el motor de las decisiones estratégicas y el crecimiento sostenible.", features: ["Gestión financiera, contable y tributaria", "Planificación estratégica y del desarrollo", "Optimización fiscal y cobro de cartera"], svg: <SvgFinance /> },
-  { title: "Soluciones de Transformación Digital", desc: "Diseñamos y construimos los ecosistemas digitales que su organización necesita para operar con mayor eficiencia y generar ventajas competitivas.", features: ["Plataformas de IA e inteligencia tributaria", "Infraestructura cloud y plataformas ERP", "Inteligencia de negocios, automatización e IoT"], svg: <SvgDigital /> },
-  { title: "Optimización Organizacional", desc: "La estrategia solo genera valor a través de una ejecución impecable. Alineamos procesos, equipos y proyectos para resultados extraordinarios.", features: ["Gerencia de proyectos de alto impacto", "Auditoría e interventoría técnica", "Modernización y talento humano"], svg: <SvgOrg /> },
-  { title: "Gestión Institucional y Comunicaciones", desc: "Construimos la narrativa y los canales para fortalecer la reputación y la confianza en su organización.", features: ["Modelos de gestión y gobernanza", "Comunicación estratégica", "Eventos y foros sectoriales"], svg: <SvgComms /> },
+  {
+    tag: "01",
+    title: "Inteligencia Tributaria",
+    desc: "Estatuto tributario, NIC/NIIF, norma internacional de contabilidad en sus tres grupos. Declaraciones de renta, ICA, estructuración fiscal y cobro de cartera para los sectores público y privado.",
+    features: ["Estatuto tributario e impuesto de renta", "Adopción NIC/NIIF (grupos 1, 2 y 3)", "Estructuración fiscal municipal y departamental", "44 estatutos tributarios coordinados para Antioquia"],
+  },
+  {
+    tag: "02",
+    title: "IA Neuro-simbólica & RAG",
+    desc: "Sistemas de inteligencia artificial que combinan razonamiento simbólico con modelos de lenguaje. Vectorización de bases normativas, asistentes con citación de fuentes y retrieval augmented generation.",
+    features: ["Asistentes tributarios con IA (Tribai)", "Vectorización y RAG sobre normativa colombiana", "Modelos neuro-simbólicos para consulta fiscal", "Integración con Pinecone, Supabase y LLMs"],
+  },
+  {
+    tag: "03",
+    title: "Gemelos Digitales & Gobernanza",
+    desc: "Réplicas digitales de la gestión municipal. Integración de datos del DNP, ministerios y organismos de control en tableros centralizados para toma de decisiones en tiempo real.",
+    features: ["Gemelo digital de municipios", "Rendición de cuentas automatizada (CIAS)", "Reportes a Contraloría y Contaduría", "Dashboards de seguimiento al plan de desarrollo"],
+  },
+  {
+    tag: "04",
+    title: "Hiperautomatización",
+    desc: "Automatización de procesos financieros, contables y administrativos mediante agentes de IA, plataformas cloud e integración de sistemas ERP.",
+    features: ["Calculadoras tributarias de precisión", "Automatización de declaraciones sugeridas", "Infraestructura cloud y plataformas ERP", "Agentes de IA para auditoría e interventoría"],
+  },
 ];
 
 const TIMELINE_EVENTS = [
@@ -175,22 +118,23 @@ const HUB_COMPANIES = [
     name: "Tribai",
     domain: "tribai.co",
     focus: "Sector Privado",
-    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes. Declaraciones de renta sugeridas y herramientas de consulta automatizada.",
+    desc: "Plataforma de inteligencia tributaria para contadores colombianos. +1.294 artículos del estatuto indexados, 35 calculadoras de precisión y asistente IA con citación de fuentes. Declaraciones de renta sugeridas y consulta automatizada.",
     status: "Activo",
   },
   {
     name: "Sector Público",
     domain: "Próximamente",
     focus: "Sector Público",
-    desc: "Plataforma de rendición de cuentas y gemelo digital para municipios. Integra datos de múltiples fuentes (DNP, ministerios, organismos de control) en un tablero centralizado. Automatiza reportes a la Contraloría, Contaduría y entidades CIAS.",
+    desc: "Gemelo digital y rendición de cuentas para municipios. Integra datos de múltiples fuentes (DNP, ministerios, organismos de control) en un tablero centralizado. Automatiza reportes a la Contraloría, Contaduría y entidades CIAS.",
     status: "En desarrollo",
   },
 ];
 
 const ECOSYSTEM = [
-  { name: "Think IT", role: "Ingeniería de software y consultoría tecnológica" },
-  { name: "Big Bang Data", role: "Analítica de datos y soluciones de información" },
-  { name: "Alianza IT", role: "Integración tecnológica y servicios TI" },
+  { name: "Fourier", url: "https://fourier.dev/en", role: "Arquitectura de software, cloud e infraestructura digital" },
+  { name: "Think IT", url: null, role: "Ingeniería de software y consultoría tecnológica" },
+  { name: "Big Bang Data", url: null, role: "Analítica de datos y soluciones de información" },
+  { name: "Alianza IT", url: null, role: "Integración tecnológica y servicios TI" },
 ];
 
 /* ═══════════════════════════════════════
@@ -259,7 +203,6 @@ export default function Home() {
             loop
             playsInline
             className="w-full h-full object-cover"
-            poster=""
           >
             <source src="/hero.webm" type="video/webm" />
             <source src="/hero.mp4" type="video/mp4" />
@@ -275,16 +218,17 @@ export default function Home() {
               <em className="font-serif italic text-[#2BBCB3]">resultados</em>
             </h1>
             <p className="reveal text-white/65 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
-              Más de 25 años integrando inteligencia financiera, consultoría tributaria y
-              transformación digital para organizaciones públicas y privadas en Colombia.
-              Expertos en inteligencia artificial aplicada al sector tributario y de gobierno.
+              +25 años en inteligencia tributaria y financiera. Hoy aplicamos IA neuro-simbólica,
+              gemelos digitales y automatización para transformar organizaciones públicas y privadas en Colombia.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
-              <a href="#servicios" className="btn-hero-primary text-center">Explorar servicios</a>
-              <a href="#contacto" className="btn-hero-ghost text-center">Agendar sesión estratégica</a>
+              <a href="#servicios" className="btn-hero-primary text-center">Ver capacidades</a>
+              <a href="#contacto" className="btn-hero-ghost text-center">Agendar sesión</a>
             </div>
           </div>
         </div>
+        {/* Fade to white */}
+        <div className="relative z-10 h-24 hero-fade-bottom" />
       </section>
 
       {/* ──── LOGOS ──── */}
@@ -321,23 +265,23 @@ export default function Home() {
       <section id="servicios" className="py-20 md:py-28 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Servicios</p>
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Capacidades</p>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
-              No ofrecemos servicios.<br /><em className="italic">Construimos capacidades.</em>
+              Tributaria de fondo.<br /><em className="italic">Tecnología de frontera.</em>
             </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-lg leading-relaxed">
-              Integramos inteligencia financiera, poder tecnológico e inteligencia artificial para diseñar, acelerar y escalar el futuro de su organización.
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              25 años de expertise tributario combinados con las herramientas que están redefiniendo la gestión pública y privada.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-5 stagger">
             {SERVICES.map((s) => (
               <div key={s.title} className="reveal card group">
-                <div className="mb-5 opacity-70 group-hover:opacity-100 transition-opacity duration-300">{s.svg}</div>
-                <h3 className="font-serif text-[1.2rem] md:text-[1.35rem] text-ink mb-2 leading-snug">{s.title}</h3>
-                <p className="text-gray-500 text-[0.9rem] leading-relaxed mb-4">{s.desc}</p>
-                <ul className="space-y-1.5">
+                <span className="text-gray-300 text-[0.75rem] font-bold tracking-[0.1em] mb-4 block">{s.tag}</span>
+                <h3 className="font-serif text-[1.3rem] md:text-[1.45rem] text-ink mb-3 leading-snug">{s.title}</h3>
+                <p className="text-gray-500 text-[0.875rem] leading-relaxed mb-5">{s.desc}</p>
+                <ul className="space-y-2">
                   {s.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-gray-600 text-[0.8125rem]">
+                    <li key={f} className="flex items-start gap-2.5 text-gray-600 text-[0.8125rem]">
                       <span className="w-1 h-1 rounded-full bg-teal mt-[7px] shrink-0" />
                       {f}
                     </li>
@@ -358,44 +302,99 @@ export default function Home() {
               Un hub de empresas de <em className="italic">tecnología y tributaria</em>
             </h2>
             <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
-              Inplux es la sombrilla que coordina un grupo de profesionales y empresas especializadas
-              en TI, inteligencia artificial y consultoría tributaria. Nuestras plataformas insignia
-              atienden al sector privado y público con soluciones a la medida.
+              Bajo la sombrilla de Inplux operan plataformas propias y empresas aliadas
+              que conforman nuestro back tecnológico y tributario.
             </p>
           </div>
 
-          {/* Flagship Platforms */}
-          <div className="grid md:grid-cols-2 gap-5 stagger mb-10">
+          {/* SVG Ecosystem Map */}
+          <div className="reveal w-full overflow-x-auto">
+            <svg viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto min-w-[600px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
+              {/* Connection lines — drawn first so they sit behind */}
+              {/* INPLUX to Tribai */}
+              <line x1="450" y1="90" x2="280" y2="200" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 4" />
+              {/* INPLUX to Sector Público */}
+              <line x1="450" y1="90" x2="620" y2="200" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 4" />
+              {/* INPLUX to Fourier (thicker, prominent) */}
+              <line x1="450" y1="90" x2="450" y2="340" stroke="#0d7d74" strokeWidth="2" strokeDasharray="6 4" opacity="0.5" />
+              {/* Fourier to allies */}
+              <line x1="450" y1="380" x2="200" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="450" y1="380" x2="450" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="450" y1="380" x2="700" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
+
+              {/* ═══ INPLUX — Top center ═══ */}
+              <rect x="340" y="24" width="220" height="68" rx="12" fill="#1a1918" />
+              <text x="450" y="58" textAnchor="middle" fill="white" fontSize="15" fontWeight="700" letterSpacing="3">INPLUX</text>
+              <text x="450" y="78" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="500" letterSpacing="1.5">HUB DE CONSULTORÍA & TECNOLOGÍA</text>
+
+              {/* ═══ TRIBAI — Left branch ═══ */}
+              <rect x="160" y="180" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+              <rect x="161" y="180" width="238" height="28" rx="12" fill="#e8f5f3" />
+              <text x="185" y="199" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
+              <circle cx="375" cy="194" r="6" fill="#0d7d74" />
+              <text x="375" y="197" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
+              <text x="280" y="232" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="700">Tribai</text>
+              <text x="280" y="250" textAnchor="middle" fill="#0d7d74" fontSize="11" fontWeight="500">tribai.co</text>
+              <text x="280" y="272" textAnchor="middle" fill="#8a8784" fontSize="9.5">Inteligencia tributaria con IA</text>
+
+              {/* ═══ SECTOR PÚBLICO — Right branch ═══ */}
+              <rect x="500" y="180" width="240" height="110" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
+              <rect x="501" y="180" width="238" height="28" rx="12" fill="#f3f1ee" />
+              <text x="525" y="199" fill="#8a8784" fontSize="9" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
+              <rect x="700" y="188" width="24" height="14" rx="7" fill="#f3f1ee" stroke="#d1cfcc" strokeWidth="1" />
+              <text x="712" y="198" textAnchor="middle" fill="#a8a5a0" fontSize="7" fontWeight="600">...</text>
+              <text x="620" y="232" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="700">Sector Público</text>
+              <text x="620" y="250" textAnchor="middle" fill="#8a8784" fontSize="11" fontWeight="500">Próximamente</text>
+              <text x="620" y="272" textAnchor="middle" fill="#8a8784" fontSize="9.5">Gemelo digital & rendición de cuentas</text>
+
+              {/* ═══ FOURIER — Center, prominent ═══ */}
+              <rect x="310" y="335" width="280" height="90" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
+              <rect x="311" y="335" width="278" height="26" rx="14" fill="#e8f5f3" />
+              <text x="335" y="353" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
+              <text x="450" y="383" textAnchor="middle" fill="#1a1918" fontSize="19" fontWeight="800" letterSpacing="0.5">Fourier</text>
+              <text x="450" y="402" textAnchor="middle" fill="#0d7d74" fontSize="11" fontWeight="500">fourier.dev</text>
+              <text x="450" y="416" textAnchor="middle" fill="#8a8784" fontSize="9">Arquitectura de software, cloud e infraestructura</text>
+
+              {/* ═══ Allied companies — Bottom row ═══ */}
+              {/* Think IT */}
+              <rect x="100" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="200" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Think IT</text>
+              <text x="200" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Ingeniería de software</text>
+
+              {/* Big Bang Data */}
+              <rect x="350" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="450" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Big Bang Data</text>
+              <text x="450" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Analítica de datos</text>
+
+              {/* Alianza IT */}
+              <rect x="600" y="448" width="200" height="56" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+              <text x="700" y="474" textAnchor="middle" fill="#3d3b39" fontSize="12" fontWeight="600">Alianza IT</text>
+              <text x="700" y="492" textAnchor="middle" fill="#a8a5a0" fontSize="9">Integración tecnológica</text>
+
+              {/* Decorative: small label */}
+              <text x="450" y="516" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">EMPRESAS ALIADAS DEL ECOSISTEMA</text>
+            </svg>
+          </div>
+
+          {/* Platform details below SVG */}
+          <div className="grid md:grid-cols-2 gap-5 mt-12 stagger">
             {HUB_COMPANIES.map((c) => (
               <div key={c.name} className="reveal card">
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between mb-4">
                   <span className="text-[0.6875rem] font-bold tracking-[0.12em] uppercase text-gray-400">{c.focus}</span>
                   <span className={`text-[0.6875rem] font-semibold px-2.5 py-1 rounded-full ${c.status === "Activo" ? "bg-teal-soft text-teal" : "bg-warm-50 text-gray-500"}`}>{c.status}</span>
                 </div>
-                <h3 className="font-serif text-[1.5rem] md:text-[1.75rem] text-ink mb-1">{c.name}</h3>
+                <h3 className="font-serif text-[1.35rem] md:text-[1.5rem] text-ink mb-1">{c.name}</h3>
                 <p className="text-teal text-sm font-medium mb-3">{c.domain}</p>
-                <p className="text-gray-500 text-[0.9rem] leading-relaxed">{c.desc}</p>
+                <p className="text-gray-500 text-[0.875rem] leading-relaxed">{c.desc}</p>
                 {c.status === "Activo" && (
-                  <a href={`https://${c.domain}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-ink text-sm font-semibold mt-5 hover:text-teal transition-colors">
+                  <a href={`https://${c.domain}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-ink text-sm font-semibold mt-4 hover:text-teal transition-colors">
                     Visitar plataforma
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
                   </a>
                 )}
               </div>
             ))}
-          </div>
-
-          {/* Ecosystem Companies */}
-          <div className="reveal">
-            <p className="text-gray-400 text-[0.6875rem] font-bold tracking-[0.12em] uppercase mb-4">Empresas aliadas del ecosistema</p>
-            <div className="grid sm:grid-cols-3 gap-4">
-              {ECOSYSTEM.map((e) => (
-                <div key={e.name} className="border border-border rounded-xl p-5 transition-all duration-300 hover:shadow-sm hover:border-gray-200">
-                  <h4 className="text-ink font-semibold text-[0.9375rem] mb-1">{e.name}</h4>
-                  <p className="text-gray-500 text-[0.8125rem] leading-relaxed">{e.role}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -434,35 +433,33 @@ export default function Home() {
             <div className="reveal-left">
               <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Sobre Inplux</p>
               <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-6">
-                Socios estratégicos que construyen <em className="italic">legados</em>
+                Tributaristas que <em className="italic">escriben código</em>
               </h2>
               <p className="text-gray-600 text-base md:text-lg leading-[1.65] mb-5">
-                Somos <strong className="text-ink font-semibold">INPLUX S.A.S.</strong>, un hub que coordina un grupo de profesionales
-                con experiencia en consultoría financiera, inteligencia tributaria, transformación digital e inteligencia artificial.
-                Ayudamos a organizaciones líderes — públicas, mixtas y privadas — a resolver desafíos complejos.
+                <strong className="text-ink font-semibold">INPLUX S.A.S.</strong> nació de 25 años asesorando la hacienda pública
+                de más de 50 municipios, coordinando 44 estatutos tributarios para la Gobernación de Antioquia
+                y estructurando la contabilidad de hospitales, ESPs y asociaciones de municipios.
               </p>
               <p className="text-gray-500 text-[0.9375rem] leading-[1.65] mb-5">
-                Nuestro recorrido abarca asesorías a más de 50 municipios, empresas de tecnología,
-                firmas de auditoría financiera multinacional y entidades del sector salud, educativo
-                y de servicios públicos. Combinamos ese recorrido con capacidades de frontera
-                en inteligencia artificial y desarrollo de software.
+                Hoy ese conocimiento fiscal profundo se ejecuta a través de inteligencia artificial.
+                Construimos sistemas RAG sobre normativa colombiana, asistentes neuro-simbólicos
+                para el estatuto tributario y gemelos digitales para la gestión municipal.
               </p>
               <p className="text-gray-500 text-[0.9375rem] leading-[1.65] mb-8">
-                Hoy operamos como la sombrilla que conecta plataformas como Tribai.co, empresas
-                aliadas como Think IT, Big Bang Data y Alianza IT, y un equipo profesional, ético y transparente
-                dedicado a entregar productos — no horas — de la más alta calidad.
+                Operamos como hub junto a Think IT, Big Bang Data y Alianza IT.
+                Entregamos productos, no horas. Plataformas como Tribai.co ya lo demuestran.
               </p>
               <div className="flex flex-wrap gap-2.5">
-                {["Medellín, Colombia", "+25 años", "Sector público & privado", "Expertos en IA"].map((t) => (
+                {["Medellín, Colombia", "+25 años tributaria", "IA & RAG", "Sector público & privado"].map((t) => (
                   <span key={t} className="text-[0.8125rem] font-medium text-gray-600 border border-border rounded-full px-4 py-1.5">{t}</span>
                 ))}
               </div>
             </div>
             <div className="space-y-4 stagger">
               {[
-                { label: "Misión", text: "Acompañar a nuestros clientes en el logro de sus metas institucionales y empresariales, integrando servicios de consultoría de alta calidad con soluciones tecnológicas innovadoras que generan un impacto medible y sostenible." },
-                { label: "Visión", text: "Ser el socio estratégico referente en Colombia por la entrega de soluciones integrales que, a través de la estrategia y la tecnología, potencien la gestión y competitividad de las organizaciones." },
-                { label: "Compromiso", text: "Entregar servicios de la más alta calidad, apoyados en un equipo profesional, ético y transparente. Actuamos con eficacia, eficiencia y un profundo respeto hacia nuestros clientes. Trabajamos por productos, no por horas." },
+                { label: "Misión", text: "Integrar consultoría tributaria de alto nivel con tecnología de frontera — IA, automatización y gemelos digitales — para generar impacto medible en organizaciones públicas y privadas." },
+                { label: "Visión", text: "Ser el referente en Colombia en la intersección entre inteligencia tributaria y tecnología. Donde la norma se encuentra con el algoritmo." },
+                { label: "Compromiso", text: "Equipo profesional, ético y transparente. Productos sobre horas. Resultados sobre promesas." },
               ].map((c) => (
                 <div key={c.label} className="reveal border border-border rounded-xl p-5 transition-all duration-300 hover:shadow-sm hover:border-gray-200">
                   <h3 className="text-ink text-[0.8125rem] font-bold tracking-[0.08em] uppercase mb-2">{c.label}</h3>
@@ -482,7 +479,7 @@ export default function Home() {
               <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Contacto</p>
               <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-5">Hablemos.</h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-10">
-                El futuro de su organización empieza con la próxima decisión estratégica. Contáctenos para agendar una sesión.
+                ¿Necesita estructurar su hacienda pública, automatizar procesos tributarios o construir un producto digital? Conversemos.
               </p>
               <div className="space-y-5">
                 {[
@@ -536,7 +533,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
               <span className="text-ink font-bold text-[0.9rem] tracking-[0.12em] uppercase block mb-3">INPLUX</span>
-              <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría, tecnología e inteligencia artificial. Medellín, Colombia.</p>
+              <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría tributaria, tecnología e inteligencia artificial. Medellín, Colombia.</p>
             </div>
             <div>
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Navegación</h4>
@@ -551,6 +548,7 @@ export default function Home() {
               <ul className="space-y-2">
                 <li><a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Tribai.co</a></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Sector Público (pronto)</span></li>
+                <li><a href="https://fourier.dev/en" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Fourier</a></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Think IT</span></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Big Bang Data</span></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Alianza IT</span></li>
