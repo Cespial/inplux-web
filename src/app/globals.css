@@ -137,6 +137,64 @@ body {
   transform: translateY(-1px);
 }
 
+/* ═══════ HERO VIDEO ═══════ */
+.hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 17, 33, 0.55) 0%,
+    rgba(11, 17, 33, 0.75) 50%,
+    rgba(11, 17, 33, 0.85) 100%
+  );
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #2BBCB3;
+  color: #0B1121;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.btn-hero-primary:hover {
+  background: #34d4ca;
+  box-shadow: 0 4px 24px rgba(43, 188, 179, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-hero-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 11px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.btn-hero-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
 /* ═══════ CARDS ═══════ */
 .card {
   background: var(--white);

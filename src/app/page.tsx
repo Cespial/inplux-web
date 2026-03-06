@@ -250,26 +250,41 @@ export default function Home() {
       </nav>
 
       {/* ──── HERO ──── */}
-      <section id="inicio" className="relative pt-[60px]">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-8 py-24 md:py-36">
+      <section id="inicio" className="relative pt-[60px] overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 top-[60px] z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+            poster=""
+          >
+            <source src="/hero.webm" type="video/webm" />
+            <source src="/hero.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 hero-overlay" />
+        </div>
+        {/* Content */}
+        <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-28 md:py-40">
           <div className="max-w-[720px]">
-            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría, tecnología e inteligencia artificial</p>
-            <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
+            <p className="reveal text-white/50 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría, tecnología e inteligencia artificial</p>
+            <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-white mb-7">
               Convertimos complejidad en{" "}
-              <em className="font-serif italic text-teal">resultados</em>
+              <em className="font-serif italic text-[#2BBCB3]">resultados</em>
             </h1>
-            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
+            <p className="reveal text-white/65 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
               Más de 25 años integrando inteligencia financiera, consultoría tributaria y
               transformación digital para organizaciones públicas y privadas en Colombia.
               Expertos en inteligencia artificial aplicada al sector tributario y de gobierno.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
-              <a href="#servicios" className="btn-dark text-center">Explorar servicios</a>
-              <a href="#contacto" className="btn-ghost text-center">Agendar sesión estratégica</a>
+              <a href="#servicios" className="btn-hero-primary text-center">Explorar servicios</a>
+              <a href="#contacto" className="btn-hero-ghost text-center">Agendar sesión estratégica</a>
             </div>
           </div>
         </div>
-        <div className="fine-rule" />
       </section>
 
       {/* ──── LOGOS ──── */}
