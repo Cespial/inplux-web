@@ -212,18 +212,18 @@ export default function Home() {
         {/* Content */}
         <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-28 md:py-40">
           <div className="max-w-[720px]">
-            <p className="reveal text-white/50 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría, tecnología e inteligencia artificial</p>
-            <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-white mb-7">
+            <p className="reveal text-gray-400 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de consultoría, tecnología e inteligencia artificial</p>
+            <h1 className="reveal font-serif text-[2.75rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
               Convertimos complejidad en{" "}
-              <em className="font-serif italic text-[#2BBCB3]">resultados</em>
+              <em className="font-serif italic text-teal">resultados</em>
             </h1>
-            <p className="reveal text-white/65 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
+            <p className="reveal text-gray-500 text-lg md:text-[1.25rem] leading-[1.6] mb-10 max-w-[600px]">
               +25 años en inteligencia tributaria y financiera. Hoy aplicamos IA neuro-simbólica,
               gemelos digitales y automatización para transformar organizaciones públicas y privadas en Colombia.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
-              <a href="#servicios" className="btn-hero-primary text-center">Ver capacidades</a>
-              <a href="#contacto" className="btn-hero-ghost text-center">Agendar sesión</a>
+              <a href="#servicios" className="btn-dark text-center">Ver capacidades</a>
+              <a href="#contacto" className="btn-ghost text-center">Agendar sesión</a>
             </div>
           </div>
         </div>
@@ -310,72 +310,88 @@ export default function Home() {
           {/* SVG Ecosystem Map */}
           <div className="reveal w-full overflow-x-auto">
             <svg viewBox="0 0 820 580" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[820px] mx-auto min-w-[580px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}>
-              {/* ═══ OUTER ORBIT — Allies circle ═══ */}
-              <circle cx="410" cy="310" r="260" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 6" fill="none" />
+              {/* ═══ OUTER ORBIT — Allies circle (animated rotation) ═══ */}
+              <circle cx="410" cy="310" r="260" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 6" fill="none" className="eco-orbit" />
+              {/* Secondary inner orbit ring */}
+              <circle cx="410" cy="310" r="220" stroke="#f0eeeb" strokeWidth="0.5" strokeDasharray="2 8" fill="none" className="eco-orbit" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
               <text x="410" y="575" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">ECOSISTEMA DE ALIADOS TECNOLÓGICOS</text>
 
-              {/* Connection lines */}
-              {/* INPLUX down to Tribai */}
-              <line x1="340" y1="95" x2="270" y2="210" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" />
-              {/* INPLUX down to Sector Público */}
-              <line x1="480" y1="95" x2="550" y2="210" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" />
-              {/* Center vertical: INPLUX → Fourier */}
-              <line x1="410" y1="95" x2="410" y2="355" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.35" />
+              {/* Small decorative orbit dots */}
+              <circle cx="220" cy="130" r="2" fill="#e5e3e0" className="eco-node-pulse" />
+              <circle cx="630" cy="155" r="2" fill="#e5e3e0" className="eco-node-pulse-delay1" />
+              <circle cx="160" cy="450" r="2" fill="#e5e3e0" className="eco-node-pulse-delay2" />
+              <circle cx="690" cy="480" r="2" fill="#e5e3e0" className="eco-node-pulse" />
+
+              {/* Connection lines (animated dash flow) */}
+              <line x1="340" y1="95" x2="270" y2="210" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
+              <line x1="480" y1="95" x2="550" y2="210" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+              <line x1="410" y1="95" x2="410" y2="355" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.35" className="eco-dash-flow" />
 
               {/* ═══ INPLUX — Top center ═══ */}
-              <rect x="305" y="24" width="210" height="72" rx="14" fill="#1a1918" />
-              <text x="410" y="57" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
-              <text x="410" y="78" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8.5" fontWeight="500" letterSpacing="1.5">HUB DE CONSULTORÍA & TECNOLOGÍA</text>
+              <g className="eco-glow">
+                <rect x="305" y="24" width="210" height="72" rx="14" fill="#1a1918" />
+                <text x="410" y="57" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
+                <text x="410" y="78" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8.5" fontWeight="500" letterSpacing="1.5">HUB DE CONSULTORÍA & TECNOLOGÍA</text>
+              </g>
 
               {/* ═══ TRIBAI — Left, under umbrella ═══ */}
-              <rect x="138" y="195" width="230" height="106" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-              <rect x="139" y="195" width="228" height="26" rx="12" fill="#e8f5f3" />
-              <text x="163" y="213" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
-              <circle cx="343" cy="208" r="6" fill="#0d7d74" />
-              <text x="343" y="211" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
-              <text x="253" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Tribai</text>
-              <text x="253" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">tribai.co</text>
-              <text x="253" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria con IA</text>
+              <g className="eco-float">
+                <rect x="138" y="195" width="230" height="106" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <rect x="139" y="195" width="228" height="26" rx="12" fill="#e8f5f3" />
+                <text x="163" y="213" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
+                <circle cx="343" cy="208" r="6" fill="#0d7d74" />
+                <text x="343" y="211" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
+                <text x="253" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Tribai</text>
+                <text x="253" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">tribai.co</text>
+                <text x="253" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria con IA</text>
+              </g>
 
               {/* ═══ SECTOR PÚBLICO — Right, under umbrella ═══ */}
-              <rect x="452" y="195" width="230" height="106" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-              <rect x="453" y="195" width="228" height="26" rx="12" fill="#f3f1ee" />
-              <text x="477" y="213" fill="#8a8784" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
-              <text x="567" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Sector Público</text>
-              <text x="567" y="264" textAnchor="middle" fill="#8a8784" fontSize="10.5" fontWeight="500">Próximamente</text>
-              <text x="567" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Gemelo digital & rendición de cuentas</text>
+              <g className="eco-float-delay">
+                <rect x="452" y="195" width="230" height="106" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
+                <rect x="453" y="195" width="228" height="26" rx="12" fill="#f3f1ee" />
+                <text x="477" y="213" fill="#8a8784" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
+                <text x="567" y="246" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Sector Público</text>
+                <text x="567" y="264" textAnchor="middle" fill="#8a8784" fontSize="10.5" fontWeight="500">Próximamente</text>
+                <text x="567" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Gemelo digital & rendición de cuentas</text>
+              </g>
 
               {/* ═══ FOURIER — Center, inside orbit, prominent ═══ */}
-              <rect x="280" y="355" width="260" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
-              <rect x="281" y="355" width="258" height="24" rx="14" fill="#e8f5f3" />
-              <text x="305" y="372" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
-              <text x="410" y="400" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="800" letterSpacing="0.5">Fourier</text>
-              <text x="410" y="418" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">fourier.dev</text>
-              <text x="410" y="434" textAnchor="middle" fill="#8a8784" fontSize="8.5">Arquitectura de software, cloud e infraestructura</text>
+              <g className="eco-glow">
+                <rect x="280" y="355" width="260" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
+                <rect x="281" y="355" width="258" height="24" rx="14" fill="#e8f5f3" />
+                <text x="305" y="372" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
+                <text x="410" y="400" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="800" letterSpacing="0.5">Fourier</text>
+                <text x="410" y="418" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">fourier.dev</text>
+                <text x="410" y="434" textAnchor="middle" fill="#8a8784" fontSize="8.5">Arquitectura de software, cloud e infraestructura</text>
+              </g>
 
               {/* ═══ Allies on the orbit circle ═══ */}
-              {/* Think IT — top-left of orbit */}
-              <rect x="52" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="127" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Think IT</text>
-              <text x="127" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Ingeniería de software</text>
-              {/* Node on orbit */}
-              <circle cx="152" cy="347" r="4" fill="#e5e3e0" />
+              {/* Think IT */}
+              <g className="eco-float-delay2">
+                <rect x="52" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <text x="127" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Think IT</text>
+                <text x="127" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Ingeniería de software</text>
+              </g>
+              <circle cx="152" cy="347" r="4" fill="#0d7d74" opacity="0.3" className="eco-node-pulse" />
               <line x1="152" y1="351" x2="140" y2="365" stroke="#e5e3e0" strokeWidth="1" />
 
-              {/* Big Bang Data — bottom of orbit */}
-              <rect x="335" y="480" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="410" y="504" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Big Bang Data</text>
-              <text x="410" y="520" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Analítica de datos</text>
-              {/* Node on orbit */}
-              <circle cx="410" cy="570" r="4" fill="#e5e3e0" />
+              {/* Big Bang Data */}
+              <g className="eco-float">
+                <rect x="335" y="480" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <text x="410" y="504" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Big Bang Data</text>
+                <text x="410" y="520" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Analítica de datos</text>
+              </g>
+              <circle cx="410" cy="570" r="4" fill="#0d7d74" opacity="0.3" className="eco-node-pulse-delay1" />
               <line x1="410" y1="566" x2="410" y2="532" stroke="#e5e3e0" strokeWidth="1" />
 
-              {/* Alianza IT — top-right of orbit */}
-              <rect x="618" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
-              <text x="693" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Alianza IT</text>
-              <text x="693" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Integración tecnológica</text>
-              {/* Node on orbit */}
-              <circle cx="668" cy="347" r="4" fill="#e5e3e0" />
+              {/* Alianza IT */}
+              <g className="eco-float-delay">
+                <rect x="618" y="365" width="150" height="52" rx="10" fill="white" stroke="#e5e3e0" strokeWidth="1" />
+                <text x="693" y="389" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Alianza IT</text>
+                <text x="693" y="405" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Integración tecnológica</text>
+              </g>
+              <circle cx="668" cy="347" r="4" fill="#0d7d74" opacity="0.3" className="eco-node-pulse-delay2" />
               <line x1="668" y1="351" x2="680" y2="365" stroke="#e5e3e0" strokeWidth="1" />
             </svg>
           </div>
