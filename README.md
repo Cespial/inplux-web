@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# INPLUX — Ecosistema Tecnológico
 
-## Getting Started
+> Landing page y sitio web corporativo de [inplux.co](https://inplux.co) — ecosistema de tecnología, datos y consultoría para el sector público y privado en Colombia.
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Descripción
+
+Sitio web de INPLUX, hub de innovación tecnológica que conecta soluciones de datos, inteligencia artificial y desarrollo de software con las necesidades del territorio colombiano.
+
+### Características
+
+- **Landing page** corporativa con diseño moderno
+- **Página "Nosotros"** (`/nosotros`) — equipo, misión y visión
+- **SEO optimizado** — `robots.ts` y `sitemap.ts` integrados
+- **Página 404** personalizada
+- **Responsive** — diseño adaptativo para todos los dispositivos
+
+## Stack
+
+| Capa | Tecnología |
+|------|-----------|
+| Framework | Next.js 16, React 19 |
+| Lenguaje | TypeScript 5 |
+| Estilos | Tailwind CSS 4 |
+| Deploy | Vercel |
+
+## Estructura
+
+```
+inplux-web/
+├── src/app/
+│   ├── page.tsx          # Landing principal
+│   ├── nosotros/         # Página "Nosotros"
+│   ├── not-found.tsx     # 404 personalizado
+│   ├── robots.ts         # robots.txt dinámico
+│   ├── sitemap.ts        # Sitemap XML dinámico
+│   ├── layout.tsx        # Layout principal
+│   └── globals.css       # Estilos globales
+└── public/               # Assets estáticos
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalación
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git clone https://github.com/Cespial/inplux-web.git
+cd inplux-web
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
+Desplegado automáticamente en [Vercel](https://vercel.com) desde la rama `main`.
 
-To learn more about Next.js, take a look at the following resources:
+## Licencia
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+MIT
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Desarrollado por [Cristian Espinal Maya](https://github.com/Cespial) · [inplux.co](https://inplux.co)
