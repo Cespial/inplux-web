@@ -105,12 +105,12 @@ const LOGOS = [
 
 const HUB_COMPANIES = [
   {
-    name: "Tribai",
-    domain: "tribai.co",
-    focus: "Sector Privado",
-    desc: "Plataforma de inteligencia tributaria y financiera para contadores colombianos. +1.294 artículos del estatuto indexados, +35 calculadoras de precisión y asistente IA con citación de fuentes. Preparaciones automáticas de declaraciones de renta con IA en desarrollo.",
+    name: "Kelsen",
+    domain: "kelsen.io",
+    focus: "Sombrilla Legal IA",
+    desc: "Cerebro legal de INPLUX. La sombrilla que integra todos nuestros productos jurídicos sobre una misma capa de conocimiento persistente: Tribai (inteligencia tributaria) y Laudos (laudos arbitrales y jurisprudencia). Agentes legales con memoria de largo plazo y citación de fuentes verificable.",
     status: "Activo",
-    upcoming: "Próximamente: preparación automática de declaraciones de renta · información exógena · app móvil",
+    upcoming: "Módulos en desarrollo: litigio · contratos · derecho constitucional · derecho penal",
   },
   {
     name: "Gobia",
@@ -160,6 +160,8 @@ export default function Home() {
   const navLinks = [
     { label: "Nosotros", href: "/nosotros" },
     { label: "Servicios", href: "#servicios" },
+    { label: "Legal", href: "#legal" },
+    { label: "Frontera", href: "#frontera" },
     { label: "Ecosistema", href: "#empresas" },
     { label: "Trayectoria", href: "#trayectoria" },
     { label: "Contacto", href: "#contacto" },
@@ -558,6 +560,228 @@ export default function Home() {
               <circle cx="15" cy="350" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay1" />
               <circle cx="985" cy="350" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay2" />
               <circle cx="500" cy="688" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* ──── ECOSISTEMA LEGAL — Kelsen sombrilla ──── */}
+      <section id="legal" className="py-20 md:py-28 bg-warm">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 text-center">
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema Legal</p>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-xl mx-auto">
+              Kelsen es la sombrilla.<br /><em className="italic">Cada vertical, un módulo.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+              kelsen.io es el cerebro legal de INPLUX. Una sola capa de conocimiento persistente; encima, productos especializados. Tribai y Laudos ya operan. El resto, en construcción.
+            </p>
+          </div>
+
+          <div className="svg-scroll-hint">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+            Desliza para ver completo
+          </div>
+          <div className="reveal w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[680px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema legal de INPLUX con Kelsen como sombrilla y Tribai, Laudos y módulos en desarrollo">
+              {/* Background dots */}
+              {Array.from({ length: 18 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`lg-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#d8d5d1" />
+                ))
+              )}
+
+              {/* Orbits centered at (500, 330) */}
+              <circle cx="500" cy="330" r="280" stroke="#c8c5c1" strokeWidth="1" strokeDasharray="8 6" fill="none" className="eco-orbit" style={{ animationDuration: "50s" }} />
+              <circle cx="500" cy="330" r="200" stroke="#d1cfcc" strokeWidth="0.8" strokeDasharray="3 7" fill="none" className="eco-orbit" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
+
+              {/* Connection lines center → modules */}
+              <line x1="430" y1="285" x2="300" y2="178" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
+              <line x1="570" y1="285" x2="700" y2="178" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
+              <line x1="445" y1="380" x2="270" y2="470" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+              <line x1="500" y1="400" x2="500" y2="500" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+              <line x1="555" y1="380" x2="730" y2="470" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+
+              {/* ═══ KELSEN — center (sombrilla) ═══ */}
+              <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
+                <g className="eco-glow" style={{ cursor: "pointer" }}>
+                  <circle cx="500" cy="330" r="72" fill="#1a1918" />
+                  <circle cx="500" cy="330" r="72" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 250" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                  <text x="500" y="320" textAnchor="middle" fill="white" fontSize="18" fontWeight="800" letterSpacing="1.5">Kelsen</text>
+                  <text x="500" y="338" textAnchor="middle" fill="#5fe3d6" fontSize="9" fontWeight="500" textDecoration="underline">kelsen.io</text>
+                  <text x="500" y="354" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="7.5" fontWeight="600" letterSpacing="1">CEREBRO LEGAL</text>
+                </g>
+              </a>
+
+              {/* ═══ TRIBAI — módulo activo (arriba-izq) ═══ */}
+              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float" style={{ cursor: "pointer" }}>
+                  <rect x="120" y="74" width="230" height="104" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                  <rect x="121" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
+                  <text x="144" y="91" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">MÓDULO · TRIBUTARIO</text>
+                  <circle cx="326" cy="86" r="6" fill="#0d7d74" />
+                  <text x="326" y="89" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
+                  <text x="235" y="126" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Tribai</text>
+                  <text x="235" y="144" textAnchor="middle" fill="#0d7d74" fontSize="10" fontWeight="500" textDecoration="underline">tribai.co</text>
+                  <text x="235" y="163" textAnchor="middle" fill="#8a8784" fontSize="8.5">Inteligencia tributaria y financiera</text>
+                </g>
+              </a>
+
+              {/* ═══ LAUDOS — módulo activo (arriba-der) ═══ */}
+              <a href="https://laudos.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float-delay" style={{ cursor: "pointer" }}>
+                  <rect x="650" y="74" width="230" height="104" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                  <rect x="651" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
+                  <text x="674" y="91" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">MÓDULO · ARBITRAJE</text>
+                  <circle cx="856" cy="86" r="6" fill="#0d7d74" />
+                  <text x="856" y="89" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
+                  <text x="765" y="126" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Laudos</text>
+                  <text x="765" y="144" textAnchor="middle" fill="#0d7d74" fontSize="10" fontWeight="500" textDecoration="underline">laudos.co</text>
+                  <text x="765" y="163" textAnchor="middle" fill="#8a8784" fontSize="8.5">Laudos arbitrales y jurisprudencia</text>
+                </g>
+              </a>
+
+              {/* ═══ EN DESARROLLO ×3 (abajo) ═══ */}
+              <g className="eco-float">
+                <rect x="90" y="470" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="256" cy="486" r="6" fill="#d1cfcc" />
+                <text x="185" y="514" textAnchor="middle" fill="#a8a5a0" fontSize="13" fontWeight="700">Litigio</text>
+                <text x="185" y="534" textAnchor="middle" fill="#b8b5b1" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              <g className="eco-float-delay">
+                <rect x="405" y="500" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="571" cy="516" r="6" fill="#d1cfcc" />
+                <text x="500" y="544" textAnchor="middle" fill="#a8a5a0" fontSize="13" fontWeight="700">Contratos</text>
+                <text x="500" y="564" textAnchor="middle" fill="#b8b5b1" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              <g className="eco-float">
+                <rect x="720" y="470" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="886" cy="486" r="6" fill="#d1cfcc" />
+                <text x="815" y="508" textAnchor="middle" fill="#a8a5a0" fontSize="12" fontWeight="700">Penal · Constitucional</text>
+                <text x="815" y="528" textAnchor="middle" fill="#b8b5b1" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              {/* Decorative pulses */}
+              <circle cx="300" cy="150" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse" />
+              <circle cx="700" cy="150" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse-delay1" />
+              <circle cx="500" cy="180" r="2.5" fill="#c8c5c1" className="eco-node-pulse-delay2" />
+
+              {/* Legend */}
+              <circle cx="372" cy="630" r="5" fill="#0d7d74" />
+              <text x="372" y="633" textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>
+              <text x="387" y="634" fill="#6e6b68" fontSize="9" fontWeight="500">En producción</text>
+              <circle cx="510" cy="630" r="5" fill="#d1cfcc" />
+              <text x="525" y="634" fill="#6e6b68" fontSize="9" fontWeight="500">En desarrollo</text>
+
+              {/* Bottom branding */}
+              <rect x="380" y="652" width="240" height="22" rx="11" fill="#1a1918" />
+              <text x="500" y="667" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700" letterSpacing="1.5">ECOSISTEMA LEGAL KELSEN</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* ──── FRONTERA — Self-improving agents ──── */}
+      <section id="frontera" className="py-20 md:py-28">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 text-center">
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Frontera del conocimiento</p>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-xl mx-auto">
+              No usamos IA del montón.<br /><em className="italic">Construimos agentes que se mejoran solos.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+              Nuestra apuesta es estar en la frontera —y la ultra-frontera— del conocimiento en IA. Memoria persistente, aprendizaje continuo y agentes que consolidan lo aprendido mientras nadie los mira. La misma maquinaria que mueve nuestro cerebro legal es nuestra fábrica de software.
+            </p>
+          </div>
+
+          <div className="svg-scroll-hint">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+            Desliza para ver completo
+          </div>
+          <div className="reveal w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 720" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[700px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ciclo de auto-mejora de los agentes de INPLUX: experiencia, memoria episódica, consolidación sleep-time, LLM-wiki y grafo, aprendizaje continuo">
+              {/* Background dots */}
+              {Array.from({ length: 19 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`fr-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#e8e6e3" />
+                ))
+              )}
+
+              {/* Outer loop orbit (the cycle) */}
+              <circle cx="500" cy="360" r="240" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 8" fill="none" opacity="0.35" className="eco-orbit" style={{ animationDuration: "30s" }} />
+              {/* Directional chevrons on the loop (clockwise) */}
+              <polygon points="500,114 494,126 506,126" fill="#0d7d74" opacity="0.55" className="eco-node-pulse" />
+              <polygon points="734,300 723,294 727,306" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay1" />
+              <polygon points="610,580 600,572 597,584" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay2" />
+              <polygon points="390,580 403,584 400,572" fill="#0d7d74" opacity="0.55" className="eco-node-pulse" />
+              <polygon points="266,300 273,306 277,294" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay1" />
+
+              {/* Lines center → each stage */}
+              <line x1="500" y1="282" x2="500" y2="170" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+              <line x1="560" y1="320" x2="690" y2="250" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+              <line x1="540" y1="420" x2="630" y2="510" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+              <line x1="460" y1="420" x2="370" y2="510" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+              <line x1="440" y1="320" x2="310" y2="250" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+
+              {/* ═══ CENTER: agente auto-evolutivo ═══ */}
+              <g className="eco-glow">
+                <circle cx="500" cy="360" r="80" fill="#1a1918" />
+                <circle cx="500" cy="360" r="80" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="12 250" className="eco-orbit" style={{ animationDuration: "7s" }} />
+                <text x="500" y="350" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">Agente</text>
+                <text x="500" y="368" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">auto-evolutivo</text>
+                <text x="500" y="386" textAnchor="middle" fill="#5fe3d6" fontSize="7.5" fontWeight="600" letterSpacing="1">SELF-IMPROVING</text>
+              </g>
+
+              {/* ═══ 1 · EXPERIENCIA (top) ═══ */}
+              <g className="eco-float">
+                <rect x="400" y="92" width="200" height="78" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <text x="420" y="113" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">01 · EXPERIENCIA</text>
+                <text x="500" y="136" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Resuelve casos reales</text>
+                <text x="500" y="154" textAnchor="middle" fill="#8a8784" fontSize="8.5">Cada interacción es un dato</text>
+              </g>
+
+              {/* ═══ 2 · MEMORIA EPISÓDICA (der-arriba) ═══ */}
+              <g className="eco-float-delay">
+                <rect x="690" y="196" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <text x="710" y="217" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">02 · MEMORIA EPISÓDICA</text>
+                <text x="800" y="240" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Recuerda cada asunto</text>
+                <text x="800" y="257" textAnchor="middle" fill="#8a8784" fontSize="8.5">Contexto, fecha y decisiones</text>
+                <text x="800" y="272" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Memory blocks persistentes</text>
+              </g>
+
+              {/* ═══ 3 · SLEEP-TIME (der-abajo) ═══ */}
+              <g className="eco-float">
+                <rect x="630" y="496" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <text x="650" y="517" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">03 · SLEEP-TIME COMPUTE</text>
+                <text x="740" y="540" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Consolida de noche</text>
+                <text x="740" y="557" textAnchor="middle" fill="#8a8784" fontSize="8.5">Reflexiona en background</text>
+                <text x="740" y="572" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Aprende sin latencia en vivo</text>
+              </g>
+
+              {/* ═══ 4 · LLM-WIKI + GRAPHRAG (izq-abajo) ═══ */}
+              <g className="eco-float-delay">
+                <rect x="150" y="496" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <text x="170" y="517" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">04 · LLM-WIKI + GRAPHRAG</text>
+                <text x="260" y="540" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">El saber se compone</text>
+                <text x="260" y="557" textAnchor="middle" fill="#8a8784" fontSize="8.5">Wiki vivo + grafo de conocimiento</text>
+                <text x="260" y="572" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Citación verificable y gobernada</text>
+              </g>
+
+              {/* ═══ 5 · APRENDIZAJE CONTINUO (izq-arriba) ═══ */}
+              <g className="eco-float">
+                <rect x="90" y="196" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <text x="110" y="217" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">05 · APRENDIZAJE CONTINUO</text>
+                <text x="200" y="240" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Mejora sin reentrenar</text>
+                <text x="200" y="257" textAnchor="middle" fill="#8a8784" fontSize="8.5">Continual learning</text>
+                <text x="200" y="272" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Sin olvido catastrófico</text>
+              </g>
+
+              {/* Bottom caption band — dual application */}
+              <rect x="250" y="640" width="500" height="46" rx="23" fill="#1a1918" />
+              <text x="500" y="662" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1">UN MISMO MOTOR, DOS FRENTES</text>
+              <text x="500" y="678" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="8" fontWeight="500">Cerebro legal (Kelsen) · Fábrica de software (otras .apps)</text>
             </svg>
           </div>
         </div>
@@ -985,17 +1209,17 @@ export default function Home() {
                 <text x="500" y="74" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="600" letterSpacing="1.5">HUB DE IA & TIC</text>
               </g>
 
-              {/* ═══ TRIBAI — left ═══ */}
-              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
+              {/* ═══ KELSEN — left (sombrilla legal) ═══ */}
+              <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
                 <g className="eco-float" style={{ cursor: "pointer" }}>
                   <rect x="145" y="190" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                   <rect x="146" y="190" width="238" height="26" rx="12" fill="#e8f5f3" />
-                  <text x="170" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
+                  <text x="170" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SOMBRILLA LEGAL IA</text>
                   <circle cx="360" cy="203" r="6" fill="#0d7d74" />
                   <text x="360" y="206" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
-                  <text x="265" y="244" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Tribai</text>
-                  <text x="265" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500" textDecoration="underline">tribai.co</text>
-                  <text x="265" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria y financiera con IA</text>
+                  <text x="265" y="244" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Kelsen</text>
+                  <text x="265" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500" textDecoration="underline">kelsen.io</text>
+                  <text x="265" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Cerebro legal · integra Tribai y Laudos</text>
                 </g>
               </a>
 
@@ -1275,15 +1499,19 @@ export default function Home() {
               <div className="space-y-5">
                 <div>
                   <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Dirección</span>
-                  <a href="https://maps.google.com/?q=Calle+23+%23+43A+66+Local+141+Medellín+Antioquia" target="_blank" rel="noopener noreferrer" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors whitespace-pre-line">Calle 23 # 43 A 66, Local 141{"\n"}Medellín, Antioquia</a>
+                  <a href="https://maps.google.com/?q=Transversal+5+A+%23+45+91+Medellín+Antioquia" target="_blank" rel="noopener noreferrer" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors whitespace-pre-line">Transversal 5 A # 45 - 91{"\n"}Medellín, Antioquia</a>
                 </div>
                 <div>
                   <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Teléfono</span>
-                  <a href="tel:+573138893615" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">(+57) 313 889 36 15</a>
+                  <a href="tel:+573023194636" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">(+57) 302 319 46 36</a>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Email</span>
+                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Gerencia</span>
                   <a href="mailto:gerencia@inplux.co" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">gerencia@inplux.co</a>
+                </div>
+                <div>
+                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Coordinación comercial</span>
+                  <a href="mailto:contacto@inplux.co" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">contacto@inplux.co</a>
                 </div>
               </div>
             </div>
@@ -1355,7 +1583,9 @@ export default function Home() {
             <div>
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Ecosistema</h4>
               <ul className="space-y-2">
+                <li><a href="https://kelsen.io" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Kelsen.io</a></li>
                 <li><a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Tribai.co</a></li>
+                <li><a href="https://laudos.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Laudos.co</a></li>
                 <li><a href="https://gobia.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Gobia.co</a></li>
                 <li><a href="https://fourier.dev/en" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Fourier</a></li>
                 <li><span className="text-gray-400 text-[0.8125rem]">Sistemas Aries</span></li>
@@ -1369,8 +1599,9 @@ export default function Home() {
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Contacto</h4>
               <ul className="space-y-2 text-gray-500 text-[0.8125rem]">
                 <li>Medellín, Antioquia</li>
-                <li>(+57) 313 889 36 15</li>
+                <li>(+57) 302 319 46 36</li>
                 <li><a href="mailto:gerencia@inplux.co" className="hover:text-ink transition-colors">gerencia@inplux.co</a></li>
+                <li><a href="mailto:contacto@inplux.co" className="hover:text-ink transition-colors">contacto@inplux.co</a></li>
               </ul>
             </div>
           </div>

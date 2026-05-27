@@ -458,8 +458,9 @@ export default function Nosotros() {
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Contacto</h4>
               <ul className="space-y-2 text-gray-500 text-[0.8125rem]">
                 <li>Medellín, Antioquia</li>
-                <li><a href="tel:+573138893615" className="hover:text-ink transition-colors">(+57) 313 889 36 15</a></li>
+                <li><a href="tel:+573023194636" className="hover:text-ink transition-colors">(+57) 302 319 46 36</a></li>
                 <li><a href="mailto:gerencia@inplux.co" className="hover:text-ink transition-colors">gerencia@inplux.co</a></li>
+                <li><a href="mailto:contacto@inplux.co" className="hover:text-ink transition-colors">contacto@inplux.co</a></li>
               </ul>
             </div>
           </div>
