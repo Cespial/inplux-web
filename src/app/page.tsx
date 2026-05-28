@@ -9,12 +9,30 @@ import Link from "next/link";
    ═══════════════════════════════════════ */
 function useScrollReveal() {
   useEffect(() => {
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal,.reveal-left"));
+    // Sin IntersectionObserver, mostramos todo de inmediato.
+    if (typeof IntersectionObserver === "undefined" || els.length === 0) {
+      els.forEach((el) => el.classList.add("visible"));
+      return;
+    }
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+      }),
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" }
     );
-    document.querySelectorAll(".reveal,.reveal-left").forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+    els.forEach((el) => obs.observe(el));
+    // Red de seguridad: si algo quedó sin revelar (observer perdido, layout tardío),
+    // forzamos visible para que ninguna sección se quede en blanco.
+    const safety = window.setTimeout(() => {
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (!el.classList.contains("visible") && r.top < window.innerHeight * 1.2) {
+          el.classList.add("visible");
+        }
+      });
+    }, 1200);
+    return () => { obs.disconnect(); window.clearTimeout(safety); };
   }, []);
 }
 
@@ -158,12 +176,11 @@ export default function Home() {
   }, []);
 
   const navLinks = [
-    { label: "Nosotros", href: "/nosotros" },
-    { label: "Servicios", href: "#servicios" },
+    { label: "Motor", href: "#motor" },
     { label: "Legal", href: "#legal" },
-    { label: "Frontera", href: "#frontera" },
+    { label: "Fábrica", href: "#fabrica" },
     { label: "Ecosistema", href: "#empresas" },
-    { label: "Trayectoria", href: "#trayectoria" },
+    { label: "Nosotros", href: "/nosotros" },
     { label: "Contacto", href: "#contacto" },
   ];
 
@@ -219,7 +236,7 @@ export default function Home() {
       {/* ──── HERO ──── */}
       <section id="inicio" className="relative pt-[60px] overflow-hidden">
         <div className="absolute inset-0 top-[60px] z-0">
-          <video autoPlay muted loop playsInline aria-hidden="true" poster="/hero-poster.jpg" className="w-full h-full object-cover">
+          <video autoPlay muted loop playsInline aria-hidden="true" className="w-full h-full object-cover">
             <source src="/hero.webm" type="video/webm" />
             <source src="/hero.mp4" type="video/mp4" />
           </video>
@@ -227,19 +244,18 @@ export default function Home() {
         </div>
         <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-[680px]">
-            <p className="reveal text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Inteligencia Tributaria · Tecnología · IA</p>
+            <p className="reveal text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Agentes de IA · Self-improving · Fábrica de software</p>
             <h1 className="reveal font-serif text-[2.25rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
-              La norma la conocemos.<br />
-              La tecnología la{" "}
-              <em className="font-serif italic text-teal">construimos.</em>
+              Construimos agentes de IA<br />
+              que se{" "}
+              <em className="font-serif italic text-teal">mejoran solos.</em>
             </h1>
             <p className="reveal text-gray-500 text-base md:text-[1.25rem] leading-[1.6] mb-7 max-w-[580px]">
-              Nuestra historia empezó en la gestión tributaria. Llevamos 25 años entre estatutos, NIC/NIIF y hacienda pública colombiana.
-              Hoy convertimos ese conocimiento en tecnología e inteligencia artificial.
+              Memoria persistente, aprendizaje continuo y conocimiento que se compone. El mismo motor mueve nuestros productos y nuestra fábrica de software — entrenado con 25 años de conocimiento real.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
-              <a href="#servicios" className="btn-dark text-center">Ver capacidades</a>
-              <a href="#contacto" className="btn-ghost text-center">Agendar sesión</a>
+              <a href="#motor" className="btn-dark text-center">Ver el motor</a>
+              <a href="#contacto" className="btn-ghost text-center">Hablemos</a>
             </div>
           </div>
         </div>
@@ -284,13 +300,150 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ──── MOTOR — Self-improving agent (ancla narrativa) ──── */}
+      <section id="motor" className="py-20 md:py-28 bg-warm">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="reveal mb-14 text-center">
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">El motor</p>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-xl mx-auto">
+              Así funciona un agente <em className="italic">que se mejora solo.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+              No es IA del montón. Un agente que recuerda cada caso, consolida lo aprendido mientras nadie lo mira y queda mejor en cada vuelta. El conocimiento no se recalcula: se compone.
+            </p>
+          </div>
+
+          <div className="svg-scroll-hint">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+            Desliza para ver completo
+          </div>
+          <div className="reveal w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[720px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Flujo de un agente self-improving: experiencia, memoria episodica, consolidacion sleep-time y conocimiento alimentan un segundo cerebro persistente (episodica, semantica, procedural, wiki y grafo) que el agente recupera en cada nuevo caso, mejorando en cada vuelta">
+              {/* Background dots */}
+              {Array.from({ length: 16 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`mt-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 12} r="0.35" fill="#dcd9d5" />
+                ))
+              )}
+
+              <text x="40" y="34" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.5">EL CICLO QUE LO HACE MEJORAR</text>
+
+              {/* ── Fila superior: el flujo 01 → 04 ── */}
+              <g className="eco-float">
+                <rect x="30" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <circle cx="52" cy="74" r="11" fill="#0d7d74" /><text x="52" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">01</text>
+                <text x="130" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Experiencia</text>
+                <text x="130" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Resuelve casos reales</text>
+                <text x="130" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Cada interacción es un dato</text>
+              </g>
+              <g className="eco-float-delay">
+                <rect x="270" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <circle cx="292" cy="74" r="11" fill="#0d7d74" /><text x="292" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">02</text>
+                <text x="370" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Memoria</text>
+                <text x="370" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Recuerda cada asunto</text>
+                <text x="370" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Episódica y persistente</text>
+              </g>
+              <g className="eco-float">
+                <rect x="510" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <circle cx="532" cy="74" r="11" fill="#0d7d74" /><text x="532" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">03</text>
+                <text x="610" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Consolida</text>
+                <text x="610" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Aprende en reposo</text>
+                <text x="610" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Sleep-time compute</text>
+              </g>
+              <g className="eco-float-delay">
+                <rect x="750" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+                <circle cx="772" cy="74" r="11" fill="#0d7d74" /><text x="772" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">04</text>
+                <text x="850" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Conocimiento</text>
+                <text x="850" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">El saber se compone</text>
+                <text x="850" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">LLM-wiki + grafo</text>
+              </g>
+
+              {/* arrows 01→02→03→04 */}
+              <line x1="232" y1="99" x2="262" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="262,94 272,99 262,104" fill="#0d7d74" />
+              <line x1="472" y1="99" x2="502" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="502,94 512,99 502,104" fill="#0d7d74" />
+              <line x1="712" y1="99" x2="742" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="742,94 752,99 742,104" fill="#0d7d74" />
+
+              {/* 04 → segundo cerebro (entra el conocimiento consolidado) */}
+              <path d="M 850 146 C 850 196, 760 200, 705 246" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 4" fill="none" className="eco-dash-flow" />
+              <polygon points="705,246 706,234 715,242" fill="#0d7d74" />
+              <text x="792" y="206" fill="#6e6b68" fontSize="7.5" fontWeight="600">alimenta</text>
+
+              {/* ── SEGUNDO CEREBRO ── */}
+              <rect x="230" y="246" width="540" height="266" rx="18" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+              <rect x="231" y="246" width="538" height="30" rx="18" fill="#e8f5f3" />
+              <text x="266" y="266" fill="#0d7d74" fontSize="10" fontWeight="700" letterSpacing="2">SEGUNDO CEREBRO</text>
+              {/* growth glyph */}
+              <path d="M 690 268 L 720 256" stroke="#0d7d74" strokeWidth="1.3" /><polygon points="720,256 711,257 715,264" fill="#0d7d74" />
+              <text x="612" y="266" fill="#0d7d74" fontSize="7.5" fontWeight="700">se perfecciona</text>
+              <text x="499" y="296" textAnchor="middle" fill="#8a8784" fontSize="8.5">Se alimenta y crece con cada caso — el conocimiento se compone, no se recalcula</text>
+
+              {/* 4 compartimentos */}
+              <rect x="250" y="306" width="242" height="76" rx="10" fill="#f3f1ee" />
+              <text x="371" y="334" textAnchor="middle" fill="#1a1918" fontSize="10.5" fontWeight="700">Memoria episódica</text>
+              <text x="371" y="352" textAnchor="middle" fill="#8a8784" fontSize="8">Eventos con fecha y contexto</text>
+              <text x="371" y="367" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Qué pasó, con quién, con qué resultado</text>
+
+              <rect x="508" y="306" width="242" height="76" rx="10" fill="#f3f1ee" />
+              <text x="629" y="334" textAnchor="middle" fill="#1a1918" fontSize="10.5" fontWeight="700">Memoria semántica</text>
+              <text x="629" y="352" textAnchor="middle" fill="#8a8784" fontSize="8">Hechos, doctrina y reglas</text>
+              <text x="629" y="367" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Lo episódico, generalizado</text>
+
+              <rect x="250" y="392" width="242" height="76" rx="10" fill="#f3f1ee" />
+              <text x="371" y="420" textAnchor="middle" fill="#1a1918" fontSize="10.5" fontWeight="700">Memoria procedural</text>
+              <text x="371" y="438" textAnchor="middle" fill="#8a8784" fontSize="8">Cómo se hace · playbooks</text>
+              <text x="371" y="453" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Habilidades aprendidas</text>
+
+              <rect x="508" y="392" width="242" height="76" rx="10" fill="#e8f5f3" />
+              <text x="600" y="420" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="700">LLM-Wiki + Grafo</text>
+              <text x="600" y="438" textAnchor="middle" fill="#6e6b68" fontSize="8">Conocimiento conectado</text>
+              {/* graph motif */}
+              <circle cx="694" cy="410" r="3" fill="#0d7d74" /><circle cx="722" cy="426" r="3" fill="#0d7d74" /><circle cx="690" cy="446" r="3" fill="#0d7d74" /><circle cx="726" cy="452" r="3" fill="#0d7d74" />
+              <line x1="694" y1="410" x2="722" y2="426" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="722" y1="426" x2="690" y2="446" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="690" y1="446" x2="726" y2="452" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="722" y1="426" x2="726" y2="452" stroke="#0d7d74" strokeWidth="1" opacity="0.5" />
+
+              {/* governed tag */}
+              <rect x="372" y="480" width="256" height="22" rx="11" fill="#1a1918" />
+              <text x="500" y="495" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" letterSpacing="0.5">GOBERNADO · citación verificable · trazabilidad</text>
+
+              {/* Recuperación: el cerebro alimenta cada nuevo caso (vuelve a 01) */}
+              <path d="M 230 386 C 110 386, 88 230, 130 150" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 5" fill="none" opacity="0.6" className="eco-dash-flow" />
+              <polygon points="130,150 124,162 136,161" fill="#0d7d74" opacity="0.8" />
+              <text x="58" y="300" fill="#0d7d74" fontSize="8" fontWeight="700">RECUPERACIÓN</text>
+              <text x="40" y="316" fill="#8a8784" fontSize="7.5">El agente consulta su</text>
+              <text x="40" y="328" fill="#8a8784" fontSize="7.5">cerebro antes de actuar</text>
+
+              {/* Bottom band — compounding */}
+              <rect x="280" y="556" width="440" height="34" rx="17" fill="#1a1918" />
+              <text x="500" y="577" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="700" letterSpacing="0.5">MÁS CASOS → MEJOR CEREBRO → MEJOR AGENTE</text>
+            </svg>
+          </div>
+
+          {/* Dual-frente quick links */}
+          <div className="reveal grid sm:grid-cols-2 gap-4 mt-12 max-w-[760px] mx-auto">
+            <a href="#legal" className="card group flex items-start gap-3 hover:border-teal transition-colors">
+              <span className="text-teal text-[0.7rem] font-bold tracking-[0.12em] uppercase mt-0.5">Frente 1</span>
+              <span>
+                <span className="block font-serif text-[1.15rem] text-ink mb-0.5">Productos con cerebro persistente</span>
+                <span className="block text-gray-500 text-[0.85rem] leading-relaxed">Kelsen, Tribai, Laudos, Gobia — el conocimiento de cada vertical, vivo.</span>
+              </span>
+            </a>
+            <a href="#fabrica" className="card group flex items-start gap-3 hover:border-teal transition-colors">
+              <span className="text-teal text-[0.7rem] font-bold tracking-[0.12em] uppercase mt-0.5">Frente 2</span>
+              <span>
+                <span className="block font-serif text-[1.15rem] text-ink mb-0.5">Fábrica de software</span>
+                <span className="block text-gray-500 text-[0.85rem] leading-relaxed">El mismo motor agéntico construye nuevas .apps a velocidad de frontera.</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ──── MANIFIESTO (moved up) ──── */}
       <section id="nosotros" className="py-20 md:py-28 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-12">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Manifiesto</p>
-            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[700px]">
-              Tributaristas y financieros que <em className="italic">escriben código</em>
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">El conocimiento</p>
+            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[760px]">
+              25 años de experiencia real <em className="italic">entrenan a nuestros agentes</em>
             </h2>
             <div className="max-w-[680px]">
               <p className="text-gray-600 text-base md:text-lg leading-[1.65] mb-4">
@@ -300,7 +453,7 @@ export default function Home() {
                 De esa experiencia nació INPLUX: un Hub donde el conocimiento tributario, financiero y contable se traduce en tecnología. Desde sus inicios, fundó empresas de asesoría tributaria y financiera, formó alianzas con Sistemas Aries — proveedores de la plataforma ERP financiera modular con más de 31 años en el departamento —, Think IT, BBD Soluciones, Alianza IT y el Observatorio de Datos y Análisis, y hoy lidera el ecosistema que construye Tribai.co y la plataforma de sector público.
               </p>
               <p className="text-gray-500 text-[0.9375rem] leading-[1.65]">
-                No contratamos IA como servicio externo. La construimos internamente, la entrenamos con normativa colombiana real, y la desplegamos como producto. Esa es la diferencia entre una consultora que usa herramientas y un Hub que las crea.
+                Ese es nuestro moat. No usamos IA genérica: entrenamos a nuestros agentes con normativa colombiana real, casos reales y 25 años de criterio experto. Por eso saben de qué hablan — y por eso cada vuelta del motor los hace mejores.
               </p>
             </div>
           </div>
@@ -423,12 +576,12 @@ export default function Home() {
       <section id="servicios" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14 text-center">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Capacidades</p>
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Lo que dominan nuestros agentes</p>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
-              Conocimiento tributario de fondo.<br /><em className="italic">Tecnología de frontera.</em>
+              Conocimiento de fondo.<br /><em className="italic">Agentes de frontera.</em>
             </h2>
             <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-              Cuatro pilares que se retroalimentan. La inteligencia tributaria nutre la IA, la IA genera herramientas, las herramientas automatizan la gestión.
+              Cuatro dominios que alimentan al motor. El conocimiento nutre a los agentes, los agentes generan herramientas, las herramientas automatizan la gestión — y todo retroalimenta al motor.
             </p>
           </div>
 
@@ -683,16 +836,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──── FRONTERA — Self-improving agents ──── */}
-      <section id="frontera" className="py-20 md:py-28">
+      {/* ──── FÁBRICA DE SOFTWARE — Frente 2 ──── */}
+      <section id="fabrica" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="reveal mb-14 text-center">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Frontera del conocimiento</p>
+            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Fábrica de software</p>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-xl mx-auto">
-              No usamos IA del montón.<br /><em className="italic">Construimos agentes que se mejoran solos.</em>
+              El mismo motor <em className="italic">construye software.</em>
             </h2>
             <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Nuestra apuesta es estar en la frontera —y la ultra-frontera— del conocimiento en IA. Memoria persistente, aprendizaje continuo y agentes que consolidan lo aprendido mientras nadie los mira. La misma maquinaria que mueve nuestro cerebro legal es nuestra fábrica de software.
+              Nuestros agentes no solo razonan: construyen. De la especificación al deploy, el motor agéntico convierte una idea en producto. Por eso operamos como fábrica — muchas .apps salen del mismo núcleo.
             </p>
           </div>
 
@@ -701,87 +854,82 @@ export default function Home() {
             Desliza para ver completo
           </div>
           <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 720" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[700px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ciclo de auto-mejora de los agentes de INPLUX: experiencia, memoria episódica, consolidación sleep-time, LLM-wiki y grafo, aprendizaje continuo">
+            <svg viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[720px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Fábrica de software de INPLUX: el motor agéntico alimenta un pipeline de especificación, agentes, build y deploy, que produce múltiples aplicaciones">
               {/* Background dots */}
-              {Array.from({ length: 19 }).map((_, row) =>
+              {Array.from({ length: 16 }).map((_, row) =>
                 Array.from({ length: 28 }).map((_, col) => (
-                  <circle key={`fr-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#e8e6e3" />
+                  <circle key={`fb-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 12} r="0.35" fill="#e8e6e3" />
                 ))
               )}
 
-              {/* Outer loop orbit (the cycle) */}
-              <circle cx="500" cy="360" r="240" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 8" fill="none" opacity="0.35" className="eco-orbit" style={{ animationDuration: "30s" }} />
-              {/* Directional chevrons on the loop (clockwise) */}
-              <polygon points="500,114 494,126 506,126" fill="#0d7d74" opacity="0.55" className="eco-node-pulse" />
-              <polygon points="734,300 723,294 727,306" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay1" />
-              <polygon points="610,580 600,572 597,584" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay2" />
-              <polygon points="390,580 403,584 400,572" fill="#0d7d74" opacity="0.55" className="eco-node-pulse" />
-              <polygon points="266,300 273,306 277,294" fill="#0d7d74" opacity="0.55" className="eco-node-pulse-delay1" />
+              {/* ═══ MOTOR (left) ═══ */}
+              <a href="#motor">
+                <g className="eco-glow" style={{ cursor: "pointer" }}>
+                  <rect x="30" y="240" width="180" height="120" rx="16" fill="#1a1918" />
+                  <rect x="30" y="240" width="180" height="120" rx="16" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 280" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                  <text x="120" y="288" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">Motor</text>
+                  <text x="120" y="306" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">agéntico</text>
+                  <text x="120" y="324" textAnchor="middle" fill="#5fe3d6" fontSize="7" fontWeight="600" letterSpacing="1">SELF-IMPROVING</text>
+                  <text x="120" y="342" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="7">memoria + aprendizaje</text>
+                </g>
+              </a>
 
-              {/* Lines center → each stage */}
-              <line x1="500" y1="282" x2="500" y2="170" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="560" y1="320" x2="690" y2="250" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="540" y1="420" x2="630" y2="510" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="460" y1="420" x2="370" y2="510" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="440" y1="320" x2="310" y2="250" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.3" className="eco-dash-flow" />
+              {/* Arrow motor → pipeline */}
+              <line x1="210" y1="300" x2="248" y2="300" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <polygon points="248,295 258,300 248,305" fill="#0d7d74" />
 
-              {/* ═══ CENTER: agente auto-evolutivo ═══ */}
-              <g className="eco-glow">
-                <circle cx="500" cy="360" r="80" fill="#1a1918" />
-                <circle cx="500" cy="360" r="80" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="12 250" className="eco-orbit" style={{ animationDuration: "7s" }} />
-                <text x="500" y="350" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">Agente</text>
-                <text x="500" y="368" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">auto-evolutivo</text>
-                <text x="500" y="386" textAnchor="middle" fill="#5fe3d6" fontSize="7.5" fontWeight="600" letterSpacing="1">SELF-IMPROVING</text>
-              </g>
+              {/* ═══ PIPELINE (center) ═══ */}
+              <rect x="258" y="172" width="318" height="256" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
+              <rect x="259" y="172" width="316" height="30" rx="16" fill="#e8f5f3" />
+              <text x="417" y="192" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="2">FÁBRICA DE SOFTWARE</text>
 
-              {/* ═══ 1 · EXPERIENCIA (top) ═══ */}
-              <g className="eco-float">
-                <rect x="400" y="92" width="200" height="78" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <text x="420" y="113" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">01 · EXPERIENCIA</text>
-                <text x="500" y="136" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Resuelve casos reales</text>
-                <text x="500" y="154" textAnchor="middle" fill="#8a8784" fontSize="8.5">Cada interacción es un dato</text>
-              </g>
+              {[
+                { n: "01", t: "Especificación", s: "spec-kit · requisitos vivos" },
+                { n: "02", t: "Agentes construyen", s: "código, datos y modelos" },
+                { n: "03", t: "Build & pruebas", s: "CI/CD · tests automáticos" },
+                { n: "04", t: "Deploy continuo", s: "a producción en días" },
+              ].map((st, i) => {
+                const y = 216 + i * 50;
+                return (
+                  <g key={st.n}>
+                    <rect x="278" y={y} width="278" height="40" rx="10" fill="#f3f1ee" />
+                    <circle cx="300" cy={y + 20} r="11" fill="#0d7d74" />
+                    <text x="300" y={y + 23} textAnchor="middle" fill="white" fontSize="8" fontWeight="700">{st.n}</text>
+                    <text x="322" y={y + 16} fill="#1a1918" fontSize="10.5" fontWeight="700">{st.t}</text>
+                    <text x="322" y={y + 31} fill="#8a8784" fontSize="7.5">{st.s}</text>
+                    {i < 3 && <line x1="417" y1={y + 40} x2="417" y2={y + 50} stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.4" />}
+                  </g>
+                );
+              })}
 
-              {/* ═══ 2 · MEMORIA EPISÓDICA (der-arriba) ═══ */}
-              <g className="eco-float-delay">
-                <rect x="690" y="196" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <text x="710" y="217" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">02 · MEMORIA EPISÓDICA</text>
-                <text x="800" y="240" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Recuerda cada asunto</text>
-                <text x="800" y="257" textAnchor="middle" fill="#8a8784" fontSize="8.5">Contexto, fecha y decisiones</text>
-                <text x="800" y="272" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Memory blocks persistentes</text>
-              </g>
+              {/* Arrow pipeline → apps */}
+              <line x1="576" y1="300" x2="614" y2="300" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <polygon points="614,295 624,300 614,305" fill="#0d7d74" />
 
-              {/* ═══ 3 · SLEEP-TIME (der-abajo) ═══ */}
-              <g className="eco-float">
-                <rect x="630" y="496" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <text x="650" y="517" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">03 · SLEEP-TIME COMPUTE</text>
-                <text x="740" y="540" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Consolida de noche</text>
-                <text x="740" y="557" textAnchor="middle" fill="#8a8784" fontSize="8.5">Reflexiona en background</text>
-                <text x="740" y="572" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Aprende sin latencia en vivo</text>
-              </g>
+              {/* ═══ APPS (right) ═══ */}
+              <text x="800" y="190" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="700" letterSpacing="2">PRODUCTOS · .APPS</text>
+              {[
+                { x: 628, y: 200, name: "Tribai", active: true },
+                { x: 800, y: 200, name: "Gobia", active: true },
+                { x: 628, y: 280, name: "Kelsen", active: true },
+                { x: 800, y: 280, name: "Laudos", active: true },
+                { x: 628, y: 360, name: "Porkia", active: false },
+                { x: 800, y: 360, name: "MiMotoYa", active: false },
+                { x: 628, y: 440, name: "+ nuevas .apps", active: false },
+                { x: 800, y: 440, name: "En desarrollo", active: false },
+              ].map((a) => (
+                <g key={a.name} className="eco-float">
+                  <rect x={a.x} y={a.y} width="156" height="64" rx="10" fill="white" stroke={a.active ? "#0d7d74" : "#d1cfcc"} strokeWidth={a.active ? 1.5 : 1.2} strokeDasharray={a.active ? "0" : "6 5"} />
+                  <circle cx={a.x + 138} cy={a.y + 16} r="5" fill={a.active ? "#0d7d74" : "#d1cfcc"} />
+                  {a.active && <text x={a.x + 138} y={a.y + 19} textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>}
+                  <text x={a.x + 78} y={a.y + 38} textAnchor="middle" fill={a.active ? "#1a1918" : "#a8a5a0"} fontSize="12" fontWeight="700">{a.name}</text>
+                  <text x={a.x + 78} y={a.y + 52} textAnchor="middle" fill={a.active ? "#0d7d74" : "#b8b5b1"} fontSize="7" fontWeight="600">{a.active ? "En producción" : "En desarrollo"}</text>
+                </g>
+              ))}
 
-              {/* ═══ 4 · LLM-WIKI + GRAPHRAG (izq-abajo) ═══ */}
-              <g className="eco-float-delay">
-                <rect x="150" y="496" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <text x="170" y="517" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">04 · LLM-WIKI + GRAPHRAG</text>
-                <text x="260" y="540" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">El saber se compone</text>
-                <text x="260" y="557" textAnchor="middle" fill="#8a8784" fontSize="8.5">Wiki vivo + grafo de conocimiento</text>
-                <text x="260" y="572" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Citación verificable y gobernada</text>
-              </g>
-
-              {/* ═══ 5 · APRENDIZAJE CONTINUO (izq-arriba) ═══ */}
-              <g className="eco-float">
-                <rect x="90" y="196" width="220" height="86" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <text x="110" y="217" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">05 · APRENDIZAJE CONTINUO</text>
-                <text x="200" y="240" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Mejora sin reentrenar</text>
-                <text x="200" y="257" textAnchor="middle" fill="#8a8784" fontSize="8.5">Continual learning</text>
-                <text x="200" y="272" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Sin olvido catastrófico</text>
-              </g>
-
-              {/* Bottom caption band — dual application */}
-              <rect x="250" y="640" width="500" height="46" rx="23" fill="#1a1918" />
-              <text x="500" y="662" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1">UN MISMO MOTOR, DOS FRENTES</text>
-              <text x="500" y="678" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="8" fontWeight="500">Cerebro legal (Kelsen) · Fábrica de software (otras .apps)</text>
+              {/* Bottom band */}
+              <rect x="300" y="540" width="400" height="40" rx="20" fill="#1a1918" />
+              <text x="500" y="565" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1">UN NÚCLEO · MUCHAS .APPS</text>
             </svg>
           </div>
         </div>
