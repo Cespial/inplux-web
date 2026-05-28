@@ -244,14 +244,14 @@ export default function Home() {
         </div>
         <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-[680px]">
-            <p className="reveal text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Agentes de IA · Self-improving · Fábrica de software</p>
+            <p className="reveal text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Inteligencia Tributaria · Tecnología · IA</p>
             <h1 className="reveal font-serif text-[2.25rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
-              Construimos agentes de IA<br />
-              que se{" "}
-              <em className="font-serif italic text-teal">mejoran solos.</em>
+              La norma la conocemos.<br />
+              La tecnología la{" "}
+              <em className="font-serif italic text-teal">construimos.</em>
             </h1>
             <p className="reveal text-gray-500 text-base md:text-[1.25rem] leading-[1.6] mb-7 max-w-[580px]">
-              Memoria persistente, aprendizaje continuo y conocimiento que se compone. El mismo motor mueve nuestros productos y nuestra fábrica de software — entrenado con 25 años de conocimiento real.
+              Nuestra historia empezó en la gestión tributaria. Llevamos 25 años entre estatutos, NIC/NIIF y hacienda pública colombiana. Hoy convertimos ese conocimiento en tecnología e inteligencia artificial.
             </p>
             <div className="reveal flex flex-col sm:flex-row gap-3">
               <a href="#motor" className="btn-dark text-center">Ver el motor</a>
