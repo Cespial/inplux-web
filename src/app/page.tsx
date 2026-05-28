@@ -209,7 +209,7 @@ export default function Home() {
             )}
           </div>
           <div className="flex items-center gap-3">
-            <a href="#contacto" className="hidden md:inline-flex btn-dark text-[0.8125rem] !py-2 !px-5">Hablemos</a>
+            <a href="#contacto" className="!hidden md:!inline-flex btn-dark text-[0.8125rem] !py-2 !px-5">Hablemos</a>
             <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-ink p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={mobileOpen}>
               {mobileOpen ? (
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -228,12 +228,33 @@ export default function Home() {
                 <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="block text-gray-600 hover:text-ink text-sm font-medium py-2.5 px-3 rounded-md transition-colors">{l.label}</a>
               )
             )}
-            <a href="#contacto" onClick={() => setMobileOpen(false)} className="block btn-dark text-sm text-center !py-2.5 mt-2">Hablemos</a>
+            <a href="#contacto" onClick={() => setMobileOpen(false)} className="btn-dark w-full text-sm !py-2.5 mt-2">Hablemos</a>
           </div>
         </div>
       </nav>
 
       <main id="main-content">
+      {/* Shared SVG defs — gradientes y filtros reutilizables por todos los diagramas */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="inkGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#26241f" />
+            <stop offset="100%" stopColor="#0d0c0b" />
+          </linearGradient>
+          <linearGradient id="tealGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#15b3a4" />
+            <stop offset="100%" stopColor="#0a665f" />
+          </linearGradient>
+          <radialGradient id="tealHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0d7d74" stopOpacity="0.32" />
+            <stop offset="65%" stopColor="#0d7d74" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#0d7d74" stopOpacity="0" />
+          </radialGradient>
+          <filter id="cardShadow" x="-25%" y="-25%" width="150%" height="150%">
+            <feDropShadow dx="0" dy="6" stdDeviation="9" floodColor="#1a1918" floodOpacity="0.12" />
+          </filter>
+        </defs>
+      </svg>
       {/* ──── HERO ──── */}
       <section id="inicio" className="relative pt-[60px] overflow-hidden">
         <div className="absolute inset-0 top-[60px] z-0">
@@ -319,7 +340,7 @@ export default function Home() {
             Desliza para ver completo
           </div>
           <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[720px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Flujo de un agente self-improving: experiencia, memoria episodica, consolidacion sleep-time y conocimiento alimentan un segundo cerebro persistente (episodica, semantica, procedural, wiki y grafo) que el agente recupera en cada nuevo caso, mejorando en cada vuelta">
+            <svg viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[720px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Flujo de un agente self-improving: experiencia, memoria episodica, consolidacion sleep-time y conocimiento alimentan un segundo cerebro persistente que el agente recupera en cada nuevo caso, mejorando en cada vuelta">
               {/* Background dots */}
               {Array.from({ length: 16 }).map((_, row) =>
                 Array.from({ length: 28 }).map((_, col) => (
@@ -327,55 +348,46 @@ export default function Home() {
                 ))
               )}
 
+              {/* Halo atmosférico detrás del cerebro */}
+              <ellipse cx="500" cy="384" rx="345" ry="170" fill="url(#tealHalo)" className="svg-halo-pulse" />
+
               <text x="40" y="34" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.5">EL CICLO QUE LO HACE MEJORAR</text>
 
-              {/* ── Fila superior: el flujo 01 → 04 ── */}
-              <g className="eco-float">
-                <rect x="30" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="52" cy="74" r="11" fill="#0d7d74" /><text x="52" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">01</text>
-                <text x="130" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Experiencia</text>
-                <text x="130" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Resuelve casos reales</text>
-                <text x="130" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Cada interacción es un dato</text>
-              </g>
-              <g className="eco-float-delay">
-                <rect x="270" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="292" cy="74" r="11" fill="#0d7d74" /><text x="292" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">02</text>
-                <text x="370" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Memoria</text>
-                <text x="370" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Recuerda cada asunto</text>
-                <text x="370" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Episódica y persistente</text>
-              </g>
-              <g className="eco-float">
-                <rect x="510" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="532" cy="74" r="11" fill="#0d7d74" /><text x="532" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">03</text>
-                <text x="610" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Consolida</text>
-                <text x="610" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">Aprende en reposo</text>
-                <text x="610" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Sleep-time compute</text>
-              </g>
-              <g className="eco-float-delay">
-                <rect x="750" y="52" width="200" height="94" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="772" cy="74" r="11" fill="#0d7d74" /><text x="772" y="77" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">04</text>
-                <text x="850" y="80" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Conocimiento</text>
-                <text x="850" y="100" textAnchor="middle" fill="#8a8784" fontSize="8.5">El saber se compone</text>
-                <text x="850" y="116" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">LLM-wiki + grafo</text>
-              </g>
+              {/* Flujo: 01 → 04 */}
+              {[
+                { n: "01", t: "Experiencia", a: "Resuelve casos reales", b: "Cada interacción es un dato", x: 30 },
+                { n: "02", t: "Memoria", a: "Recuerda cada asunto", b: "Episódica y persistente", x: 270 },
+                { n: "03", t: "Consolida", a: "Aprende en reposo", b: "Sleep-time compute", x: 510 },
+                { n: "04", t: "Conocimiento", a: "El saber se compone", b: "LLM-wiki + grafo", x: 750 },
+              ].map((c) => (
+                <g key={c.n} className="svg-card svg-lift">
+                  <rect x={c.x} y={52} width={200} height={94} rx={12} fill="white" stroke="#0d7d74" strokeWidth={1.5} />
+                  <circle cx={c.x + 22} cy={74} r={11} fill="url(#tealGrad)" />
+                  <text x={c.x + 22} y={77} textAnchor="middle" fill="white" fontSize="8" fontWeight="700">{c.n}</text>
+                  <text x={c.x + 100} y={80} textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">{c.t}</text>
+                  <text x={c.x + 100} y={100} textAnchor="middle" fill="#8a8784" fontSize="8.5">{c.a}</text>
+                  <text x={c.x + 100} y={116} textAnchor="middle" fill="#a8a5a0" fontSize="7.5">{c.b}</text>
+                </g>
+              ))}
 
               {/* arrows 01→02→03→04 */}
-              <line x1="232" y1="99" x2="262" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="262,94 272,99 262,104" fill="#0d7d74" />
-              <line x1="472" y1="99" x2="502" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="502,94 512,99 502,104" fill="#0d7d74" />
-              <line x1="712" y1="99" x2="742" y2="99" stroke="#0d7d74" strokeWidth="1.5" /><polygon points="742,94 752,99 742,104" fill="#0d7d74" />
+              {[232, 472, 712].map((x) => (
+                <g key={x}>
+                  <line x1={x} y1={99} x2={x + 30} y2={99} stroke="#0d7d74" strokeWidth={1.5} />
+                  <polygon points={`${x + 30},94 ${x + 40},99 ${x + 30},104`} fill="#0d7d74" />
+                </g>
+              ))}
 
-              {/* 04 → segundo cerebro (entra el conocimiento consolidado) */}
-              <path d="M 850 146 C 850 196, 760 200, 705 246" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 4" fill="none" className="eco-dash-flow" />
+              {/* 04 → segundo cerebro (flujo de datos) */}
+              <path d="M 850 146 C 850 196, 760 200, 705 246" stroke="#0d7d74" strokeWidth="1.6" fill="none" className="svg-flow" />
               <polygon points="705,246 706,234 715,242" fill="#0d7d74" />
-              <text x="792" y="206" fill="#6e6b68" fontSize="7.5" fontWeight="600">alimenta</text>
+              <text x="794" y="206" fill="#6e6b68" fontSize="7.5" fontWeight="600">alimenta</text>
 
               {/* ── SEGUNDO CEREBRO ── */}
-              <rect x="230" y="246" width="540" height="266" rx="18" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-              <rect x="231" y="246" width="538" height="30" rx="18" fill="#e8f5f3" />
-              <text x="266" y="266" fill="#0d7d74" fontSize="10" fontWeight="700" letterSpacing="2">SEGUNDO CEREBRO</text>
-              {/* growth glyph */}
-              <path d="M 690 268 L 720 256" stroke="#0d7d74" strokeWidth="1.3" /><polygon points="720,256 711,257 715,264" fill="#0d7d74" />
-              <text x="612" y="266" fill="#0d7d74" fontSize="7.5" fontWeight="700">se perfecciona</text>
+              <g className="svg-card"><rect x="230" y="246" width="540" height="266" rx="18" fill="white" stroke="#0d7d74" strokeWidth="1.5" /></g>
+              <path d="M230 264 Q230 246 248 246 H752 Q770 246 770 264 V276 H230 Z" fill="url(#tealGrad)" />
+              <text x="266" y="266" fill="white" fontSize="10" fontWeight="700" letterSpacing="2">SEGUNDO CEREBRO</text>
+              <text x="740" y="266" textAnchor="end" fill="rgba(255,255,255,0.85)" fontSize="7.5" fontWeight="700" letterSpacing="0.5">SE PERFECCIONA ↑</text>
               <text x="499" y="296" textAnchor="middle" fill="#8a8784" fontSize="8.5">Se alimenta y crece con cada caso — el conocimiento se compone, no se recalcula</text>
 
               {/* 4 compartimentos */}
@@ -397,23 +409,27 @@ export default function Home() {
               <rect x="508" y="392" width="242" height="76" rx="10" fill="#e8f5f3" />
               <text x="600" y="420" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="700">LLM-Wiki + Grafo</text>
               <text x="600" y="438" textAnchor="middle" fill="#6e6b68" fontSize="8">Conocimiento conectado</text>
-              {/* graph motif */}
-              <circle cx="694" cy="410" r="3" fill="#0d7d74" /><circle cx="722" cy="426" r="3" fill="#0d7d74" /><circle cx="690" cy="446" r="3" fill="#0d7d74" /><circle cx="726" cy="452" r="3" fill="#0d7d74" />
+              <circle cx="694" cy="410" r="3" fill="#0d7d74" className="eco-node-pulse" /><circle cx="722" cy="426" r="3" fill="#0d7d74" /><circle cx="690" cy="446" r="3" fill="#0d7d74" className="eco-node-pulse-delay1" /><circle cx="726" cy="452" r="3" fill="#0d7d74" />
               <line x1="694" y1="410" x2="722" y2="426" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="722" y1="426" x2="690" y2="446" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="690" y1="446" x2="726" y2="452" stroke="#0d7d74" strokeWidth="1" opacity="0.5" /><line x1="722" y1="426" x2="726" y2="452" stroke="#0d7d74" strokeWidth="1" opacity="0.5" />
 
               {/* governed tag */}
-              <rect x="372" y="480" width="256" height="22" rx="11" fill="#1a1918" />
+              <rect x="372" y="480" width="256" height="22" rx="11" fill="url(#inkGrad)" />
               <text x="500" y="495" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" letterSpacing="0.5">GOBERNADO · citación verificable · trazabilidad</text>
 
-              {/* Recuperación: el cerebro alimenta cada nuevo caso (vuelve a 01) */}
-              <path d="M 230 386 C 110 386, 88 230, 130 150" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="6 5" fill="none" opacity="0.6" className="eco-dash-flow" />
-              <polygon points="130,150 124,162 136,161" fill="#0d7d74" opacity="0.8" />
+              {/* Recuperación: el cerebro alimenta cada nuevo caso */}
+              <path d="M 230 386 C 110 386, 88 230, 130 150" stroke="#0d7d74" strokeWidth="1.6" fill="none" className="svg-flow-fast" />
+              <polygon points="130,150 124,162 136,161" fill="#0d7d74" />
               <text x="58" y="300" fill="#0d7d74" fontSize="8" fontWeight="700">RECUPERACIÓN</text>
               <text x="40" y="316" fill="#8a8784" fontSize="7.5">El agente consulta su</text>
               <text x="40" y="328" fill="#8a8784" fontSize="7.5">cerebro antes de actuar</text>
 
-              {/* Bottom band — compounding */}
-              <rect x="280" y="556" width="440" height="34" rx="17" fill="#1a1918" />
+              {/* Partículas ambientales */}
+              <circle cx="252" cy="330" r="2.5" fill="#0d7d74" className="svg-spark" />
+              <circle cx="752" cy="420" r="2" fill="#15b3a4" className="svg-spark" style={{ animationDelay: "1.6s" }} />
+              <circle cx="500" cy="226" r="2" fill="#0d7d74" className="svg-spark" style={{ animationDelay: "3.1s" }} />
+
+              {/* Bottom band */}
+              <rect x="280" y="556" width="440" height="34" rx="17" fill="url(#inkGrad)" />
               <text x="500" y="577" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="700" letterSpacing="0.5">MÁS CASOS → MEJOR CEREBRO → MEJOR AGENTE</text>
             </svg>
           </div>
@@ -497,8 +513,9 @@ export default function Home() {
               </g>
 
               {/* ═══ CENTER: INPLUX HUB ═══ */}
+              <ellipse cx="450" cy="140" rx="115" ry="95" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <g className="eco-glow">
-                <circle cx="450" cy="140" r="52" fill="#1a1918" />
+                <circle cx="450" cy="140" r="52" fill="url(#inkGrad)" />
                 <circle cx="450" cy="140" r="52" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="6 200" className="eco-orbit" style={{ animationDuration: "8s" }} />
                 <text x="450" y="133" textAnchor="middle" fill="white" fontSize="14" fontWeight="700" letterSpacing="2.5">INPLUX</text>
                 <text x="450" y="152" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="7.5" fontWeight="600" letterSpacing="1.5">HUB</text>
@@ -548,7 +565,7 @@ export default function Home() {
               <circle cx="450" cy="260" r="2" fill="#d1cfcc" className="eco-node-pulse-delay2" />
 
               {/* Bottom label */}
-              <rect x="330" y="240" width="240" height="24" rx="12" fill="#1a1918" />
+              <rect x="330" y="240" width="240" height="24" rx="12" fill="url(#inkGrad)" />
               <text x="450" y="256" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700" letterSpacing="1.5">EXPERIENCIA → HUB → PRODUCTO</text>
             </svg>
           </div>
@@ -612,8 +629,9 @@ export default function Home() {
               <path d="M 720 515 Q 600 440, 500 420" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 4" fill="none" />
 
               {/* ═══ CENTER: INPLUX ═══ */}
+              <ellipse cx="500" cy="350" rx="150" ry="122" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <g className="eco-glow">
-                <circle cx="500" cy="350" r="60" fill="#1a1918" />
+                <circle cx="500" cy="350" r="60" fill="url(#inkGrad)" />
                 <circle cx="500" cy="350" r="60" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="8 200" className="eco-orbit" style={{ animationDuration: "8s" }} />
                 <text x="500" y="343" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
                 <text x="500" y="364" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="8" fontWeight="600" letterSpacing="1.5">HUB CENTRAL</text>
@@ -757,9 +775,10 @@ export default function Home() {
               <line x1="555" y1="380" x2="730" y2="470" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
 
               {/* ═══ KELSEN — center (sombrilla) ═══ */}
+              <ellipse cx="500" cy="330" rx="155" ry="132" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
-                <g className="eco-glow" style={{ cursor: "pointer" }}>
-                  <circle cx="500" cy="330" r="72" fill="#1a1918" />
+                <g className="eco-glow svg-card" style={{ cursor: "pointer" }}>
+                  <circle cx="500" cy="330" r="72" fill="url(#inkGrad)" />
                   <circle cx="500" cy="330" r="72" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 250" className="eco-orbit" style={{ animationDuration: "8s" }} />
                   <text x="500" y="320" textAnchor="middle" fill="white" fontSize="18" fontWeight="800" letterSpacing="1.5">Kelsen</text>
                   <text x="500" y="338" textAnchor="middle" fill="#5fe3d6" fontSize="9" fontWeight="500" textDecoration="underline">kelsen.io</text>
@@ -769,7 +788,7 @@ export default function Home() {
 
               {/* ═══ TRIBAI — módulo activo (arriba-izq) ═══ */}
               <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float" style={{ cursor: "pointer" }}>
+                <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
                   <rect x="120" y="74" width="230" height="104" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                   <rect x="121" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
                   <text x="144" y="91" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">MÓDULO · TRIBUTARIO</text>
@@ -783,7 +802,7 @@ export default function Home() {
 
               {/* ═══ LAUDOS — módulo activo (arriba-der) ═══ */}
               <a href="https://laudos.co" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float-delay" style={{ cursor: "pointer" }}>
+                <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
                   <rect x="650" y="74" width="230" height="104" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                   <rect x="651" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
                   <text x="674" y="91" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">MÓDULO · ARBITRAJE</text>
@@ -830,7 +849,7 @@ export default function Home() {
               <text x="525" y="634" fill="#6e6b68" fontSize="9" fontWeight="500">En desarrollo</text>
 
               {/* Bottom branding */}
-              <rect x="380" y="652" width="240" height="22" rx="11" fill="#1a1918" />
+              <rect x="380" y="652" width="240" height="22" rx="11" fill="url(#inkGrad)" />
               <text x="500" y="667" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700" letterSpacing="1.5">ECOSISTEMA LEGAL KELSEN</text>
             </svg>
           </div>
@@ -886,9 +905,10 @@ export default function Home() {
               )}
 
               {/* ═══ MOTOR (left) ═══ */}
+              <ellipse cx="120" cy="300" rx="135" ry="112" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <a href="#motor">
-                <g className="eco-glow" style={{ cursor: "pointer" }}>
-                  <rect x="30" y="240" width="180" height="120" rx="16" fill="#1a1918" />
+                <g className="eco-glow svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="30" y="240" width="180" height="120" rx="16" fill="url(#inkGrad)" />
                   <rect x="30" y="240" width="180" height="120" rx="16" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 280" className="eco-orbit" style={{ animationDuration: "8s" }} />
                   <text x="120" y="288" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">Motor</text>
                   <text x="120" y="306" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">agéntico</text>
@@ -941,7 +961,7 @@ export default function Home() {
                 { x: 628, y: 440, name: "+ nuevas .apps", active: false },
                 { x: 800, y: 440, name: "En desarrollo", active: false },
               ].map((a) => (
-                <g key={a.name} className="eco-float">
+                <g key={a.name} className="eco-float svg-card">
                   <rect x={a.x} y={a.y} width="156" height="64" rx="10" fill="white" stroke={a.active ? "#0d7d74" : "#d1cfcc"} strokeWidth={a.active ? 1.5 : 1.2} strokeDasharray={a.active ? "0" : "6 5"} />
                   <circle cx={a.x + 138} cy={a.y + 16} r="5" fill={a.active ? "#0d7d74" : "#d1cfcc"} />
                   {a.active && <text x={a.x + 138} y={a.y + 19} textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>}
@@ -951,7 +971,7 @@ export default function Home() {
               ))}
 
               {/* Bottom band */}
-              <rect x="300" y="540" width="400" height="40" rx="20" fill="#1a1918" />
+              <rect x="300" y="540" width="400" height="40" rx="20" fill="url(#inkGrad)" />
               <text x="500" y="565" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1">UN NÚCLEO · MUCHAS .APPS</text>
             </svg>
           </div>
@@ -1202,7 +1222,7 @@ export default function Home() {
               <circle cx="900" cy="480" r="3" fill="#d1cfcc" className="eco-node-pulse" />
 
               {/* Stats bar */}
-              <rect x="200" y="540" width="560" height="34" rx="17" fill="#1a1918" />
+              <rect x="200" y="540" width="560" height="34" rx="17" fill="url(#inkGrad)" />
               <text x="480" y="561" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1.5">4 CAPAS · 40+ HERRAMIENTAS · INFRAESTRUCTURA DE CLASE MUNDIAL</text>
 
               {/* Side labels */}
@@ -1250,15 +1270,16 @@ export default function Home() {
               <line x1="500" y1="95" x2="500" y2="370" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
 
               {/* ═══ INPLUX — top center ═══ */}
+              <ellipse cx="500" cy="60" rx="185" ry="92" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <g className="eco-glow">
-                <rect x="400" y="24" width="200" height="68" rx="14" fill="#1a1918" />
+                <rect x="400" y="24" width="200" height="68" rx="14" fill="url(#inkGrad)" />
                 <text x="500" y="55" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
                 <text x="500" y="74" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="600" letterSpacing="1.5">HUB DE IA & TIC</text>
               </g>
 
               {/* ═══ KELSEN — left (sombrilla legal) ═══ */}
               <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float" style={{ cursor: "pointer" }}>
+                <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
                   <rect x="145" y="190" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                   <rect x="146" y="190" width="238" height="26" rx="12" fill="#e8f5f3" />
                   <text x="170" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SOMBRILLA LEGAL IA</text>
@@ -1272,7 +1293,7 @@ export default function Home() {
 
               {/* ═══ GOBIA — right (mirror of Tribai) ═══ */}
               <a href="https://gobia.co" target="_blank" rel="noopener noreferrer">
-              <g className="eco-float-delay" style={{ cursor: "pointer" }}>
+              <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
                 <rect x="615" y="190" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
                 <rect x="616" y="190" width="238" height="26" rx="12" fill="#e8f5f3" />
                 <text x="640" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
@@ -1284,7 +1305,7 @@ export default function Home() {
 
               {/* ═══ FOURIER — center ═══ */}
               <a href="https://fourier.dev/en" target="_blank" rel="noopener noreferrer">
-                <g className="eco-glow" style={{ cursor: "pointer" }}>
+                <g className="eco-glow svg-card" style={{ cursor: "pointer" }}>
                   <rect x="350" y="370" width="300" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
                   <rect x="351" y="370" width="298" height="24" rx="14" fill="#e8f5f3" />
                   <text x="380" y="387" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
@@ -1325,7 +1346,7 @@ export default function Home() {
 
               {/* Observatorio de Datos — abajo-derecha (espejo de BBD), clickable */}
               <a href="https://datosyanalisis.org/" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float-delay" style={{ cursor: "pointer" }}>
+                <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
                   <rect x="675" y="510" width="170" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
                   <text x="760" y="534" textAnchor="middle" fill="#3d3b39" fontSize="10" fontWeight="600">Observatorio de Datos</text>
                   <text x="760" y="550" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="500" textDecoration="underline">datosyanalisis.org</text>

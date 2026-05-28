@@ -452,4 +452,26 @@ body {
   .logo-track {
     animation: none !important;
   }
+  .svg-flow, .svg-flow-fast, .svg-breathe, .svg-halo-pulse, .svg-spark { animation: none !important; }
 }
+
+/* ═══════ SVG "STARTUP" UPGRADE KIT ═══════ */
+/* Flujo de datos: dash que recorre el conector (vida + dirección) */
+@keyframes svg-flow-move { to { stroke-dashoffset: -1000; } }
+.svg-flow { stroke-dasharray: 7 9; animation: svg-flow-move 16s linear infinite; }
+.svg-flow-fast { stroke-dasharray: 5 8; animation: svg-flow-move 9s linear infinite; }
+
+/* Profundidad: sombra suave en tarjetas */
+.svg-card { filter: drop-shadow(0 7px 16px rgba(26, 25, 24, 0.10)); }
+
+/* Hover lift en nodos interactivos */
+.svg-lift { transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), filter 0.4s ease; transform-box: fill-box; transform-origin: center; }
+.svg-lift:hover { transform: translateY(-5px); filter: drop-shadow(0 14px 26px rgba(13, 125, 116, 0.22)); }
+
+/* Halo que respira detrás del cerebro / nodos clave */
+@keyframes svg-halo-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.9; } }
+.svg-halo-pulse { animation: svg-halo-pulse 5.5s ease-in-out infinite; }
+
+/* Partículas ambientales que ascienden */
+@keyframes svg-spark-rise { 0% { opacity: 0; transform: translateY(8px); } 35% { opacity: 0.8; } 100% { opacity: 0; transform: translateY(-16px); } }
+.svg-spark { animation: svg-spark-rise 4.5s ease-in-out infinite; transform-box: fill-box; }
