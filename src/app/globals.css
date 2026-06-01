@@ -205,13 +205,13 @@ body {
   height: 32px;
   max-width: 120px;
   object-fit: contain;
-  opacity: 0.55;
+  opacity: 0.72;
   filter: grayscale(100%);
   transition: opacity var(--motion-base) var(--ease-standard), filter var(--motion-base) var(--ease-standard);
 }
 
 .logo-item:hover {
-  opacity: 0.85;
+  opacity: 1;
   filter: grayscale(0%);
 }
 

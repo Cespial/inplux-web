@@ -767,7 +767,7 @@ function GobiaTwin() {
         viewBox="0 0 520 460"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full max-w-[520px] mx-auto"
+        className="w-full max-w-[480px] mx-auto lg:mx-0"
         style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}
         role="img"
         aria-label="Gemelo digital municipal Gobia: fuentes DNP, Contraloría, Ministerios, Contaduría e IAS fluyendo al tablero de hacienda"
@@ -1229,7 +1229,7 @@ export default function Home() {
               <line x1="820" y1="396" x2="820" y2="410" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
 
               {/* Tribai aparece en ambos frentes — indicador visual */}
-              <text x="662" y="393" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="600" opacity="0.7">↕ también Público</text>
+              
 
               {/* Conector Privado → Motor */}
               <path d="M760,466 C760,520 580,580 538,622" fill="none" stroke="#d1cfcc" strokeWidth="1.2" strokeDasharray="4 3" />
@@ -1241,17 +1241,15 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="fine-rule" />
-
       {/* ──── STATS ──── */}
-      <section className="py-20 md:py-28" aria-label="Cifras de impacto">
+      <section className="py-12 md:py-16" aria-label="Cifras de impacto">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <Stagger className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-14">
             {[
               { value: "+25", label: "Años de experiencia", detail: "Desde el año 2000" },
               { value: "+50", label: "Municipios atendidos", detail: "Sector público" },
               { value: "+100", label: "Proyectos ejecutados", detail: "Público y privado" },
-              { value: "2", label: "Frentes de mercado", detail: "Público · Privado" },
+              { value: "+35", label: "Calculadoras IA", detail: "Tributario · Financiero" },
             ].map((stat) => (
               <StaggerItem key={stat.label} className="group relative border border-border-light hover:border-border rounded-xl p-4 md:p-5 transition-all duration-300 hover:shadow-sm">
                 <AnimatedNumber value={stat.value} label={stat.label} />
@@ -1263,7 +1261,7 @@ export default function Home() {
       </section>
 
       {/* ──── FRENTE PÚBLICO — Gobia · Hacienda municipal ──── */}
-      <section id="publico" className="py-24 md:py-32">
+      <section id="publico" className="py-16 md:py-24">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
@@ -1347,16 +1345,70 @@ export default function Home() {
       {/* ──── FRENTE PRIVADO — Kelsen sombrilla + Fábrica ──── */}
       <section id="privado" className="py-24 md:py-32 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <Reveal className="mb-14">
-            <SectionKicker n="03">Frente Privado · Empresas y firmas</SectionKicker>
-            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-2xl">
-              Kelsen es la sombrilla.<br /><em className="italic">Cada vertical, un módulo.</em>
-            </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
-              Para empresas, firmas legales y startups. Kelsen — el cerebro legal de INPLUX — integra Tribai (inteligencia tributaria) y Laudos (arbitral y jurisprudencia) sobre una sola capa de conocimiento persistente con citación verificable.
-            </p>
-          </Reveal>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-14">
 
+            {/* Columna izquierda — narrativa privado */}
+            <div>
+              <Reveal>
+                <SectionKicker n="03">Frente Privado · Empresas y firmas</SectionKicker>
+                <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
+                  Kelsen es la sombrilla.<br /><em className="italic">Cada vertical, un módulo.</em>
+                </h2>
+                <p className="text-gray-500 text-base md:text-[1.05rem] leading-[1.65] mb-8 max-w-md">
+                  Para empresas, firmas legales y startups. Un cerebro legal con memoria persistente que cita su fuente — verificable ante la DIAN o un juez.
+                </p>
+              </Reveal>
+
+              <Stagger className="space-y-4 mb-8">
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Kelsen · Cerebro legal</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Memoria persistente de tus asuntos, clientes y estilo. Razona sobre normativa colombiana real.</p>
+                    <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">kelsen.io →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Tribai · Tributario privado</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Declaración de renta, exógena y estatuto tributario con RAG. Citación verificable ante la DIAN.</p>
+                    <a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">tribai.co →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Laudos · Arbitraje</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Laudos arbitrales y jurisprudencia indexada. El primer módulo de derecho comercial.</p>
+                    <a href="https://laudos.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">laudos.co →</a>
+                  </div>
+                </StaggerItem>
+              </Stagger>
+
+              <Reveal>
+                <span className="bracket-cta is-block max-w-[220px]">
+                  <span className="br-tr" /><span className="br-bl" />
+                  <m.a href="mailto:gerencia@inplux.co?subject=Demo%20de%20Kelsen" className="btn-dark w-full justify-center" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
+                    Pide demo de Kelsen
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
+                  </m.a>
+                </span>
+              </Reveal>
+            </div>
+
+            {/* Columna derecha — diagrama Kelsen sombrilla */}
+            <div className="w-full overflow-x-auto">
+              <div className="svg-scroll-hint">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+                Desliza para ver completo
+              </div>
           <div className="svg-scroll-hint">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
             Desliza para ver completo
@@ -1454,36 +1506,8 @@ export default function Home() {
               <text x="500" y="667" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1.2">ECOSISTEMA LEGAL KELSEN</text>
             </svg>
           </Reveal>
-
-          {/* Para quién · qué te llevas · CTA — Legal */}
-          <Reveal className="grid md:grid-cols-3 gap-6 md:gap-8 mt-14 items-start">
-            <div>
-              <p className="text-teal text-[0.65rem] font-bold tracking-[0.12em] uppercase mb-2">Para quién</p>
-              <p className="text-gray-600 text-[0.9rem] leading-relaxed">Firmas legales, abogados independientes y áreas jurídicas que quieren una IA que recuerde sus asuntos y trabaje a su estilo.</p>
-            </div>
-            <div>
-              <p className="text-teal text-[0.65rem] font-bold tracking-[0.12em] uppercase mb-2">Qué te llevas</p>
-              <ul className="space-y-2 text-gray-600 text-[0.9rem] leading-snug">
-                <li className="flex gap-2"><span className="text-teal">→</span>Un cerebro que recuerda todos tus asuntos y aprende tu estilo.</li>
-                <li className="flex gap-2"><span className="text-teal">→</span>Investigación jurídica con citación verificable, sin alucinaciones.</li>
-                <li className="flex gap-2"><span className="text-teal">→</span>Módulos listos: Tribai (tributario) y Laudos (arbitral).</li>
-              </ul>
-            </div>
-            <div className="md:pt-5">
-              <span className="bracket-cta is-block">
-                <span className="br-tr" />
-                <span className="br-bl" />
-                <m.a href="mailto:gerencia@inplux.co?subject=Demo%20de%20Kelsen" className="btn-dark w-full justify-center" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
-                  Pide demo de Kelsen
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
-                </m.a>
-              </span>
-              <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-gray-500 hover:text-ink text-sm font-semibold mt-3 ml-1.5 transition-colors">
-                Conoce Kelsen.io
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-              </a>
-            </div>
-          </Reveal>
+            </div>{/* cierre columna derecha */}
+          </div>{/* cierre grid 2 col */}
 
           {/* Separador sub-bloque Fábrica */}
           <div className="fine-rule mt-20 mb-16" />
