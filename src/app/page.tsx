@@ -26,7 +26,7 @@ function AnimatedNumber({ value, label }: { value: string; label: string }) {
           setDisplay(prefix + num.toString());
           return;
         }
-        const dur = 900;
+        const dur = 600;
         const start = performance.now();
         const tick = (now: number) => {
           const t = Math.min((now - start) / dur, 1);
@@ -719,17 +719,17 @@ const MED_PATH = "M20.0,92.2L23.1,100.7L21.6,110.9L22.6,121.6L30.5,132.6L37.3,14
    Centro del municipio ≈ (262, 240). */
 const TWIN_NODES = [
   { id: "dnp",         cx: 262, cy: 80,  label: "DNP",  pulse: "",             card: { x: 148, y: 48,  w: 156, title: "DNP",        sub: "PLANEACIÓN NACIONAL",  desc: "Planes de desarrollo · SGP · inversión" } },
-  { id: "contraloria", cx: 420, cy: 200, label: "CTRL", pulse: "twin-pulse-2", card: { x: 264, y: 168, w: 156, title: "Contraloría", sub: "CONTROL FISCAL",       desc: "Alertas fiscales · auditoría · deuda" } },
+  { id: "contraloria", cx: 390, cy: 195, label: "CTRL", pulse: "twin-pulse-2", card: { x: 244, y: 163, w: 156, title: "Contraloría", sub: "CONTROL FISCAL",       desc: "Alertas fiscales · auditoría · deuda" } },
   { id: "ministerios", cx: 80,  cy: 260, label: "MIN",  pulse: "twin-pulse-3", card: { x: 26,  y: 228, w: 152, title: "Ministerios", sub: "NORMATIVA SECTORIAL",  desc: "Hacienda · Interior · Salud · Educación" } },
-  { id: "contaduria",  cx: 440, cy: 330, label: "CTD",  pulse: "twin-pulse-4", card: { x: 284, y: 300, w: 152, title: "Contaduría", sub: "ESTADO FINANCIERO",    desc: "Balance · pasivos · cierre contable" } },
+  { id: "contaduria",  cx: 400, cy: 320, label: "CTD",  pulse: "twin-pulse-4", card: { x: 244, y: 290, w: 152, title: "Contaduría", sub: "ESTADO FINANCIERO",    desc: "Balance · pasivos · cierre contable" } },
   { id: "ias",         cx: 262, cy: 400, label: "IAS",  pulse: "twin-pulse-5", card: { x: 148, y: 368, w: 216, title: "IAS",        sub: "ENTIDADES ESPECIALES", desc: "EICE · SEM · empresas servicios públicos" } },
 ] as const;
 
 const TWIN_FLOWS = [
   "M262,89 Q262,155 248,214",
-  "M411,208 Q370,225 308,234",
+  "M381,203 Q348,218 308,234",
   "M89,260 Q160,256 218,248",
-  "M431,322 Q385,304 310,254",
+  "M391,312 Q360,295 310,254",
   "M262,391 Q262,340 264,267",
 ] as const;
 
@@ -1074,168 +1074,138 @@ export default function Home() {
             Desliza para ver completo
           </div>
           <Reveal className="w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 700" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[700px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema INPLUX: dos frentes (público y privado) con seis productos sobre un motor agéntico compartido">
+            <svg viewBox="0 0 1000 580" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema INPLUX: dos frentes (público y privado) con siete productos sobre un motor agéntico compartido">
               {/* Background dots */}
-              {Array.from({ length: 19 }).map((_, row) =>
+              {Array.from({ length: 16 }).map((_, row) =>
                 Array.from({ length: 28 }).map((_, col) => (
                   <circle key={`ec-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#ebe8e4" />
                 ))
               )}
 
-              {/* Motor — capa de fondo transversal */}
-              <ellipse cx="500" cy="650" rx="460" ry="88" fill="url(#tealHalo)" className="svg-halo-pulse" />
-              <rect x="362" y="620" width="276" height="52" rx="26" fill="url(#inkGrad)" />
-              <text x="500" y="643" textAnchor="middle" fill="white" fontSize="11" fontWeight="700" letterSpacing="1">Motor agéntico</text>
-              <text x="500" y="659" textAnchor="middle" fill="#5fe3d6" fontSize="8" fontWeight="600" letterSpacing="1.5">SELF-IMPROVING · BASE COMÚN</text>
-
-              {/* Motor → ramas */}
-              <line x1="500" y1="618" x2="500" y2="560" stroke="#0d7d74" strokeWidth="1.2" strokeDasharray="4 3" className="eco-dash-flow" opacity="0.5" />
-              <line x1="440" y1="618" x2="260" y2="556" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.28" />
-              <line x1="560" y1="618" x2="740" y2="556" stroke="#0d7d74" strokeWidth="1" strokeDasharray="4 4" opacity="0.28" />
-
-              {/* Aliados tecnológicos */}
-              {[
-                { x: 30, name: "Fourier", sub: "Arquitectura · Cloud" },
-                { x: 190, name: "Think IT", sub: "Ingeniería software" },
-                { x: 680, name: "Alianza IT", sub: "Integración tecnológica" },
-                { x: 825, name: "Sistemas Aries", sub: "ERP financiero · 31 años" },
-              ].map((a) => (
-                <g key={a.name} className="eco-float-delay2">
-                  <rect x={a.x} y={580} width={a.x < 400 ? (a.x < 100 ? 145 : 130) : (a.x > 800 ? 145 : 130)} height={42} rx={10} fill="white" stroke="#e2dfdb" strokeWidth="1" />
-                  <text x={a.x + (a.x < 100 ? 72 : a.x < 250 ? 65 : a.x > 800 ? 72 : 65)} y={599} textAnchor="middle" fill="#3d3b39" fontSize={10} fontWeight="600">{a.name}</text>
-                  <text x={a.x + (a.x < 100 ? 72 : a.x < 250 ? 65 : a.x > 800 ? 72 : 65)} y={613} textAnchor="middle" fill="#76716a" fontSize={8}>{a.sub}</text>
-                </g>
-              ))}
-
-              {/* Líneas aliados → motor */}
-              <line x1="175" y1="601" x2="362" y2="640" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="320" y1="601" x2="400" y2="635" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="680" y1="601" x2="600" y2="635" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="825" y1="601" x2="638" y2="640" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-
-              {/* INPLUX — centro arriba */}
-              <ellipse cx="500" cy="80" rx="200" ry="88" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              {/* ═══ INPLUX — top center ═══ */}
+              <ellipse cx="500" cy="62" rx="190" ry="80" fill="url(#tealHalo)" className="svg-halo-pulse" />
               <g className="eco-glow svg-card">
-                <rect x="386" y="38" width="228" height="74" rx="16" fill="url(#inkGrad)" />
-                <rect x="386" y="38" width="228" height="74" rx="16" fill="none" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="10 300" className="eco-orbit" style={{ animationDuration: "8s" }} />
-                <text x="500" y="72" textAnchor="middle" fill="white" fontSize="17" fontWeight="800" letterSpacing="2.5">INPLUX</text>
-                <text x="500" y="90" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="9" fontWeight="600" letterSpacing="1.5">HUB DE IA · COLOMBIA</text>
+                <rect x="390" y="24" width="220" height="68" rx="14" fill="url(#inkGrad)" />
+                <rect x="390" y="24" width="220" height="68" rx="14" fill="none" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="10 300" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                <text x="500" y="55" textAnchor="middle" fill="white" fontSize="16" fontWeight="800" letterSpacing="2.5">INPLUX</text>
+                <text x="500" y="72" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="8.5" fontWeight="600" letterSpacing="1.5">HUB DE IA · COLOMBIA</text>
               </g>
 
-              {/* INPLUX → ramas */}
-              <line x1="430" y1="114" x2="240" y2="180" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
-              <line x1="570" y1="114" x2="760" y2="180" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              {/* INPLUX → frentes */}
+              <line x1="434" y1="94" x2="248" y2="148" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <line x1="566" y1="94" x2="752" y2="148" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
 
-              {/* ═══ RAMA PÚBLICA ═══ */}
-              <rect x="100" y="178" width="280" height="32" rx="16" fill="#e8f5f3" />
-              <text x="240" y="199" textAnchor="middle" fill="#0d5c57" fontSize="9" fontWeight="800" letterSpacing="2">FRENTE PÚBLICO</text>
+              {/* ═══ FRENTE PÚBLICO ═══ */}
+              <rect x="100" y="148" width="296" height="28" rx="14" fill="#e8f5f3" />
+              <text x="248" y="167" textAnchor="middle" fill="#0d5c57" fontSize="8.5" fontWeight="800" letterSpacing="2">FRENTE PÚBLICO</text>
 
               {/* Gobia */}
               <a href="https://gobia.co" target="_blank" rel="noopener noreferrer">
                 <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
-                  <rect x="100" y="222" width="280" height="86" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
-                  <rect x="101" y="222" width="278" height="26" rx="12" fill="#f0faf9" />
-                  <text x="124" y="239" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1">GEMELO MUNICIPAL</text>
-                  <circle cx="362" cy="235" r="7" fill="#0d7d74" />
-                  <text x="362" y="238" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">&#10003;</text>
-                  <text x="240" y="270" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Gobia</text>
-                  <text x="240" y="287" textAnchor="middle" fill="#0d7d74" fontSize="9.5" fontWeight="500">gobia.co</text>
-                  <text x="240" y="301" textAnchor="middle" fill="#76716a" fontSize="8.5">Hacienda · DNP · Contraloría · IAS</text>
+                  <rect x="100" y="188" width="296" height="78" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
+                  <rect x="101" y="188" width="294" height="24" rx="12" fill="#f0faf9" />
+                  <text x="122" y="204" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1">GEMELO MUNICIPAL</text>
+                  <circle cx="376" cy="200" r="6.5" fill="#0d7d74" />
+                  <text x="376" y="203" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="248" y="234" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Gobia</text>
+                  <text x="248" y="249" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">gobia.co</text>
+                  <text x="248" y="261" textAnchor="middle" fill="#76716a" fontSize="8">Hacienda · DNP · Contraloría · IAS</text>
                 </g>
               </a>
 
-              {/* Tribai */}
+              {/* Tribai mun. */}
               <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
                 <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
-                  <rect x="100" y="320" width="280" height="86" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
-                  <rect x="101" y="320" width="278" height="26" rx="12" fill="#f0faf9" />
-                  <text x="124" y="337" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1">TRIBUTARIO MUNICIPAL</text>
-                  <circle cx="362" cy="333" r="7" fill="#0d7d74" />
-                  <text x="362" y="336" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">&#10003;</text>
-                  <text x="240" y="365" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Tribai</text>
-                  <text x="240" y="380" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">· municipal ·</text>
-                  <text x="240" y="395" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">tribai.co</text>
-                  <text x="240" y="408" textAnchor="middle" fill="#76716a" fontSize="8">+44 estatutos · +50 municipios</text>
+                  <rect x="100" y="278" width="296" height="78" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
+                  <rect x="101" y="278" width="294" height="24" rx="12" fill="#f0faf9" />
+                  <text x="122" y="294" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1">TRIBUTARIO MUNICIPAL</text>
+                  <circle cx="376" cy="290" r="6.5" fill="#0d7d74" />
+                  <text x="376" y="293" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="248" y="322" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Tribai</text>
+                  <text x="248" y="337" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">tribai.co</text>
+                  <text x="248" y="349" textAnchor="middle" fill="#76716a" fontSize="8">+44 estatutos · +50 municipios</text>
                 </g>
               </a>
 
-              {/* Conector Público → Motor */}
-              <path d="M240,406 C240,510 420,580 462,622" fill="none" stroke="#a9d6d0" strokeWidth="1.2" strokeDasharray="4 3" />
+              {/* Público → Motor */}
+              <path d="M248,356 C248,430 400,470 450,500" fill="none" stroke="#a9d6d0" strokeWidth="1.2" strokeDasharray="4 3" />
 
-              {/* ═══ RAMA PRIVADA ═══ */}
-              <rect x="620" y="178" width="280" height="32" rx="16" fill="#f3f1ee" />
-              <text x="760" y="199" textAnchor="middle" fill="#3d3b39" fontSize="9" fontWeight="800" letterSpacing="2">FRENTE PRIVADO</text>
+              {/* ═══ FRENTE PRIVADO ═══ */}
+              <rect x="604" y="148" width="296" height="28" rx="14" fill="#f3f1ee" />
+              <text x="752" y="167" textAnchor="middle" fill="#3d3b39" fontSize="8.5" fontWeight="800" letterSpacing="2">FRENTE PRIVADO</text>
 
               {/* Kelsen */}
               <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
                 <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
-                  <rect x="620" y="222" width="280" height="86" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                  <rect x="621" y="222" width="278" height="26" rx="12" fill="#f3f1ee" />
-                  <text x="644" y="239" fill="#6e6b68" fontSize="8.5" fontWeight="700" letterSpacing="1">SOMBRILLA LEGAL · IA</text>
-                  <circle cx="882" cy="235" r="7" fill="#0d7d74" />
-                  <text x="882" y="238" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">&#10003;</text>
-                  <text x="760" y="270" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Kelsen</text>
-                  <text x="760" y="287" textAnchor="middle" fill="#0d7d74" fontSize="9.5" fontWeight="500">kelsen.io</text>
-                  <text x="760" y="301" textAnchor="middle" fill="#76716a" fontSize="8.5">Sombrilla legal · Tribai · Laudos</text>
+                  <rect x="604" y="188" width="296" height="78" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
+                  <rect x="605" y="188" width="294" height="24" rx="12" fill="#f3f1ee" />
+                  <text x="626" y="204" fill="#6e6b68" fontSize="8" fontWeight="700" letterSpacing="1">SOMBRILLA LEGAL · IA</text>
+                  <circle cx="880" cy="200" r="6.5" fill="#0d7d74" />
+                  <text x="880" y="203" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="752" y="234" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Kelsen</text>
+                  <text x="752" y="249" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">kelsen.io</text>
+                  <text x="752" y="261" textAnchor="middle" fill="#76716a" fontSize="8">Cerebro legal · Tribai · Laudos</text>
                 </g>
               </a>
 
-              {/* Tribai (privado — módulo de Kelsen) */}
-              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
-                  <rect x="620" y="320" width="84" height="76" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
-                  <text x="662" y="342" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="700">TRIBUTARIO</text>
-                  <circle cx="696" cy="334" r="5.5" fill="#0d7d74" />
-                  <text x="696" y="337" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">&#10003;</text>
-                  <text x="662" y="362" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Tribai</text>
-                  <text x="662" y="377" textAnchor="middle" fill="#0d7d74" fontSize="8">tribai.co</text>
-                </g>
-              </a>
+              {/* Módulos privados: Tribai · Laudos · Porkia en fila */}
+              {[
+                { x: 604, label: "Tribai", sub: "tribai.co", tag: "TRIBUTARIO", prod: true, href: "https://tribai.co" },
+                { x: 704, label: "Laudos", sub: "laudos.co", tag: "ARBITRAL", prod: true, href: "https://laudos.co" },
+                { x: 804, label: "Porkia", sub: "porkia.co", tag: "GANADERÍA", prod: true, href: "https://porkia.co" },
+              ].map(({ x, label, sub, tag, href }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer">
+                  <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
+                    <rect x={x} y={278} width={92} height={72} rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.2" />
+                    <text x={x + 46} y={295} textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="700" letterSpacing="0.5">{tag}</text>
+                    <circle cx={x + 81} cy={289} r="5.5" fill="#0d7d74" />
+                    <text x={x + 81} y={292} textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">&#10003;</text>
+                    <text x={x + 46} y={320} textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">{label}</text>
+                    <text x={x + 46} y={341} textAnchor="middle" fill="#0d7d74" fontSize="8">{sub}</text>
+                  </g>
+                </a>
+              ))}
 
-              {/* Laudos */}
+              {/* MiMotoYa — lado a lado con los módulos */}
               <g className="eco-float-delay svg-card">
-                <rect x="712" y="320" width="84" height="76" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <text x="754" y="342" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="700">ARBITRAL</text>
-                <circle cx="788" cy="334" r="5.5" fill="#0d7d74" />
-                <text x="788" y="337" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">&#10003;</text>
-                <text x="754" y="362" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Laudos</text>
-                <text x="754" y="377" textAnchor="middle" fill="#0d7d74" fontSize="8">laudos.co</text>
-              </g>
-
-              {/* Porkia */}
-              <a href="https://porkia.co" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float-delay2 svg-card" style={{ cursor: "pointer" }}>
-                  <rect x="804" y="320" width="96" height="76" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                  <text x="852" y="342" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="700">GANADERÍA</text>
-                  <circle cx="892" cy="334" r="5.5" fill="#0d7d74" />
-                  <text x="892" y="337" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">&#10003;</text>
-                  <text x="852" y="362" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Porkia</text>
-                  <text x="852" y="377" textAnchor="middle" fill="#0d7d74" fontSize="8">porkia.co</text>
-                </g>
-              </a>
-
-              {/* MiMotoYa */}
-              <g className="eco-float svg-card">
-                <rect x="620" y="410" width="280" height="56" rx="12" fill="white" stroke="#e2dfdb" strokeWidth="1" strokeDasharray="5 4" />
-                <text x="760" y="433" textAnchor="middle" fill="#76716a" fontSize="14" fontWeight="700">MiMotoYa</text>
-                <text x="760" y="450" textAnchor="middle" fill="#9a958e" fontSize="8.5">Movilidad urbana · En desarrollo</text>
+                <rect x="604" y="362" width="296" height="46" rx="10" fill="white" stroke="#e2dfdb" strokeWidth="1" strokeDasharray="5 4" />
+                <text x="752" y="381" textAnchor="middle" fill="#76716a" fontSize="13" fontWeight="700">MiMotoYa</text>
+                <text x="752" y="397" textAnchor="middle" fill="#9a958e" fontSize="8">Movilidad urbana · En desarrollo</text>
               </g>
 
               {/* Kelsen → módulos */}
-              <line x1="662" y1="308" x2="662" y2="320" stroke="#a9d6d0" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="754" y1="308" x2="754" y2="320" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="852" y1="308" x2="852" y2="320" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="700" y1="396" x2="700" y2="410" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="820" y1="396" x2="820" y2="410" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="650" y1="266" x2="650" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="750" y1="266" x2="750" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="850" y1="266" x2="850" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="700" y1="350" x2="700" y2="362" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="800" y1="350" x2="800" y2="362" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
 
-              {/* Tribai aparece en ambos frentes — indicador visual */}
-              
+              {/* Privado → Motor */}
+              <path d="M752,408 C752,450 580,476 550,500" fill="none" stroke="#d1cfcc" strokeWidth="1.2" strokeDasharray="4 3" />
 
-              {/* Conector Privado → Motor */}
-              <path d="M760,466 C760,520 580,580 538,622" fill="none" stroke="#d1cfcc" strokeWidth="1.2" strokeDasharray="4 3" />
+              {/* ═══ MOTOR AGÉNTICO ═══ */}
+              <ellipse cx="500" cy="514" rx="380" ry="56" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              <rect x="340" y="490" width="320" height="48" rx="24" fill="url(#inkGrad)" />
+              <text x="500" y="511" textAnchor="middle" fill="white" fontSize="11" fontWeight="700" letterSpacing="1">Motor agéntico</text>
+              <text x="500" y="526" textAnchor="middle" fill="#5fe3d6" fontSize="7.5" fontWeight="600" letterSpacing="1.5">SELF-IMPROVING · BASE COMÚN</text>
+
+              {/* Aliados — fila debajo del motor */}
+              {[
+                { cx: 108, name: "Fourier", sub: "Cloud" },
+                { cx: 248, name: "Think IT", sub: "Ingeniería" },
+                { cx: 752, name: "Alianza IT", sub: "Integración" },
+                { cx: 892, name: "Aries", sub: "ERP · 31 años" },
+              ].map((a) => (
+                <g key={a.name} className="eco-float-delay2">
+                  <rect x={a.cx - 60} y={552} width={120} height={36} rx={9} fill="white" stroke="#e2dfdb" strokeWidth="1" />
+                  <text x={a.cx} y={567} textAnchor="middle" fill="#3d3b39" fontSize={9} fontWeight="600">{a.name}</text>
+                  <text x={a.cx} y={580} textAnchor="middle" fill="#76716a" fontSize={7.5}>{a.sub}</text>
+                  <line x1={a.cx} y1={552} x2={a.cx < 500 ? 420 : 580} y2={538} stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+                </g>
+              ))}
 
               {/* Caption */}
-              <text x="500" y="692" textAnchor="middle" fill="#9a958e" fontSize="8.5" fontWeight="600" letterSpacing="1.5">UN MOTOR · DOS FRENTES · SIETE PRODUCTOS</text>
+              <text x="500" y="574" textAnchor="middle" fill="#9a958e" fontSize="0" letterSpacing="1.5">.</text>
             </svg>
           </Reveal>
         </div>
@@ -1414,7 +1384,7 @@ export default function Home() {
             Desliza para ver completo
           </div>
           <Reveal className="w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[680px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema legal de INPLUX con Kelsen como sombrilla y Tribai, Laudos y módulos en desarrollo">
+            <svg viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema legal de INPLUX con Kelsen como sombrilla y Tribai, Laudos y módulos en desarrollo">
               {/* Background dots */}
               {Array.from({ length: 18 }).map((_, row) =>
                 Array.from({ length: 28 }).map((_, col) => (
@@ -1515,7 +1485,7 @@ export default function Home() {
           {/* Sub-bloque B — Fábrica de software (capacidad del mismo motor) */}
           <div id="fabrica">
           <Reveal className="mb-14">
-            <SectionKicker n="03b">Fábrica de software · Privado</SectionKicker>
+            <SectionKicker n="03b">Fábrica de software</SectionKicker>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-2xl">
               El mismo motor <em className="italic">construye software.</em>
             </h2>
@@ -1529,7 +1499,7 @@ export default function Home() {
             Desliza para ver completo
           </div>
           <Reveal className="w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[720px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Fábrica de software de INPLUX: el mismo motor agéntico alimenta un pipeline de especificación, agentes, build y deploy que produce muchas aplicaciones, y cada release entrena de vuelta al motor">
+            <svg viewBox="0 0 1000 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[540px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Fábrica de software de INPLUX: el mismo motor agéntico alimenta un pipeline de especificación, agentes, build y deploy que produce muchas aplicaciones, y cada release entrena de vuelta al motor">
               {/* Background dots */}
               {Array.from({ length: 14 }).map((_, row) =>
                 Array.from({ length: 28 }).map((_, col) => (

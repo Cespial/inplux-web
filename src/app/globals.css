@@ -202,8 +202,8 @@ body {
 
 .logo-item {
   flex-shrink: 0;
-  height: 32px;
-  max-width: 120px;
+  height: 40px;
+  max-width: 130px;
   object-fit: contain;
   opacity: 0.72;
   filter: grayscale(100%);
