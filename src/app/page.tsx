@@ -722,7 +722,7 @@ const TWIN_NODES = [
   { id: "contraloria", cx: 390, cy: 195, label: "CTRL", pulse: "twin-pulse-2", card: { x: 244, y: 163, w: 156, title: "Contraloría", sub: "CONTROL FISCAL",       desc: "Alertas fiscales · auditoría · deuda" } },
   { id: "ministerios", cx: 80,  cy: 260, label: "MIN",  pulse: "twin-pulse-3", card: { x: 26,  y: 228, w: 152, title: "Ministerios", sub: "NORMATIVA SECTORIAL",  desc: "Hacienda · Interior · Salud · Educación" } },
   { id: "contaduria",  cx: 400, cy: 320, label: "CTD",  pulse: "twin-pulse-4", card: { x: 244, y: 290, w: 152, title: "Contaduría", sub: "ESTADO FINANCIERO",    desc: "Balance · pasivos · cierre contable" } },
-  { id: "ias",         cx: 262, cy: 400, label: "IAS",  pulse: "twin-pulse-5", card: { x: 148, y: 368, w: 216, title: "IAS",        sub: "ENTIDADES ESPECIALES", desc: "EICE · SEM · empresas servicios públicos" } },
+  { id: "ias",         cx: 262, cy: 390, label: "IAS",  pulse: "twin-pulse-5", card: { x: 148, y: 358, w: 216, title: "IAS",        sub: "ENTIDADES ESPECIALES", desc: "EICE · SEM · empresas servicios públicos" } },
 ] as const;
 
 const TWIN_FLOWS = [
@@ -730,7 +730,7 @@ const TWIN_FLOWS = [
   "M381,203 Q348,218 308,234",
   "M89,260 Q160,256 218,248",
   "M391,312 Q360,295 310,254",
-  "M262,391 Q262,340 264,267",
+  "M262,381 Q262,335 264,267",
 ] as const;
 
 function GobiaTwin() {
@@ -1004,7 +1004,7 @@ export default function Home() {
       <section id="inicio" className={`relative overflow-hidden bg-white transition-[padding] duration-300 ${bannerOpen ? "pt-[100px]" : "pt-[60px]"}`}>
         {/* Grid técnico de fondo */}
         <div className={`absolute inset-x-0 bottom-0 z-0 tech-grid tech-grid-fade pointer-events-none transition-[top] duration-300 ${bannerOpen ? "top-[100px]" : "top-[60px]"}`} aria-hidden="true" />
-        <div className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 py-20 md:py-28 lg:py-36">
+        <div className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 py-16 md:py-24 lg:py-28">
           <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-20 items-start">
             {/* LEFT — copy */}
             <div className="min-w-0 max-w-[620px]">
@@ -1315,8 +1315,8 @@ export default function Home() {
       {/* ──── FRENTE PRIVADO — Kelsen sombrilla + Fábrica ──── */}
       <section id="privado" className="py-24 md:py-32 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-14">
-
+          <div className="mb-14">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-12">
             {/* Columna izquierda — narrativa privado */}
             <div>
               <Reveal>
@@ -1371,19 +1371,16 @@ export default function Home() {
                   </m.a>
                 </span>
               </Reveal>
-            </div>
+            </div>{/* fin col izq */}
+            <div />{/* espacio derecho — visible solo en lg */}
+          </div>{/* fin inner grid */}
 
-            {/* Columna derecha — diagrama Kelsen sombrilla */}
-            <div className="w-full overflow-x-auto">
-              <div className="svg-scroll-hint">
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-                Desliza para ver completo
-              </div>
-          <div className="svg-scroll-hint">
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-            Desliza para ver completo
-          </div>
-          <Reveal className="w-full overflow-x-auto">
+            {/* SVG Kelsen — full width */}
+            <div className="svg-scroll-hint">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+              Desliza para ver completo
+            </div>
+            <Reveal className="w-full overflow-x-auto">
             <svg viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema legal de INPLUX con Kelsen como sombrilla y Tribai, Laudos y módulos en desarrollo">
               {/* Background dots */}
               {Array.from({ length: 18 }).map((_, row) =>
@@ -1475,9 +1472,8 @@ export default function Home() {
               <rect x="380" y="652" width="240" height="22" rx="11" fill="url(#inkGrad)" />
               <text x="500" y="667" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1.2">ECOSISTEMA LEGAL KELSEN</text>
             </svg>
-          </Reveal>
-            </div>{/* cierre columna derecha */}
-          </div>{/* cierre grid 2 col */}
+            </Reveal>
+          </div>{/* fin mb-14 */}
 
           {/* Separador sub-bloque Fábrica */}
           <div className="fine-rule mt-20 mb-16" />
