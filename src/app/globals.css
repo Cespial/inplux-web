@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Design System tokens (Editorial White System v3 — Estratos).
+   colors/typography/spacing/effects + aliases semánticos.
+   Las familias --font-body/--font-serif de next/font (en <body>) shadowean
+   las literales de typography.css para todo el contenido → fuentes self-hosted. */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/effects.css";
+
 /* ═══════════════════════════════════════════════
    INPLUX — Editorial White System v3
    Instrument Serif (display) + Plus Jakarta Sans

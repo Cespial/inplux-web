@@ -1,0 +1,63 @@
+<!-- @dsCard group="Marketing site" viewport="1280x760" name="INPLUX.co — homepage" subtitle="Hero, ecosystem, pillars, CTA" -->
+<!-- @startingPoint section="Marketing site" subtitle="INPLUX.co marketing homepage" viewport="1280x900" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INPLUX — Tributaristas que construyen tecnología</title>
+<link rel="icon" href="../../assets/favicon/favicon.ico">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--text-strong); background: var(--white); -webkit-font-smoothing: antialiased; }
+  #site { height: 100vh; overflow-y: auto; scroll-behavior: smooth; }
+  a { color: var(--teal); }
+  @media (max-width: 880px) {
+    .ipx-navlinks, .ipx-nav-cta { display: none !important; }
+    .ipx-burger { display: flex !important; }
+    .ipx-hero-grid { grid-template-columns: 1fr !important; }
+    .ipx-hero-orbit { display: none !important; }
+    .ipx-eco-grid { grid-template-columns: 1fr !important; }
+    .ipx-pillars { grid-template-columns: 1fr !important; gap: 28px !important; }
+    .ipx-stats { grid-template-columns: 1fr 1fr !important; }
+    .ipx-footer { grid-template-columns: 1fr !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" src="sections.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  function App() {
+    const [menuOpen, setMenuOpen] = React.useState(false);
+    const [sent, setSent] = React.useState(false);
+    const contactRef = React.useRef(null);
+    const onContact = () => {
+      setMenuOpen(false);
+      const el = contactRef.current;
+      const site = document.getElementById("site");
+      if (el && site) site.scrollTo({ top: el.offsetTop - 72, behavior: "smooth" });
+    };
+    return (
+      <div id="site">
+        <Nav onContact={onContact} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Hero onContact={onContact} />
+        <Allies />
+        <Ecosystem />
+        <Pillars />
+        <StatsBand />
+        <CTA contactRef={contactRef} sent={sent} setSent={setSent} />
+        <Footer />
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

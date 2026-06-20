@@ -1,0 +1,71 @@
+/* ===========================================================================
+   INPLUX · Color — Editorial White System v3
+   Warm white surfaces · ink text · teal as ACCENT only (never dominant).
+   Never pure black (#000) · never cold/bluish backgrounds.
+   =========================================================================== */
+
+:root {
+  /* --- Brand primaries --- */
+  --white: #ffffff;        /* primary surface */
+  --off-white: #f8f8f7;    /* alternate sections */
+  --warm-50: #f3f1ee;      /* warm neutral wash */
+  --ink: #1a1918;          /* text, primary buttons, dark surface (NOT #000) */
+  --teal: #0d7d74;         /* brand accent — links, hover, focus, "tech" */
+  --teal-bright: #15dcc4;  /* highlight on dark surfaces */
+  --teal-soft: #e8f5f3;    /* soft teal fill */
+
+  /* --- Warm neutral scale --- */
+  --gray-100: #e8e6e3;
+  --gray-200: #d1cfcc;
+  --gray-300: #a8a5a0;
+  --gray-400: #8a8784;
+  --gray-500: #6e6b68;
+  --gray-600: #545250;
+  --gray-700: #3d3b39;
+  --gray-800: #282726;
+  --gray-900: #1a1918;
+  --gray-950: #0d0c0c;
+
+  /* --- Borders & dividers --- */
+  --border: #e5e3e0;
+  --border-light: #f0eeeb;
+
+  /* =====================================================================
+     Semantic aliases — prefer these in components
+     ===================================================================== */
+  --surface-page: var(--white);
+  --surface-alt: var(--off-white);
+  --surface-warm: var(--warm-50);
+  --surface-card: var(--white);
+  --surface-ink: var(--ink);          /* dark sections */
+  --surface-ink-deep: var(--gray-950);
+  --surface-teal-soft: var(--teal-soft);
+
+  --text-strong: var(--ink);          /* headings, primary text */
+  --text-body: var(--gray-700);       /* paragraph body */
+  --text-muted: var(--gray-500);      /* captions, meta */
+  --text-faint: var(--gray-400);      /* disabled, placeholder */
+  --text-on-ink: var(--white);        /* text on dark surfaces */
+  --text-on-ink-muted: var(--gray-300);
+  --text-accent: var(--teal);         /* links, emphasis */
+  --text-accent-bright: var(--teal-bright); /* accent on dark */
+
+  --accent: var(--teal);
+  --accent-bright: var(--teal-bright);
+  --accent-fill: var(--teal-soft);
+
+  --border-default: var(--border);
+  --border-subtle: var(--border-light);
+  --border-strong: var(--gray-200);
+  --border-on-ink: rgba(255, 255, 255, 0.12);
+
+  /* Tinted helpers (built from teal) */
+  --accent-12: rgba(13, 125, 116, 0.12);  /* selection, focus glow */
+  --accent-08: rgba(13, 125, 116, 0.08);
+  --accent-ring: rgba(13, 125, 116, 0.18);
+
+  --focus-ring: 0 0 0 3px var(--accent-ring);
+  --selection-bg: rgba(13, 125, 116, 0.12);
+}
+
+::selection { background: var(--selection-bg); color: var(--gray-950); }

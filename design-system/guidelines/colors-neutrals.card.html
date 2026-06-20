@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Warm neutral scale" subtitle="gray-100 → gray-950 (warm, never cold)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family:var(--font-body); background:var(--white); color:var(--text-strong); }
+  .wrap { padding:20px 24px; }
+  .scale { display:grid; grid-template-columns:repeat(10,1fr); gap:0; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); }
+  .cell { height:72px; display:flex; align-items:flex-end; justify-content:center; padding-bottom:6px; }
+  .cell span { font-size:10px; font-weight:600; }
+  .lbl { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="scale">
+      <div class="cell" style="background:var(--gray-100)"><span style="color:#3d3b39">100</span></div>
+      <div class="cell" style="background:var(--gray-200)"><span style="color:#3d3b39">200</span></div>
+      <div class="cell" style="background:var(--gray-300)"><span style="color:#282726">300</span></div>
+      <div class="cell" style="background:var(--gray-400)"><span style="color:#fff">400</span></div>
+      <div class="cell" style="background:var(--gray-500)"><span style="color:#fff">500</span></div>
+      <div class="cell" style="background:var(--gray-600)"><span style="color:#fff">600</span></div>
+      <div class="cell" style="background:var(--gray-700)"><span style="color:#fff">700</span></div>
+      <div class="cell" style="background:var(--gray-800)"><span style="color:#fff">800</span></div>
+      <div class="cell" style="background:var(--gray-900)"><span style="color:#fff">900</span></div>
+      <div class="cell" style="background:var(--gray-950)"><span style="color:#fff">950</span></div>
+    </div>
+    <div class="lbl"><span>#e8e6e3</span><span>warm grey · text &amp; surfaces</span><span>#0d0c0c</span></div>
+  </div>
+</body>
+</html>

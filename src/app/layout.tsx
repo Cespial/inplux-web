@@ -76,7 +76,7 @@ export default function RootLayout({
     "@type": "Organization",
     name: "INPLUX S.A.S.",
     url: "https://inplux.co",
-    logo: "https://inplux.co/logos/logo.png",
+    logo: "https://inplux.co/inplux-logo.png",
     description:
       "Hub de inteligencia tributaria, consultoría y tecnología con IA. +25 años de experiencia en Colombia.",
     address: {
