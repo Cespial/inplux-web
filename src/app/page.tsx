@@ -1,23 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { LazyMotion, domMax, MotionConfig, m, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate, useMotionValueEvent, type Variants, type Transition } from "motion/react";
+import { spring, pressable } from "@/lib/motion";
 
 /* ═══════════════════════════════════════
    HOOKS
    ═══════════════════════════════════════ */
-function useScrollReveal() {
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
-    );
-    document.querySelectorAll(".reveal,.reveal-left").forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-}
-
 function AnimatedNumber({ value, label }: { value: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [display, setDisplay] = useState("0");
@@ -31,7 +22,11 @@ function AnimatedNumber({ value, label }: { value: string; label: string }) {
         animated.current = true;
         const num = parseInt(value.replace(/[^0-9]/g, ""));
         const prefix = value.startsWith("+") ? "+" : "";
-        const dur = 1400;
+        if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          setDisplay(prefix + num.toString());
+          return;
+        }
+        const dur = 600;
         const start = performance.now();
         const tick = (now: number) => {
           const t = Math.min((now - start) / dur, 1);
@@ -48,8 +43,510 @@ function AnimatedNumber({ value, label }: { value: string; label: string }) {
 
   return (
     <div ref={ref}>
-      <div className="font-serif text-5xl md:text-6xl lg:text-[4.5rem] text-ink leading-none mb-2">{display}</div>
+      <div className="font-serif text-5xl md:text-6xl lg:text-[4.5rem] text-ink leading-none mb-2 tabular-nums">{display}</div>
       <div className="text-gray-500 text-sm font-medium">{label}</div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   SECTION KICKER — eyebrow numerado (estilo Pinecone 01-NN)
+   ═══════════════════════════════════════ */
+function SectionKicker({ n, children }: { n: string; children: React.ReactNode }) {
+  return (
+    <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">
+      <span className="text-gray-400 font-normal tabular-nums mr-2">{n}</span>
+      <span className="text-gray-300 font-normal mr-2">/</span>
+      {children}
+    </p>
+  );
+}
+
+/* ═══════════════════════════════════════
+   VECTOR CLOUD — hero visual (memoria del agente)
+   ═══════════════════════════════════════ */
+type VPoint = { id: number; x: number; y: number; size: number; vop: number; delay: number };
+function makeVecPoints(seed: number, count: number, radius: number, cx: number, cy: number): VPoint[] {
+  let s = seed >>> 0;
+  const rand = () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  return Array.from({ length: count }, (_, i) => {
+    const r = Math.sqrt(rand()) * radius;
+    const a = rand() * Math.PI * 2;
+    return {
+      id: i,
+      x: cx + r * Math.cos(a),
+      y: cy + r * Math.sin(a),
+      size: 1.2 + rand() * 1.4,
+      vop: 0.4 + rand() * 0.5,
+      delay: rand() * 6,
+    };
+  });
+}
+const VEC_POINTS: VPoint[] = makeVecPoints(7, 240, 270, 300, 300);
+const VEC_HIGHLIGHT: VPoint[] = makeVecPoints(91, 5, 230, 300, 300);
+
+/* ═══════════════════════════════════════
+   BRAIN GRAPH — el "segundo cerebro" como supergrafo
+   Nodos deterministas + aristas a vecinos cercanos.
+   ═══════════════════════════════════════ */
+type GNode = { id: number; x: number; y: number; size: number; vop: number; delay: number };
+function makeBrainGraph(seed: number, count: number, w: number, h: number): { nodes: GNode[]; edges: [number, number][] } {
+  let s = seed >>> 0;
+  const rand = () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const cx = w / 2, cy = h / 2;
+  const nodes: GNode[] = Array.from({ length: count }, (_, i) => {
+    const r = Math.pow(rand(), 0.62) * (h / 2 - 26);
+    const a = rand() * Math.PI * 2;
+    return {
+      id: i,
+      x: cx + Math.cos(a) * r * 1.12,
+      y: cy + Math.sin(a) * r,
+      size: 1 + rand() * 1.9,
+      vop: 0.35 + rand() * 0.5,
+      delay: Math.round(rand() * 600) / 100,
+    };
+  });
+  const edges: [number, number][] = [];
+  const seen = new Set<string>();
+  const maxD = (h * 0.17) ** 2;
+  for (let i = 0; i < nodes.length; i++) {
+    const near: { j: number; d: number }[] = [];
+    for (let j = 0; j < nodes.length; j++) {
+      if (j === i) continue;
+      const dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y;
+      const d = dx * dx + dy * dy;
+      if (d < maxD) near.push({ j, d });
+    }
+    near.sort((p, q) => p.d - q.d);
+    near.slice(0, 2).forEach((o) => {
+      const k = i < o.j ? `${i}-${o.j}` : `${o.j}-${i}`;
+      if (!seen.has(k)) { seen.add(k); edges.push([i, o.j]); }
+    });
+  }
+  return { nodes, edges };
+}
+const MOTOR_GRAPH = makeBrainGraph(73, 180, 520, 460);
+const MOTOR_HILITE = [9, 31, 54, 78, 103, 121, 147, 168];
+
+/* Grafo cerebral reutilizable (puro visual; los textos van en HTML alrededor) */
+function BrainGraph({ data, highlights = [], reticleId, uid, w, h }: { data: { nodes: GNode[]; edges: [number, number][] }; highlights?: number[]; reticleId?: number; uid: string; w: number; h: number }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const rafRef = useRef<number>(0);
+  const prefersReduced = useReducedMotion();
+  // Tras el ensamblaje, Motion suelta el control y volvemos a SVG plano:
+  // el twinkle CSS (--vop) y el focus/dim (opacity vía data-attrs) recuperan el mando.
+  const [assembled, setAssembled] = useState(false);
+
+  const adj = useMemo(() => {
+    const m = new Map<number, Set<number>>();
+    data.edges.forEach(([a, b]) => {
+      (m.get(a) ?? m.set(a, new Set()).get(a))!.add(b);
+      (m.get(b) ?? m.set(b, new Set()).get(b))!.add(a);
+    });
+    return m;
+  }, [data]);
+
+  const focus = (id: number | null) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    if (id == null) {
+      svg.removeAttribute("data-focusing");
+      svg.querySelectorAll("[data-on]").forEach((el) => el.removeAttribute("data-on"));
+      return;
+    }
+    const nbrs = adj.get(id);
+    svg.setAttribute("data-focusing", "1");
+    svg.querySelectorAll<SVGElement>("[data-node]").forEach((el) => {
+      const nid = Number(el.getAttribute("data-node"));
+      if (nid === id || (nbrs && nbrs.has(nid))) el.setAttribute("data-on", ""); else el.removeAttribute("data-on");
+    });
+    svg.querySelectorAll<SVGElement>("[data-edge]").forEach((el) => {
+      const on = Number(el.getAttribute("data-a")) === id || Number(el.getAttribute("data-b")) === id;
+      if (on) el.setAttribute("data-on", ""); else el.removeAttribute("data-on");
+    });
+  };
+
+  const onMove = (e: React.PointerEvent) => {
+    if (!assembled) return; // durante el ensamblaje no peleamos estilos con Motion
+    const hit = (e.target as Element).closest?.("[data-node]");
+    const id = hit ? Number(hit.getAttribute("data-node")) : null;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => focus(id));
+  };
+  const onLeave = () => {
+    if (!assembled) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    focus(null);
+  };
+
+  const reduced = !!prefersReduced;
+  const nodesContainer: Variants = {
+    hidden: {},
+    show: { transition: reduced ? { duration: 0 } : { staggerChildren: 0.004, delayChildren: 0.05 } },
+  };
+  const edgesContainer: Variants = {
+    hidden: {},
+    show: { transition: reduced ? { duration: 0 } : { staggerChildren: 0.004, delayChildren: 0.18 } },
+  };
+  const nodeVariants: Variants = {
+    hidden: reduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 },
+    show: (delay: number) => ({
+      opacity: 1,
+      scale: 1,
+      transition: reduced ? { duration: 0 } : ({ type: "spring", stiffness: 420, damping: 26, mass: 0.7, delay: delay * 0.018 } as Transition),
+    }),
+  };
+  const edgeVariants: Variants = {
+    hidden: reduced ? { pathLength: 1 } : { pathLength: 0 },
+    show: (delay: number) => ({
+      pathLength: 1,
+      transition: reduced ? { duration: 0 } : ({ duration: 0.55, ease: "easeOut", delay: delay * 0.012 } as Transition),
+    }),
+  };
+  const onNodesComplete = useCallback(() => setAssembled(true), []);
+
+  const renderNodes = () =>
+    data.nodes.map((n) =>
+      assembled ? (
+        <circle key={`n${n.id}`} data-node={n.id} className="vec-dot brain-node" cx={n.x} cy={n.y} r={n.size} style={{ ["--vop" as string]: n.vop.toString(), animationDelay: `${n.delay}s`, transformBox: "fill-box", transformOrigin: "center" } as React.CSSProperties} />
+      ) : (
+        <m.circle key={`n${n.id}`} data-node={n.id} className="brain-node" cx={n.x} cy={n.y} r={n.size} custom={n.delay} variants={nodeVariants} style={{ transformBox: "fill-box", transformOrigin: "center", opacity: n.vop } as React.CSSProperties} />
+      )
+    );
+
+  const renderEdges = () =>
+    data.edges.map(([a, b], i) =>
+      assembled ? (
+        <line key={`e${i}`} data-edge data-a={a} data-b={b} x1={data.nodes[a].x} y1={data.nodes[a].y} x2={data.nodes[b].x} y2={data.nodes[b].y} strokeWidth="0.6" opacity={i % 5 === 0 ? 0.55 : 0.2} className={`brain-edge${i % 5 === 0 ? " svg-flow" : ""}`} />
+      ) : (
+        <m.line key={`e${i}`} data-edge data-a={a} data-b={b} x1={data.nodes[a].x} y1={data.nodes[a].y} x2={data.nodes[b].x} y2={data.nodes[b].y} strokeWidth="0.6" custom={i} variants={edgeVariants} className="brain-edge" style={{ opacity: i % 5 === 0 ? 0.55 : 0.2 }} />
+      )
+    );
+
+  return (
+    <m.svg ref={svgRef} onPointerMove={onMove} onPointerLeave={onLeave} viewBox={`0 0 ${w} ${h}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="brain-svg w-full h-auto" role="img" aria-label="Grafo de conocimiento interactivo: pasa el cursor sobre un nodo para iluminar sus conexiones" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }}>
+      <defs><filter id={`bg-${uid}`} x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" /></filter></defs>
+      <ellipse cx={w / 2} cy={h / 2} rx={w * 0.47} ry={h * 0.47} fill="url(#tealHalo)" opacity="0.6" className="svg-halo-pulse" style={{ pointerEvents: "none" }} />
+      <g filter={`url(#bg-${uid})`} fill="#15dcc4" className="brain-glow" style={{ pointerEvents: "none" }}>
+        {data.nodes.map((n) => (
+          <circle key={`g${n.id}`} cx={n.x} cy={n.y} r={n.size * 2.4} opacity={n.vop * 0.55} />
+        ))}
+      </g>
+      <m.g stroke="#0fb3a1" style={{ pointerEvents: "none" }} variants={edgesContainer}>
+        {renderEdges()}
+      </m.g>
+      <m.g fill="#0d7d74" variants={nodesContainer} onAnimationComplete={onNodesComplete}>
+        {renderNodes()}
+      </m.g>
+      {highlights.map((id, i) => {
+        const n = data.nodes[id];
+        return (
+          <g key={`h${i}`} style={{ pointerEvents: "none" }}>
+            <circle cx={n.x} cy={n.y} r="10" fill="none" stroke="#0d7d74" strokeWidth="1" opacity="0.5" />
+            <circle className="eco-node-pulse" cx={n.x} cy={n.y} r="4.5" fill="#0d7d74" style={{ animationDelay: `${i * 0.5}s` }} />
+          </g>
+        );
+      })}
+      {reticleId != null && data.nodes[reticleId] && (
+        <g className="vec-cursor" style={{ transformOrigin: `${data.nodes[reticleId].x}px ${data.nodes[reticleId].y}px`, pointerEvents: "none" }}>
+          <circle cx={data.nodes[reticleId].x} cy={data.nodes[reticleId].y} r="15" fill="none" stroke="#1a1918" strokeWidth="1.2" />
+          <line x1={data.nodes[reticleId].x - 22} y1={data.nodes[reticleId].y} x2={data.nodes[reticleId].x - 11} y2={data.nodes[reticleId].y} stroke="#1a1918" strokeWidth="1.2" />
+          <line x1={data.nodes[reticleId].x + 11} y1={data.nodes[reticleId].y} x2={data.nodes[reticleId].x + 22} y2={data.nodes[reticleId].y} stroke="#1a1918" strokeWidth="1.2" />
+        </g>
+      )}
+    </m.svg>
+  );
+}
+
+/* Grafo clusterizado — 4 lóbulos (dominios) + nodo-hub central */
+function makeClusterGraph(seed: number, w: number, h: number): { nodes: GNode[]; edges: [number, number][] } {
+  let s = seed >>> 0;
+  const rand = () => { s = (s + 0x6D2B79F5) >>> 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const lobes = [{ x: w * 0.27, y: h * 0.28 }, { x: w * 0.73, y: h * 0.28 }, { x: w * 0.27, y: h * 0.72 }, { x: w * 0.73, y: h * 0.72 }];
+  const per = 30, rad = Math.min(w, h) * 0.18;
+  const nodes: GNode[] = [], cluster: number[] = [];
+  lobes.forEach((L, ci) => {
+    for (let k = 0; k < per; k++) {
+      const rr = Math.pow(rand(), 0.6) * rad, a = rand() * Math.PI * 2;
+      nodes.push({ id: nodes.length, x: L.x + Math.cos(a) * rr, y: L.y + Math.sin(a) * rr, size: 1 + rand() * 1.7, vop: 0.35 + rand() * 0.5, delay: Math.round(rand() * 600) / 100 });
+      cluster.push(ci);
+    }
+  });
+  const hubId = nodes.length;
+  nodes.push({ id: hubId, x: w / 2, y: h / 2, size: 3.4, vop: 1, delay: 0 }); cluster.push(-1);
+  const edges: [number, number][] = [], seen = new Set<string>();
+  const add = (i: number, j: number) => { const k = i < j ? `${i}-${j}` : `${j}-${i}`; if (!seen.has(k)) { seen.add(k); edges.push([i, j]); } };
+  for (let i = 0; i < hubId; i++) {
+    const near: { j: number; d: number }[] = [];
+    for (let j = 0; j < hubId; j++) { if (j === i || cluster[j] !== cluster[i]) continue; const dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y; near.push({ j, d: dx * dx + dy * dy }); }
+    near.sort((p, q) => p.d - q.d); near.slice(0, 2).forEach((o) => add(i, o.j));
+  }
+  lobes.forEach((_, ci) => { let best = -1, bd = Infinity; for (let i = 0; i < hubId; i++) { if (cluster[i] !== ci) continue; const dx = nodes[i].x - w / 2, dy = nodes[i].y - h / 2, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } } if (best >= 0) add(best, hubId); });
+  return { nodes, edges };
+}
+const CAPAC_GRAPH = makeClusterGraph(41, 520, 460);
+const CAPAC_HILITE = [14, 44, 74, 104];
+
+/* Grafo de flujo — denso a la izquierda (experiencia) → cristaliza a la derecha (producto) */
+function makeFlowGraph(seed: number, count: number, w: number, h: number): { nodes: GNode[]; edges: [number, number][] } {
+  let s = seed >>> 0;
+  const rand = () => { s = (s + 0x6D2B79F5) >>> 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const nodes: GNode[] = Array.from({ length: count }, (_, i) => {
+    const bias = Math.pow(rand(), 1.7); // más densidad a la izquierda
+    const x = 30 + bias * (w - 60);
+    const spread = 30 + (x / w) * (h * 0.42); // se abre hacia la derecha
+    const y = h / 2 + (rand() - 0.5) * 2 * spread;
+    return { id: i, x, y, size: 1 + rand() * 1.7, vop: 0.35 + rand() * 0.5, delay: Math.round(rand() * 600) / 100 };
+  });
+  const edges: [number, number][] = [], seen = new Set<string>();
+  const maxD = (w * 0.16) ** 2;
+  for (let i = 0; i < count; i++) {
+    const near: { j: number; d: number }[] = [];
+    for (let j = 0; j < count; j++) { if (j === i) continue; const dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y; const d = dx * dx + dy * dy; if (d < maxD) near.push({ j, d }); }
+    near.sort((p, q) => p.d - q.d);
+    near.slice(0, 2).forEach((o) => { const k = i < o.j ? `${i}-${o.j}` : `${o.j}-${i}`; if (!seen.has(k)) { seen.add(k); edges.push([i, o.j]); } });
+  }
+  return { nodes, edges };
+}
+const CONOC_GRAPH = makeFlowGraph(58, 150, 520, 380);
+// nodos-producto: los 4 más a la derecha
+const CONOC_PRODUCTS = CONOC_GRAPH.nodes.slice().sort((a, b) => b.x - a.x).slice(0, 4).map((n) => n.id);
+
+function VectorCloud() {
+  return (
+    <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" role="img" aria-label="Espacio vectorial de la memoria del agente: una nube de puntos donde cada uno es un fragmento de conocimiento">
+      <defs>
+        <filter id="vecBlur"><feGaussianBlur stdDeviation="3.2" /></filter>
+        <radialGradient id="vecBgHalo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#15dcc4" stopOpacity="0.18" />
+          <stop offset="65%" stopColor="#15dcc4" stopOpacity="0.03" />
+          <stop offset="100%" stopColor="#15dcc4" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Halo de fondo */}
+      <ellipse cx="300" cy="300" rx="280" ry="280" fill="url(#vecBgHalo)" />
+
+      {/* Órbita exterior — gira lentamente con un marcador */}
+      <g className="vec-orbit">
+        <circle cx="300" cy="300" r="278" fill="none" stroke="#0fb3a1" strokeWidth="1" strokeDasharray="2 9" opacity="0.5" />
+        <circle cx="578" cy="300" r="3.2" fill="#15dcc4" />
+      </g>
+      {/* Órbita interior — más sutil */}
+      <circle cx="300" cy="300" r="186" fill="none" stroke="#0fb3a1" strokeWidth="0.8" strokeDasharray="1 7" opacity="0.28" />
+
+      {/* Capa borrosa (halos suaves) */}
+      <g filter="url(#vecBlur)" fill="#15dcc4">
+        {VEC_POINTS.map((p) => (
+          <circle key={`h${p.id}`} className="vec-halo" cx={p.x} cy={p.y} r={p.size * 2.4} style={{ ["--vop" as string]: (p.vop * 0.55).toString(), animationDelay: `${p.delay}s` } as React.CSSProperties} />
+        ))}
+      </g>
+
+      {/* Capa nítida (puntos brillantes) */}
+      <g fill="#0fb3a1">
+        {VEC_POINTS.map((p) => (
+          <circle key={`s${p.id}`} className="vec-dot" cx={p.x} cy={p.y} r={p.size} style={{ ["--vop" as string]: p.vop.toString(), animationDelay: `${p.delay + 0.4}s` } as React.CSSProperties} />
+        ))}
+      </g>
+
+      {/* Puntos destacados (vectores "seleccionados") */}
+      <g>
+        {VEC_HIGHLIGHT.map((p, i) => (
+          <g key={`H${i}`}>
+            <circle cx={p.x} cy={p.y} r={6} fill="none" stroke="#0d7d74" strokeWidth="1" opacity="0.7" />
+            <circle cx={p.x} cy={p.y} r={2.6} fill="#0d7d74" />
+          </g>
+        ))}
+      </g>
+
+      {/* Cursor / reticle central — el agente "mira" su memoria */}
+      <g className="vec-cursor">
+        <circle cx="300" cy="300" r="14" fill="none" stroke="#1a1918" strokeWidth="1.4" />
+        <circle cx="300" cy="300" r="3.6" fill="#1a1918" />
+        <line x1="276" y1="300" x2="288" y2="300" stroke="#1a1918" strokeWidth="1" />
+        <line x1="312" y1="300" x2="324" y2="300" stroke="#1a1918" strokeWidth="1" />
+        <line x1="300" y1="276" x2="300" y2="288" stroke="#1a1918" strokeWidth="1" />
+        <line x1="300" y1="312" x2="300" y2="324" stroke="#1a1918" strokeWidth="1" />
+      </g>
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════
+   KELSEN PROOF — demo de producto en el hero
+   La cita normativa verificable es el héroe visual.
+   NOTA: consulta y cita son ILUSTRATIVAS — verificar
+   vigencia con un abogado antes de publicar a prod.
+   ═══════════════════════════════════════ */
+const KELSEN_DEMO = {
+  consulta: "¿Es válida esta cláusula compromisoria?",
+  respuesta: "Sí. El pacto cumple los requisitos de existencia y validez del arbitraje nacional.",
+  fuente: { norma: "Ley 1563 de 2012", detalle: "Art. 3 · Estatuto de Arbitraje" },
+};
+
+// .apps que salen del mismo motor agéntico (la fábrica de software)
+const SECTOR_PUBLICO: { name: string; url: string | null; live: boolean }[] = [
+  { name: "Gobia", url: "https://gobia.co", live: true },
+  { name: "Tribai mun.", url: "https://tribai.co", live: true },
+];
+const SECTOR_PRIVADO: { name: string; url: string | null; live: boolean }[] = [
+  { name: "Kelsen", url: "https://kelsen.io", live: true },
+  { name: "Tribai", url: "https://tribai.co", live: true },
+  { name: "Laudos", url: "https://laudos.co", live: true },
+  { name: "Porkia", url: "https://porkia.co", live: true },
+  { name: "MiMotoYa", url: null, live: false },
+];
+
+function KelsenProof() {
+  const reducedTilt = !!useReducedMotion();
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(my, [0, 1], [6, -6]), spring.gentle);
+  const rotateY = useSpring(useTransform(mx, [0, 1], [-6, 6]), spring.gentle);
+  const glowX = useTransform(mx, (v) => `${v * 100}%`);
+  const glowY = useTransform(my, (v) => `${v * 100}%`);
+  const glow = useMotionTemplate`radial-gradient(240px circle at ${glowX} ${glowY}, rgba(13,125,116,0.10), transparent 72%)`;
+  const onTilt = (e: React.MouseEvent) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width);
+    my.set((e.clientY - r.top) / r.height);
+  };
+  const onTiltLeave = () => {
+    mx.set(0.5);
+    my.set(0.5);
+  };
+  // Parallax al scroll (capas a distinta velocidad). Nodos distintos al rotate del tilt.
+  const { scrollY } = useScroll();
+  const cloudY = useTransform(scrollY, [0, 800], [0, 64]); // fondo: lento, mismo sentido
+  const cardY = useTransform(scrollY, [0, 800], [0, -30]); // card: en contra, sutil
+  return (
+    <div className="relative w-full">
+      {/* VectorCloud como capa de memoria difuminada detrás (solo desktop) — parallax lento */}
+      <m.div className="hidden lg:block absolute -inset-10 opacity-35 blur-[2px] pointer-events-none" aria-hidden="true" style={reducedTilt ? undefined : { y: cloudY }}>
+        <div className="aspect-square w-full"><VectorCloud /></div>
+      </m.div>
+
+      {/* App de Kelsen — mockup de alta fidelidad (tilt 3D + glow magnético) */}
+      <m.div
+        className="relative w-full max-w-[560px] mx-auto lg:ml-auto lg:mr-0"
+        onMouseMove={reducedTilt ? undefined : onTilt}
+        onMouseLeave={reducedTilt ? undefined : onTiltLeave}
+        style={reducedTilt ? undefined : { rotateX, rotateY, y: cardY, transformPerspective: 900 }}
+      >
+      <div className="kelsen-card relative w-full rounded-xl border border-border bg-white shadow-sm overflow-hidden">
+        {/* Barra de título */}
+        <div className="flex items-center gap-2 h-9 px-3.5 border-b border-border-light bg-off-white">
+          <span className="flex gap-1.5" aria-hidden="true">
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+          </span>
+          <span className="ml-2 inline-flex items-center gap-1.5 text-[0.7rem] text-gray-400 font-medium truncate">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" aria-hidden="true" /> kelsen.io
+          </span>
+          <span className="ml-auto text-[0.58rem] font-semibold px-2 py-0.5 rounded-full bg-teal-soft text-teal shrink-0">En producción</span>
+        </div>
+
+        {/* Cuerpo: sidebar + panel */}
+        <div className="flex">
+          {/* Sidebar */}
+          <aside className="hidden sm:flex w-[150px] shrink-0 flex-col border-r border-border-light bg-off-white/70 py-3 px-2.5">
+            <p className="text-[0.5rem] font-bold tracking-[0.14em] uppercase text-gray-400 px-2 mb-1.5">Espacio legal</p>
+            {[
+              { label: "Asuntos", active: true, d: "M5 4h10M5 8h10M5 12h6" },
+              { label: "Investigación", active: false, d: "M9 4a5 5 0 103.5 8.5L16 16" },
+              { label: "Memoria", active: false, d: "M10 3l7 4-7 4-7-4 7-4zM3 11l7 4 7-4" },
+            ].map((it) => (
+              <span key={it.label} className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-[0.72rem] font-medium ${it.active ? "bg-teal-soft text-teal" : "text-gray-500"}`}>
+                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d={it.d} /></svg>
+                {it.label}
+              </span>
+            ))}
+            <p className="text-[0.5rem] font-bold tracking-[0.14em] uppercase text-gray-400 px-2 mt-3.5 mb-1.5">Módulos</p>
+            {["Tribai", "Laudos", "Gobia"].map((m) => (
+              <span key={m} className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[0.72rem] font-medium text-gray-500">
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0 mx-0.5" aria-hidden="true" />
+                {m}
+              </span>
+            ))}
+          </aside>
+
+          {/* Panel principal */}
+          <div className="flex-1 min-w-0 p-4 md:p-5">
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <span className="text-[0.68rem] text-gray-400 font-medium truncate">Asuntos / Cláusula compromisoria</span>
+              <span className="inline-flex items-center gap-1 text-[0.58rem] font-semibold text-teal shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-teal" aria-hidden="true" /> Resuelto
+              </span>
+            </div>
+
+            {/* Consulta del usuario */}
+            <div className="flex gap-2.5 mb-4">
+              <span className="w-6 h-6 rounded-full bg-gray-100 text-gray-500 text-[0.58rem] font-bold flex items-center justify-center shrink-0">CE</span>
+              <div className="min-w-0">
+                <p className="text-[0.58rem] font-semibold text-gray-400 mb-0.5">Tú</p>
+                <p className="text-ink text-[0.9rem] font-medium leading-snug">{KELSEN_DEMO.consulta}</p>
+              </div>
+            </div>
+
+            {/* Respuesta del agente */}
+            <div className="flex gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-ink text-white text-[0.6rem] font-bold flex items-center justify-center shrink-0">K</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[0.58rem] font-semibold text-teal mb-0.5">Kelsen</p>
+                <p className="text-gray-700 text-[0.875rem] leading-relaxed mb-3">
+                  {KELSEN_DEMO.respuesta}<span className="kelsen-caret" aria-hidden="true" />
+                </p>
+                {/* Cita — héroe visual */}
+                <div className="kelsen-cite flex items-start gap-2.5 rounded-lg border border-teal/30 bg-teal-soft/60 p-2.5">
+                  <svg className="w-4 h-4 text-teal shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
+                  <div className="min-w-0">
+                    <p className="text-[0.6rem] font-bold tracking-[0.1em] uppercase text-teal mb-0.5">Fuente verificable</p>
+                    <p className="text-ink text-[0.85rem] font-semibold leading-tight">{KELSEN_DEMO.fuente.norma}</p>
+                    <p className="text-gray-500 text-[0.75rem] tabular-nums">{KELSEN_DEMO.fuente.detalle}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        {!reducedTilt && <m.div className="absolute inset-0 rounded-xl pointer-events-none" style={{ background: glow }} aria-hidden="true" />}
+      </m.div>
+
+      {/* Productos por sector — el mismo motor, público y privado */}
+      <div className="relative mt-5 w-full max-w-[560px] mx-auto lg:ml-auto lg:mr-0">
+        {[
+          { label: "Público", href: "#publico", apps: SECTOR_PUBLICO },
+          { label: "Privado", href: "#privado", apps: SECTOR_PRIVADO },
+        ].map((sector) => (
+          <div key={sector.label} className="mb-2.5">
+            <a href={sector.href} className="text-gray-400 text-[0.6rem] font-bold tracking-[0.12em] uppercase mb-1.5 inline-block hover:text-teal transition-colors">{sector.label} →</a>
+            <div className="flex flex-wrap gap-1.5">
+              {sector.apps.map((app) => {
+                const cls = `inline-flex items-center gap-1.5 text-[0.72rem] font-medium px-2.5 py-1 rounded-full border transition-colors ${app.live ? "border-border bg-white text-gray-700 hover:border-gray-300" : "border-dashed border-gray-300 text-gray-400 hover:text-gray-600"}`;
+                const dot = <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${app.live ? "bg-teal" : "bg-gray-300"}`} aria-hidden="true" />;
+                const lbl = app.live ? `${app.name} (en producción)` : `${app.name} (en desarrollo)`;
+                return app.url ? (
+                  <a key={app.name} href={app.url} target="_blank" rel="noopener noreferrer" className={cls} aria-label={lbl} title={lbl}>{dot}{app.name}</a>
+                ) : (
+                  <span key={app.name} className={cls} title={lbl}>{dot}{app.name}</span>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -105,12 +602,12 @@ const LOGOS = [
 
 const HUB_COMPANIES = [
   {
-    name: "Tribai",
-    domain: "tribai.co",
-    focus: "Sector Privado",
-    desc: "Plataforma de inteligencia tributaria y financiera para contadores colombianos. +1.294 artículos del estatuto indexados, +35 calculadoras de precisión y asistente IA con citación de fuentes. Preparaciones automáticas de declaraciones de renta con IA en desarrollo.",
+    name: "Kelsen",
+    domain: "kelsen.io",
+    focus: "Sombrilla Legal IA",
+    desc: "Cerebro legal de INPLUX. La sombrilla que integra todos nuestros productos jurídicos sobre una misma capa de conocimiento persistente: Tribai (inteligencia tributaria) y Laudos (laudos arbitrales y jurisprudencia). Agentes legales con memoria de largo plazo y citación de fuentes verificable.",
     status: "Activo",
-    upcoming: "Próximamente: preparación automática de declaraciones de renta · información exógena · app móvil",
+    upcoming: "Módulos en desarrollo: litigio · contratos · derecho constitucional · derecho penal",
   },
   {
     name: "Gobia",
@@ -123,6 +620,235 @@ const HUB_COMPANIES = [
 ];
 
 /* ═══════════════════════════════════════
+   REVEAL / STAGGER (motion)
+   Entrada al viewport con física de resorte. Compositor-only
+   (opacity + translateY). Bajo reduced-motion entra sin desplazar.
+   NO usar en hero (LCP) ni en wrappers que contengan grafos SVG
+   (esos ya ensamblan al scroll por su cuenta).
+   ═══════════════════════════════════════ */
+const REVEAL_VARIANTS: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+const STAGGER_PARENT: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.04 } },
+};
+
+function Reveal({
+  children,
+  className,
+  amount = 0.3,
+  as = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  amount?: number;
+  as?: "div" | "li" | "section" | "p";
+}) {
+  const reduced = !!useReducedMotion();
+  const Comp = m[as];
+  return (
+    <Comp
+      className={className}
+      variants={REVEAL_VARIANTS}
+      initial={reduced ? false : "hidden"}
+      whileInView="show"
+      viewport={{ once: true, amount }}
+      transition={spring.smooth}
+    >
+      {children}
+    </Comp>
+  );
+}
+
+function Stagger({
+  children,
+  className,
+  amount = 0.2,
+  as = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  amount?: number;
+  as?: "div" | "ul" | "section";
+}) {
+  const reduced = !!useReducedMotion();
+  const Comp = m[as];
+  return (
+    <Comp
+      className={className}
+      variants={STAGGER_PARENT}
+      initial={reduced ? false : "hidden"}
+      whileInView="show"
+      viewport={{ once: true, amount }}
+    >
+      {children}
+    </Comp>
+  );
+}
+
+function StaggerItem({
+  children,
+  className,
+  as = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  as?: "div" | "li";
+}) {
+  const Comp = m[as];
+  return (
+    <Comp className={className} variants={REVEAL_VARIANTS} transition={spring.smooth}>
+      {children}
+    </Comp>
+  );
+}
+
+/* ═══════════════════════════════════════
+   GOBIA TWIN — Gemelo digital municipal
+   Silueta real del municipio de Medellín
+   (OSM/Nominatim, escalada a 520×460).
+   Hover revela mini-cards por fuente.
+   ═══════════════════════════════════════ */
+
+/* Path real del municipio de Medellín — OSM relation, simplificado a ~90 pts */
+const MED_PATH = "M20.0,92.2L23.1,100.7L21.6,110.9L22.6,121.6L30.5,132.6L37.3,147.7L40.7,159.7L42.7,165.1L41.0,171.5L40.8,187.3L44.8,205.2L41.3,216.5L38.3,231.3L38.4,247.8L39.7,272.4L54.4,299.6L57.2,322.0L56.0,362.0L79.3,381.4L87.5,396.9L94.8,415.7L116.1,435.5L136.8,426.6L144.2,425.7L146.0,429.5L154.6,429.5L159.0,431.1L164.0,431.3L169.7,421.3L180.0,417.3L184.4,412.0L181.9,407.4L187.9,397.3L199.0,376.0L229.3,368.7L243.9,370.1L255.7,373.5L272.4,378.3L285.8,388.0L295.6,399.5L310.8,407.1L319.7,412.2L325.2,413.4L330.9,413.4L333.8,414.5L341.4,414.0L392.5,391.0L427.6,379.4L456.9,377.7L478.5,366.0L471.1,337.8L467.6,315.6L485.1,306.6L498.6,292.5L488.1,272.8L476.2,259.5L465.0,240.5L457.7,224.1L456.9,217.7L457.4,212.5L453.3,200.7L448.0,186.6L406.8,190.3L392.7,183.9L393.5,177.8L383.7,171.1L378.4,174.3L373.6,169.4L369.0,165.9L364.0,163.9L360.6,162.4L353.3,159.7L347.3,157.3L336.9,151.3L331.3,147.4L322.9,147.8L316.9,147.0L309.7,150.4L305.0,150.0L300.0,149.4L294.5,151.1L285.3,153.0L271.2,154.2L255.2,156.6L242.1,150.4L230.2,143.4L210.3,143.3L196.8,140.7L179.6,129.5L155.9,109.6L139.7,62.3L125.7,41.3L108.1,30.0L87.1,34.9L67.6,34.5L52.3,29.9L41.4,30.7L25.3,44.7L27.4,64.0L30.3,79.7L22.7,82.4Z";
+
+/* Nodos posicionados dentro del shape real de Medellín.
+   Centro del municipio ≈ (262, 240). */
+const TWIN_NODES = [
+  { id: "dnp",         cx: 262, cy: 80,  label: "DNP",  pulse: "",             card: { x: 148, y: 48,  w: 156, title: "DNP",        sub: "PLANEACIÓN NACIONAL",  desc: "Planes de desarrollo · SGP · inversión" } },
+  { id: "contraloria", cx: 390, cy: 195, label: "CTRL", pulse: "twin-pulse-2", card: { x: 244, y: 163, w: 156, title: "Contraloría", sub: "CONTROL FISCAL",       desc: "Alertas fiscales · auditoría · deuda" } },
+  { id: "ministerios", cx: 80,  cy: 260, label: "MIN",  pulse: "twin-pulse-3", card: { x: 26,  y: 228, w: 152, title: "Ministerios", sub: "NORMATIVA SECTORIAL",  desc: "Hacienda · Interior · Salud · Educación" } },
+  { id: "contaduria",  cx: 400, cy: 320, label: "CTD",  pulse: "twin-pulse-4", card: { x: 244, y: 290, w: 152, title: "Contaduría", sub: "ESTADO FINANCIERO",    desc: "Balance · pasivos · cierre contable" } },
+  { id: "ias",         cx: 262, cy: 390, label: "IAS",  pulse: "twin-pulse-5", card: { x: 148, y: 358, w: 216, title: "IAS",        sub: "ENTIDADES ESPECIALES", desc: "EICE · SEM · empresas servicios públicos" } },
+] as const;
+
+const TWIN_FLOWS = [
+  "M262,89 Q262,155 248,214",
+  "M381,203 Q348,218 308,234",
+  "M89,260 Q160,256 218,248",
+  "M391,312 Q360,295 310,254",
+  "M262,381 Q262,335 264,267",
+] as const;
+
+function GobiaTwin() {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const reduced = !!useReducedMotion();
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const cleanup: (() => void)[] = [];
+    svg.querySelectorAll<SVGGElement>("[data-twin-node]").forEach((g) => {
+      const id = g.getAttribute("data-twin-node");
+      const card = svg.querySelector(`[data-twin-card="${id}"]`);
+      if (!card) return;
+      const enter = () => card.setAttribute("data-visible", "");
+      const leave = () => card.removeAttribute("data-visible");
+      g.addEventListener("mouseenter", enter);
+      g.addEventListener("mouseleave", leave);
+      cleanup.push(() => { g.removeEventListener("mouseenter", enter); g.removeEventListener("mouseleave", leave); });
+    });
+    return () => cleanup.forEach((fn) => fn());
+  }, []);
+
+  return (
+    <m.div
+      initial={reduced ? false : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={spring.smooth}
+      className="relative w-full"
+    >
+      <svg
+        ref={svgRef}
+        viewBox="0 0 520 460"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full max-w-[480px] mx-auto lg:mx-0"
+        style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }}
+        role="img"
+        aria-label="Gemelo digital municipal Gobia: fuentes DNP, Contraloría, Ministerios, Contaduría e IAS fluyendo al tablero de hacienda"
+      >
+        <defs>
+          <radialGradient id="twinHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0d7d74" stopOpacity="0.28" />
+            <stop offset="60%" stopColor="#0d7d74" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#0d7d74" stopOpacity="0" />
+          </radialGradient>
+          <clipPath id="medClip">
+            <path d={MED_PATH} />
+          </clipPath>
+        </defs>
+
+        {/* Silueta real del municipio de Medellín */}
+        <path d={MED_PATH} fill="#edf7f6" stroke="#a9d6d0" strokeWidth="1.5" strokeLinejoin="round" />
+
+        {/* Puntos urbanos (recortados al shape) */}
+        <g clipPath="url(#medClip)" opacity="0.35">
+          {Array.from({ length: 13 }).map((_, row) =>
+            Array.from({ length: 15 }).map((_, col) => (
+              <circle key={`dot-${row}-${col}`} cx={35 * col + 22} cy={35 * row + 22} r={0.9} fill="#0d7d74" />
+            ))
+          )}
+        </g>
+
+        {/* Río Aburrá — recorre el centro del municipio de NE a SW */}
+        <path
+          d="M260,50 C258,100 250,140 245,180 C240,220 248,252 244,290 C240,330 238,372 244,430"
+          fill="none" stroke="#a9d6d0" strokeWidth="2.5" strokeLinecap="round"
+          clipPath="url(#medClip)"
+        />
+
+        {/* Flujos animados de fuentes → Gobia */}
+        {!reduced && TWIN_FLOWS.map((d, i) => (
+          <path key={i} d={d} className={`twin-flow twin-flow-${i + 1}`} />
+        ))}
+
+        {/* Halo central */}
+        <ellipse cx="262" cy="240" rx="54" ry="48" fill="url(#twinHalo)" className="svg-halo-pulse" />
+
+        {/* Card Gobia */}
+        <g style={{ filter: "drop-shadow(0 4px 14px rgba(13,125,116,0.20))" }}>
+          <rect x="214" y="212" width="96" height="56" rx="12" fill="url(#inkGrad)" />
+          <rect x="214" y="212" width="96" height="56" rx="12" fill="none" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="8 100" className="eco-orbit" style={{ animationDuration: "10s" }} />
+          <text x="262" y="235" textAnchor="middle" fill="white" fontSize="13" fontWeight="800">Gobia</text>
+          <text x="262" y="249" textAnchor="middle" fill="#5fe3d6" fontSize="6.5" fontWeight="600" letterSpacing="1">TABLERO HACIENDA</text>
+          <text x="238" y="263" textAnchor="middle" fill="rgba(255,255,255,0.75)" fontSize="9" fontWeight="700">+50</text>
+          <text x="262" y="263" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="7.5">mun.</text>
+          <text x="286" y="263" textAnchor="middle" fill="rgba(255,255,255,0.75)" fontSize="9" fontWeight="700">44</text>
+        </g>
+
+        {/* Nodos de fuentes de datos */}
+        {TWIN_NODES.map(({ id, cx, cy, label, pulse }) => (
+          <g key={id} data-twin-node={id}>
+            <circle cx={cx} cy={cy} r={13} fill="none" stroke="#a9d6d0" strokeWidth="1" className={`twin-pulse ${pulse}`} />
+            <circle cx={cx} cy={cy} r={8} fill="white" stroke="#0d7d74" strokeWidth="1.5" className="twin-node-dot" />
+            <text x={cx} y={cy + 3.5} textAnchor="middle" fill="#0d7d74" fontSize={label.length > 3 ? 6 : 7.5} fontWeight="700">{label}</text>
+          </g>
+        ))}
+
+        {/* Mini-cards de hover */}
+        {TWIN_NODES.map(({ id, card }) => (
+          <g key={id} data-twin-card={id} className="twin-card" style={{ filter: "drop-shadow(0 4px 12px rgba(26,25,24,0.10))" }}>
+            <rect x={card.x} y={card.y} width={card.w} height={54} rx={10} fill="white" stroke="#e2dfdb" strokeWidth="1" />
+            <rect x={card.x + 1} y={card.y} width={card.w - 2} height={18} rx={10} fill="#f0faf9" />
+            <text x={card.x + 12} y={card.y + 13} fill="#0d7d74" fontSize={7.5} fontWeight="700" letterSpacing="0.5">{card.sub}</text>
+            <text x={card.x + 12} y={card.y + 32} fill="#1a1918" fontSize={10} fontWeight="700">{card.title}</text>
+            <text x={card.x + 12} y={card.y + 46} fill="#76716a" fontSize={8}>{card.desc}</text>
+          </g>
+        ))}
+
+        {/* Label */}
+        <text x="262" y="452" textAnchor="middle" fill="#9a958e" fontSize="8" fontWeight="600" letterSpacing="1">MEDELLÍN · GEMELO DIGITAL MUNICIPAL · GOBIA.CO</text>
+      </svg>
+    </m.div>
+  );
+}
+
+/* ═══════════════════════════════════════
    PAGE
    ═══════════════════════════════════════ */
 export default function Home() {
@@ -130,8 +856,21 @@ export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [bannerOpen, setBannerOpen] = useState(true);
 
-  useScrollReveal();
+  const reducedMotion = !!useReducedMotion();
+  const { scrollYProgress } = useScroll();
+
+  // Announcement bar — recuerda el dismiss entre visitas
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem("inplux-banner-dismissed") === "1") setBannerOpen(false);
+    } catch { /* localStorage no disponible */ }
+  }, []);
+  const dismissBanner = () => {
+    setBannerOpen(false);
+    try { window.localStorage.setItem("inplux-banner-dismissed", "1"); } catch { /* noop */ }
+  };
 
   useEffect(() => {
     const h = () => {
@@ -158,40 +897,66 @@ export default function Home() {
   }, []);
 
   const navLinks = [
-    { label: "Nosotros", href: "/nosotros" },
-    { label: "Servicios", href: "#servicios" },
+    { label: "Motor", href: "#motor" },
+    { label: "Público", href: "#publico" },
+    { label: "Privado", href: "#privado" },
     { label: "Ecosistema", href: "#empresas" },
-    { label: "Trayectoria", href: "#trayectoria" },
-    { label: "Contacto", href: "#contacto" },
+    { label: "Nosotros", href: "/nosotros" },
   ];
 
   return (
-    <>
+    <LazyMotion features={domMax} strict>
+      <MotionConfig reducedMotion="user" transition={spring.smooth}>
+        <>
+      {/* Barra de progreso de lectura */}
+      <m.div className="fixed top-0 left-0 right-0 h-[2px] bg-teal z-[61] origin-left pointer-events-none" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       {/* Skip to content — accessibility */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-ink focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold">
         Ir al contenido principal
       </a>
 
+      {/* ──── ANNOUNCEMENT BAR (dismissible) ──── */}
+      {bannerOpen && (
+        <div className="announce-bar" role="region" aria-label="Anuncio">
+          <span className="announce-inner">
+            <span className="announce-dot" aria-hidden="true" />
+            <span className="announce-label hidden sm:inline">
+              Lanzamiento — Tribai.co: inteligencia tributaria con IA, ya en producción.
+            </span>
+            <span className="announce-label sm:hidden">
+              Lanzamiento — Tribai.co en producción.
+            </span>
+            <a href="#empresas" className="announce-link" onClick={dismissBanner}>Ver más →</a>
+          </span>
+          <button onClick={dismissBanner} className="announce-dismiss" aria-label="Cerrar anuncio">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}><path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      )}
+
       {/* Mobile nav overlay */}
       <div className={`mobile-overlay ${mobileOpen ? "active" : ""}`} onClick={() => setMobileOpen(false)} role="presentation" aria-hidden="true" />
 
       {/* ──── NAV ──── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 nav-wrap ${scrolled ? "scrolled" : ""}`} aria-label="Navegación principal">
+      <nav className={`fixed left-0 right-0 z-50 nav-wrap transition-[top] duration-300 ${bannerOpen ? "top-10" : "top-0"} ${scrolled ? "scrolled" : ""}`} aria-label="Navegación principal">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8 flex items-center justify-between h-[60px]">
           <a href="#inicio" aria-label="INPLUX - Inicio" className="flex items-center">
             <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto" />
           </a>
-          <div className="hidden md:flex items-center gap-0.5">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((l) =>
               l.href.startsWith("/") ? (
-                <Link key={l.href} href={l.href} className="text-[0.8125rem] font-medium px-3 py-1.5 rounded-md transition-colors text-gray-500 hover:text-ink">{l.label}</Link>
+                <Link key={l.href} href={l.href} className="text-[0.8125rem] font-medium px-3.5 py-2 rounded-md transition-colors text-gray-500 hover:text-ink">{l.label}</Link>
               ) : (
-                <a key={l.href} href={l.href} className={`text-[0.8125rem] font-medium px-3 py-1.5 rounded-md transition-colors ${activeSection === l.href ? "nav-link-active" : "text-gray-500 hover:text-ink"}`}>{l.label}</a>
+                <a key={l.href} href={l.href} className={`relative text-[0.8125rem] font-medium px-3.5 py-2 rounded-md transition-colors ${activeSection === l.href ? "text-ink font-semibold" : "text-gray-500 hover:text-ink"}`}>
+                  {activeSection === l.href && <m.span layoutId="nav-pill" className="absolute inset-0 rounded-md bg-off-white -z-10" transition={spring.smooth} />}
+                  {l.label}
+                </a>
               )
             )}
           </div>
           <div className="flex items-center gap-3">
-            <a href="#contacto" className="hidden md:inline-flex btn-dark text-[0.8125rem] !py-2 !px-5">Hablemos</a>
+            <m.a href="#contacto" className="!hidden md:!inline-flex btn-dark text-[0.8125rem] !py-2 !px-5" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>Hablemos</m.a>
             <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-ink p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={mobileOpen}>
               {mobileOpen ? (
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -210,48 +975,78 @@ export default function Home() {
                 <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="block text-gray-600 hover:text-ink text-sm font-medium py-2.5 px-3 rounded-md transition-colors">{l.label}</a>
               )
             )}
-            <a href="#contacto" onClick={() => setMobileOpen(false)} className="block btn-dark text-sm text-center !py-2.5 mt-2">Hablemos</a>
+            <a href="#contacto" onClick={() => setMobileOpen(false)} className="btn-dark w-full text-sm !py-2.5 mt-2">Hablemos</a>
           </div>
         </div>
       </nav>
 
       <main id="main-content">
+      {/* Shared SVG defs — gradientes y filtros reutilizables por todos los diagramas */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="inkGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#26241f" />
+            <stop offset="100%" stopColor="#0d0c0b" />
+          </linearGradient>
+          <linearGradient id="tealGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#15b3a4" />
+            <stop offset="100%" stopColor="#0a665f" />
+          </linearGradient>
+          <radialGradient id="tealHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0d7d74" stopOpacity="0.32" />
+            <stop offset="65%" stopColor="#0d7d74" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#0d7d74" stopOpacity="0" />
+          </radialGradient>
+          <filter id="cardShadow" x="-25%" y="-25%" width="150%" height="150%">
+            <feDropShadow dx="0" dy="6" stdDeviation="9" floodColor="#1a1918" floodOpacity="0.12" />
+          </filter>
+        </defs>
+      </svg>
       {/* ──── HERO ──── */}
-      <section id="inicio" className="relative pt-[60px] overflow-hidden">
-        <div className="absolute inset-0 top-[60px] z-0">
-          <video autoPlay muted loop playsInline aria-hidden="true" poster="/hero-poster.jpg" className="w-full h-full object-cover">
-            <source src="/hero.webm" type="video/webm" />
-            <source src="/hero.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 hero-overlay" />
-        </div>
-        <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 py-16 md:py-24">
-          <div className="max-w-[680px]">
-            <p className="reveal text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Inteligencia Tributaria · Tecnología · IA</p>
-            <h1 className="reveal font-serif text-[2.25rem] sm:text-[3.5rem] md:text-[4.25rem] lg:text-[5rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
-              La norma la conocemos.<br />
-              La tecnología la{" "}
-              <em className="font-serif italic text-teal">construimos.</em>
-            </h1>
-            <p className="reveal text-gray-500 text-base md:text-[1.25rem] leading-[1.6] mb-7 max-w-[580px]">
-              Nuestra historia empezó en la gestión tributaria. Llevamos 25 años entre estatutos, NIC/NIIF y hacienda pública colombiana.
-              Hoy convertimos ese conocimiento en tecnología e inteligencia artificial.
-            </p>
-            <div className="reveal flex flex-col sm:flex-row gap-3">
-              <a href="#servicios" className="btn-dark text-center">Ver capacidades</a>
-              <a href="#contacto" className="btn-ghost text-center">Agendar sesión</a>
+      <section id="inicio" className={`relative overflow-hidden bg-white transition-[padding] duration-300 ${bannerOpen ? "pt-[100px]" : "pt-[60px]"}`}>
+        {/* Grid técnico de fondo */}
+        <div className={`absolute inset-x-0 bottom-0 z-0 tech-grid tech-grid-fade pointer-events-none transition-[top] duration-300 ${bannerOpen ? "top-[100px]" : "top-[60px]"}`} aria-hidden="true" />
+        <div className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 py-16 md:py-24 lg:py-28">
+          <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-20 items-start">
+            {/* LEFT — copy */}
+            <div className="min-w-0 max-w-[620px]">
+              <p className="text-gray-500 text-[0.75rem] font-semibold tracking-[0.15em] uppercase mb-5">Hub de IA · Sector público y privado · 25 años</p>
+              <h1 className="font-serif text-[2.3rem] sm:text-[3.25rem] md:text-[4rem] lg:text-[4.75rem] leading-[1.05] tracking-[-0.02em] text-ink mb-7">
+                Construimos el<br />
+                <em className="font-serif italic" style={{ color: "var(--teal-accent)" }}>cerebro de IA</em><br />
+                de Colombia.
+              </h1>
+              <p className="text-gray-500 text-base md:text-[1.15rem] leading-[1.65] mb-8 max-w-[540px]">
+                Agentes con memoria que aprenden de 25 años de experiencia real. Modernizamos la hacienda pública de los municipios y construimos el software de las empresas — sobre un mismo motor que cita su fuente y mejora en cada caso.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <span className="bracket-cta">
+                  <span className="br-tr" />
+                  <span className="br-bl" />
+                  <m.a href="#publico" className="btn-dark" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>Sector público</m.a>
+                </span>
+                <span className="bracket-cta">
+                  <span className="br-tr" />
+                  <span className="br-bl" />
+                  <m.a href="#privado" className="btn-ghost" style={{ transitionProperty: "background-color, border-color" }} {...pressable(reducedMotion)}>Sector privado</m.a>
+                </span>
+              </div>
             </div>
+
+            {/* RIGHT — Kelsen en acción (prueba de producto) */}
+            <Reveal className="relative min-w-0 w-full max-w-[560px] mx-auto lg:mx-0">
+              <KelsenProof />
+            </Reveal>
           </div>
         </div>
-        <div className="relative z-10 h-12 hero-fade-bottom" />
       </section>
 
       {/* ──── LOGOS ──── */}
       <section className="pt-4 pb-8 md:pt-5 md:pb-10" aria-label="Clientes que confían en nosotros">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8 mb-5">
-          <p className="reveal text-center text-gray-500 text-[0.6875rem] font-semibold tracking-[0.15em] uppercase">Confían en nosotros</p>
+          <Reveal as="p" className="text-center text-gray-500 text-[0.6875rem] font-semibold tracking-[0.15em] uppercase">Confían en nosotros</Reveal>
         </div>
-        <div className="reveal relative overflow-hidden">
+        <Reveal className="relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-16 md:w-28 z-10" style={{ background: "linear-gradient(90deg, white, transparent)" }} />
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-28 z-10" style={{ background: "linear-gradient(270deg, white, transparent)" }} />
           <div className="logo-track">
@@ -259,38 +1054,640 @@ export default function Home() {
               <Image key={`${logo.alt}-${i}`} src={logo.src} alt={logo.alt} width={90} height={32} className="logo-item" style={{ objectFit: "contain", width: "auto" }} unoptimized loading="lazy" />
             ))}
           </div>
+        </Reveal>
+      </section>
+
+      {/* ──── HUB / ECOSYSTEM ──── */}
+      <section id="empresas" className="py-20 md:py-28">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <Reveal className="mb-14">
+            <SectionKicker n="01">Ecosistema Inplux</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
+              Seis productos.<br /><em className="italic">Un motor. Dos frentes.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Sector público y privado, sobre el mismo motor agéntico con memoria persistente.
+              Cada producto aprende de los demás — el conocimiento se comparte, no se siloa.
+            </p>
+          </Reveal>
+
+          <div className="svg-scroll-hint">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+            Desliza para ver completo
+          </div>
+          <Reveal className="w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 580" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema INPLUX: dos frentes (público y privado) con siete productos sobre un motor agéntico compartido">
+              {/* Background dots */}
+              {Array.from({ length: 16 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`ec-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#ebe8e4" />
+                ))
+              )}
+
+              {/* ═══ INPLUX — top center ═══ */}
+              <ellipse cx="500" cy="62" rx="190" ry="80" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              <g className="eco-glow svg-card">
+                <rect x="390" y="24" width="220" height="68" rx="14" fill="url(#inkGrad)" />
+                <rect x="390" y="24" width="220" height="68" rx="14" fill="none" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="10 300" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                <text x="500" y="55" textAnchor="middle" fill="white" fontSize="16" fontWeight="800" letterSpacing="2.5">INPLUX</text>
+                <text x="500" y="72" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="8.5" fontWeight="600" letterSpacing="1.5">HUB DE IA · COLOMBIA</text>
+              </g>
+
+              {/* INPLUX → frentes */}
+              <line x1="434" y1="94" x2="248" y2="148" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <line x1="566" y1="94" x2="752" y2="148" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+
+              {/* ═══ FRENTE PÚBLICO ═══ */}
+              <rect x="100" y="148" width="296" height="28" rx="14" fill="#e8f5f3" />
+              <text x="248" y="167" textAnchor="middle" fill="#0d5c57" fontSize="8.5" fontWeight="800" letterSpacing="2">FRENTE PÚBLICO</text>
+
+              {/* Gobia */}
+              <a href="https://gobia.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="100" y="188" width="296" height="78" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
+                  <rect x="101" y="188" width="294" height="24" rx="12" fill="#f0faf9" />
+                  <text x="122" y="204" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1">GEMELO MUNICIPAL</text>
+                  <circle cx="376" cy="200" r="6.5" fill="#0d7d74" />
+                  <text x="376" y="203" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="248" y="234" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Gobia</text>
+                  <text x="248" y="249" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">gobia.co</text>
+                  <text x="248" y="261" textAnchor="middle" fill="#76716a" fontSize="8">Hacienda · DNP · Contraloría · IAS</text>
+                </g>
+              </a>
+
+              {/* Tribai mun. */}
+              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="100" y="278" width="296" height="78" rx="12" fill="white" stroke="#a9d6d0" strokeWidth="1.5" />
+                  <rect x="101" y="278" width="294" height="24" rx="12" fill="#f0faf9" />
+                  <text x="122" y="294" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1">TRIBUTARIO MUNICIPAL</text>
+                  <circle cx="376" cy="290" r="6.5" fill="#0d7d74" />
+                  <text x="376" y="293" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="248" y="322" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Tribai</text>
+                  <text x="248" y="337" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">tribai.co</text>
+                  <text x="248" y="349" textAnchor="middle" fill="#76716a" fontSize="8">+44 estatutos · +50 municipios</text>
+                </g>
+              </a>
+
+              {/* Público → Motor */}
+              <path d="M248,356 C248,430 400,470 450,500" fill="none" stroke="#a9d6d0" strokeWidth="1.2" strokeDasharray="4 3" />
+
+              {/* ═══ FRENTE PRIVADO ═══ */}
+              <rect x="604" y="148" width="296" height="28" rx="14" fill="#f3f1ee" />
+              <text x="752" y="167" textAnchor="middle" fill="#3d3b39" fontSize="8.5" fontWeight="800" letterSpacing="2">FRENTE PRIVADO</text>
+
+              {/* Kelsen */}
+              <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="604" y="188" width="296" height="78" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
+                  <rect x="605" y="188" width="294" height="24" rx="12" fill="#f3f1ee" />
+                  <text x="626" y="204" fill="#6e6b68" fontSize="8" fontWeight="700" letterSpacing="1">SOMBRILLA LEGAL · IA</text>
+                  <circle cx="880" cy="200" r="6.5" fill="#0d7d74" />
+                  <text x="880" y="203" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="752" y="234" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Kelsen</text>
+                  <text x="752" y="249" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="500">kelsen.io</text>
+                  <text x="752" y="261" textAnchor="middle" fill="#76716a" fontSize="8">Cerebro legal · Tribai · Laudos</text>
+                </g>
+              </a>
+
+              {/* Módulos privados: Tribai · Laudos · Porkia en fila */}
+              {[
+                { x: 604, label: "Tribai", sub: "tribai.co", tag: "TRIBUTARIO", prod: true, href: "https://tribai.co" },
+                { x: 704, label: "Laudos", sub: "laudos.co", tag: "ARBITRAL", prod: true, href: "https://laudos.co" },
+                { x: 804, label: "Porkia", sub: "porkia.co", tag: "GANADERÍA", prod: true, href: "https://porkia.co" },
+              ].map(({ x, label, sub, tag, href }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer">
+                  <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
+                    <rect x={x} y={278} width={92} height={72} rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.2" />
+                    <text x={x + 46} y={295} textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="700" letterSpacing="0.5">{tag}</text>
+                    <circle cx={x + 81} cy={289} r="5.5" fill="#0d7d74" />
+                    <text x={x + 81} y={292} textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">&#10003;</text>
+                    <text x={x + 46} y={320} textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">{label}</text>
+                    <text x={x + 46} y={341} textAnchor="middle" fill="#0d7d74" fontSize="8">{sub}</text>
+                  </g>
+                </a>
+              ))}
+
+              {/* MiMotoYa — lado a lado con los módulos */}
+              <g className="eco-float-delay svg-card">
+                <rect x="604" y="362" width="296" height="46" rx="10" fill="white" stroke="#e2dfdb" strokeWidth="1" strokeDasharray="5 4" />
+                <text x="752" y="381" textAnchor="middle" fill="#76716a" fontSize="13" fontWeight="700">MiMotoYa</text>
+                <text x="752" y="397" textAnchor="middle" fill="#9a958e" fontSize="8">Movilidad urbana · En desarrollo</text>
+              </g>
+
+              {/* Kelsen → módulos */}
+              <line x1="650" y1="266" x2="650" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="750" y1="266" x2="750" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="850" y1="266" x2="850" y2="278" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="700" y1="350" x2="700" y2="362" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="800" y1="350" x2="800" y2="362" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+
+              {/* Privado → Motor */}
+              <path d="M752,408 C752,450 580,476 550,500" fill="none" stroke="#d1cfcc" strokeWidth="1.2" strokeDasharray="4 3" />
+
+              {/* ═══ MOTOR AGÉNTICO ═══ */}
+              <ellipse cx="500" cy="514" rx="380" ry="56" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              <rect x="340" y="490" width="320" height="48" rx="24" fill="url(#inkGrad)" />
+              <text x="500" y="511" textAnchor="middle" fill="white" fontSize="11" fontWeight="700" letterSpacing="1">Motor agéntico</text>
+              <text x="500" y="526" textAnchor="middle" fill="#5fe3d6" fontSize="7.5" fontWeight="600" letterSpacing="1.5">SELF-IMPROVING · BASE COMÚN</text>
+
+              {/* Aliados — fila debajo del motor */}
+              {[
+                { cx: 108, name: "Fourier", sub: "Cloud" },
+                { cx: 248, name: "Think IT", sub: "Ingeniería" },
+                { cx: 752, name: "Alianza IT", sub: "Integración" },
+                { cx: 892, name: "Aries", sub: "ERP · 31 años" },
+              ].map((a) => (
+                <g key={a.name} className="eco-float-delay2">
+                  <rect x={a.cx - 60} y={552} width={120} height={36} rx={9} fill="white" stroke="#e2dfdb" strokeWidth="1" />
+                  <text x={a.cx} y={567} textAnchor="middle" fill="#3d3b39" fontSize={9} fontWeight="600">{a.name}</text>
+                  <text x={a.cx} y={580} textAnchor="middle" fill="#76716a" fontSize={7.5}>{a.sub}</text>
+                  <line x1={a.cx} y1={552} x2={a.cx < 500 ? 420 : 580} y2={538} stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
+                </g>
+              ))}
+
+              {/* Caption */}
+              <text x="500" y="574" textAnchor="middle" fill="#9a958e" fontSize="0" letterSpacing="1.5">.</text>
+            </svg>
+          </Reveal>
         </div>
       </section>
 
-      <div className="fine-rule" />
-
       {/* ──── STATS ──── */}
-      <section className="py-20 md:py-28" aria-label="Cifras de impacto">
+      <section className="py-12 md:py-16" aria-label="Cifras de impacto">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 stagger">
+          <Stagger className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-14">
             {[
               { value: "+25", label: "Años de experiencia", detail: "Desde el año 2000" },
-              { value: "+50", label: "Municipios atendidos", detail: "En toda Colombia" },
+              { value: "+50", label: "Municipios atendidos", detail: "Sector público" },
               { value: "+100", label: "Proyectos ejecutados", detail: "Público y privado" },
-              { value: "6", label: "Sectores de impacto", detail: "Gobierno · Salud · Educación" },
+              { value: "+35", label: "Calculadoras IA", detail: "Tributario · Financiero" },
             ].map((stat) => (
-              <div key={stat.label} className="reveal group relative border border-transparent hover:border-border rounded-xl p-4 md:p-5 transition-all duration-300 hover:shadow-sm">
-                <div className="absolute top-4 right-4 w-1.5 h-1.5 rounded-full bg-teal opacity-0 group-hover:opacity-100 transition-opacity" />
+              <StaggerItem key={stat.label} className="group relative border border-border-light hover:border-border rounded-xl p-4 md:p-5 transition-all duration-300 hover:shadow-sm">
                 <AnimatedNumber value={stat.value} label={stat.label} />
-                <p className="text-gray-500 text-[0.7rem] mt-1.5">{stat.detail}</p>
-              </div>
+                <p className="text-gray-400 text-xs mt-2">{stat.detail}</p>
+              </StaggerItem>
             ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* ──── FRENTE PÚBLICO — Gobia · Hacienda municipal ──── */}
+      <section id="publico" className="py-16 md:py-24">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+            {/* Columna izquierda — narrativa */}
+            <div>
+              <Reveal>
+                <SectionKicker n="02">Frente Público · Gobierno y municipios</SectionKicker>
+                <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
+                  Ponemos al día la<br /><em className="italic">hacienda pública de Colombia.</em>
+                </h2>
+                <p className="text-gray-500 text-base md:text-[1.05rem] leading-[1.65] mb-8 max-w-md">
+                  25 años asesorando municipios, gobernaciones y empresas de servicios públicos. Hoy esa experiencia vive en <strong className="font-semibold text-ink">Gobia</strong> — gemelo digital municipal — y en <strong className="font-semibold text-ink">Tribai</strong> para el tributario.
+                </p>
+              </Reveal>
+
+              <Stagger className="space-y-4 mb-8">
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Gobia · Gemelo digital municipal</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">DNP · Contraloría · Contaduría · Ministerios · IAS en un solo tablero. El secretario de Hacienda ve todo en tiempo real.</p>
+                    <a href="https://gobia.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">gobia.co →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Tribai · Tributario municipal</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">44 estatutos coordinados, +50 municipios. Estatuto RAG con citación verificable ante la DIAN.</p>
+                    <a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">tribai.co →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-warm-50 border border-border flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-gray-300" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Para quién</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Alcaldías · secretarías de hacienda · gobernaciones · EICE · SEM · empresas de servicios públicos.</p>
+                  </div>
+                </StaggerItem>
+              </Stagger>
+
+              <Reveal>
+                <span className="bracket-cta is-block max-w-[200px]">
+                  <span className="br-tr" /><span className="br-bl" />
+                  <m.a href="mailto:gerencia@inplux.co?subject=Sector%20p%C3%BAblico%20INPLUX" className="btn-dark w-full justify-center" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
+                    Conversemos
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
+                  </m.a>
+                </span>
+
+                {/* Stats inline */}
+                <div className="mt-10 pt-8 border-t border-border grid grid-cols-2 gap-5">
+                  {[
+                    { n: "+50", l: "municipios atendidos" },
+                    { n: "44", l: "estatutos coordinados" },
+                    { n: "25", l: "años en campo" },
+                    { n: "5", l: "provincias — Min. Interior" },
+                  ].map((s) => (
+                    <div key={s.l}>
+                      <div className="font-serif text-[1.6rem] text-ink leading-none mb-0.5">{s.n}</div>
+                      <div className="text-gray-400 text-[0.7rem] leading-snug">{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Columna derecha — Gemelo digital interactivo */}
+            <GobiaTwin />
+
           </div>
+        </div>
+      </section>
+
+      {/* ──── FRENTE PRIVADO — Kelsen sombrilla + Fábrica ──── */}
+      <section id="privado" className="py-24 md:py-32 bg-warm">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="mb-14">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-12">
+            {/* Columna izquierda — narrativa privado */}
+            <div>
+              <Reveal>
+                <SectionKicker n="03">Frente Privado · Empresas y firmas</SectionKicker>
+                <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
+                  Kelsen es la sombrilla.<br /><em className="italic">Cada vertical, un módulo.</em>
+                </h2>
+                <p className="text-gray-500 text-base md:text-[1.05rem] leading-[1.65] mb-8 max-w-md">
+                  Para empresas, firmas legales y startups. Un cerebro legal con memoria persistente que cita su fuente — verificable ante la DIAN o un juez.
+                </p>
+              </Reveal>
+
+              <Stagger className="space-y-4 mb-8">
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Kelsen · Cerebro legal</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Memoria persistente de tus asuntos, clientes y estilo. Razona sobre normativa colombiana real.</p>
+                    <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">kelsen.io →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Tribai · Tributario privado</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Declaración de renta, exógena y estatuto tributario con RAG. Citación verificable ante la DIAN.</p>
+                    <a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">tribai.co →</a>
+                  </div>
+                </StaggerItem>
+                <StaggerItem className="flex items-start gap-3">
+                  <span className="w-7 h-7 rounded-full bg-teal-soft flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-teal" />
+                  </span>
+                  <div>
+                    <p className="text-[0.875rem] font-semibold text-ink mb-0.5">Laudos · Arbitraje</p>
+                    <p className="text-gray-500 text-[0.82rem] leading-relaxed">Laudos arbitrales y jurisprudencia indexada. El primer módulo de derecho comercial.</p>
+                    <a href="https://laudos.co" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-teal text-[0.78rem] font-semibold mt-1 hover:opacity-75 transition-opacity">laudos.co →</a>
+                  </div>
+                </StaggerItem>
+              </Stagger>
+
+              <Reveal>
+                <span className="bracket-cta is-block max-w-[220px]">
+                  <span className="br-tr" /><span className="br-bl" />
+                  <m.a href="mailto:gerencia@inplux.co?subject=Demo%20de%20Kelsen" className="btn-dark w-full justify-center" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
+                    Pide demo de Kelsen
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
+                  </m.a>
+                </span>
+              </Reveal>
+            </div>{/* fin col izq */}
+            <div />{/* espacio derecho — visible solo en lg */}
+          </div>{/* fin inner grid */}
+
+            {/* SVG Kelsen — full width */}
+            <div className="svg-scroll-hint">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+              Desliza para ver completo
+            </div>
+            <Reveal className="w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Ecosistema legal de INPLUX con Kelsen como sombrilla y Tribai, Laudos y módulos en desarrollo">
+              {/* Background dots */}
+              {Array.from({ length: 18 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`lg-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#ebe8e4" />
+                ))
+              )}
+
+              {/* Orbit guía única */}
+              <circle cx="500" cy="330" r="280" stroke="#e2dfdb" strokeWidth="1" strokeDasharray="8 6" fill="none" className="eco-orbit" style={{ animationDuration: "50s" }} />
+
+              {/* Connection lines center → modules */}
+              <line x1="430" y1="285" x2="300" y2="178" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <line x1="570" y1="285" x2="700" y2="178" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <line x1="445" y1="380" x2="270" y2="470" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+              <line x1="500" y1="400" x2="500" y2="500" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+              <line x1="555" y1="380" x2="730" y2="470" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
+
+              {/* ═══ KELSEN — center (sombrilla) ═══ */}
+              <ellipse cx="500" cy="330" rx="155" ry="132" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              <a href="https://kelsen.io" target="_blank" rel="noopener noreferrer">
+                <g className="eco-glow svg-card" style={{ cursor: "pointer" }}>
+                  <circle cx="500" cy="330" r="72" fill="url(#inkGrad)" />
+                  <circle cx="500" cy="330" r="72" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 250" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                  <text x="500" y="320" textAnchor="middle" fill="white" fontSize="18" fontWeight="800" letterSpacing="1.5">Kelsen</text>
+                  <text x="500" y="338" textAnchor="middle" fill="#5fe3d6" fontSize="9" fontWeight="500" textDecoration="underline">kelsen.io</text>
+                  <text x="500" y="355" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="8.5" fontWeight="600" letterSpacing="1">CEREBRO LEGAL</text>
+                </g>
+              </a>
+
+              {/* ═══ TRIBAI — módulo activo (arriba-izq) ═══ */}
+              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="120" y="74" width="230" height="104" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1" />
+                  <rect x="121" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
+                  <text x="144" y="91" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.2">MÓDULO · TRIBUTARIO</text>
+                  <circle cx="326" cy="86" r="6.5" fill="#0d7d74" />
+                  <text x="326" y="89" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="235" y="126" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Tribai</text>
+                  <text x="235" y="144" textAnchor="middle" fill="#0d7d74" fontSize="10" fontWeight="500" textDecoration="underline">tribai.co</text>
+                  <text x="235" y="163" textAnchor="middle" fill="#76716a" fontSize="9">Inteligencia tributaria y financiera</text>
+                </g>
+              </a>
+
+              {/* ═══ LAUDOS — módulo activo (arriba-der) ═══ */}
+              <a href="https://laudos.co" target="_blank" rel="noopener noreferrer">
+                <g className="eco-float-delay svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="650" y="74" width="230" height="104" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1" />
+                  <rect x="651" y="74" width="228" height="24" rx="12" fill="#e8f5f3" />
+                  <text x="674" y="91" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="1.2">MÓDULO · ARBITRAJE</text>
+                  <circle cx="856" cy="86" r="6.5" fill="#0d7d74" />
+                  <text x="856" y="89" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+                  <text x="765" y="126" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Laudos</text>
+                  <text x="765" y="144" textAnchor="middle" fill="#0d7d74" fontSize="10" fontWeight="500" textDecoration="underline">laudos.co</text>
+                  <text x="765" y="163" textAnchor="middle" fill="#76716a" fontSize="9">Laudos arbitrales y jurisprudencia</text>
+                </g>
+              </a>
+
+              {/* ═══ EN DESARROLLO ×3 (abajo) ═══ */}
+              <g className="eco-float">
+                <rect x="90" y="470" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="256" cy="486" r="6" fill="#d1cfcc" />
+                <text x="185" y="514" textAnchor="middle" fill="#76716a" fontSize="13" fontWeight="700">Litigio</text>
+                <text x="185" y="534" textAnchor="middle" fill="#9a958e" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              <g className="eco-float-delay">
+                <rect x="405" y="500" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="571" cy="516" r="6" fill="#d1cfcc" />
+                <text x="500" y="544" textAnchor="middle" fill="#76716a" fontSize="13" fontWeight="700">Contratos</text>
+                <text x="500" y="564" textAnchor="middle" fill="#9a958e" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              <g className="eco-float">
+                <rect x="720" y="470" width="190" height="92" rx="12" fill="white" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="6 5" />
+                <circle cx="886" cy="486" r="6" fill="#d1cfcc" />
+                <text x="815" y="508" textAnchor="middle" fill="#76716a" fontSize="12" fontWeight="700">Penal · Constitucional</text>
+                <text x="815" y="528" textAnchor="middle" fill="#9a958e" fontSize="8.5" fontWeight="600" letterSpacing="0.5">EN DESARROLLO</text>
+              </g>
+
+              {/* Legend */}
+              <circle cx="372" cy="630" r="5.5" fill="#0d7d74" />
+              <text x="372" y="633.5" textAnchor="middle" fill="white" fontSize="8" fontWeight="700">&#10003;</text>
+              <text x="387" y="634" fill="#6e6b68" fontSize="9" fontWeight="500">En producción</text>
+              <circle cx="510" cy="630" r="5" fill="#d1cfcc" />
+              <text x="525" y="634" fill="#6e6b68" fontSize="9" fontWeight="500">En desarrollo</text>
+
+              {/* Bottom branding */}
+              <rect x="380" y="652" width="240" height="22" rx="11" fill="url(#inkGrad)" />
+              <text x="500" y="667" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1.2">ECOSISTEMA LEGAL KELSEN</text>
+            </svg>
+            </Reveal>
+          </div>{/* fin mb-14 */}
+
+          {/* Separador sub-bloque Fábrica */}
+          <div className="fine-rule mt-20 mb-16" />
+
+          {/* Sub-bloque B — Fábrica de software (capacidad del mismo motor) */}
+          <div id="fabrica">
+          <Reveal className="mb-14">
+            <SectionKicker n="03b">Fábrica de software</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-2xl">
+              El mismo motor <em className="italic">construye software.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Nuestros agentes no solo razonan: construyen. De la especificación al deploy, el motor convierte una idea en producto para empresas y startups. Porkia y MiMotoYa ya salieron del mismo núcleo.
+            </p>
+          </Reveal>
+
+          <div className="svg-scroll-hint">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+            Desliza para ver completo
+          </div>
+          <Reveal className="w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[540px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Fábrica de software de INPLUX: el mismo motor agéntico alimenta un pipeline de especificación, agentes, build y deploy que produce muchas aplicaciones, y cada release entrena de vuelta al motor">
+              {/* Background dots */}
+              {Array.from({ length: 14 }).map((_, row) =>
+                Array.from({ length: 28 }).map((_, col) => (
+                  <circle key={`fb-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 12} r="0.35" fill="#ebe8e4" />
+                ))
+              )}
+
+              {/* ═══ MOTOR (núcleo, izquierda) ═══ */}
+              <ellipse cx="124" cy="280" rx="132" ry="106" fill="url(#tealHalo)" className="svg-halo-pulse" />
+              <a href="#motor">
+                <g className="eco-glow svg-card" style={{ cursor: "pointer" }}>
+                  <rect x="38" y="224" width="172" height="112" rx="16" fill="url(#inkGrad)" />
+                  <rect x="38" y="224" width="172" height="112" rx="16" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="10 280" className="eco-orbit" style={{ animationDuration: "8s" }} />
+                  <text x="124" y="274" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">Motor agéntico</text>
+                  <text x="124" y="294" textAnchor="middle" fill="#5fe3d6" fontSize="8" fontWeight="600" letterSpacing="1.5">SELF-IMPROVING</text>
+                  <text x="124" y="314" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="8.5">memoria · aprendizaje</text>
+                </g>
+              </a>
+
+              {/* Motor → pipeline */}
+              <line x1="210" y1="280" x2="248" y2="280" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <polygon points="248,275 258,280 248,285" fill="#0d7d74" />
+
+              {/* ═══ PIPELINE (fábrica, centro) ═══ */}
+              <rect x="262" y="150" width="300" height="262" rx="16" fill="white" stroke="#d1cfcc" strokeWidth="1" />
+              <rect x="263" y="150" width="298" height="30" rx="16" fill="#f3f1ee" />
+              <text x="412" y="170" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="700" letterSpacing="2">FÁBRICA DE SOFTWARE</text>
+              {[
+                { n: "01", t: "Especificación", s: "spec-kit · requisitos vivos" },
+                { n: "02", t: "Agentes construyen", s: "código, datos y modelos" },
+                { n: "03", t: "Build & pruebas", s: "CI/CD · tests automáticos" },
+                { n: "04", t: "Deploy continuo", s: "a producción en días" },
+              ].map((st, i) => {
+                const y = 196 + i * 52;
+                return (
+                  <g key={st.n}>
+                    <rect x="280" y={y} width="264" height="42" rx="10" fill="#f6f4f1" />
+                    <circle cx="302" cy={y + 21} r="11" fill="#0d7d74" />
+                    <text x="302" y={y + 24} textAnchor="middle" fill="white" fontSize="8" fontWeight="700">{st.n}</text>
+                    <text x="324" y={y + 18} fill="#1a1918" fontSize="11" fontWeight="700">{st.t}</text>
+                    <text x="324" y={y + 33} fill="#76716a" fontSize="9">{st.s}</text>
+                    {i < 3 && <line x1="412" y1={y + 42} x2="412" y2={y + 52} stroke="#d1cfcc" strokeWidth="1.2" strokeDasharray="3 3" />}
+                  </g>
+                );
+              })}
+
+              {/* Salida del pipeline → origen del abanico */}
+              <line x1="562" y1="280" x2="592" y2="280" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" />
+              <circle cx="600" cy="280" r="4.5" fill="#0d7d74" />
+              <circle cx="600" cy="280" r="9" fill="none" stroke="#0d7d74" strokeWidth="1" opacity="0.35" />
+
+              {/* ═══ ABANICO DE PRODUCTOS (un núcleo → muchas .apps) ═══ */}
+              <text x="828" y="132" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="700" letterSpacing="2">PRODUCTOS · .APPS</text>
+              {[
+                { name: "Tribai", prod: true, status: "En producción" },
+                { name: "Gobia", prod: true, status: "En producción" },
+                { name: "Kelsen", prod: true, status: "En producción" },
+                { name: "Laudos", prod: true, status: "En producción" },
+                { name: "Porkia", prod: true, status: "En producción" },
+                { name: "MiMotoYa", prod: false, status: "En desarrollo" },
+                { name: "+ nuevas .apps", prod: false, status: "el mismo núcleo, más productos" },
+              ].map((a, i) => {
+                const cy = 168 + i * 46;
+                return (
+                  <g key={a.name}>
+                    <path d={`M600,280 C 658,280 662,${cy} 716,${cy}`} fill="none" stroke={a.prod ? "#a9d6d0" : "#e2dfdb"} strokeWidth={a.prod ? 1.4 : 1} strokeDasharray={a.prod ? "0" : "4 4"} />
+                    <rect x="720" y={cy - 19} width="216" height="38" rx="10" fill="white" stroke={a.prod ? "#e2dfdb" : "#d1cfcc"} strokeWidth="1" strokeDasharray={a.prod ? "0" : "5 4"} />
+                    {a.prod && <rect x="729" y={cy - 12} width="3.5" height="24" rx="1.75" fill="#0d7d74" />}
+                    <text x={a.prod ? 744 : 736} y={cy - 1} fill={a.prod ? "#1a1918" : "#76716a"} fontSize="12" fontWeight="700">{a.name}</text>
+                    <text x={a.prod ? 744 : 736} y={cy + 12} fill={a.prod ? "#0d7d74" : "#9a958e"} fontSize="8" fontWeight="600">{a.status}</text>
+                  </g>
+                );
+              })}
+              <text x="828" y="500" textAnchor="middle" fill="#9a958e" fontSize="8.5" fontWeight="600" letterSpacing="1.5">UN NÚCLEO · MUCHAS .APPS</text>
+
+              {/* ═══ BUCLE DE AUTO-MEJORA: cada release entrena al motor ═══ */}
+              <path d="M412,412 C 412,486 124,486 124,340" fill="none" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow" opacity="0.65" />
+              <polygon points="119,350 124,338 129,350" fill="#0d7d74" opacity="0.8" />
+              <text x="268" y="472" textAnchor="middle" fill="#0d7d74" fontSize="9" fontWeight="600" letterSpacing="0.4">Cada release entrena al motor</text>
+            </svg>
+          </Reveal>
+
+          {/* Para quién · qué te llevas · CTA */}
+          <Reveal className="grid md:grid-cols-3 gap-6 md:gap-8 mt-14 items-start">
+            <div>
+              <p className="text-teal text-[0.65rem] font-bold tracking-[0.12em] uppercase mb-2">Para quién</p>
+              <p className="text-gray-600 text-[0.9rem] leading-relaxed">Empresas y startups que necesitan software de verdad — no presentaciones — a velocidad de frontera. El mismo motor agéntico, tu producto.</p>
+            </div>
+            <div>
+              <p className="text-teal text-[0.65rem] font-bold tracking-[0.12em] uppercase mb-2">Qué te llevas</p>
+              <ul className="space-y-2 text-gray-600 text-[0.9rem] leading-snug">
+                <li className="flex gap-2"><span className="text-teal">→</span>Del spec al deploy en semanas, no meses.</li>
+                <li className="flex gap-2"><span className="text-teal">→</span>Agentes que construyen, prueban y despliegan con tu conocimiento dentro.</li>
+                <li className="flex gap-2"><span className="text-teal">→</span>Portafolio probado: Porkia (ganadería) · MiMotoYa (movilidad) · más.</li>
+              </ul>
+            </div>
+            <div className="md:pt-5">
+              <span className="bracket-cta is-block">
+                <span className="br-tr" />
+                <span className="br-bl" />
+                <m.a href="mailto:contacto@inplux.co?subject=Nueva%20.app%20con%20INPLUX" className="btn-dark w-full justify-center" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
+                  Conversemos tu .app
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
+                </m.a>
+              </span>
+              <a href="#empresas" className="inline-flex items-center gap-1.5 text-gray-500 hover:text-ink text-sm font-semibold mt-3 ml-1.5 transition-colors">
+                Ver el portafolio
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+              </a>
+            </div>
+          </Reveal>
+          </div>{/* end #fabrica */}
+        </div>
+      </section>
+
+      {/* ──── MOTOR — Self-improving agent (ancla narrativa) ──── */}
+      <section id="motor" className="py-24 md:py-32 bg-warm">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <Reveal className="mb-14">
+            <SectionKicker n="04">El motor</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-2xl">
+Un agente <em className="italic">que se mejora solo.</em>
+            </h2>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              No es IA del montón. Un agente que recuerda cada caso, consolida lo aprendido mientras nadie lo mira y queda mejor en cada vuelta. El conocimiento no se recalcula: se compone.
+            </p>
+          </Reveal>
+
+          <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-14 items-center">
+            {/* Narrativa (HTML, responsive) */}
+            <Reveal className="max-w-[420px]">
+              <h3 className="font-serif text-[1.6rem] md:text-[1.9rem] italic text-ink leading-tight mb-2">Segundo cerebro</h3>
+              <p className="text-gray-500 text-[0.9rem] leading-relaxed mb-6">Memoria persistente que se compone, no se recalcula. El agente recupera de ella antes de actuar.</p>
+              <ul className="space-y-3.5 mb-6">
+                {[
+                  { t: "Episódica", s: "Eventos con fecha y contexto" },
+                  { t: "Semántica", s: "Hechos, doctrina y reglas" },
+                  { t: "Procedural", s: "Cómo se hace · playbooks" },
+                  { t: "Grafo + LLM-wiki", s: "Conocimiento conectado" },
+                ].map((m) => (
+                  <li key={m.t} className="flex items-start gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0 mt-2" aria-hidden="true" />
+                    <span>
+                      <span className="block font-serif italic text-ink text-[1.05rem] leading-tight">{m.t}</span>
+                      <span className="block text-gray-500 text-[0.8rem]">{m.s}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t border-border pt-4">
+                <p className="font-serif italic text-ink text-[1.05rem] leading-snug">
+                  Más casos<span className="text-teal"> → </span>mejor cerebro<span className="text-teal"> → </span>mejor agente
+                </p>
+                <p className="text-gray-400 text-[0.75rem] mt-1.5">Gobernado · citación verificable · trazabilidad</p>
+              </div>
+            </Reveal>
+
+            {/* Grafo cerebro (puro visual) */}
+            <div className="relative">
+              <BrainGraph data={MOTOR_GRAPH} highlights={MOTOR_HILITE} reticleId={54} uid="motor" w={520} h={460} />
+            </div>
+          </div>
+
+          {/* Dual-frente quick links — más aire tras el diagrama */}
+          <Reveal className="grid sm:grid-cols-2 gap-4 mt-16 max-w-[760px] mx-auto">
+            <a href="#publico" className="card group flex items-start gap-3 hover:border-teal transition-colors">
+              <span className="text-teal text-[0.7rem] font-bold tracking-[0.12em] uppercase mt-0.5">Frente Público</span>
+              <span>
+                <span className="block font-serif text-[1.15rem] text-ink mb-0.5">Gobierno y municipios</span>
+                <span className="block text-gray-500 text-[0.85rem] leading-relaxed">Gobia, Tribai tributario — hacienda pública modernizada con IA.</span>
+              </span>
+            </a>
+            <a href="#privado" className="card group flex items-start gap-3 hover:border-teal transition-colors">
+              <span className="text-teal text-[0.7rem] font-bold tracking-[0.12em] uppercase mt-0.5">Frente Privado</span>
+              <span>
+                <span className="block font-serif text-[1.15rem] text-ink mb-0.5">Empresas y startups</span>
+                <span className="block text-gray-500 text-[0.85rem] leading-relaxed">Kelsen, Laudos, Porkia, MiMotoYa — cerebro legal y fábrica de software.</span>
+              </span>
+            </a>
+          </Reveal>
         </div>
       </section>
 
       {/* ──── MANIFIESTO (moved up) ──── */}
       <section id="nosotros" className="py-20 md:py-28 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-12">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Manifiesto</p>
-            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[700px]">
-              Tributaristas y financieros que <em className="italic">escriben código</em>
+          <Reveal className="mb-12">
+            <SectionKicker n="05">El conocimiento</SectionKicker>
+            <h2 className="font-serif text-[2.25rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-[-0.02em] text-ink mb-6 max-w-[760px]">
+              25 años de experiencia real <em className="italic">entrenan a nuestros agentes</em>
             </h2>
             <div className="max-w-[680px]">
               <p className="text-gray-600 text-base md:text-lg leading-[1.65] mb-4">
@@ -300,517 +1697,177 @@ export default function Home() {
                 De esa experiencia nació INPLUX: un Hub donde el conocimiento tributario, financiero y contable se traduce en tecnología. Desde sus inicios, fundó empresas de asesoría tributaria y financiera, formó alianzas con Sistemas Aries — proveedores de la plataforma ERP financiera modular con más de 31 años en el departamento —, Think IT, BBD Soluciones, Alianza IT y el Observatorio de Datos y Análisis, y hoy lidera el ecosistema que construye Tribai.co y la plataforma de sector público.
               </p>
               <p className="text-gray-500 text-[0.9375rem] leading-[1.65]">
-                No contratamos IA como servicio externo. La construimos internamente, la entrenamos con normativa colombiana real, y la desplegamos como producto. Esa es la diferencia entre una consultora que usa herramientas y un Hub que las crea.
+                Ese es nuestro moat. No usamos IA genérica: entrenamos a nuestros agentes con normativa colombiana real, casos reales y 25 años de criterio experto. Por eso saben de qué hablan — y por eso cada vuelta del motor los hace mejores.
               </p>
+            </div>
+          </Reveal>
+
+          {/* El conocimiento — flujo experiencia → producto (grafo) */}
+          <div className="mb-14 max-w-[900px] mx-auto">
+            <div className="flex items-center justify-between text-[0.68rem] font-semibold tracking-[0.14em] uppercase text-gray-400 mb-1 px-1">
+              <span>Experiencia · 25 años</span>
+              <span>Producto</span>
+            </div>
+            <BrainGraph data={CONOC_GRAPH} highlights={CONOC_PRODUCTS} uid="conoc" w={520} h={380} />
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 mt-4 text-[0.82rem]">
+              <span className="text-gray-500">Cristaliza en producto:</span>
+              {["Tribai", "Kelsen", "Laudos", "Gobia"].map((p) => (
+                <span key={p} className="inline-flex items-center gap-1.5 font-serif italic text-ink">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal" aria-hidden="true" />{p}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Manifesto SVG — bridge between expertise and technology */}
-          <div className="reveal mb-14 w-full overflow-x-auto">
-            <svg viewBox="0 0 900 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[900px] mx-auto min-w-[600px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Puente entre experiencia tributaria-financiera y tecnología">
-              {/* Subtle dot grid */}
-              {Array.from({ length: 8 }).map((_, row) =>
-                Array.from({ length: 26 }).map((_, col) => (
-                  <circle key={`mg-${row}-${col}`} cx={35 * col + 12} cy={36 * row + 10} r="0.35" fill="#d8d5d1" />
-                ))
-              )}
-
-              {/* ═══ LEFT: EXPERTISE ═══ */}
-              <g className="eco-float">
-                <rect x="20" y="40" width="260" height="200" rx="16" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <rect x="21" y="40" width="258" height="28" rx="16" fill="#f3f1ee" />
-                <text x="40" y="59" fill="#6e6b68" fontSize="8" fontWeight="700" letterSpacing="1.5">EXPERIENCIA · 25 AÑOS</text>
-
-                <text x="150" y="92" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Conocimiento de campo</text>
-
-                {/* Expertise pills */}
-                <rect x="36" y="108" width="100" height="22" rx="11" fill="#f3f1ee" />
-                <text x="86" y="123" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">Tributaria</text>
-                <rect x="144" y="108" width="80" height="22" rx="11" fill="#f3f1ee" />
-                <text x="184" y="123" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">Financiera</text>
-
-                <rect x="36" y="136" width="80" height="22" rx="11" fill="#f3f1ee" />
-                <text x="76" y="151" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">Contable</text>
-                <rect x="124" y="136" width="100" height="22" rx="11" fill="#f3f1ee" />
-                <text x="174" y="151" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">NIC/NIIF</text>
-
-                <rect x="36" y="164" width="110" height="22" rx="11" fill="#f3f1ee" />
-                <text x="91" y="179" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">Hacienda pública</text>
-                <rect x="154" y="164" width="100" height="22" rx="11" fill="#f3f1ee" />
-                <text x="204" y="179" textAnchor="middle" fill="#6e6b68" fontSize="7.5" fontWeight="600">44 estatutos</text>
-
-                <text x="150" y="216" textAnchor="middle" fill="#a8a5a0" fontSize="8">+50 municipios · +100 proyectos</text>
-              </g>
-
-              {/* ═══ CENTER: INPLUX HUB ═══ */}
-              <g className="eco-glow">
-                <circle cx="450" cy="140" r="52" fill="#1a1918" />
-                <circle cx="450" cy="140" r="52" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="6 200" className="eco-orbit" style={{ animationDuration: "8s" }} />
-                <text x="450" y="133" textAnchor="middle" fill="white" fontSize="14" fontWeight="700" letterSpacing="2.5">INPLUX</text>
-                <text x="450" y="152" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="7.5" fontWeight="600" letterSpacing="1.5">HUB</text>
-              </g>
-
-              {/* Connecting arrows: LEFT → CENTER */}
-              <line x1="288" y1="140" x2="392" y2="140" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
-              <polygon points="392,136 400,140 392,144" fill="#0d7d74" opacity="0.5" />
-
-              {/* Connecting arrows: CENTER → RIGHT */}
-              <line x1="508" y1="140" x2="612" y2="140" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
-              <polygon points="612,136 620,140 612,144" fill="#0d7d74" opacity="0.5" />
-
-              {/* ═══ RIGHT: TECHNOLOGY ═══ */}
-              <g className="eco-float-delay">
-                <rect x="620" y="40" width="260" height="200" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="621" y="40" width="258" height="28" rx="16" fill="#e8f5f3" />
-                <text x="640" y="59" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">TECNOLOGÍA · PRODUCTOS</text>
-
-                <text x="750" y="92" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Soluciones digitales</text>
-
-                {/* Tech pills */}
-                <rect x="636" y="108" width="90" height="22" rx="11" fill="#e8f5f3" />
-                <text x="681" y="123" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">Tribai.co</text>
-                <rect x="734" y="108" width="130" height="22" rx="11" fill="#e8f5f3" />
-                <text x="799" y="123" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">IA Tributaria</text>
-
-                <rect x="636" y="136" width="120" height="22" rx="11" fill="#e8f5f3" />
-                <text x="696" y="151" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">Gemelo Municipal</text>
-                <rect x="764" y="136" width="100" height="22" rx="11" fill="#e8f5f3" />
-                <text x="814" y="151" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">Calculadoras</text>
-
-                <rect x="636" y="164" width="110" height="22" rx="11" fill="#e8f5f3" />
-                <text x="691" y="179" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">RAG Normativo</text>
-                <rect x="754" y="164" width="110" height="22" rx="11" fill="#e8f5f3" />
-                <text x="809" y="179" textAnchor="middle" fill="#0d7d74" fontSize="7.5" fontWeight="600">Declaración de Renta</text>
-
-                <text x="750" y="216" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Productos en producción y desarrollo</text>
-              </g>
-
-              {/* Aliados label below */}
-              <text x="450" y="220" textAnchor="middle" fill="#a8a5a0" fontSize="7" fontWeight="600" letterSpacing="0.8">SISTEMAS ARIES · THINK IT · BBD SOLUCIONES · ALIANZA IT · OBSERVATORIO DE DATOS</text>
-
-              {/* Decorative pulses */}
-              <circle cx="305" cy="100" r="2.5" fill="#0d7d74" opacity="0.3" className="eco-node-pulse" />
-              <circle cx="600" cy="180" r="2.5" fill="#0d7d74" opacity="0.3" className="eco-node-pulse-delay1" />
-              <circle cx="450" cy="260" r="2" fill="#d1cfcc" className="eco-node-pulse-delay2" />
-
-              {/* Bottom label */}
-              <rect x="330" y="240" width="240" height="24" rx="12" fill="#1a1918" />
-              <text x="450" y="256" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700" letterSpacing="1.5">EXPERIENCIA → HUB → PRODUCTO</text>
-            </svg>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12 stagger">
-            <div className="reveal text-center md:text-left">
+          <Stagger className="grid md:grid-cols-3 gap-8 md:gap-12">
+            <StaggerItem className="text-center md:text-left">
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-ink text-white text-[0.75rem] font-bold mb-4">1</div>
               <h3 className="font-serif text-[1.15rem] text-ink mb-2 leading-snug">Primero la norma,<br /><em className="italic">después el código</em></h3>
               <p className="text-gray-500 text-[0.85rem] leading-relaxed">Nuestros modelos de IA se entrenan con 25 años de experiencia tributaria y financiera real. No con tutoriales de internet.</p>
-            </div>
-            <div className="reveal text-center md:text-left">
+            </StaggerItem>
+            <StaggerItem className="text-center md:text-left">
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-ink text-white text-[0.75rem] font-bold mb-4">2</div>
               <h3 className="font-serif text-[1.15rem] text-ink mb-2 leading-snug">Entregamos productos,<br /><em className="italic">no horas de consultoría</em></h3>
               <p className="text-gray-500 text-[0.85rem] leading-relaxed">Tribai.co ya está en producción. El gemelo digital municipal viene en camino. Esto no es un PowerPoint.</p>
-            </div>
-            <div className="reveal text-center md:text-left">
+            </StaggerItem>
+            <StaggerItem className="text-center md:text-left">
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-teal text-white text-[0.75rem] font-bold mb-4">3</div>
               <h3 className="font-serif text-[1.15rem] text-ink mb-2 leading-snug">Medimos impacto,<br /><em className="italic">no cobramos por estar</em></h3>
               <p className="text-gray-500 text-[0.85rem] leading-relaxed">+100 proyectos. +50 municipios. Un equipo que llega, ejecuta y deja las cosas funcionando.</p>
-            </div>
-          </div>
+            </StaggerItem>
+          </Stagger>
         </div>
       </section>
 
       {/* ──── CAPACIDADES — SVG Interconnected ──── */}
       <section id="servicios" className="py-20 md:py-28">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-14 text-center">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Capacidades</p>
-            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
-              Conocimiento tributario de fondo.<br /><em className="italic">Tecnología de frontera.</em>
+          <Reveal className="mb-14">
+            <SectionKicker n="06">Lo que dominan nuestros agentes</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
+              Conocimiento de fondo.<br /><em className="italic">Agentes de frontera.</em>
             </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-              Cuatro pilares que se retroalimentan. La inteligencia tributaria nutre la IA, la IA genera herramientas, las herramientas automatizan la gestión.
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Cuatro dominios que alimentan al motor. El conocimiento nutre a los agentes, los agentes generan herramientas, las herramientas automatizan la gestión — y todo retroalimenta al motor.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="svg-scroll-hint">
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-            Desliza para ver completo
-          </div>
-          <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 700" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[700px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Cuatro capacidades de INPLUX interconectadas">
-              {/* Subtle grid */}
-              {Array.from({ length: 19 }).map((_, row) =>
-                Array.from({ length: 28 }).map((_, col) => (
-                  <circle key={`cg-${row}-${col}`} cx={36 * col + 14} cy={37 * row + 10} r="0.4" fill="#e8e6e3" />
-                ))
-              )}
+          <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-center">
+            {/* Narrativa (HTML responsive) */}
+            <Reveal className="max-w-[440px]">
+              <ul className="space-y-4">
+                {[
+                  { n: "01", t: "Inteligencia tributaria", s: "+50 municipios · 44 estatutos coordinados" },
+                  { n: "02", t: "IA neuro-simbólica & RAG", s: "normativa colombiana indexada y razonada" },
+                  { n: "03", t: "Gemelos & gobernanza", s: "Contraloría · DNP · IAS en un solo tablero" },
+                  { n: "04", t: "Hiperautomatización", s: "+35 calculadoras · ×100 más rápido" },
+                ].map((d) => (
+                  <li key={d.n} className="flex items-start gap-3">
+                    <span className="font-serif italic text-teal text-[0.95rem] tabular-nums mt-0.5">{d.n}</span>
+                    <span>
+                      <span className="block font-serif italic text-ink text-[1.1rem] leading-tight">{d.t}</span>
+                      <span className="block text-gray-500 text-[0.82rem]">{d.s}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-gray-400 text-[0.78rem] mt-6 flex flex-wrap items-center gap-x-2">
+                <span>nutre</span><span className="text-teal">→</span><span>genera</span><span className="text-teal">→</span><span>automatiza</span><span className="text-teal">→</span><span>retroalimenta</span>
+              </p>
+            </Reveal>
 
-              {/* Connecting lines from center to each pillar */}
-              <line x1="500" y1="350" x2="500" y2="115" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="500" y1="350" x2="500" y2="585" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="500" y1="350" x2="165" y2="350" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-              <line x1="500" y1="350" x2="835" y2="350" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-
-              {/* Diagonal connection lines */}
-              <path d="M 280 185 Q 400 260, 500 280" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 4" fill="none" />
-              <path d="M 720 185 Q 600 260, 500 280" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 4" fill="none" />
-              <path d="M 280 515 Q 400 440, 500 420" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 4" fill="none" />
-              <path d="M 720 515 Q 600 440, 500 420" stroke="#e5e3e0" strokeWidth="0.8" strokeDasharray="3 4" fill="none" />
-
-              {/* ═══ CENTER: INPLUX ═══ */}
-              <g className="eco-glow">
-                <circle cx="500" cy="350" r="60" fill="#1a1918" />
-                <circle cx="500" cy="350" r="60" fill="none" stroke="#0d7d74" strokeWidth="2" strokeDasharray="8 200" className="eco-orbit" style={{ animationDuration: "8s" }} />
-                <text x="500" y="343" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
-                <text x="500" y="364" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="8" fontWeight="600" letterSpacing="1.5">HUB CENTRAL</text>
-              </g>
-
-              {/* ═══ TOP: INTELIGENCIA TRIBUTARIA ═══ */}
-              <g className="eco-float">
-                <rect x="320" y="30" width="360" height="150" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="321" y="30" width="358" height="28" rx="16" fill="#e8f5f3" />
-                <text x="340" y="49" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">01 · INTELIGENCIA TRIBUTARIA</text>
-                <text x="500" y="82" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Inteligencia Tributaria</text>
-                <text x="500" y="104" textAnchor="middle" fill="#8a8784" fontSize="9.5">Estatuto tributario · NIC/NIIF · ICA · Renta</text>
-                <text x="500" y="122" textAnchor="middle" fill="#8a8784" fontSize="9.5">44 estatutos coordinados para Antioquia</text>
-                {/* Feature pills */}
-                <rect x="335" y="137" width="90" height="20" rx="10" fill="#f3f1ee" />
-                <text x="380" y="151" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Renta</text>
-                <rect x="433" y="137" width="60" height="20" rx="10" fill="#f3f1ee" />
-                <text x="463" y="151" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">NIIF</text>
-                <rect x="501" y="137" width="60" height="20" rx="10" fill="#f3f1ee" />
-                <text x="531" y="151" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">ICA</text>
-                <rect x="569" y="137" width="95" height="20" rx="10" fill="#e8f5f3" />
-                <text x="616" y="151" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="600">+50 municipios</text>
-              </g>
-              <circle cx="500" cy="188" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse" />
-
-              {/* ═══ BOTTOM: HIPERAUTOMATIZACIÓN ═══ */}
-              <g className="eco-float-delay">
-                <rect x="320" y="520" width="360" height="150" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="321" y="520" width="358" height="28" rx="16" fill="#e8f5f3" />
-                <text x="340" y="539" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">04 · HIPERAUTOMATIZACIÓN</text>
-                <text x="500" y="572" textAnchor="middle" fill="#1a1918" fontSize="16" fontWeight="700">Hiperautomatización</text>
-                <text x="500" y="594" textAnchor="middle" fill="#8a8784" fontSize="9.5">+35 calculadoras · Declaración de renta · Exógena · Agentes IA</text>
-                <text x="500" y="612" textAnchor="middle" fill="#8a8784" fontSize="9.5">APIs de integración · App móvil Tribai</text>
-                <rect x="345" y="627" width="80" height="20" rx="10" fill="#f3f1ee" />
-                <text x="385" y="641" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Calculadoras</text>
-                <rect x="433" y="627" width="60" height="20" rx="10" fill="#f3f1ee" />
-                <text x="463" y="641" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">APIs</text>
-                <rect x="501" y="627" width="80" height="20" rx="10" fill="#f3f1ee" />
-                <text x="541" y="641" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">App Móvil</text>
-                <rect x="589" y="627" width="75" height="20" rx="10" fill="#e8f5f3" />
-                <text x="626" y="641" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="600">×100 más rápido</text>
-              </g>
-              <circle cx="500" cy="512" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse-delay1" />
-
-              {/* ═══ LEFT: IA NEURO-SIMBÓLICA ═══ */}
-              <g className="eco-float">
-                <rect x="30" y="240" width="270" height="220" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="31" y="240" width="268" height="28" rx="16" fill="#e8f5f3" />
-                <text x="50" y="259" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">02 · IA NEURO-SIMBÓLICA & RAG</text>
-                <text x="165" y="294" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">IA Neuro-simbólica</text>
-                <text x="165" y="312" textAnchor="middle" fill="#0d7d74" fontSize="12" fontWeight="600">& RAG</text>
-
-                <text x="165" y="340" textAnchor="middle" fill="#8a8784" fontSize="9">Indexamos toda la normativa</text>
-                <text x="165" y="356" textAnchor="middle" fill="#8a8784" fontSize="9">colombiana y la procesamos</text>
-                <text x="165" y="372" textAnchor="middle" fill="#8a8784" fontSize="9">con modelos de lenguaje</text>
-
-                <rect x="50" y="390" width="100" height="20" rx="10" fill="#f3f1ee" />
-                <text x="100" y="404" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Tribai con IA</text>
-                <rect x="158" y="390" width="60" height="20" rx="10" fill="#f3f1ee" />
-                <text x="188" y="404" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">RAG</text>
-                <rect x="50" y="416" width="70" height="20" rx="10" fill="#f3f1ee" />
-                <text x="85" y="430" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Simbólico</text>
-                <rect x="128" y="416" width="90" height="20" rx="10" fill="#e8f5f3" />
-                <text x="173" y="430" textAnchor="middle" fill="#0d7d74" fontSize="7" fontWeight="600">Declaración de renta</text>
-              </g>
-              <circle cx="308" cy="350" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse-delay2" />
-
-              {/* ═══ RIGHT: GEMELOS DIGITALES ═══ */}
-              <g className="eco-float-delay">
-                <rect x="700" y="240" width="270" height="220" rx="16" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <rect x="701" y="240" width="268" height="28" rx="16" fill="#f3f1ee" />
-                <text x="720" y="259" fill="#6e6b68" fontSize="8" fontWeight="700" letterSpacing="1.5">03 · GEMELOS DIGITALES</text>
-                <text x="835" y="294" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Gemelos Digitales</text>
-                <text x="835" y="312" textAnchor="middle" fill="#6e6b68" fontSize="12" fontWeight="600">& Gobernanza</text>
-
-                <text x="835" y="340" textAnchor="middle" fill="#8a8784" fontSize="9">Réplica digital del municipio.</text>
-                <text x="835" y="356" textAnchor="middle" fill="#8a8784" fontSize="9">Datos de Contraloría, Contaduría,</text>
-                <text x="835" y="372" textAnchor="middle" fill="#8a8784" fontSize="9">DNP e IAS en un solo tablero.</text>
-
-                <rect x="720" y="390" width="70" height="20" rx="10" fill="#f3f1ee" />
-                <text x="755" y="404" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Gemelo</text>
-                <rect x="798" y="390" width="60" height="20" rx="10" fill="#f3f1ee" />
-                <text x="828" y="404" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">IAS</text>
-                <rect x="866" y="390" width="90" height="20" rx="10" fill="#f3f1ee" />
-                <text x="911" y="404" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Contraloría</text>
-                <rect x="720" y="416" width="100" height="20" rx="10" fill="#f3f1ee" />
-                <text x="770" y="430" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Plan desarrollo</text>
-                <rect x="828" y="416" width="128" height="20" rx="10" fill="#f3f1ee" />
-                <text x="892" y="430" textAnchor="middle" fill="#6e6b68" fontSize="7" fontWeight="600">Hacienda Dashboard</text>
-              </g>
-              <circle cx="692" cy="350" r="4" fill="#0d7d74" opacity="0.5" className="eco-node-pulse" />
-
-              {/* Outer orbit */}
-              <circle cx="500" cy="350" r="280" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 8" fill="none" className="eco-orbit" style={{ animationDuration: "40s" }} />
-
-              {/* Decorative pulsing */}
-              <circle cx="500" cy="12" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse" />
-              <circle cx="15" cy="350" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay1" />
-              <circle cx="985" cy="350" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay2" />
-              <circle cx="500" cy="688" r="2" fill="#0d7d74" opacity="0.2" className="eco-node-pulse" />
-            </svg>
+            {/* Constelación de dominios (4 lóbulos + hub) */}
+            <div className="relative">
+              <BrainGraph data={CAPAC_GRAPH} highlights={CAPAC_HILITE} reticleId={120} uid="capac" w={520} h={460} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ──── PRODUCTOS & APPS — SVG ──── */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-14 text-center">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema de Apps</p>
-            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
-              No vendemos horas.<br /><em className="italic">Construimos herramientas.</em>
+      {/* ──── SOLIDEZ TÉCNICA — Frontera del conocimiento ──── */}
+      <section id="tecnologia" className="relative overflow-hidden py-20 md:py-28 bg-warm">
+        <div className="absolute inset-0 z-0 tech-grid tech-grid-fade pointer-events-none" aria-hidden="true" />
+        <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8">
+          <Reveal className="mb-14">
+            <SectionKicker n="07">Solidez técnica · Frontera del conocimiento</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-2xl">
+              No inventamos la IA.<br /><em className="italic">Implementamos su frontera.</em>
             </h2>
-          </div>
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
+              Construimos sobre lo último en memoria, aprendizaje continuo y conocimiento persistente. Esto es lo que estudiamos y desplegamos — con 25 años de conocimiento real que lo aterriza.
+            </p>
+          </Reveal>
 
-          {/* Professional SVG: Sector Privado / Sector Público split */}
-          <div className="svg-scroll-hint">
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-            Desliza para ver completo
-          </div>
-          <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 960 560" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[960px] mx-auto min-w-[640px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Portafolio de aplicaciones INPLUX dividido por sector privado y público">
-              {/* Background dots */}
-              {Array.from({ length: 14 }).map((_, row) =>
-                Array.from({ length: 27 }).map((_, col) => (
-                  <circle key={`ad-${row}-${col}`} cx={36 * col + 12} cy={38 * row + 10} r="0.4" fill="#e8e6e3" />
-                ))
-              )}
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {[
+              { t: "Memory Blocks", d: "Memoria persistente y editable que el propio agente lee, escribe y versiona.", r: "MemGPT · Letta" },
+              { t: "Sleep-time Compute", d: "El agente consolida y reflexiona en reposo, sin costar latencia en vivo.", r: "Letta · arXiv 2504.13171" },
+              { t: "LLM-Wiki", d: "El conocimiento se compila en un wiki vivo e interconectado, no en chunks sueltos.", r: "Patrón A. Karpathy, 2026" },
+              { t: "GraphRAG", d: "Grafo de conocimiento para razonamiento multi-hop y menos alucinaciones.", r: "Microsoft Research" },
+              { t: "Continual Learning", d: "Mejora con cada caso, sin olvido catastrófico ni reentrenar de cero.", r: "Survey · arXiv 2404.16789" },
+              { t: "Memoria episódica", d: "Recuerda eventos con fecha y contexto — la pieza que faltaba para el largo plazo.", r: "arXiv 2502.06975" },
+            ].map((x) => (
+              <StaggerItem key={x.t} className="card">
+                <h3 className="font-serif text-[1.2rem] tracking-[-0.01em] text-ink mb-1.5">{x.t}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-3.5">{x.d}</p>
+                <span className="inline-block text-[0.62rem] font-semibold tracking-[0.06em] uppercase bg-gray-50 text-gray-400 border border-border px-2.5 py-1 rounded-md">{x.r}</span>
+              </StaggerItem>
+            ))}
+          </Stagger>
 
-              {/* Central divider */}
-              <line x1="480" y1="60" x2="480" y2="460" stroke="#e5e3e0" strokeWidth="1" strokeDasharray="4 4" />
-
-              {/* ═══ SECTOR PRIVADO (Left) ═══ */}
-              <rect x="30" y="20" width="420" height="44" rx="22" fill="#e8f5f3" />
-              <text x="240" y="48" textAnchor="middle" fill="#0d7d74" fontSize="11" fontWeight="700" letterSpacing="2">SECTOR PRIVADO</text>
-
-              {/* Tribai.co */}
-              <g className="eco-float">
-                <rect x="40" y="84" width="190" height="100" rx="10" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="220" cy="94" r="5" fill="#0d7d74" />
-                <text x="220" y="97" textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>
-                <text x="56" y="106" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">WEB APP</text>
-                <text x="135" y="132" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Tribai.co</text>
-                <text x="135" y="150" textAnchor="middle" fill="#8a8784" fontSize="8.5">Asistente tributario con IA</text>
-                <text x="135" y="166" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Citación de fuentes verificable</text>
-              </g>
-
-              {/* Tribai Móvil */}
-              <g className="eco-float-delay">
-                <rect x="250" y="84" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="430" cy="94" r="5" fill="#d1cfcc" />
-                <text x="266" y="106" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">iOS · ANDROID</text>
-                <text x="345" y="132" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Tribai Móvil</text>
-                <text x="345" y="150" textAnchor="middle" fill="#8a8784" fontSize="8.5">Consultas tributarias en campo</text>
-                <text x="345" y="166" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Próximamente en App Store</text>
-              </g>
-
-              {/* Declaración de Renta */}
-              <g className="eco-float">
-                <rect x="40" y="200" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="220" cy="210" r="5" fill="#d1cfcc" />
-                <text x="56" y="222" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">MOTOR IA</text>
-                <text x="135" y="248" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Declaración de Renta</text>
-                <text x="135" y="266" textAnchor="middle" fill="#8a8784" fontSize="8.5">Declaración automatizada DIAN</text>
-                <text x="135" y="282" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Declaración automatizada</text>
-              </g>
-
-              {/* Calculadoras */}
-              <g className="eco-float-delay">
-                <rect x="250" y="200" width="190" height="100" rx="10" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="430" cy="210" r="5" fill="#0d7d74" />
-                <text x="430" y="213" textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>
-                <text x="266" y="222" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">WEB APP</text>
-                <text x="345" y="248" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Calculadoras</text>
-                <text x="345" y="266" textAnchor="middle" fill="#8a8784" fontSize="8.5">+35 calculadoras de precisión</text>
-                <text x="345" y="282" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Tributaria colombiana</text>
-              </g>
-
-              {/* Estatuto RAG */}
-              <g className="eco-float">
-                <rect x="40" y="316" width="190" height="100" rx="10" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <circle cx="220" cy="326" r="5" fill="#0d7d74" />
-                <text x="220" y="329" textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>
-                <text x="56" y="338" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">BASE VECTORIAL</text>
-                <text x="135" y="364" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Estatuto RAG</text>
-                <text x="135" y="382" textAnchor="middle" fill="#8a8784" fontSize="8.5">+1.294 artículos vectorizados</text>
-                <text x="135" y="398" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Búsqueda semántica</text>
-              </g>
-
-              {/* API Tributaria */}
-              <g className="eco-float-delay">
-                <rect x="250" y="316" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="430" cy="326" r="5" fill="#d1cfcc" />
-                <text x="266" y="338" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">REST API</text>
-                <text x="345" y="364" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">API Tributaria</text>
-                <text x="345" y="382" textAnchor="middle" fill="#8a8784" fontSize="8.5">Endpoints de inteligencia fiscal</text>
-                <text x="345" y="398" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Integración con plataformas</text>
-              </g>
-
-              {/* Información Exógena — Privado */}
-              <g className="eco-float">
-                <rect x="145" y="432" width="190" height="70" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="325" cy="442" r="5" fill="#d1cfcc" />
-                <text x="161" y="454" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">AUTOMATIZACIÓN</text>
-                <text x="240" y="476" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Info. Exógena</text>
-                <text x="240" y="490" textAnchor="middle" fill="#8a8784" fontSize="8">Preparación para DIAN</text>
-              </g>
-
-              {/* ═══ SECTOR PÚBLICO (Right) ═══ */}
-              <rect x="510" y="20" width="420" height="44" rx="22" fill="#f3f1ee" />
-              <text x="720" y="48" textAnchor="middle" fill="#6e6b68" fontSize="11" fontWeight="700" letterSpacing="2">SECTOR PÚBLICO</text>
-
-              {/* Gemelo Municipal */}
-              <g className="eco-float-delay">
-                <rect x="520" y="84" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="700" cy="94" r="5" fill="#d1cfcc" />
-                <text x="536" y="106" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">DASHBOARD</text>
-                <text x="615" y="132" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Gemelo Municipal</text>
-                <text x="615" y="150" textAnchor="middle" fill="#8a8784" fontSize="8.5">Réplica digital del municipio</text>
-                <text x="615" y="166" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Datos de múltiples fuentes</text>
-              </g>
-
-              {/* Rendición IAS */}
-              <g className="eco-float">
-                <rect x="730" y="84" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="910" cy="94" r="5" fill="#d1cfcc" />
-                <text x="746" y="106" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">AUTOMATIZACIÓN</text>
-                <text x="825" y="132" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Rendición IAS</text>
-                <text x="825" y="150" textAnchor="middle" fill="#8a8784" fontSize="8.5">Reportes a Contraloría e IAS</text>
-                <text x="825" y="166" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Generación automática</text>
-              </g>
-
-              {/* Seguimiento PDM */}
-              <g className="eco-float-delay">
-                <rect x="520" y="200" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="700" cy="210" r="5" fill="#d1cfcc" />
-                <text x="536" y="222" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">MONITOREO</text>
-                <text x="615" y="248" textAnchor="middle" fill="#1a1918" fontSize="14" fontWeight="700">Seguimiento PDM</text>
-                <text x="615" y="266" textAnchor="middle" fill="#8a8784" fontSize="8.5">Plan de desarrollo municipal</text>
-                <text x="615" y="282" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Tiempo real con alertas</text>
-              </g>
-
-              {/* Hacienda Dashboard */}
-              <g className="eco-float">
-                <rect x="730" y="200" width="190" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="910" cy="210" r="5" fill="#d1cfcc" />
-                <text x="746" y="222" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">PANEL</text>
-                <text x="825" y="248" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Hacienda Dashboard</text>
-                <text x="825" y="266" textAnchor="middle" fill="#8a8784" fontSize="8.5">Panel centralizado de hacienda</text>
-                <text x="825" y="282" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">Todo en un solo vistazo</text>
-              </g>
-
-              {/* Estatuto Municipal IA */}
-              <g className="eco-float-delay">
-                <rect x="620" y="316" width="200" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="810" cy="326" r="5" fill="#d1cfcc" />
-                <text x="636" y="338" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">IA · NLP</text>
-                <text x="720" y="364" textAnchor="middle" fill="#1a1918" fontSize="13" fontWeight="700">Estatuto Municipal IA</text>
-                <text x="720" y="382" textAnchor="middle" fill="#8a8784" fontSize="8.5">Análisis inteligente del estatuto</text>
-                <text x="720" y="398" textAnchor="middle" fill="#a8a5a0" fontSize="7.5">NLP sobre normativa local</text>
-              </g>
-
-              {/* Información Exógena — Público */}
-              <g className="eco-float">
-                <rect x="520" y="316" width="92" height="100" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1" />
-                <circle cx="602" cy="326" r="5" fill="#d1cfcc" />
-                <text x="536" y="338" fill="#a8a5a0" fontSize="7" fontWeight="700" letterSpacing="1">AUTO</text>
-                <text x="566" y="364" textAnchor="middle" fill="#1a1918" fontSize="11" fontWeight="700">Exógena</text>
-                <text x="566" y="380" textAnchor="middle" fill="#8a8784" fontSize="7.5">Info. exógena</text>
-                <text x="566" y="394" textAnchor="middle" fill="#a8a5a0" fontSize="7">Sector público</text>
-              </g>
-
-              {/* Legend */}
-              <circle cx="340" cy="510" r="5" fill="#0d7d74" />
-              <text x="340" y="513" textAnchor="middle" fill="white" fontSize="6" fontWeight="700">&#10003;</text>
-              <text x="355" y="514" fill="#6e6b68" fontSize="9" fontWeight="500">En producción</text>
-              <circle cx="470" cy="510" r="5" fill="#d1cfcc" />
-              <text x="485" y="514" fill="#6e6b68" fontSize="9" fontWeight="500">En desarrollo</text>
-
-              {/* Bottom INPLUX branding */}
-              <rect x="360" y="530" width="240" height="24" rx="12" fill="#1a1918" />
-              <text x="480" y="546" textAnchor="middle" fill="white" fontSize="8" fontWeight="700" letterSpacing="2">PORTAFOLIO INPLUX {new Date().getFullYear()}</text>
-            </svg>
-          </div>
+          <Reveal as="p" className="text-gray-400 text-[0.8rem] mt-10 max-w-xl leading-relaxed">
+            Estudiamos la frontera para construir en ella. La misma maquinaria de auto-mejora mueve nuestro cerebro legal y nuestra fábrica de software.
+          </Reveal>
         </div>
       </section>
 
       {/* ──── INFRAESTRUCTURA — SVG Visual ──── */}
-      <section className="py-20 md:py-28 bg-warm">
+      <section className="py-24 md:py-32 bg-warm">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-14 text-center">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Infraestructura</p>
-            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg mx-auto">
+          <Reveal className="mb-14">
+            <SectionKicker n="08">Infraestructura</SectionKicker>
+            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
               Tecnología de punta <em className="italic">detrás de cada producto</em>
             </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
               Construimos sobre infraestructura de clase mundial. Cada capa — desde la inteligencia artificial hasta el despliegue — está diseñada para escalar con nuestros clientes.
             </p>
-          </div>
+          </Reveal>
 
           <div className="svg-scroll-hint">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
             Desliza para ver completo
           </div>
-          <div className="reveal w-full overflow-x-auto">
+          <Reveal className="w-full overflow-x-auto">
             <svg viewBox="0 0 960 620" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[960px] mx-auto min-w-[640px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Infraestructura tecnológica de INPLUX organizada por capas">
               {/* Background dots */}
               {Array.from({ length: 17 }).map((_, row) =>
                 Array.from({ length: 27 }).map((_, col) => (
-                  <circle key={`ig-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#d8d5d1" />
+                  <circle key={`ig-${row}-${col}`} cx={36 * col + 12} cy={37 * row + 10} r="0.35" fill="#ebe8e4" />
                 ))
               )}
 
               {/* ═══ LAYER 1: IA & MODELOS ═══ */}
               <g className="eco-float">
                 <rect x="30" y="20" width="900" height="120" rx="16" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="31" y="20" width="898" height="30" rx="16" fill="#e8f5f3" />
-                <text x="55" y="40" fill="#0d7d74" fontSize="9" fontWeight="700" letterSpacing="2">INTELIGENCIA ARTIFICIAL & MODELOS</text>
+                <rect x="31" y="20" width="898" height="30" rx="16" fill="#f3f1ee" />
+                <text x="55" y="40" fill="#6e6b68" fontSize="9" fontWeight="700" letterSpacing="2">INTELIGENCIA ARTIFICIAL & MODELOS</text>
 
-                {/* AI pills */}
-                <rect x="50" y="64" width="110" height="24" rx="12" fill="#e8f5f3" />
-                <text x="105" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Modelos LLM</text>
-                <rect x="170" y="64" width="100" height="24" rx="12" fill="#e8f5f3" />
-                <text x="220" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Embeddings</text>
-                <rect x="280" y="64" width="110" height="24" rx="12" fill="#e8f5f3" />
-                <text x="335" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">RAG Pipeline</text>
-                <rect x="400" y="64" width="130" height="24" rx="12" fill="#e8f5f3" />
-                <text x="465" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Prompt Engineering</text>
-                <rect x="540" y="64" width="100" height="24" rx="12" fill="#e8f5f3" />
-                <text x="590" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Fine-tuning</text>
-                <rect x="650" y="64" width="130" height="24" rx="12" fill="#e8f5f3" />
-                <text x="715" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">Agentes Autónomos</text>
-                <rect x="790" y="64" width="120" height="24" rx="12" fill="#e8f5f3" />
-                <text x="850" y="80" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="600">NLP Normativo</text>
-
-                <rect x="50" y="98" width="120" height="24" rx="12" fill="#f3f1ee" />
-                <text x="110" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">Base Vectorial</text>
-                <rect x="180" y="98" width="130" height="24" rx="12" fill="#f3f1ee" />
-                <text x="245" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">Razonamiento Híbrido</text>
-                <rect x="320" y="98" width="140" height="24" rx="12" fill="#f3f1ee" />
-                <text x="390" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">Clasificación Semántica</text>
-                <rect x="470" y="98" width="130" height="24" rx="12" fill="#f3f1ee" />
-                <text x="535" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">APIs de IA Propias</text>
-                <rect x="610" y="98" width="140" height="24" rx="12" fill="#f3f1ee" />
-                <text x="680" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">Validación de Fuentes</text>
-                <rect x="760" y="98" width="150" height="24" rx="12" fill="#f3f1ee" />
-                <text x="835" y="114" textAnchor="middle" fill="#6e6b68" fontSize="8" fontWeight="600">Procesamiento Masivo</text>
+                {/* AI pills — esenciales */}
+                <rect x="50" y="82" width="124" height="26" rx="13" fill="#f3f1ee" />
+                <text x="112" y="99" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">Modelos LLM</text>
+                <rect x="184" y="82" width="120" height="26" rx="13" fill="#f3f1ee" />
+                <text x="244" y="99" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">Embeddings</text>
+                <rect x="314" y="82" width="124" height="26" rx="13" fill="#f3f1ee" />
+                <text x="376" y="99" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">RAG Pipeline</text>
+                <rect x="448" y="82" width="168" height="26" rx="13" fill="#f3f1ee" />
+                <text x="532" y="99" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">Agentes Autónomos</text>
+                <rect x="626" y="82" width="132" height="26" rx="13" fill="#f3f1ee" />
+                <text x="692" y="99" textAnchor="middle" fill="#6e6b68" fontSize="9" fontWeight="600">Base Vectorial</text>
               </g>
 
               {/* Connection lines layer 1 → 2 */}
-              <line x1="480" y1="144" x2="480" y2="168" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.3" className="eco-dash-flow" />
+              <line x1="480" y1="144" x2="480" y2="168" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="4 3" className="eco-dash-flow" />
               <line x1="240" y1="144" x2="240" y2="168" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
               <line x1="720" y1="144" x2="720" y2="168" stroke="#d1cfcc" strokeWidth="1" strokeDasharray="3 3" />
 
@@ -927,199 +1984,37 @@ export default function Home() {
               </g>
 
               {/* Decorative pulses */}
-              <circle cx="60" cy="80" r="3" fill="#0d7d74" opacity="0.3" className="eco-node-pulse" />
-              <circle cx="900" cy="230" r="3" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay1" />
-              <circle cx="60" cy="370" r="3" fill="#0d7d74" opacity="0.2" className="eco-node-pulse-delay2" />
+              <circle cx="60" cy="80" r="3" fill="#c8c5c1" className="eco-node-pulse" />
+              <circle cx="900" cy="230" r="3" fill="#d1cfcc" className="eco-node-pulse-delay1" />
+              <circle cx="60" cy="370" r="3" fill="#d1cfcc" className="eco-node-pulse-delay2" />
               <circle cx="900" cy="480" r="3" fill="#d1cfcc" className="eco-node-pulse" />
 
               {/* Stats bar */}
-              <rect x="200" y="540" width="560" height="34" rx="17" fill="#1a1918" />
+              <rect x="200" y="540" width="560" height="34" rx="17" fill="url(#inkGrad)" />
               <text x="480" y="561" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" letterSpacing="1.5">4 CAPAS · 40+ HERRAMIENTAS · INFRAESTRUCTURA DE CLASE MUNDIAL</text>
 
               {/* Side labels */}
-              <text x="480" y="600" textAnchor="middle" fill="#a8a5a0" fontSize="7.5" fontWeight="600" letterSpacing="1">DISEÑADA PARA ESCALAR CON NUESTROS CLIENTES</text>
+              <text x="480" y="600" textAnchor="middle" fill="#76716a" fontSize="7.5" fontWeight="600" letterSpacing="1">DISEÑADA PARA ESCALAR CON NUESTROS CLIENTES</text>
             </svg>
-          </div>
-        </div>
-      </section>
-
-      {/* ──── HUB / ECOSYSTEM ──── */}
-      <section id="empresas" className="py-20 md:py-28">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-14">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Ecosistema Inplux</p>
-            <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
-              No trabajamos solos.<br /><em className="italic">Operamos como hub.</em>
-            </h2>
-            <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
-              Inplux integra plataformas propias con empresas aliadas de primer nivel.
-              Cada proyecto tiene detrás un ecosistema completo de ingeniería, datos e infraestructura.
-            </p>
-          </div>
-
-          {/* SVG Ecosystem Map — clickable Tribai & Fourier */}
-          <div className="svg-scroll-hint">
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-            Desliza para ver completo
-          </div>
-          <div className="reveal w-full overflow-x-auto">
-            <svg viewBox="0 0 1000 760" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[1000px] mx-auto min-w-[680px]" style={{ fontFamily: "var(--font-body), system-ui, sans-serif" }} role="img" aria-label="Mapa del ecosistema de empresas aliadas de INPLUX">
-              {/* Orbits — centered at (500, 360) */}
-              <circle cx="500" cy="360" r="330" stroke="#a8a5a0" strokeWidth="1" strokeDasharray="8 6" fill="none" className="eco-orbit" style={{ animationDuration: "50s" }} />
-              <circle cx="500" cy="360" r="280" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="6 5" fill="none" className="eco-orbit" />
-              <circle cx="500" cy="360" r="220" stroke="#d1cfcc" strokeWidth="0.8" strokeDasharray="3 7" fill="none" className="eco-orbit" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
-
-              {/* Decorative pulses on orbits */}
-              <circle cx="250" cy="150" r="3" fill="#c8c5c1" className="eco-node-pulse" />
-              <circle cx="780" cy="180" r="3" fill="#c8c5c1" className="eco-node-pulse-delay1" />
-              <circle cx="180" cy="520" r="3" fill="#c8c5c1" className="eco-node-pulse-delay2" />
-              <circle cx="830" cy="540" r="3" fill="#c8c5c1" className="eco-node-pulse" />
-
-              {/* Connection lines from INPLUX down */}
-              <line x1="400" y1="95" x2="310" y2="210" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.4" className="eco-dash-flow" />
-              <line x1="600" y1="95" x2="690" y2="210" stroke="#d1cfcc" strokeWidth="1.5" strokeDasharray="5 4" className="eco-dash-flow-slow" />
-              <line x1="500" y1="95" x2="500" y2="370" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-
-              {/* ═══ INPLUX — top center ═══ */}
-              <g className="eco-glow">
-                <rect x="400" y="24" width="200" height="68" rx="14" fill="#1a1918" />
-                <text x="500" y="55" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" letterSpacing="3">INPLUX</text>
-                <text x="500" y="74" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontWeight="600" letterSpacing="1.5">HUB DE IA & TIC</text>
-              </g>
-
-              {/* ═══ TRIBAI — left ═══ */}
-              <a href="https://tribai.co" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float" style={{ cursor: "pointer" }}>
-                  <rect x="145" y="190" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                  <rect x="146" y="190" width="238" height="26" rx="12" fill="#e8f5f3" />
-                  <text x="170" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PRIVADO</text>
-                  <circle cx="360" cy="203" r="6" fill="#0d7d74" />
-                  <text x="360" y="206" textAnchor="middle" fill="white" fontSize="7" fontWeight="700">&#10003;</text>
-                  <text x="265" y="244" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Tribai</text>
-                  <text x="265" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500" textDecoration="underline">tribai.co</text>
-                  <text x="265" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Inteligencia tributaria y financiera con IA</text>
-                </g>
-              </a>
-
-              {/* ═══ GOBIA — right (mirror of Tribai) ═══ */}
-              <a href="https://gobia.co" target="_blank" rel="noopener noreferrer">
-              <g className="eco-float-delay" style={{ cursor: "pointer" }}>
-                <rect x="615" y="190" width="240" height="110" rx="12" fill="white" stroke="#0d7d74" strokeWidth="1.5" />
-                <rect x="616" y="190" width="238" height="26" rx="12" fill="#e8f5f3" />
-                <text x="640" y="208" fill="#0d7d74" fontSize="8.5" fontWeight="700" letterSpacing="1.5">SECTOR PÚBLICO</text>
-                <text x="735" y="244" textAnchor="middle" fill="#1a1918" fontSize="17" fontWeight="700">Gobia</text>
-                <text x="735" y="264" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500">gobia.co</text>
-                <text x="735" y="284" textAnchor="middle" fill="#8a8784" fontSize="9">Gemelo digital & rendición de cuentas</text>
-              </g>
-              </a>
-
-              {/* ═══ FOURIER — center ═══ */}
-              <a href="https://fourier.dev/en" target="_blank" rel="noopener noreferrer">
-                <g className="eco-glow" style={{ cursor: "pointer" }}>
-                  <rect x="350" y="370" width="300" height="86" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
-                  <rect x="351" y="370" width="298" height="24" rx="14" fill="#e8f5f3" />
-                  <text x="380" y="387" fill="#0d7d74" fontSize="8" fontWeight="700" letterSpacing="1.5">BACK TECNOLÓGICO PRINCIPAL</text>
-                  <text x="500" y="416" textAnchor="middle" fill="#1a1918" fontSize="18" fontWeight="800" letterSpacing="0.5">Fourier</text>
-                  <text x="500" y="434" textAnchor="middle" fill="#0d7d74" fontSize="10.5" fontWeight="500" textDecoration="underline">fourier.dev</text>
-                  <text x="500" y="450" textAnchor="middle" fill="#8a8784" fontSize="8.5">Arquitectura de software, cloud e infraestructura</text>
-                </g>
-              </a>
-
-              {/* ═══ 4 ALIADOS — distribución simétrica alrededor de Fourier ═══ */}
-
-              {/* Think IT — izquierda */}
-              <g className="eco-float-delay2">
-                <rect x="55" y="395" width="170" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <text x="140" y="419" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Think IT</text>
-                <text x="140" y="435" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Ingeniería de software</text>
-              </g>
-              <line x1="225" y1="415" x2="350" y2="410" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="4 3" />
-              <circle cx="287" cy="413" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse" />
-
-              {/* Alianza IT — derecha (espejo de Think IT) */}
-              <g className="eco-float-delay">
-                <rect x="775" y="395" width="170" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <text x="860" y="419" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">Alianza IT</text>
-                <text x="860" y="435" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Integración tecnológica</text>
-              </g>
-              <line x1="775" y1="415" x2="650" y2="410" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="4 3" />
-              <circle cx="713" cy="413" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse-delay2" />
-
-              {/* BBD Soluciones — abajo-izquierda */}
-              <g className="eco-float">
-                <rect x="155" y="510" width="170" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                <text x="240" y="534" textAnchor="middle" fill="#3d3b39" fontSize="11" fontWeight="600">BBD Soluciones</text>
-                <text x="240" y="550" textAnchor="middle" fill="#a8a5a0" fontSize="8.5">Analítica de datos</text>
-              </g>
-              <line x1="325" y1="525" x2="400" y2="456" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="4 3" />
-              <circle cx="362" cy="490" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse-delay1" />
-
-              {/* Observatorio de Datos — abajo-derecha (espejo de BBD), clickable */}
-              <a href="https://datosyanalisis.org/" target="_blank" rel="noopener noreferrer">
-                <g className="eco-float-delay" style={{ cursor: "pointer" }}>
-                  <rect x="675" y="510" width="170" height="52" rx="10" fill="white" stroke="#d1cfcc" strokeWidth="1.5" />
-                  <text x="760" y="534" textAnchor="middle" fill="#3d3b39" fontSize="10" fontWeight="600">Observatorio de Datos</text>
-                  <text x="760" y="550" textAnchor="middle" fill="#0d7d74" fontSize="8" fontWeight="500" textDecoration="underline">datosyanalisis.org</text>
-                </g>
-              </a>
-              <line x1="675" y1="525" x2="600" y2="456" stroke="#c8c5c1" strokeWidth="1.5" strokeDasharray="4 3" />
-              <circle cx="638" cy="490" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse" />
-
-              {/* ═══ SISTEMAS ARIES — círculo exterior, abajo centro ═══ */}
-              <g className="eco-float-delay2">
-                <rect x="380" y="620" width="240" height="66" rx="14" fill="white" stroke="#0d7d74" strokeWidth="2" />
-                <rect x="381" y="620" width="238" height="22" rx="14" fill="#e8f5f3" />
-                <text x="405" y="636" fill="#0d7d74" fontSize="7" fontWeight="700" letterSpacing="1.5">ALIADO ESTRATÉGICO · CÍRCULO EXTERIOR</text>
-                <text x="500" y="659" textAnchor="middle" fill="#1a1918" fontSize="15" fontWeight="700">Sistemas Aries</text>
-                <text x="500" y="676" textAnchor="middle" fill="#8a8784" fontSize="8.5">+31 años · ERP financiero modular</text>
-              </g>
-              <line x1="500" y1="600" x2="500" y2="620" stroke="#0d7d74" strokeWidth="1.5" strokeDasharray="5 4" opacity="0.3" className="eco-dash-flow" />
-              <circle cx="500" cy="608" r="3" fill="#0d7d74" opacity="0.4" className="eco-node-pulse" />
-
-              {/* Bottom label */}
-              <text x="500" y="710" textAnchor="middle" fill="#d1cfcc" fontSize="8" fontWeight="600" letterSpacing="2">ECOSISTEMA DE ALIADOS ESTRATÉGICOS Y TECNOLÓGICOS</text>
-            </svg>
-          </div>
-
-          {/* Platform details */}
-          <div className="grid md:grid-cols-2 gap-5 mt-12 stagger">
-            {HUB_COMPANIES.map((c) => (
-              <div key={c.name} className="reveal card">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[0.6875rem] font-bold tracking-[0.12em] uppercase text-gray-400">{c.focus}</span>
-                  <span className={`text-[0.6875rem] font-semibold px-2.5 py-1 rounded-full ${c.status === "Activo" ? "bg-teal-soft text-teal" : "bg-warm-50 text-gray-500"}`}>{c.status}</span>
-                </div>
-                <h3 className="font-serif text-[1.35rem] md:text-[1.5rem] text-ink mb-1">{c.name}</h3>
-                <p className="text-teal text-sm font-medium mb-3">{c.domain}</p>
-                <p className="text-gray-500 text-[0.875rem] leading-relaxed mb-3">{c.desc}</p>
-                <p className="text-gray-400 text-[0.75rem] italic">{c.upcoming}</p>
-                {c.status === "Activo" && (
-                  <a href={`https://${c.domain}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-ink text-sm font-semibold mt-4 hover:text-teal transition-colors">
-                    Visitar plataforma
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ──── TIMELINE — Scrollytelling with two eras ──── */}
       <section id="trayectoria" className="py-20 md:py-28 bg-warm overflow-hidden">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="reveal mb-16 md:mb-20">
-            <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Trayectoria</p>
+          <Reveal className="mb-16 md:mb-20">
+            <SectionKicker n="09">Trayectoria</SectionKicker>
             <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-4 max-w-lg">
               25 años de <em className="italic">transformaciones</em>
             </h2>
             <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed">
               Cada hito construyó sobre el anterior. Lo que empezó como asesoría en terreno hoy es un ecosistema de tecnología e inteligencia artificial.
             </p>
-          </div>
+          </Reveal>
 
           {/* ═══ ERA 1: El grupo de expertos ═══ */}
-          <div className="reveal mb-10">
+          <Reveal className="mb-10">
             <div className="flex items-start gap-4 mb-5">
               <div className="w-12 h-12 rounded-2xl bg-ink text-white flex items-center justify-center text-[0.75rem] font-bold shrink-0 shadow-md">I</div>
               <div>
@@ -1136,7 +2031,7 @@ export default function Home() {
                 Jaime Alonso Cano Pino
               </a>
             </div>
-          </div>
+          </Reveal>
 
           {/* Era 1 Timeline */}
           <div className="relative mb-10">
@@ -1148,7 +2043,7 @@ export default function Home() {
               {TIMELINE_ERA_1.events.map((ev, i) => {
                 const isKeyMilestone = ["2000", "2010", "2019"].includes(ev.year);
                 return (
-                  <div key={ev.year} className="reveal relative md:grid md:grid-cols-2 md:gap-10">
+                  <Reveal key={ev.year} className="relative md:grid md:grid-cols-2 md:gap-10">
                     {/* Timeline dot */}
                     <div className="absolute left-[12px] md:left-1/2 md:-translate-x-1/2 top-6 z-10">
                       <div className={`rounded-full border-2 transition-all duration-500 ${isKeyMilestone ? "w-4 h-4 border-ink bg-ink shadow-[0_0_0_4px_rgba(26,25,24,0.08)]" : "w-3 h-3 border-gray-300 bg-white hover:border-ink hover:bg-ink"}`} />
@@ -1156,7 +2051,7 @@ export default function Home() {
 
                     {/* Card — alternates sides on desktop */}
                     <div className={`ml-10 md:ml-0 ${i % 2 === 0 ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}`}>
-                      <div className={`rounded-xl p-5 md:p-6 transition-all duration-300 hover:shadow-md ${isKeyMilestone ? "bg-white border-2 border-gray-200 shadow-sm" : "bg-white border border-border hover:border-gray-200"}`}>
+                      <div className={`rounded-xl p-5 md:p-6 transition-all duration-300 hover:shadow-md ${isKeyMilestone ? "bg-warm-50 border border-border shadow-sm" : "bg-white border border-border hover:border-gray-200"}`}>
                         {/* Year + metric row */}
                         <div className={`flex items-center gap-3 mb-3 ${i % 2 === 0 ? "md:flex-row-reverse" : ""}`}>
                           <span className={`font-serif leading-none text-ink ${isKeyMilestone ? "text-[1.75rem] md:text-[2.25rem]" : "text-xl md:text-2xl"}`}>{ev.year}</span>
@@ -1166,14 +2061,14 @@ export default function Home() {
                       </div>
                     </div>
                     {i % 2 === 0 && <div className="hidden md:block" />}
-                  </div>
+                  </Reveal>
                 );
               })}
             </div>
           </div>
 
           {/* Era 1 Summary */}
-          <div className="reveal mb-8">
+          <Reveal className="mb-8">
             <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
               {[
                 { num: "21", label: "años en campo" },
@@ -1186,10 +2081,10 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/* ═══ TRANSITION — Era break ═══ */}
-          <div className="reveal relative my-14 md:my-20">
+          <Reveal className="relative my-14 md:my-20">
             <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent" />
             <div className="relative flex flex-col items-center gap-3">
               <div className="bg-off-white px-8 py-4 border border-teal/30 rounded-2xl shadow-sm">
@@ -1200,10 +2095,10 @@ export default function Home() {
                 <p className="text-gray-400 text-[0.7rem] text-center">Todo ese conocimiento se formaliza en tecnología</p>
               </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* ═══ ERA 2: La era INPLUX ═══ */}
-          <div className="reveal mb-10">
+          <Reveal className="mb-10">
             <div className="flex items-start gap-4 mb-5">
               <div className="w-12 h-12 rounded-2xl bg-teal text-white flex items-center justify-center text-[0.75rem] font-bold shrink-0 shadow-md shadow-teal/20">II</div>
               <div>
@@ -1216,7 +2111,7 @@ export default function Home() {
                 {TIMELINE_ERA_2.subtitle}
               </p>
             </div>
-          </div>
+          </Reveal>
 
           {/* Era 2 Timeline */}
           <div className="relative">
@@ -1228,7 +2123,7 @@ export default function Home() {
               {TIMELINE_ERA_2.events.map((ev, i) => {
                 const isLast = i === TIMELINE_ERA_2.events.length - 1;
                 return (
-                  <div key={ev.year} className="reveal relative md:grid md:grid-cols-2 md:gap-10">
+                  <Reveal key={ev.year} className="relative md:grid md:grid-cols-2 md:gap-10">
                     {/* Timeline dot — teal, glowing for last */}
                     <div className="absolute left-[12px] md:left-1/2 md:-translate-x-1/2 top-6 z-10">
                       <div className={`w-4 h-4 rounded-full border-2 border-teal bg-teal transition-all ${isLast ? "shadow-[0_0_0_5px_rgba(13,125,116,0.15),0_0_12px_rgba(13,125,116,0.2)]" : "shadow-[0_0_0_4px_rgba(13,125,116,0.08)]"}`} />
@@ -1236,23 +2131,23 @@ export default function Home() {
 
                     {/* Card */}
                     <div className={`ml-10 md:ml-0 ${i % 2 === 0 ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}`}>
-                      <div className={`rounded-xl p-5 md:p-7 transition-all duration-300 hover:shadow-lg ${isLast ? "bg-gradient-to-br from-teal-soft/60 to-white border-2 border-teal/30 shadow-md" : "bg-white border-2 border-teal/20 shadow-sm hover:border-teal/30"}`}>
+                      <div className={`rounded-xl p-5 md:p-7 transition-all duration-300 hover:shadow-md ${isLast ? "bg-gradient-to-br from-teal-soft/50 to-white border border-teal/30 shadow-sm" : "bg-white border border-border hover:border-gray-200"}`}>
                         <div className={`flex items-center gap-3 mb-3 ${i % 2 === 0 ? "md:flex-row-reverse" : ""}`}>
                           <span className="font-serif text-[2rem] md:text-[2.75rem] text-ink leading-none">{ev.year}</span>
-                          <span className="text-[0.65rem] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full bg-teal text-white shadow-sm">{ev.metric}</span>
+                          <span className="text-[0.65rem] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full bg-ink text-white shadow-sm">{ev.metric}</span>
                         </div>
                         <p className="text-gray-600 text-[0.875rem] leading-[1.65] font-medium">{ev.text}</p>
                       </div>
                     </div>
                     {i % 2 === 0 && <div className="hidden md:block" />}
-                  </div>
+                  </Reveal>
                 );
               })}
             </div>
           </div>
 
           {/* Final — current status pulse */}
-          <div className="reveal mt-10 flex justify-center">
+          <Reveal className="mt-10 flex justify-center">
             <div className="inline-flex items-center gap-2 bg-white border border-teal/20 rounded-full px-5 py-2.5 shadow-sm">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-teal opacity-40 animate-ping" />
@@ -1260,16 +2155,17 @@ export default function Home() {
               </span>
               <span className="text-gray-600 text-[0.8rem] font-medium">Construyendo el futuro — {new Date().getFullYear()} en curso</span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ──── CONTACT ──── */}
-      <section id="contacto" className="py-20 md:py-28 bg-warm">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+      <section id="contacto" className="relative overflow-hidden py-20 md:py-28 bg-warm">
+        <div className="absolute inset-0 z-0 tech-grid tech-grid-fade pointer-events-none" aria-hidden="true" />
+        <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="grid lg:grid-cols-2 gap-14 md:gap-20">
-            <div className="reveal-left">
-              <p className="text-teal text-[0.6875rem] font-bold tracking-[0.15em] uppercase mb-3">Contacto</p>
+            <Reveal>
+              <SectionKicker n="10">Contacto</SectionKicker>
               <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.1] tracking-[-0.01em] text-ink mb-5">Hablemos.</h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-10">
                 Ya sea que necesite poner al día la hacienda pública de su municipio, automatizar su operación tributaria o construir un producto digital desde cero — arrancamos con una conversación.
@@ -1277,47 +2173,51 @@ export default function Home() {
               <div className="space-y-5">
                 <div>
                   <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Dirección</span>
-                  <a href="https://maps.google.com/?q=Calle+23+%23+43A+66+Local+141+Medellín+Antioquia" target="_blank" rel="noopener noreferrer" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors whitespace-pre-line">Calle 23 # 43 A 66, Local 141{"\n"}Medellín, Antioquia</a>
+                  <a href="https://maps.google.com/?q=Transversal+5+A+%23+45+91+Medellín+Antioquia" target="_blank" rel="noopener noreferrer" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors whitespace-pre-line">Transversal 5 A # 45 - 91{"\n"}Medellín, Antioquia</a>
                 </div>
                 <div>
                   <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Teléfono</span>
-                  <a href="tel:+573138893615" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">(+57) 313 889 36 15</a>
+                  <a href="tel:+573023194636" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">(+57) 302 319 46 36</a>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Email</span>
+                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Gerencia</span>
                   <a href="mailto:gerencia@inplux.co" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">gerencia@inplux.co</a>
                 </div>
+                <div>
+                  <span className="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase block mb-0.5">Coordinación comercial</span>
+                  <a href="mailto:contacto@inplux.co" className="text-gray-700 text-[0.9375rem] hover:text-teal transition-colors">contacto@inplux.co</a>
+                </div>
               </div>
-            </div>
-            <div className="reveal">
-              <div className="bg-white border border-border rounded-xl p-6 md:p-7">
-                <h3 className="text-ink font-semibold text-[1rem] mb-5">Enviar mensaje</h3>
-                <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+            </Reveal>
+            <Reveal>
+              <div className="bg-off-white border border-border rounded-xl p-7 md:p-9">
+                <h3 className="text-ink font-semibold text-[1.0625rem] tracking-[-0.01em] mb-6">Enviar mensaje</h3>
+                <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
                   <div>
-                    <label htmlFor="contact-name" className="text-gray-500 text-xs font-bold tracking-wider uppercase mb-1 block">Nombre</label>
+                    <label htmlFor="contact-name" className="text-gray-700 text-[0.8125rem] font-medium mb-1.5 block">Nombre</label>
                     <input id="contact-name" type="text" placeholder="Su nombre" className="form-input" required />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label htmlFor="contact-email" className="text-gray-500 text-xs font-bold tracking-wider uppercase mb-1 block">Email</label>
+                      <label htmlFor="contact-email" className="text-gray-700 text-[0.8125rem] font-medium mb-1.5 block">Email</label>
                       <input id="contact-email" type="email" placeholder="correo@empresa.co" className="form-input" required />
                     </div>
                     <div>
-                      <label htmlFor="contact-phone" className="text-gray-500 text-xs font-bold tracking-wider uppercase mb-1 block">Teléfono</label>
+                      <label htmlFor="contact-phone" className="text-gray-700 text-[0.8125rem] font-medium mb-1.5 block">Teléfono</label>
                       <input id="contact-phone" type="tel" placeholder="+57 3XX XXX XXXX" className="form-input" />
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="contact-message" className="text-gray-500 text-xs font-bold tracking-wider uppercase mb-1 block">Mensaje</label>
+                    <label htmlFor="contact-message" className="text-gray-700 text-[0.8125rem] font-medium mb-1.5 block">Mensaje</label>
                     <textarea id="contact-message" rows={4} placeholder="Cuéntenos sobre su proyecto..." className="form-input resize-none" required />
                   </div>
-                  <button type="submit" className="btn-dark w-full sm:w-auto">
+                  <m.button type="submit" className="btn-dark w-full sm:w-auto" style={{ transitionProperty: "background-color, box-shadow" }} {...pressable(reducedMotion)}>
                     Enviar mensaje
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
-                  </button>
+                  </m.button>
                 </form>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -1335,14 +2235,14 @@ export default function Home() {
       {/* ──── FOOTER ──── */}
       <footer className="py-14 md:py-16 border-t border-border">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-          <div className="grid md:grid-cols-4 gap-10 mb-12">
+          <div className="grid md:grid-cols-5 gap-8 mb-10">
             <div>
               <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto mb-3" />
               <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría tributaria, tecnología e inteligencia artificial. Medellín, Colombia.</p>
             </div>
             <div>
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Navegación</h4>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {[{ label: "Inicio", href: "#inicio" }, ...navLinks].map((l) => (
                   <li key={l.href}>
                     {l.href.startsWith("/") ? (
@@ -1355,28 +2255,41 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Ecosistema</h4>
-              <ul className="space-y-2">
-                <li><a href="https://tribai.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Tribai.co</a></li>
-                <li><a href="https://gobia.co" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Gobia.co</a></li>
+              <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Productos</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: "Kelsen.io", href: "https://kelsen.io" },
+                  { label: "Tribai.co", href: "https://tribai.co" },
+                  { label: "Laudos.co", href: "https://laudos.co" },
+                  { label: "Gobia.co", href: "https://gobia.co" },
+                  { label: "Porkia.co", href: "https://porkia.co" },
+                ].map((p) => (
+                  <li key={p.label}><a href={p.href} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">{p.label}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Aliados</h4>
+              <ul className="space-y-2.5">
                 <li><a href="https://fourier.dev/en" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Fourier</a></li>
-                <li><span className="text-gray-400 text-[0.8125rem]">Sistemas Aries</span></li>
-                <li><span className="text-gray-400 text-[0.8125rem]">Think IT</span></li>
-                <li><span className="text-gray-400 text-[0.8125rem]">BBD Soluciones</span></li>
-                <li><span className="text-gray-400 text-[0.8125rem]">Alianza IT</span></li>
                 <li><a href="https://datosyanalisis.org/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-ink text-[0.8125rem] transition-colors">Observatorio de Datos</a></li>
+                <li className="text-gray-500 text-[0.8125rem]">Sistemas Aries</li>
+                <li className="text-gray-500 text-[0.8125rem]">Think IT</li>
+                <li className="text-gray-500 text-[0.8125rem]">BBD Soluciones</li>
+                <li className="text-gray-500 text-[0.8125rem]">Alianza IT</li>
               </ul>
             </div>
             <div>
               <h4 className="text-ink font-semibold text-[0.8125rem] mb-3.5">Contacto</h4>
-              <ul className="space-y-2 text-gray-500 text-[0.8125rem]">
+              <ul className="space-y-2.5 text-gray-500 text-[0.8125rem]">
                 <li>Medellín, Antioquia</li>
-                <li>(+57) 313 889 36 15</li>
+                <li>(+57) 302 319 46 36</li>
                 <li><a href="mailto:gerencia@inplux.co" className="hover:text-ink transition-colors">gerencia@inplux.co</a></li>
+                <li><a href="mailto:contacto@inplux.co" className="hover:text-ink transition-colors">contacto@inplux.co</a></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-border pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="text-gray-400 text-[0.75rem]">&copy; {new Date().getFullYear()} INPLUX S.A.S. Todos los derechos reservados.</p>
             <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-ink transition-colors" aria-label="INPLUX en LinkedIn">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
@@ -1384,6 +2297,8 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </>
+        </>
+      </MotionConfig>
+    </LazyMotion>
   );
 }
