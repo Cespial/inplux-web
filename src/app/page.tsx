@@ -87,20 +87,20 @@ const LOGOS = [
   { src: "/logos/21053_escudo-vegachi-pagina_200x200.png", alt: "Vegachí" },
   { src: "/logos/47914_logo-alcaldia--300-x-100-1_200x200.png", alt: "Alcaldía" },
   { src: "/logos/54672_escudo-de-cisneros-antioquia-oficial-3x3_200x200.png", alt: "Cisneros" },
-  { src: "/logos/CIS.png", alt: "CIS" },
-  { src: "/logos/Escudo.png", alt: "Escudo" },
+  { src: "/logos/CIS.png", alt: "CIS – Corporación Interuniversitaria de Servicios" },
+  { src: "/logos/Escudo.png", alt: "Alcaldía de Andes" },
   { src: "/logos/Parque_Arví_Logo_Blanco.png", alt: "Parque Arví" },
   { src: "/logos/Think_It_Logo_Blanco.png", alt: "Think IT" },
   { src: "/logos/cropped-Logo_Alianza-IT-1.png", alt: "Alianza IT" },
-  { src: "/logos/images.jpeg", alt: "Cliente" },
-  { src: "/logos/images.png", alt: "Cliente" },
-  { src: "/logos/logo-negro.png", alt: "Cliente" },
+  { src: "/logos/images.jpeg", alt: "Hospital San Camilo de Lelis (Vegachí)" },
+  { src: "/logos/images.png", alt: "Hospital San Pío X" },
+  { src: "/logos/logo-negro.png", alt: "Politécnico Colombiano Jaime Isaza Cadavid" },
   { src: "/logos/logo-think-oracle.png", alt: "Think Oracle" },
   { src: "/logos/logo-provincia-b.svg", alt: "Provincia" },
-  { src: "/logos/logo.png", alt: "Sistemas Aries" },
-  { src: "/logos/logoedu.png", alt: "EDU" },
+  { src: "/logos/logo.png", alt: "Rentan" },
+  { src: "/logos/logoedu.png", alt: "EDU – Empresa de Desarrollo Urbano" },
   { src: "/logos/navarro-ospina-logo.png", alt: "Navarro Ospina" },
-  { src: "/logos/logo.jpg", alt: "Cliente" },
+  { src: "/logos/logo.jpg", alt: "Sistemas Aries" },
 ];
 
 const HUB_COMPANIES = [
@@ -178,7 +178,9 @@ export default function Home() {
       {/* ──── NAV ──── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 nav-wrap ${scrolled ? "scrolled" : ""}`} aria-label="Navegación principal">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8 flex items-center justify-between h-[60px]">
-          <a href="#inicio" className="text-ink font-bold text-[1.1rem] tracking-[0.12em] uppercase" aria-label="INPLUX - Inicio">INPLUX</a>
+          <a href="#inicio" aria-label="INPLUX - Inicio" className="flex items-center">
+            <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto" />
+          </a>
           <div className="hidden md:flex items-center gap-0.5">
             {navLinks.map((l) =>
               l.href.startsWith("/") ? (
@@ -1335,7 +1337,7 @@ export default function Home() {
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
-              <span className="text-ink font-bold text-[0.9rem] tracking-[0.12em] uppercase block mb-3">INPLUX</span>
+              <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto mb-3" />
               <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría tributaria, tecnología e inteligencia artificial. Medellín, Colombia.</p>
             </div>
             <div>

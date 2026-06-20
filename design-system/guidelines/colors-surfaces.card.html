@@ -1,0 +1,29 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Surfaces & dark sections" subtitle="Editorial white vs. dark ink with teal glow" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family:var(--font-body); background:var(--white); }
+  .wrap { padding:20px 24px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .panel { height:120px; border-radius:var(--radius-lg); border:1px solid var(--border); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:14px; }
+  .light { background:var(--off-white); color:var(--text-strong); }
+  .dark { background:var(--ink); color:var(--text-on-ink); border-color:transparent; }
+  .dark::before { content:""; position:absolute; inset:0; background:var(--glow-teal); }
+  .dark::after { content:""; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size:16px 16px; opacity:0.5; }
+  .t { font-family:var(--font-serif); font-size:22px; position:relative; line-height:1; }
+  .t em { color:var(--teal); font-style:italic; }
+  .dark .t em { color:var(--teal-bright); }
+  .meta { font-size:11px; letter-spacing:var(--tracking-label); text-transform:uppercase; margin-bottom:8px; position:relative; }
+  .light .meta { color:var(--text-muted); }
+  .dark .meta { color:var(--text-on-ink-muted); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel light"><div class="meta">Editorial white</div><div class="t">La norma la <em>conocemos.</em></div></div>
+    <div class="panel dark"><div class="meta">Dark ink · teal glow</div><div class="t">La tecnología la <em>construimos.</em></div></div>
+  </div>
+</body>
+</html>

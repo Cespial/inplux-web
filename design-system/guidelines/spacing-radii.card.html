@@ -1,0 +1,25 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Radii" subtitle="8px buttons · 14px cards · 16px max · pill" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family:var(--font-body); background:var(--white); color:var(--text-strong); }
+  .wrap { padding:24px 28px; display:flex; gap:20px; align-items:flex-end; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .box { width:88px; height:64px; background:var(--off-white); border:1px solid var(--border); }
+  .n { font-size:11px; font-weight:600; }
+  .v { font-size:10px; color:var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="col"><div class="box" style="border-radius:var(--radius-sm)"></div><div class="n">sm · button</div><div class="v">8px</div></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-md)"></div><div class="n">md</div><div class="v">12px</div></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-lg)"></div><div class="n">lg · card</div><div class="v">14px</div></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-xl)"></div><div class="n">xl · max</div><div class="v">16px</div></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-pill);width:64px"></div><div class="n">pill</div><div class="v">full</div></div>
+  </div>
+</body>
+</html>

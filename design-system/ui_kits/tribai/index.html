@@ -1,0 +1,74 @@
+<!-- @dsCard group="Tribai.co" viewport="1280x800" name="Tribai.co — tax-intelligence agent" subtitle="Login + agent workspace with norm citations" -->
+<!-- @startingPoint section="Tribai.co" subtitle="Tribai agent workspace" viewport="1280x800" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tribai.co — Inteligencia tributaria</title>
+<link rel="icon" href="../../assets/favicon/favicon.ico">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body, #root { margin: 0; padding: 0; height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-strong); background: var(--off-white); -webkit-font-smoothing: antialiased; }
+  [data-lucide] svg { width: 1em; height: 1em; }
+  .tb-pulse { animation: tbpulse 1.4s ease-in-out infinite; }
+  @keyframes tbpulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { .tb-pulse { animation: none; } }
+  @media (max-width: 820px) {
+    .tb-login { grid-template-columns: 1fr !important; }
+    .tb-login > div:first-child { display: none !important; }
+    .tb-sidebar { display: none !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" src="app.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const ANSWER = {
+    role: "agent",
+    html: 'La sobretasa bomberil se liquida como un <strong>porcentaje del impuesto de Industria y Comercio</strong> definido por acuerdo municipal (típicamente 1%–10% del ICA). Para 2026, confirme la tarifa vigente en su Estatuto de Rentas y aplíquela sobre la base del ICA, no sobre los ingresos brutos.',
+    citation: {
+      tag: "Ley 1575 de 2012 · Art. 37",
+      title: "Sobretasa o impuesto bomberil",
+      body: "Autoriza a los concejos municipales a establecer la sobretasa con destino a la gestión del riesgo contra incendios, ligada a un tributo existente.",
+    },
+  };
+
+  function App() {
+    const [screen, setScreen] = React.useState("login");
+    const [active, setActive] = React.useState("chat");
+    const [messages, setMessages] = React.useState([]);
+    const [thinking, setThinking] = React.useState(false);
+    const threads = ["Sobretasa bomberil 2026", "Exención predial — acuerdo", "NIC 12 vs. diferido local", "Cierre fiscal Cisneros"];
+
+    React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+    const onSend = (text) => {
+      setMessages((m) => [...m, { role: "user", text }]);
+      setThinking(true);
+      setTimeout(() => {
+        setThinking(false);
+        setMessages((m) => [...m, ANSWER]);
+      }, 1100);
+    };
+
+    if (screen === "login") return <Login onEnter={() => setScreen("app")} />;
+    return (
+      <div style={{ height: "100%", display: "flex" }}>
+        <Sidebar active={active} setActive={setActive} onLogout={() => { setScreen("login"); setMessages([]); }} threads={threads} />
+        <Chat messages={messages} onSend={onSend} thinking={thinking} />
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

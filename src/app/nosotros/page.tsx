@@ -128,7 +128,9 @@ export default function Nosotros() {
       {/* ──── NAV ──── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 nav-wrap ${scrolled ? "scrolled" : ""}`} aria-label="Navegación">
         <div className="max-w-[1100px] mx-auto px-5 md:px-8 flex items-center justify-between h-[60px]">
-          <Link href="/" className="text-ink font-bold text-[1.1rem] tracking-[0.12em] uppercase" aria-label="INPLUX - Inicio">INPLUX</Link>
+          <Link href="/" aria-label="INPLUX - Inicio" className="flex items-center">
+            <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto" />
+          </Link>
           <div className="hidden md:flex items-center gap-1">
             <Link href="/" className="text-[0.8125rem] font-medium px-3 py-1.5 rounded-md text-gray-500 hover:text-ink transition-colors">Inicio</Link>
             <span className="text-[0.8125rem] font-medium px-3 py-1.5 rounded-md nav-link-active">Nosotros</span>
@@ -434,7 +436,7 @@ export default function Nosotros() {
         <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
-              <span className="text-ink font-bold text-[0.9rem] tracking-[0.12em] uppercase block mb-3">INPLUX</span>
+              <img src="/brand/logos/inplux-logo-horizontal.svg" alt="INPLUX" className="h-7 w-auto mb-3" />
               <p className="text-gray-500 text-[0.8125rem] leading-relaxed max-w-[200px]">Hub de consultoría tributaria, tecnología e inteligencia artificial. Medellín, Colombia.</p>
             </div>
             <div>

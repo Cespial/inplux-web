@@ -1,0 +1,27 @@
+/* INPLUX webfonts — Editorial White System v3
+   Display: Instrument Serif (Regular + Italic)
+   Body/UI: Plus Jakarta Sans (variable 200–800) */
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./IS-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./IS-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("./PJS-var.ttf") format("truetype");
+}

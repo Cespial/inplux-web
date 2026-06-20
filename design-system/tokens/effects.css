@@ -1,0 +1,47 @@
+/* ===========================================================================
+   INPLUX · Effects — radii, shadows, motion
+   Subtle, progressive shadows. Radii: 8px buttons / 14px cards. Never > 16px.
+   Easing cubic-bezier(0.25, 1, 0.5, 1) for reveals.
+   =========================================================================== */
+
+:root {
+  /* --- Radii (never exceed 16px on corners) --- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;     /* buttons, inputs */
+  --radius-md: 12px;
+  --radius-lg: 14px;    /* cards */
+  --radius-xl: 16px;    /* max */
+  --radius-pill: 999px; /* badges, pills, capsules */
+
+  /* --- Shadows (warm, subtle, progressive) --- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.07);
+  --shadow-focus: 0 0 0 3px rgba(13, 125, 116, 0.18);
+
+  /* Glow used on dark ink surfaces (teal radial accent) */
+  --glow-teal: radial-gradient(circle at center,
+                 rgba(21, 220, 196, 0.16) 0%,
+                 rgba(13, 125, 116, 0.06) 35%,
+                 transparent 70%); /* @kind other */
+
+  /* --- Motion --- */
+  --ease-brand: cubic-bezier(0.25, 1, 0.5, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+
+  --dur-fast: 0.2s; /* @kind other */
+  --dur-base: 0.3s; /* @kind other */
+  --dur-slow: 0.65s; /* @kind other */
+
+  --transition-button: transform var(--dur-fast) var(--ease-brand),
+                       background-color var(--dur-fast) var(--ease-brand),
+                       box-shadow var(--dur-fast) var(--ease-brand);
+  --transition-card: transform var(--dur-base) var(--ease-brand),
+                     box-shadow var(--dur-base) var(--ease-brand),
+                     border-color var(--dur-base) var(--ease-brand);
+
+  /* --- Backdrop (frosted nav) --- */
+  --blur-nav: blur(16px) saturate(1.3); /* @kind other */
+  --nav-bg: rgba(255, 255, 255, 0.88);
+}

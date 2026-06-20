@@ -1,0 +1,24 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Shadows" subtitle="Subtle, progressive, warm" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family:var(--font-body); background:var(--off-white); color:var(--text-strong); }
+  .wrap { padding:28px 28px; display:flex; gap:26px; align-items:center; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .box { width:96px; height:64px; background:var(--white); border-radius:var(--radius-lg); border:1px solid var(--border-light); }
+  .n { font-size:11px; font-weight:600; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-xs)"></div><div class="n">xs</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-sm)"></div><div class="n">sm</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-md)"></div><div class="n">md</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-lg)"></div><div class="n">lg</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-focus);border-color:var(--teal)"></div><div class="n">focus ring</div></div>
+  </div>
+</body>
+</html>
