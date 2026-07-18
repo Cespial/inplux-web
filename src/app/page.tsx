@@ -586,17 +586,13 @@ const LOGOS = [
   { src: "/logos/54672_escudo-de-cisneros-antioquia-oficial-3x3_200x200.png", alt: "Cisneros" },
   { src: "/logos/CIS.png", alt: "CIS – Corporación Interuniversitaria de Servicios" },
   { src: "/logos/Escudo.png", alt: "Alcaldía de Andes" },
-  { src: "/logos/Parque_Arví_Logo_Blanco.png", alt: "Parque Arví" },
-  { src: "/logos/Think_It_Logo_Blanco.png", alt: "Think IT" },
   { src: "/logos/cropped-Logo_Alianza-IT-1.png", alt: "Alianza IT" },
   { src: "/logos/images.jpeg", alt: "Hospital San Camilo de Lelis (Vegachí)" },
   { src: "/logos/images.png", alt: "Hospital San Pío X" },
   { src: "/logos/logo-negro.png", alt: "Politécnico Colombiano Jaime Isaza Cadavid" },
-  { src: "/logos/logo-think-oracle.png", alt: "Think Oracle" },
   { src: "/logos/logo-provincia-b.svg", alt: "Provincia" },
   { src: "/logos/logo.png", alt: "Rentan" },
   { src: "/logos/logoedu.png", alt: "EDU – Empresa de Desarrollo Urbano" },
-  { src: "/logos/navarro-ospina-logo.png", alt: "Navarro Ospina" },
   { src: "/logos/logo.jpg", alt: "Sistemas Aries" },
 ];
 
