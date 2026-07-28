@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-07-21",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "captures": [
+    {
+      "slug": "gobia",
+      "sourceUrl": "https://www.gobia.co/demo",
+      "file": "gobia-demo-2026-07-21.png",
+      "sha256": "0348a1e565569d26493c32ab0971040c75c9e6cc5acdb5611d2cb10c6cb59458"
+    },
+    {
+      "slug": "laudos",
+      "sourceUrl": "https://laudos.co/?view=predecir",
+      "file": "laudos-prediccion-2026-07-21.png",
+      "sha256": "c67447ef596c4a98daf199e2e1487855eaf26b1a893319aed408a601ddefd5b2"
+    },
+    {
+      "slug": "tribai",
+      "sourceUrl": "https://tribai.co/asistente",
+      "file": "tribai-asistente-2026-07-21.png",
+      "sha256": "ab3f121645b9d9046e3cce0921261c8b8fa4cb60164aab3c1f6378082e2d1ef7"
+    },
+    {
+      "slug": "kelsen",
+      "sourceUrl": "https://kelsen.io/explorador?vigencia=modificado",
+      "file": "kelsen-explorador-2026-07-21.png",
+      "sha256": "77c687415e796f3769ce2322b79361d03426052f0a6b8ea6e802d5fb646ea7a7"
+    }
+  ]
+}

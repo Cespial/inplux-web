@@ -1,0 +1,297 @@
+.stateRoot,
+.loading,
+.errorState {
+  --state-black: #0c0c0b;
+  --state-ink: #11110f;
+  --state-ivory: #f9f5ef;
+  --state-muted: #959089;
+  --state-line: #2b2926;
+  --state-teal: #00d7ca;
+  --state-gutter: clamp(1.5rem, 6.35vw, 6rem);
+  background: var(--state-black);
+  color: var(--state-ivory);
+  font-family: var(--font-body), "Geist", sans-serif;
+}
+
+.notFound,
+.errorState {
+  position: relative;
+  display: flex;
+  min-height: min(58rem, 100svh);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(6.5rem, 12vw, 10rem) var(--state-gutter) clamp(2rem, 5vw, 4rem);
+  isolation: isolate;
+}
+
+.notFound {
+  min-height: 100svh;
+}
+
+.notFound::before,
+.errorState::before {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(0, 215, 202, 0.09), transparent 28%),
+    linear-gradient(125deg, transparent 0 56%, rgba(249, 245, 239, 0.035) 56.1% 56.2%, transparent 56.3%);
+  content: "";
+}
+
+.stateGrid {
+  position: absolute;
+  z-index: -1;
+  inset: 4rem 0 0 50%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-left: 1px solid var(--state-line);
+  opacity: 0.6;
+}
+
+.stateGrid span {
+  border-right: 1px solid var(--state-line);
+  border-bottom: 1px solid var(--state-line);
+}
+
+.stateMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #b9b3aa;
+  font: 550 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stateMeta span:first-child,
+.stateCopy > p:first-child {
+  color: var(--state-teal);
+}
+
+.stateCopy {
+  width: min(100%, 68rem);
+  margin-top: clamp(6rem, 16vh, 11rem);
+}
+
+.stateCopy > p:first-child {
+  margin: 0 0 1.4rem;
+  font: 550 0.62rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stateCopy h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: var(--font-serif), "Newsreader", Georgia, serif;
+  font-size: clamp(4.4rem, 10vw, 10rem);
+  font-weight: 300;
+  letter-spacing: -0.065em;
+  line-height: 0.82;
+}
+
+.stateCopy h1 em {
+  font-weight: 300;
+}
+
+.stateCopy > p:not(:first-child) {
+  max-width: 34rem;
+  margin: clamp(2rem, 4vw, 3.5rem) 0 0;
+  color: var(--state-muted);
+  font-size: clamp(0.83rem, 1.2vw, 1rem);
+  line-height: 1.65;
+}
+
+.stateActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.stateActions :is(a, button) {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border: 1px solid rgba(249, 245, 239, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--state-ivory);
+  padding: 0.8rem 1.2rem;
+  font: 600 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.055em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.stateActions :is(a, button):first-child {
+  border-color: var(--state-ivory);
+  background: var(--state-ivory);
+  color: var(--state-ink);
+}
+
+.stateActions :is(a, button):active {
+  transform: scale(0.97);
+}
+
+.stateActions :is(a, button):focus-visible {
+  outline: 2px solid var(--state-teal);
+  outline-offset: 3px;
+}
+
+.stateFoot {
+  margin: 5rem 0 0;
+  color: #aaa49c;
+  font: 500 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.loading {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: grid;
+  min-height: 100svh;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.5rem var(--state-gutter);
+}
+
+.loadingTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.loadingTop img {
+  width: 7.75rem;
+  height: auto;
+}
+
+.loadingTop span,
+.loadingMessage,
+.loadingStage span {
+  color: #aaa49c;
+  font: 550 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.loadingStage {
+  position: relative;
+  display: grid;
+  width: min(100%, 62rem);
+  align-self: center;
+  justify-self: center;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--state-line);
+}
+
+.loadingStage span {
+  display: grid;
+  min-height: 15rem;
+  place-items: center;
+  border-right: 1px solid var(--state-line);
+}
+
+.loadingStage span:nth-child(3) {
+  border-right: 0;
+}
+
+.loadingStage i {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: calc(33.333% + 1px);
+  height: 2px;
+  background: var(--state-teal);
+  animation: state-progress 1.8s cubic-bezier(0.77, 0, 0.175, 1) infinite alternate;
+}
+
+.loadingMessage {
+  justify-self: end;
+}
+
+@keyframes state-progress {
+  from { transform: translateX(0); }
+  to { transform: translateX(200%); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stateActions :is(a, button):hover {
+    border-color: var(--state-teal);
+    background: var(--state-teal);
+    color: var(--state-ink);
+  }
+}
+
+@media (max-width: 680px) {
+  .stateMeta,
+  .loadingTop {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stateCopy h1 {
+    font-size: clamp(4.25rem, 21vw, 6.5rem);
+  }
+
+  .stateActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .stateActions :is(a, button) {
+    width: 100%;
+  }
+
+  .stateGrid {
+    left: 66%;
+  }
+
+  .loadingStage {
+    grid-template-columns: 1fr;
+  }
+
+  .loadingStage span {
+    min-height: 8rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--state-line);
+  }
+
+  .loadingStage span:nth-child(3) {
+    border-bottom: 0;
+  }
+
+  .loadingStage i {
+    width: 2px;
+    height: calc(33.333% + 1px);
+    animation-name: state-progress-mobile;
+  }
+}
+
+@keyframes state-progress-mobile {
+  from { transform: translateY(0); }
+  to { transform: translateY(200%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingStage i {
+    animation: none;
+    transform: translateX(100%);
+  }
+
+  .stateActions :is(a, button) {
+    transition-duration: 0.01ms;
+  }
+}

@@ -1,117 +1,135 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
+import localFont from "next/font/local";
+import type { ReactNode } from "react";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const geist = localFont({
+  src: "./fonts/Geist-Latin.woff2",
   variable: "--font-body",
+  weight: "100 900",
+  display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
+const newsreader = localFont({
+  src: "./fonts/Newsreader-Display-300-Latin.woff2",
   variable: "--font-serif",
+  weight: "300",
+  style: "normal",
+  display: "swap",
+});
+
+const newsreaderItalic = localFont({
+  src: "./fonts/Newsreader-Display-300-Italic-Latin.woff2",
+  variable: "--font-serif-italic",
+  weight: "300",
+  style: "italic",
+  display: "swap",
+  preload: false,
+});
+
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Latin.woff2",
+  variable: "--font-mono-face",
+  weight: "100 900",
+  display: "swap",
+  preload: false,
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1a1918",
+  themeColor: "#0c0c0b",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://inplux.co"),
-  title: "INPLUX — Hub de Inteligencia Tributaria, Financiera & IA",
+  title: {
+    default: "INPLUX | Fábrica de software a la medida",
+    template: "%s | INPLUX",
+  },
   description:
-    "Hub que integra consultoría tributaria y financiera, inteligencia artificial y transformación digital. +25 años de experiencia, +50 municipios, +100 proyectos en Colombia. Creadores de Tribai.co.",
+    "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades, con inteligencia artificial aplicada y dirección humana.",
   keywords: [
-    "consultoría tributaria",
-    "inteligencia tributaria",
-    "inteligencia artificial",
-    "transformación digital",
-    "hub tecnológico",
-    "sector público",
-    "Colombia",
+    "fábrica de software",
+    "software a la medida",
+    "desarrollo de software Colombia",
+    "automatización",
+    "inteligencia artificial aplicada",
+    "plataformas digitales",
     "Medellín",
-    "Inplux",
-    "Tribai",
-    "NIC NIIF",
-    "estatuto tributario",
-    "hacienda pública",
-    "IA tributaria",
+    "INPLUX",
   ],
   openGraph: {
-    title: "INPLUX — Hub de Inteligencia Tributaria, Consultoría & IA",
+    title: "De un problema real a software en producción.",
     description:
-      "Nuestra historia empezó en la gestión tributaria. Llevamos 25 años entre estatutos, NIC/NIIF y hacienda pública colombiana. Hoy convertimos ese conocimiento en tecnología e inteligencia artificial.",
+      "Conoce cómo INPLUX convierte necesidades concretas en productos digitales que se pueden usar y mejorar.",
     url: "https://inplux.co",
     siteName: "INPLUX S.A.S.",
     locale: "es_CO",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "INPLUX — Hub de Inteligencia Tributaria & IA" }],
+    images: [
+      {
+        url: "/brand/og/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "INPLUX, de un problema real a software en producción",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "INPLUX — Hub de Inteligencia Tributaria & IA",
-    description:
-      "Tributaristas que construyen tecnología. +25 años, +50 municipios, +100 proyectos. Creadores de Tribai.co.",
-    images: ["/og-image.png"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://inplux.co",
+    title: "De un problema real a software en producción.",
+    description: "Fábrica de software a la medida para empresas y entidades.",
+    images: [
+      {
+        url: "/brand/og/og-default.png",
+        alt: "INPLUX, de un problema real a software en producción",
+      },
+    ],
   },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": "https://inplux.co/#organization",
     name: "INPLUX S.A.S.",
     url: "https://inplux.co",
-    logo: "https://inplux.co/inplux-logo.png",
+    logo: "https://inplux.co/brand/logos/inplux-logo-horizontal.svg",
     description:
-      "Hub de inteligencia tributaria, consultoría y tecnología con IA. +25 años de experiencia en Colombia.",
+      "Fábrica de software a la medida para empresas y entidades, con inteligencia artificial aplicada y dirección humana.",
+    foundingDate: "2023",
+    email: "gerencia@inplux.co",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Transversal 5 A # 45 - 91",
       addressLocality: "Medellín",
       addressRegion: "Antioquia",
       addressCountry: "CO",
     },
-    telephone: "+573023194636",
-    email: "gerencia@inplux.co",
-    foundingDate: "2000",
-    numberOfEmployees: { "@type": "QuantitativeValue", minValue: 10 },
-    sameAs: ["https://kelsen.io", "https://tribai.co", "https://laudos.co", "https://gobia.co", "https://fourier.dev/en"],
+    sameAs: ["https://www.linkedin.com/company/inplux"],
     knowsAbout: [
-      "Inteligencia tributaria",
-      "Consultoría financiera",
-      "Inteligencia artificial",
-      "Transformación digital",
-      "NIC/NIIF",
-      "Estatuto tributario colombiano",
+      "Desarrollo de software a la medida",
+      "Productos digitales",
+      "Automatización",
+      "Inteligencia artificial aplicada",
     ],
   };
 
   return (
-    <html lang="es">
+    <html
+      lang="es-CO"
+      className={`${geist.variable} ${newsreader.variable} ${newsreaderItalic.variable} ${geistMono.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${jakarta.variable} ${instrumentSerif.variable} antialiased`}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

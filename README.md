@@ -1,64 +1,74 @@
-# INPLUX — Ecosistema Tecnológico
+# INPLUX — Fábrica de software
 
-> Landing page y sitio web corporativo de [inplux.co](https://inplux.co) — ecosistema de tecnología, datos y consultoría para el sector público y privado en Colombia.
+Sitio corporativo de [inplux.co](https://inplux.co). Presenta a INPLUX como una fábrica de software a la medida para empresas y entidades: de un problema real a un producto digital en producción, con inteligencia artificial aplicada y dirección humana.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=next.js)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+## Experiencia pública
 
-## Descripción
+- `/`: propuesta de valor, servicios, trabajo real, método, públicos y preguntas frecuentes.
+- `/nosotros`: historia, principios, disciplinas y liderazgo.
+- `/marca`: guía interna de identidad y descarga de activos propios.
+- `robots.txt`, `sitemap.xml`, manifiesto web, metadatos y tarjetas sociales por ruta.
 
-Sitio web de INPLUX, hub de innovación tecnológica que conecta soluciones de datos, inteligencia artificial y desarrollo de software con las necesidades del territorio colombiano.
-
-### Características
-
-- **Landing page** corporativa con diseño moderno
-- **Página "Nosotros"** (`/nosotros`) — equipo, misión y visión
-- **SEO optimizado** — `robots.ts` y `sitemap.ts` integrados
-- **Página 404** personalizada
-- **Responsive** — diseño adaptativo para todos los dispositivos
+El sitio evita cifras, resultados, relaciones comerciales y estados de producto que no tengan evidencia vigente. Los logos de terceros no se publican hasta registrar relación, proyecto, periodo, permiso y archivo maestro.
 
 ## Stack
 
-| Capa | Tecnología |
-|------|-----------|
-| Framework | Next.js 16, React 19 |
-| Lenguaje | TypeScript 5 |
-| Estilos | Tailwind CSS 4 |
-| Deploy | Vercel |
+- Next.js 16 y React 19.
+- TypeScript 5.
+- CSS nativo con tokens de marca.
+- Fuentes locales para evitar dependencias externas en el render inicial.
+- Despliegue previsto en Vercel.
 
-## Estructura
-
-```
-inplux-web/
-├── src/app/
-│   ├── page.tsx          # Landing principal
-│   ├── nosotros/         # Página "Nosotros"
-│   ├── not-found.tsx     # 404 personalizado
-│   ├── robots.ts         # robots.txt dinámico
-│   ├── sitemap.ts        # Sitemap XML dinámico
-│   ├── layout.tsx        # Layout principal
-│   └── globals.css       # Estilos globales
-└── public/               # Assets estáticos
-```
-
-## Instalación
+## Desarrollo
 
 ```bash
-git clone https://github.com/Cespial/inplux-web.git
-cd inplux-web
 npm install
 npm run dev
 ```
 
-## Deploy
+Antes de entregar o desplegar:
 
-Desplegado automáticamente en [Vercel](https://vercel.com) desde la rama `main`.
+```bash
+npm run check
+```
+
+El control completo ejecuta lint, pruebas del inspector visual, validación editorial, build de producción y verificación del HTML generado. Comprueba, entre otras cosas:
+
+- lenguaje público bloqueado o promesas sin evidencia;
+- separación entre etapa y acceso de cada producto;
+- fecha de verificación del portafolio;
+- atribución de Laudos a REDEK;
+- tarjetas sociales y dimensiones 1200 × 630;
+- ausencia de logos de terceros sin permiso publicable;
+- presencia de las cabeceras de seguridad requeridas.
+- metadata final, social cards, canonical, JSON-LD, sitemap y manifest web;
+- manifest, decisiones visuales y hashes del futuro HERO generado.
+
+Por defecto, un estado de producto vence después de 120 días. Para una revisión excepcional puede definirse `CONTENT_VERIFICATION_MAX_AGE_DAYS`, sin eliminar la obligación de actualizar `verifiedAt` en `src/content/home.ts`.
+
+Una entrega visual se inspecciona antes de integrarla:
+
+```bash
+npm run inspect:hero -- /ruta/absoluta/a/la/entrega
+```
+
+La carpeta debe incluir `hero-media-manifest.json`, las decisiones JSON aprobadas del reviewer, ambos posters canónicos y, si existe video, el par WebM/MP4. El inspector no consulta URLs externas: valida procedencia declarada, aprobaciones, SHA-256 y el contenido real de cada medio.
+
+## Estructura principal
+
+```text
+src/
+├── app/                  # Rutas, metadatos y estilos
+├── components/site/      # Componentes compartidos
+└── content/home.ts       # Contenido estructurado y estados verificados
+public/brand/             # Únicos activos publicables de marca
+scripts/                  # Controles de calidad del repositorio
+```
+
+## Publicación
+
+La rama `main` alimenta producción. Antes de integrarla se requiere aprobar el contenido, ejecutar `npm run check` y revisar visualmente las rutas públicas en móvil y escritorio.
 
 ## Licencia
 
 MIT
-
----
-
-Desarrollado por [Cristian Espinal Maya](https://github.com/Cespial) · [inplux.co](https://inplux.co)

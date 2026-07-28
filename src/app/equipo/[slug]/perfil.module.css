@@ -1,0 +1,222 @@
+.profileRoot {
+  --p-black: #0c0c0b;
+  --p-ivory: #f9f5ef;
+  --p-paper: #e6e1d9;
+  --p-muted: #959089;
+  --p-line: #363533;
+  --p-teal: #00d7ca;
+  --p-gutter: clamp(1.5rem, 6.35vw, 6rem);
+  --p-display: var(--font-serif), "Newsreader", "Iowan Old Style", Georgia, serif;
+  --p-body: var(--font-body), "Geist", "Helvetica Neue", Arial, sans-serif;
+  --p-mono: var(--font-mono);
+  min-width: 0;
+  overflow: clip;
+  background: var(--p-black);
+  color: var(--p-ivory);
+  font-family: var(--p-body);
+}
+
+.profileRoot *,
+.profileRoot *::before,
+.profileRoot *::after {
+  box-sizing: border-box;
+}
+
+.profileRoot :is(h1, h2, p, ol, ul, li) {
+  margin: 0;
+}
+
+.shell {
+  width: min(100%, 62rem);
+  margin-inline: auto;
+  padding-inline: var(--p-gutter);
+}
+
+/* ── Hero ───────────────────────────────────────────── */
+
+.hero {
+  padding-block: clamp(7rem, 16vh, 11rem) clamp(3rem, 7vh, 5rem);
+  border-bottom: 1px solid var(--p-line);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--p-teal);
+  font: 540 0.68rem/1.2 var(--p-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  max-width: 16ch;
+  font-family: var(--p-display);
+  font-size: clamp(2.9rem, 6.4vw, 5.2rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+}
+
+.focus {
+  margin-top: clamp(1.1rem, 2.6vh, 1.8rem);
+  max-width: 46ch;
+  color: var(--p-paper);
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+}
+
+/* ── Cuerpo ─────────────────────────────────────────── */
+
+.body,
+.publications {
+  padding-block: clamp(3.2rem, 8vh, 5.5rem);
+  border-bottom: 1px solid var(--p-line);
+}
+
+.sectionTitle {
+  margin-bottom: 1.5rem;
+  color: var(--p-teal);
+  font: 540 0.68rem/1.2 var(--p-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sectionTitle:not(:first-child) {
+  margin-top: clamp(2.6rem, 6vh, 4rem);
+}
+
+.prose {
+  display: grid;
+  gap: 1.15rem;
+  max-width: 64ch;
+  color: var(--p-paper);
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.68;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  list-style: none;
+  padding: 0;
+}
+
+.tags li {
+  padding: 0.42rem 0.85rem;
+  border: 1px solid var(--p-line);
+  border-radius: 999px;
+  color: var(--p-paper);
+  font-size: 0.86rem;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  list-style: none;
+  padding: 0;
+}
+
+.links a {
+  color: var(--p-teal);
+  font-size: 0.94rem;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--p-teal) 40%, transparent);
+  padding-bottom: 2px;
+  transition: border-color 160ms var(--ease-standard, ease);
+}
+
+.links a:hover,
+.links a:focus-visible {
+  border-bottom-color: var(--p-teal);
+}
+
+/* ── Publicaciones ──────────────────────────────────── */
+
+.note {
+  margin-top: -0.6rem;
+  margin-bottom: 1.9rem;
+  color: var(--p-muted);
+  font-size: 0.9rem;
+}
+
+.note a {
+  color: var(--p-paper);
+}
+
+.publicationList {
+  display: grid;
+  gap: 1.6rem;
+  list-style: none;
+  padding: 0;
+  counter-reset: pub;
+}
+
+.publicationList li {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--p-line);
+}
+
+.publicationList li:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.publicationList a {
+  display: inline-block;
+  max-width: 62ch;
+  color: var(--p-ivory);
+  font-family: var(--p-display);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.28;
+  text-decoration: none;
+  transition: color 160ms var(--ease-standard, ease);
+}
+
+.publicationList a:hover,
+.publicationList a:focus-visible {
+  color: var(--p-teal);
+}
+
+.publicationMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  color: var(--p-muted);
+  font: 500 0.72rem/1.2 var(--p-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ── Cierre ─────────────────────────────────────────── */
+
+.back {
+  padding-block: clamp(2.6rem, 6vh, 4rem);
+}
+
+.backLink {
+  color: var(--p-muted);
+  font: 540 0.72rem/1.2 var(--p-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 160ms var(--ease-standard, ease);
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+  color: var(--p-teal);
+}
+
+@media (max-width: 40rem) {
+  .title {
+    max-width: 100%;
+  }
+}
