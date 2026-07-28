@@ -12,13 +12,14 @@
   --ink: #1a1918;          /* text, primary buttons, dark surface (NOT #000) */
   --teal: #0d7d74;         /* brand accent — links, hover, focus, "tech" */
   --teal-bright: #15dcc4;  /* highlight on dark surfaces */
+  --teal-on-soft: #0b746c; /* AA text on teal-soft */
   --teal-soft: #e8f5f3;    /* soft teal fill */
 
   /* --- Warm neutral scale --- */
   --gray-100: #e8e6e3;
   --gray-200: #d1cfcc;
   --gray-300: #a8a5a0;
-  --gray-400: #8a8784;
+  --gray-400: #76716a; /* AA sobre blanco y off-white */
   --gray-500: #6e6b68;
   --gray-600: #545250;
   --gray-700: #3d3b39;
@@ -49,6 +50,7 @@
   --text-on-ink-muted: var(--gray-300);
   --text-accent: var(--teal);         /* links, emphasis */
   --text-accent-bright: var(--teal-bright); /* accent on dark */
+  --text-accent-on-soft: var(--teal-on-soft);
 
   --accent: var(--teal);
   --accent-bright: var(--teal-bright);

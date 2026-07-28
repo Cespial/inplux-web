@@ -2,17 +2,25 @@
   "name": "inplux-web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:content && next build && npm run check:output",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:content": "node scripts/verify-public-content.mjs",
+    "check:output": "node scripts/verify-build-output.mjs",
+    "check:http": "node scripts/verify-http-contracts.mjs",
+    "inspect:hero": "node scripts/inspect-hero-media.mjs",
+    "test:hero-inspector": "node --test scripts/inspect-hero-media.test.mjs",
+    "check": "npm run lint && npm run test:hero-inspector && npm run build && npm run check:http"
   },
   "dependencies": {
-    "motion": "^12.40.0",
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -20,8 +28,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
   }
 }

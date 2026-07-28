@@ -1,0 +1,596 @@
+.contactRoot {
+  --contact-black: #0c0c0b;
+  --contact-ivory: #faf7f1;
+  --contact-paper: #f2eee7;
+  --contact-line: #2b2926;
+  --contact-teal: #00d7ca;
+  --contact-teal-dark: #006f68;
+  --contact-muted-on-dark: #aaa69f;
+  --contact-body-on-dark: #c5c1ba;
+  --contact-gutter: clamp(1.4rem, 6.35vw, 6rem);
+  overflow: clip;
+  background: var(--contact-paper);
+  color: #121210;
+  font-family: var(--font-body), "Geist", sans-serif;
+}
+
+.contactRoot :is(h1, h2, h3, p) {
+  margin-top: 0;
+}
+
+.contactRoot main:focus {
+  outline: none;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  color: #625d57;
+  font: 600 0.63rem/1.2 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow span {
+  color: var(--contact-teal-dark);
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  overflow: hidden;
+  align-items: center;
+  grid-template-columns: minmax(0, 0.9fr) minmax(28rem, 1.1fr);
+  gap: clamp(3rem, 7vw, 8rem);
+  background:
+    radial-gradient(circle at 82% 20%, rgba(0, 215, 202, 0.12), transparent 25rem),
+    var(--contact-black);
+  color: var(--contact-ivory);
+  padding: clamp(8.5rem, 13vh, 11rem) var(--contact-gutter) clamp(5rem, 9vh, 8rem);
+}
+
+.hero::before {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(250, 247, 241, 0.12) 1px, transparent 1.2px);
+  background-size: 2rem 2rem;
+  content: "";
+  mask-image: linear-gradient(90deg, transparent 25%, #000);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.heroCopy,
+.heroBrief {
+  position: relative;
+  z-index: 1;
+}
+
+.hero .eyebrow,
+.formSection .eyebrow {
+  color: var(--contact-muted-on-dark);
+}
+
+.hero .eyebrow span,
+.formSection .eyebrow span {
+  color: var(--contact-teal);
+}
+
+.heroCopy h1 {
+  max-width: 10.5ch;
+  margin: 1.3rem 0 0;
+  font-family: var(--font-serif), "Newsreader", serif;
+  font-size: clamp(4.5rem, 8.2vw, 8.7rem);
+  font-weight: 300;
+  letter-spacing: -0.06em;
+  line-height: 0.86;
+}
+
+.heroCopy h1 em,
+.prepare h2 em,
+.formCopy h2 em,
+.after h2 em {
+  color: var(--contact-teal-dark);
+  font-weight: 300;
+}
+
+.heroCopy h1 em,
+.formCopy h2 em {
+  color: var(--contact-teal);
+}
+
+.heroCopy > p:not(.eyebrow) {
+  max-width: 37rem;
+  margin: 1.8rem 0 0;
+  color: var(--contact-body-on-dark);
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  line-height: 1.6;
+}
+
+.heroCopy > a,
+.after > a {
+  display: inline-flex;
+  min-height: 3.1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+  border: 1px solid var(--contact-ivory);
+  border-radius: 999px;
+  background: var(--contact-ivory);
+  color: var(--contact-black);
+  padding: 0.8rem 1.2rem;
+  font: 600 0.67rem/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.heroCopy > a:active,
+.after > a:active {
+  transform: scale(0.97);
+}
+
+.heroBrief {
+  width: min(100%, 46rem);
+  justify-self: end;
+  border: 1px solid rgba(250, 247, 241, 0.18);
+  background: rgba(16, 16, 15, 0.82);
+  box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.34);
+}
+
+.briefHeader,
+.briefFooter {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--contact-line);
+  color: var(--contact-muted-on-dark);
+  padding: 0.8rem 1rem;
+  font: 550 0.59rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.briefBody {
+  position: relative;
+  min-height: clamp(27rem, 57vh, 38rem);
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.briefBody::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(250, 247, 241, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 247, 241, 0.035) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  content: "";
+  pointer-events: none;
+}
+
+.briefStatus,
+.briefBody ol,
+.briefResult {
+  position: relative;
+  z-index: 1;
+}
+
+.briefStatus,
+.briefResult {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(250, 247, 241, 0.2);
+  background: var(--contact-black);
+  padding: 1.1rem;
+}
+
+.briefStatus span,
+.briefResult span {
+  color: var(--contact-muted-on-dark);
+  font: 550 0.52rem/1 var(--font-mono);
+  letter-spacing: 0.07em;
+}
+
+.briefStatus strong,
+.briefResult strong {
+  color: var(--contact-teal);
+  font: 550 0.58rem/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+
+.briefBody ol {
+  display: grid;
+  gap: 0;
+  margin: 2rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.briefBody li {
+  display: grid;
+  min-height: 4.7rem;
+  align-items: center;
+  grid-template-columns: 2.4rem 1fr auto;
+  gap: 1rem;
+  border-top: 1px solid var(--contact-line);
+  color: var(--contact-body-on-dark);
+  font: 520 0.65rem/1.2 var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.briefBody li:last-child {
+  border-bottom: 1px solid var(--contact-line);
+}
+
+.briefBody li span {
+  color: var(--contact-teal);
+  font-size: 0.55rem;
+}
+
+.briefBody li i {
+  width: 0.46rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--contact-teal);
+  border-radius: 50%;
+  background: rgba(0, 215, 202, 0.08);
+}
+
+.briefFooter {
+  border-top: 1px solid var(--contact-line);
+  border-bottom: 0;
+}
+
+.briefFooter span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--contact-ivory);
+}
+
+.briefFooter i {
+  width: 0.45rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--contact-teal);
+}
+
+.prepare,
+.formSection,
+.after {
+  padding: clamp(5.5rem, 10vw, 9.5rem) var(--contact-gutter);
+}
+
+.prepare {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.38fr) minmax(0, 0.82fr) minmax(25rem, 0.8fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  border-bottom: 1px solid #d5d0c8;
+}
+
+.prepare h2,
+.formCopy h2,
+.after h2 {
+  margin: 0;
+  font-family: var(--font-serif), "Newsreader", serif;
+  font-size: clamp(3.25rem, 6vw, 6.5rem);
+  font-weight: 300;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+}
+
+.prepare > div > p {
+  max-width: 35rem;
+  margin: 1.5rem 0 0;
+  color: #68625c;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.prepare > ol,
+.after > ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prepare li {
+  display: grid;
+  min-height: 8.5rem;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  border-top: 1px solid #d5d0c8;
+  padding: 1.4rem 0;
+}
+
+.prepare li:last-child {
+  border-bottom: 1px solid #d5d0c8;
+}
+
+.prepare li > span,
+.after li > span {
+  color: var(--contact-teal-dark);
+  font: 600 0.62rem/1 var(--font-mono);
+}
+
+.prepare h3 {
+  margin: 0;
+  font-family: var(--font-serif), "Newsreader", serif;
+  font-size: 1.65rem;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+}
+
+.prepare li p {
+  margin: 0.55rem 0 0;
+  color: #6c665f;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.formSection {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.8fr) minmax(28rem, 1.2fr);
+  gap: clamp(4rem, 10vw, 10rem);
+  border-top: 1px solid var(--contact-line);
+  background:
+    radial-gradient(circle at 82% 28%, rgba(0, 215, 202, 0.1), transparent 25rem),
+    var(--contact-black);
+  color: var(--contact-ivory);
+}
+
+.formCopy {
+  align-self: start;
+  position: sticky;
+  top: 8rem;
+}
+
+.formCopy h2 {
+  margin-top: 1.4rem;
+}
+
+.formCopy > p:not(.eyebrow) {
+  max-width: 35rem;
+  margin: 1.4rem 0 0;
+  color: var(--contact-body-on-dark);
+  font-size: 0.95rem;
+  line-height: 1.67;
+}
+
+.directChannels {
+  display: grid;
+  margin-top: 3rem;
+  border-top: 1px solid var(--contact-line);
+}
+
+.directChannels p {
+  margin: 0;
+  color: var(--contact-muted-on-dark);
+  padding: 1rem 0;
+  font: 550 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.directChannels :is(a, span) {
+  display: flex;
+  min-height: 3.2rem;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--contact-line);
+  color: var(--contact-body-on-dark);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.directChannels > span {
+  border-bottom: 1px solid var(--contact-line);
+}
+
+.directChannels a {
+  transition: color 160ms ease;
+}
+
+.formPanel {
+  min-width: 0;
+  align-self: start;
+  border: 1px solid var(--contact-line);
+  background: rgba(250, 247, 241, 0.025);
+}
+
+.formPanelHeader {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--contact-line);
+  color: var(--contact-muted-on-dark);
+  padding: 0.8rem 1rem;
+  font: 550 0.57rem/1 var(--font-mono);
+  letter-spacing: 0.07em;
+}
+
+.formPanel :global(.site-contact-form) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.after {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.38fr) minmax(0, 0.82fr) minmax(24rem, 0.8fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  background: var(--contact-ivory);
+}
+
+.after > ol {
+  border-top: 1px solid #d5d0c8;
+}
+
+.after li {
+  display: grid;
+  min-height: 6.2rem;
+  align-items: start;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  border-bottom: 1px solid #d5d0c8;
+  padding: 1.25rem 0;
+}
+
+.after li p {
+  margin: 0;
+  color: #635e58;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.after > a {
+  width: max-content;
+  grid-column: 2;
+  border-color: #1a1918;
+  background: #1a1918;
+  color: var(--contact-ivory);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .heroCopy > a:hover {
+    border-color: var(--contact-teal);
+    background: var(--contact-teal);
+  }
+
+  .after > a:hover {
+    border-color: var(--contact-teal-dark);
+    background: var(--contact-teal-dark);
+  }
+
+  .directChannels a:hover {
+    color: var(--contact-teal);
+  }
+}
+
+@media (max-width: 1020px) {
+  .hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    padding-top: 8.5rem;
+  }
+
+  .heroBrief {
+    width: 100%;
+  }
+
+  .prepare,
+  .after {
+    grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1.65fr);
+  }
+
+  .prepare > ol,
+  .after > ol {
+    grid-column: 2;
+  }
+
+  .formSection {
+    grid-template-columns: 1fr;
+  }
+
+  .formCopy {
+    position: static;
+  }
+
+  .after > a {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero,
+  .prepare,
+  .formSection,
+  .after {
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .hero {
+    gap: 3rem;
+    padding-top: 7.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(4rem, 19vw, 5.6rem);
+  }
+
+  .heroCopy > a {
+    width: 100%;
+  }
+
+  .briefBody {
+    min-height: 28rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .briefHeader,
+  .briefFooter {
+    font-size: 0.48rem;
+  }
+
+  .briefStatus,
+  .briefResult {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .briefStatus strong,
+  .briefResult strong {
+    text-align: left;
+  }
+
+  .prepare,
+  .after {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .prepare > ol,
+  .after > ol,
+  .after > a {
+    grid-column: auto;
+  }
+
+  .prepare h2,
+  .formCopy h2,
+  .after h2 {
+    font-size: clamp(3rem, 14.5vw, 4.4rem);
+  }
+
+  .formSection {
+    gap: 3rem;
+  }
+
+  .formPanel {
+    margin-inline: -1.25rem;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .formPanel :global(.site-form-row) {
+    grid-template-columns: 1fr;
+  }
+
+  .after > a {
+    width: 100%;
+  }
+}

@@ -1,19 +1,25 @@
 /* ===========================================================================
    INPLUX · Typography
-   Display: Instrument Serif (400, normal + italic) — headings ONLY.
-   Body/UI:  Plus Jakarta Sans (300–800).
+   Display: Newsreader Display (300, normal + italic) — headings ONLY.
+   Body/UI:  Geist (100–900).
+   Mono/UI:  Geist Mono (100–900).
    Labels:   uppercase, letter-spacing 0.08em, weight 500–600.
    =========================================================================== */
 
 :root {
-  /* --- Families --- */
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* --font-serif, --font-serif-italic, --font-body y --font-mono-face los inyecta
+     next/font en <html> para enlazar estos tokens con los WOFF2 locales y evitar
+     que la cascada los sustituya. La cursiva no se precarga: el navegador la pide
+     únicamente cuando una página contiene énfasis editorial real. */
+  --font-mono: var(--font-mono-face), "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* aliases */
   --font-display: var(--font-serif);
   --font-ui: var(--font-body);
+  --font-home-display: var(--font-serif);
+  --font-home-display-italic: var(--font-serif-italic);
+  --font-home-body: var(--font-body);
+  --font-home-mono: var(--font-mono);
 
   /* --- Weights (body) --- */
   --weight-light: 300;
