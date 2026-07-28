@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { teamMembers } from "@/content/team";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -11,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/trabajo/laudos",
     "/capacidades",
     "/nosotros",
+    ...teamMembers.map((member) => `/equipo/${member.slug}`),
     "/prensa",
     "/contacto",
   ];

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CriterionFlow } from "@/components/about/CriterionFlow.client";
 import { HistoryScrolly } from "@/components/about/HistoryScrolly.client";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { personId, profileUrl, teamMembers } from "@/content/team";
 import styles from "./nosotros.module.css";
 
 export const metadata: Metadata = {
@@ -72,26 +74,7 @@ const principles = [
   },
 ] as const;
 
-const leaders = [
-  {
-    code: "DIR–01",
-    role: "CEO Y FUNDADOR",
-    name: "Jaime Alonso Cano Pino",
-    focus: "Estrategia, criterio tributario, financiero e institucional.",
-    bio:
-      "Dirige la estrategia y el criterio con el que INPLUX convierte experiencia de contextos complejos en productos que puedan operar y producir resultados verificables.",
-    linkedin: "https://www.linkedin.com/in/jaime-alonso-cano-pino-a11a6246/",
-  },
-  {
-    code: "DIR–02",
-    role: "CTO",
-    name: "Cristian Espinal",
-    focus: "Producto, arquitectura tecnológica e inteligencia artificial.",
-    bio:
-      "Lidera la definición y construcción de productos digitales. Coordina cómo diseño, software, datos e inteligencia artificial trabajan como un solo sistema de entrega.",
-    linkedin: "https://www.linkedin.com/in/cespial/",
-  },
-] as const;
+const leaders = teamMembers;
 
 const aboutPageJsonLd = {
   "@context": "https://schema.org",
@@ -127,13 +110,17 @@ const aboutSupportingJsonLd = {
         },
       ],
     },
-    ...leaders.map((leader, index) => ({
+    // Referencia por `@id` canónico, no una definición nueva: la persona se
+    // define una sola vez en /equipo/[slug]. Repetir aquí un `@id` distinto
+    // crearía una entidad paralela con el mismo nombre.
+    ...leaders.map((leader) => ({
       "@type": "Person",
-      "@id": `https://inplux.co/nosotros#leader-${index + 1}`,
+      "@id": personId(leader.slug),
       name: leader.name,
-      jobTitle: leader.role,
+      url: profileUrl(leader.slug),
+      jobTitle: leader.jobTitle,
       description: leader.focus,
-      sameAs: [leader.linkedin],
+      sameAs: [...leader.sameAs],
       worksFor: {
         "@id": "https://inplux.co/#organization",
       },
@@ -298,6 +285,9 @@ export default function Nosotros() {
                     <h3>{leader.name}</h3>
                     <p className={styles.leaderFocus}>{leader.focus}</p>
                     <p className={styles.leaderBio}>{leader.bio}</p>
+                    <Link href={`/equipo/${leader.slug}`}>
+                      Ver trayectoria y publicaciones
+                    </Link>
                     <a href={leader.linkedin} target="_blank" rel="noreferrer">
                       Ver perfil en LinkedIn <span aria-hidden="true">↗</span>
                     </a>

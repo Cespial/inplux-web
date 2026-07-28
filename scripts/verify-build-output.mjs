@@ -487,6 +487,8 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/laudos`,
     `${siteUrl}/capacidades`,
     `${siteUrl}/nosotros`,
+    `${siteUrl}/equipo/jaime-alonso-cano-pino`,
+    `${siteUrl}/equipo/cristian-espinal-maya`,
     `${siteUrl}/prensa`,
     `${siteUrl}/contacto`,
   ];

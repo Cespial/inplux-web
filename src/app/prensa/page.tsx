@@ -4,6 +4,7 @@ import { PressArchive } from "@/components/site/PressStories";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { pressStories, type PressStory } from "@/content/press";
+import { findTeamMemberInByline, personId } from "@/content/team";
 import styles from "./prensa.module.css";
 
 const canonicalUrl = "https://inplux.co/prensa";
@@ -62,6 +63,24 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Nodo `Person` para el autor de una pieza del archivo.
+ *
+ * Cuando el byline corresponde a alguien del equipo se emite el `@id` canónico
+ * definido en /equipo/[slug]. Sin él, cada una de las piezas firmadas creaba un
+ * `Person` anónimo distinto: Google veía tantas personas homónimas como
+ * publicaciones, en lugar de una sola con un cuerpo de trabajo atribuido.
+ *
+ * Los autores externos siguen emitiéndose sólo con `name`, que es lo correcto:
+ * no nos corresponde asignarles identidad dentro de nuestro grafo.
+ */
+function authorNode(byline: string) {
+  const member = findTeamMemberInByline(byline);
+  return member
+    ? { "@type": "Person", "@id": personId(member.slug), name: member.name }
+    : { "@type": "Person", name: byline };
+}
+
 const pressCollectionJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -95,10 +114,7 @@ const pressCollectionJsonLd = {
                 datePublished: story.publishedAt,
                 description: story.summary,
                 author: story.byline
-                  ? story.byline.split(" · ").map((name) => ({
-                      "@type": "Person",
-                      name,
-                    }))
+                  ? story.byline.split(" · ").map(authorNode)
                   : undefined,
                 creativeWorkStatus: story.editorialStatus,
                 publisher: {
@@ -123,12 +139,7 @@ const pressCollectionJsonLd = {
                     "@type": "Organization",
                     name: story.outlet,
                   },
-                  performer: story.byline
-                    ? {
-                        "@type": "Person",
-                        name: story.byline,
-                      }
-                    : undefined,
+                  performer: story.byline ? authorNode(story.byline) : undefined,
                 }
               : {
                   "@type": "Article",
@@ -140,10 +151,7 @@ const pressCollectionJsonLd = {
                   description: story.summary,
                   author:
                     story.category === "Ideas firmadas" && story.byline
-                      ? {
-                          "@type": "Person",
-                          name: story.byline,
-                        }
+                      ? authorNode(story.byline)
                       : undefined,
                   creativeWorkStatus: story.editorialStatus,
                   publisher: {
