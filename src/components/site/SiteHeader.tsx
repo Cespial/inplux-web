@@ -5,8 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ContactLink } from "@/components/site/ContactLink";
-import { publicNavigation } from "@/content/navigation";
+import type { ContactSource } from "@/components/site/ContactLink";
+import { homeCopyEs } from "@/content/copy/es";
+import type { HeaderCopy } from "@/content/copy/types";
 import styles from "./SiteChrome.module.css";
+
+/** Ruta estable de contacto cuando el diálogo no puede abrirse. */
+const headerContactHref = "/contacto";
 
 function readMenuCloseDuration() {
   const value = getComputedStyle(document.documentElement)
@@ -18,7 +23,17 @@ function readMenuCloseDuration() {
   return 150;
 }
 
-export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean }) {
+export function SiteHeader({
+  copy = homeCopyEs.header,
+  desktopContactSource = "header-desktop",
+  inverseOnTop = false,
+  mobileContactSource = "header-mobile",
+}: {
+  copy?: HeaderCopy;
+  desktopContactSource?: ContactSource;
+  inverseOnTop?: boolean;
+  mobileContactSource?: ContactSource;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
@@ -254,14 +269,14 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
       data-inverse={inverseOnTop || undefined}
     >
       <a className={styles.skipLink} href="#main-content">
-        Saltar al contenido
+        {copy.skipToContent}
       </a>
       <div className={styles.inner} data-site-header-inner>
         <Link
           className={styles.brand}
           href="/"
           prefetch={false}
-          aria-label="INPLUX, ir al inicio"
+          aria-label={copy.brandLabel}
         >
           <Image
             src="/brand/logos/inplux-logo-horizontal-inverse.svg"
@@ -272,24 +287,35 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
           />
         </Link>
 
-        <nav className={styles.desktopNav} aria-label="Navegación principal">
-          {publicNavigation.map(([label, href]) => (
+        <nav className={styles.desktopNav} aria-label={copy.navigationLabel}>
+          {copy.navigation.map(({ href, hrefLang, label }) => (
             <Link
               key={href}
               href={href}
+              hrefLang={hrefLang}
               aria-current={pathname === href || pathname.startsWith(`${href}/`) ? "page" : undefined}
             >
               {label}
             </Link>
           ))}
+          {copy.languageSwitch ? (
+            <Link
+              className={styles.languageSwitch}
+              href={copy.languageSwitch.href}
+              hrefLang={copy.languageSwitch.hrefLang}
+              prefetch={false}
+            >
+              {copy.languageSwitch.label}
+            </Link>
+          ) : null}
         </nav>
 
         <ContactLink
           className={styles.cta}
-          fallbackHref="/contacto"
-          source="header-desktop"
+          fallbackHref={headerContactHref}
+          source={desktopContactSource}
         >
-          Empezar un proyecto
+          {copy.contactCta}
         </ContactLink>
 
         <button
@@ -299,7 +325,7 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
           aria-expanded={menuMounted}
           aria-controls={menuMounted ? "site-mobile-menu" : undefined}
           aria-haspopup="dialog"
-          aria-label={menuMounted ? "Cerrar menú" : "Abrir menú"}
+          aria-label={menuMounted ? copy.closeMenu : copy.openMenu}
           onClick={(event) => {
             const animate =
               event.detail !== 0 &&
@@ -319,7 +345,7 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
           className={styles.menuLayer}
           role="dialog"
           aria-modal="true"
-          aria-label="Navegación móvil"
+          aria-label={copy.mobileNavigationLabel}
         >
           <button
             type="button"
@@ -327,7 +353,7 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
               menuClosing ? ` ${styles.closing}` : ""
             }${menuInstant ? ` ${styles.instant}` : ""}`}
             onClick={(event) => closeMenu(event.detail !== 0)}
-            aria-label="Cerrar menú"
+            aria-label={copy.closeMenu}
             tabIndex={-1}
           />
 
@@ -337,23 +363,24 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
             className={`${styles.mobileNav}${open ? ` ${styles.open}` : ""}${
               menuClosing ? ` ${styles.closing}` : ""
             }${menuInstant ? ` ${styles.instant}` : ""}`}
-            aria-label="Navegación principal"
+            aria-label={copy.navigationLabel}
           >
             <button
               type="button"
               className={styles.menuClose}
               onClick={(event) => closeMenu(event.detail !== 0)}
-              aria-label="Cerrar menú"
+              aria-label={copy.closeMenu}
             >
               <span aria-hidden="true" />
               <span aria-hidden="true" />
             </button>
-            <p className={styles.mobileLabel}>Explora INPLUX</p>
-            {publicNavigation.map(([label, href], index) => (
+            <p className={styles.mobileLabel}>{copy.mobileMenuLabel}</p>
+            {copy.navigation.map(({ href, hrefLang, label }, index) => (
               <Link
                 key={href}
                 className={styles.mobileLink}
                 href={href}
+                hrefLang={hrefLang}
                 aria-current={pathname === href || pathname.startsWith(`${href}/`) ? "page" : undefined}
                 onClick={(event) => closeMenu(event.detail !== 0)}
               >
@@ -361,16 +388,28 @@ export function SiteHeader({ inverseOnTop = false }: { inverseOnTop?: boolean })
                 {label}
               </Link>
             ))}
+            {copy.languageSwitch ? (
+              <Link
+                className={styles.mobileLink}
+                href={copy.languageSwitch.href}
+                hrefLang={copy.languageSwitch.hrefLang}
+                prefetch={false}
+                onClick={(event) => closeMenu(event.detail !== 0)}
+              >
+                <span aria-hidden="true">ES</span>
+                {copy.languageSwitch.label}
+              </Link>
+            ) : null}
             <ContactLink
               className={styles.mobileContact}
-              fallbackHref="/contacto"
-              source="header-mobile"
+              fallbackHref={headerContactHref}
+              source={mobileContactSource}
               beforeOpen={closeMenuBeforeContact}
               returnFocusRef={menuButtonRef}
             >
-              Empezar un proyecto <span aria-hidden="true">→</span>
+              {`${copy.contactCtaMobile} `}<span aria-hidden="true">→</span>
             </ContactLink>
-            <p className={styles.menuNote}>No necesitas tener el alcance definido.</p>
+            <p className={styles.menuNote}>{copy.menuNote}</p>
           </nav>
         </div>
       ) : null}

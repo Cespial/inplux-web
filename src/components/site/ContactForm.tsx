@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { homeCopyEs } from "@/content/copy/es";
+import { formatCopy } from "@/content/copy/format";
+import type { ContactFormCopy } from "@/content/copy/types";
 
 const contactEmail = "gerencia@inplux.co";
 
 type ContactFormProps = {
   context?: "dialog" | "section";
+  copy?: ContactFormCopy;
 };
 
-export function ContactForm({ context = "section" }: ContactFormProps) {
+export function ContactForm({
+  context = "section",
+  copy = homeCopyEs.contactForm,
+}: ContactFormProps) {
   const [preparedMessage, setPreparedMessage] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const [showManualCopy, setShowManualCopy] = useState(false);
@@ -28,18 +35,27 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
     const needType = String(data.get("needType") ?? "").trim();
     const challenge = String(data.get("challenge") ?? "").trim();
 
-    const subject = `Nuevo reto de software · ${organization || name}`;
+    const subject = formatCopy(copy.mailSubject, {
+      organization: organization || name,
+    });
     const body = [
-      `Nombre: ${name}`,
-      `Empresa o entidad: ${organization || "No indicada"}`,
-      `Tipo de necesidad: ${needType}`,
+      `${copy.mailFieldName}: ${name}`,
+      `${copy.mailFieldOrganization}: ${
+        organization || copy.mailFieldOrganizationEmpty
+      }`,
+      `${copy.mailFieldNeed}: ${needType}`,
       "",
-      "Reto:",
+      copy.mailChallengeHeading,
       challenge,
     ].join("\n");
 
     setPreparedMessage(
-      [`Para: ${contactEmail}`, `Asunto: ${subject}`, "", body].join("\n"),
+      [
+        `${copy.mailTo}: ${contactEmail}`,
+        `${copy.mailSubjectLabel}: ${subject}`,
+        "",
+        body,
+      ].join("\n"),
     );
     setCopyStatus(null);
     setShowManualCopy(false);
@@ -85,10 +101,10 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
     }
 
     if (copied) {
-      setCopyStatus("Mensaje copiado. Puedes pegarlo en el canal que prefieras.");
+      setCopyStatus(copy.copySuccess);
       setShowManualCopy(false);
     } else {
-      setCopyStatus("No pudimos copiarlo automáticamente. El mensaje está seleccionado abajo.");
+      setCopyStatus(copy.copyFailure);
       setShowManualCopy(true);
     }
   };
@@ -97,16 +113,12 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
     <form
       className="site-contact-form"
       data-contact-form={context}
-      aria-label={
-        context === "dialog"
-          ? "Formulario de contacto en diálogo"
-          : "Formulario de contacto de la página"
-      }
+      aria-label={context === "dialog" ? copy.dialogLabel : copy.sectionLabel}
       onSubmit={onSubmit}
     >
       <div className="site-form-row">
         <label>
-          <span>Nombre</span>
+          <span>{copy.nameLabel}</span>
           <input
             name="name"
             type="text"
@@ -116,7 +128,7 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
           />
         </label>
         <label>
-          <span>Empresa o entidad <em>opcional</em></span>
+          <span>{`${copy.organizationLabel} `}<em>{copy.organizationOptional}</em></span>
           <input
             name="organization"
             type="text"
@@ -127,46 +139,41 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
       </div>
 
       <label>
-        <span>¿Qué tipo de necesidad tienes?</span>
-        <select name="needType" defaultValue="Aún no lo sé">
-          <option>Lanzar un producto digital</option>
-          <option>Mejorar una operación</option>
-          <option>Automatizar trabajo y conocimiento</option>
-          <option>Aún no lo sé</option>
+        <span>{copy.needLabel}</span>
+        <select name="needType" defaultValue={copy.needDefault}>
+          {copy.needOptions.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
         </select>
       </label>
 
       <label>
-        <span>¿Qué problema necesitas resolver?</span>
+        <span>{copy.challengeLabel}</span>
         <textarea
           name="challenge"
           rows={5}
-          placeholder="Cuéntanos el problema, quién lo vive y qué debería cambiar."
+          placeholder={copy.challengePlaceholder}
           maxLength={900}
           required
         />
       </label>
 
-      <p className="site-form-note">
-        Prepararemos un borrador en tu aplicación de correo. Esta página no enviará ni
-        almacenará los datos.
-      </p>
+      <p className="site-form-note">{copy.note}</p>
       <button className="site-button site-button-light" type="submit">
-        Abrir borrador en mi correo <span aria-hidden="true">↗</span>
+        {`${copy.submit} `}<span aria-hidden="true">↗</span>
       </button>
 
       {preparedMessage ? (
         <>
           <p className="site-contact-note" role="status">
-            El borrador quedó preparado. Si tu aplicación de correo no se abrió, puedes
-            copiar el mensaje y enviarlo desde el canal que prefieras.
+            {copy.preparedNote}
           </p>
           <button
             className="site-button site-button-light"
             type="button"
             onClick={copyMessage}
           >
-            Copiar mensaje preparado
+            {copy.copyAction}
           </button>
           {copyStatus ? (
             <p className="site-contact-note" role="status" aria-live="polite">
@@ -175,7 +182,7 @@ export function ContactForm({ context = "section" }: ContactFormProps) {
           ) : null}
           {showManualCopy ? (
             <label>
-              <span>Mensaje preparado para copiar manualmente</span>
+              <span>{copy.manualCopyLabel}</span>
               <textarea
                 ref={manualCopyRef}
                 value={preparedMessage}

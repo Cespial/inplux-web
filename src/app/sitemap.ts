@@ -4,6 +4,7 @@ import { teamMembers } from "@/content/team";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
+    "/en",
     "/fabrica",
     "/trabajo",
     "/trabajo/tribai",

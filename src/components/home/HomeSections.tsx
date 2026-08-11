@@ -1,5 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { homeCopyEs } from "@/content/copy/es";
+import type {
+  ApiChapterCopy,
+  BuildNarrativeCopy,
+  ExperienceRailCopy,
+  SectorsCopy,
+} from "@/content/copy/types";
 import { portfolio } from "@/content/home";
 import { pressStories } from "@/content/press";
 import { workProfiles } from "@/content/work";
@@ -7,12 +14,16 @@ import { FactoryRun } from "./FactoryRun.client";
 import { ProjectCreateDemo } from "./ProjectCreateDemo.client";
 import styles from "./home.module.css";
 
+/**
+ * El nombre y las dimensiones de cada logo son datos de la relación, no copy:
+ * viven aquí, en el único archivo con permiso registrado para nombrarlos. La
+ * nota descriptiva sí se traduce y llega desde el diccionario de copy.
+ */
 const clientLogos = [
   {
     src: "/brand/clients/parque-arvi.png",
     name: "Parque Arví Corporación",
-    note: "Turismo, territorio y sostenibilidad",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 379,
     height: 394,
     renderWidth: 50,
@@ -20,8 +31,7 @@ const clientLogos = [
   {
     src: "/brand/clients/think-it.png",
     name: "Think IT",
-    note: "Aliado tecnológico",
-    relation: "Aliado",
+    relation: "partner",
     width: 577,
     height: 140,
     renderWidth: 140,
@@ -29,8 +39,7 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-03.png",
     name: "Corporación Interuniversitaria de Servicios",
-    note: "Gestión y servicios interinstitucionales",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 447,
     height: 151,
     renderWidth: 140,
@@ -38,8 +47,7 @@ const clientLogos = [
   {
     src: "/brand/clients/politecnico-jaime-isaza.png",
     name: "Politécnico Colombiano Jaime Isaza Cadavid",
-    note: "Educación superior pública",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 563,
     height: 146,
     renderWidth: 140,
@@ -47,8 +55,7 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-04.png",
     name: "Provincia del Agua, Bosques y el Turismo",
-    note: "Cooperación territorial",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 473,
     height: 512,
     renderWidth: 48,
@@ -56,8 +63,7 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-05.png",
     name: "Rentan",
-    note: "Operación empresarial",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 388,
     height: 104,
     renderWidth: 140,
@@ -65,8 +71,7 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-06-transparent.png",
     name: "Empresa de Desarrollo Urbano",
-    note: "Desarrollo urbano",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 367,
     height: 138,
     renderWidth: 138,
@@ -74,8 +79,7 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-07.png",
     name: "Sistemas Aries",
-    note: "Tecnología para la gestión pública",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 223,
     height: 113,
     renderWidth: 103,
@@ -83,8 +87,7 @@ const clientLogos = [
   {
     src: "/brand/clients/municipio-cisneros.png",
     name: "Municipio de Cisneros",
-    note: "Gestión pública territorial",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 200,
     height: 200,
     renderWidth: 52,
@@ -92,22 +95,33 @@ const clientLogos = [
   {
     src: "/brand/clients/experience-08.png",
     name: "Municipio de Necoclí",
-    note: "Gestión pública territorial",
-    relation: "Experiencia",
+    relation: "partner-experience",
     width: 192,
     height: 180,
     renderWidth: 55,
   },
 ] as const;
 
-function ClientLogoCell({ client }: { client: (typeof clientLogos)[number] }) {
+function ClientLogoCell({
+  client,
+  copy,
+}: {
+  client: (typeof clientLogos)[number];
+  copy: ExperienceRailCopy;
+}) {
+  const relation =
+    client.relation === "partner"
+      ? copy.relationPartner
+      : copy.relationExperience;
+  const note = copy.clientNotes[client.src];
+
   return (
     <div
       className={styles.logoCell}
       role="group"
-      aria-label={`${client.relation}: ${client.name}. ${client.note}`}
+      aria-label={`${relation}: ${client.name}. ${note}`}
     >
-      <span className={styles.logoRelation}>{client.relation}</span>
+      <span className={styles.logoRelation}>{relation}</span>
       <Image
         src={client.src}
         alt={client.name}
@@ -117,13 +131,17 @@ function ClientLogoCell({ client }: { client: (typeof clientLogos)[number] }) {
       />
       <span className={styles.logoProof} aria-hidden="true">
         <strong>{client.name}</strong>
-        <span>{client.note}</span>
+        <span>{note}</span>
       </span>
     </div>
   );
 }
 
-export function ExperienceRail() {
+export function ExperienceRail({
+  copy = homeCopyEs.experienceRail,
+}: {
+  copy?: ExperienceRailCopy;
+}) {
   const featuredProducts = workProfiles.filter(
     (product) => product.attribution.state === "confirmed",
   );
@@ -137,15 +155,16 @@ export function ExperienceRail() {
       <div
         className={styles.proofRibbon}
         role="region"
-        aria-label="Productos con atribución pública confirmada a INPLUX"
+        aria-label={copy.ribbonAriaLabel}
         tabIndex={0}
       >
         <div className={styles.proofRibbonIntro}>
-          <p>TRABAJO ATRIBUIBLE / PRODUCTOS</p>
-          <h2 id="proof-ribbon-title">Trabajo que sí podemos atribuir.</h2>
+          <p>{copy.ribbonEyebrow}</p>
+          <h2 id="proof-ribbon-title">{copy.ribbonTitle}</h2>
         </div>
         {featuredProducts.map((product) => {
-          const status = product.status.label;
+          const status = copy.productStatuses[product.slug] ?? product.status.label;
+          const category = copy.productCategories[product.slug] ?? product.category;
           return (
             <Link
               className={styles.proofProduct}
@@ -153,7 +172,7 @@ export function ExperienceRail() {
               key={product.name}
             >
               <>
-                <span>{product.category}</span>
+                <span>{category}</span>
                 <strong>{product.name}</strong>
                 <small>{status}</small>
                 <i aria-hidden="true">→</i>
@@ -162,39 +181,45 @@ export function ExperienceRail() {
           );
         })}
         <Link className={styles.proofProduct} href="/trabajo">
-          <span>EVIDENCIA / ATRIBUCIÓN</span>
-          <strong>Directorio</strong>
-          <small>{workProfiles.length} perfiles documentados</small>
+          <span>{copy.directoryEyebrow}</span>
+          <strong>{copy.directoryName}</strong>
+          <small>{workProfiles.length}{copy.directoryDetail}</small>
           <i aria-hidden="true">→</i>
         </Link>
       </div>
       <div
         className={styles.logoWall}
         role="region"
-        aria-label="Organizaciones con las que INPLUX ha trabajado."
+        aria-label={copy.logoWallAriaLabel}
         tabIndex={0}
       >
         {clientLogos.slice(0, 2).map((client) => (
-          <ClientLogoCell client={client} key={client.src} />
+          <ClientLogoCell client={client} copy={copy} key={client.src} />
         ))}
         <div className={`${styles.logoCell} ${styles.logoStatement}`}>
           <p>
-            RELACIONES REALES
-            <strong>EXPERIENCIA Y ALIANZAS</strong>
+            {copy.statementEyebrow}
+            <strong>{copy.statementTitle}</strong>
             <span className={styles.logoRailHint} aria-hidden="true">
-              DESLIZA PARA VER 10 →
+              {copy.statementHint}
             </span>
           </p>
         </div>
         {clientLogos.slice(2).map((client) => (
-          <ClientLogoCell client={client} key={client.src} />
+          <ClientLogoCell client={client} copy={copy} key={client.src} />
         ))}
       </div>
     </section>
   );
 }
 
-export function SectorPanel({ kind }: { kind: "public" | "private" }) {
+export function SectorPanel({
+  copy = homeCopyEs.sectors,
+  kind,
+}: {
+  copy?: SectorsCopy;
+  kind: "public" | "private";
+}) {
   const isPublic = kind === "public";
   const image = isPublic
     ? "/brand/home/sector-public.webp"
@@ -215,27 +240,16 @@ export function SectorPanel({ kind }: { kind: "public" | "private" }) {
         />
       </div>
       <div className={styles.sectorContent}>
-        <p>{isPublic ? "SECTOR PÚBLICO / 01" : "SECTOR PRIVADO / 02"}</p>
-        <h3>
-          {isPublic
-            ? "Servicios que sostienen lo colectivo."
-            : "Productos que mueven el negocio."}
-        </h3>
-        <p>
-          {isPublic
-            ? "Digitalizamos atención, información y seguimiento para que la operación sea más clara, conectada y trazable."
-            : "Construimos productos y herramientas internas que convierten procesos, conocimiento y datos en una operación que puede crecer."}
-        </p>
+        <p>{isPublic ? copy.publicEyebrow : copy.privateEyebrow}</p>
+        <h3>{isPublic ? copy.publicTitle : copy.privateTitle}</h3>
+        <p>{isPublic ? copy.publicCopy : copy.privateCopy}</p>
         <ul>
-          {(isPublic
-            ? ["Atención y trámites", "Gestión y seguimiento", "Datos para decidir"]
-            : ["Productos digitales", "Operaciones internas", "Automatización con control"]
-          ).map((item) => (
+          {(isPublic ? copy.publicItems : copy.privateItems).map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
         <a href="#contacto">
-          {isPublic ? "Hablemos de un reto público" : "Hablemos de un reto privado"}
+          {isPublic ? copy.publicCta : copy.privateCta}
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -243,45 +257,39 @@ export function SectorPanel({ kind }: { kind: "public" | "private" }) {
   );
 }
 
-export function ApiChapter() {
-  const capabilities = [
-    ["Interfaces y APIs claras", "Cada integración tiene un contrato comprensible y verificable."],
-    ["Seguridad desde el diseño", "Identidad, permisos y trazabilidad se definen desde el principio."],
-    ["Integraciones observables", "Sabemos qué ocurrió, cuándo y por qué, sin depender de cajas negras."],
-    ["Documentación viva", "El producto y su documentación evolucionan como una sola pieza."],
-  ] as const;
-
+export function ApiChapter({
+  copy = homeCopyEs.apiChapter,
+}: {
+  copy?: ApiChapterCopy;
+}) {
   return (
     <section id="integraciones" className={styles.apiChapter} aria-labelledby="api-chapter-title">
       <div className={styles.apiChapterCopy}>
-        <p className={styles.eyebrow}>03 / INTEGRACIÓN</p>
+        <p className={styles.eyebrow}>{copy.eyebrow}</p>
         <h2 id="api-chapter-title">
-          <span>Listo para integrarse.</span>
+          <span>{copy.titleLead}</span>
           <span>
-            Hecho para <em>evolucionar.</em>
+            {copy.titleTail}<em>{copy.titleEmphasis}</em>
           </span>
         </h2>
-        <p>
-          Construimos software que conversa con lo que tu organización ya usa y
-          deja una base clara para lo que vendrá después.
-        </p>
+        <p>{copy.lead}</p>
         <ul>
-          {capabilities.map(([title, copy]) => (
+          {copy.capabilities.map(([title, detail]) => (
             <li key={title}>
               <i aria-hidden="true">✓</i>
               <span>
                 <strong>{title}</strong>
-                <small>{copy}</small>
+                <small>{detail}</small>
               </span>
             </li>
           ))}
         </ul>
         <div className={styles.apiChapterActions}>
           <a className={styles.ghostButton} href="#contacto">
-            Hablemos de tu arquitectura
+            {copy.primaryCta}
           </a>
           <a href="#fabrica-en-vivo">
-            Ver la fábrica
+            {copy.secondaryCta}
             <span aria-hidden="true">↓</span>
           </a>
         </div>
@@ -297,7 +305,7 @@ export function ApiChapter() {
           sizes="(max-width: 767px) 100vw, 50vw"
         />
         <div className={styles.apiChapterScrim} aria-hidden="true" />
-        <ProjectCreateDemo />
+        <ProjectCreateDemo copy={copy} />
       </div>
     </section>
   );
@@ -399,63 +407,49 @@ export function HomePressStories() {
   );
 }
 
-export function BuildNarrative() {
-  const deliveryChecks = [
-    ["Problema y resultado primero", "Alineamos propósito, personas y evidencia antes de definir el alcance."],
-    ["Diseño e ingeniería juntos", "Una sola mesa de trabajo reduce traducciones y decisiones tardías."],
-    ["Demostraciones frecuentes", "Ves software funcionando y decides con algo concreto frente a ti."],
-    ["Inteligencia con supervisión", "La IA acelera el trabajo; el criterio humano conserva la dirección."],
-    ["Medición en producción", "Cada versión genera señales para decidir qué conviene evolucionar."],
-  ] as const;
-
-  const capabilities = [
-    ["01", "Propósito antes que alcance", "Partimos del problema y del resultado esperado, no de una lista cerrada de pantallas."],
-    ["02", "Una sola mesa de trabajo", "Contexto, diseño e ingeniería deciden juntos para reducir pérdida de información."],
-    ["03", "Inteligencia con supervisión", "Sistemas de IA aceleran investigación, código y pruebas; las decisiones siguen bajo dirección humana."],
-    ["04", "Evidencia para evolucionar", "Cada versión en uso produce señales que orientan la siguiente decisión de producto."],
-  ] as const;
-
+export function BuildNarrative({
+  copy = homeCopyEs.build,
+}: {
+  copy?: BuildNarrativeCopy;
+}) {
   return (
     <section id="como-trabajamos" className={styles.build} aria-labelledby="build-title">
       <div className={styles.buildIntro}>
-        <p className={styles.eyebrow}>05 / CÓMO TRABAJAMOS</p>
-        <h2 id="build-title">Una fábrica diseñada para entregar.</h2>
-        <p>
-          La tecnología cambia rápido. Nuestro sistema de trabajo está diseñado para
-          aprender sin perder claridad, responsabilidad ni control.
-        </p>
+        <p className={styles.eyebrow}>{copy.eyebrow}</p>
+        <h2 id="build-title">{copy.title}</h2>
+        <p>{copy.lead}</p>
         <ul className={styles.buildChecklist}>
-          {deliveryChecks.map(([title, copy]) => (
+          {copy.deliveryChecks.map(([title, detail]) => (
             <li key={title}>
               <i aria-hidden="true">✓</i>
               <span>
                 <strong>{title}</strong>
-                <small>{copy}</small>
+                <small>{detail}</small>
               </span>
             </li>
           ))}
         </ul>
         <div className={styles.buildActions}>
           <a className={styles.pillButton} href="#contacto">
-            Empezar un proyecto
+            {copy.primaryCta}
           </a>
           <a className={styles.ghostButton} href="#fabrica-en-vivo">
-            Ver la fábrica
+            {copy.secondaryCta}
           </a>
         </div>
       </div>
-      <FactoryRun />
+      <FactoryRun copy={copy.factoryRun} />
       <div className={styles.capabilityAct}>
         <div className={styles.capabilityHeading}>
-          <p className={styles.eyebrow}>06 / HECHA PARA AVANZAR</p>
-          <h2>Ritmo de entrega, sin perder criterio ni control.</h2>
+          <p className={styles.eyebrow}>{copy.capabilitiesEyebrow}</p>
+          <h2>{copy.capabilitiesTitle}</h2>
         </div>
         <div className={styles.capabilityGrid}>
-          {capabilities.map(([number, title, copy]) => (
+          {copy.capabilities.map(([number, title, detail]) => (
             <article key={number}>
               <span>{number}</span>
               <h3>{title}</h3>
-              <p>{copy}</p>
+              <p>{detail}</p>
             </article>
           ))}
         </div>

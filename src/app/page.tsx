@@ -19,7 +19,14 @@ export const metadata: Metadata = {
   title: "INPLUX | Fábrica de software a la medida",
   description:
     "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades. La IA acelera el trabajo; personas expertas dirigen las decisiones críticas.",
-  alternates: { canonical: "https://inplux.co" },
+  alternates: {
+    canonical: "https://inplux.co",
+    languages: {
+      "es-CO": "https://inplux.co",
+      "en-US": "https://inplux.co/en",
+      "x-default": "https://inplux.co",
+    },
+  },
 };
 
 const websiteJsonLd = {

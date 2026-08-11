@@ -7,39 +7,11 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { homeCopyEs } from "@/content/copy/es";
+import { formatCopy } from "@/content/copy/format";
+import type { FactoryScrollyCopy } from "@/content/copy/types";
 import styles from "./home.module.css";
 import ultraStyles from "./FactoryScrollyUltra.module.css";
-
-const steps = [
-  {
-    index: "01",
-    label: "TU RETO",
-    title: "Entender",
-    copy: "Observamos el contexto, escuchamos a las personas y hacemos visible el problema que realmente vale la pena resolver.",
-    signals: ["PERSONAS / CONTEXTO", "REGLAS / FRICCIONES"],
-  },
-  {
-    index: "02",
-    label: "EL PRODUCTO",
-    title: "Dar forma",
-    copy: "Convertimos lo aprendido en prioridades, flujos y una experiencia que se puede probar antes de escalar.",
-    signals: ["FLUJOS / DECISIONES", "INTERFAZ / PROTOTIPO"],
-  },
-  {
-    index: "03",
-    label: "LA FÁBRICA",
-    title: "Construir",
-    copy: "Diseño, ingeniería e inteligencia aplicada trabajan como un solo sistema, con revisión humana en cada punto crítico.",
-    signals: ["DISEÑO / INGENIERÍA", "IA / REVISIÓN HUMANA"],
-  },
-  {
-    index: "04",
-    label: "EN PRODUCCIÓN",
-    title: "Evolucionar",
-    copy: "Lanzamos una versión útil, observamos cómo funciona y decidimos contigo qué mejorar a partir de evidencia real.",
-    signals: ["DATOS / APRENDIZAJE", "OPERACIÓN / EVOLUCIÓN"],
-  },
-] as const;
 
 const chapterOffsets = [0.642, 1.139, 1.8844, 2.5055] as const;
 const compactChapterOffsets = [0.22, 0.58, 0.94, 1.3] as const;
@@ -256,14 +228,19 @@ function LayerAnnotations({ signals }: { signals: readonly [string, string] }) {
   );
 }
 
-const planeLayers = [
-  { Plane: ChallengePlane, signals: steps[0].signals },
-  { Plane: ProductPlane, signals: steps[1].signals },
-  { Plane: FactoryPlane, signals: steps[2].signals },
-  { Plane: ProductionPlane, signals: steps[3].signals },
+const planes = [
+  ChallengePlane,
+  ProductPlane,
+  FactoryPlane,
+  ProductionPlane,
 ] as const;
 
-export function FactoryScrolly() {
+export function FactoryScrolly({
+  copy = homeCopyEs.factoryScrolly,
+}: {
+  copy?: FactoryScrollyCopy;
+}) {
+  const steps = copy.steps;
   const sectionRef = useRef<HTMLElement>(null);
   const layerRefs = useRef<Array<SVGGElement | null>>([]);
   const timelineBeamRef = useRef<HTMLSpanElement>(null);
@@ -491,17 +468,14 @@ export function FactoryScrolly() {
           <div className={styles.storyColumn}>
             <p className={ultraStyles.demoDisclosure}>
               <span aria-hidden="true" />
-              Demostración interactiva · datos ilustrativos
+              {copy.disclosure}
             </p>
             <div className={`${styles.storyIntro}${activeStep < 0 ? ` ${styles.isVisible}` : ""}`}>
-              <p className={styles.eyebrow}>01 / LA FÁBRICA EN VIVO</p>
+              <p className={styles.eyebrow}>{copy.eyebrow}</p>
               <h2 id="factory-story-title">
-                Software construido para <em>evolucionar.</em>
+                {copy.titleLead}<em>{copy.titleEmphasis}</em>
               </h2>
-              <p>
-                No ensamblamos pantallas aisladas. Construimos un sistema en el que contexto,
-                producto e ingeniería avanzan juntos hasta poner software útil en operación.
-              </p>
+              <p>{copy.lead}</p>
             </div>
 
             <div className={styles.stepCopy} aria-hidden="true">
@@ -533,11 +507,16 @@ export function FactoryScrolly() {
             </ol>
             <p className={styles.storyStatus} aria-live="polite" aria-atomic="true">
               {activeStep < 0
-                ? "Introducción a la fábrica"
-                : `Etapa ${steps[activeStep].index} de ${steps.length}: ${steps[activeStep].label}. ${steps[activeStep].title}.`}
+                ? copy.introStatus
+                : formatCopy(copy.stageStatus, {
+                    index: steps[activeStep].index,
+                    total: steps.length,
+                    label: steps[activeStep].label,
+                    title: steps[activeStep].title,
+                  })}
             </p>
 
-            <div className={styles.storyTimeline} aria-label="Etapas de la fábrica">
+            <div className={styles.storyTimeline} aria-label={copy.timelineAriaLabel}>
               <span ref={timelineBeamRef} className={styles.timelineBeam} aria-hidden="true" />
               {steps.map((step, index) => (
                 <button
@@ -576,7 +555,7 @@ export function FactoryScrolly() {
           <div className={styles.sceneColumn} aria-hidden="true">
             <div className={styles.dotField} />
             <span className={ultraStyles.sceneDisclosure}>
-              Demo / 04 etapas
+              {copy.sceneDisclosure}
             </span>
             <div className={styles.scene}>
               <svg
@@ -587,8 +566,7 @@ export function FactoryScrolly() {
                 aria-hidden="true"
               >
                 {paintOrder.map((layerIndex) => {
-                  const layer = planeLayers[layerIndex];
-                  const Plane = layer.Plane;
+                  const Plane = planes[layerIndex];
                   return (
                     <g
                       ref={(element) => {
@@ -607,7 +585,7 @@ export function FactoryScrolly() {
                       key={layerIndex}
                     >
                       <Plane />
-                      <LayerAnnotations signals={layer.signals} />
+                      <LayerAnnotations signals={steps[layerIndex].signals} />
                     </g>
                   );
                 })}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type PointerEvent } from "react";
+import { homeCopyEs } from "@/content/copy/es";
+import type { HeroCopy } from "@/content/copy/types";
 import styles from "./home.module.css";
 
 type PointerState = {
@@ -19,7 +21,7 @@ const glyphColors = [
   "rgba(0,215,202,.88)",
 ] as const;
 
-export function HeroSignal() {
+export function HeroSignal({ copy = homeCopyEs.hero }: { copy?: HeroCopy }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerRef = useRef<PointerState>({ active: false, x: 0.68, y: 0.48 });
@@ -223,35 +225,27 @@ export function HeroSignal() {
         pointerRef.current = { active: false, x: 0.68, y: 0.48 };
       }}
       role="img"
-      aria-label="Visual interactivo del flujo de una fábrica de software"
+      aria-label={copy.signalAriaLabel}
     >
       <canvas ref={canvasRef} className={styles.signalCanvas} aria-hidden="true" />
       <div className={styles.signalMeta} aria-hidden="true">
-        <span>ENTRADA / CONTEXTO</span>
-        <span>MUEVE EL CURSOR PARA EXPLORAR</span>
-        <span>SALIDA / PRODUCTO EN OPERACIÓN</span>
+        {copy.signalMeta.map((label) => (
+          <span key={label}>{label}</span>
+        ))}
       </div>
       <div className={styles.signalStages} aria-hidden="true">
-        <span>
-          <b>01</b>
-          <strong>PROBLEMA REAL</strong>
-          <small>PERSONAS + CONTEXTO</small>
-        </span>
-        <span>
-          <b>02</b>
-          <strong>CONSTRUIR</strong>
-          <small>DISEÑO + INGENIERÍA</small>
-        </span>
-        <span>
-          <b>03</b>
-          <strong>EN PRODUCCIÓN</strong>
-          <small>MEDIR + EVOLUCIONAR</small>
-        </span>
+        {copy.signalStages.map((stage) => (
+          <span key={stage.number}>
+            <b>{stage.number}</b>
+            <strong>{stage.title}</strong>
+            <small>{stage.detail}</small>
+          </span>
+        ))}
       </div>
       <div className={styles.signalAxis} aria-hidden="true">
         <span />
         <i />
-        <strong>BUILD / 01</strong>
+        <strong>{copy.signalAxis}</strong>
       </div>
     </div>
   );

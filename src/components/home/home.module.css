@@ -3051,6 +3051,17 @@
   color: #aaa49c;
 }
 
+/* Sede y figura societaria: acompaña la invitación sin competir con ella. */
+.contactEntity {
+  max-width: 44rem;
+  margin: 1.5rem 0 0 !important;
+  border-top: 1px solid var(--home-line);
+  padding-top: 1.5rem;
+  color: #8e8981;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
 @media (max-width: 1180px) {
 
   .heroStatement {

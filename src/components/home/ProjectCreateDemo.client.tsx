@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { homeCopyEs } from "@/content/copy/es";
+import type { ApiChapterCopy } from "@/content/copy/types";
 import styles from "./home.module.css";
 
 type ProjectRunState = "ready" | "running" | "created";
@@ -11,7 +13,11 @@ const requestBody = `{
   "evidence": "required"
 }`;
 
-export function ProjectCreateDemo() {
+export function ProjectCreateDemo({
+  copy = homeCopyEs.apiChapter,
+}: {
+  copy?: ApiChapterCopy;
+}) {
   const [runState, setRunState] = useState<ProjectRunState>("ready");
   const [responseOpen, setResponseOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -43,7 +49,7 @@ export function ProjectCreateDemo() {
     try {
       await navigator.clipboard.writeText("/v1/projects");
       setCopied(true);
-      setCopyAnnouncement("Endpoint copiado al portapapeles.");
+      setCopyAnnouncement(copy.copyEndpointAnnouncement);
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => {
         setCopied(false);
@@ -52,36 +58,34 @@ export function ProjectCreateDemo() {
       }, 1500);
     } catch {
       setCopied(false);
-      setCopyAnnouncement("No fue posible copiar el endpoint.");
+      setCopyAnnouncement(copy.copyEndpointFailure);
     }
   };
 
   const statusLabel =
     runState === "ready"
-      ? "SANDBOX READY"
+      ? copy.sandboxReady
       : runState === "running"
-        ? "CREATING PROJECT…"
-        : "PROJECT CREATED";
+        ? copy.creatingProject
+        : copy.projectCreated;
 
   return (
     <div
       className={styles.projectCreateDemo}
       data-state={runState}
       role="region"
-      aria-label="Demostración para crear un proyecto en INPLUX Factory"
+      aria-label={copy.demoAriaLabel}
     >
       <span className="site-visually-hidden" role="status" aria-live="polite">
         {copyAnnouncement}
       </span>
-      <p className={styles.projectDemoDisclosure}>
-        DEMOSTRACIÓN INTERACTIVA · DATOS ILUSTRATIVOS
-      </p>
+      <p className={styles.projectDemoDisclosure}>{copy.demoDisclosure}</p>
       <div className={styles.apiIdentityCard}>
-        <span>{"// CREATE PROJECT"}</span>
+        <span>{copy.createProjectComment}</span>
         <strong>INPLUX FACTORY</strong>
         <div className={styles.projectIdentityMeta}>
-          <span>ENV / SANDBOX</span>
-          <span>REGION / LATAM-01</span>
+          <span>{copy.environmentLabel}</span>
+          <span>{copy.regionLabel}</span>
         </div>
         <i aria-hidden="true" />
       </div>
@@ -96,8 +100,8 @@ export function ProjectCreateDemo() {
           <code>/v1/projects</code>
           <button
             type="button"
-            aria-label={copied ? "Endpoint copiado" : "Copiar endpoint"}
-            title={copied ? "Copiado" : "Copiar endpoint"}
+            aria-label={copied ? copy.copiedEndpoint : copy.copyEndpoint}
+            title={copied ? copy.copiedTitle : copy.copyEndpoint}
             onClick={copyEndpoint}
           >
             {copied ? (
@@ -129,7 +133,11 @@ export function ProjectCreateDemo() {
                 </svg>
               )}
             </span>
-            {runState === "created" ? "RUN AGAIN" : runState === "running" ? "RUNNING" : "RUN REQUEST"}
+            {runState === "created"
+              ? copy.runAgain
+              : runState === "running"
+                ? copy.running
+                : copy.runRequest}
           </button>
           <span role="status" aria-live="polite">
             <i aria-hidden="true" />
@@ -146,7 +154,11 @@ export function ProjectCreateDemo() {
           onClick={() => setResponseOpen((current) => !current)}
         >
           <span>{"// RESPONSE"}</span>
-          <b>{runState === "created" ? "201 / CREATED" : "READY"}</b>
+          <b>
+            {runState === "created"
+              ? copy.responseCreatedLabel
+              : copy.responseReadyLabel}
+          </b>
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="m3.75 6 4.25 4 4.25-4" />
           </svg>
@@ -159,23 +171,17 @@ export function ProjectCreateDemo() {
         >
           <div className={styles.projectResponseRevealInner}>
             <dl>
-              <div>
-                <dt>PROJECT</dt>
-                <dd>IX-0718</dd>
-              </div>
-              <div>
-                <dt>NEXT GATE</dt>
-                <dd>CONTEXT / 01</dd>
-              </div>
-              <div>
-                <dt>TRACE</dt>
-                <dd>ENABLED</dd>
-              </div>
+              {copy.responseFields.map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
             </dl>
             <code>{`{ "status": "ready", "human_direction": true }`}</code>
             {runState === "created" ? (
               <a className={styles.projectOpenLink} href="#factory-run">
-                ABRIR IX-0718 EN FACTORY RUN <span aria-hidden="true">→</span>
+                {`${copy.openInFactoryRun} `}<span aria-hidden="true">→</span>
               </a>
             ) : null}
           </div>

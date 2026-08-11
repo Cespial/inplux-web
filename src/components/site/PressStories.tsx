@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { homeCopyEs } from "@/content/copy/es";
+import { formatCopy } from "@/content/copy/format";
+import type { PressCopy } from "@/content/copy/types";
 import {
   pressCategories,
   pressStories,
@@ -10,30 +13,60 @@ import styles from "./PressStories.module.css";
 
 type VisualVariant = "home" | "row" | "paper";
 
-function externalLabel(story: PressStory) {
-  return `${story.title} — ${story.outlet} (abre en una pestaña nueva)`;
+/**
+ * El archivo editorial se publica en español. En la home inglesa traducimos las
+ * etiquetas y los resúmenes —que son nuestros— y dejamos el titular original,
+ * marcado con su idioma, porque es el nombre publicado de la pieza.
+ */
+const esPress = homeCopyEs.press;
+
+function externalLabel(story: PressStory, copy: PressCopy) {
+  return formatCopy(copy.externalLabel, {
+    title: story.title,
+    outlet: story.outlet,
+  });
 }
 
-function StoryMeta({ story }: { story: PressStory }) {
+function StoryMeta({
+  story,
+  copy = esPress,
+}: {
+  story: PressStory;
+  copy?: PressCopy;
+}) {
   return (
     <span className={styles.meta}>
-      <span>{story.category}</span>
+      <span>{copy.categories[story.category] ?? story.category}</span>
       <span aria-hidden="true">/</span>
-      <span>{story.format}</span>
+      <span>{copy.formats[story.format] ?? story.format}</span>
       <span aria-hidden="true">/</span>
       <span>{story.outlet}</span>
-      <time dateTime={story.publishedAt}>{story.publishedLabel}</time>
+      <time dateTime={story.publishedAt}>
+        {copy.publishedLabels[story.slug] ?? story.publishedLabel}
+      </time>
     </span>
   );
 }
 
-function StorySourceContext({ story }: { story: PressStory }) {
+function StorySourceContext({
+  story,
+  copy = esPress,
+}: {
+  story: PressStory;
+  copy?: PressCopy;
+}) {
   if (!story.byline && !story.editorialStatus) return null;
 
   return (
     <span className={styles.sourceContext}>
-      {story.byline ? <span>{story.byline}</span> : null}
-      {story.editorialStatus ? <span>{story.editorialStatus}</span> : null}
+      {story.byline ? (
+        <span>{copy.bylines[story.byline] ?? story.byline}</span>
+      ) : null}
+      {story.editorialStatus ? (
+        <span>
+          {copy.editorialStatuses[story.editorialStatus] ?? story.editorialStatus}
+        </span>
+      ) : null}
     </span>
   );
 }
@@ -42,19 +75,23 @@ function PressStoryVisual({
   story,
   variant = "home",
   eager = false,
+  copy = esPress,
 }: {
   story: PressStory;
   variant?: VisualVariant;
   eager?: boolean;
+  copy?: PressCopy;
 }) {
   const className = `${styles.visual} ${styles[`${variant}Visual`]}`;
+  const signal = copy.visualSignals[story.slug] ?? story.visualSignal;
+  const imageAlt = copy.imageAlts[story.slug] ?? story.imageAlt ?? "";
 
   if (story.visualKind === "cover" && story.image) {
     return (
       <span className={`${className} ${styles.coverVisual}`}>
         <Image
           src={story.image}
-          alt={story.imageAlt ?? ""}
+          alt={imageAlt}
           fill
           sizes={
             variant === "row"
@@ -65,7 +102,7 @@ function PressStoryVisual({
           fetchPriority={eager ? "high" : undefined}
         />
         <span className={styles.visualShade} aria-hidden="true" />
-        <span className={styles.visualSignal}>{story.visualSignal}</span>
+        <span className={styles.visualSignal}>{signal}</span>
       </span>
     );
   }
@@ -77,12 +114,12 @@ function PressStoryVisual({
         <Image
           className={styles.mark}
           src={story.image}
-          alt={story.imageAlt ?? ""}
+          alt={imageAlt}
           width={104}
           height={104}
         />
-        <span className={styles.markName}>THE COMMONPLACE</span>
-        <span className={styles.visualSignal}>{story.visualSignal}</span>
+        <span className={styles.markName}>{copy.markName}</span>
+        <span className={styles.visualSignal}>{signal}</span>
       </span>
     );
   }
@@ -91,12 +128,10 @@ function PressStoryVisual({
     return (
       <span className={`${className} ${styles.statVisual}`}>
         <span className={styles.dotGrid} aria-hidden="true" />
-        <span className={styles.visualEyebrow}>Hallazgo / Colombia</span>
+        <span className={styles.visualEyebrow}>{copy.statEyebrow}</span>
         <strong>{story.stat ?? "—"}</strong>
-        <span className={styles.statCopy}>
-          empleados formales deciden a qué hora trabajan
-        </span>
-        <span className={styles.visualSignal}>{story.visualSignal}</span>
+        <span className={styles.statCopy}>{copy.statCopy}</span>
+        <span className={styles.visualSignal}>{signal}</span>
       </span>
     );
   }
@@ -106,8 +141,8 @@ function PressStoryVisual({
       <span className={`${className} ${styles.panelVisual}`}>
         <span className={styles.dotGrid} aria-hidden="true" />
         <span className={styles.panelTop}>
-          <span>Escenario público</span>
-          <span>Medellín / CO</span>
+          <span>{copy.panelScenario}</span>
+          <span>{copy.panelPlace}</span>
         </span>
         <span className={styles.stage} aria-hidden="true">
           <i />
@@ -115,8 +150,8 @@ function PressStoryVisual({
           <i />
           <i />
         </span>
-        <strong>{story.visualCode ?? "EN VIVO"}</strong>
-        <span className={styles.visualSignal}>{story.visualSignal}</span>
+        <strong>{story.visualCode ?? copy.panelLive}</strong>
+        <span className={styles.visualSignal}>{signal}</span>
       </span>
     );
   }
@@ -126,12 +161,12 @@ function PressStoryVisual({
       <span className={`${className} ${styles.paperVisual}`}>
         <span className={styles.paperRules} aria-hidden="true" />
         <span className={styles.paperTop}>
-          <span>INPLUX / RESEARCH</span>
+          <span>{copy.paperEyebrow}</span>
           <span>{story.outlet}</span>
         </span>
-        <strong>{story.visualCode ?? "OPEN PAPER"}</strong>
-        <span className={styles.paperTitle}>{story.visualSignal}</span>
-        <span className={styles.paperFoot}>Leer · contrastar · citar</span>
+        <strong>{story.visualCode ?? copy.paperCode}</strong>
+        <span className={styles.paperTitle}>{signal}</span>
+        <span className={styles.paperFoot}>{copy.paperFoot}</span>
       </span>
     );
   }
@@ -139,14 +174,22 @@ function PressStoryVisual({
   return (
     <span className={`${className} ${styles.archiveVisual}`}>
       <span className={styles.dotGrid} aria-hidden="true" />
-      <span className={styles.visualEyebrow}>{story.visualCode ?? story.format}</span>
-      <strong>IDEAS</strong>
-      <span className={styles.visualSignal}>{story.visualSignal}</span>
+      <span className={styles.visualEyebrow}>
+        {story.visualCode ?? copy.formats[story.format] ?? story.format}
+      </span>
+      <strong>{copy.archiveIdeas}</strong>
+      <span className={styles.visualSignal}>{signal}</span>
     </span>
   );
 }
 
-function HomeStoryList({ stories }: { stories: readonly PressStory[] }) {
+function HomeStoryList({
+  stories,
+  copy = esPress,
+}: {
+  stories: readonly PressStory[];
+  copy?: PressCopy;
+}) {
   return (
     <ul className={styles.homeList}>
       {stories.map((story, index) => (
@@ -157,15 +200,15 @@ function HomeStoryList({ stories }: { stories: readonly PressStory[] }) {
               href={story.href}
               target="_blank"
               rel="noreferrer"
-              aria-label={externalLabel(story)}
+              aria-label={externalLabel(story, copy)}
             >
-              <PressStoryVisual story={story} eager={index === 0} />
-              <StoryMeta story={story} />
-              <StorySourceContext story={story} />
-              <h3>{story.title}</h3>
-              <p>{story.summary}</p>
+              <PressStoryVisual story={story} eager={index === 0} copy={copy} />
+              <StoryMeta story={story} copy={copy} />
+              <StorySourceContext story={story} copy={copy} />
+              <h3 lang={copy.storyLang ?? undefined}>{story.title}</h3>
+              <p>{copy.summaries[story.slug] ?? story.summary}</p>
               <span className={styles.storyAction}>
-                Consultar fuente
+                {copy.sourceAction}
                 <span aria-hidden="true">↗</span>
               </span>
             </a>
@@ -185,7 +228,7 @@ function EditorialRows({ stories }: { stories: readonly PressStory[] }) {
             href={story.href}
             target="_blank"
             rel="noreferrer"
-            aria-label={externalLabel(story)}
+            aria-label={externalLabel(story, esPress)}
           >
             <span className={styles.rowIndex} aria-hidden="true">
               {String(index + 1).padStart(2, "0")}
@@ -218,7 +261,7 @@ function ResearchGrid({ stories }: { stories: readonly PressStory[] }) {
               href={story.href}
               target="_blank"
               rel="noreferrer"
-              aria-label={externalLabel(story)}
+              aria-label={externalLabel(story, esPress)}
             >
               <PressStoryVisual story={story} variant="paper" />
               <StoryMeta story={story} />
@@ -251,7 +294,7 @@ function SignedIdeasIndex({ stories }: { stories: readonly PressStory[] }) {
             href={story.href}
             target="_blank"
             rel="noreferrer"
-            aria-label={externalLabel(story)}
+            aria-label={externalLabel(story, esPress)}
           >
             <span className={styles.ideaCode}>
               <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
@@ -295,8 +338,13 @@ function CategoryContents({
   return <EditorialRows stories={stories} />;
 }
 
-export function FactoryPressStories() {
+export function FactoryPressStories({
+  copy = esPress,
+}: {
+  copy?: PressCopy;
+}) {
   const featuredStories = pressStories.filter((story) => story.featured).slice(0, 3);
+  const archiveHrefLang = copy.storyLang ?? undefined;
 
   return (
     <section
@@ -307,20 +355,31 @@ export function FactoryPressStories() {
     >
       <div className={styles.homeHeading}>
         <div>
-          <p>06 / PRENSA Y CONVERSACIONES</p>
+          <p>{copy.eyebrow}</p>
           <h2 id="factory-press-title">
-            El trabajo también entra en <em>conversación.</em>
+            {copy.titleLead}<em>{copy.titleEmphasis}</em>
           </h2>
+          {copy.storyNote ? (
+            <p className={styles.homeHeadingNote}>{copy.storyNote}</p>
+          ) : null}
         </div>
-        <Link className={styles.archiveLink} href="/prensa">
-          Ver el archivo <span aria-hidden="true">→</span>
+        <Link
+          className={styles.archiveLink}
+          href="/prensa"
+          hrefLang={archiveHrefLang}
+        >
+          {`${copy.archiveLink} `}<span aria-hidden="true">→</span>
         </Link>
       </div>
 
-      <HomeStoryList stories={featuredStories} />
+      <HomeStoryList stories={featuredStories} copy={copy} />
 
-      <Link className={styles.archiveLinkBottom} href="/prensa">
-        Ver el archivo <span aria-hidden="true">→</span>
+      <Link
+        className={styles.archiveLinkBottom}
+        href="/prensa"
+        hrefLang={archiveHrefLang}
+      >
+        {`${copy.archiveLink} `}<span aria-hidden="true">→</span>
       </Link>
     </section>
   );

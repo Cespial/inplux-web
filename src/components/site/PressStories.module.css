@@ -65,6 +65,16 @@
   font-style: normal;
 }
 
+/* Aviso de idioma de los titulares: nota editorial, no antetítulo. */
+.homeHeading .homeHeadingNote {
+  max-width: 46ch;
+  margin: 1.5rem 0 0;
+  color: rgba(249, 245, 239, 0.62);
+  font: 400 0.9rem/1.5 inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .archiveLink,
 .archiveLinkBottom {
   display: inline-flex;

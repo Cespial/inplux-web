@@ -83,7 +83,8 @@ export type ContactFormCopy = {
   copySuccess: string;
   copyFailure: string;
   manualCopyLabel: string;
-  mailSubject: (organizationOrName: string) => string;
+  /** Plantilla con {organization}. */
+  mailSubject: string;
   mailFieldName: string;
   mailFieldOrganization: string;
   mailFieldOrganizationEmpty: string;
@@ -116,7 +117,8 @@ export type ExperienceRailCopy = {
   ribbonTitle: string;
   directoryEyebrow: string;
   directoryName: string;
-  directoryDetail: (count: number) => string;
+  /** Sufijo del contador; el número se interpola aparte. */
+  directoryDetail: string;
   logoWallAriaLabel: string;
   statementEyebrow: string;
   statementTitle: string;
@@ -146,7 +148,8 @@ export type FactoryScrollyCopy = {
   lead: string;
   timelineAriaLabel: string;
   introStatus: string;
-  stageStatus: (step: FactoryStep, total: number) => string;
+  /** Plantilla con {index}, {total}, {label} y {title}. */
+  stageStatus: string;
   steps: readonly FactoryStep[];
 };
 
@@ -215,8 +218,9 @@ export type SolutionsCopy = {
   copyAction: string;
   copyDone: string;
   copyFailed: string;
-  copyRequestLabel: (projectId: string) => string;
-  copyResponseLabel: (projectId: string) => string;
+  /** Plantillas con {project}. */
+  copyRequestLabel: string;
+  copyResponseLabel: string;
   responseNotRun: string;
   responseRunning: string;
   responseIdleHint: string;
@@ -235,7 +239,8 @@ export type SolutionsCopy = {
   environmentFieldLabel: string;
   updatedFieldLabel: string;
   appNavigation: readonly [string, string, string];
-  ownerAriaLabel: (owner: string) => string;
+  /** Plantilla con {owner}. */
+  ownerAriaLabel: string;
   recentActivityLabel: string;
   outcomeLabel: string;
   items: readonly SolutionCopy[];
@@ -337,11 +342,13 @@ export type FactoryRunCopy = {
   runActive: string;
   breadcrumbProject: string;
   breadcrumbPhase: string;
-  scrollableDetailAriaLabel: (phaseTitle: string) => string;
-  inspectorAriaLabel: (phaseTitle: string) => string;
+  /** Plantillas con {phase}. */
+  scrollableDetailAriaLabel: string;
+  inspectorAriaLabel: string;
   phasePrefix: string;
   ownerLabel: string;
-  gateProgressAriaLabel: (gate: string) => string;
+  /** Plantilla con {gate}. */
+  gateProgressAriaLabel: string;
   gateLabel: string;
   boardPriorities: string;
   propertiesTitle: string;
@@ -355,7 +362,8 @@ export type FactoryRunCopy = {
   scrollCue: string;
   runApiLabel: string;
   syncedLabel: string;
-  announcement: (phaseTitle: string, status: string) => string;
+  /** Plantilla con {phase} y {status}. */
+  announcement: string;
   phases: readonly FactoryPhaseCopy[];
 };
 
@@ -381,7 +389,8 @@ export type PressCopy = {
   storyLang: string | null;
   storyNote: string | null;
   sourceAction: string;
-  externalLabel: (title: string, outlet: string) => string;
+  /** Plantilla con {title} y {outlet}. */
+  externalLabel: string;
   /** Traducción de las etiquetas editoriales; la clave es el valor español. */
   categories: Readonly<Record<string, string>>;
   formats: Readonly<Record<string, string>>;

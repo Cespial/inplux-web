@@ -130,6 +130,23 @@
   transform: scaleX(1);
 }
 
+/* Cambio de idioma: se lee como un conmutador, no como otra sección del menú. */
+.header .desktopNav a.languageSwitch {
+  min-height: 1.7rem;
+  padding-inline: 0.55rem;
+  border: 1px solid rgba(249, 245, 239, 0.26);
+  border-radius: 999px;
+  color: rgba(249, 245, 239, 0.62);
+  letter-spacing: 0.09em;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.header .desktopNav a.languageSwitch::after {
+  content: none;
+}
+
 .header .cta {
   display: inline-flex;
   min-height: 2.55rem;
@@ -234,6 +251,14 @@
   transition: color 160ms ease;
 }
 
+/* Aviso de idioma de los destinos que solo existen en español. */
+.footer nav > small {
+  max-width: 22ch;
+  color: #8b857d;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
 .footerBottom {
   display: flex;
   align-items: center;
@@ -261,6 +286,11 @@
   .header .desktopNav a:hover::after {
     opacity: 1;
     transform: scaleX(1);
+  }
+
+  .header .desktopNav a.languageSwitch:hover {
+    border-color: var(--chrome-teal);
+    color: var(--chrome-ivory);
   }
 
   .header .cta:hover {

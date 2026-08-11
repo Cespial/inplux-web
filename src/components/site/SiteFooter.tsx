@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { productNavigation, publicNavigation } from "@/content/navigation";
+import { homeCopyEs } from "@/content/copy/es";
+import type { FooterCopy } from "@/content/copy/types";
 import styles from "./SiteChrome.module.css";
 
-export function SiteFooter() {
+export function SiteFooter({ copy = homeCopyEs.footer }: { copy?: FooterCopy }) {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInner}>
-        <h2 className="site-visually-hidden">Pie de página</h2>
+        <h2 className="site-visually-hidden">{copy.heading}</h2>
         <div className={styles.footerTop}>
           <div className={styles.footerBrand}>
             <Image
@@ -16,38 +17,37 @@ export function SiteFooter() {
               width={403}
               height={112}
             />
-            <p>Fábrica de software a la medida para empresas y entidades.</p>
+            <p>{copy.tagline}</p>
           </div>
-          <nav aria-label="Explorar">
-            <p>Explora</p>
-            {publicNavigation.map(([label, href]) => (
-              <Link href={href} key={href} prefetch={false}>{label}</Link>
+          {copy.groups.map((group) => (
+            <nav aria-label={group.ariaLabel} key={group.ariaLabel}>
+              <p>{group.label}</p>
+              {group.items.map((item) => (
+                <Link
+                  href={item.href}
+                  hrefLang={item.hrefLang}
+                  key={item.href}
+                  prefetch={false}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          ))}
+          <nav aria-label={copy.contactAriaLabel}>
+            <p>{copy.contactLabel}</p>
+            <Link href="/contacto" prefetch={false}>{copy.contactCta}</Link>
+            <a href={`mailto:${copy.email}`}>{copy.email}</a>
+            <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noreferrer">{copy.linkedInLabel}</a>
+            {copy.locations.map((location) => (
+              <span key={location}>{location}</span>
             ))}
-          </nav>
-          <nav aria-label="Productos documentados">
-            <p>Productos</p>
-            {productNavigation.map(([label, href]) => (
-              <Link href={href} key={href} prefetch={false}>{label}</Link>
-            ))}
-          </nav>
-          <nav aria-label="Capacidades">
-            <p>Capacidades</p>
-            <Link href="/capacidades#producto" prefetch={false}>Producto digital</Link>
-            <Link href="/capacidades#modernizacion" prefetch={false}>Modernización</Link>
-            <Link href="/capacidades#ia" prefetch={false}>IA aplicada</Link>
-            <Link href="/capacidades#sector-publico" prefetch={false}>Servicios públicos</Link>
-          </nav>
-          <nav aria-label="Contacto">
-            <p>Contacto</p>
-            <Link href="/contacto" prefetch={false}>Empezar un proyecto</Link>
-            <a href="mailto:gerencia@inplux.co">gerencia@inplux.co</a>
-            <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noreferrer">LinkedIn</a>
-            <span>Medellín, Colombia</span>
+            {copy.languageNote ? <small>{copy.languageNote}</small> : null}
           </nav>
         </div>
         <div className={styles.footerBottom}>
-          <span>© {new Date().getFullYear()} INPLUX S.A.S.</span>
-          <span>Software con criterio y dirección humana.</span>
+          <span>© {new Date().getFullYear()}{` ${copy.copyright}`}</span>
+          <span>{copy.closingLine}</span>
         </div>
       </div>
     </footer>

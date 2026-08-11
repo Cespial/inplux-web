@@ -69,6 +69,11 @@ const pageDefinitions = {
     twitterDescription: "Fábrica de software a la medida para empresas y entidades.",
     twitterImageAlt: defaultOgImageAlt,
     jsonLd: { type: "WebSite", name: "INPLUX", url: siteUrl },
+    languageAlternates: {
+      "es-CO": siteUrl,
+      "en-US": `${siteUrl}/en`,
+      "x-default": siteUrl,
+    },
     legacyFragments: [
       "inicio",
       "servicios",
@@ -78,6 +83,43 @@ const pageDefinitions = {
       "empresas",
       "contacto",
     ],
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+  },
+  englishHome: {
+    file: ".next/server/app/en.html",
+    title: "Custom software factory in Miami, Florida | INPLUX",
+    description:
+      "INPLUX LLC is a Miami-based custom software factory. We design, build and evolve software for companies and public institutions. AI accelerates the work; expert people direct the critical decisions.",
+    canonical: `${siteUrl}/en`,
+    contentLang: "en-US",
+    ogLocale: "en_US",
+    ogTitle: "From a real problem to software in production.",
+    ogDescription:
+      "See how INPLUX turns concrete needs into digital products that can be used and improved.",
+    ogUrl: `${siteUrl}/en`,
+    ogImage: defaultOgImage,
+    ogImageAlt: "INPLUX, from a real problem to software in production",
+    twitterTitle: "From a real problem to software in production.",
+    twitterDescription:
+      "A custom software factory for companies and public institutions.",
+    twitterImageAlt: "INPLUX, from a real problem to software in production",
+    jsonLd: {
+      type: "WebPage",
+      name: "INPLUX, custom software factory in Miami",
+      url: `${siteUrl}/en`,
+    },
+    usEntity: {
+      "@id": `${siteUrl}/en#organization-us`,
+      name: "INPLUX LLC",
+      addressLocality: "Miami",
+      addressRegion: "FL",
+      addressCountry: "US",
+    },
+    languageAlternates: {
+      "es-CO": siteUrl,
+      "en-US": `${siteUrl}/en`,
+      "x-default": siteUrl,
+    },
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
   },
   factory: {
@@ -347,7 +389,11 @@ function verifySocialMetadata(name, html, definition) {
   );
   expectEqual(metaContent(html, "property", "og:url"), definition.ogUrl, `${name} og:url`);
   expectEqual(metaContent(html, "property", "og:site_name"), "INPLUX S.A.S.", `${name} og:site_name`);
-  expectEqual(metaContent(html, "property", "og:locale"), "es_CO", `${name} og:locale`);
+  expectEqual(
+    metaContent(html, "property", "og:locale"),
+    definition.ogLocale ?? "es_CO",
+    `${name} og:locale`,
+  );
   expectEqual(metaContent(html, "property", "og:type"), "website", `${name} og:type`);
   expectEqual(metaContent(html, "property", "og:image"), definition.ogImage, `${name} og:image`);
   expectEqual(metaContent(html, "property", "og:image:width"), "1200", `${name} og:image:width`);
@@ -412,7 +458,9 @@ function verifyJsonLd(name, html, definition) {
       : []),
   ]);
   const organization = jsonLdEntities.find(
-    (data) => data["@type"] === "Organization",
+    (data) =>
+      data["@type"] === "Organization" &&
+      data["@id"] === "https://inplux.co/#organization",
   );
 
   expect(Boolean(organization), `${name}: falta Organization JSON-LD`);
@@ -456,6 +504,40 @@ function verifyJsonLd(name, html, definition) {
     }
   }
 
+  if (definition.usEntity) {
+    const usEntity = jsonLdEntities.find(
+      (data) => data["@id"] === definition.usEntity["@id"],
+    );
+    expect(
+      Boolean(usEntity),
+      `${name}: falta la sociedad estadounidense ${definition.usEntity["@id"]} en JSON-LD`,
+    );
+    if (usEntity) {
+      expectEqual(usEntity["@type"], "Organization", `${name} LLC @type`);
+      expectEqual(usEntity.name, definition.usEntity.name, `${name} LLC name`);
+      expectEqual(
+        usEntity.address?.addressLocality,
+        definition.usEntity.addressLocality,
+        `${name} LLC addressLocality`,
+      );
+      expectEqual(
+        usEntity.address?.addressRegion,
+        definition.usEntity.addressRegion,
+        `${name} LLC addressRegion`,
+      );
+      expectEqual(
+        usEntity.address?.addressCountry,
+        definition.usEntity.addressCountry,
+        `${name} LLC addressCountry`,
+      );
+      expectEqual(
+        usEntity.parentOrganization?.["@id"],
+        "https://inplux.co/#organization",
+        `${name} LLC parentOrganization`,
+      );
+    }
+  }
+
   const website = jsonLd.find((data) => data["@type"] === "WebSite");
   expect(
     name === "home" ? Boolean(website) : !website,
@@ -479,6 +561,7 @@ function verifyIds(name, html, legacyFragments = []) {
 async function verifyGeneratedRoutes() {
   const expectedSitemapUrls = [
     siteUrl,
+    `${siteUrl}/en`,
     `${siteUrl}/fabrica`,
     `${siteUrl}/trabajo`,
     `${siteUrl}/trabajo/tribai`,
@@ -591,6 +674,30 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
     expect(robots.includes("noindex"), `${name}: debe declarar noindex`);
   } else {
     expect(!robots.includes("noindex"), `${name}: no debe declarar noindex`);
+  }
+
+  if (definition.languageAlternates) {
+    const alternates = collectElements(html, "link").filter((attributes) =>
+      String(attributes.rel ?? "")
+        .split(/\s+/)
+        .includes("alternate"),
+    );
+    for (const [hreflang, href] of Object.entries(definition.languageAlternates)) {
+      // React serializa la prop como `hrefLang`; el atributo HTML no distingue
+      // mayúsculas, así que aceptamos ambas escrituras.
+      const alternate = alternates.find(
+        (attributes) =>
+          (attributes.hreflang ?? attributes.hrefLang) === hreflang,
+      );
+      expectEqual(alternate?.href, href, `${name} hreflang ${hreflang}`);
+    }
+  }
+
+  if (definition.contentLang) {
+    expect(
+      html.includes(`lang="${definition.contentLang}"`),
+      `${name}: el contenido debe declarar lang="${definition.contentLang}"`,
+    );
   }
 
   verifySocialMetadata(name, html, definition);

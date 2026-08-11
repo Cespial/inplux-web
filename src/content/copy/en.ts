@@ -127,8 +127,7 @@ export const homeCopyEn: HomeCopy = {
     copyFailure:
       "We couldn't copy it automatically. The message is selected below.",
     manualCopyLabel: "Message prepared for manual copying",
-    mailSubject: (organizationOrName) =>
-      `New software challenge · ${organizationOrName}`,
+    mailSubject: "New software challenge · {organization}",
     mailFieldName: "Name",
     mailFieldOrganization: "Company or institution",
     mailFieldOrganizationEmpty: "Not provided",
@@ -168,7 +167,7 @@ export const homeCopyEn: HomeCopy = {
     ribbonTitle: "Work we can actually claim.",
     directoryEyebrow: "EVIDENCE / ATTRIBUTION",
     directoryName: "Directory",
-    directoryDetail: (count) => `${count} documented profiles`,
+    directoryDetail: " documented profiles",
     logoWallAriaLabel: "Organizations INPLUX has worked with.",
     statementEyebrow: "REAL RELATIONSHIPS",
     statementTitle: "EXPERIENCE AND ALLIANCES",
@@ -206,8 +205,7 @@ export const homeCopyEn: HomeCopy = {
     lead: "We don't assemble isolated screens. We build a system where context, product and engineering move together until useful software is running in production.",
     timelineAriaLabel: "Stages of the factory",
     introStatus: "Introduction to the factory",
-    stageStatus: (step, total) =>
-      `Stage ${step.index} of ${total}: ${step.label}. ${step.title}.`,
+    stageStatus: "Stage {index} of {total}: {label}. {title}.",
     steps: [
       {
         index: "01",
@@ -254,9 +252,8 @@ export const homeCopyEn: HomeCopy = {
     copyAction: "COPY",
     copyDone: "COPIED",
     copyFailed: "COULD NOT COPY",
-    copyRequestLabel: (projectId) => `Copy the request for project ${projectId}`,
-    copyResponseLabel: (projectId) =>
-      `Copy the response for project ${projectId}`,
+    copyRequestLabel: "Copy the request for project {project}",
+    copyResponseLabel: "Copy the response for project {project}",
     responseNotRun: "NOT RUN",
     responseRunning: "EXECUTING",
     responseIdleHint: "Run the request to inspect the response.",
@@ -275,7 +272,7 @@ export const homeCopyEn: HomeCopy = {
     environmentFieldLabel: "ENVIRONMENT",
     updatedFieldLabel: "UPDATED",
     appNavigation: ["SUMMARY", "ACTIVITY", "EVIDENCE"],
-    ownerAriaLabel: (owner) => `Owner: ${owner}`,
+    ownerAriaLabel: "Owner: {owner}",
     recentActivityLabel: "RECENT ACTIVITY",
     outcomeLabel: "OUTCOME",
     items: [
@@ -630,12 +627,11 @@ export const homeCopyEn: HomeCopy = {
       runActive: "RUN ACTIVE",
       breadcrumbProject: "Project",
       breadcrumbPhase: "Phase",
-      scrollableDetailAriaLabel: (phaseTitle) =>
-        `Scrollable detail of the ${phaseTitle} phase`,
-      inspectorAriaLabel: (phaseTitle) => `Inspector for ${phaseTitle}`,
+      scrollableDetailAriaLabel: "Scrollable detail of the {phase} phase",
+      inspectorAriaLabel: "Inspector for {phase}",
       phasePrefix: "INPLUX FACTORY · PHASE",
       ownerLabel: "OWNER",
-      gateProgressAriaLabel: (gate) => `Progress of the ${gate} gate`,
+      gateProgressAriaLabel: "Progress of the {gate} gate",
       gateLabel: "GATE",
       boardPriorities: "3 VISIBLE PRIORITIES",
       propertiesTitle: "Properties",
@@ -649,8 +645,7 @@ export const homeCopyEn: HomeCopy = {
       scrollCue: "SWIPE FOR MORE DETAIL",
       runApiLabel: "RUN API",
       syncedLabel: "DATA SYNCED",
-      announcement: (phaseTitle, status) =>
-        `Active phase: ${phaseTitle}. Status ${status}.`,
+      announcement: "Active phase: {phase}. Status {status}.",
       phases: [
         {
           code: "01",
@@ -1006,8 +1001,7 @@ export const homeCopyEn: HomeCopy = {
     storyNote:
       "Headlines keep their original Spanish; the summaries are ours, in English.",
     sourceAction: "Go to the source",
-    externalLabel: (title, outlet) =>
-      `${title} — ${outlet} (opens in a new tab)`,
+    externalLabel: "{title} — {outlet} (opens in a new tab)",
     categories: {
       Medios: "Media",
       "Escenarios públicos": "Public forums",

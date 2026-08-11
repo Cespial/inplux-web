@@ -10,6 +10,9 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
+import { homeCopyEs } from "@/content/copy/es";
+import { formatCopy } from "@/content/copy/format";
+import type { SolutionCopy, SolutionsCopy } from "@/content/copy/types";
 import styles from "./home.module.css";
 import ultra from "./SolutionsShowcaseUltra.module.css";
 
@@ -20,186 +23,7 @@ type CopyFeedback = {
   target: "request" | "response" | "error";
 } | null;
 
-const solutions = [
-  {
-    number: "01",
-    title: "Lanzar un producto digital",
-    copy: "Convertimos una oportunidad en una primera versión útil, preparada para aprender y crecer.",
-    status: "PRODUCT DISCOVERY",
-    outcome: "Primera versión lista para validar",
-    modules: ["Contexto", "Experiencia", "Producto", "Entrega"],
-    image: "/brand/home/solution-product.webp",
-    imagePosition: "50% 50%",
-    project: {
-      id: "PRJ-0718",
-      name: "Órbita piloto",
-      owner: "Laura M.",
-      ownerInitials: "LM",
-      state: "Lista para validar",
-      environment: "PILOTO",
-      updated: "Hace 12 min",
-    },
-    ui: {
-      kind: "release",
-      eyebrow: "PRODUCT RELEASE / 01",
-      value: "V1.0",
-      description: "Primera versión preparada para validar.",
-      metrics: [
-        ["USUARIOS PILOTO", "48"],
-        ["FLUJOS CLAVE", "06"],
-        ["COBERTURA", "82%"],
-        ["RIESGO", "BAJO"],
-      ],
-      progress: 82,
-      progressLabel: "Cobertura de validación",
-      activity: [
-        ["Onboarding", "VALIDADO"],
-        ["Flujo principal", "READY"],
-      ],
-    },
-    api: {
-      method: "POST",
-      endpoint: "/v1/projects/PRJ-0718/releases",
-      action: "publish_pilot_release",
-      httpStatus: "201 CREATED",
-      latency: "86 ms",
-    },
-  },
-  {
-    number: "02",
-    title: "Modernizar una operación",
-    copy: "Conectamos personas, procesos, reglas y datos alrededor de la forma real de trabajar.",
-    status: "OPERATION DESIGN",
-    outcome: "Operación conectada y trazable",
-    modules: ["Personas", "Procesos", "Reglas", "Datos"],
-    image: "/brand/home/solution-operation.webp",
-    imagePosition: "50% 52%",
-    project: {
-      id: "OPS-1842",
-      name: "Flujo de casos",
-      owner: "Santiago R.",
-      ownerInitials: "SR",
-      state: "En ejecución",
-      environment: "PRODUCCIÓN",
-      updated: "Hace 4 min",
-    },
-    ui: {
-      kind: "operation",
-      eyebrow: "CASE FLOW / 1842",
-      value: "12m",
-      description: "Tiempo medio para resolver un caso.",
-      metrics: [
-        ["CASOS ACTIVOS", "186"],
-        ["PASOS", "04"],
-        ["SLA", "94%"],
-        ["REPROCESO", "−31%"],
-      ],
-      progress: 74,
-      progressLabel: "Flujo completado",
-      activity: [
-        ["Validación de regla", "PASS"],
-        ["Asignación automática", "DONE"],
-      ],
-    },
-    api: {
-      method: "POST",
-      endpoint: "/v1/projects/OPS-1842/cases/1842/advance",
-      action: "advance_to_human_review",
-      httpStatus: "200 OK",
-      latency: "112 ms",
-    },
-  },
-  {
-    number: "03",
-    title: "Activar conocimiento con IA",
-    copy: "Convertimos tareas repetitivas y conocimiento disperso en flujos claros, con control humano.",
-    status: "KNOWLEDGE SYSTEM",
-    outcome: "Conocimiento disponible al decidir",
-    modules: ["Fuentes", "Criterios", "Flujos", "Revisión"],
-    image: "/brand/home/solution-knowledge.webp",
-    imagePosition: "50% 45%",
-    project: {
-      id: "KNO-0031",
-      name: "Criterio asistido",
-      owner: "María P.",
-      ownerInitials: "MP",
-      state: "Revisión aprobada",
-      environment: "CONTROLADO",
-      updated: "Hace 7 min",
-    },
-    ui: {
-      kind: "knowledge",
-      eyebrow: "KNOWLEDGE QUERY / 031",
-      value: "94%",
-      description: "Confianza de la respuesta con evidencia.",
-      metrics: [
-        ["FUENTES", "04"],
-        ["CITAS", "07"],
-        ["REVISIÓN", "HUMANA"],
-        ["COLA", "00"],
-      ],
-      progress: 94,
-      progressLabel: "Confianza verificada",
-      activity: [
-        ["Política interna", "CITADA"],
-        ["Criterio experto", "APROBADO"],
-      ],
-    },
-    api: {
-      method: "POST",
-      endpoint: "/v1/projects/KNO-0031/knowledge/query",
-      action: "answer_with_verified_sources",
-      httpStatus: "200 OK",
-      latency: "148 ms",
-    },
-  },
-  {
-    number: "04",
-    title: "Evolucionar un servicio público",
-    copy: "Diseñamos experiencias claras para ciudadanía y equipos internos, con seguimiento de punta a punta.",
-    status: "PUBLIC SERVICE",
-    outcome: "Servicio visible, conectado y medible",
-    modules: ["Ciudadanía", "Trámite", "Seguimiento", "Control"],
-    image: "/brand/home/solution-public-service.webp",
-    imagePosition: "50% 52%",
-    project: {
-      id: "GOV-0184",
-      name: "Trámite conectado",
-      owner: "Ana C.",
-      ownerInitials: "AC",
-      state: "En revisión técnica",
-      environment: "SERVICIO",
-      updated: "Hace 9 min",
-    },
-    ui: {
-      kind: "service",
-      eyebrow: "TRÁMITE / 2026-0184",
-      value: "03 / 04",
-      description: "Etapa actual visible para ciudadanía y equipo.",
-      metrics: [
-        ["SOLICITUDES", "284"],
-        ["TIEMPO MEDIO", "2.4D"],
-        ["TRAZABILIDAD", "100%"],
-        ["ALERTAS", "02"],
-      ],
-      progress: 75,
-      progressLabel: "Progreso del trámite",
-      activity: [
-        ["Documento recibido", "VERIFICADO"],
-        ["Revisión técnica", "EN CURSO"],
-      ],
-    },
-    api: {
-      method: "GET",
-      endpoint: "/v1/projects/GOV-0184/procedures/2026-0184",
-      action: "read_procedure_status",
-      httpStatus: "200 OK",
-      latency: "96 ms",
-    },
-  },
-] as const;
-
-type Solution = (typeof solutions)[number];
+type Solution = SolutionCopy;
 
 function toApiKey(label: string) {
   return label
@@ -320,11 +144,13 @@ function useMobileSolutionsLayout() {
 }
 
 function SolutionUiArtifact({ item }: { item: Solution }) {
+  const artifact = item.ui.artifact;
+
   if (item.ui.kind === "release") {
     return (
       <div className={styles.solutionUiArtifact} data-kind="release">
         <div className={styles.releaseTrack}>
-          {["DISCOVERY", "PROTOTYPE", "PILOT", "RELEASE"].map((stage, index) => (
+          {(artifact.stages ?? []).map((stage, index) => (
             <span data-state={index < 3 ? "done" : "current"} key={stage}>
               <i aria-hidden="true" />
               {stage}
@@ -332,8 +158,8 @@ function SolutionUiArtifact({ item }: { item: Solution }) {
           ))}
         </div>
         <div className={styles.releaseCohort}>
-          <span>COHORTE PILOTO</span>
-          <b>48 PERSONAS · 06 FLUJOS</b>
+          <span>{artifact.cohortLabel}</span>
+          <b>{artifact.cohortValue}</b>
         </div>
       </div>
     );
@@ -342,12 +168,7 @@ function SolutionUiArtifact({ item }: { item: Solution }) {
   if (item.ui.kind === "operation") {
     return (
       <div className={styles.solutionUiArtifact} data-kind="operation">
-        {[
-          ["ENTRADA", "186"],
-          ["VALIDACIÓN", "42"],
-          ["REVISIÓN", "18"],
-          ["RESUELTOS", "126"],
-        ].map(([label, count], index) => (
+        {(artifact.queues ?? []).map(([label, count], index) => (
           <span key={label}>
             <i data-active={index === 2 ? "true" : undefined} aria-hidden="true" />
             <small>{label}</small>
@@ -361,15 +182,12 @@ function SolutionUiArtifact({ item }: { item: Solution }) {
   if (item.ui.kind === "knowledge") {
     return (
       <div className={styles.solutionUiArtifact} data-kind="knowledge">
-        <p>
-          La decisión aplica cuando existe evidencia verificable y una persona
-          responsable confirma el criterio.
-        </p>
+        <p>{artifact.statement}</p>
         <div>
-          <span>FUENTE 01</span>
-          <span>FUENTE 02</span>
-          <span>CRITERIO EXPERTO</span>
-          <b>REVISADO</b>
+          {(artifact.chips ?? []).map((chip) => (
+            <span key={chip}>{chip}</span>
+          ))}
+          <b>{artifact.chipVerdict}</b>
         </div>
       </div>
     );
@@ -377,12 +195,7 @@ function SolutionUiArtifact({ item }: { item: Solution }) {
 
   return (
     <div className={styles.solutionUiArtifact} data-kind="service">
-      {[
-        ["01", "SOLICITUD", "DONE"],
-        ["02", "DOCUMENTOS", "DONE"],
-        ["03", "REVISIÓN TÉCNICA", "ACTIVE"],
-        ["04", "RESPUESTA", "NEXT"],
-      ].map(([number, label, status]) => (
+      {(artifact.steps ?? []).map(([number, label, status]) => (
         <span data-state={status.toLowerCase()} key={number}>
           <i>{number}</i>
           <b>{label}</b>
@@ -481,6 +294,7 @@ interface SolutionDemoPanelProps {
   active: number;
   apiRunState: ApiRunState;
   className: string;
+  copy: SolutionsCopy;
   id: string;
   labelledBy: string;
   layout: "desktop" | "mobile";
@@ -494,6 +308,7 @@ function SolutionDemoPanel({
   active,
   apiRunState,
   className,
+  copy,
   id,
   labelledBy,
   layout,
@@ -502,7 +317,11 @@ function SolutionDemoPanel({
   onToggleMode,
   role,
 }: SolutionDemoPanelProps) {
+  const solutions = copy.items;
   const item = solutions[active];
+  const ownerLabel = formatCopy(copy.ownerAriaLabel, {
+    owner: item.project.owner,
+  });
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
   const copyTimerRef = useRef<number | null>(null);
   const backdropIndexes = [active, (active + 1) % solutions.length];
@@ -545,12 +364,12 @@ function SolutionDemoPanel({
       <div className={`${styles.solutionPanelTop} ${ultra.panelTop}`}>
         <span className={ultra.disclosure}>
           <i aria-hidden="true" />
-          DEMOSTRACIÓN INTERACTIVA · DATOS ILUSTRATIVOS
+          {copy.disclosure}
         </span>
         <span className={ultra.panelProject}>
-          PROJECT {item.project.id} · {item.project.state}
+          {`${copy.projectPrefix} `}{item.project.id} · {item.project.state}
         </span>
-        <b>INPLUX FACTORY · {item.number}</b>
+        <b>{`${copy.factoryLabel} · `}{item.number}</b>
       </div>
 
       <div className={`${styles.solutionPanelBody} ${ultra.panelBody}`}>
@@ -589,7 +408,7 @@ function SolutionDemoPanel({
               type="button"
               role="switch"
               aria-checked={mode === "api"}
-              title="Alternar entre la aplicación y la API"
+              title={copy.toggleTitle}
               onClick={onToggleMode}
             >
               <span data-active={mode === "ui" ? "true" : undefined}>UI</span>
@@ -616,8 +435,8 @@ function SolutionDemoPanel({
                       <div className={ultra.appIdentity}>
                         <span aria-hidden="true">IN</span>
                         <p>
-                          INPLUX FACTORY
-                          <small>API WORKBENCH</small>
+                          {copy.factoryLabel}
+                          <small>{copy.workbenchLabel}</small>
                         </p>
                       </div>
                       <span className={ultra.chromeProject}>
@@ -630,23 +449,25 @@ function SolutionDemoPanel({
 
                     <div className={ultra.apiProjectStrip}>
                       <span>
-                        PROYECTO <b>{item.project.name}</b>
+                        {`${copy.projectFieldLabel} `}<b>{item.project.name}</b>
                       </span>
                       <span>
-                        RESPONSABLE <b>{item.project.owner}</b>
+                        {`${copy.ownerFieldLabel} `}<b>{item.project.owner}</b>
                       </span>
                       <span>
-                        ESTADO <b>{item.project.state}</b>
+                        {`${copy.stateFieldLabel} `}<b>{item.project.state}</b>
                       </span>
                     </div>
 
                     <div className={ultra.apiColumns}>
-                      <section className={ultra.apiPane} aria-label="Solicitud API">
+                      <section className={ultra.apiPane} aria-label={copy.requestPaneLabel}>
                         <header className={ultra.apiPaneHeader}>
                           <span>{"// REQUEST"}</span>
                           <button
                             type="button"
-                            aria-label={`Copiar request del proyecto ${item.project.id}`}
+                            aria-label={formatCopy(copy.copyRequestLabel, {
+                              project: item.project.id,
+                            })}
                             onClick={() =>
                               copyCode(
                                 "request",
@@ -657,8 +478,8 @@ function SolutionDemoPanel({
                           >
                             {copyFeedback?.projectId === item.project.id &&
                             copyFeedback.target === "request"
-                              ? "COPIADO"
-                              : "COPIAR"}
+                              ? copy.copyDone
+                              : copy.copyAction}
                           </button>
                         </header>
                         <div
@@ -674,7 +495,7 @@ function SolutionDemoPanel({
 
                       <section
                         className={ultra.apiPane}
-                        aria-label="Respuesta API"
+                        aria-label={copy.responsePaneLabel}
                       >
                         <header className={ultra.apiPaneHeader}>
                           <span>{"// RESPONSE"}</span>
@@ -683,13 +504,15 @@ function SolutionDemoPanel({
                               {apiRunState === "complete"
                                 ? `${item.api.httpStatus} · ${item.api.latency}`
                                 : apiRunState === "running"
-                                  ? "EXECUTING"
-                                  : "NOT RUN"}
+                                  ? copy.responseRunning
+                                  : copy.responseNotRun}
                             </b>
                             <button
                               type="button"
                               disabled={apiRunState !== "complete"}
-                              aria-label={`Copiar response del proyecto ${item.project.id}`}
+                              aria-label={formatCopy(copy.copyResponseLabel, {
+                                project: item.project.id,
+                              })}
                               onClick={() =>
                                 copyCode(
                                   "response",
@@ -700,8 +523,8 @@ function SolutionDemoPanel({
                             >
                               {copyFeedback?.projectId === item.project.id &&
                               copyFeedback.target === "response"
-                                ? "COPIADO"
-                                : "COPIAR"}
+                                ? copy.copyDone
+                                : copy.copyAction}
                             </button>
                           </div>
                         </header>
@@ -715,8 +538,8 @@ function SolutionDemoPanel({
                           ) : (
                             <code>
                               {apiRunState === "running"
-                                ? "Validando contrato y permisos…"
-                                : "Ejecuta el request para inspeccionar la respuesta."}
+                                ? copy.responseRunningHint
+                                : copy.responseIdleHint}
                             </code>
                           )}
                         </pre>
@@ -734,21 +557,21 @@ function SolutionDemoPanel({
                         onClick={onRunRequest}
                       >
                         {apiRunState === "running"
-                          ? "RUNNING…"
+                          ? copy.running
                           : apiRunState === "complete"
-                            ? "RUN AGAIN"
-                            : "RUN REQUEST"}
+                            ? copy.runAgain
+                            : copy.runRequest}
                         <span aria-hidden="true">→</span>
                       </button>
                       <span role="status" aria-live="polite">
                         {copyFeedback?.projectId === item.project.id &&
                         copyFeedback.target === "error"
-                          ? "NO FUE POSIBLE COPIAR"
+                          ? copy.copyFailed
                           : apiRunState === "complete"
-                            ? `${item.api.httpStatus} · ${item.api.latency} · RESPONSE READY`
+                            ? `${item.api.httpStatus} · ${item.api.latency} · ${copy.responseReady}`
                             : apiRunState === "running"
-                              ? "VALIDANDO CONTRATO"
-                              : "SANDBOX READY"}
+                              ? copy.validatingContract
+                              : copy.sandboxReady}
                       </span>
                     </div>
                   </div>
@@ -766,19 +589,19 @@ function SolutionDemoPanel({
                       <div className={ultra.appIdentity}>
                         <span aria-hidden="true">IN</span>
                         <p>
-                          INPLUX FACTORY
+                          {copy.factoryLabel}
                           <small>{item.project.name}</small>
                         </p>
                       </div>
                       <div className={ultra.appNavigation} aria-hidden="true">
-                        <span data-current="true">RESUMEN</span>
-                        <span>ACTIVIDAD</span>
-                        <span>EVIDENCIA</span>
+                        <span data-current="true">{copy.appNavigation[0]}</span>
+                        <span>{copy.appNavigation[1]}</span>
+                        <span>{copy.appNavigation[2]}</span>
                       </div>
                       <span
                         className={ultra.projectOwner}
-                        aria-label={`Responsable: ${item.project.owner}`}
-                        title={`Responsable: ${item.project.owner}`}
+                        aria-label={ownerLabel}
+                        title={ownerLabel}
                       >
                         {item.project.ownerInitials}
                       </span>
@@ -786,16 +609,16 @@ function SolutionDemoPanel({
 
                     <div className={ultra.projectStrip}>
                       <span>
-                        PROJECT ID <b>{item.project.id}</b>
+                        {`${copy.projectIdFieldLabel} `}<b>{item.project.id}</b>
                       </span>
                       <span>
-                        RESPONSABLE <b>{item.project.owner}</b>
+                        {`${copy.ownerFieldLabel} `}<b>{item.project.owner}</b>
                       </span>
                       <span>
-                        ENTORNO <b>{item.project.environment}</b>
+                        {`${copy.environmentFieldLabel} `}<b>{item.project.environment}</b>
                       </span>
                       <span>
-                        ACTUALIZADO <b>{item.project.updated}</b>
+                        {`${copy.updatedFieldLabel} `}<b>{item.project.updated}</b>
                       </span>
                     </div>
 
@@ -845,7 +668,7 @@ function SolutionDemoPanel({
                           <b>{item.ui.progress}%</b>
                         </div>
                         <div className={styles.solutionUiActivity}>
-                          <span>ACTIVIDAD RECIENTE</span>
+                          <span>{copy.recentActivityLabel}</span>
                           {item.ui.activity.map(([label, value]) => (
                             <p key={label}>
                               {label}
@@ -862,7 +685,7 @@ function SolutionDemoPanel({
         </div>
 
         <div className={styles.solutionOutcome}>
-          <span>RESULTADO</span>
+          <span>{copy.outcomeLabel}</span>
           <p>{item.outcome}</p>
           <b aria-hidden="true">READY →</b>
         </div>
@@ -871,7 +694,12 @@ function SolutionDemoPanel({
   );
 }
 
-export function SolutionsShowcase() {
+export function SolutionsShowcase({
+  copy = homeCopyEs.solutions,
+}: {
+  copy?: SolutionsCopy;
+}) {
+  const solutions = copy.items;
   const [active, setActive] = useState(0);
   const [mode, setMode] = useState<DemoMode>("ui");
   const [apiRunState, setApiRunState] = useState<ApiRunState>("ready");
@@ -945,16 +773,16 @@ export function SolutionsShowcase() {
       <div className={styles.solutionsGrid}>
         <div className={styles.solutionRail}>
           <div className={styles.sectionHeading}>
-            <p className={styles.eyebrow}>02 / QUÉ CONSTRUIMOS</p>
+            <p className={styles.eyebrow}>{copy.eyebrow}</p>
             <h2 id="solutions-title">
-              Software para lo que tu organización necesita <em>hacer posible.</em>
+              {copy.titleLead}<em>{copy.titleEmphasis}</em>
             </h2>
           </div>
 
           {isMobileLayout ? (
             <div
               className={styles.solutionMobileAccordion}
-              aria-label="Tipos de proyecto"
+              aria-label={copy.tabsAriaLabel}
             >
               {solutions.map((item, index) => {
                 const selected = active === index;
@@ -988,6 +816,7 @@ export function SolutionsShowcase() {
                           active={active}
                           apiRunState={apiRunState}
                           className={styles.solutionMobilePanel}
+                          copy={copy}
                           id={panelId}
                           labelledBy={`solution-tab-${index}`}
                           layout="mobile"
@@ -1007,7 +836,7 @@ export function SolutionsShowcase() {
               <div
                 className={styles.solutionTabs}
                 role="tablist"
-                aria-label="Tipos de proyecto"
+                aria-label={copy.tabsAriaLabel}
                 aria-orientation="vertical"
               >
                 {solutions.map((item, index) => (
@@ -1038,6 +867,7 @@ export function SolutionsShowcase() {
             active={active}
             apiRunState={apiRunState}
             className={styles.solutionDesktopPanel}
+            copy={copy}
             id="solution-panel"
             labelledBy={`solution-tab-${active}`}
             layout="desktop"

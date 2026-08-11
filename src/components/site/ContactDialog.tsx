@@ -14,6 +14,8 @@ import {
   type PropsWithChildren,
 } from "react";
 import { ContactForm } from "@/components/site/ContactForm";
+import { homeCopyEs } from "@/content/copy/es";
+import type { ContactDialogCopy, ContactFormCopy } from "@/content/copy/types";
 
 type DialogPhase = "closed" | "open" | "closing";
 
@@ -46,7 +48,16 @@ export function useContactDialog() {
   return context;
 }
 
-export function ContactDialogProvider({ children }: PropsWithChildren) {
+type ContactDialogProviderProps = PropsWithChildren<{
+  copy?: ContactDialogCopy;
+  formCopy?: ContactFormCopy;
+}>;
+
+export function ContactDialogProvider({
+  children,
+  copy = homeCopyEs.contactDialog,
+  formCopy = homeCopyEs.contactForm,
+}: ContactDialogProviderProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -259,7 +270,7 @@ export function ContactDialogProvider({ children }: PropsWithChildren) {
         <button
           className="site-contact-dialog-close"
           type="button"
-          aria-label="Cerrar formulario de contacto"
+          aria-label={copy.closeLabel}
           onClick={(event) => closeContact(event.detail !== 0)}
         >
           <span aria-hidden="true" />
@@ -269,17 +280,14 @@ export function ContactDialogProvider({ children }: PropsWithChildren) {
         <div className="site-contact-dialog-scroll">
           <div className="site-contact-dialog-grid">
             <div className="site-contact-dialog-copy">
-              <p className="site-eyebrow">Empecemos por el problema</p>
+              <p className="site-eyebrow">{copy.eyebrow}</p>
               <h2 ref={titleRef} id="site-contact-dialog-title" tabIndex={-1}>
-                ¿Qué necesitas <em>construir</em>?
+                {copy.titleLead}<em>{copy.titleEmphasis}</em>{copy.titleTail}
               </h2>
-              <p id="site-contact-dialog-description">
-                Cuéntanos qué debería cambiar. No necesitas llegar con requisitos ni con el
-                alcance definido.
-              </p>
+              <p id="site-contact-dialog-description">{copy.description}</p>
               <a href="mailto:gerencia@inplux.co">gerencia@inplux.co</a>
             </div>
-            <ContactForm context="dialog" />
+            <ContactForm context="dialog" copy={formCopy} />
           </div>
         </div>
       </dialog>

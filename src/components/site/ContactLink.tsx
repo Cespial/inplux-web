@@ -12,7 +12,13 @@ export type ContactSource =
   | "home-offer"
   | "header-desktop"
   | "header-mobile"
-  | "about-closing";
+  | "about-closing"
+  // La home en inglés declara sus propios orígenes para no confundir la
+  // telemetría de los disparadores con los de la ruta española.
+  | "en-home-hero"
+  | "en-home-offer"
+  | "en-header-desktop"
+  | "en-header-mobile";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;

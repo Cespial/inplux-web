@@ -333,6 +333,7 @@ async function verifyLogoPermissions() {
 async function verifyContactExperience() {
   const files = {
     home: "src/app/page.tsx",
+    englishHome: "src/app/en/page.tsx",
     about: "src/app/nosotros/page.tsx",
     contact: "src/app/contacto/page.tsx",
     header: "src/components/site/SiteHeader.tsx",
@@ -347,12 +348,12 @@ async function verifyContactExperience() {
     ]),
   );
   const source = Object.fromEntries(entries);
-  const triggerSurface = `${source.home}\n${source.about}\n${source.header}`;
+  const triggerSurface = `${source.home}\n${source.englishHome}\n${source.about}`;
   const expectedSources = [
     "home-hero",
     "home-offer",
-    "header-desktop",
-    "header-mobile",
+    "en-home-hero",
+    "en-home-offer",
     "about-closing",
   ];
 
@@ -365,6 +366,31 @@ async function verifyContactExperience() {
     }
   }
 
+  // El header sirve a las dos rutas: recibe el origen por prop y conserva un
+  // valor por defecto para cada disparador.
+  for (const [prop, defaultSource] of [
+    ["desktopContactSource", "header-desktop"],
+    ["mobileContactSource", "header-mobile"],
+  ]) {
+    if (!source.header.includes(`${prop} = "${defaultSource}"`)) {
+      errors.push(
+        `SiteHeader debe conservar el origen por defecto ${prop} = "${defaultSource}"`,
+      );
+    }
+    if (source.header.split(`source={${prop}}`).length - 1 !== 1) {
+      errors.push(`SiteHeader debe usar una vez source={${prop}}`);
+    }
+  }
+  // La ruta española usa los valores por defecto; la inglesa debe declarar los
+  // suyos para que los disparadores del header no se confundan entre idiomas.
+  for (const contactSource of ["en-header-desktop", "en-header-mobile"]) {
+    if (!source.englishHome.includes(`"${contactSource}"`)) {
+      errors.push(
+        `La HOME en inglés debe declarar el origen "${contactSource}" del header`,
+      );
+    }
+  }
+
   const requirements = [
     [
       source.home.includes('id="contacto"') &&
@@ -372,19 +398,30 @@ async function verifyContactExperience() {
       "HOME debe conservar #contacto y un contacto directo como fallback progresivo",
     ],
     [
-      source.home.split('fallbackHref="#contacto"').length - 1 === 2,
-      "Los dos CTA de HOME deben conservar fallbackHref=\"#contacto\"",
+      source.englishHome.includes('id="contacto"') &&
+        source.englishHome.includes('href="mailto:gerencia@inplux.co"'),
+      "La HOME en inglés debe conservar #contacto y un contacto directo como fallback progresivo",
+    ],
+    [
+      source.home.split('fallbackHref="#contacto"').length - 1 === 2 &&
+        source.englishHome.split('fallbackHref="#contacto"').length - 1 === 2,
+      "Los dos CTA de cada HOME deben conservar fallbackHref=\"#contacto\"",
     ],
     [
       source.about.split('fallbackHref="/contacto"').length - 1 === 1 &&
-        source.header.split('fallbackHref="/contacto"').length - 1 === 2,
-      "Header y Nosotros deben conservar la ruta estable fallbackHref=\"/contacto\"",
+        source.header.includes('const headerContactHref = "/contacto"') &&
+        source.header.split("fallbackHref={headerContactHref}").length - 1 === 2,
+      "Header y Nosotros deben conservar la ruta estable /contacto como fallback",
     ],
     [
       source.home.includes("<ContactDialogProvider>") &&
         source.about.includes("<ContactDialogProvider>") &&
         source.contact.includes("<ContactDialogProvider>"),
       "HOME, Nosotros y Contacto deben compartir el proveedor del diálogo de contacto",
+    ],
+    [
+      /<ContactDialogProvider[\s>]/.test(source.englishHome),
+      "La HOME en inglés debe montar el proveedor del diálogo de contacto",
     ],
     [
       source.contact.includes('<ContactForm context="section"') &&
