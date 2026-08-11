@@ -4054,6 +4054,15 @@
     display: none;
   }
 
+  /* La sede y la figura societaria se quedan en móvil: es el dato que un
+     cliente del exterior necesita ver, aunque la invitación se recorte. */
+  .contactEntity {
+    margin-top: 1.25rem !important;
+    padding-top: 1.25rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
   .contactOffer {
     margin-top: 1.5rem;
     font-size: 0.75rem;

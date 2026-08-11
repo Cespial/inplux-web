@@ -10,6 +10,7 @@ const pollIntervalMs = 250;
 
 const expectedRoutes = [
   ["/", 200],
+  ["/en", 200],
   ["/trabajo/tribai", 200],
   ["/trabajo/gobia", 200],
   ["/trabajo/kelsen", 200],

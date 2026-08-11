@@ -67,11 +67,14 @@
 
 /* Aviso de idioma de los titulares: nota editorial, no antetítulo. */
 .homeHeading .homeHeadingNote {
-  max-width: 46ch;
-  margin: 1.5rem 0 0;
-  color: rgba(249, 245, 239, 0.62);
-  font: 400 0.9rem/1.5 inherit;
+  max-width: 44ch;
+  margin: 1.75rem 0 0;
+  color: rgba(249, 245, 239, 0.58);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 400;
   letter-spacing: 0;
+  line-height: 1.55;
   text-transform: none;
 }
 

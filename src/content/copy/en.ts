@@ -1011,7 +1011,7 @@ export const homeCopyEn: HomeCopy = {
     formats: {
       Entrevista: "Interview",
       Prensa: "Press",
-      "Selección editorial": "Editorial selection",
+      "Selección editorial": "Editorial pick",
       Panel: "Panel",
       Preprint: "Preprint",
       "Working paper": "Working paper",
