@@ -1,4 +1,5 @@
 import type { DeckSlide } from "@/content/deck";
+import { MetodoSlide } from "./slides/MetodoSlide";
 import { PortadaSlide } from "./slides/PortadaSlide";
 import { ProblemaSlide } from "./slides/ProblemaSlide";
 import { TesisSlide } from "./slides/TesisSlide";
@@ -9,9 +10,8 @@ export function SlideRenderer({
   slide,
 }: {
   slide: DeckSlide;
-  // Los motivos bajan desde la ruta y los consume la lámina de evidencia en
-  // la Tarea 12. Se declaran aquí —sin desestructurar— para que el riel ya
-  // los pase y esa tarea solo tenga que leerlos.
+  // Los motivos bajan desde la ruta y los consume la lámina de evidencia. Se
+  // declaran aquí —sin desestructurar— para que el riel ya los pase.
   motivos: readonly string[];
 }) {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
@@ -25,14 +25,14 @@ export function SlideRenderer({
   // todos los kind, y añadir uno sin su rama rompe el build en vez de
   // pintar un hueco en producción.
   switch (slide.kind) {
-    // Las tres láminas con cuerpo propio. El resto sigue en el grupo genérico
+    // Las láminas con cuerpo propio. El resto sigue en el grupo genérico
     // —solo su título— hasta que su tarea les toque; el `switch` sin `default`
     // garantiza que ninguna se quede sin rama.
     //
-    // Ni `titulo` ni `perfil` bajan a estas tres: su texto sale de DECK_COPY,
-    // que es más largo y más preciso que el título del modelo (el del modelo
-    // es el que rotula la barra superior y el índice, y ahí tiene que caber en
-    // una línea). Pasarles el título sería una prop que no usan.
+    // Ni `titulo` ni `perfil` bajan a estas: su texto sale de DECK_COPY, que es
+    // más largo y más preciso que el título del modelo (el del modelo es el que
+    // rotula la barra superior y el índice, y ahí tiene que caber en una
+    // línea). Pasarles el título sería una prop que no usan.
     case "portada":
       return <PortadaSlide id={slide.id} />;
     case "problema":
@@ -40,6 +40,7 @@ export function SlideRenderer({
     case "tesis":
       return <TesisSlide id={slide.id} />;
     case "metodo":
+      return <MetodoSlide id={slide.id} />;
     case "espejo":
     case "evidencia":
     case "puente":
