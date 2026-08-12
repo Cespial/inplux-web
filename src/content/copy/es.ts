@@ -133,12 +133,12 @@ export const homeCopyEs: HomeCopy = {
   },
 
   experienceRail: {
-    ribbonAriaLabel: "Productos con atribución pública confirmada a INPLUX",
-    ribbonEyebrow: "TRABAJO ATRIBUIBLE / PRODUCTOS",
-    ribbonTitle: "Trabajo que sí podemos atribuir.",
+    ribbonAriaLabel: "Productos de INPLUX, cada uno con su fuente.",
+    ribbonEyebrow: "PRODUCTOS / TRABAJO",
+    ribbonTitle: "Lo que hemos construido.",
     directoryEyebrow: "EVIDENCIA / ATRIBUCIÓN",
     directoryName: "Directorio",
-    directoryDetail: " perfiles documentados",
+    directoryDetail: " productos documentados",
     logoWallAriaLabel: "Organizaciones con las que INPLUX ha trabajado.",
     statementEyebrow: "RELACIONES REALES",
     statementTitle: "EXPERIENCIA Y ALIANZAS",

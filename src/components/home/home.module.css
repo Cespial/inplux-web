@@ -392,15 +392,24 @@
   scroll-margin-top: 4rem;
 }
 
+/*
+ * El ribbon no tiene un conteo de columnas fijo: el número de tarjetas
+ * (productos confirmados + el enlace al directorio) vive en
+ * `src/content/work.ts` y cambia sin avisar. `display: flex` + `flex-wrap`
+ * hace que la disposición se derive del ancho disponible y del número de
+ * ítems reales, en vez de reservar N columnas fijas que se quedan a medio
+ * llenar cuando el conteo cambia. Cada tarjeta dibuja su propio borde
+ * derecho e inferior (ver `.proofRibbonIntro, .proofProduct` más abajo), así
+ * que un renglón incompleto termina donde termina el contenido — nunca deja
+ * una celda vacía con bordes que prometan una tarjeta que no está.
+ */
 .proofRibbon {
-  display: grid;
-  grid-template-columns: minmax(17rem, 1.45fr) repeat(3, minmax(11rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   width: calc(100% - (var(--home-gutter) * 1.16));
   max-width: 1400px;
   margin-inline: auto;
-  overflow-x: auto;
-  border-inline: 1px solid var(--home-line);
-  border-bottom: 1px solid var(--home-line);
+  border-left: 1px solid var(--home-line);
   scrollbar-width: none;
 }
 
@@ -415,12 +424,15 @@
 
 .proofRibbonIntro,
 .proofProduct {
+  box-sizing: border-box;
   min-height: 8.75rem;
   border-right: 1px solid var(--home-line);
+  border-bottom: 1px solid var(--home-line);
   padding: 1.35rem;
 }
 
 .proofRibbonIntro {
+  flex: 0 0 17rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -442,6 +454,7 @@
 }
 
 .proofProduct {
+  flex: 0 0 15.5rem;
   position: relative;
   display: grid;
   align-content: space-between;
@@ -450,10 +463,6 @@
   transition:
     background-color 180ms ease,
     transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.proofProduct:last-child {
-  border-right: 0;
 }
 
 .proofProduct strong {
@@ -3252,8 +3261,21 @@
 
   .proofRibbon {
     display: flex;
+    flex-wrap: nowrap;
     width: calc(100% - 1rem);
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
+    /*
+     * El carrusel es un contenedor con scroll, así que estos dos bordes se
+     * pintan sobre su caja fija y no se van con el contenido que se desplaza:
+     * el derecho es el marco que cierra el carrusel a la vista siempre, y el
+     * inferior es la línea que lo separa del muro de logos de abajo. En
+     * escritorio el contenedor ya no dibuja el rectángulo completo (cada
+     * tarjeta pone su propio borde para que un renglón incompleto termine
+     * donde termina el contenido), de modo que aquí hay que declararlos.
+     */
+    border-right: 1px solid var(--home-line);
+    border-bottom: 1px solid var(--home-line);
   }
 
   .proofRibbonIntro,
@@ -3261,7 +3283,17 @@
     flex: 0 0 15rem;
     min-height: 7.5rem;
     padding: 1rem;
+    /* El carrusel móvil es un único renglón: no hay filas que dividir. */
+    border-bottom: 0;
     scroll-snap-align: start;
+  }
+
+  /*
+   * La última tarjeta cede su borde derecho al del contenedor: al llegar al
+   * final del scroll caerían uno junto al otro y se vería una línea doble.
+   */
+  .proofProduct:last-child {
+    border-right: 0;
   }
 
   .proofRibbonIntro {

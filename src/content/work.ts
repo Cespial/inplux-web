@@ -1,4 +1,4 @@
-export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos";
+export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos" | "porkia";
 
 export type WorkSource = {
   label: string;
@@ -39,7 +39,7 @@ export type WorkProfile = {
     description: string;
   }[];
   interface: {
-    theme: "tributary" | "civic" | "legal" | "arbitration";
+    theme: "tributary" | "civic" | "legal" | "arbitration" | "livestock";
     eyebrow: string;
     primaryMetric: string;
     metricLabel: string;
@@ -63,21 +63,21 @@ export const workProfiles = [
       "Consulta tributaria con fuentes, vigencia y herramientas visibles.",
     headline: "Encontrar criterio tributario sin perder la fuente.",
     description:
-      "Tribai reúne consulta y herramientas tributarias en un entorno orientado a revisar el sustento y la vigencia de la información. Este perfil describe lo que el producto publica; no atribuye su desarrollo a INPLUX.",
+      "Tribai reúne consulta y herramientas tributarias en un entorno orientado a revisar el sustento y la vigencia de la información.",
     status: {
       label: "Producto público",
       detail: "El sitio y sus herramientas se encuentran públicamente accesibles.",
     },
     access: {
       label: "Abrir asistente",
-      href: "https://tribai.co/asistente",
+      href: "https://app.tribai.co/",
       detail: "El asistente tributario puede explorarse públicamente en el dominio oficial.",
     },
     attribution: {
-      state: "unconfirmed",
-      label: "Atribución pública no confirmada",
+      state: "confirmed",
+      label: "Desarrollo de INPLUX",
       statement:
-        "Las fuentes públicas revisadas no muestran una atribución verificable a INPLUX. Se publica como perfil de producto observado, no como caso de resultados ni como proyecto atribuido.",
+        "Tribai es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, interfaz y disponibilidad—, no quién lo construyó.",
     },
     partners: [],
     capabilities: [
@@ -119,14 +119,14 @@ export const workProfiles = [
         url: "https://tribai.co/",
         supports:
           "Existencia pública del producto, enfoque tributario, consulta, fuentes, vigencia y herramientas.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Asistente público de Tribai",
-        url: "https://tribai.co/asistente",
+        url: "https://app.tribai.co/",
         supports:
           "Disponibilidad pública de la interfaz del asistente tributario mostrada en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -196,14 +196,14 @@ export const workProfiles = [
         url: "https://gobia.co/",
         supports:
           "Descripción del producto, atribución pública a INPLUX, estado de piloto y disponibilidad de demostración.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Demo pública de Gobia",
         url: "https://www.gobia.co/demo",
         supports:
           "Disponibilidad pública del mapa y el centro de mando fiscal mostrados en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -217,7 +217,7 @@ export const workProfiles = [
       "Análisis, redacción y monitoreo jurídico con trazabilidad.",
     headline: "Trabajar conocimiento jurídico con una ruta verificable.",
     description:
-      "Kelsen presenta capacidades para investigar, analizar, redactar y monitorear trabajo jurídico conservando trazabilidad. Las fuentes públicas revisadas no confirman una relación con INPLUX.",
+      "Kelsen presenta capacidades para investigar, analizar, redactar y monitorear trabajo jurídico conservando trazabilidad.",
     status: {
       label: "Explorador público",
       detail: "La biblioteca jurídica y sus filtros se encuentran públicamente accesibles.",
@@ -229,10 +229,10 @@ export const workProfiles = [
         "La biblioteca legal puede explorarse públicamente en kelsen.io.",
     },
     attribution: {
-      state: "unconfirmed",
-      label: "Atribución pública no confirmada",
+      state: "confirmed",
+      label: "Desarrollo de INPLUX",
       statement:
-        "No encontramos una atribución pública verificable a INPLUX en la fuente revisada. Por eso se presenta como perfil de producto, no como caso ni como trabajo atribuido.",
+        "Kelsen es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, biblioteca y disponibilidad—, no quién lo construyó.",
     },
     partners: [],
     capabilities: [
@@ -274,14 +274,14 @@ export const workProfiles = [
         url: "https://kelsen.io/",
         supports:
           "Presentación pública de capacidades de análisis, redacción, monitoreo y trazabilidad jurídica.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Explorador público de Kelsen",
         url: "https://kelsen.io/explorador?vigencia=modificado",
         supports:
           "Disponibilidad pública de la biblioteca legal, búsqueda, filtros y resultados del corpus; es la vista exacta usada en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -360,14 +360,100 @@ export const workProfiles = [
         url: "https://laudos.co/",
         supports:
           "Objeto del producto, beta abierta y atribución diferenciada entre INPLUX y REDEK.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Laboratorio de Predicción de Laudos",
         url: "https://laudos.co/?view=predecir",
         supports:
           "Disponibilidad pública del formulario de análisis arbitral mostrado en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
+      },
+    ],
+  },
+  {
+    kind: "product-profile",
+    slug: "porkia",
+    number: "05",
+    name: "Porkia",
+    category: "Porcicultura",
+    shortDescription:
+      "Lotes, cuido, sanidad y cuentas de una finca porcícola en una sola app.",
+    headline: "Llevar una finca porcícola sin volver al cuaderno.",
+    description:
+      "Porkia reúne el seguimiento de lotes, el cuido, la sanidad y las cuentas de una finca porcícola en una aplicación móvil que funciona sin conexión y guarda los datos en el teléfono.",
+    status: {
+      // El sitio anuncia la salida a tiendas para junio de 2026 y esa fecha ya
+      // pasó cuando se verificó. El perfil publica lo que el producto sostiene
+      // hoy —la inscripción a la beta cerrada— y anota el anuncio vencido en
+      // vez de repetirlo como si siguiera vigente.
+      label: "Beta cerrada",
+      detail:
+        "El sitio inscribe a porcicultores de Antioquia en una beta cerrada. Sus fichas de tienda seguían anunciando junio de 2026 en la fecha de verificación.",
+    },
+    access: {
+      label: "Abrir demostración",
+      href: "https://porkia.co/#demo",
+      detail:
+        "Las pantallas de la aplicación pueden recorrerse públicamente en el navegador, con datos de ejemplo. La aplicación todavía no se entrega: el sitio inscribe a la beta cerrada y anuncia que enviará el enlace cuando esté lista.",
+    },
+    attribution: {
+      state: "confirmed",
+      label: "Desarrollo de INPLUX",
+      statement:
+        "Porkia es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, demostración y modalidad de acceso—, no quién lo construyó.",
+    },
+    partners: [],
+    capabilities: [
+      {
+        title: "Lotes y crecimiento",
+        description:
+          "Registra cada lote de cerdas con sus crías, el peso de los animales y el avance de la ceba.",
+      },
+      {
+        title: "Cuido y bodega",
+        description:
+          "Lleva el inventario de bultos y su consumo por lote, y avisa cuando la bodega baja.",
+      },
+      {
+        title: "Plan sanitario",
+        description:
+          "Programa vacunas, vermifugaciones e inspecciones, y recuerda cada una el día que corresponde.",
+      },
+      {
+        title: "Cuentas por lote",
+        description:
+          "Reúne ventas, kilos entregados e ingreso para leer qué dejó cada lote.",
+      },
+    ],
+    interface: {
+      theme: "livestock",
+      eyebrow: "FINCA / PORCÍCOLA",
+      // La demostración pública corre sobre datos de ejemplo de una granja
+      // ficticia: sus cifras describen el escenario de la demo, no el producto.
+      // Por eso este bloque usa etiquetas cualitativas, como el de Kelsen.
+      primaryMetric: "CERDO",
+      metricLabel: "seguido desde el día del parto",
+      items: [
+        { label: "Cuido", value: "Bultos y consumo" },
+        { label: "Sanidad", value: "Plan programado", state: "accent" },
+        { label: "Cuentas", value: "Ingreso por lote" },
+      ],
+    },
+    sources: [
+      {
+        label: "Sitio oficial de Porkia",
+        url: "https://porkia.co/",
+        supports:
+          "Existencia pública del producto, alcance sobre lotes, cuido, sanidad y cuentas, funcionamiento sin conexión y la beta cerrada para porcicultores de Antioquia.",
+        verifiedAt: "2026-08-11",
+      },
+      {
+        label: "Demostración pública de Porkia",
+        url: "https://porkia.co/#demo",
+        supports:
+          "Disponibilidad pública de la demostración navegable con datos de ejemplo; es la vista exacta usada en la captura.",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -386,7 +472,10 @@ export const workDirectory = [
     name: "MiMotoYa",
     category: "Movilidad",
     status: "En desarrollo",
-    attribution: "Sin perfil público verificable",
+    // Es un desarrollo de INPLUX como los perfiles anteriores; lo que todavía
+    // no tiene es una superficie pública que citar, y por eso `hasProfile` es
+    // falso y no hay `href`.
+    attribution: "Desarrollo de INPLUX",
     href: null,
     hasProfile: false as const,
   },

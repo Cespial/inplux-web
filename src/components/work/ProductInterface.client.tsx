@@ -140,10 +140,14 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
           <div className={styles.evidenceWindow}>
             <div className={styles.evidenceHeader}>
               <span>REGISTRO DE EVIDENCIA</span>
+              {/*
+                El registro cuenta las fuentes que lista debajo, no dictamina
+                sobre la atribución: la autoría la declara INPLUX y ninguna de
+                estas filas la demuestra por sí sola.
+              */}
               <b>
-                {profile.attribution.state === "confirmed"
-                  ? "CONFIRMADO"
-                  : "PENDIENTE"}
+                {profile.sources.length}{" "}
+                {profile.sources.length === 1 ? "FUENTE" : "FUENTES"}
               </b>
             </div>
             <div className={styles.evidenceStatement}>

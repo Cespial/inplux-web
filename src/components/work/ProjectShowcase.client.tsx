@@ -9,7 +9,11 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import { type WorkProfile, type WorkSlug } from "@/content/work";
+// El tipo se borra en compilación; la función viene de un módulo sin datos.
+// Importar `verificationDateFor` desde `@/content/work` metía el literal
+// completo de `workProfiles` en el chunk cliente de `/trabajo`.
+import type { WorkProfile, WorkSlug } from "@/content/work";
+import { formatShortDate, verificationDateFor } from "@/content/work-format";
 import styles from "./ProjectShowcase.module.css";
 
 type InputMode = "keyboard" | "pointer";
@@ -18,6 +22,14 @@ type RealPage = {
   sourceUrl: string;
   displayUrl: string;
   captureSrc: string;
+  /**
+   * Fecha en que se tomó la captura, copiada de `capture-manifest.json`.
+   *
+   * Vive aquí y no como una constante única del pie porque el conjunto dejó de
+   * tomarse en una sola sesión: cada captura declara la suya y el pie la lee de
+   * la pestaña activa.
+   */
+  capturedAt: string;
   alt: string;
   screenLabel: string;
   surfaceLabel: string;
@@ -28,6 +40,7 @@ const profileOrder = [
   "laudos",
   "tribai",
   "kelsen",
+  "porkia",
 ] as const satisfies readonly WorkSlug[];
 
 const realPages = {
@@ -35,6 +48,7 @@ const realPages = {
     sourceUrl: "https://www.gobia.co/demo",
     displayUrl: "gobia.co/demo",
     captureSrc: "/work/real-pages/gobia-demo-2026-07-21.png",
+    capturedAt: "2026-07-21",
     alt: "Captura real de la demo pública de Gobia, con el mapa de Medellín y su panel fiscal.",
     screenLabel: "Demo pública de Medellín",
     surfaceLabel: "Centro de mando fiscal",
@@ -43,14 +57,16 @@ const realPages = {
     sourceUrl: "https://laudos.co/?view=predecir",
     displayUrl: "laudos.co/?view=predecir",
     captureSrc: "/work/real-pages/laudos-prediccion-2026-07-21.png",
+    capturedAt: "2026-07-21",
     alt: "Captura real del Laboratorio de Predicción público de Laudos.",
     screenLabel: "Laboratorio de Predicción",
     surfaceLabel: "Análisis arbitral",
   },
   tribai: {
-    sourceUrl: "https://tribai.co/asistente",
-    displayUrl: "tribai.co/asistente",
+    sourceUrl: "https://app.tribai.co/",
+    displayUrl: "app.tribai.co",
     captureSrc: "/work/real-pages/tribai-asistente-2026-07-21.png",
+    capturedAt: "2026-07-21",
     alt: "Captura real del Asistente Tributario público de Tribai.",
     screenLabel: "Asistente Tributario",
     surfaceLabel: "Consulta con fuentes",
@@ -59,9 +75,21 @@ const realPages = {
     sourceUrl: "https://kelsen.io/explorador?vigencia=modificado",
     displayUrl: "kelsen.io/explorador?vigencia=modificado",
     captureSrc: "/work/real-pages/kelsen-explorador-2026-07-21.png",
+    capturedAt: "2026-07-21",
     alt: "Captura real de la Biblioteca Legal pública de Kelsen con resultados del corpus jurídico.",
     screenLabel: "Biblioteca Legal de Colombia",
     surfaceLabel: "Explorador jurídico",
+  },
+  porkia: {
+    sourceUrl: "https://porkia.co/#demo",
+    displayUrl: "porkia.co/#demo",
+    captureSrc: "/work/real-pages/porkia-demo-2026-08-11.png",
+    capturedAt: "2026-08-11",
+    // El teléfono que se ve en la imagen lo dibuja porkia.co: la captura no
+    // recrea ninguna interfaz, retrata la página pública tal como responde.
+    alt: "Captura real de la demostración pública de Porkia, con las pantallas de la app recorribles desde el navegador.",
+    screenLabel: "Demostración navegable",
+    surfaceLabel: "Finca porcícola",
   },
 } as const satisfies Record<WorkSlug, RealPage>;
 
@@ -184,7 +212,7 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
             <span aria-hidden="true" />
             <p>PÁGINA REAL / SITIO OFICIAL</p>
           </div>
-          <p>CAPTURA DE NAVEGADOR · 21 JUL 2026</p>
+          <p>CAPTURA DE NAVEGADOR · {formatShortDate(activePage.capturedAt)}</p>
         </div>
 
         <div
@@ -299,7 +327,10 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
                     <span aria-hidden="true" />
                     CAPTURA REAL · {profile.name.toUpperCase()}
                   </p>
-                  <p>URL OFICIAL · VERIFICADA 21 JUL 2026</p>
+                  <p>
+                    URL OFICIAL · VERIFICADA{" "}
+                    {verificationDateFor(profile.sources, page.sourceUrl)}
+                  </p>
                 </div>
               </div>
             </div>

@@ -10,10 +10,19 @@ import styles from "./trabajo.module.css";
 
 const workSocialImage = getWorkSocialImageUrl("directorio");
 const workSocialDescription =
-  "Trabajo atribuible y ecosistema observado, con la atribución pública de cada perfil explicada por separado.";
+  "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.";
 const workSocialImageAlt =
-  "INPLUX, directorio de trabajo y productos con atribución pública diferenciada";
-const showcaseOrder = ["gobia", "laudos", "tribai", "kelsen"] as const satisfies readonly WorkSlug[];
+  "INPLUX, directorio de trabajo y productos con fuentes verificadas";
+// Porkia cierra la lista: es el perfil más nuevo y su captura es la más
+// reciente. Entra al final para no desplazar a Gobia, que abre la vitrina y es
+// la única imagen con `priority`.
+const showcaseOrder = [
+  "gobia",
+  "laudos",
+  "tribai",
+  "kelsen",
+  "porkia",
+] as const satisfies readonly WorkSlug[];
 const showcaseProfiles = showcaseOrder.flatMap((slug) => {
   const profile = workProfiles.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
@@ -23,7 +32,7 @@ const upcomingWork = workDirectory.find((item) => !item.hasProfile);
 export const metadata: Metadata = {
   title: "Trabajo y productos — evidencia y atribución",
   description:
-    "Explora por separado el trabajo públicamente atribuible a INPLUX y los productos documentados del ecosistema observado.",
+    "Los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
   alternates: {
     canonical: "https://inplux.co/trabajo",
   },
@@ -62,7 +71,7 @@ const workJsonLd = {
   name: "Trabajo y productos — evidencia y atribución",
   url: "https://inplux.co/trabajo",
   description:
-    "Directorio que separa trabajo atribuible a INPLUX de productos documentados sin atribución pública confirmada.",
+    "Directorio de los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
   mainEntity: {
     "@type": "ItemList",
     itemListElement: showcaseProfiles.map((profile, index) => ({
@@ -75,12 +84,13 @@ const workJsonLd = {
 };
 
 export default function TrabajoPage() {
-  const attributedProfiles = workProfiles.filter(
-    (profile) => profile.attribution.state === "confirmed",
+  const sourceCount = workProfiles.reduce(
+    (total, profile) => total + profile.sources.length,
+    0,
   );
-  const observedProfiles = workProfiles.filter(
-    (profile) => profile.attribution.state === "unconfirmed",
-  );
+  const lastVerified = workProfiles
+    .flatMap((profile) => profile.sources.map((source) => source.verifiedAt))
+    .reduce((latest, date) => (date > latest ? date : latest), "0000-00-00");
 
   return (
     <>
@@ -103,30 +113,30 @@ export default function TrabajoPage() {
                     <span>00</span> Trabajo y productos
                   </p>
                   <h1 id="work-title">
-                    Lo atribuible y lo observado, <em>sin confundirlos.</em>
+                    Cada producto, <em>con su fuente.</em>
                   </h1>
                   <p className={styles.heroLead}>
-                    Separamos el trabajo públicamente atribuible a INPLUX de los
-                    productos que documentamos sin afirmar una relación que las fuentes
-                    todavía no demuestran.
+                    Publicamos lo que cada producto muestra en su sitio oficial, con la
+                    fecha en que lo revisamos. Nada de lo que aparece aquí depende de
+                    que nos creas.
                   </p>
                 </div>
                 <div className={styles.heroLedger} aria-label="Resumen del directorio">
-                  <p>REGISTRO / 2026.07</p>
+                  <p>REGISTRO / 2026.08</p>
                   <div>
                     <strong>{workProfiles.length}</strong>
-                    <span>perfiles documentados</span>
+                    <span>productos documentados</span>
                   </div>
                   <div>
-                    <strong>{attributedProfiles.length}</strong>
-                    <span>trabajos con atribución pública confirmada</span>
+                    <strong>{sourceCount}</strong>
+                    <span>fuentes públicas citadas</span>
                   </div>
                   <div>
-                    <strong>{observedProfiles.length}</strong>
-                    <span>productos observados sin atribución confirmada</span>
+                    <strong>{lastVerified}</strong>
+                    <span>última verificación</span>
                   </div>
                   <small>
-                    Una atribución pendiente no se presenta como caso de INPLUX.
+                    Cada perfil conserva sus fuentes y la fecha en que se revisaron.
                   </small>
                 </div>
               </div>
@@ -143,12 +153,12 @@ export default function TrabajoPage() {
                   <span>02</span> Evidencia y alcance
                 </p>
                 <h2 id="evidence-title">
-                  Cada pantalla dice qué es — y <em>qué no es.</em>
+                  Cada pantalla dice <em>de dónde salió.</em>
                 </h2>
                 <p>
                   Son capturas estáticas de páginas públicas oficiales; la experiencia
                   interactiva se abre en el sitio fuente. Cada perfil conserva sus
-                  fuentes, fecha de revisión y atribución por separado.
+                  fuentes y su fecha de revisión.
                 </p>
               </div>
 
@@ -156,7 +166,14 @@ export default function TrabajoPage() {
                 <article className={styles.upcomingCard}>
                   <p>PRÓXIMO / EN DESARROLLO</p>
                   <div>
-                    <span>05</span>
+                    {/*
+                      El número sigue al último perfil publicado en vez de estar
+                      escrito a mano: cuando entra un producto nuevo a
+                      `work.ts`, la ficha de lo que viene se corre sola.
+                    */}
+                    <span>
+                      {String(workProfiles.length + 1).padStart(2, "0")}
+                    </span>
                     <h3>{upcomingWork.name}</h3>
                   </div>
                   <dl>
@@ -170,7 +187,8 @@ export default function TrabajoPage() {
                     </div>
                   </dl>
                   <small>
-                    Sumaremos su pantalla cuando exista un perfil público verificable.
+                    {upcomingWork.attribution}, todavía sin fuente pública que
+                    abrir. Sumaremos su pantalla cuando la tenga.
                   </small>
                 </article>
               ) : null}

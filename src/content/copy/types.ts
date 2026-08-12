@@ -11,6 +11,8 @@
  * publicados.
  */
 
+import type { WorkSlug } from "@/content/work";
+
 export type NavigationItem = {
   label: string;
   href: string;
@@ -111,6 +113,21 @@ export type HeroCopy = {
   signalAxis: string;
 };
 
+/**
+ * O están los cinco, o no está ninguno.
+ *
+ * El español los deja vacíos a propósito: `HomeSections` cae al valor de
+ * `work.ts`, que ya está en español, y duplicarlo aquí crearía dos textos
+ * para el mismo dato sin nada que los compare. El inglés los necesita
+ * completos, porque su respaldo publicaría español dentro de /en.
+ *
+ * Lo que este tipo hace imposible es el estado intermedio: un diccionario
+ * a medias es lo que publicó dos tarjetas en español en agosto de 2026.
+ */
+type ProductLabels =
+  | Readonly<Record<WorkSlug, string>>
+  | Readonly<Record<string, never>>;
+
 export type ExperienceRailCopy = {
   ribbonAriaLabel: string;
   ribbonEyebrow: string;
@@ -126,9 +143,9 @@ export type ExperienceRailCopy = {
   relationExperience: string;
   relationPartner: string;
   clientNotes: Readonly<Record<string, string>>;
-  /** Etiquetas de los productos con atribución confirmada, por slug. */
-  productCategories: Readonly<Record<string, string>>;
-  productStatuses: Readonly<Record<string, string>>;
+  /** Categoría y estado de cada producto del ribbon, por slug. Ver `ProductLabels`. */
+  productCategories: ProductLabels;
+  productStatuses: ProductLabels;
 };
 
 export type FactoryStep = {

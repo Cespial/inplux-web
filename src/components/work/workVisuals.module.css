@@ -26,6 +26,13 @@
   --work-wash: #352017;
 }
 
+[data-theme="livestock"].preview,
+[data-theme="livestock"].interfaceStage {
+  --work-accent: #8fce6c;
+  --work-accent-rgb: 143, 206, 108;
+  --work-wash: #1d3018;
+}
+
 .preview {
   position: relative;
   display: flex;

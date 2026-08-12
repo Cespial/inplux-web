@@ -89,6 +89,18 @@ export const portfolio: Array<{
     verifiedAt: "2026-07-15",
   },
   {
+    name: "Porkia",
+    category: "Porcicultura",
+    description: "Lotes, cuido, sanidad y cuentas de una finca porcícola.",
+    // La beta de Porkia es cerrada: se entra por inscripción. Esta tabla
+    // muestra `stage ?? access`, así que declarar "Beta" la haría verse igual
+    // que la beta abierta de Laudos. Se declara solo el acceso, que es lo que
+    // distingue a las dos.
+    access: "Por solicitud",
+    href: "/trabajo/porkia",
+    verifiedAt: "2026-08-11",
+  },
+  {
     name: "MiMotoYa",
     category: "Movilidad",
     description: "Producto digital para una operación de movilidad.",

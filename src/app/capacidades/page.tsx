@@ -5,6 +5,8 @@ import { CapabilitiesWorkbench } from "@/components/routes/CapabilitiesWorkbench
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { getWorkProfile } from "@/content/work";
+import { formatShortDate, verificationDateFor } from "@/content/work-format";
 import styles from "./capacidades.module.css";
 
 export const metadata: Metadata = {
@@ -78,9 +80,26 @@ const capabilityLayers = [
   },
 ] as const;
 
+/**
+ * Cada pieza de evidencia enmarca la captura de una página pública.
+ *
+ * `capturedAt` es la fecha en que se tomó esa imagen, copiada en ISO del acta
+ * `public/work/real-pages/capture-manifest.json`: el conjunto dejó de tomarse
+ * en una sola sesión, así que cada captura declara la suya y el pie la formatea
+ * con la misma función que usa la vitrina de `/trabajo`, en vez de llevar la
+ * fecha ya escrita a mano. La fecha de verificación de la fuente se deriva de
+ * `work.ts` (`slug` + `productHref`), para que no quede escrita a mano en una
+ * segunda ruta y se desincronice del perfil.
+ *
+ * `headline` y `description` describen lo que la captura muestra —la superficie
+ * que respondió ese día—, no lo que el producto promete: el vocabulario sale de
+ * `headline`, `description` y `capabilities` del perfil correspondiente.
+ */
 const evidence = [
   {
     number: "01",
+    slug: "gobia",
+    capturedAt: "2026-07-21",
     name: "Gobia",
     category: "Gestión pública",
     headline: "Una operación municipal reunida en un centro de mando.",
@@ -95,6 +114,8 @@ const evidence = [
   },
   {
     number: "02",
+    slug: "laudos",
+    capturedAt: "2026-07-21",
     name: "Laudos",
     category: "Arbitraje",
     headline: "Conocimiento arbitral convertido en una herramienta explorable.",
@@ -107,7 +128,83 @@ const evidence = [
     productHref: "https://laudos.co/?view=predecir",
     productLabel: "Abrir beta pública",
   },
+  {
+    number: "03",
+    slug: "tribai",
+    capturedAt: "2026-07-21",
+    name: "Tribai",
+    category: "Tributación",
+    headline: "Una consulta tributaria que no se separa de su fuente.",
+    description:
+      "El asistente público abre con su caja de consulta y deja a la vista las rutas del producto: declaraciones, herramientas y estatuto en el mismo entorno.",
+    attribution:
+      "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
+    image: "/work/real-pages/tribai-asistente-2026-07-21.png",
+    imageAlt: "Asistente tributario público de Tribai con su caja de consulta",
+    profileHref: "/trabajo/tribai",
+    productHref: "https://app.tribai.co/",
+    productLabel: "Abrir asistente",
+  },
+  {
+    number: "04",
+    slug: "kelsen",
+    capturedAt: "2026-07-21",
+    name: "Kelsen",
+    category: "Derecho",
+    headline: "Una biblioteca jurídica abierta, filtrable por vigencia.",
+    description:
+      "El explorador público reúne la búsqueda, los filtros de colección, tipo, área y vigencia, y los resultados del corpus, cada uno con su entidad emisora, su año y su número de fragmentos.",
+    attribution:
+      "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
+    image: "/work/real-pages/kelsen-explorador-2026-07-21.png",
+    imageAlt: "Explorador público de Kelsen con filtros y resultados del corpus jurídico",
+    profileHref: "/trabajo/kelsen",
+    productHref: "https://kelsen.io/explorador?vigencia=modificado",
+    productLabel: "Abrir explorador",
+  },
+  {
+    number: "05",
+    slug: "porkia",
+    capturedAt: "2026-08-11",
+    name: "Porkia",
+    category: "Porcicultura",
+    headline: "Las pantallas de una finca, recorribles desde el navegador.",
+    description:
+      "La demostración pública corre la aplicación con datos de ejemplo y deja recorrer lotes, cuido, sanidad y cuentas sin descargar nada.",
+    attribution:
+      "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
+    image: "/work/real-pages/porkia-demo-2026-08-11.png",
+    imageAlt: "Demostración pública de Porkia con las pantallas de la aplicación en el navegador",
+    profileHref: "/trabajo/porkia",
+    productHref: "https://porkia.co/#demo",
+    productLabel: "Abrir demostración",
+  },
 ] as const;
+
+/**
+ * La evidencia con su estado y su fecha de verificación resueltos contra
+ * `work.ts`.
+ *
+ * Si un `slug` deja de existir en `work.ts` esto revienta el build. Que el
+ * `productHref` sea exactamente una de las fuentes del perfil lo exige
+ * `verificationDateFor`, que revienta por su cuenta: la comprobación vive en el
+ * contrato y no aquí, para que ninguna otra pantalla que enmarque una URL
+ * tenga que acordarse de repetirla.
+ */
+const evidenceItems = evidence.map((item) => {
+  const profile = getWorkProfile(item.slug);
+
+  if (!profile) {
+    throw new Error(`Evidencia sin perfil en work.ts: ${item.slug}`);
+  }
+
+  return {
+    ...item,
+    capturedLabel: formatShortDate(item.capturedAt),
+    statusLabel: profile.status.label,
+    verifiedLabel: verificationDateFor(profile.sources, item.productHref),
+  };
+});
 
 const audiences = [
   {
@@ -235,13 +332,14 @@ export default function CapacidadesPage() {
                 <h2 id="evidence-title">La composición se entiende mejor <em>cuando ya está funcionando.</em></h2>
                 <p>
                   Estas son capturas de productos públicos, no ilustraciones conceptuales.
-                  Cada atribución está separada de lo que el producto declara y permite verificar.
+                  Cada perfil publica el estado que el producto declara, las fuentes que
+                  lo respaldan y la fecha en que se revisaron.
                 </p>
               </div>
             </div>
 
             <div className={styles.evidenceGrid}>
-              {evidence.map((item) => (
+              {evidenceItems.map((item) => (
                 <article key={item.name}>
                   <figure className={styles.browserFrame}>
                     <div className={styles.browserChrome} aria-hidden="true">
@@ -255,13 +353,16 @@ export default function CapacidadesPage() {
                       height={960}
                       sizes="(max-width: 800px) 100vw, 50vw"
                     />
-                    <figcaption>Captura de la experiencia pública · verificada 21 JUL 2026</figcaption>
+                    <figcaption>
+                      Captura pública {item.capturedLabel} · fuente verificada{" "}
+                      {item.verifiedLabel}
+                    </figcaption>
                   </figure>
                   <div className={styles.evidenceCopy}>
                     <div className={styles.evidenceMeta}>
                       <span>{item.number}</span>
                       <p>{item.category}</p>
-                      <strong>ATRIBUCIÓN CONFIRMADA</strong>
+                      <strong>{item.statusLabel}</strong>
                     </div>
                     <h3>{item.name}</h3>
                     <h4>{item.headline}</h4>

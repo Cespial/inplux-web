@@ -67,6 +67,7 @@ export const homeCopyEn: HomeCopy = {
           spanishRoute("Gobia", "/trabajo/gobia"),
           spanishRoute("Kelsen", "/trabajo/kelsen"),
           spanishRoute("Laudos", "/trabajo/laudos"),
+          spanishRoute("Porkia", "/trabajo/porkia"),
         ],
       },
       {
@@ -162,12 +163,12 @@ export const homeCopyEn: HomeCopy = {
   },
 
   experienceRail: {
-    ribbonAriaLabel: "Products with confirmed public attribution to INPLUX",
-    ribbonEyebrow: "ATTRIBUTABLE WORK / PRODUCTS",
-    ribbonTitle: "Work we can actually claim.",
+    ribbonAriaLabel: "INPLUX products, each with its source.",
+    ribbonEyebrow: "PRODUCTS / WORK",
+    ribbonTitle: "What we've built.",
     directoryEyebrow: "EVIDENCE / ATTRIBUTION",
     directoryName: "Directory",
-    directoryDetail: " documented profiles",
+    directoryDetail: " documented products",
     logoWallAriaLabel: "Organizations INPLUX has worked with.",
     statementEyebrow: "REAL RELATIONSHIPS",
     statementTitle: "EXPERIENCE AND ALLIANCES",
@@ -187,12 +188,18 @@ export const homeCopyEn: HomeCopy = {
       "/brand/clients/experience-08.png": "Territorial public management",
     },
     productCategories: {
+      tribai: "Taxation",
       gobia: "Public management",
+      kelsen: "Law",
       laudos: "Arbitration",
+      porkia: "Pig farming",
     },
     productStatuses: {
+      tribai: "Public product",
       gobia: "Active pilot",
+      kelsen: "Public explorer",
       laudos: "Open beta",
+      porkia: "Closed beta",
     },
   },
 

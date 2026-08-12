@@ -829,6 +829,37 @@
   background: var(--cap-ivory);
 }
 
+/*
+ * Un renglón incompleto no deja media casilla vacía.
+ *
+ * El número de piezas de evidencia sigue al de productos, que vive en
+ * `src/content/work.ts` y cambia sin avisar. Cuando ese número es impar, la
+ * última tarjeta se queda sola en su renglón y la mitad libre —papel donde
+ * arriba hay marfil— se lee como una casilla que falta. La regla no nombra una
+ * posición («la quinta», «las dos últimas»): dice «la última, cuando quedó
+ * sola», así que sigue valiendo con cualquier conteo y deja de aplicar por sí
+ * misma en cuanto entra un producto más. La tarjeta ocupa el renglón entero y
+ * reparte captura y texto en las mismas dos pistas de la rejilla, de modo que
+ * la captura conserva exactamente el ancho que tiene en las demás tarjetas.
+ */
+.evidenceGrid > article:last-child:nth-child(odd) {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.evidenceGrid > article:last-child:nth-child(odd) .browserFrame {
+  display: grid;
+  border-right: 1px solid var(--cap-line-light);
+  border-bottom: 0;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.evidenceGrid > article:last-child:nth-child(odd) .browserFrame img {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
 .browserFrame {
   position: relative;
   overflow: hidden;
@@ -1396,6 +1427,23 @@
   .evidenceGrid,
   .audienceGrid {
     grid-template-columns: 1fr;
+  }
+
+  /* Con una sola columna no hay renglón que completar: la última tarjeta
+     vuelve a apilar captura sobre texto como todas las demás. */
+  .evidenceGrid > article:last-child:nth-child(odd) {
+    display: block;
+  }
+
+  .evidenceGrid > article:last-child:nth-child(odd) .browserFrame {
+    display: block;
+    border-right: 0;
+    border-bottom: 1px solid var(--cap-line-light);
+  }
+
+  .evidenceGrid > article:last-child:nth-child(odd) .browserFrame img {
+    height: auto;
+    aspect-ratio: 3 / 2;
   }
 
   .audienceGrid article + article {

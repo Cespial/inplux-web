@@ -63,15 +63,16 @@ const chapters = [
     period: "HOY",
     code: "TRABAJO VISIBLE",
     kicker: "La tesis se puede recorrer",
-    title: "Productos distintos, el mismo criterio de entrega.",
+    title: "Dominios distintos, el mismo criterio de entrega.",
     copy:
-      "Gobia se presenta públicamente como una solución de INPLUX y permite solicitar una demostración. Laudos atribuye a INPLUX el desarrollo técnico y a REDEK el criterio legal; el producto se presenta en beta abierta.",
-    evidence: "ATRIBUCIÓN PÚBLICA / ESTADO DECLARADO",
+      "Los productos que este sitio documenta son desarrollos de INPLUX, en dominios que no se parecen entre sí. Cuando la responsabilidad se reparte, el perfil lo dice: en Laudos, INPLUX realiza el desarrollo técnico y REDEK aporta el criterio legal. Junto a esa autoría, cada perfil publica el estado que el producto sostiene y las fuentes que lo respaldan, con la fecha en que se revisaron.",
+    evidence: "DESARROLLOS DE INPLUX / FUENTE Y FECHA",
     visual: "work",
-    links: [
-      { href: "/trabajo/gobia", label: "Ver Gobia" },
-      { href: "/trabajo/laudos", label: "Ver Laudos" },
-    ],
+    // Un solo enlace al directorio, no uno por producto: el capítulo argumenta
+    // que no es un catálogo y una lista de píldoras hacía lo contrario. Además
+    // era una lista mantenida a mano que había que actualizar con cada producto
+    // nuevo. `/trabajo` es el directorio y se mantiene solo desde `work.ts`.
+    links: [{ href: "/trabajo", label: "Ver el trabajo documentado" }],
   },
   {
     id: "direccion",
@@ -137,11 +138,18 @@ function VisualLayer({ kind }: { kind: VisualKind }) {
   }
 
   if (kind === "work") {
+    // Las dos casillas nombran la política del capítulo, no dos productos.
+    // Antes decían GOBIA y LAUDOS: exacto, pero el escenario mostraba dos
+    // mientras la prosa hablaba de varios dominios, y cada producto nuevo
+    // obligaba a revisar una rejilla de dos casillas dimensionada a mano
+    // (`.historyWorkGraphic` es `repeat(2, ...)` con tipografía de despliegue).
+    // Nombrando la política, el escenario queda desacoplado de la identidad y
+    // del número de los productos para siempre.
     return (
       <div className={styles.historyWorkGraphic}>
         <article>
-          <span>GOBIA / PILOTO ACTIVO</span>
-          <strong>Información municipal</strong>
+          <span>ESTADO / DECLARADO</span>
+          <strong>Lo publica el producto</strong>
           <div aria-hidden="true">
             <i />
             <i />
@@ -149,8 +157,8 @@ function VisualLayer({ kind }: { kind: VisualKind }) {
           </div>
         </article>
         <article>
-          <span>LAUDOS / BETA ABIERTA</span>
-          <strong>Búsqueda jurídica</strong>
+          <span>FUENTE / FECHADA</span>
+          <strong>Con fecha de revisión</strong>
           <div aria-hidden="true">
             <i />
             <i />

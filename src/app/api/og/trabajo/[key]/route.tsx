@@ -186,45 +186,29 @@ export async function GET(
           {card.kind === "directory" ? (
             <div
               style={{
-                alignItems: "stretch",
+                alignItems: "center",
                 border: "1px solid rgba(243,240,234,0.22)",
                 display: "flex",
                 flexDirection: "column",
+                justifyContent: "center",
                 marginLeft: 42,
+                padding: "28px 22px",
                 width: 270,
               }}
             >
-              <div
+              <span style={{ color: "#00d7ca", display: "flex", fontSize: 56 }}>
+                {card.sourceCount}
+              </span>
+              <span
                 style={{
-                  alignItems: "baseline",
-                  borderBottom: "1px solid rgba(243,240,234,0.22)",
                   display: "flex",
-                  justifyContent: "space-between",
-                  padding: "20px 22px",
+                  fontSize: 16,
+                  letterSpacing: "0.09em",
+                  marginTop: 10,
                 }}
               >
-                <span style={{ color: "#00d7ca", display: "flex", fontSize: 48 }}>
-                  {card.confirmedCount}
-                </span>
-                <span style={{ display: "flex", fontSize: 16, letterSpacing: "0.09em" }}>
-                  ATRIBUIBLES
-                </span>
-              </div>
-              <div
-                style={{
-                  alignItems: "baseline",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "20px 22px",
-                }}
-              >
-                <span style={{ color: "#b8aaa0", display: "flex", fontSize: 48 }}>
-                  {card.observedCount}
-                </span>
-                <span style={{ display: "flex", fontSize: 16, letterSpacing: "0.09em" }}>
-                  OBSERVADOS
-                </span>
-              </div>
+                FUENTES CITADAS
+              </span>
             </div>
           ) : (
             <div

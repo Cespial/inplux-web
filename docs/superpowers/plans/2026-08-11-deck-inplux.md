@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Construir `inplux.co/deck` y `inplux.co/deck/presentacion` — una presentación de 14 láminas, fondo claro, navegable con teclado y gestos — precedida por la corrección de atribución de Tribai y Kelsen en el sitio.
+**Goal:** Construir `inplux.co/deck` y `inplux.co/deck/presentacion` — una presentación de 15 láminas, fondo claro, navegable con teclado y gestos — precedida por la corrección de atribución de Tribai y Kelsen en el sitio.
 
 **Architecture:** Las láminas de producto se generan recorriendo `workProfiles`, así que el deck no tiene una segunda copia de la verdad. El riel monta **dos láminas a la vez** con `key` por secuencia. Todo el movimiento es **CSS de módulo**, como el resto del repo: no se instala framer-motion.
 
@@ -33,12 +33,53 @@ El resto del spec se mantiene íntegro.
 
 ---
 
+## Enmienda — noche del 11-ago-2026
+
+F0.5 creció durante su ejecución.
+
+⚠️ **Este plan NO está completamente actualizado, y esa es la advertencia más importante del
+documento.** Los números de cabecera, el modelo de datos, las pruebas y los comandos del arnés sí
+se corrigieron. Los cuerpos de las tareas sin ejecutar **conservan «cuatro» en varios sitios** —
+la revisión final de F0.5 encontró siete—. Antes de ejecutar cada tarea, **cuenta los perfiles en
+`src/content/work.ts`** y trata cualquier «cuatro» del cuerpo como una errata a verificar, no como
+un dato.
+
+Donde eso más muerde: el copy destinado a `src/` (la lámina 7 decía «cuatro dominios»), el
+presupuesto de layout de esa misma lámina —medido para cuatro miniaturas, **no para cinco**— y la
+posición de las rutas nuevas en `expectedSitemapUrls`, que se compara posicionalmente y donde el
+orden ya cambió una vez.
+
+La versión anterior de este párrafo afirmaba que el plan «ya refleja los números nuevos». Era
+falso, y una desactualización visible es mucho menos peligrosa que una garantía falsa: quien
+confía en ella reproduce la clase exacta de defecto que F0.5 tardó 31 confirmaciones en erradicar.
+
+- **Cinco productos, no cuatro.** Porkia entró al portafolio y la regla de build que bloqueaba su
+  nombre se retiró. El deck pasa de 14 a **15 láminas**, y se renumera solo porque las de producto
+  se generan desde `workProfiles`.
+- **La lámina 6 dice «Trece cosas», no «Catorce».** `bannedPublicLanguage` bajó de 14 reglas a 13
+  al retirar la de Porkia. La prueba de la Tarea 12 —la que falla si el conteo cambia— se disparó
+  antes de que la lámina existiera. Está haciendo su trabajo.
+- **`Porkia` ya no es una cadena prohibida.** Las otras trece reglas siguen vigentes, incluida la
+  de promesas de plazo.
+- **La autoría es una declaración de INPLUX, no una cita.** Ninguna fuente pública de Tribai,
+  Kelsen ni Porkia atribuye el desarrollo a INPLUX. El sitio lo dice como declaración y reserva la
+  tabla de fuentes para lo que las fuentes sí sostienen. El deck hereda ese criterio: las fichas
+  de producto muestran `attribution.label` sin convertirlo en una afirmación con fuente.
+
+⚠️ **El defecto que más caro salió, y que el deck no puede repetir:** rejillas y listas acopladas
+a un conteo fijo de productos. Apareció **tres veces** en F0.5 —el ribbon de la portada, las
+pestañas de la vitrina, y una lista de columnas— con un síntoma distinto cada vez. Toda
+disposición del deck se deriva del número de ítems. Ningún `repeat(N, …)` con N escrito a mano,
+ninguna regla que nombre una posición («la tercera», «las dos últimas»).
+
+---
+
 ## Global Constraints
 
 Aplican a **todas** las tareas. No se repiten en cada una.
 
 - **Puerta de contenido.** `scripts/verify-public-content.mjs` escanea `src/` y `public/` en `.css .html .json .svg .ts .tsx .txt .webmanifest`. Ninguna cadena de la lista `bannedPublicLanguage` puede aparecer en un archivo de esos. En particular: nada de `en días` / `en semanas`, `resultados medibles` / `impacto medible`, `alcance nacional`, `areaServed`, `agéntic*`, `agentes de IA`, `confían en nosotros`, ni las cifras de trayectoria.
-- **El motivo «jerga agéntica» coincide con su propio patrón bloqueado.** Verificado el 11-ago-2026. Los catorce motivos de la lámina 6 **nunca** se escriben como literales en `src/` (Tarea 12).
+- **El motivo «jerga agéntica» coincide con su propio patrón bloqueado.** Verificado el 11-ago-2026. Los trece motivos de la lámina 6 **nunca** se escriben como literales en `src/` (Tarea 12).
 - **Comando de verificación:** `npm run check` = `lint` + `test:hero-inspector` + `build` + `check:http`. `build` = `check:content` → `next build` → `check:output`. **Toda tarea cierra con `npm run check` en verde.**
 - **`check:http` necesita el servidor arriba.** Es `npm run build && npm run start` en otra terminal. Si el puerto 3000 está tomado por otro proyecto, `check:http` responde 200 desde la app equivocada: levantar en `-p 3210` y exportar la base.
 - **Tokens.** Solo los de `src/app/tokens/colors.css` y `src/app/globals.css`. No se crea paleta de deck. Nombres reales: `--off-white`, `--ink`, `--teal`, `--teal-bright`, `--teal-on-soft`, `--teal-soft`, `--gray-400`, `--border`, `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)`.
@@ -77,7 +118,7 @@ Aplican a **todas** las tareas. No se repiten en cada una.
 | `src/content/deck.copy.ts` | Todo el texto en un objeto tipado, listo para un gemelo en inglés |
 | `scripts/verify-deck-model.test.mjs` | Prueba de perfil huérfano y de conteo de láminas |
 | `src/lib/banned-reasons.server.ts` | Lee los motivos de `verify-public-content.mjs` en build. Solo lo importa la ruta, que es de servidor |
-| `scripts/verify-deck-reasons.test.mjs` | Prueba de que los motivos siguen siendo 14 |
+| `scripts/verify-deck-reasons.test.mjs` | Prueba de que los motivos siguen siendo 13 |
 | `scripts/qa-deck.mjs` | Arnés de medición de láminas |
 | `scripts/qa-reduce.mjs` | Barrera de movimiento reducido |
 | `src/app/deck/page.tsx` | Índice puntual `/deck` |
@@ -103,7 +144,7 @@ Rama: `fix/atribucion-tribai-kelsen`.
 
 ### Tarea 1: Re-verificar las fuentes y sincronizar la versión de las tarjetas OG
 
-Las ocho fuentes de los cuatro perfiles se verificaron el 2026-07-21. La Tarea 2 cambia el contenido de las tarjetas OG, y las cachés sociales indexan por URL: si el `?v=` no se mueve, el mundo sigue viendo la tarjeta vieja. La versión se deriva de `verifiedAt`, así que primero se re-verifica de verdad y después se actualiza la fecha.
+Las fuentes citadas de todos los perfiles se verificaron el 2026-07-21. La Tarea 2 cambia el contenido de las tarjetas OG, y las cachés sociales indexan por URL: si el `?v=` no se mueve, el mundo sigue viendo la tarjeta vieja. La versión se deriva de `verifiedAt`, así que primero se re-verifica de verdad y después se actualiza la fecha.
 
 **Files:**
 - Modify: `src/content/work.ts` — el campo `verifiedAt` de las 8 entradas de `sources[]`
@@ -454,7 +495,7 @@ Rama: `feat/deck`, desde `main` ya con F0.5 dentro.
 **Interfaces:**
 - Consumes: `workProfiles` de `src/content/work.ts`.
 - Produces:
-  - `SLIDES: readonly DeckSlide[]` — 14 entradas, `n` de 1 a 14
+  - `SLIDES: readonly DeckSlide[]` — 15 entradas, `n` de 1 a 15
   - `TOTAL_SLIDES: number` — 14
   - `DeckSlideKind` — unión de 11 literales
   - `getSlideById(id: string): DeckSlide | undefined`
@@ -506,10 +547,10 @@ test("cada perfil de work.ts tiene su lámina de producto", () => {
   );
 });
 
-test("el deck tiene 14 láminas numeradas de 1 a 14 sin huecos", () => {
+test("el deck tiene 15 láminas numeradas de 1 a 15 sin huecos", () => {
   const deck = loadDeck();
-  assert.equal(deck.total, 14);
-  assert.deepEqual(deck.numbers, Array.from({ length: 14 }, (_, i) => i + 1));
+  assert.equal(deck.total, 15);
+  assert.deepEqual(deck.numbers, Array.from({ length: 15 }, (_, i) => i + 1));
 });
 
 test("ningún id se repite", () => {
@@ -626,13 +667,13 @@ export const DECK_COPY = {
   },
   evidencia: {
     pregunta: "¿Por qué habría de creerle a una fábrica de software?",
-    respuesta: "Catorce cosas que este sitio no puede decir.",
+    respuesta: "Trece cosas que este sitio no puede decir.",
     cuerpo: "No es una guía de estilo. Es una prueba automática.",
     remate: "Si alguien las escribe, el sitio no compila.",
   },
   puente: {
     pregunta: "¿Ustedes son de un sector?",
-    respuesta: "Cuatro dominios distintos. La misma fábrica.",
+    respuesta: "Cinco dominios distintos. La misma fábrica.",
   },
   capacidades: {
     pregunta: "¿Qué comparten los cuatro por dentro?",
@@ -687,8 +728,8 @@ const APERTURA = [
   { id: "tesis", kind: "tesis", titulo: "El software empieza en el problema" },
   { id: "metodo", kind: "metodo", titulo: "Cuatro tiempos" },
   { id: "espejo", kind: "espejo", titulo: "El mismo método, dos lecturas" },
-  { id: "evidencia", kind: "evidencia", titulo: "Catorce cosas que este sitio no puede decir" },
-  { id: "puente", kind: "puente", titulo: "Cuatro dominios, la misma fábrica" },
+  { id: "evidencia", kind: "evidencia", titulo: "Trece cosas que este sitio no puede decir" },
+  { id: "puente", kind: "puente", titulo: "Cinco dominios, la misma fábrica" },
 ] as const;
 
 const CIERRE = [
@@ -754,7 +795,7 @@ el deck de Tensor esa misma comprobación atrapó un producto suelto."
 
 ### Tarea 4: Las dos rutas, en blanco, atravesando las tres puertas
 
-Registrar una ruta en este repo toca tres verificadores. Se hace **antes** de tener contenido, porque descubrir el contrato con 14 láminas encima cuesta el triple.
+Registrar una ruta en este repo toca tres verificadores. Se hace **antes** de tener contenido, porque descubrir el contrato con 15 láminas encima cuesta el triple.
 
 **Files:**
 - Create: `src/app/deck/page.tsx`
@@ -785,7 +826,7 @@ import { SLIDES } from "@/content/deck";
 export const metadata: Metadata = {
   title: "Presentación — de un problema real a software en producción",
   description:
-    "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en catorce láminas.",
+    "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en quince láminas.",
   alternates: { canonical: "https://inplux.co/deck/presentacion" },
 };
 
@@ -850,19 +891,21 @@ En `pageDefinitions`, dos entradas nuevas con la misma forma que las existentes:
     title:
       "Presentación — de un problema real a software en producción | INPLUX",
     description:
-      "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en catorce láminas.",
+      "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en quince láminas.",
     canonical: `${siteUrl}/deck/presentacion`,
   },
 ```
 
 ⚠️ El `title` que el verificador compara es el **renderizado**, con el sufijo de plantilla que `src/app/layout.tsx` añade. Leer ahí la `title.template` antes de escribir la cadena; si no coincide, `check:output` dice exactamente qué encontró.
 
-Y en `expectedSitemapUrls`, después de `/trabajo/laudos`:
+Y en `expectedSitemapUrls`, **después de `/trabajo/porkia`**, que es la última ruta de producto desde que Porkia entró al portafolio:
 
 ```js
     `${siteUrl}/deck`,
     `${siteUrl}/deck/presentacion`,
 ```
+
+⚠️ La comparación es **posicional** (`verify-build-output.mjs`, `expectedSitemapUrls.forEach` con `expectEqual(urls[index], …)`). Insertarlas en otro sitio rompe `check:output`. **Lee el orden real del sitemap construido antes de escribir**, no te fíes de esta indicación: el orden ya cambió una vez.
 
 - [ ] **Step 4: Registrar en `verify-http-contracts.mjs`**
 
@@ -886,7 +929,7 @@ Si `check:output` dice `sitemap cantidad de URLs: esperaba 16, encontró 14`, el
 git add src/app/deck scripts/verify-build-output.mjs scripts/verify-http-contracts.mjs src/app/sitemap.ts
 git commit -m "feat(deck): registrar /deck y /deck/presentacion en las tres puertas
 
-Las rutas entran vacías y con las catorce secciones en blanco, para
+Las rutas entran vacías y con las quince secciones en blanco, para
 descubrir el contrato de sitemap, metadatos y HTTP antes de que haya
 contenido encima. El sitemap pasa de 14 a 16 URLs."
 ```
@@ -1046,7 +1089,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         inicioTactil.current = null;
       }}
     >
-      {/* Dos slots, no una lista. Montar las catorce haría que todas las
+      {/* Dos slots, no una lista. Montar las quince haría que todas las
           animaciones de entrada terminaran antes de que nadie las viera. */}
       <div className={styles.slot} key={`activa-${nav.secuencia}`}>
         <SlideRenderer slide={nav.slide} motivos={motivos} />
@@ -1063,7 +1106,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         Lámina siguiente
       </button>
 
-      {/* Sin JS, o antes de hidratar, las catorce láminas siguen siendo
+      {/* Sin JS, o antes de hidratar, las quince láminas siguen siendo
           texto navegable: el deck se puede leer y se puede indexar. */}
       <noscript>
         {SLIDES.map((slide) => (
@@ -1160,7 +1203,7 @@ export default async function PresentacionPage() {
 
 ⚠️ En esta tarea `leerMotivos()` todavía no existe (llega en la Tarea 12). Hasta entonces, pasar `motivos={[]}`; la lámina 6 aún no lo usa. Dejar el `async` puesto desde ya evita convertir la ruta después.
 
-- [ ] **Step 5: Recorrer las catorce a mano**
+- [ ] **Step 5: Recorrer las quince a mano**
 
 ```bash
 npm run dev -- -p 3210
@@ -1175,7 +1218,7 @@ npm run check
 git add src/components/deck src/app/deck
 git commit -m "feat(deck): riel de dos slots, teclado, gestos y hash
 
-Solo hay una lámina montada más su saliente. Montar las catorce haría
+Solo hay una lámina montada más su saliente. Montar las quince haría
 que las animaciones de entrada dispararan al cargar la página y no al
 llegar a la lámina, que es justo lo que las hace argumentar.
 
@@ -1215,7 +1258,7 @@ export const ALTO_BARRA_INFERIOR = 60;
 
 - [ ] **Step 2: Índice y ayuda**
 
-`IndexOverlay` se abre con `i` y lista las catorce con su número y su título; al hacer clic llama `nav.ir(i)` y cierra. `HelpOverlay` se abre con `?` y lista los atajos: `→` / `←` / `espacio` / `inicio` / `fin` / `i` / `?` / `esc`.
+`IndexOverlay` se abre con `i` y lista las quince con su número y su título; al hacer clic llama `nav.ir(i)` y cierra. `HelpOverlay` se abre con `?` y lista los atajos: `→` / `←` / `espacio` / `inicio` / `fin` / `i` / `?` / `esc`.
 
 Los dos usan `<dialog>` nativo con `showModal()`, igual que `src/components/site/ContactDialog.tsx`. Copiar de ahí el patrón de `onClose` y de foco, que ya está resuelto y verificado por `verifyContactExperience()`.
 
@@ -1866,9 +1909,9 @@ lámina afirmaría una prioridad que el copy no tiene."
 
 ---
 
-### Tarea 12: Lámina 6 — las catorce cosas
+### Tarea 12: Lámina 6 — las quince cosas
 
-La lámina se muerde la cola: uno de sus catorce motivos **es** una cadena que el propio verificador bloquea.
+La lámina se muerde la cola: uno de sus trece motivos **es** una cadena que el propio verificador bloquea.
 
 **Files:**
 - Create: `src/lib/banned-reasons.server.ts`
@@ -1895,7 +1938,7 @@ console.log("jerga agéntica".match(p));
 ```
 Esperado: `[ "agéntica" ]`.
 
-Eso prueba que escribir los catorce motivos como literales en un `.tsx` **falla el build en esa línea**. El lector de build no es una elegancia: es la única forma de construir esta lámina.
+Eso prueba que escribir los trece motivos como literales en un `.tsx` **falla el build en esa línea**. El lector de build no es una elegancia: es la única forma de construir esta lámina.
 
 - [ ] **Step 2: La prueba que falla**
 
@@ -1924,12 +1967,12 @@ function leerMotivos() {
   return JSON.parse(r.stdout);
 }
 
-test("hay catorce motivos, y el titular de la lámina dice catorce", async () => {
+test("hay trece motivos, y el titular de la lámina dice trece", async () => {
   const motivos = leerMotivos();
-  assert.equal(motivos.length, 14, "cambió el número de reglas: actualiza el titular de la lámina 6");
+  assert.equal(motivos.length, 13, "cambió el número de reglas: actualiza el titular de la lámina 6");
 
   const copy = await readFile(path.join(root, "src/content/deck.copy.ts"), "utf8");
-  assert.match(copy, /Catorce cosas que este sitio no puede decir/);
+  assert.match(copy, /Trece cosas que este sitio no puede decir/);
 });
 
 test("ningún motivo se coló como literal en src/", async () => {
@@ -2068,7 +2111,7 @@ export default async function PresentacionPage() {
 
 - [ ] **Step 6: El log que corre**
 
-En `evidencia.module.css`, las catorce líneas entran escalonadas y la salida al final:
+En `evidencia.module.css`, las trece líneas entran escalonadas y la salida al final:
 
 ```css
 .registro li {
@@ -2085,7 +2128,7 @@ En `evidencia.module.css`, las catorce líneas entran escalonadas y la salida al
 }
 ```
 
-Catorce en móvil no caben en dos columnas legibles: bajo 640 px van en una sola, con `font-size` de 0,7 rem y la marca `✗` como viñeta.
+Trece en móvil no caben en dos columnas legibles: bajo 640 px van en una sola, con `font-size` de 0,7 rem y la marca `✗` como viñeta.
 
 - [ ] **Step 7: Verla pasar y registrar la prueba**
 
@@ -2112,17 +2155,17 @@ y en `check`, entre `test:deck` y `build`:
 QA_BASE=http://localhost:3210 npm run qa:deck evidencia
 npm run check
 git add src/lib/banned-reasons.server.ts scripts/verify-deck-reasons.test.mjs src/components/deck src/app/deck package.json
-git commit -m "feat(deck): la lámina de las catorce cosas que el sitio no puede decir
+git commit -m "feat(deck): la lámina de las quince cosas que el sitio no puede decir
 
 Todo el mercado de fábricas de software enseña logos sin permiso y casos
 sin fuente. Aquí el argumento no es un adjetivo: es que el build rechaza
-publicar catorce familias de frases, y eso un competidor no lo copia sin
+publicar trece familias de frases, y eso un competidor no lo copia sin
 reescribir su propio sitio.
 
 La lista se lee de verify-public-content.mjs en build y nunca aparece
 como literal bajo src/, porque uno de los motivos coincide con su propio
 patrón bloqueado y rompería el build en su propia lista. Hay una prueba
-que falla si el número deja de ser catorce."
+que falla si el número deja de ser trece."
 ```
 
 ---
@@ -2140,15 +2183,17 @@ Sin esta lámina, lo que sigue son cuatro aplicaciones sueltas.
 - Consumes: `workProfiles`, `DECK_COPY.puente`.
 - Produces: nada.
 
-- [ ] **Step 1: La rejilla de cuatro**
+- [ ] **Step 1: La rejilla, derivada de `workProfiles`**
 
-Cuatro miniaturas, una por perfil, con `name` y `category`. Sin etiqueta de atribución aquí: las fichas de la Tarea 14 la llevan con su peso completo, y repetirla cuatro veces en miniatura la convierte en ruido.
+Una miniatura por perfil —hoy **cinco**— con `name` y `category`. Sin etiqueta de atribución aquí: las fichas de la Tarea 14 la llevan con su peso completo, y repetirla en cada miniatura la convierte en ruido.
 
-La lámina dice en voz alta que la fábrica no es de un sector: cuatro dominios distintos —tributación, gestión pública, derecho, arbitraje— y la misma forma de trabajar.
+La lámina dice en voz alta que la fábrica no es de un sector: **cinco dominios distintos —tributación, gestión pública, derecho, arbitraje y porcicultura—** y la misma forma de trabajar.
 
-- [ ] **Step 2: Cuatro caben; nueve no**
+⚠️ **La rejilla se deriva del número de perfiles, no de un número escrito a mano.** En F0.5 este patrón rompió cuatro veces; ningún `repeat(N, …)` con N literal, ninguna regla que nombre una posición.
 
-⚠️ Medido en Tensor: nueve miniaturas apiladas no caben en 844 px de alto y la lámina se mete debajo de las dos barras. Con cuatro, en 2×2 en móvil y 4×1 en escritorio, sí caben — pero el arnés lo comprueba, no se asume.
+- [ ] **Step 2: Medir cuántas caben — no está medido**
+
+⚠️ Medido en Tensor: nueve miniaturas apiladas no caben en 844 px de alto y la lámina se mete debajo de las dos barras. **Cuatro sí caben en 2×2 móvil / 4×1 escritorio; cinco NO están medidas.** Es tu trabajo medirlo, no asumirlo — y si cinco no caben en 390×844, la disposición cambia, no el contenido.
 
 - [ ] **Step 3: Medir en los tres tamaños y commit**
 
@@ -2210,7 +2255,7 @@ Una sola lámina, cuatro instancias generadas desde `workProfiles`.
 
 ⚠️ **Nada aquí menciona socios.** El campo `perfil.partners` existe y Laudos lo tiene poblado; la lámina **no lo renderiza**. Es una decisión tomada el 11-ago-2026 y registrada en §2.1a del spec: el sitio conserva la atribución del socio, el deck no la muestra. No «arreglar» esto añadiendo `partners` al render.
 
-⚠️ **No hay rama por `attribution.state`.** Tras la Tarea 2 los cuatro son `confirmed`; una rama condicional aquí sería código muerto que reintroduce una segunda copia de la verdad.
+⚠️ **No hay rama por `attribution.state`.** Tras la Tarea 2 los cinco son `confirmed`; una rama condicional aquí sería código muerto que reintroduce una segunda copia de la verdad.
 
 - [ ] **Step 2: La interfaz, diferenciada por tema**
 
@@ -2229,9 +2274,11 @@ const CLASE_TEMA = {
 - [ ] **Step 3: Comprobar que la serie se ve como serie y no como plantilla**
 
 ```bash
-QA_BASE=http://localhost:3210 npm run qa:deck tribai gobia kelsen laudos
+QA_BASE=http://localhost:3210 npm run qa:deck tribai gobia kelsen laudos porkia
 ```
-Esperado: 12 líneas `ok`. Mirar las cuatro capturas de `qa-out/escritorio/` una al lado de otra: tienen que reconocerse como la misma familia y distinguirse entre sí. Si las cuatro son idénticas salvo el texto, el tema no está haciendo nada.
+Esperado: 15 líneas `ok`. Mirar las cinco capturas de `qa-out/escritorio/` una al lado de otra: tienen que reconocerse como la misma familia y distinguirse entre sí. Si las cinco son idénticas salvo el texto, el tema no está haciendo nada.
+
+⚠️ Porkia es el caso que más pone a prueba la figura: es el único producto que no es una herramienta jurídico-administrativa, y su interfaz real es una app de teléfono, no un panel. Si su ficha se ve forzada dentro del molde de las otras cuatro, el molde está mal, no Porkia.
 
 - [ ] **Step 4: Commit**
 
@@ -2277,12 +2324,12 @@ Los cuatro tiempos de `method`, esta vez alrededor de un centro que dice «tu re
 
 Ahora `SlideRenderer` tiene una rama por `kind`, sin agrupaciones y sin `default`. Comprobar que si se añade un `kind` al tipo sin su rama, `npm run lint` y `next build` fallan.
 
-- [ ] **Step 5: Recorrer las catorce y medir todas**
+- [ ] **Step 5: Recorrer las quince y medir todas**
 
 ```bash
-QA_BASE=http://localhost:3210 npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos capacidades como-empezamos cierre
+QA_BASE=http://localhost:3210 npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos porkia capacidades como-empezamos cierre
 ```
-Esperado: 42 líneas, todas `ok`.
+Esperado: 45 líneas, todas `ok`.
 
 - [ ] **Step 6: Commit**
 
@@ -2314,9 +2361,9 @@ en la retina es la dirección de correo."
 
 - [ ] **Step 1: La página**
 
-Hero con la tesis, la lista de las catorce con enlace a su hash, y los cuatro perfiles con **salida doble**: al producto vivo (`perfil.access.href`) y a su lámina (`/deck/presentacion#<slug>`).
+Hero con la tesis, la lista de las quince con enlace a su hash, y los cuatro perfiles con **salida doble**: al producto vivo (`perfil.access.href`) y a su lámina (`/deck/presentacion#<slug>`).
 
-A diferencia de la presentación, esta página es estática y se lee de arriba abajo: es la que se manda por correo cuando alguien quiere el contenido sin recorrer catorce láminas.
+A diferencia de la presentación, esta página es estática y se lee de arriba abajo: es la que se manda por correo cuando alguien quiere el contenido sin recorrer quince láminas.
 
 - [ ] **Step 2: Alinear los metadatos**
 
@@ -2405,11 +2452,11 @@ sistema pide movimiento reducido."
 
 - [ ] **Step 1: Cliente escéptico — ¿qué no me creo?**
 
-Recorrer las catorce preguntando, lámina por lámina, qué afirmación se puede rebatir en la sala. Anotar cada una con la lámina y la objeción concreta.
+Recorrer las quince preguntando, lámina por lámina, qué afirmación se puede rebatir en la sala. Anotar cada una con la lámina y la objeción concreta.
 
 - [ ] **Step 2: Director de arte — ¿qué se ve barato?**
 
-Mirar las 42 capturas de `qa-out/` sin leer el texto. Anotar densidades desiguales, figuras que no comparten grosor de trazo, láminas donde el aire está mal repartido.
+Mirar las 45 capturas de `qa-out/` sin leer el texto. Anotar densidades desiguales, figuras que no comparten grosor de trazo, láminas donde el aire está mal repartido.
 
 ⚠️ En Tensor esta lectura encontró que un plan B faltante proyectaba un rectángulo blanco **en vivo**. Comprobar explícitamente qué se ve si una figura no carga.
 
@@ -2447,10 +2494,10 @@ Esperado: verde de punta a punta.
 
 ```bash
 npm run build && npm run start -- -p 3210 &
-QA_BASE=http://localhost:3210 npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos capacidades como-empezamos cierre
+QA_BASE=http://localhost:3210 npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos porkia capacidades como-empezamos cierre
 QA_BASE=http://localhost:3210 npm run qa:reduce
 ```
-Esperado: 42 líneas `ok` y `SIN ERRORES` en los dos modos.
+Esperado: 45 líneas `ok` y `SIN ERRORES` en los dos modos.
 
 - [ ] **Step 3: PR y preview**
 
@@ -2468,7 +2515,7 @@ Mergear a `main`. El despliegue es automático desde GitHub.
 - [ ] **Step 5: Verificar producción con Playwright, no con `curl`**
 
 ```bash
-QA_BASE=https://inplux.co npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos capacidades como-empezamos cierre
+QA_BASE=https://inplux.co npm run qa:deck portada problema tesis metodo espejo evidencia puente tribai gobia kelsen laudos porkia capacidades como-empezamos cierre
 ```
 
 ⚠️ **`curl` no sirve.** Las láminas más allá de la primera se renderizan en cliente y no aparecen en el HTML inicial: `curl` diría que el deck está vacío.
