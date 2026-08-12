@@ -11,50 +11,99 @@
 
    El arquetipo, contra sus vecinas: la lámina del puente reparte miniaturas
    con un filete ARRIBA en una fila de borde a borde; esta parte la lámina en
-   dos columnas y pone a la derecha un panel de pares rótulo/valor con filetes
-   ENTRE las filas. La del puente afirma que los dominios no se parecen; esta
-   enseña uno por dentro.
+   dos columnas —lo que afirmamos a la izquierda, lo que se puede comprobar a
+   la derecha— y pone en la derecha la captura de la página pública con el panel
+   de pares rótulo/valor debajo, como leyenda. La del puente afirma que los
+   dominios no se parecen; esta enseña uno por dentro, y lo enseña de verdad.
 
    Color: los valores en `--ink`, los rótulos en `--gray-400` (4,84:1 sobre
    blanco) y el valor destacado de cada producto en `--teal-on-soft` (5,63:1),
    que es el único teal que este proyecto admite como TEXTO.
    =========================================================================== */
 
+/* ⚠️ **Sin `align-items: center`, y es un cambio medido.** Centrada, la columna
+   del argumento (480 px a 1440) quedaba flotando en mitad de una columna de
+   evidencia de 684 px y dejaba 212 px de blanco encima del titular: el defecto
+   que la comparación adversarial mide como «el contenido vive encajonado en el
+   tercio central». Estirada, el titular arranca a la altura del marco y el pie
+   se apoya en la última fila del panel, así que las dos mitades empiezan y
+   acaban en la misma línea y la lámina ocupa las seis bandas en vez de dos. */
 .rejilla {
   display: grid;
-  align-items: center;
-  gap: clamp(1.5rem, 3.5vh, 2.5rem);
+  gap: clamp(1.25rem, 2.6vh, 2.5rem);
   min-width: 0;
 }
 
 /* El mismo corte que la tesis y el problema, y por la misma razón: en apaisado
-   el ancho sobra y la altura no. La columna del argumento pesa algo más que la
-   del panel —el titular es lo que manda en la lámina—, así que el reparto no es
-   de mitades. */
+   el ancho sobra y la altura no.
+
+   ⚠️ El reparto pasó de 1,1 / 0,9 a 1,05 / 0,95 cuando entró la captura, y no
+   por gusto: la altura de la imagen la fija su ancho —es 3:2— así que cada
+   punto de ancho que gana la derecha son dos tercios de punto de alto, y a
+   1,1 fr la columna de la evidencia no cabía entre las barras en el proyector.
+   Sigue siendo asimétrico a favor del argumento: el titular es lo que manda en
+   la lámina y la captura es la prueba, no el sujeto. */
 @media (min-width: 62rem) {
   .rejilla {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: clamp(2rem, 4.5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 4rem);
   }
 }
 
-/* El pie de la ficha lleva dos cosas de distinto rango —quién lo hizo y en qué
-   estado está, arriba; la fuente y su fecha, debajo— y el salto las separa sin
-   gastar un margen: `.pie` ya trae su interlínea de 1,5. Es un bloque dentro
-   del párrafo para que la fuente empiece SIEMPRE en renglón propio, y no donde
-   la deje caer el ancho de la atribución. */
-.pieFuente {
-  display: block;
+/* ── La atribución ────────────────────────────────────────────────────────────
+   Sube del pie y cambia de registro. En mono de 12 px sobre `--gray-400` se
+   leía como una nota legal; en cuerpo de lectura y en tinta se lee como lo que
+   es: la mitad de lo que la ficha afirma. Un escalón por debajo del titular y
+   uno por encima del cuerpo —mismo tamaño que el cuerpo, más peso y más
+   contraste—, para que acompañe al nombre sin disputárselo. */
+.atribucion {
+  margin: clamp(0.6rem, 1.4vh, 1rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* El pie de la ficha se apoya en el suelo de la lámina.
+   ⚠️ `deck.module.css` advierte que en `.pie` NO va `margin-top: auto` porque
+   «`auto` solo reparte espacio LIBRE, y aquí no hay ninguno». Era cierto
+   entonces y dejó de serlo aquí: en dos columnas la altura de la fila la fija
+   la de la evidencia, que es 200 px más alta que la del argumento, así que hay
+   hueco de sobra y `auto` sí tiene qué repartir.
+
+   ⚠️ Y por eso va DENTRO de la consulta, no fuera: apilada no hay espacio libre,
+   `auto` resuelve a cero **y de paso pisa el margen de `.pie`**, así que la
+   fuente se pegaba al titular del producto. Medido a 390: 25 px de aire
+   perdidos. Fuera de la consulta el arreglo de una medida rompía otra. */
+@media (min-width: 62rem) {
+  .pieFicha {
+    margin-top: auto;
+  }
+}
+
+/* ── La columna de la evidencia ───────────────────────────────────────────────
+   La captura y su leyenda entran como un bloque, con el mismo compás con que
+   entra la figura de la tesis (520 ms tras 410 ms), para que la ficha tenga el
+   ritmo del resto del deck. Una sola animación para las dos: no hay escalonado
+   dentro porque la prueba y su pie no son una secuencia, y contarlos con el
+   reloj sería adorno. */
+.evidencia {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2vh, 1.6rem);
+  min-width: 0;
+  animation: panelEntra 520ms var(--ease-out) 410ms both;
 }
 
 /* ── El panel de interfaz ──────────────────────────────────────────────────
    Lo que el producto publica en su propia superficie. Sin marco, sin relleno y
-   sin sombra: la gramática del deck es de hilos, y una tarjeta aquí convertiría
-   la ficha en un catálogo. */
+   sin sombra: el único marco de la lámina es el de la captura, que lo necesita
+   para separarse del papel, y una segunda caja aquí convertiría la ficha en un
+   catálogo. */
 
 .panel {
   min-width: 0;
-  animation: panelEntra 520ms var(--ease-out) 410ms both;
 }
 
 /* El rótulo que el propio producto se pone. Mismo registro de mono en versalita
@@ -75,7 +124,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.15rem;
-  margin: clamp(0.6rem, 1.5vh, 1rem) 0 0;
+  margin: clamp(0.4rem, 1.1vh, 0.8rem) 0 0;
 }
 
 /* La métrica principal. Serif, como todo lo que en este deck es una cifra, pero
@@ -89,7 +138,7 @@
 .metricaValor {
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.4vw, 3.2rem);
+  font-size: clamp(1.85rem, 3vw, 2.9rem);
   font-weight: 300;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.025em;
@@ -111,18 +160,18 @@
    forma del valor. La misma corrección hace falta en `WorkPreview` del sitio,
    donde la serie tiene la misma asimetría. */
 .metricaValorPalabra {
-  font-size: clamp(1.45rem, 2.45vw, 2.3rem);
+  font-size: clamp(1.35rem, 2.15vw, 2.1rem);
 }
 
 .metricaPie {
   color: var(--text-muted, var(--gray-400));
   font-family: var(--font-body);
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-size: clamp(0.82rem, 0.95vw, 0.98rem);
   line-height: 1.4;
 }
 
 .datos {
-  margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
+  margin: clamp(0.7rem, 1.8vh, 1.2rem) 0 0;
   padding: 0;
   min-width: 0;
 }
@@ -131,13 +180,18 @@
    filete va ARRIBA de cada fila: así el bloque de la métrica queda cerrado por
    abajo y las filas se leen como un registro, no como tarjetas. `gap` y no un
    `justify-content` a secas para que un valor largo pueda envolver sin pisar su
-   rótulo. */
+   rótulo.
+
+   ⚠️ El relleno bajó de `1,2vh` a `0,85vh` al entrar la captura: apilada, la
+   ficha se quedaba sin hueco entre barras y tres filas a la altura anterior
+   costaban 15 px que la imagen necesitaba. Se paga en las tres medidas por
+   igual, que es lo que exige la serie. */
 .dato {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 0.35rem clamp(0.75rem, 1.5vw, 1.5rem);
-  padding: clamp(0.5rem, 1.2vh, 0.75rem) 0;
+  gap: 0.3rem clamp(0.75rem, 1.5vw, 1.5rem);
+  padding: clamp(0.38rem, 0.85vh, 0.6rem) 0;
   border-top: 1px solid var(--border);
   min-width: 0;
 }
@@ -146,7 +200,7 @@
   min-width: 0;
   color: var(--gray-400);
   font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  font-size: clamp(0.68rem, 0.88vw, 0.8rem);
   line-height: 1.45;
 }
 
@@ -157,7 +211,7 @@
   min-width: 0;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  font-size: clamp(0.88rem, 1vw, 1.02rem);
   font-weight: 500;
   line-height: 1.45;
   text-align: end;
@@ -169,10 +223,54 @@
   color: var(--teal-on-soft);
 }
 
-/* El panel entra como un bloque, con el mismo compás con que entra la figura de
-   la tesis (520 ms tras 410 ms), para que la ficha tenga el ritmo del resto del
-   deck. No hay escalonado fila a fila: un panel de datos no es una secuencia y
-   contarlo con el reloj sería adorno. */
+/* ── Apilada ─────────────────────────────────────────────────────────────────
+   ⚠️ **La ficha con captura es la lámina más alta del deck, y apilada no cabía.**
+   Medido a 390 × 844 con el hueco entre barras (70 → 784): la caja de la ficha
+   iba de 112 a 844, es decir **60 px por debajo del riel**, y el arnés lo
+   denunciaba como CHOCA CON LAS BARRAS y como texto tapado por el propio riel.
+   El desglose era: 231 px de argumento, 264 de captura con su acta y 198 de
+   panel, más 39 de separaciones.
+
+   La mitad la devuelve el recorte de la imagen (ver `captura-enmarcada`); la
+   otra mitad sale de aquí, apretando SOLO lo que en un teléfono no significa
+   nada —separaciones y relleno de filas— y sin tocar ni un cuerpo de letra: lo
+   que hace legible el panel desde el fondo de una sala es el tamaño de la
+   métrica, y una sala no es un teléfono pero la serie sí es la misma.
+
+   Va en una consulta y no bajando los `clamp`, que es lo que parecía obvio: los
+   `clamp` con `vh` también encogen el proyector, que es donde sobran 150 px de
+   alto y donde el aire es lo que hace que la ficha no se lea como un formulario. */
+@media (max-width: 62rem) {
+  .rejilla {
+    gap: 0.9rem;
+  }
+
+  .atribucion {
+    margin-top: 0.45rem;
+  }
+
+  .evidencia {
+    gap: 0.65rem;
+  }
+
+  .metrica {
+    margin-top: 0.3rem;
+  }
+
+  .datos {
+    margin-top: 0.5rem;
+  }
+
+  .dato {
+    padding: 0.24rem 0;
+  }
+
+  .datoEtiqueta,
+  .datoValor {
+    line-height: 1.3;
+  }
+}
+
 @keyframes panelEntra {
   from {
     opacity: 0;
@@ -185,7 +283,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel {
+  .evidencia {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

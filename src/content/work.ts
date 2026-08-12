@@ -185,7 +185,20 @@ export const workProfiles = [
       primaryMetric: "16+",
       metricLabel: "fuentes conectadas",
       items: [
-        { label: "Recaudo", value: "92,1% de la meta", state: "accent" },
+        // ⚠️ **Decía «Recaudo · 92,1% de la meta» y la demo no publica esa
+        // cifra.** El centro de mando de `gobia.co/demo` publica «RECAUDO 89%
+        // tributario» en su fila de indicadores y «Recaudo tributario 89,5% —
+        // $3.869 de $4.325 MM» en el bloque de detalle; 3.869/4.325 = 89,5%, o
+        // sea que el 89,5% ES el porcentaje de la meta. Comprobado dos veces:
+        // en la captura del 21-jul-2026 que enmarca la ficha de producto y
+        // contra la demo viva el 12-ago-2026. El 92,1% no aparece en ninguna
+        // parte de la superficie pública del producto.
+        //
+        // Se corrige el dato y no la maquetación porque la ficha del deck
+        // enseña el panel y la captura a la vez: dejarlo habría publicado dos
+        // números distintos para la misma magnitud, en la misma pantalla,
+        // delante del cliente.
+        { label: "Recaudo tributario", value: "89,5% de la meta", state: "accent" },
         { label: "Reporte FUT", value: "15 minutos" },
         { label: "Estatuto municipal", value: "Beta activa" },
       ],

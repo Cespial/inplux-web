@@ -6,6 +6,7 @@ import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { getWorkProfile } from "@/content/work";
+import { workCaptures } from "@/content/work-captures";
 import { formatShortDate, verificationDateFor } from "@/content/work-format";
 import styles from "./capacidades.module.css";
 
@@ -83,13 +84,17 @@ const capabilityLayers = [
 /**
  * Cada pieza de evidencia enmarca la captura de una página pública.
  *
- * `capturedAt` es la fecha en que se tomó esa imagen, copiada en ISO del acta
- * `public/work/real-pages/capture-manifest.json`: el conjunto dejó de tomarse
- * en una sola sesión, así que cada captura declara la suya y el pie la formatea
- * con la misma función que usa la vitrina de `/trabajo`, en vez de llevar la
- * fecha ya escrita a mano. La fecha de verificación de la fuente se deriva de
- * `work.ts` (`slug` + `productHref`), para que no quede escrita a mano en una
- * segunda ruta y se desincronice del perfil.
+ * ⚠️ **Aquí ya no se escribe ni la ruta del PNG, ni su texto alternativo, ni la
+ * fecha en que se tomó.** Las tres salían copiadas del acta
+ * `public/work/real-pages/capture-manifest.json` y estaban escritas otra vez en
+ * la vitrina de `/trabajo`, con dos redacciones distintas del mismo `alt` y sin
+ * nada que obligara a las dos fechas a coincidir. Ahora salen de
+ * `workCaptures`, y `scripts/verify-captures.test.mjs` compara ese módulo
+ * contra el acta —fichero, fecha, URL de origen y `sha256` recalculado—.
+ *
+ * La fecha de verificación de la fuente se deriva de `work.ts` (`slug` +
+ * `productHref`), para que no quede escrita a mano en una segunda ruta y se
+ * desincronice del perfil.
  *
  * `headline` y `description` describen lo que la captura muestra —la superficie
  * que respondió ese día—, no lo que el producto promete: el vocabulario sale de
@@ -99,15 +104,12 @@ const evidence = [
   {
     number: "01",
     slug: "gobia",
-    capturedAt: "2026-07-21",
     name: "Gobia",
     category: "Gestión pública",
     headline: "Una operación municipal reunida en un centro de mando.",
     description:
       "La demostración pública conecta lectura territorial, seguimiento e información fiscal en una sola superficie de trabajo.",
     attribution: "Solución de INPLUX · atribución pública confirmada en gobia.co",
-    image: "/work/real-pages/gobia-demo-2026-07-21.png",
-    imageAlt: "Demo pública de Gobia con mapa y centro de mando municipal",
     profileHref: "/trabajo/gobia",
     productHref: "https://www.gobia.co/demo",
     productLabel: "Abrir demo pública",
@@ -115,15 +117,12 @@ const evidence = [
   {
     number: "02",
     slug: "laudos",
-    capturedAt: "2026-07-21",
     name: "Laudos",
     category: "Arbitraje",
     headline: "Conocimiento arbitral convertido en una herramienta explorable.",
     description:
       "La beta abierta combina búsqueda, estructura jurídica y un laboratorio de predicción sin ocultar la responsabilidad de cada aliado.",
     attribution: "Desarrollo técnico: INPLUX · criterio legal: REDEK",
-    image: "/work/real-pages/laudos-prediccion-2026-07-21.png",
-    imageAlt: "Laboratorio de predicción de la beta pública de Laudos",
     profileHref: "/trabajo/laudos",
     productHref: "https://laudos.co/?view=predecir",
     productLabel: "Abrir beta pública",
@@ -131,7 +130,6 @@ const evidence = [
   {
     number: "03",
     slug: "tribai",
-    capturedAt: "2026-07-21",
     name: "Tribai",
     category: "Tributación",
     headline: "Una consulta tributaria que no se separa de su fuente.",
@@ -139,8 +137,6 @@ const evidence = [
       "El asistente público abre con su caja de consulta y deja a la vista las rutas del producto: declaraciones, herramientas y estatuto en el mismo entorno.",
     attribution:
       "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
-    image: "/work/real-pages/tribai-asistente-2026-07-21.png",
-    imageAlt: "Asistente tributario público de Tribai con su caja de consulta",
     profileHref: "/trabajo/tribai",
     productHref: "https://app.tribai.co/",
     productLabel: "Abrir asistente",
@@ -148,7 +144,6 @@ const evidence = [
   {
     number: "04",
     slug: "kelsen",
-    capturedAt: "2026-07-21",
     name: "Kelsen",
     category: "Derecho",
     headline: "Una biblioteca jurídica abierta, filtrable por vigencia.",
@@ -156,8 +151,6 @@ const evidence = [
       "El explorador público reúne la búsqueda, los filtros de colección, tipo, área y vigencia, y los resultados del corpus, cada uno con su entidad emisora, su año y su número de fragmentos.",
     attribution:
       "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
-    image: "/work/real-pages/kelsen-explorador-2026-07-21.png",
-    imageAlt: "Explorador público de Kelsen con filtros y resultados del corpus jurídico",
     profileHref: "/trabajo/kelsen",
     productHref: "https://kelsen.io/explorador?vigencia=modificado",
     productLabel: "Abrir explorador",
@@ -165,7 +158,6 @@ const evidence = [
   {
     number: "05",
     slug: "porkia",
-    capturedAt: "2026-08-11",
     name: "Porkia",
     category: "Porcicultura",
     headline: "Las pantallas de una finca, recorribles desde el navegador.",
@@ -173,8 +165,6 @@ const evidence = [
       "La demostración pública corre la aplicación con datos de ejemplo y deja recorrer lotes, cuido, sanidad y cuentas sin descargar nada.",
     attribution:
       "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
-    image: "/work/real-pages/porkia-demo-2026-08-11.png",
-    imageAlt: "Demostración pública de Porkia con las pantallas de la aplicación en el navegador",
     profileHref: "/trabajo/porkia",
     productHref: "https://porkia.co/#demo",
     productLabel: "Abrir demostración",
@@ -198,9 +188,13 @@ const evidenceItems = evidence.map((item) => {
     throw new Error(`Evidencia sin perfil en work.ts: ${item.slug}`);
   }
 
+  const captura = workCaptures[item.slug];
+
   return {
     ...item,
-    capturedLabel: formatShortDate(item.capturedAt),
+    image: captura.src,
+    imageAlt: captura.alt,
+    capturedLabel: formatShortDate(captura.capturedAt),
     statusLabel: profile.status.label,
     verifiedLabel: verificationDateFor(profile.sources, item.productHref),
   };

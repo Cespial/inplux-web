@@ -1,0 +1,141 @@
+/* ===========================================================================
+   La captura enmarcada
+
+   El único objeto del deck que tiene marco, y la excepción está razonada: la
+   escala tipográfica de `deck.module.css` declara que aquí no hay sombras ni
+   rellenos porque sobre fondo claro el efecto es la precisión. Eso vale para el
+   TEXTO. Una captura es otra cosa —una superficie ajena metida en la nuestra— y
+   sin frontera cerrada no se separa del papel: medido, una interfaz clara da
+   ~1,05:1 contra el fondo y desaparece; una oscura da 11–14,5:1 y se lee como
+   un rectángulo pegado encima. El hilo, el radio y la sombra son lo que hace
+   que las cinco —dos oscuras, tres claras— se lean como el MISMO objeto.
+
+   ⚠️ Aquí no hay una sola regla que nombre un producto ni un `:nth-child` que
+   dé a uno trato distinto, igual que en la hoja de la ficha: la serie es el
+   argumento y lo único que cambia entre láminas es lo que hay dentro del marco.
+   =========================================================================== */
+
+.captura {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 1vh, 0.6rem);
+  min-width: 0;
+  margin: 0;
+}
+
+/* La sombra se construye con `color-mix` sobre `--ink` en vez de con un rgba
+   suelto: no entra un color nuevo al sistema, entra el mismo a otra opacidad.
+   Dos capas y las dos flojas —un contacto de 1 px y una caída larga y muy
+   diluida—: lo que separa es el hilo, la sombra solo despega el marco del
+   papel. Una sombra que se note convierte la lámina en una tarjeta. */
+.marco {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: clamp(0.4rem, 0.8vw, 0.7rem);
+  background: var(--surface-page);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--ink) 7%, transparent),
+    0 1.5rem 2.5rem -1.5rem color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+/* La barra del navegador. Es lo que dice «esto es una página, no un dibujo», y
+   por eso lleva la URL de verdad y no un rótulo. `--gray-400` sobre
+   `--off-white` da 4,59:1: pasa AA y se queda por debajo del texto de la
+   lámina, que es lo que tiene que mandar. */
+.cromo {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.45rem, 1vw, 0.7rem);
+  min-width: 0;
+  margin: 0;
+  padding: clamp(0.4rem, 0.9vh, 0.6rem) clamp(0.6rem, 1vw, 0.9rem);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.8vw, 0.72rem);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+.puntos {
+  display: flex;
+  flex: none;
+  gap: 0.28rem;
+}
+
+.puntos > span {
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 50%;
+}
+
+/* ⚠️ Sin `text-overflow: ellipsis`. Recortar una URL dentro de una caja con
+   `overflow: hidden` la deja a medias sin que se vea que falta algo, y el arnés
+   lo denuncia como TEXTO RECORTADO con razón. La más larga —el explorador de
+   Kelsen con su filtro de vigencia— cabe entera en las tres medidas; si algún
+   día no cupiera, envuelve y la barra crece, que es un defecto que se ve. */
+.url {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* La captura entera, sin recorte, en su relación nativa 3:2. `object-fit` está
+   por si el archivo no la cumpliera: la caja manda y la imagen no deforma. */
+.lienzo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* ⚠️ Apilada, la lámina se queda sin altura antes que sin ancho, y medido: a
+   390 × 844 la captura a ancho completo y sin recortar mide 228 px de alto y la
+   caja de la ficha se salía 60 px por debajo del riel. 2:1 recorta el tercio
+   inferior —de la demo de Gobia, el pie del mapa; de Laudos, su pie de página;
+   de Porkia, la base del teléfono— y deja arriba lo que identifica cada
+   pantalla, que es donde vive la barra del producto y su primer bloque. Es la
+   misma corrección, y por el mismo motivo, que la vitrina de /trabajo documenta
+   en su recorte de móvil.
+
+   El corte solo existe apilado: en las dos medidas de sala la captura se ve
+   ENTERA, en su 3:2 nativo, sin una decisión editorial de por medio. */
+@media (max-width: 62rem) {
+  .lienzo {
+    aspect-ratio: 2 / 1;
+  }
+
+  /* Los dos renglones del acta caen uno bajo otro a este ancho —cada uno mide
+     ~204 px sobre 342— y la interlínea de sala cuesta 3 px que la imagen
+     necesita. */
+  .acta {
+    line-height: 1.35;
+  }
+}
+
+/* El acta. Dos renglones en el registro de pie del deck, con el par
+   rótulo/valor en dos tintas —lo mismo que hace el panel de al lado— para que
+   la fecha y el número de fuentes se lean como datos y no como letra pequeña.
+   `--gray-400` da 4,84:1 sobre blanco y `--text-body` 11,15:1. */
+.acta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.15rem clamp(0.75rem, 1.5vw, 1.5rem);
+  min-width: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.dato {
+  color: var(--text-body);
+  font-weight: 500;
+}
