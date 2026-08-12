@@ -32,31 +32,44 @@ type Perfil = Extract<DeckSlide, { kind: "producto" }>["perfil"];
 export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
   const fuente = perfil.sources[0];
 
-  // ⚠️ **`partners` son las PARTES, no «nuestros aliados»**, y una de ellas
-  // somos nosotros: el producto de arbitraje declara `REDEK · Criterio legal` y
-  // `INPLUX · Desarrollo técnico`. Pintar la lista entera detrás de
-  // `attribution.label` daba «Desarrollo técnico de INPLUX · … · INPLUX ·
-  // Desarrollo técnico» —el mismo nombre y el mismo papel dos veces en el mismo
-  // renglón—, que en la sala se lee como una errata. Visto en la captura, no en
-  // el arnés: para él era una línea de texto más y dio `ok`.
+  // ⚠️ **`perfil.partners` NO se pinta en el deck, y es una divergencia
+  // deliberada respecto del sitio.** El sitio conserva la atribución de las
+  // partes —`/trabajo/laudos` nombra a REDEK y su papel— y el deck la omite:
+  // decisión del dueño del 11-ago-2026, escrita en el spec §13.6 y §2.1a, en el
+  // plan y en `progress.md`. Antes se pintaba una lista de aliados filtrada, y
+  // la ficha de arbitraje salía a la sala con un tercero nombrado.
   //
-  // Se quita la parte que la atribución ya nombra, preguntándoselo a la propia
-  // atribución en vez de escribir aquí a quién hay que excluir: así el día que
-  // una ficha atribuya a otra casa, el filtro sigue siendo correcto y este
-  // archivo no se entera.
-  const aliados = perfil.partners.filter(
-    (parte) => !perfil.attribution.label.includes(parte.name),
-  );
+  // ⚠️ `DECK.md:201` dice lo contrario («donde haya socio real y confirmado, se
+  // nombra como el sitio ya lo nombra»). Es el documento anterior y la decisión
+  // 13.6 es posterior y más específica, así que manda 13.6 — pero la
+  // contradicción entre los dos papeles sigue abierta y la cierra el dueño. Si
+  // se revierte, se revierte AQUÍ y no volviendo a mostrar `description` ni
+  // `attribution.statement`, que también traen el nombre.
+
+  // ⚠️ **La métrica publicada no siempre es una cifra.** Hay productos cuya
+  // métrica es una palabra, y una palabra en versal al cuerpo de la serie pesa
+  // el doble que un número con sus huecos: medido a 390 px, la palabra tenía
+  // más masa que el nombre del producto y la ficha se leía con dos titulares.
+  // Se pregunta por la FORMA del valor, no por el producto: ningún nombre de
+  // producto se escribe aquí y un producto nuevo cae solo del lado que le toca.
+  const metricaEsCifra = /^\p{Nd}/u.test(perfil.interface.primaryMetric);
 
   return (
     <Slide id={id}>
       <div className={styles.rejilla}>
         <div className={`${deck.bloque} ${deck.escalonado}`}>
-          {/* El numeral y el dominio, en el registro de rótulo del deck. El
-              numeral es el del perfil (`number`), no la posición de la lámina:
-              es el mismo que rotula el producto en /trabajo. */}
+          {/* El numeral, el dominio y la madurez, en el registro de rótulo del
+              deck. El numeral es el del perfil (`number`), no la posición de la
+              lámina: es el mismo que rotula el producto en /trabajo.
+              ⚠️ El estado sube aquí desde el pie a propósito. Abajo iba pegado
+              a la atribución y a la fuente en un solo renglón —«Desarrollo de
+              INPLUX · Beta cerrada · Sitio oficial de X · consultado …»—, y ese
+              orden le presta a una DECLARACIÓN nuestra el peso de una cita: en
+              cuatro de los cinco perfiles la fuente respalda lo que el producto
+              publica, no quién lo construyó, y el propio `work.ts` lo dice. En
+              el rótulo, la madurez se lee junto al dominio, que es lo que es. */}
           <p className={deck.pregunta}>
-            {perfil.number} · {perfil.category}
+            {perfil.number} · {perfil.category} · {perfil.status.label}
           </p>
 
           <h1 className={deck.respuesta}>{perfil.name}</h1>
@@ -65,17 +78,12 @@ export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
               lo reescribe: lo lee de donde ya vive. */}
           <p className={deck.cuerpo}>{perfil.headline}</p>
 
+          {/* El pie, con las dos cosas en dos renglones y no en uno: arriba
+              quién lo hizo —una declaración de INPLUX—, abajo la fuente y su
+              fecha —una cita, que es otra clase de cosa—. El salto lo da
+              `.pieFuente`, que ya era un bloque. */}
           <p className={deck.pie}>
-            {perfil.attribution.label} · {perfil.status.label}
-            {/* Los aliados solo aparecen donde los hay. Se recorre la lista en
-                vez de preguntar por el producto, así que un aliado nuevo en
-                `work.ts` se pinta solo y ninguno se queda fuera. */}
-            {aliados.map((aliado) => (
-              <span key={aliado.name}>
-                {" · "}
-                {aliado.name} · {aliado.role}
-              </span>
-            ))}
+            {perfil.attribution.label}
             <span className={styles.pieFuente}>
               <a className={deck.pieEnlace} href={fuente.url}>
                 {fuente.label}
@@ -94,7 +102,15 @@ export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
           <p className={styles.panelRotulo}>{perfil.interface.eyebrow}</p>
 
           <p className={styles.metrica}>
-            <span className={styles.metricaValor}>{perfil.interface.primaryMetric}</span>
+            <span
+              className={
+                metricaEsCifra
+                  ? styles.metricaValor
+                  : `${styles.metricaValor} ${styles.metricaValorPalabra}`
+              }
+            >
+              {perfil.interface.primaryMetric}
+            </span>
             <span className={styles.metricaPie}>{perfil.interface.metricLabel}</span>
           </p>
 

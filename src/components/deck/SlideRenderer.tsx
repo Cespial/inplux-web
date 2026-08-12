@@ -45,7 +45,7 @@ export function SlideRenderer({
   // comprueba que están cubiertos todos los kind, y añadir uno sin su rama
   // rompe el build en vez de pintar un hueco en producción.
   switch (slide.kind) {
-    // Ya no queda grupo genérico: las quince láminas tienen cuerpo propio y
+    // Ya no queda grupo genérico: todas las láminas tienen cuerpo propio y
     // ninguna se pinta como un título suelto.
     //
     // `titulo` no baja a ninguna: su texto sale de DECK_COPY o de `work.ts`,

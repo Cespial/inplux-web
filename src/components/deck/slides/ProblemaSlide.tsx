@@ -52,11 +52,18 @@ export function ProblemaSlide({ id }: { id: string }) {
           <p className={styles.pregunta}>{pregunta}</p>
           <h1 className={styles.respuesta}>{respuesta}</h1>
           <p className={styles.cuerpo}>{cuerpo}</p>
+          {/* ⚠️ El título del artículo va en `<span lang>`. El documento
+              declara `es-CO` y sin esa marca un lector de pantalla en español
+              pronuncia el título inglés con fonemas españoles (SC 3.1.2, AA).
+              Es el enlace de la única fuente dura del deck: justo el texto que
+              alguien va a querer leer para ir a comprobar la cifra.
+              El idioma sale de la fuente, no de aquí. */}
           <p className={styles.pie}>
             <a className={styles.pieEnlace} href={fuente.url}>
-              {fuente.label}
+              {fuente.label}{" "}
+              <span lang={fuente.labelIdioma.lang}>{fuente.labelIdioma.texto}</span>
             </a>
-            {" · n=1.471 · consultado "}
+            {` · ${fuente.muestra} · consultado `}
             {fuente.verifiedAt}
           </p>
         </div>

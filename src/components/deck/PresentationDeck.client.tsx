@@ -74,8 +74,31 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   // lo que se acaba de pedir. Si el destino era la lámina ya visible no hay
   // cambio de secuencia, el efecto no corre, y el foco se queda en el botón
   // que abrió el índice: también correcto.
+  // ⚠️ **Salvo si quien pidió el cambio está en el riel.** Medido con teclado
+  // real: foco en «Lámina siguiente» → Enter → el foco acababa en el slot y
+  // volver al mismo botón costaba **18 tabulaciones** (los dos botones de la
+  // barra superior y los quince segmentos del riel). Quien conduce el deck
+  // desde el riel es justamente quien no usa las flechas —conmutador, teclado
+  // en pantalla, navegación por tabulación— y no podía repetir la acción sin
+  // recorrer el riel entero.
+  //
+  // La guarda mira SOLO el riel (`data-deck-chrome="inferior"`) y no el chrome
+  // entero, a propósito: el índice se abre desde la barra superior y al
+  // cerrarse el `<dialog>` devuelve el foco al botón que lo abrió, así que si
+  // la guarda cubriera también la barra, el salto desde el índice dejaría el
+  // foco arriba y la lámina pedida no se anunciaría. Ese camino tiene que
+  // seguir moviendo el foco.
+  //
+  // El precio, declarado: al conducir desde el riel, el cambio de lámina ya no
+  // se anuncia por traslado de foco. Se acepta porque en ese camino el usuario
+  // acaba de pedir esa lámina por su nombre —los segmentos se llaman «Ir a
+  // <título>»— y el coste de volver era real y medido.
   useEffect(() => {
     if (nav.secuencia === 0) return;
+    const activo = document.activeElement;
+    if (activo instanceof HTMLElement && activo.closest('[data-deck-chrome="inferior"]') !== null) {
+      return;
+    }
     slotActivo.current?.focus({ preventScroll: true });
   }, [nav.secuencia]);
 
@@ -165,15 +188,19 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
       ) : null}
       {overlay === "ayuda" ? <HelpOverlay alCerrar={cerrarOverlay} /> : null}
 
-      {/* Sin JavaScript el recorrido no existe. Repetir aquí los quince
-          títulos ofrecía MENOS que /deck —que los publica enlazados— y metía
-          quince `data-slide` de más en el HTML construido, una trampa para
-          cualquiera que los cuente. Queda la frase y el enlace. Si algún día
-          las láminas traen su cuerpo real aquí dentro, se reconsidera. */}
+      {/* Sin JavaScript el recorrido no existe. Repetir aquí los títulos de
+          todas las láminas ofrecía MENOS que /deck —que los publica
+          enlazados— y metía un `data-slide` de más por lámina en el HTML
+          construido, una trampa para cualquiera que los cuente. Queda la frase
+          y el enlace. Si algún día las láminas traen su cuerpo real aquí
+          dentro, se reconsidera.
+          ⚠️ El número sale de `TOTAL_SLIDES`, no escrito: este texto se
+          publica dentro del `<noscript>` del HTML construido y decía «las
+          quince láminas». */}
       <noscript>
         <p className={styles.sinScript}>
           El recorrido lámina a lámina necesita JavaScript.{" "}
-          <a href="/deck">Ver el índice de las quince láminas</a>.
+          <a href="/deck">Ver el índice de las {TOTAL_SLIDES} láminas</a>.
         </p>
       </noscript>
     </div>

@@ -96,6 +96,24 @@
   line-height: 1;
 }
 
+/* ⚠️ **Cuando la métrica publicada es una palabra, no una cifra.**
+   La misma regla pintaba un dígito y una versal, y una versal a este cuerpo
+   pesa el doble: medido a 390 px, el nombre del producto va en serif a 55 px
+   con altura de x de ~25 px y la palabra iba en versal a 48 px con altura de
+   mayúscula de ~34 px, o sea que **la palabra del panel tenía más masa que el
+   nombre del producto** y la ficha se leía con dos titulares. No es un problema
+   de tamaño sino de caja tipográfica: una versal no tiene los huecos que una
+   cifra sí tiene.
+
+   El factor (~0,72) es el que iguala la altura de mayúscula de la palabra con
+   la altura de x del nombre, que es lo que hace que deje de competir. La regla
+   no nombra ningún producto: la elige `metricaEsCifra` en el componente, por la
+   forma del valor. La misma corrección hace falta en `WorkPreview` del sitio,
+   donde la serie tiene la misma asimetría. */
+.metricaValorPalabra {
+  font-size: clamp(1.45rem, 2.45vw, 2.3rem);
+}
+
 .metricaPie {
   color: var(--text-muted, var(--gray-400));
   font-family: var(--font-body);

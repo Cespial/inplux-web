@@ -1,16 +1,46 @@
 export type DeckSource = {
+  /** La parte del rótulo que está en el idioma del documento. */
   label: string;
+  /**
+   * La parte del rótulo que NO está en español, con su idioma.
+   *
+   * ⚠️ El documento declara `lang="es-CO"`, así que un lector de pantalla
+   * pronuncia con fonemas españoles todo lo que no lleve `lang` propio, y el
+   * título de un artículo en inglés se vuelve ininteligible (SC 3.1.2, AA). Va
+   * partido en dos campos y no como una cadena con marcado dentro porque el
+   * idioma es un dato de la fuente, no una decisión de la lámina que la pinta.
+   */
+  labelIdioma?: { texto: string; lang: string };
   url: string;
+  /**
+   * El tamaño de la muestra, tal y como se imprime en el pie de la lámina.
+   *
+   * ⚠️ Vive aquí y no en el JSX: era un literal escrito en
+   * `ProblemaSlide.tsx`, así que tocar `supports` no lo movía y los dos podían
+   * separarse en silencio. `verify-deck-model.test.mjs` exige que el número de
+   * este campo aparezca dentro de `supports`.
+   */
+  muestra?: string;
   supports: string;
   verifiedAt: `${number}-${number}-${number}`;
 };
 
 export const DECK_SOURCES = [
   {
-    label: "Flyvbjerg y Budzier, Why Your IT Project Might Be Riskier Than You Think",
+    label: "Flyvbjerg y Budzier,",
+    labelIdioma: {
+      texto: "Why Your IT Project Might Be Riskier Than You Think",
+      lang: "en",
+    },
     url: "https://arxiv.org/abs/1304.0265",
+    muestra: "n=1.471",
+    // ⚠️ «en promedio» no es un adorno: el abstract dice «a cost overrun of
+    // 200%, on average», y el 200 % es la media de la cola, no el suelo de
+    // todos los proyectos de la cola. En la lámina que abre diciendo que los
+    // promedios engañan, decirlo sin el matiz es justo la imprecisión que la
+    // lámina denuncia. El 27 % queda acotado a la muestra por la misma razón.
     supports:
-      "Muestra de 1.471 proyectos de TI; sobrecosto promedio de 27 %; uno de cada seis con 200 % de sobrecosto y casi 70 % de sobreplazo.",
+      "Muestra de 1.471 proyectos de TI; en esa muestra, sobrecosto promedio de 27 %; uno de cada seis con 200 % de sobrecosto en promedio y casi 70 % de sobreplazo.",
     verifiedAt: "2026-08-11",
   },
 ] as const satisfies readonly DeckSource[];

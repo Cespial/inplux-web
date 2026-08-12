@@ -2,8 +2,8 @@
    Lámina 7 · El puente
 
    ⚠️ Ni un `repeat(N, …)` con N escrito, ni una regla que nombre una posición.
-   Las pistas las decide `auto-fit` con un mínimo en `rem`: con cinco perfiles
-   y una lámina de 1.296 px salen cinco pistas de ~250 px; con 342 px salen dos
+   Las pistas las decide `auto-fit` con un mínimo en `rem`: con los perfiles de
+   hoy y una lámina de 1.296 px salen pistas de ~250 px; con 342 px salen dos
    de ~163 px y tres filas. El día que `work.ts` gane o pierda un perfil, esta
    hoja no se entera y sigue estando bien — que es exactamente lo que en F0.5
    falló seis veces.
@@ -23,10 +23,10 @@
   list-style: none;
 }
 
-/* El filete superior es el mismo en las cinco, y esa es la afirmación de la
+/* El filete superior es el mismo en todas, y esa es la afirmación de la
    lámina dicha sin palabras: los dominios cambian, la fábrica no. Un hilo de
    1 px en `--border`, no una tarjeta: cero rellenos, cero sombras, cero cajas.
-   Si cada miniatura llevara marco, la lámina diría «cinco productos» en vez de
+   Si cada miniatura llevara marco, la lámina diría «un catálogo» en vez de
    «una fábrica». */
 .ficha {
   display: flex;
@@ -39,7 +39,7 @@
 }
 
 /* El dominio manda sobre el nombre, y es al revés de lo que uno haría. La
-   lámina no está presentando productos —eso lo hacen las cinco que siguen, una
+   lámina no está presentando productos —eso lo hacen las fichas que siguen, una
    por producto—: está afirmando que los dominios no se parecen. El sustantivo
    del argumento es «porcicultura», no «Porkia». */
 .dominio {

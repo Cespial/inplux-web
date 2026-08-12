@@ -149,3 +149,59 @@ test("un slug que no existe revienta en vez de encogerse en silencio", () => {
   const deck = loadDeck();
   assert.match(String(deck.errorPorSlugInventado), /no hay perfil para: no-existe/);
 });
+
+// ── Los conteos escritos a mano que quedan, y su red ─────────────────────────
+// La regla del proyecto es que ningún conteo se escriba a mano. Donde el copy
+// no puede evitarlo —un titular no dice «4 tiempos», dice «cuatro»— la única
+// forma legítima es que una prueba caiga antes de que el texto llegue a mentir.
+// Es lo que `verify-deck-reasons.test.mjs` hace con «Trece» y lo que aquí se
+// hace con «cuatro».
+
+/** Lee del modelo lo que hace falta para juzgar los conteos del copy. */
+function leerConteos() {
+  const result = spawnSync(
+    "npx",
+    ["tsx", "--eval", `
+      import { DECK_COPY, DECK_SOURCES } from "./src/content/deck.ts";
+      import { method } from "./src/content/home.ts";
+      process.stdout.write(JSON.stringify({
+        tiempos: method.length,
+        metodoRespuesta: DECK_COPY.metodo.respuesta,
+        comoEmpezamosRespuesta: DECK_COPY.comoEmpezamos.respuesta,
+        fuente: DECK_SOURCES[0],
+      }));
+    `],
+    { cwd: root, encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, `no se pudo cargar el copy:\n${result.stderr}`);
+  return JSON.parse(result.stdout);
+}
+
+test("si `method` deja de tener cuatro tiempos, los dos titulares que lo dicen caen", () => {
+  const { tiempos, metodoRespuesta, comoEmpezamosRespuesta } = leerConteos();
+
+  // `method` vive en `home.ts` y lo comparte la portada del sitio: puede crecer
+  // por una razón que no tiene nada que ver con el deck, y estos dos titulares
+  // —y los dos títulos del riel que los espejan— se quedarían mintiendo con
+  // `npm run check` en verde.
+  assert.equal(
+    tiempos,
+    4,
+    "cambió el número de tiempos de `method`: actualiza los titulares de las láminas del método y de «¿y con lo mío?», y sus títulos en `deck.ts`",
+  );
+  for (const titular of [metodoRespuesta, comoEmpezamosRespuesta]) {
+    assert.match(titular, /uatro/, `«${titular}» ya no dice cuatro`);
+  }
+});
+
+test("la muestra que el pie imprime es la que la fuente declara respaldar", () => {
+  const { fuente } = leerConteos();
+  // `n=1.471` era un literal del JSX: tocar `supports` no lo movía y los dos
+  // podían separarse sin que nadie se enterara.
+  const numero = fuente.muestra.replace(/[^\d.,]/g, "");
+  assert.ok(numero.length > 0, "la muestra no trae ningún número");
+  assert.ok(
+    fuente.supports.includes(numero),
+    `el pie imprime «${fuente.muestra}» y el campo supports no menciona ${numero}`,
+  );
+});

@@ -57,6 +57,12 @@ const HILOS = Array.from({ length: LADO / PASO - 1 }, (_, i) => (i + 1) * PASO);
  * Los cuatro tiempos, sobre la diagonal y en intersecciones de la retícula: el
  * orden se lee sin una sola palabra, y ninguno pesa más que otro porque
  * ninguno se salta.
+ *
+ * ⚠️ Son cuatro posiciones escritas y NO se derivan de `method`: son geometría
+ * —cada una cae en un cruce de la retícula y en la diagonal—, no una lista. Lo
+ * que las sujeta es la prueba de `verify-deck-model.test.mjs` que exige que
+ * `method` tenga cuatro tiempos: el día que gane un quinto, esa prueba cae y
+ * manda mirar aquí, además de los dos titulares que lo dicen en palabras.
  */
 const NODOS = [600, 660, 720, 780].map((x) => ({ x, y: 840 - x }));
 

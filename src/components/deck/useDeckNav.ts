@@ -29,6 +29,31 @@ function hayDialogoAbierto(): boolean {
   return document.querySelector("dialog[open]") !== null;
 }
 
+/**
+ * ¿El documento se puede desplazar ahora mismo?
+ *
+ * ⚠️ **Cuando la respuesta es sí, `Espacio`, `Av Pág`, `Re Pág`, `Inicio` y
+ * `Fin` dejan de ser del deck.** El riel es `overflow: hidden auto`, así que
+ * con el texto ampliado —200 % de la fuente del navegador, que es lo que pide
+ * SC 1.4.4— la lámina crece, el documento se desplaza y el contenido sigue
+ * estando todo ahí. Lo que se perdía era la forma de llegar a él: medido a
+ * 200 %, `Espacio` y `Av Pág` cambiaban de lámina en vez de bajar una pantalla
+ * y `Fin` saltaba a la última en vez de ir al final del documento, así que
+ * quien leía ampliado tenía que bajar con `↓` unas doce veces —la única tecla
+ * que no estaba tomada— y las dos que cualquiera pulsa primero le saltaban la
+ * lámina.
+ *
+ * Las flechas `←` y `→` NO entran en esta guarda: son las del deck, no las del
+ * navegador, y quien las pulsa está conduciendo. Se pregunta por el estado real
+ * del documento en cada pulsación y no por un tamaño de fuente: da igual por
+ * qué se desplace —ampliación, fuente grande, una lámina que creció—, si hay
+ * dónde bajar, bajar es lo que tiene que hacer la tecla de bajar.
+ */
+function documentoSeDesplaza(): boolean {
+  const raiz = document.documentElement;
+  return raiz.scrollHeight - raiz.clientHeight > 1;
+}
+
 /** Los atajos que el chrome atiende y el riel se limita a encaminar. */
 export type AtajosDeck = {
   /** `i` */
@@ -134,6 +159,16 @@ export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): De
       // Las láminas van a llevar cuerpo: si el foco está escribiendo en algún
       // sitio, el espacio y las flechas son suyos, no del riel.
       if (escribiendo(evento.target)) return;
+      // Las cinco teclas que el navegador usa para desplazar el documento se
+      // devuelven en cuanto hay algo que desplazar. Ver `documentoSeDesplaza`.
+      const deDesplazamiento =
+        evento.key === " " ||
+        evento.key === "PageDown" ||
+        evento.key === "PageUp" ||
+        evento.key === "Home" ||
+        evento.key === "End";
+      if (deDesplazamiento && documentoSeDesplaza()) return;
+
       switch (evento.key) {
         case " ":
           // Mayús+Espacio retrocede de página en el navegador; que aquí

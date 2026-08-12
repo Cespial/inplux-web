@@ -60,12 +60,26 @@
   }
 }
 
+/* ⚠️ La separación entre la línea de salida y el remate era menor que la que
+   hay entre dos reglas de la lista —26 px contra 36—, así que el remate, que es
+   la frase que CIERRA la lámina y la única en negrita del deck, se leía como un
+   pie de la línea de comando. La proximidad es lo que agrupa: para que se lea
+   como conclusión y no como apéndice tiene que estar más lejos de la salida que
+   las reglas entre sí. En apaisado y no a 390 px: ahí la lámina va justa —con
+   la raíz del navegador en 18 px le quedan pocos píxeles— y el defecto es de
+   composición de sala. */
 .cierre {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.35rem;
   min-width: 0;
+}
+
+@media (min-width: 40rem) {
+  .cierre {
+    gap: clamp(0.75rem, 1.6vh, 1.15rem);
+  }
 }
 
 /* El pie del registro: el mismo recuento que se acaba de recorrer, con el

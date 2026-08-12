@@ -36,10 +36,18 @@
    de dentro de la entrada— la lámina vuelve a CABER y por eso su caja se centra
    en vez de desbordarse. Se movieron tamaños de espacio, no copy, que es la
    regla escrita en la escala. */
+/* ⚠️ Segunda bajada de los cuatro ritmos, y con la medida delante otra vez. La
+   primera dejó la lámina cabiendo con la raíz del navegador por omisión; con la
+   raíz en 18 px —una preferencia corriente— a 390×844 se salía **8 px**, y era
+   la única lámina del deck que rompía ahí. La causa no es su copy: los cuatro
+   tiempos salen de `method` en `home.ts`, que el deck comparte con la portada
+   del sitio y puede crecer por una razón ajena a esta lámina. Medido con la
+   preferencia real del navegador (CDP `Page.setFontSizes`), no con una hoja
+   inyectada. Se movieron tamaños de espacio, no copy. */
 .registro {
   display: grid;
-  gap: clamp(0.9rem, 1.9vh, 1.75rem) clamp(1.5rem, 3.5vw, 3.5rem);
-  margin: clamp(0.6rem, 1.6vh, 1.5rem) 0 0;
+  gap: clamp(0.75rem, 1.45vh, 1.75rem) clamp(1.5rem, 3.5vw, 3.5rem);
+  margin: clamp(0.5rem, 1.2vh, 1.5rem) 0 0;
   padding: 0;
   min-width: 0;
   list-style: none;
@@ -53,6 +61,17 @@
 @media (min-width: 62rem) {
   .registro {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* ⚠️ El tope existe por lo que pasa en el proyector. Sin él las dos
+       columnas se estiran con la lámina y lo único que crece es el CANAL entre
+       ellas: medido, 253 px de aire a 1440 y **433 px a 1920**, con el texto
+       de cada una topando en sus 44ch mucho antes. Las dos columnas del espejo
+       aguantan ese estiramiento porque cada fila lleva un filete que las cruza
+       entera; estas solo tienen un hilo vertical de 1 px a su izquierda, así
+       que al separarse dejan de leerse como una rejilla y se ven como dos
+       listas sueltas en los extremos de la pared. Con el tope, el canal mide lo
+       mismo a 1440 y a 1920: la lámina deja de cambiar de forma entre el
+       portátil y la sala. */
+    max-width: 74rem;
   }
 }
 
@@ -76,7 +95,7 @@
 
 .tituloTiempo {
   max-width: 24ch;
-  margin: clamp(0.15rem, 0.45vh, 0.35rem) 0 0;
+  margin: clamp(0.12rem, 0.3vh, 0.35rem) 0 0;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: clamp(1rem, 1.25vw, 1.2rem);
@@ -87,7 +106,7 @@
 
 .copyTiempo {
   max-width: 44ch;
-  margin: clamp(0.25rem, 0.6vh, 0.45rem) 0 0;
+  margin: clamp(0.2rem, 0.45vh, 0.45rem) 0 0;
   color: var(--text-muted, var(--gray-400));
   font-family: var(--font-body);
   font-size: clamp(0.88rem, 1vw, 1rem);
