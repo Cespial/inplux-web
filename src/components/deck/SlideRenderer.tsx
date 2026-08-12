@@ -4,6 +4,7 @@ import { EvidenciaSlide } from "./slides/EvidenciaSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
 import { PortadaSlide } from "./slides/PortadaSlide";
 import { ProblemaSlide } from "./slides/ProblemaSlide";
+import { PuenteSlide } from "./slides/PuenteSlide";
 import { TesisSlide } from "./slides/TesisSlide";
 import { Slide } from "./Slide";
 import styles from "./deck.module.css";
@@ -53,6 +54,7 @@ export function SlideRenderer({
     case "evidencia":
       return <EvidenciaSlide id={slide.id} motivos={motivos} />;
     case "puente":
+      return <PuenteSlide id={slide.id} />;
     case "capacidades":
     case "como-empezamos":
     case "cierre":
