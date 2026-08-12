@@ -65,8 +65,8 @@ const chapters = [
     kicker: "La tesis se puede recorrer",
     title: "Dominios distintos, el mismo criterio de entrega.",
     copy:
-      "Los productos que este sitio documenta son desarrollos propios, en dominios que no se parecen entre sí. INPLUX declara esa autoría; lo que cada perfil publica junto a ella es el estado que el producto sostiene y las fuentes que lo respaldan, con la fecha en que se revisaron.",
-    evidence: "DESARROLLOS PROPIOS / FUENTE Y FECHA",
+      "Los productos que este sitio documenta son desarrollos de INPLUX, en dominios que no se parecen entre sí. Cuando la responsabilidad se reparte, el perfil lo dice: en Laudos, INPLUX realiza el desarrollo técnico y REDEK aporta el criterio legal. Junto a esa autoría, cada perfil publica el estado que el producto sostiene y las fuentes que lo respaldan, con la fecha en que se revisaron.",
+    evidence: "DESARROLLOS DE INPLUX / FUENTE Y FECHA",
     visual: "work",
     // Un enlace por perfil publicado: el capítulo enuncia la idea y deja que
     // los enlaces hagan de directorio, que es el trabajo de `/trabajo`. La

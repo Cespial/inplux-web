@@ -261,6 +261,42 @@ async function verifyPortfolio() {
   }
 }
 
+/**
+ * El capítulo «evidencia» de `/nosotros` es la única prosa del sitio que
+ * resume de una vez la autoría de todos los productos, y por eso es donde el
+ * crédito de un aliado se pierde sin que nada se rompa.
+ *
+ * `work.ts` reparte Laudos entre INPLUX («Desarrollo técnico de INPLUX») y
+ * REDEK («Criterio legal»), y `home.ts` lo llama «cocreada con REDEK» —eso ya
+ * lo vigila `verifyPortfolio()`—. Este control extiende la misma protección a
+ * la ruta que cuenta quiénes somos: ya ocurrió una vez que esa prosa pasara a
+ * hablar de «desarrollos propios» en bloque, borrando a REDEK de toda la ruta
+ * sin que el build lo notara.
+ */
+async function verifyAboutAttribution() {
+  const relativePath = "src/components/about/HistoryScrolly.client.tsx";
+  const source = await readFile(path.join(root, relativePath), "utf8");
+  const chapter = source.split('id: "evidencia"')[1]?.split('id: "direccion"')[0];
+
+  if (!chapter) {
+    errors.push(
+      `${relativePath} no contiene un capítulo «evidencia» verificable antes de «direccion»`,
+    );
+    return;
+  }
+
+  if (!/REDEK/.test(chapter)) {
+    errors.push(
+      `${relativePath} debe conservar en el capítulo «evidencia» la atribución explícita a REDEK`,
+    );
+  }
+  if (/desarrollos\s+propios/iu.test(chapter)) {
+    errors.push(
+      `${relativePath} no puede llamar «desarrollos propios» al conjunto: Laudos reparte el crédito con REDEK`,
+    );
+  }
+}
+
 async function verifySecurityConfiguration() {
   const relativePath = "next.config.ts";
   const source = await readFile(path.join(root, relativePath), "utf8");
@@ -480,6 +516,7 @@ async function verifyLegacyFragments() {
 await verifyPublicLanguage();
 await verifySocialCards();
 await verifyPortfolio();
+await verifyAboutAttribution();
 await verifySecurityConfiguration();
 await verifyBrandSystem();
 await verifyLogoPermissions();
