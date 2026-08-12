@@ -1,4 +1,4 @@
-export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos";
+export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos" | "porkia";
 
 export type WorkSource = {
   label: string;
@@ -39,7 +39,7 @@ export type WorkProfile = {
     description: string;
   }[];
   interface: {
-    theme: "tributary" | "civic" | "legal" | "arbitration";
+    theme: "tributary" | "civic" | "legal" | "arbitration" | "livestock";
     eyebrow: string;
     primaryMetric: string;
     metricLabel: string;
@@ -367,6 +367,92 @@ export const workProfiles = [
         url: "https://laudos.co/?view=predecir",
         supports:
           "Disponibilidad pública del formulario de análisis arbitral mostrado en la captura.",
+        verifiedAt: "2026-08-11",
+      },
+    ],
+  },
+  {
+    kind: "product-profile",
+    slug: "porkia",
+    number: "05",
+    name: "Porkia",
+    category: "Porcicultura",
+    shortDescription:
+      "Lotes, cuido, sanidad y cuentas de una finca porcícola en una sola app.",
+    headline: "Llevar una finca porcícola sin volver al cuaderno.",
+    description:
+      "Porkia reúne el seguimiento de lotes, el cuido, la sanidad y las cuentas de una finca porcícola en una aplicación móvil que funciona sin conexión y guarda los datos en el teléfono.",
+    status: {
+      // El sitio anuncia la salida a tiendas para junio de 2026 y esa fecha ya
+      // pasó cuando se verificó. El perfil publica lo que el producto sostiene
+      // hoy —la inscripción a la beta cerrada— y anota el anuncio vencido en
+      // vez de repetirlo como si siguiera vigente.
+      label: "Beta cerrada",
+      detail:
+        "El sitio inscribe a porcicultores de Antioquia en una beta cerrada. Sus fichas de tienda seguían anunciando junio de 2026 en la fecha de verificación.",
+    },
+    access: {
+      label: "Abrir demostración",
+      href: "https://porkia.co/#demo",
+      detail:
+        "Las pantallas de la aplicación pueden recorrerse públicamente en el navegador, con datos de ejemplo. La aplicación se entrega por inscripción a la beta cerrada.",
+    },
+    attribution: {
+      state: "confirmed",
+      label: "Desarrollo de INPLUX",
+      statement:
+        "Porkia es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, demostración y modalidad de acceso—, no quién lo construyó.",
+    },
+    partners: [],
+    capabilities: [
+      {
+        title: "Lotes y crecimiento",
+        description:
+          "Registra cada lote de cerdas con sus crías, el peso de los animales y el avance de la ceba.",
+      },
+      {
+        title: "Cuido y bodega",
+        description:
+          "Lleva el inventario de bultos y su consumo por lote, y avisa cuando la bodega baja.",
+      },
+      {
+        title: "Plan sanitario",
+        description:
+          "Programa vacunas, vermifugaciones e inspecciones, y recuerda cada una el día que corresponde.",
+      },
+      {
+        title: "Cuentas por lote",
+        description:
+          "Reúne ventas, kilos entregados e ingreso para leer qué dejó cada lote.",
+      },
+    ],
+    interface: {
+      theme: "livestock",
+      eyebrow: "FINCA / PORCÍCOLA",
+      // La demostración pública corre sobre datos de ejemplo de una granja
+      // ficticia: sus cifras describen el escenario de la demo, no el producto.
+      // Por eso este bloque usa etiquetas cualitativas, como el de Kelsen.
+      primaryMetric: "LOTE",
+      metricLabel: "seguido desde el parto",
+      items: [
+        { label: "Cuido", value: "Bultos y consumo" },
+        { label: "Sanidad", value: "Plan programado", state: "accent" },
+        { label: "Cuentas", value: "Ingreso por lote" },
+      ],
+    },
+    sources: [
+      {
+        label: "Sitio oficial de Porkia",
+        url: "https://porkia.co/",
+        supports:
+          "Existencia pública del producto, alcance sobre lotes, cuido, sanidad y cuentas, funcionamiento sin conexión y la beta cerrada para porcicultores de Antioquia.",
+        verifiedAt: "2026-08-11",
+      },
+      {
+        label: "Demostración pública de Porkia",
+        url: "https://porkia.co/#demo",
+        supports:
+          "Disponibilidad pública de la demostración navegable con datos de ejemplo; es la vista exacta usada en la captura.",
         verifiedAt: "2026-08-11",
       },
     ],

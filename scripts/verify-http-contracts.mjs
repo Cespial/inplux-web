@@ -15,6 +15,7 @@ const expectedRoutes = [
   ["/trabajo/gobia", 200],
   ["/trabajo/kelsen", 200],
   ["/trabajo/laudos", 200],
+  ["/trabajo/porkia", 200],
   ["/trabajo/slug-inexistente", 404],
   ["/ruta-inexistente", 404],
 ];
@@ -25,6 +26,7 @@ const expectedSocialImages = [
   "/api/og/trabajo/gobia?v=2026-08-11",
   "/api/og/trabajo/kelsen?v=2026-08-11",
   "/api/og/trabajo/laudos?v=2026-08-11",
+  "/api/og/trabajo/porkia?v=2026-08-11",
 ];
 
 function readPngDimensions(buffer) {

@@ -10,10 +10,19 @@ import styles from "./trabajo.module.css";
 
 const workSocialImage = getWorkSocialImageUrl("directorio");
 const workSocialDescription =
-  "Cuatro productos documentados, cada uno con sus fuentes públicas y su fecha de verificación.";
+  "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.";
 const workSocialImageAlt =
   "INPLUX, directorio de trabajo y productos con fuentes verificadas";
-const showcaseOrder = ["gobia", "laudos", "tribai", "kelsen"] as const satisfies readonly WorkSlug[];
+// Porkia cierra la lista: es el perfil más nuevo y su captura es la más
+// reciente. Entra al final para no desplazar a Gobia, que abre la vitrina y es
+// la única imagen con `priority`.
+const showcaseOrder = [
+  "gobia",
+  "laudos",
+  "tribai",
+  "kelsen",
+  "porkia",
+] as const satisfies readonly WorkSlug[];
 const showcaseProfiles = showcaseOrder.flatMap((slug) => {
   const profile = workProfiles.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
@@ -23,7 +32,7 @@ const upcomingWork = workDirectory.find((item) => !item.hasProfile);
 export const metadata: Metadata = {
   title: "Trabajo y productos — evidencia y atribución",
   description:
-    "Los cuatro productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
+    "Los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
   alternates: {
     canonical: "https://inplux.co/trabajo",
   },
@@ -157,7 +166,14 @@ export default function TrabajoPage() {
                 <article className={styles.upcomingCard}>
                   <p>PRÓXIMO / EN DESARROLLO</p>
                   <div>
-                    <span>05</span>
+                    {/*
+                      El número sigue al último perfil publicado en vez de estar
+                      escrito a mano: cuando entra un producto nuevo a
+                      `work.ts`, la ficha de lo que viene se corre sola.
+                    */}
+                    <span>
+                      {String(workProfiles.length + 1).padStart(2, "0")}
+                    </span>
                     <h3>{upcomingWork.name}</h3>
                   </div>
                   <dl>

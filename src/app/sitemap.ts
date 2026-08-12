@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/trabajo/gobia",
     "/trabajo/kelsen",
     "/trabajo/laudos",
+    "/trabajo/porkia",
     "/capacidades",
     "/nosotros",
     ...teamMembers.map((member) => `/equipo/${member.slug}`),

@@ -50,6 +50,15 @@ const workProfiles = [
     attribution: "Desarrollo técnico de INPLUX",
     socialAlt: "Laudos: Beta abierta. Desarrollo técnico de INPLUX.",
   },
+  {
+    slug: "porkia",
+    name: "Porkia",
+    shortDescription:
+      "Lotes, cuido, sanidad y cuentas de una finca porcícola en una sola app.",
+    status: "Beta cerrada",
+    attribution: "Desarrollo de INPLUX",
+    socialAlt: "Porkia: Beta cerrada. Desarrollo de INPLUX.",
+  },
 ];
 
 const pageDefinitions = {
@@ -149,18 +158,18 @@ const pageDefinitions = {
     file: ".next/server/app/trabajo.html",
     title: "Trabajo y productos — evidencia y atribución | INPLUX",
     description:
-      "Los cuatro productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
+      "Los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
     canonical: `${siteUrl}/trabajo`,
     ogTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
     ogDescription:
-      "Cuatro productos documentados, cada uno con sus fuentes públicas y su fecha de verificación.",
+      "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
     ogUrl: `${siteUrl}/trabajo`,
     ogImage: workSocialImage("directorio"),
     ogImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     twitterTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
     twitterDescription:
-      "Cuatro productos documentados, cada uno con sus fuentes públicas y su fecha de verificación.",
+      "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
     twitterImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     jsonLd: {
@@ -568,6 +577,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/gobia`,
     `${siteUrl}/trabajo/kelsen`,
     `${siteUrl}/trabajo/laudos`,
+    `${siteUrl}/trabajo/porkia`,
     `${siteUrl}/capacidades`,
     `${siteUrl}/nosotros`,
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,

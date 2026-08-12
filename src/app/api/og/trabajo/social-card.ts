@@ -67,7 +67,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
       kind: "directory",
       title: "Trabajo y productos",
       description:
-        "Cuatro productos, cada uno con sus fuentes públicas y su fecha de verificación.",
+        "Cada producto, con sus fuentes públicas y su fecha de verificación.",
       eyebrow: "DIRECTORIO / EVIDENCIA",
       status: `${workProfiles.length} PRODUCTOS DOCUMENTADOS`,
       attribution: "CADA DATO CON SU FUENTE",
