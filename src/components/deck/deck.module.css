@@ -752,10 +752,29 @@
 
    El `calc()` compensa la escala: resta un término proporcional al ancho de la
    ventana —que es de lo que depende la escala— y lo congela con `min()` cuando
-   la figura llega a su `max-width` y deja de crecer. Medido después: 11,0 px a
-   390, 14,0 px a 1440 y 15,4 px a 1920. La etiqueta del presupuesto usa la
-   misma banda con su propia escala, para que el mismo registro no tenga dos
-   tamaños en la misma sala.
+   la figura llega a su `max-width` y deja de crecer. La etiqueta del
+   presupuesto hace lo mismo con su propia escala, para que el mismo registro no
+   tenga dos tamaños en la misma sala.
+
+   ⚠️ **La compensación NO es completa, y la razón está escrita unas líneas más
+   arriba, en la nota de `.curvaTrazo`: la escala no es monótona con el ancho de
+   la ventana.** El deck apila por debajo de 62 rem, así que la figura pasa de
+   media columna a la columna entera y la escala salta. Medido en la página, en
+   catorce anchos:
+
+     ancho    360   390   640   700   800   900  1000  1100  1440  1728  1920
+     escala  0,56  0,61  1,03  1,13  1,20  1,20  0,72  0,79  1,04  1,20  1,20
+     antes    8,9   9,8  16,5  18,0  19,2  19,2  11,5  12,7  16,6  19,2  19,2
+     ahora   10,1  11,0  17,4  18,8  19,5  19,0  11,1  11,9  14,0  15,4  15,4
+
+   O sea: sube el suelo del teléfono (8,9 → 10,1) y baja el proyector
+   (19,2 → 15,4), que son los dos extremos que se ven en la sala y en el enlace;
+   en la franja apilada de 640–992 px deja las cosas como estaban (19,2 → 19,5),
+   porque ahí el `vw` crece mientras la escala ya topó. La banda de los tres
+   tamaños del arnés es 11,0 · 14,0 · 15,4.
+
+   Comprobado además que la etiqueta no se recorta en ninguno de los catorce
+   anchos: el `<svg>` tiene `overflow: hidden` y cortaría sin avisar.
 
    ⚠️ **Lo que esto NO arregla, y no se puede arreglar aquí: la etiqueta sigue
    sin obedecer la preferencia de fuente del lector.** Ponerla en `rem` la haría

@@ -70,10 +70,12 @@
    esta figura: en unidades de lienzo el tamaño lo decidía el ancho del SVG, así
    que se veía a 9,3 px a 390 —por debajo del suelo de la escala— y a 16,5 px a
    1440. El `min()` congela el término cuando la figura toca su `max-width`
-   (38 rem), que aquí ocurre ya a 1440. Medido después: 11,0 px a 390 y 14,0 px
-   a 1440 y 1920, la misma banda que la etiqueta de las curvas. La limitación de
-   fondo —que no obedece la preferencia de fuente del lector— está explicada
-   allí y es la misma. */
+   (38 rem), que aquí ocurre ya a 1440. Medido después: 10,1 px a 360, 11,0 px a
+   390, 14,0 px de 1440 en adelante — y 17,9 px en la franja apilada de
+   640–992 px, donde la escala ya topó y el `vw` sigue creciendo. Las dos
+   limitaciones de fondo —la escala no es monótona con el ancho, y la etiqueta no
+   obedece la preferencia de fuente del lector— están explicadas en
+   `.curvaEtiqueta` y son las mismas. */
 .marcaEtiqueta {
   fill: var(--gray-400);
   font-family: var(--font-mono);
