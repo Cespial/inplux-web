@@ -63,14 +63,22 @@ const chapters = [
     period: "HOY",
     code: "TRABAJO VISIBLE",
     kicker: "La tesis se puede recorrer",
-    title: "Productos distintos, el mismo criterio de entrega.",
+    title: "Dominios distintos, el mismo criterio de entrega.",
     copy:
-      "Gobia se presenta públicamente como una solución de INPLUX y permite solicitar una demostración. Laudos atribuye a INPLUX el desarrollo técnico y a REDEK el criterio legal; el producto se presenta en beta abierta.",
-    evidence: "ATRIBUCIÓN PÚBLICA / ESTADO DECLARADO",
+      "Los productos que este sitio documenta son desarrollos propios, en dominios que no se parecen entre sí. INPLUX declara esa autoría; lo que cada perfil publica junto a ella es el estado que el producto sostiene y las fuentes que lo respaldan, con la fecha en que se revisaron.",
+    evidence: "DESARROLLOS PROPIOS / FUENTE Y FECHA",
     visual: "work",
+    // Un enlace por perfil publicado: el capítulo enuncia la idea y deja que
+    // los enlaces hagan de directorio, que es el trabajo de `/trabajo`. La
+    // lista no se deriva de `workProfiles` a propósito: este es un componente
+    // cliente y esa importación arrastraría el arreglo completo de perfiles al
+    // chunk del navegador (la misma razón por la que existe `work-format.ts`).
     links: [
       { href: "/trabajo/gobia", label: "Ver Gobia" },
       { href: "/trabajo/laudos", label: "Ver Laudos" },
+      { href: "/trabajo/tribai", label: "Ver Tribai" },
+      { href: "/trabajo/kelsen", label: "Ver Kelsen" },
+      { href: "/trabajo/porkia", label: "Ver Porkia" },
     ],
   },
   {
