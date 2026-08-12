@@ -1,0 +1,125 @@
+/* ===========================================================================
+   Lámina 6 · El registro de lo que no se puede decir
+
+   ⚠️ La lista que esta hoja maqueta NO puede aparecer escrita en ningún
+   archivo bajo `src/` —ni aquí, ni en un comentario de aquí—: uno de sus
+   motivos coincide con su propio patrón bloqueado y `check:content` escanea
+   también los `.css`. Ver `EvidenciaSlide.tsx` y
+   `scripts/verify-deck-reasons.test.mjs`.
+
+   ⚠️ **El ancho de línea es el límite duro de esta lámina, y está medido.** A
+   390 px la columna útil mide 342 px; el mono a 0,7 rem avanza ~6,7 px por
+   carácter, o sea unos 50 caracteres. El motivo más largo mide 36. El margen
+   es de catorce caracteres, y por eso las líneas van DESNUDAS: una viñeta, un
+   numeral o un par de comillas se comen un tercio de esa holgura, y el primer
+   motivo que envuelva parte la lista en dos ritmos y empuja la lámina contra
+   el riel de progreso. Lo que dice que esto es una lista lo dice la
+   tipografía, no un glifo.
+   =========================================================================== */
+
+.registro {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* El registro corre: cada regla aterriza detrás de la anterior, como la salida
+   de una comprobación que se está ejecutando. Es el argumento de la lámina
+   —«no es una guía de estilo, es una prueba automática»— y sin el escalonado
+   trece líneas grises aparecen de golpe y se leen como una lista de deseos.
+   70 ms entre líneas: lo justo para que se vea correr sin que haya que
+   esperarla. */
+.motivo {
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+  line-height: 1.9;
+  letter-spacing: 0.01em;
+  /* En dos columnas, una regla partida entre el pie de una y la cabeza de la
+     otra es ilegible. */
+  break-inside: avoid;
+  animation: entraLinea 220ms var(--ease-out) calc(0.3s + var(--i) * 0.07s) both;
+}
+
+/* Dos columnas a partir de 40 rem, y ninguna de las dos baja de los ~58
+   caracteres de línea que el motivo más largo necesita. Es `columns` y no una
+   rejilla a propósito: reparte las reglas que haya, sin que ningún número esté
+   escrito, y el orden de lectura sigue siendo de arriba abajo y luego a la
+   derecha. Bajo 40 rem, una sola columna: trece líneas de mono repartidas en
+   dos pistas de 165 px no las lee nadie. */
+@media (min-width: 40rem) {
+  .registro {
+    /* Visto en la captura: a ancho completo de lámina las dos pistas miden
+       619 px para un texto de 400, y la segunda columna aterrizaba tan lejos
+       de la primera que las dos dejaban de leerse como una sola lista. El tope
+       las junta y deja el registro como un bloque, que es lo que es. */
+    max-width: 60rem;
+    columns: 2;
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+  }
+}
+
+.cierre {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+/* El pie del registro: el mismo recuento que se acaba de recorrer, con el
+   nombre real del comando que lo aplica. En mono y en gris, un escalón por
+   debajo de las reglas: es el pie de la lista, no una regla más. */
+.salida {
+  margin: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+/* El remate es la frase que cierra el argumento, así que va en tinta y en
+   cuerpo, no en el gris del registro. Sin cursiva ni comillas: la jerarquía de
+   este deck es por peso y tamaño. */
+.remate {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* El pie y el remate entran cuando ya ha aterrizado la última regla, y ese
+   instante se calcula con `--n` —el largo real de la lista— y no con un número
+   escrito: el día que el verificador gane una regla, el remate sigue llegando
+   después de ella. */
+.salida,
+.remate {
+  animation: entraLinea 260ms var(--ease-out) calc(0.3s + var(--n) * 0.07s + 0.15s) both;
+}
+
+@keyframes entraLinea {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.35rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motivo,
+  .salida,
+  .remate {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

@@ -1,0 +1,456 @@
+/* ===========================================================================
+   Deck · el chrome
+   Barra superior y riel de progreso, los dos fijos, más el índice y la ayuda
+   en <dialog> nativo.
+
+   ⚠️ Los dos altos NO se escriben aquí. Los inyecta PresentationDeck como
+   `--deck-barra-superior` y `--deck-barra-inferior` desde las constantes
+   ALTO_BARRA_SUPERIOR (TopBar.tsx) y ALTO_BARRA_INFERIOR (ProgressRail.tsx),
+   que son la única fuente: el mismo número reserva el espacio de la lámina en
+   deck.module.css y lo importa el arnés de QA. Poner aquí un `70px` literal
+   crearía la segunda copia que puede divergir.
+   =========================================================================== */
+
+/* ── Barra superior ──────────────────────────────────────────────────────── */
+
+.barraSuperior {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 3;
+  height: var(--deck-barra-superior);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 2rem);
+  padding-inline: var(--deck-gutter);
+  border-bottom: 1px solid var(--border);
+  background: var(--off-white);
+}
+
+.marca {
+  margin: 0;
+  color: var(--text-strong);
+  font: 600 0.78rem/1 var(--font-body);
+  letter-spacing: var(--tracking-wordmark);
+}
+
+/* El título de la lámina, al centro. Se recorta antes de empujar al contador:
+   el texto completo ya está en la lámina, debajo. */
+.tituloLamina {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font: 400 0.85rem/1.2 var(--font-body);
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* `justify-self: end` porque en pantallas estrechas el título del centro se
+   retira y este bloque cae en la columna elástica: sin esto, contador y
+   botones se quedaban pegados a la marca con el borde derecho vacío. */
+.acciones {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 0.5rem;
+}
+
+.contador {
+  margin: 0 0.25rem 0 0;
+  color: var(--text-muted);
+  font: 500 0.7rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.contadorNumero {
+  color: var(--text-strong);
+}
+
+.accion {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font: 500 0.75rem/1 var(--font-body);
+  cursor: pointer;
+  transition:
+    border-color var(--motion-base) var(--ease-out),
+    background-color var(--motion-base) var(--ease-out),
+    color var(--motion-base) var(--ease-out);
+}
+
+.accion:hover {
+  border-color: var(--teal-on-soft);
+  background: var(--surface-teal-soft);
+  color: var(--text-accent-on-soft);
+}
+
+.tecla {
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--warm-50);
+  color: var(--text-muted);
+  font: 500 0.68rem/1.3 var(--font-mono);
+}
+
+/* ── Riel de progreso ────────────────────────────────────────────────────── */
+
+.barraInferior {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 3;
+  height: var(--deck-barra-inferior);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1.25rem);
+  /* La banda mide exactamente --deck-barra-inferior; el margen del iPhone se
+     descuenta por dentro para que los controles no queden bajo el indicador
+     de inicio sin que la banda crezca y desmienta la constante. */
+  padding: 0 var(--deck-gutter) min(env(safe-area-inset-bottom, 0px), 14px);
+  border-top: 1px solid var(--border);
+  background: var(--off-white);
+}
+
+.paso {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font: 400 1rem/1 var(--font-body);
+  cursor: pointer;
+  transition:
+    border-color var(--motion-base) var(--ease-out),
+    background-color var(--motion-base) var(--ease-out),
+    color var(--motion-base) var(--ease-out);
+}
+
+.paso:hover:not(:disabled) {
+  border-color: var(--teal-on-soft);
+  background: var(--surface-teal-soft);
+  color: var(--text-accent-on-soft);
+}
+
+.paso:disabled {
+  border-color: var(--border-subtle);
+  color: var(--text-faint);
+  cursor: default;
+}
+
+.hilo {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tramo {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+
+/* El botón ocupa toda la banda para que se pueda pulsar; lo que se ve es el
+   hilo que dibuja su ::after. Un blanco de 3 px de alto no se acierta. */
+.segmento {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.segmento::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border);
+  transform: translateY(-50%);
+  transition:
+    background-color var(--motion-base) var(--ease-out),
+    height var(--motion-base) var(--ease-out);
+}
+
+.segmento[data-estado="visto"]::after {
+  background: var(--gray-400);
+}
+
+.segmento[data-estado="actual"]::after {
+  height: 6px;
+  background: var(--teal);
+}
+
+.segmento:hover::after {
+  background: var(--teal-on-soft);
+}
+
+/* Anillo fino y nítido ceñido al hilo: es el glifo de «ESTE BOTÓN tiene el
+   foco», y no lo comparte con nada. (Sobre el propio botón no, que mide 60 px
+   de alto y marcado de borde a borde volvería a ser un marco.) */
+.segmento:focus-visible {
+  outline: none;
+}
+
+.segmento:focus-visible::after {
+  outline: 2px solid var(--teal);
+  outline-offset: 4px;
+}
+
+/* ── El foco de la lámina, trasladado al chrome ──────────────────────────────
+   El slot activo recibe el foco en cada cambio de lámina (es lo que la
+   anuncia) y ocupa la pantalla entera: un `outline` sobre él dibuja un marco
+   de borde a borde que, proyectado, la sala lee como «algo falla» antes que
+   como indicador. El indicador se muda aquí: el filete que separa la barra
+   superior de la lámina se vuelve teal, y el segmento actual del riel gana su
+   anillo. Dos acentos finos que enmarcan el área de la lámina por arriba y por
+   abajo, sin dibujarle un marco.
+   La red de seguridad para navegadores sin `:has()` vive en deck.module.css. */
+.conChrome:has([data-estado="activa"]:focus-visible) .barraSuperior {
+  border-bottom-color: var(--teal);
+  box-shadow: inset 0 -1px 0 var(--teal);
+}
+
+/* Halo blando y ancho, NO el anillo fino de arriba: ese ya significa «este
+   botón del riel tiene el foco», y dibujar los dos estados con el mismo glifo
+   los dejaba indistinguibles salvo por el filete de la barra. Aquí el hilo
+   engorda y se envuelve en teal traslúcido; allí hay una línea nítida con su
+   holgura. Nunca coinciden —el foco está en el slot o está en el botón, no en
+   los dos— así que no se pisan. */
+.conChrome:has([data-estado="activa"]:focus-visible) .segmento[data-estado="actual"]::after {
+  height: 10px;
+  box-shadow: 0 0 0 5px var(--accent-ring);
+}
+
+/* ── Índice y ayuda ──────────────────────────────────────────────────────── */
+
+/* `position/inset/margin` explícitos, igual que `.site-contact-dialog`: el
+   preflight de Tailwind pone `margin: 0` en todo y con eso se pierde el
+   `margin: auto` con el que el navegador centra un diálogo modal. Sin esto el
+   panel se pega a la esquina superior izquierda —comprobado—. */
+.dialogo {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(38rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: min(80vh, 42rem);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-page);
+  color: var(--text-body);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.dialogo::backdrop {
+  background: rgba(26, 25, 24, 0.38);
+}
+
+.dialogo[open] {
+  animation: entraPanel var(--motion-moderate) var(--ease-out) both;
+}
+
+.dialogo[open]::backdrop {
+  animation: entraFondo var(--motion-moderate) var(--ease-out) both;
+}
+
+@keyframes entraPanel {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entraFondo {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  max-height: inherit;
+}
+
+.cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem 0.9rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panelTitulo {
+  margin: 0;
+  color: var(--text-strong);
+  font: 500 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.panelTitulo:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 4px;
+}
+
+.cerrar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-muted);
+  font: 500 0.75rem/1 var(--font-body);
+  cursor: pointer;
+  transition:
+    border-color var(--motion-base) var(--ease-out),
+    color var(--motion-base) var(--ease-out);
+}
+
+.cerrar:hover {
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
+
+.cuerpo {
+  overflow-y: auto;
+  padding: 0.6rem;
+}
+
+.listaIndice {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemIndice {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-body);
+  font: 400 0.95rem/1.35 var(--font-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) var(--ease-out);
+}
+
+.itemIndice:hover {
+  background: var(--surface-teal-soft);
+  color: var(--text-accent-on-soft);
+}
+
+.itemIndice[data-actual="si"] {
+  background: var(--warm-50);
+  color: var(--text-strong);
+  font-weight: 500;
+}
+
+.itemNumero {
+  color: var(--text-faint);
+  font: 500 0.7rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.itemIndice[data-actual="si"] .itemNumero {
+  color: var(--text-accent-on-soft);
+}
+
+.listaAtajos {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0.35rem 0.75rem 0.75rem;
+}
+
+.atajoTeclas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.atajoQue {
+  margin: 0;
+  color: var(--text-body);
+  font: 400 0.9rem/1.4 var(--font-body);
+}
+
+/* ── Pantallas estrechas ─────────────────────────────────────────────────── */
+/* El título del centro y las pistas de tecla son lo primero que sobra: en
+   390 px compiten con el contador, que sí hace falta. */
+@media (max-width: 52rem) {
+  .tituloLamina,
+  .accion .tecla {
+    display: none;
+  }
+
+  .barraSuperior {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
+/* ── Sin JavaScript ──────────────────────────────────────────────────────── */
+/* El retiro de las barras y la vuelta de la lámina a su sitio viven en
+   deck.module.css, que es quien reserva el espacio: aquí no hay nada que
+   apagar que no se apague allí. */
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogo[open],
+  .dialogo[open]::backdrop,
+  .accion,
+  .paso,
+  .segmento::after,
+  .itemIndice,
+  .cerrar {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

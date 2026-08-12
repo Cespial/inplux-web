@@ -93,6 +93,7 @@ Aplican a **todas** las tareas. No se repiten en cada una.
   }
   ```
 - **Cada `<section>` de lámina lleva `data-slide="<id>"`.** Sin eso el arnés no sabe cuál es la lámina visible.
+- ⚠️ **Durante toda la transición hay DOS `[data-slide]` montados** — la entrante y la saliente. El riel marca el slot visible con `data-estado="activa"`, y ese atributo vive en el **slot**, no en la `<section>`. Todo lo que mida una lámina filtra por `[data-estado="activa"] section[data-slide="…"]`; sin ese filtro se mide la caja de la saliente la mitad de las veces, y el fallo se ve como ruido aleatorio, no como error. Contrato establecido y verificado en navegador por la Tarea 5.
 - **Commits sin trailer de atribución a Claude.** Mensaje en español, imperativo, explicando el porqué.
 - **Rama de trabajo.** F0.5 va en `fix/atribucion-tribai-kelsen`; el deck en `feat/deck`. `main` auto-despliega: no se mergea nada que no haya pasado `npm run check`.
 
@@ -1348,9 +1349,11 @@ const VPS = [
   { n: "movil", width: 390, height: 844 },
 ];
 
-// Tienen que coincidir con chrome/TopBar.tsx y chrome/ProgressRail.tsx.
-const BARRA_SUP = 70;
-const BARRA_INF = 60;
+// Se importan de `src/components/deck/chrome/altos.ts`, que no importa CSS
+// justamente para que este arnés pueda leerlas. Copiarlas aquí a mano las
+// deja divergir en silencio el día que el chrome cambie de alto.
+import { ALTO_BARRA_SUPERIOR as BARRA_SUP, ALTO_BARRA_INFERIOR as BARRA_INF }
+  from "../src/components/deck/chrome/altos.ts";
 
 let fallos = 0;
 const nav = await chromium.launch();
@@ -1369,11 +1372,25 @@ for (const vp of VPS) {
 
   for (const id of IDS) {
     await p.goto(`${BASE}/deck/presentacion#${id}`, { waitUntil: "networkidle" });
-    await p.waitForSelector(`section[data-slide="${id}"]`, { timeout: 15000 });
-    await p.waitForTimeout(2800);
+    // ⚠️ Durante la transición hay DOS [data-slide] montados: la entrante y
+    // la saliente. `data-estado="activa"` vive en el SLOT, no en la section,
+    // y es lo único que distingue cuál se está viendo. Medir sin ese filtro
+    // devuelve la caja de la lámina equivocada la mitad de las veces —
+    // contrato establecido por la Tarea 5, verificado en navegador.
+    await p.waitForSelector(`[data-estado="activa"] section[data-slide="${id}"]`, { timeout: 15000 });
+
+    // ⚠️ `waitForSelector` NO es condición de reposo. La lámina activa entra
+    // con `animation-delay: 150ms` y `fill: both`: durante esos 150 ms está a
+    // `opacity: 0` y lo que se ve es la SALIENTE. Medir ahí devuelve una caja
+    // desplazada hasta ~3 rem. Esperar por reloj lo tapa a veces; esto no.
+    await p.waitForFunction(
+      () => document.getAnimations().every((a) => a.playState !== "running"),
+      null,
+      { timeout: 15000 },
+    );
 
     const m = await p.evaluate(({ id, sup, inf }) => {
-      const s = document.querySelector(`section[data-slide="${id}"]`);
+      const s = document.querySelector(`[data-estado="activa"] section[data-slide="${id}"]`);
       // Los hijos ocultos por breakpoint devuelven un rect en ceros y
       // contaminan el Math.min: hay que filtrarlos.
       const hijos = [...s.children].filter((c) => c.getBoundingClientRect().height > 0);
@@ -1416,6 +1433,12 @@ await nav.close();
 console.log(fallos ? `\n${fallos} problema(s)` : "\nsin choques ni errores");
 process.exitCode = fallos ? 1 : 0;
 ```
+
+⚠️ **Tres trampas de medición, las tres descubiertas ejecutando durante F1:**
+
+1. **Con `document.visibilityState === "hidden"` nada se asienta.** La animación de la saliente queda congelada, `animationend` no dispara, la saliente sigue a `opacity: 1` ocupando el viewport y la activa a `opacity: 0`. Quedan **dos** `[data-slide]` en reposo y los píxeles visibles son los de la lámina equivocada. Playwright headless reporta `visible` y va bien; una corrida headful con la ventana en segundo plano produce exactamente el «ruido aleatorio» que este arnés existe para no generar.
+2. **Un `tabId` apuntando a una pestaña no es una ventana enfocada.** En F1, una medición con la pestaña en background silenciaba las teclas **sin dar error**. Si automatizas con navegador real, activa la ventana antes de medir.
+3. **`element.click()` no cambia la modalidad de entrada**, así que `:focus-visible` sigue activo y cualquier comprobación de indicador de foco da un falso positivo. Para eso hace falta un clic real (`Input.dispatchMouseEvent` por CDP).
 
 - [ ] **Step 3: La barrera de movimiento reducido**
 
@@ -1645,8 +1668,14 @@ export const T_CIFRA = {
 
 Seis `<rect>` en un SVG con `viewBox` fijo. Las seis entran con el **mismo** `animation-duration` y el **mismo** `animation-delay` base; lo que las separa es un `--i` por barra que escala el retraso:
 
+⚠️ **Dos correcciones a este CSS, las dos medidas durante la Tarea 9:**
+
+1. **La segunda animación va `forwards`, no `both`.** Con `both`, su relleno **hacia atrás** aplica `from { scaleX(1) }` durante todo el retraso — y como `desbordar` va la última de la lista y las dos escriben `transform`, gana. Resultado: la sexta barra aparece **entera desde el fotograma 0** y nunca se la ve entrar. Medido: 177,3 px a t=0,05 s con `both`; 0 px con `forwards`.
+2. **Hace falta `transform-box: fill-box`.** Sin él, `transform-origin: left center` se resuelve contra el `viewBox` y no contra la caja de la barra: la única que escala se desvía **60,8 px** (48 unidades de lienzo × 1,2664 px). Las cinco que terminan en `scaleX(1)` no se enteran, así que el defecto golpea exactamente a la barra de la que trata la lámina.
+
 ```css
 .barra {
+  transform-box: fill-box;
   transform-origin: left center;
   animation: entrar var(--dur) var(--ease-out) both;
   animation-delay: calc(var(--inicio) + var(--i) * 0.06s);
@@ -1658,7 +1687,7 @@ Seis `<rect>` en un SVG con `viewBox` fijo. Las seis entran con el **mismo** `an
 .barraDesbordada {
   animation:
     entrar var(--dur) var(--ease-out) both,
-    desbordar var(--durCrecida) linear both;
+    desbordar var(--durCrecida) linear forwards;
   animation-delay: calc(var(--inicio) + 5 * 0.06s), var(--retrasoCrecida);
 }
 
@@ -1808,12 +1837,17 @@ Cuatro nodos en línea, gramática de fondo claro:
 
 - [ ] **Step 2: El pulso**
 
-Un `<circle>` pequeño en `--teal-bright` que recorre el conector de extremo a extremo, con `offset-path` sobre la misma trayectoria:
+Un `<circle>` pequeño en `--teal-bright` que recorre el conector de extremo a extremo, con `offset-path` sobre la misma trayectoria.
+
+⚠️ **Dos correcciones a este CSS, las dos medidas durante la ejecución:**
+
+1. **Nada de `infinite` en una lámina medida.** El arnés espera a que **ninguna animación siga corriendo**, con 15 s de tope: una animación perpetua no le hace fallar, le hace **dejar de medir esa lámina en silencio**. Va `forwards`.
+2. **El pulso va `linear`, no `--ease-out`.** Si los encendidos de los nodos son lineales —que lo son por construcción— y el pulso lleva una curva, dejan de coincidir: medido, el pulso llegaba al último nodo **casi un segundo antes** que su encendido. La lámina se habría presentado con un acoplamiento inventado.
 
 ```css
 .pulso {
   offset-path: path("M 40 60 L 560 60");
-  animation: recorrer 3.2s var(--ease-out) infinite;
+  animation: recorrer 3.2s linear forwards;
 }
 @keyframes recorrer { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 @media (prefers-reduced-motion: reduce) { .pulso { display: none; } }

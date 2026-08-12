@@ -1,0 +1,812 @@
+/* ===========================================================================
+   Deck · el riel
+   Dos slots apilados en la misma celda de la retícula: la lámina activa y la
+   que sale mientras dura su animación. El movimiento vive aquí, en CSS, y la
+   dirección la fija el atributo `data-direccion` del riel.
+   =========================================================================== */
+
+.riel {
+  --deck-gutter: clamp(1.5rem, 5vw, 5.5rem);
+  /* La lámina que sale se va antes de que entre la siguiente: con dos títulos
+     de este tamaño superpuestos, un fundido cruzado simétrico deja un
+     fotograma ilegible. Salida corta, entrada retrasada lo que dura la
+     salida. */
+  --deck-entra: 380ms;
+  --deck-sale: 190ms;
+  --deck-espera: 150ms;
+  --deck-shift: clamp(1.25rem, 3.5vw, 3rem);
+
+  position: relative;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--surface-page);
+  color: var(--text-strong);
+  overflow-x: hidden;
+  /* El gesto horizontal es del riel; el vertical y el pellizco siguen siendo
+     del navegador. `pan-y` a secas NO incluye `pinch-zoom`: dejaba sin ampliar
+     todo el deck, que es de lo primero que necesita quien no ve bien de
+     lejos. */
+  touch-action: pan-y pinch-zoom;
+}
+
+.riel *,
+.riel *::before,
+.riel *::after {
+  box-sizing: border-box;
+}
+
+/* ── Los dos slots ───────────────────────────────────────────────────────── */
+
+.slot {
+  grid-area: 1 / 1;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.slot[data-estado="activa"] {
+  z-index: 1;
+  animation: entraAdelante var(--deck-entra) var(--ease-out) var(--deck-espera) both;
+}
+
+/* El slot recibe el foco al cambiar de lámina, y ocupa la pantalla entera: un
+   `outline` aquí dibuja un marco de borde a borde que, proyectado, es lo
+   primero que ve la sala cuando el presentador toca una flecha, y se lee como
+   «algo falla». El indicador se mudó al chrome —el filete de la barra superior
+   y el segmento actual del riel— en `chrome/chrome.module.css`.
+   Con ratón no llega a marcarse: `:focus-visible` no casa con un foco puesto
+   por código tras un clic. */
+.slot:focus-visible {
+  outline: none;
+}
+
+/* Red de seguridad: sin `:has()` no hay quien dibuje el indicador en el
+   chrome, y un marco feo es infinitamente mejor que ningún indicador. */
+@supports not selector(:has(*)) {
+  .slot:focus-visible {
+    outline: 2px solid var(--teal-on-soft);
+    outline-offset: -4px;
+  }
+}
+
+.slot[data-estado="saliente"] {
+  pointer-events: none;
+  animation: saleAdelante var(--deck-sale) var(--ease-in) both;
+}
+
+.riel[data-direccion="atras"] .slot[data-estado="activa"] {
+  animation-name: entraAtras;
+}
+
+.riel[data-direccion="atras"] .slot[data-estado="saliente"] {
+  animation-name: saleAtras;
+}
+
+@keyframes entraAdelante {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--deck-shift), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entraAtras {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--deck-shift) * -1), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes saleAdelante {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(calc(var(--deck-shift) * -1), 0, 0);
+  }
+}
+
+@keyframes saleAtras {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--deck-shift), 0, 0);
+  }
+}
+
+/* ── La lámina ───────────────────────────────────────────────────────────── */
+
+/* La lámina vive ENTRE las barras, y el hueco lo reserva su propio margen de
+   bloque, no un padding del contenedor: así la caja de la lámina empieza donde
+   acaba la barra superior y acaba donde empieza el riel, y el arnés puede
+   medirla contra las dos.
+   Los dos altos salen de `--deck-barra-superior` / `--deck-barra-inferior`,
+   que PresentationDeck inyecta desde ALTO_BARRA_SUPERIOR y ALTO_BARRA_INFERIOR.
+   Aquí no hay ningún `70px` escrito: una lámina puede caber en el viewport y
+   quedar igual debajo de las barras si los dos números se separan. */
+.lamina {
+  /* La figura de fondo de una lámina se ancla a ESTA caja, no al riel: así no
+     puede meterse debajo de las barras del chrome, que es justo lo que el
+     margen de bloque de aquí arriba está reservando. */
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  min-width: 0;
+  min-height: calc(100vh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  min-height: calc(100dvh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  margin-block: var(--deck-barra-superior) var(--deck-barra-inferior);
+  padding-block: clamp(1.5rem, 5vh, 3.5rem);
+  padding-inline: var(--deck-gutter);
+}
+
+.titulo {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+/* ===========================================================================
+   La escala tipográfica de las quince láminas
+   ===========================================================================
+
+   La jerarquía va al revés de lo obvio. En un deck normal la pregunta es el
+   titular y la respuesta va debajo en cuerpo pequeño; aquí no. La pregunta es
+   el MONTAJE —un rótulo de mono, en versalita, del tamaño de un pie— y la
+   respuesta es el TITULAR, en serif, a 4,3 rem. La consecuencia práctica está
+   medida: al bajar la pregunta de 4,1 rem a 1,6 rem y subir la respuesta de
+   2,1 rem a 4,3 rem cabe el doble de texto pesando menos, y no hay que cortar
+   una sola palabra. La regla que se sigue de eso: cuando una lámina se vea
+   cargada, se mueven tamaños antes que borrar copy.
+
+   Y el fondo es claro, lo que cambia el motor visual entero. Sobre negro el
+   efecto lo da la luz —halos, trazos encendidos—; sobre claro el efecto es la
+   PRECISIÓN: aire, retículas de un solo hilo, trazos hairline. De ahí que la
+   única decoración de esta escala sea el filete de 1 px sobre la pregunta.
+   Nada de sombras, degradados de fondo ni rellenos sólidos.
+
+   Contraste, medido sobre --off-white (#f8f8f7) y no sobre blanco puro, que
+   es el caso peor de las dos superficies del deck:
+     --gray-400 #76716a → 4,59:1   (pregunta y pie)
+     --text-muted #6e6b68 → 4,98:1 (cuerpo)
+     --ink #1a1918 → 16,4:1        (respuesta)
+     --teal-on-soft #0b746c → 5,30:1 — el teal que alcanza AA como TEXTO.
+   El teal de marca (--teal #0d7d74) se queda para trazos y filetes, nunca
+   para texto: es la razón de que verifyBrandSystem() exija conservar el otro.
+   =========================================================================== */
+
+.pregunta {
+  margin: 0 0 clamp(1rem, 2vh, 2rem);
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* El filete: un hilo de 1 px, no un fondo ni una pastilla. Es el único acento
+   de color de la escala y ancla la mirada donde empieza la lámina. Va en un
+   pseudo-elemento a propósito: no es contenido, no entra en el DOM y ningún
+   lector de pantalla lo anuncia. */
+.pregunta::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  margin-bottom: 0.85rem;
+  background: var(--teal);
+}
+
+.respuesta {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5.2vw, 4.3rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* ── El modificador de densidad ──────────────────────────────────────────────
+   Se pone JUNTO a `.respuesta`, nunca en su lugar: la respuesta sigue siendo
+   el titular, solo que un paso más abajo. Existe porque la escala de arriba
+   está dimensionada para una lámina de texto —portada, tesis— y trece de las
+   quince traen debajo una rejilla, una tabla o una lista.
+
+   ⚠️ **No es un rescate: la lámina densa entra igual sin esto.** Medido sobre
+   la lámina 6 simulada —trece motivos de su longitud real en una sola columna
+   a ancho completo, con pregunta, respuesta, cuerpo y remate— contra el hueco
+   real entre barras:
+
+                encabezado   caja               holgura
+     1440×900   199 px 26 %  121→789 de 70→840   51 px
+       2,8 rem  149 px 19 %  146→764             76 px
+     1920×1080  203 px 21 %  191→899 de 70→1020 121 px
+       2,8 rem  153 px 16 %  216→874            146 px
+     390×844    134 px 19 %  148→706 de 70→784   78 px
+       2,8 rem  124 px 17 %  153→701             83 px
+
+   Lo que compra el modificador, dicho sin adornos: **unos 50 px de presupuesto
+   vertical a 1440 y a 1920, y 10 px a 390** —donde el `clamp` ya está tocando
+   su suelo—. En filas de motivo, a 1440 son 1,8 filas más de margen (cada una
+   cuesta 27,7 px). Útil, y no imprescindible.
+
+   La razón de peso es tipográfica y se ve en el ancho, no en el alto: a
+   4,3 rem la respuesta ocupa **875 px** —`22ch`, que por fin gobierna en una
+   lámina de una columna— sobre una caja de 1.296 px, o sea dos tercios del
+   ancho, y pesa 4,6 veces el cuerpo de mono que introduce. A 2,8 rem son
+   570 px y 3 veces. Un titular no debería medir cuatro veces y media la lista
+   que resume.
+
+   2,8 rem y no 3,0 ni 2,6: deja la respuesta un escalón entero por debajo del
+   título de portada (4,7 rem) y del genérico (5,5 rem), así que una lámina
+   cargada nunca compite con las dos cuya única materia es un título; y sigue
+   siendo 2,2× el cuerpo y 2,8× la pregunta, con lo que la inversión de la
+   jerarquía —la tesis de toda la escala— se conserva entera.
+
+   ⚠️ La Tarea 12 tiene que VOLVER A MEDIR con su maquetación real. Estos
+   números son de una simulación con una lista de un ritmo elegido por mí; si
+   esa lámina llega con dos columnas, tarjetas o viñetas, no valen. */
+.respuestaCompacta {
+  font-size: clamp(1.7rem, 3.4vw, 2.8rem);
+}
+
+.cuerpo {
+  max-width: 58ch;
+  margin: clamp(1rem, 2.5vh, 2rem) 0 0;
+  color: var(--text-muted, var(--gray-400));
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* ⚠️ Aquí NO va `margin-top: auto`, aunque «pie» invite a pensar en pegarlo
+   abajo. `auto` solo reparte espacio LIBRE, y aquí no hay ninguno: `.bloque`
+   se ciñe a su contenido porque `.lamina` es `align-content: center` y
+   `.tesisRejilla` es `align-items: center`. Con cero espacio libre, `auto`
+   resuelve a cero y la declaración no hacía nada — el aire lo daba el
+   `padding-top`, que es lo único que estaba trabajando. Y si el bloque se
+   estirara, un pie clavado al borde inferior pelearía con el centrado
+   vertical de la lámina, que es la composición que manda. Un margen normal,
+   del mismo tipo que los de la escala de arriba, y ya. */
+.pie {
+  margin: clamp(1rem, 3vh, 2.5rem) 0 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* La columna de texto de una lámina. Flex y no grid con `gap`: los márgenes de
+   la escala de arriba son los que mandan en el ritmo vertical, y un `gap`
+   encima los duplicaría. Flex además no colapsa márgenes, así que lo que se
+   lee en cada clase es lo que se mide en pantalla. */
+.bloque {
+  position: relative;
+  /* Por encima de la figura de fondo — declarado, no heredado de un efecto.
+     ⚠️ Medido, y NO es lo que uno diría: quitar este par no sube la malla.
+     Sonda sobre la portada con la malla pintada de rojo opaco, preguntando
+     con elementFromPoint qué hay encima del título, a 1440 y a 390:
+       tal cual                               → TÍTULO
+       sin el par de z-index                  → TÍTULO
+       sin z-index + .bloque en static        → TÍTULO
+       sin z-index + sin .escalonado          → TÍTULO
+       sin z-index + static + sin .escalonado → MALLA
+     O sea que hay TRES cosas manteniendo la malla detrás, y basta una: este
+     par; el `position: relative` de aquí abajo (un posicionado con z-index
+     automático se pinta en el mismo grupo que el absoluto y gana por orden de
+     DOM, porque va después); y el contexto de apilamiento que la animación de
+     `.escalonado` crea en cada hijo, que hace exactamente lo mismo. Las dos
+     últimas son efectos colaterales de decisiones tomadas para otra cosa y
+     una edición posterior puede llevárselas sin enterarse. Este par es el
+     único de los tres declarado PARA esto, y por eso se queda.
+     ⚠️ Y es una barrera contra la OCLUSIÓN, solo contra eso. El defecto que
+     de verdad apareció en la portada —un nodo teal asomando por los huecos de
+     una «ó»— ocurrió con este par ya puesto, es decir con la malla DEBAJO del
+     texto: una figura decorativa compite con los glifos desde detrás, y de
+     ahí no la saca ningún z-index. Ver la nota de MallaPortada.tsx. */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* ── Entradas escalonadas ────────────────────────────────────────────────────
+   El escalonado no es adorno: es el orden de lectura. La pregunta aterriza
+   primero y la respuesta después, que es exactamente el montaje que sostiene
+   la jerarquía de arriba —si las dos aparecieran a la vez, el titular ganaría
+   la mirada y la pregunta dejaría de ser el planteamiento—. 90 ms entre
+   hermanos. Nada más se anima: si la lámina no se entendiera peor sin una
+   animación, esa animación no entra. */
+
+.escalonado > * {
+  animation: laminaEntra 460ms var(--ease-out) both;
+}
+
+.escalonado > *:nth-child(1) {
+  animation-delay: 140ms;
+}
+
+.escalonado > *:nth-child(2) {
+  animation-delay: 230ms;
+}
+
+.escalonado > *:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+.escalonado > *:nth-child(n + 4) {
+  animation-delay: 410ms;
+}
+
+@keyframes laminaEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes apareceSuave {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================================================================
+   Lámina 1 · Portada
+   =========================================================================== */
+
+/* El título del deck es la única respuesta que llega en dos líneas escritas,
+   no envueltas por el navegador: las trae `DECK_COPY.portada.titulo` partidas
+   así. Cada una es un bloque para que el corte lo decida el copy y no el
+   ancho; dentro, si no cabe, el navegador envuelve como siempre. */
+.tituloPortada {
+  max-width: 24ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5.6vw, 4.7rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.tituloPortadaLinea {
+  display: block;
+}
+
+/* La cursiva es una FAMILIA aparte —Newsreader Display 300 Italic, dibujada—,
+   no una inclinación sintética de la romana. `font-style: italic` se declara
+   igualmente para que un navegador sin la cara cargada no pinte la segunda
+   línea idéntica a la primera. */
+.tituloPortadaCursiva {
+  display: block;
+  font-family: var(--font-serif-italic), var(--font-serif);
+  font-style: italic;
+}
+
+/* La malla vive pegada a la caja de la lámina, entre las dos barras. Sorda al
+   puntero para que no robe ni un clic, y fuera del árbol de accesibilidad. */
+.malla {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ⚠️ La opacidad vive AQUÍ, en el SVG hijo, y no en `.malla`. Si mañana
+   alguien anima el contenedor —un fundido, un desplazamiento—, la animación
+   escribiría `opacity` sobre él y la atenuación desaparecería de golpe: la
+   retícula saltaría a plena intensidad por encima del título. En el hijo, la
+   atenuación es suya y nadie la pisa. */
+.mallaTrazo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.mallaHilos {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+/* Los cuatro tiempos, sin nombrarlos. Van sobre la diagonal y en
+   intersecciones de la retícula: el orden se lee sin una sola palabra. */
+.mallaNodo {
+  fill: var(--teal);
+  animation: apareceSuave 520ms var(--ease-out) both;
+}
+
+.mallaNodo:nth-of-type(1) {
+  animation-delay: 320ms;
+}
+
+.mallaNodo:nth-of-type(2) {
+  animation-delay: 410ms;
+}
+
+.mallaNodo:nth-of-type(3) {
+  animation-delay: 500ms;
+}
+
+.mallaNodo:nth-of-type(4) {
+  animation-delay: 590ms;
+}
+
+/* ===========================================================================
+   Lámina 2 · El problema
+   ===========================================================================
+
+   La lámina que más trabaja del deck: es la única con un dato duro dentro, y
+   la cifra no sube sola —sube contra una figura que explica por qué el
+   promedio engaña—. De ahí la maquetación: el argumento a la izquierda, el
+   mecanismo a la derecha, y dentro de la derecha el numeral ARRIBA y las
+   barras DEBAJO.
+
+   ⚠️ Ese orden vertical no es estético. Las barras crecen hacia la derecha, y
+   la sexta triplica su largo: puestas al lado del numeral, la que se desborda
+   iría derecha a él. Ninguna medida del arnés caza una barra que roza un
+   glifo —es el mismo hueco que dejó pasar el nodo de la portada asomando por
+   el ojo de una «ó»—, así que la única defensa es una maquetación donde la
+   colisión no pueda ocurrir. Encima y debajo no se tocan.
+
+   El compás no vive aquí: llega en variables desde `figures/SeisBarras.tsx`
+   (ver `.cifraBloque`).
+   =========================================================================== */
+
+/* El tope del `gap` es más bajo que el de la tesis y se nota solo en vertical:
+   apilada, esta lámina es la más alta del deck —texto, fuente, dos líneas de
+   rótulo, un numeral de 4 rem y seis barras— y a 390 px llegaba a dejar 9 px
+   entre el pie de la figura y el riel de progreso. */
+.problemaRejilla {
+  display: grid;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  min-width: 0;
+}
+
+/* El mismo corte que la tesis, y por la misma razón: en apaisado el ancho
+   sobra y la altura no. Apilados, el numeral y las seis barras empujaban la
+   lámina contra el riel de progreso. Mitades iguales, no 1,05/0,95: aquí la
+   columna derecha lleva un numeral de 8,5 rem y una figura de 38 rem, y pide
+   tanto sitio como el texto. */
+@media (min-width: 62rem) {
+  .problemaRejilla {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+  }
+}
+
+/* `--inicio` llega desde `COMPAS`, que sale de `RITMO`. El bloque aparece con
+   el mismo segundo con que entra la primera barra, así que el numeral ya está
+   puesto —en 0— cuando la cascada arranca.
+   Y de paso tapa el único fotograma incómodo del contador: se renderiza a su
+   valor FINAL para que no haya discrepancia de hidratación, y el efecto que lo
+   pone a cero corre después del primer pintado. Ese fotograma ocurre a
+   opacidad 0. */
+.cifraBloque {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  animation: apareceSuave 520ms var(--ease-out) var(--inicio) both;
+}
+
+.cifraTexto {
+  margin: 0;
+}
+
+/* Dos líneas escritas, no envueltas: son dos campos distintos del copy
+   —`cifra.antetitulo` y `cifra.pie`— y el corte lo decide el copy, no el
+   ancho. Mismo rótulo de mono que `.pregunta`, SIN su filete: el filete es el
+   único acento de color de la escala y aquí ya lo lleva la pregunta; dos hilos
+   teal en la misma lámina compiten y ninguno ancla nada. */
+.cifraLinea {
+  display: block;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+/* El numeral. En `--ink`, no en teal, aunque la barra que le corresponde sea
+   teal: la jerarquía de este deck es por peso y tamaño, y lo que ata la cifra
+   a la barra es que las dos terminan en el mismo instante, no que compartan
+   color.
+   `tabular-nums` para que el salto de 9 a 10 y de 99 a 100 no zarandee lo que
+   ya está escrito; la cifra crece hacia la derecha, que es la misma dirección
+   en la que crece la barra.
+
+   ⚠️ **El suelo del `clamp` es el tamaño de MÓVIL, no un mínimo teórico.** Con
+   raíz 16 los tres tramos se reparten así: el techo (8,5 rem) manda de 1.236 px
+   de viewport para arriba, `11vw` manda en la franja intermedia y el suelo
+   manda por debajo de 436 px —a 390 px, `11vw` son 42,9 px, muy por debajo—. O
+   sea que este número solo lo ve un teléfono, y se paga en el único sitio donde
+   esta lámina no tiene margen: apilada, es la más alta del deck.
+
+   Bajó de 4 rem a 3 rem por eso. El suelo se multiplica por la fuente RAÍZ, así
+   que a 390 px valía 64 px con raíz 16 y 80 px con raíz 20: la lámina chocaba
+   con el riel con un solo píxel de más en la preferencia del usuario. Medido a
+   390 px, holgura contra el riel, antes → después:
+     raíz 16   17 → 49     raíz 18   −31 → 9
+     raíz 17   −7 → 33     raíz 20  −156 → −114
+   (la otra mitad de la ganancia la pone la figura; ver `SeisBarras.tsx`). Con
+   raíz 16 la lámina vuelve a CABER, y por eso su caja se centra en vez de
+   desbordarse hacia abajo.
+
+   ⚠️ Raíz 19 y de ahí para arriba sigue chocando, y no lo arregla este número:
+   entre raíz 18 y raíz 19 el cuerpo y el pie ganan dos líneas cada uno y la
+   lámina crece 74 px de golpe. Es un escalón de composición del texto, no del
+   numeral. Ver la nota del informe de la Tarea 9.
+
+   ⚠️ Y el numeral tiene que SEGUIR siendo el numeral, que es lo que ninguna
+   medida dice. A 390 px con raíz 16 son 48 px contra los 32 px del titular y
+   los 16 px del cuerpo: 1,5× y 3×, el elemento más grande de la lámina con
+   diferencia. Por debajo de 3 rem empieza a empatar con el titular —a 2,68 rem
+   el suelo cae por debajo de `11vw` y el numeral deja de crecer con la
+   preferencia del usuario, que es justo lo contrario de lo que se busca—. Se
+   comprueba EN LA CAPTURA, no aquí. */
+.cifra {
+  display: block;
+  margin: clamp(0.25rem, 1.2vh, 0.85rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 11vw, 8.5rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+/* El enlace de la fuente es el propio nombre del artículo, no un «arXiv:…»
+   suelto: el texto del enlace tiene que decir a dónde lleva sin su contexto,
+   que es como lo lee quien navega por enlaces. Subrayado, porque en un pie de
+   0,75 rem el color no basta para distinguirlo del resto de la línea. */
+.pieEnlace {
+  color: var(--text-accent-on-soft);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* ===========================================================================
+   Lámina 3 · Tesis
+   =========================================================================== */
+
+.tesisRejilla {
+  display: grid;
+  align-items: center;
+  gap: clamp(1.75rem, 4vh, 3rem);
+  min-width: 0;
+}
+
+@media (min-width: 62rem) {
+  .tesisRejilla {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+
+/* ⚠️ `max-width` explícito y `viewBox` de relación fija. Un SVG con
+   <circle> dentro NO puede llevar `preserveAspectRatio="none"`: al cambiar el
+   ancho, el círculo del cruce se deformaría en óvalo y el nodo dejaría de
+   leerse como un nodo. */
+.figura {
+  min-width: 0;
+  margin: 0;
+  animation: laminaEntra 520ms var(--ease-out) 410ms both;
+}
+
+.curvas {
+  display: block;
+  width: 100%;
+  /* El tope es lo que impide que la figura se coma la lámina en un proyector
+     de 1920: sin él la columna la estira y el trazo engorda hasta competir con
+     el titular, que es quien manda. */
+  max-width: 42rem;
+  height: auto;
+  margin-inline: auto;
+}
+
+.curvaBase {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.curvaOrigen {
+  fill: var(--gray-300);
+}
+
+/* Las dos curvas se dibujan, no aparecen. El argumento de la lámina es
+   temporal —una empieza rápido y se aplana, la otra arranca lenta y la
+   adelanta—, así que verlas trazarse ES la explicación; verlas ya hechas
+   obliga a reconstruirla. Salen del mismo punto y con 180 ms de diferencia,
+   lo justo para que se distingan.
+
+   ⚠️ `stroke-dasharray` va a 1,02 y no a 1 con `pathLength="1"`: con un trazo
+   ancho y remate redondo, una cola de longitud exacta se queda sin pintar en
+   el último subpíxel y la curva termina mocha. El 2 % de holgura no se ve —el
+   patrón es más largo que la curva— y garantiza el remate. */
+.curvaTrazo {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1.02;
+  animation: dibujaCurva 900ms var(--ease-out) both;
+}
+
+.curvaRequisito {
+  stroke: var(--gray-300);
+  stroke-width: 2.5;
+  animation-delay: 480ms;
+}
+
+.curvaProblema {
+  stroke: var(--teal);
+  stroke-width: 2.5;
+  animation-delay: 660ms;
+}
+
+@keyframes dibujaCurva {
+  from {
+    stroke-dashoffset: 1.02;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* El cruce es el argumento, así que se marca: nodo HUECO —relleno del fondo de
+   la lámina, contorno teal—, distinto de los cuatro nodos macizos de la
+   portada. Llega cuando las dos curvas ya están trazadas.
+
+   ⚠️ Este trazo NO lleva `non-scaling-stroke`, y es el único de la figura que
+   no lo lleva. Con él, el aro conservaba 2 px de pantalla mientras el círculo
+   encogía, así que su grosor relativo iba de 11,9 % del diámetro a 1920 y
+   13,8 % a 1440 hasta 23,4 % a 390 —el doble—: el mismo nodo pintado con dos
+   gramáticas distintas según la pantalla. Sin él, el trazo escala con el
+   dibujo y el grosor queda clavado en 2/14 = 14,3 % en los tres tamaños
+   (2,40 px a 1920 · 2,08 px a 1440 · 1,22 px a 390). Medido, no deducido.
+
+   Y por qué 14,3 % y no el 6–7 % que pide DECK.md §8.3, que es una desviación
+   consciente: ese 6–7 % está escrito para los nodos ROTULADOS de estilo-s50,
+   que miden 30–40 unidades porque llevan texto dentro. Este nodo tiene el
+   diámetro acotado por los dos lados. Por arriba, porque marca un cruce y su
+   hueco borra el trozo de curva que cubre: agrandarlo hasta 24 unidades para
+   alcanzar el 6–7 % taparía justo lo que señala. Por abajo, porque a 390 la
+   figura escala a 0,61 y un aro del 6,5 % —0,91 unidades— se pintaría a
+   0,55 px, o sea gris claro y roto, en la pantalla donde el deck ya se lee
+   peor. Entre esos dos topes el 6–7 % no existe, así que la regla que sí se
+   puede cumplir, y la que de verdad importaba, es la otra: que la proporción
+   sea la MISMA en las tres pantallas. */
+.curvaCruce {
+  fill: var(--surface-page);
+  stroke: var(--teal);
+  stroke-width: 2;
+  animation: apareceSuave 320ms var(--ease-out) 1320ms both;
+}
+
+.curvaEtiqueta {
+  fill: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  animation: apareceSuave 380ms var(--ease-out) both;
+}
+
+.curvaEtiquetaRequisito {
+  animation-delay: 1180ms;
+}
+
+/* La etiqueta de la curva teal se pinta en teal, y por eso va en
+   --teal-on-soft (#0b746c) y no en --teal (#0d7d74): sobre --off-white el
+   primero da 5,30:1 y el de marca 4,70:1, que pasa AA por dos centésimas y no
+   deja margen para ningún cambio de superficie. El trazo de la curva sí es
+   --teal, porque un trazo no es texto y no lo mide ese umbral. */
+.curvaEtiquetaProblema {
+  fill: var(--teal-on-soft);
+  animation-delay: 1320ms;
+}
+
+/* ── El deck sin JavaScript ──────────────────────────────────────────────── */
+/* Ojo: nada de `display` sobre el propio <noscript>. Con JavaScript activo el
+   navegador lo esconde, y darle display aquí lo devolvería a la vista como
+   texto crudo. La clase va dentro. */
+
+/* Sin borde superior: la caja se ciñe a la medida del texto y el filete se
+   quedaba a media página, como una raya suelta debajo de la lámina. */
+.sinScript {
+  max-width: 46ch;
+  margin: 0;
+  padding: clamp(2rem, 6vh, 4rem) var(--deck-gutter);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.sinScript a {
+  color: var(--text-accent-on-soft);
+}
+
+/* Sin JavaScript el recorrido no existe: el chrome queda como una barra y un
+   riel que no responden a nada. Se retiran —los dos llevan `data-deck-chrome`,
+   que es atributo global y por eso se alcanza desde aquí aunque su CSS viva en
+   chrome.module.css—, la lámina recupera su hueco (ya no hay barras que
+   esquivar) y debajo va la frase con el enlace a /deck, que es el índice que
+   sí navega. Al imprimir, la consulta devuelve `initial-only` y no `none`, así
+   que el riel sigue en pie. */
+@media (scripting: none) {
+  .riel {
+    display: block;
+    min-height: 0;
+  }
+
+  /* El `.riel` delante no es decorativo: un selector de módulo tiene que
+     llevar al menos una clase local o el compilador lo rechaza por impuro. */
+  .riel [data-deck-chrome] {
+    display: none;
+  }
+
+  .lamina {
+    min-height: 0;
+    margin-block: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot,
+  .escalonado > *,
+  .figura,
+  .cifraBloque,
+  .mallaNodo,
+  .curvaTrazo,
+  .curvaCruce,
+  .curvaEtiqueta {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    /* El bloque global de globals.css no toca el retardo, y aquí las entradas
+       llevan uno —hasta 1,32 s en el nodo del cruce—: sin esto la lámina se
+       quedaría a medio pintar todo ese rato justo a quien pidió menos
+       movimiento. Con `both` de relleno, duración y retardo a cero dejan cada
+       elemento en su estado final: la curva entera trazada, el nodo puesto. */
+    animation-delay: 0ms !important;
+  }
+}

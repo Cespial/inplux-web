@@ -1,0 +1,44 @@
+import { DECK_COPY } from "@/content/deck";
+import { MallaPortada } from "../figures/MallaPortada";
+import { Slide } from "../Slide";
+import styles from "../deck.module.css";
+
+const { eyebrow, titulo, bajada } = DECK_COPY.portada;
+const [PRIMERA, SEGUNDA] = titulo;
+
+/**
+ * Lámina 1 · Portada.
+ *
+ * El antetítulo va en `.pregunta` —el rótulo de mono de la escala— y el título
+ * del deck en serif, con la segunda línea en la cursiva dibujada. Todo el
+ * texto sale de `DECK_COPY.portada`; el corte en dos líneas también, porque
+ * viene partido de ahí.
+ *
+ * La malla es lo único que no es texto, va delante en el DOM y detrás en la
+ * pintura: `.bloque` lleva `z-index: 1` y `.malla` `z-index: 0`. ⚠️ Ese par no
+ * es lo único que la mantiene detrás —medido: quitarlo no la sube, porque el
+ * `position: relative` de `.bloque` y los contextos de apilamiento de
+ * `.escalonado` hacen lo mismo por su cuenta—, pero sí es lo único declarado
+ * PARA esto. La sonda y sus cinco escenarios están en el comentario de
+ * `.bloque`, en `deck.module.css`.
+ */
+export function PortadaSlide({ id }: { id: string }) {
+  return (
+    <Slide id={id}>
+      <MallaPortada />
+      <div className={`${styles.bloque} ${styles.escalonado}`}>
+        <p className={styles.pregunta}>{eyebrow}</p>
+        <h1 className={styles.tituloPortada}>
+          <span className={styles.tituloPortadaLinea}>{PRIMERA}</span>
+          {/* ⚠️ `<span>`, no `<em>`. La segunda línea no está enfatizada: es
+              otra CARA de la misma familia, una decisión tipográfica. `<em>`
+              es énfasis semántico —un lector de pantalla puede anunciarlo y
+              cambiar la entonación— y aquí no hay nada que enfatizar; la
+              primera línea, que es del mismo rango, ya va en `<span>`. */}
+          <span className={styles.tituloPortadaCursiva}>{SEGUNDA}</span>
+        </h1>
+        <p className={styles.cuerpo}>{bajada}</p>
+      </div>
+    </Slide>
+  );
+}
