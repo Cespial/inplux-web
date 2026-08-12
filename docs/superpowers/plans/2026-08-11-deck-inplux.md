@@ -1349,9 +1349,11 @@ const VPS = [
   { n: "movil", width: 390, height: 844 },
 ];
 
-// Tienen que coincidir con chrome/TopBar.tsx y chrome/ProgressRail.tsx.
-const BARRA_SUP = 70;
-const BARRA_INF = 60;
+// Se importan de `src/components/deck/chrome/altos.ts`, que no importa CSS
+// justamente para que este arnés pueda leerlas. Copiarlas aquí a mano las
+// deja divergir en silencio el día que el chrome cambie de alto.
+import { ALTO_BARRA_SUPERIOR as BARRA_SUP, ALTO_BARRA_INFERIOR as BARRA_INF }
+  from "../src/components/deck/chrome/altos.ts";
 
 let fallos = 0;
 const nav = await chromium.launch();
@@ -1376,7 +1378,16 @@ for (const vp of VPS) {
     // devuelve la caja de la lámina equivocada la mitad de las veces —
     // contrato establecido por la Tarea 5, verificado en navegador.
     await p.waitForSelector(`[data-estado="activa"] section[data-slide="${id}"]`, { timeout: 15000 });
-    await p.waitForTimeout(2800);
+
+    // ⚠️ `waitForSelector` NO es condición de reposo. La lámina activa entra
+    // con `animation-delay: 150ms` y `fill: both`: durante esos 150 ms está a
+    // `opacity: 0` y lo que se ve es la SALIENTE. Medir ahí devuelve una caja
+    // desplazada hasta ~3 rem. Esperar por reloj lo tapa a veces; esto no.
+    await p.waitForFunction(
+      () => document.getAnimations().every((a) => a.playState !== "running"),
+      null,
+      { timeout: 15000 },
+    );
 
     const m = await p.evaluate(({ id, sup, inf }) => {
       const s = document.querySelector(`[data-estado="activa"] section[data-slide="${id}"]`);
@@ -1422,6 +1433,12 @@ await nav.close();
 console.log(fallos ? `\n${fallos} problema(s)` : "\nsin choques ni errores");
 process.exitCode = fallos ? 1 : 0;
 ```
+
+⚠️ **Tres trampas de medición, las tres descubiertas ejecutando durante F1:**
+
+1. **Con `document.visibilityState === "hidden"` nada se asienta.** La animación de la saliente queda congelada, `animationend` no dispara, la saliente sigue a `opacity: 1` ocupando el viewport y la activa a `opacity: 0`. Quedan **dos** `[data-slide]` en reposo y los píxeles visibles son los de la lámina equivocada. Playwright headless reporta `visible` y va bien; una corrida headful con la ventana en segundo plano produce exactamente el «ruido aleatorio» que este arnés existe para no generar.
+2. **Un `tabId` apuntando a una pestaña no es una ventana enfocada.** En F1, una medición con la pestaña en background silenciaba las teclas **sin dar error**. Si automatizas con navegador real, activa la ventana antes de medir.
+3. **`element.click()` no cambia la modalidad de entrada**, así que `:focus-visible` sigue activo y cualquier comprobación de indicador de foco da un falso positivo. Para eso hace falta un clic real (`Input.dispatchMouseEvent` por CDP).
 
 - [ ] **Step 3: La barrera de movimiento reducido**
 
