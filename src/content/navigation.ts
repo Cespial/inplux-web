@@ -18,10 +18,12 @@ export const publicNavigation = [
  * funciones de fecha a `work-format.ts`.
  *
  * Lo que impide que esta lista se desincronice de `work.ts` es
- * `verifyProductNavigation()` en `scripts/verify-public-content.mjs`: si un
- * perfil no tiene su entrada aquí —o si aquí sobra algo que no es un perfil—
- * el build se detiene. Porkia estuvo ausente de este pie, en producción, hasta
- * que ese control existió.
+ * `verifyProductFooter()` en `scripts/verify-build-output.mjs`, que no lee este
+ * archivo: lee los `<a href>` del `<nav aria-label="Productos documentados">`
+ * del HTML ya construido y exige biyección con los perfiles —ruta y etiqueta—.
+ * Da igual cómo se escriba esta lista, e incluso da igual que el pie deje de
+ * consumirla: lo que se juzga es el enlace que recibe el navegador. Porkia
+ * estuvo ausente de este pie, en producción, hasta que ese control existió.
  */
 export const productNavigation = [
   ["Tribai", "/trabajo/tribai"],

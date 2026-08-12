@@ -130,6 +130,7 @@ const pageDefinitions = {
       "x-default": siteUrl,
     },
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    productFooter: "Documented products",
   },
   factory: {
     file: ".next/server/app/fabrica.html",
@@ -244,6 +245,8 @@ const pageDefinitions = {
       url: `${siteUrl}/nosotros`,
     },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
+    productFooter: "Productos documentados",
+    attribution: true,
   },
   press: {
     file: ".next/server/app/prensa.html",
@@ -567,6 +570,133 @@ function verifyIds(name, html, legacyFragments = []) {
   }
 }
 
+/**
+ * Las dos invariantes de contenido que se juzgan sobre el DOM y no sobre la
+ * fuente.
+ *
+ * Vivieron cuatro rondas en `scripts/verify-public-content.mjs`, leyendo
+ * TypeScript con un lexer propio de ~415 líneas, y una re-revisión adversarial
+ * las atravesó nueve veces: el `title` escrito con backticks en vez de comillas
+ * —dos caracteres—, una constante declarada fuera del capítulo, un delimitador
+ * de cierre forjado dentro de un comentario, un `copy:` anidado señuelo que
+ * acreditaba a REDEK mientras la prosa publicada lo perdía, la frase mudada al
+ * capítulo vecino, un sexto producto añadido en el archivo que el pie sí
+ * renderiza y un `href` reescrito dentro del `.map()` que mandaba los cinco
+ * enlaces a 404.
+ *
+ * Todas tenían la misma causa: el guardia leía la fuente y la invariante vive
+ * en el DOM. `navigation.ts` y `copy/en.ts` ni siquiera son lo que el pie
+ * renderiza —el pie español publica `homeCopyEs.footer.groups`, que *consume*
+ * `productNavigation`, y el inglés publica el resultado de `spanishRoute(…)`,
+ * no sus argumentos—. Aquí se juzga el HTML que recibe el navegador: ninguna
+ * forma de escribir el contenido puede esconderle nada a este control, y a
+ * cambio desaparece toda restricción sobre cómo escribirlo.
+ *
+ * El precio: `check:content` corre antes de `next build` y estas dos fallaban
+ * antes de compilar; ahora fallan después. Se juzga lo que el usuario ve en vez
+ * de lo que la fuente insinúa.
+ */
+function verifyAttribution(name, html) {
+  expect(
+    html.includes("REDEK"),
+    `${name}: el HTML publicado de /nosotros debe acreditar a REDEK; es la única prosa del sitio que resume la autoría de todos los productos y Laudos reparte desarrollo técnico (INPLUX) y criterio legal (REDEK)`,
+  );
+
+  const banned = html.match(/desarrollos\s+propios/i);
+  expect(
+    banned === null,
+    `${name}: el HTML publicado de /nosotros dice «${banned?.[0]}» y no puede llamar así al conjunto de productos; Laudos reparte el crédito con REDEK`,
+  );
+}
+
+/** Los enlaces de un `<nav>` del HTML construido: su `href` y su texto visible. */
+function readNavigationLinks(html, ariaLabel) {
+  const opening = new RegExp(
+    `<nav\\b[^>]*\\baria-label="${ariaLabel.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")}"[^>]*>`,
+    "i",
+  );
+  const opened = opening.exec(html);
+  if (!opened) return null;
+
+  const bodyStart = opened.index + opened[0].length;
+  const navTags = /<(\/?)nav\b[^>]*>/gi;
+  navTags.lastIndex = bodyStart;
+  let depth = 1;
+  let bodyEnd = -1;
+  for (let tag = navTags.exec(html); tag !== null; tag = navTags.exec(html)) {
+    depth += tag[1] === "/" ? -1 : 1;
+    if (depth === 0) {
+      bodyEnd = tag.index;
+      break;
+    }
+  }
+  if (bodyEnd === -1) return null;
+
+  return [...html.slice(bodyStart, bodyEnd).matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)].map(
+    (anchor) => ({
+      href: readAttributes(anchor[1]).href ?? "",
+      label: decodeHtml(anchor[2].replace(/<[^>]*>/g, ""))
+        .replace(/\s+/g, " ")
+        .trim(),
+    }),
+  );
+}
+
+/**
+ * Biyección entre `workProfiles` y los enlaces que el pie de productos publica:
+ * ruta y etiqueta. Falta uno y falla; sobra uno y falla; el `href` o el texto no
+ * coinciden y falla.
+ *
+ * `workProfiles` es aquí el espejo fijado de `src/content/work.ts`, igual que
+ * `expectedSitemapUrls`: dar de alta un sexto producto obliga a darlo de alta
+ * también en este archivo, y hasta que se haga el build se detiene diciendo qué
+ * enlace sobra. Es ruidoso a propósito —Porkia se dio de alta como quinto
+ * producto y nunca llegó a ninguno de los dos pies, en silencio—.
+ */
+function verifyProductFooter(name, html, ariaLabel) {
+  const links = readNavigationLinks(html, ariaLabel);
+  if (links === null) {
+    errors.push(
+      `${name}: el HTML publicado no trae el pie de productos <nav aria-label="${ariaLabel}">; sin él nadie verifica que el pie y work.ts no divergen`,
+    );
+    return;
+  }
+
+  const documented = workProfiles.map((profile) => ({
+    href: `/trabajo/${profile.slug}`,
+    label: profile.name,
+  }));
+  const surface = `${name}: el pie de productos (aria-label="${ariaLabel}")`;
+
+  for (const product of documented) {
+    const published = links.filter((link) => link.href === product.href);
+    if (published.length === 0) {
+      errors.push(
+        `${surface} no publica “${product.label}”: falta el enlace ${product.href}, y work.ts documenta ese producto`,
+      );
+      continue;
+    }
+    if (published.length > 1) {
+      errors.push(`${surface} publica ${published.length} veces el enlace ${product.href}`);
+    }
+    for (const link of published) {
+      if (link.label !== product.label) {
+        errors.push(
+          `${surface} llama “${link.label}” a ${product.href}; work.ts lo llama “${product.label}”`,
+        );
+      }
+    }
+  }
+
+  for (const link of links) {
+    if (!documented.some((product) => product.href === link.href)) {
+      errors.push(
+        `${surface} publica “${link.label}” (${link.href}) y work.ts no documenta ese producto`,
+      );
+    }
+  }
+}
+
 async function verifyGeneratedRoutes() {
   const expectedSitemapUrls = [
     siteUrl,
@@ -714,6 +844,8 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
   verifyContactSurface(name, html, definition.contact);
   verifyJsonLd(name, html, definition);
   verifyIds(name, html, definition.legacyFragments);
+  if (definition.attribution) verifyAttribution(name, html);
+  if (definition.productFooter) verifyProductFooter(name, html, definition.productFooter);
 }
 
 await verifyGeneratedRoutes();
@@ -725,6 +857,6 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    "Salida final aprobada: metadata, social cards, estructura, contacto, JSON-LD, sitemap y manifest.",
+    "Salida final aprobada: metadata, social cards, estructura, contacto, JSON-LD, atribución, pie de productos, sitemap y manifest.",
   );
 }
