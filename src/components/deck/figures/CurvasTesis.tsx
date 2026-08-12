@@ -80,13 +80,12 @@ export function CurvasTesis() {
           vectorEffect="non-scaling-stroke"
         />
 
-        <circle
-          className={styles.curvaCruce}
-          cx={CRUCE.x}
-          cy={CRUCE.y}
-          r={7}
-          vectorEffect="non-scaling-stroke"
-        />
+        {/* ⚠️ Este círculo es el ÚNICO trazo de la figura sin
+            `non-scaling-stroke`, y es a propósito: ver la nota de
+            `.curvaCruce` en deck.module.css. El aro tiene que guardar una
+            proporción con su diámetro, y un trazo que no escala la rompe en
+            cuanto cambia el tamaño de la pantalla. */}
+        <circle className={styles.curvaCruce} cx={CRUCE.x} cy={CRUCE.y} r={7} />
 
         {/* Cada etiqueta a la altura exacta del final de su curva: no hace
             falta leyenda ni muestras de color para saber cuál es cuál. */}

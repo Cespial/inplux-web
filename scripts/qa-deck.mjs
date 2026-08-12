@@ -20,6 +20,16 @@
  * atribuidos a la lámina que los soltó, y guarda una captura por si hace
  * falta juzgar a ojo. Lo que decide si algo está mal son los números.
  *
+ * ⚠️ **Lo que este arnés no puede ver, y no va a poder.** Todo lo de arriba se
+ * mide preguntando qué se pinta ENCIMA de un texto. Una figura decorativa que
+ * compite con los glifos desde DETRÁS —un nodo de la retícula asomando por el
+ * ojo de una «ó», que es el defecto real que trajo la portada de la Tarea 8—
+ * no está encima de nada: la respuesta correcta a la pregunta que hace este
+ * arnés es «ahí no hay nadie», y la lámina está mal igual. Ninguna medida de
+ * cajas, glifos ni alfa distingue una retícula que acompaña de una que
+ * estorba. **Las trece láminas con figura que vienen hay que mirarlas en la
+ * captura**, y `ok` en esta salida no dice nada sobre eso.
+ *
  * Uso:
  *   npm run build && npm run start -- -p 3210      (en otra terminal)
  *   QA_BASE=http://localhost:3210 npm run qa:deck
@@ -32,13 +42,27 @@
  */
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const BASE = process.env.QA_BASE ?? "http://localhost:3210";
+
+/**
+ * ⚠️ **El puerto del deck es el 3210, y solo el 3210.** No es capricho: es la
+ * única defensa barata contra el fallo que ya ocurrió. Cuatro números
+ * distintos circulando —3210, 3410, 3412, 3521— significan que en cualquier
+ * momento hay servidores viejos escuchando en tres de ellos, y un servidor
+ * viejo contesta 200 con un build de hace horas. Un solo puerto convierte ese
+ * fallo en un `EADDRINUSE` que se ve al arrancar.
+ *
+ * Este número manda en los tres sitios donde aparece: el valor por omisión de
+ * `QA_BASE`, el mensaje de «no hay deck en…» y el encabezado de arriba.
+ */
+const PUERTO_CANONICO = 3210;
+const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
 const SALIDA = "qa-out";
 
 const VPS = [
@@ -108,15 +132,67 @@ if (DESCONOCIDOS.length) {
 
 // Preflight: sin servidor, `page.goto` revienta con un ECONNREFUSED que no le
 // dice a nadie qué le falta.
+let PRIMERA_RESPUESTA = "";
 try {
   const r = await fetch(`${BASE}/deck/presentacion`, { redirect: "manual" });
   if (r.status >= 400) throw new Error(`respondió ${r.status}`);
+  PRIMERA_RESPUESTA = await r.text();
 } catch (e) {
   console.error(
     `No hay deck en ${BASE} (${e.message}).\n` +
-      "Levántalo en otra terminal:  npm run build && npm run start -- -p 3210",
+      `Levántalo en otra terminal:  npm run build && npm run start -- -p ${PUERTO_CANONICO}`,
   );
   process.exit(2);
+}
+
+/**
+ * La firma del build. **Para el arnés un 200 es un 200**, y eso ya costó una
+ * corrida entera: un `next-server` de una sesión anterior seguía escuchando en
+ * el puerto, contestaba 200 con un build de hacía horas y el arnés midió una
+ * portada que ya no existía sin quejarse de nada.
+ *
+ * Next escribe el identificador del build en `.next/BUILD_ID` y lo emite en el
+ * árbol serializado de la página, así que basta buscarlo en el cuerpo que ya
+ * trajo el preflight.
+ *
+ * Dos decisiones deliberadas:
+ *
+ *   · **Aviso, no aborto.** Un desajuste puede ser legítimo —alguien
+ *     reconstruyó mientras el servidor viejo sigue vivo, y quiere ver
+ *     justamente eso—, y un arnés que se niega a correr se deja de correr.
+ *     Lo que no puede pasar es que mida en silencio otro código.
+ *   · **Solo contra `localhost`.** Si `QA_BASE` apunta a un preview
+ *     desplegado, el `.next/BUILD_ID` de esta máquina no tiene por qué
+ *     coincidir con el de allá, y el aviso sería ruido puro.
+ */
+function esLocal(base) {
+  try {
+    const h = new URL(base).hostname;
+    return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "[::1]";
+  } catch {
+    return false;
+  }
+}
+
+if (esLocal(BASE)) {
+  let local = null;
+  try {
+    local = readFileSync(path.join(RAIZ, ".next", "BUILD_ID"), "utf8").trim();
+  } catch {
+    // Sin `.next/BUILD_ID` no hay nada que comparar: no se ha construido
+    // todavía en esta copia, y el servidor de enfrente es de otra. No es este
+    // el sitio para dictaminarlo.
+  }
+  if (local !== null && local !== "" && !PRIMERA_RESPUESTA.includes(local)) {
+    const servido = /\\"b\\":\\"([\w-]+)\\"/.exec(PRIMERA_RESPUESTA)?.[1] ?? "no identificado";
+    console.warn(
+      `⚠️ ${BASE} NO está sirviendo este build.\n` +
+        `   .next/BUILD_ID local: ${local}\n` +
+        `   build que contesta:   ${servido}\n` +
+        "   Suele ser un servidor de otra sesión que se quedó escuchando en el puerto.\n" +
+        `   Sigo midiendo, pero lo que salga es de OTRO código.\n`,
+    );
+  }
 }
 
 /**
@@ -225,18 +301,49 @@ function medir({ id, sup, inf }) {
     return motivo;
   };
 
-  // Las palabras se cuentan nodo de texto a nodo de texto y solo si su rama
-  // se pinta. `innerText` no vale: respeta `display: none` y `visibility`,
-  // pero un subárbol a `opacity: 0` le suma sus palabras como si se leyeran.
+  /**
+   * Un solo barrido de texto, que responde a las dos preguntas: cuántas
+   * palabras se leen y dónde están las líneas que hay que muestrear.
+   *
+   * `innerText` no vale para contar: respeta `display: none` y `visibility`,
+   * pero un subárbol a `opacity: 0` le suma sus palabras como si se leyeran.
+   *
+   * ⚠️ Y el discriminante es el propio barrido de líneas, no una regla aparte.
+   * `Range.getClientRects()` devuelve **cero** rects para un texto al que el
+   * navegador no le da caja y **uno o más** para todo texto real, así que un
+   * texto con cero rects no se cuenta. Eso descuenta solo el caso que había
+   * que descontar —el `<title>` de un SVG, que es el nombre accesible de la
+   * figura y que Chrome no marca con `display: none`, así que un recuento
+   * nodo a nodo lo sumaba: 38 palabras de las 89 de la tesis— sin nombrar
+   * ninguna etiqueta ni inventar una heurística nueva. Cualquier lámina con
+   * figura traía el recuento inflado, y el recuento es justo lo que se mira
+   * para juzgar densidad en la fase de contenido.
+   *
+   * Las dos preguntas se separan en un punto: para CONTAR basta un rect,
+   * para MUESTREAR hace falta que la línea mida algo (4 px), porque una
+   * franja de un píxel no admite nueve muestras.
+   */
   let palabras = 0;
   let palabrasApagadas = 0;
+  const lineas = [];
   const paseador = document.createTreeWalker(seccion, NodeFilter.SHOW_TEXT);
   for (let nodo = paseador.nextNode(); nodo !== null; nodo = paseador.nextNode()) {
     const t = (nodo.nodeValue ?? "").replace(/\s+/g, " ").trim();
     if (t === "") continue;
-    const cuantas = t.split(" ").length;
-    if (noSePinta(nodo.parentElement) === null) palabras += cuantas;
-    else if (noSePinta(nodo.parentElement) === "fantasma") palabrasApagadas += cuantas;
+    const duenno = nodo.parentElement;
+    if (duenno === null) continue;
+    const rango = document.createRange();
+    rango.selectNodeContents(nodo);
+    const rects = [...rango.getClientRects()];
+    if (rects.length === 0) continue;
+    const motivo = noSePinta(duenno);
+    if (motivo === null) palabras += t.split(" ").length;
+    else if (motivo === "fantasma") palabrasApagadas += t.split(" ").length;
+    if (motivo !== null) continue;
+    for (const linea of rects) {
+      if (linea.width < 4 || linea.height < 4) continue;
+      lineas.push({ duenno, linea });
+    }
   }
 
   const todos = [seccion, ...seccion.querySelectorAll("*")];
@@ -402,29 +509,45 @@ function medir({ id, sup, inf }) {
     }
     return false;
   };
-  const lineas = [];
-  const paseadorLineas = document.createTreeWalker(seccion, NodeFilter.SHOW_TEXT);
-  for (let nodo = paseadorLineas.nextNode(); nodo !== null; nodo = paseadorLineas.nextNode()) {
-    if ((nodo.nodeValue ?? "").trim() === "") continue;
-    const duenno = nodo.parentElement;
-    if (duenno === null || noSePinta(duenno) !== null) continue;
-    const rango = document.createRange();
-    rango.selectNodeContents(nodo);
-    for (const linea of rango.getClientRects()) {
-      if (linea.width < 4 || linea.height < 4) continue;
-      lineas.push({ duenno, linea });
-    }
-  }
+
+  /**
+   * ⚠️ **El agujero mudo-sordo, y cómo se cierra.**
+   *
+   * `elementFromPoint` ignora lo que lleva `pointer-events: none`, así que un
+   * elemento SIN TEXTO PROPIO y sordo al puntero era invisible para las dos
+   * vías: el camino principal veía a través de él, y el respaldo por
+   * geometría de más abajo solo mira absolutos CON texto. Reproducido: un
+   * rectángulo teal **opaco al 100 %** encima del titular de la portada, con
+   * `pointer-events: none`, y el arnés decía `ok`.
+   *
+   * La cura es de una línea y no necesita ninguna heurística: se fuerza
+   * `pointer-events: auto` en todo el árbol justo antes de muestrear. A
+   * partir de ahí `elementFromPoint` devuelve exactamente lo que la sala ve,
+   * porque respeta el orden de pintado. Y no sobre-denuncia: sobre portada y
+   * tesis —una malla absoluta a sangre debajo del título, una figura al lado
+   * del texto— da cero falsos positivos, porque lo que está debajo sigue
+   * estando debajo.
+   *
+   * El parche se quita en cuanto se acaba de muestrear: la captura que se
+   * guarda después tiene que ser la de la página de verdad. No toca la
+   * pintura —`pointer-events` solo decide quién recibe el clic—, así que
+   * ninguna caja medida cambia por esto.
+   */
+  const parcheDePuntero = document.createElement("style");
+  parcheDePuntero.textContent = "*, *::before, *::after { pointer-events: auto !important; }";
+  document.head.append(parcheDePuntero);
 
   const MUESTRAS = 9;
   const tapados = [];
   for (const { duenno, linea } of lineas) {
-    // ⚠️ Si el propio texto es sordo al puntero, `elementFromPoint` VE A
-    // TRAVÉS de él y devuelve lo que tiene DEBAJO. Muestrear ahí invierte el
-    // mensaje: el rótulo saldría «tapado» por el párrafo al que en realidad
-    // está tapando, y quien lea la alerta iría a mover el elemento
-    // equivocado. Ese caso lo atiende el respaldo por geometría de más
-    // abajo, que sí sabe quién está encima de quién.
+    // ⚠️ Si el propio texto SIGUE siendo sordo al puntero pese al parche
+    // —solo puede pasar con un `style="pointer-events: none !important"` en
+    // línea, que gana a cualquier hoja—, `elementFromPoint` ve a través de él
+    // y devuelve lo que tiene DEBAJO. Muestrear ahí invierte el mensaje: el
+    // rótulo saldría «tapado» por el párrafo al que en realidad está tapando,
+    // y quien lea la alerta iría a mover el elemento equivocado. Ese residuo
+    // lo atiende el respaldo por geometría de más abajo, que sí sabe quién
+    // está encima de quién.
     if (sordoAlPuntero(duenno)) continue;
     const y = linea.top + linea.height / 2;
     let cubiertas = 0;
@@ -451,7 +574,19 @@ function medir({ id, sup, inf }) {
     }
   }
 
-  // El caso sordo al puntero, por geometría.
+  // Fuera el parche: lo que sigue pregunta por el `pointer-events` REAL, y la
+  // captura que se guarda al terminar tiene que ser la de la página tal cual.
+  // `getComputedStyle` devuelve un objeto vivo, así que la caché de estilos de
+  // arriba vuelve sola a los valores de verdad.
+  parcheDePuntero.remove();
+
+  // El residuo sordo al puntero, por geometría. Con el parche puesto, el
+  // camino principal ya caza todo lo que se pinte encima de un texto, así que
+  // aquí solo queda lo que ni siquiera el parche puede desbancar: un
+  // `pointer-events: none !important` escrito en el atributo `style`. Se
+  // conserva porque está calibrado —el rótulo con el offset mal puesto de la
+  // ronda 3— y porque cuando los dos caminos coinciden emiten exactamente el
+  // mismo mensaje, que la salida deduplica.
   for (const el of todos) {
     if (noSePinta(el) !== null) continue;
     const e = estilo(el);

@@ -26,7 +26,12 @@ export function PortadaSlide({ id }: { id: string }) {
         <p className={styles.pregunta}>{eyebrow}</p>
         <h1 className={styles.tituloPortada}>
           <span className={styles.tituloPortadaLinea}>{PRIMERA}</span>
-          <em className={styles.tituloPortadaCursiva}>{SEGUNDA}</em>
+          {/* ⚠️ `<span>`, no `<em>`. La segunda línea no está enfatizada: es
+              otra CARA de la misma familia, una decisión tipográfica. `<em>`
+              es énfasis semántico —un lector de pantalla puede anunciarlo y
+              cambiar la entonación— y aquí no hay nada que enfatizar; la
+              primera línea, que es del mismo rango, ya va en `<span>`. */}
+          <span className={styles.tituloPortadaCursiva}>{SEGUNDA}</span>
         </h1>
         <p className={styles.cuerpo}>{bajada}</p>
       </div>

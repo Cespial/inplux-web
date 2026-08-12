@@ -12,11 +12,28 @@ import styles from "../deck.module.css";
  * fondo a sangre.
  *
  * ⚠️ Y el anclaje es `xMaxYMin`, no `xMidYMid`, por una razón que solo se ve
- * en una captura: con el recorte centrado, dos de los nodos caían ENCIMA del
+ * en una captura: con el recorte centrado, dos de los nodos caían sobre el
  * título —uno sobre la «ó» de «producción» en las tres pantallas—, y un punto
- * teal detrás de un glifo no se lee como retícula, se lee como una errata. El
- * arnés no lo ve: la malla es sorda al puntero y no tiene texto que muestrear,
- * así que sus dos vías de detección la ignoran. Esto lo caza la vista.
+ * teal asomando por el ojo de un glifo no se lee como retícula, se lee como
+ * una errata.
+ *
+ * ⚠️ **Corrección de la explicación anterior, que estaba mal.** Aquí la malla
+ * NUNCA tapó nada: `.malla` lleva `z-index: 0` y `.bloque` lleva `z-index: 1`,
+ * o sea que el nodo estaba DEBAJO del texto y lo que se veía era el teal
+ * asomando por los huecos de la letra. No es oclusión, es competencia visual
+ * desde el fondo. La diferencia no es académica:
+ *
+ *   · endurecer el arnés —forzar `pointer-events: auto` antes de muestrear—
+ *     cierra un agujero real, el del absoluto opaco mal puesto ENCIMA de un
+ *     texto, y ese agujero existía;
+ *   · pero no cubre este caso ni ninguno parecido. Un detector geométrico
+ *     pregunta «¿qué se pinta encima de esta línea?», y la respuesta correcta
+ *     aquí es «nada». Ninguna medida de cajas, glifos ni alfa distingue una
+ *     retícula que acompaña de una que estorba desde detrás.
+ *
+ * Es decir: quien lea esta nota, arregle el arnés y se dé por cubierto para
+ * las trece láminas con figura que vienen, NO lo está. La única barrera para
+ * una figura que compite con los glifos es mirar la captura.
  *
  * Anclando el lienzo a la ESQUINA SUPERIOR DERECHA, el trozo que sobrevive al
  * recorte es el mismo en las tres pantallas —vertical arriba, apaisado a la
@@ -25,7 +42,8 @@ import styles from "../deck.module.css";
  * 1920×1080 y 390×844: el nodo más cercano al texto le deja 47 px.
  *
  * Si una tarea posterior ensancha el título o lo sube, esta holgura es lo
- * primero que hay que volver a mirar en la captura.
+ * primero que hay que volver a mirar en la captura, y el arnés seguirá
+ * diciendo `ok`.
  */
 
 const LADO = 900;

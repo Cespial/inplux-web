@@ -22,7 +22,10 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const BASE = process.env.QA_BASE ?? "http://localhost:3210";
+
+/** ⚠️ El mismo puerto que `qa-deck.mjs`, y por la misma razón: ver su nota. */
+const PUERTO_CANONICO = 3210;
+const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
 
 // Los ids salen de `src/content/deck.ts`, que es quien manda en el orden.
 const r = spawnSync(
@@ -61,7 +64,7 @@ try {
 } catch (e) {
   console.error(
     `No hay deck en ${BASE} (${e.message}).\n` +
-      "Levántalo en otra terminal:  npm run build && npm run start -- -p 3210",
+      `Levántalo en otra terminal:  npm run build && npm run start -- -p ${PUERTO_CANONICO}`,
   );
   process.exit(2);
 }

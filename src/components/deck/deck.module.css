@@ -229,6 +229,40 @@
   text-wrap: balance;
 }
 
+/* ── El modificador de densidad ──────────────────────────────────────────────
+   Se pone JUNTO a `.respuesta`, nunca en su lugar: la respuesta sigue siendo
+   el titular, solo que un paso más abajo. Existe porque la escala de arriba
+   está dimensionada para una lámina de texto —portada, tesis— y trece de las
+   quince traen debajo una rejilla, una tabla o una lista.
+
+   Medido sobre la lámina más densa que viene (evidencia: trece motivos en una
+   sola columna a ancho completo, con pregunta, respuesta, cuerpo y remate),
+   contra el hueco real entre barras:
+
+     1440×900   4,3 rem → caja 115→821 de 70→840   19 px de holgura
+                2,8 rem → caja 127→783 de 70→840   57 px
+     1920×1080  4,3 rem → caja 169→921 de 70→1020  99 px
+                2,8 rem → caja 194→896 de 70→1020 124 px
+     390×844    4,3 rem → caja 112→805 de 70→784   SE PASA 21 px
+                2,8 rem → caja 112→795 de 70→784   SE PASA 11 px
+
+   Dos lecturas, y las dos importan. A 1440 el modificador multiplica por tres
+   la holgura: con la escala llena, un solo motivo que envuelva a dos líneas
+   (28 px) se come el margen entero. Y a 390 el modificador NO basta: ahí el
+   encabezado son 168 px de 714 y lo que desborda es la lista, así que la
+   lámina 6 tendrá que traer además su propio ritmo —interlínea 1,4 y 0,2 rem
+   de separación, medido: la lista baja de 295 a 269 px y la caja cierra en
+   112→769 con 15 px de sobra—. El tamaño es la primera palanca, no la única.
+
+   El valor sale de la tipografía, no del ajuste: 2,8 rem deja la respuesta un
+   escalón entero por debajo del título de portada (4,7 rem) y del genérico
+   (5,5 rem), así que una lámina cargada nunca compite con las dos cuya única
+   materia es un título. Sigue siendo 2,2× el cuerpo y 2,8× la pregunta: la
+   inversión de la jerarquía se conserva. */
+.respuestaCompacta {
+  font-size: clamp(1.7rem, 3.4vw, 2.8rem);
+}
+
 .cuerpo {
   max-width: 58ch;
   margin: clamp(1rem, 2.5vh, 2rem) 0 0;
@@ -239,9 +273,17 @@
   text-wrap: pretty;
 }
 
+/* ⚠️ Aquí NO va `margin-top: auto`, aunque «pie» invite a pensar en pegarlo
+   abajo. `auto` solo reparte espacio LIBRE, y aquí no hay ninguno: `.bloque`
+   se ciñe a su contenido porque `.lamina` es `align-content: center` y
+   `.tesisRejilla` es `align-items: center`. Con cero espacio libre, `auto`
+   resuelve a cero y la declaración no hacía nada — el aire lo daba el
+   `padding-top`, que es lo único que estaba trabajando. Y si el bloque se
+   estirara, un pie clavado al borde inferior pelearía con el centrado
+   vertical de la lámina, que es la composición que manda. Un margen normal,
+   del mismo tipo que los de la escala de arriba, y ya. */
 .pie {
-  margin: auto 0 0;
-  padding-top: clamp(1rem, 3vh, 2.5rem);
+  margin: clamp(1rem, 3vh, 2.5rem) 0 0;
   color: var(--gray-400);
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -255,9 +297,14 @@
 .bloque {
   position: relative;
   /* Por encima de la figura de fondo. Un absoluto con z-index automático se
-     pinta SOBRE el contenido en flujo de su contenedor, aunque vaya antes en
-     el DOM: sin este par de z-index la malla de la portada taparía el título
-     y el arnés no lo vería, porque no tiene texto que muestrear. */
+     pinta SOBRE el contenido en flujo de su contenedor aunque vaya antes en
+     el DOM, así que sin este par la malla de la portada taparía el título de
+     verdad.
+     ⚠️ Es una barrera contra la OCLUSIÓN, y solo contra eso. El defecto que
+     de verdad apareció en la portada —un nodo teal asomando por los huecos de
+     una «ó»— ocurrió con este par ya puesto, es decir con la malla DEBAJO del
+     texto: una figura decorativa compite con los glifos desde detrás, y de
+     ahí no la saca ningún z-index. Ver la nota de MallaPortada.tsx. */
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -486,7 +533,27 @@
 
 /* El cruce es el argumento, así que se marca: nodo HUECO —relleno del fondo de
    la lámina, contorno teal—, distinto de los cuatro nodos macizos de la
-   portada. Llega cuando las dos curvas ya están trazadas. */
+   portada. Llega cuando las dos curvas ya están trazadas.
+
+   ⚠️ Este trazo NO lleva `non-scaling-stroke`, y es el único de la figura que
+   no lo lleva. Con él, el aro conservaba 2 px de pantalla mientras el círculo
+   encogía, así que su grosor relativo iba de 11,9 % del diámetro a 1920 y
+   13,8 % a 1440 hasta 23,4 % a 390 —el doble—: el mismo nodo pintado con dos
+   gramáticas distintas según la pantalla. Sin él, el trazo escala con el
+   dibujo y el grosor queda clavado en 2/14 = 14,3 % en los tres tamaños
+   (2,40 px a 1920 · 2,08 px a 1440 · 1,22 px a 390). Medido, no deducido.
+
+   Y por qué 14,3 % y no el 6–7 % que pide DECK.md §8.3, que es una desviación
+   consciente: ese 6–7 % está escrito para los nodos ROTULADOS de estilo-s50,
+   que miden 30–40 unidades porque llevan texto dentro. Este nodo tiene el
+   diámetro acotado por los dos lados. Por arriba, porque marca un cruce y su
+   hueco borra el trozo de curva que cubre: agrandarlo hasta 24 unidades para
+   alcanzar el 6–7 % taparía justo lo que señala. Por abajo, porque a 390 la
+   figura escala a 0,61 y un aro del 6,5 % —0,91 unidades— se pintaría a
+   0,55 px, o sea gris claro y roto, en la pantalla donde el deck ya se lee
+   peor. Entre esos dos topes el 6–7 % no existe, así que la regla que sí se
+   puede cumplir, y la que de verdad importaba, es la otra: que la proporción
+   sea la MISMA en las tres pantallas. */
 .curvaCruce {
   fill: var(--surface-page);
   stroke: var(--teal);
