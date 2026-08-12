@@ -2,9 +2,21 @@
  * Arnés de QA del deck: mide cajas, no capturas.
  *
  * Una captura hay que mirarla; una caja se compara. Este arnés recorre las
- * quince láminas en tres tamaños, mide la caja del contenido de cada una
- * contra el hueco que dejan las dos barras del chrome, cuenta palabras y
- * figuras, recoge los errores de consola y guarda una captura POR SI hace
+ * quince láminas en tres tamaños y de cada una comprueba cinco cosas:
+ *
+ *   · que su caja quepa en el hueco que dejan las dos barras del chrome;
+ *   · que no se salga de lado —el riel la recorta y a ojo no se ve—;
+ *   · que ningún texto se pinte encima de otro;
+ *   · que ningún texto se quede recortado dentro de una caja que lo tapa;
+ *   · que todo lo que ocupa sitio se PINTE de verdad.
+ *
+ * Las tres últimas barren el árbol entero de la lámina, no sus hijos
+ * directos. Una lámina real es una rejilla de tarjetas, una lista o una
+ * figura con pie: si la comprobación que justifica el arnés —texto encima de
+ * texto— solo mirara un nivel, se apagaría con el primer contenedor.
+ *
+ * Cuenta además palabras VISIBLES y figuras, recoge los errores de consola
+ * atribuidos a la lámina que los soltó, y guarda una captura por si hace
  * falta juzgar a ojo. Lo que decide si algo está mal son los números.
  *
  * Uso:
@@ -12,9 +24,10 @@
  *   QA_BASE=http://localhost:3210 npm run qa:deck
  *   QA_BASE=http://localhost:3210 npm run qa:deck -- portada evidencia
  *
- * Sale con código distinto de cero si alguna lámina choca, desborda, solapa o
- * si la consola escupió un error. NO entra en `npm run check`: necesita un
- * servidor levantado y es una herramienta de desarrollo.
+ * Sale con 1 si alguna lámina falla cualquiera de las cinco o si la consola
+ * escupió un error; con 2 si no hay servidor o no se pudo leer el modelo. NO
+ * entra en `npm run check`: necesita un servidor levantado y es una
+ * herramienta de desarrollo.
  */
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
@@ -68,7 +81,20 @@ function leerModelo() {
     console.error(`No se pudo leer el modelo del deck:\n${r.stderr}`);
     process.exit(2);
   }
-  return JSON.parse(r.stdout);
+  try {
+    return JSON.parse(r.stdout);
+  } catch (e) {
+    // Cualquier escritura suelta a stdout desde `deck.ts` o sus imports
+    // —un `console.log` de depuración, un aviso de una dependencia— deja de
+    // ser JSON. Sin esta guarda muere con un SyntaxError que no señala a
+    // nadie.
+    console.error(
+      `El modelo del deck no devolvió JSON (${e.message}).\n` +
+        "Algo escribe en stdout desde src/content/deck.ts o sus imports.\n" +
+        `Salida recibida: ${JSON.stringify(r.stdout.slice(0, 400))}`,
+    );
+    process.exit(2);
+  }
 }
 
 const MODELO = leerModelo();
@@ -112,13 +138,15 @@ try {
  *    con `{ subtree: true }` y no a `document`: `document.getAnimations()`
  *    incluye cualquier animación infinita de otra parte del sitio y con una
  *    sola de esas esta espera no terminaría nunca.
- * 4. La opacidad calculada del slot es 1, y las fuentes ya cargaron. Lo
- *    tercero por sí solo tiene un agujero: entre que el nodo aparece y el
- *    navegador crea la animación, `getAnimations()` devuelve una lista VACÍA
- *    y `.every()` sobre una lista vacía es `true`, así que la espera pasaría
- *    justo en el peor momento. La opacidad no miente: durante el retardo
- *    vale 0. Y medir con la fuente de respaldo puesta da una caja que no es
- *    la que verá nadie.
+ * 4. La opacidad calculada del slot es 1. Lo tercero por sí solo tiene un
+ *    agujero: entre que el nodo aparece y el navegador crea la animación,
+ *    `getAnimations()` devuelve una lista VACÍA y `.every()` sobre una lista
+ *    vacía es `true`, así que la espera pasaría justo en el peor momento. La
+ *    opacidad no miente: durante el retardo vale 0.
+ *
+ * Las fuentes se esperan aparte, con `document.fonts.ready`. `fonts.status`
+ * NO sirve para esto: vale «loaded» siempre que no haya una carga en curso,
+ * incluso antes de que se haya pedido la primera fuente.
  */
 function enReposo(id) {
   if (document.querySelector('[data-estado="saliente"]') !== null) return false;
@@ -126,28 +154,114 @@ function enReposo(id) {
   if (slot === null) return false;
   if (slot.querySelector(`section[data-slide="${CSS.escape(id)}"]`) === null) return false;
   if (slot.getAnimations({ subtree: true }).some((a) => a.playState === "running")) return false;
-  if (getComputedStyle(slot).opacity !== "1") return false;
-  return document.fonts.status === "loaded";
+  return getComputedStyle(slot).opacity === "1";
 }
 
-/** La medición, que también corre dentro de la página. */
+/**
+ * La medición, que también corre dentro de la página.
+ *
+ * Barre el árbol ENTERO de la lámina, no sus hijos directos. Mirar un solo
+ * nivel funciona mientras una lámina sea un título suelto y se apaga con el
+ * primer contenedor: dos párrafos pisándose dentro de un `<div>` son nietos,
+ * y a un nivel de profundidad no existen.
+ */
 function medir({ id, sup, inf }) {
   const seccion = document.querySelector(
     `[data-estado="activa"] section[data-slide="${CSS.escape(id)}"]`,
   );
   if (seccion === null) return { falta: true };
 
+  const cache = new Map();
+  const estilo = (el) => {
+    let v = cache.get(el);
+    if (v === undefined) {
+      v = getComputedStyle(el);
+      cache.set(el, v);
+    }
+    return v;
+  };
+
   const nombre = (el) => {
     const texto = (el.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 24);
     return texto ? `${el.tagName.toLowerCase()}«${texto}»` : el.tagName.toLowerCase();
   };
 
+  /**
+   * ¿Por qué no se pinta este nodo? Se mira él y toda su ascendencia hasta la
+   * lámina, porque la opacidad y la visibilidad las hereda el subárbol
+   * entero.
+   *
+   * Se distinguen dos motivos y NO son lo mismo:
+   *
+   *   · `display: none` es la manera legítima de esconder algo en un
+   *     breakpoint. No ocupa sitio, no cuenta y no se denuncia.
+   *   · `opacity: 0` y `visibility: hidden` sí OCUPAN sitio: mueven la caja
+   *     de la lámina y suman sus palabras sin que nadie las lea. Eso es un
+   *     fallo, y encima de los mudos: una lámina invisible tampoco da error
+   *     de consola, que es la misma razón por la que existe la barrera de
+   *     movimiento reducido.
+   */
+  const motivos = new Map();
+  const noSePinta = (el) => {
+    if (motivos.has(el)) return motivos.get(el);
+    let motivo = null;
+    for (let n = el; n !== null && n !== seccion.parentElement; n = n.parentElement) {
+      const e = estilo(n);
+      if (e.display === "none") {
+        motivo = "display";
+        break;
+      }
+      if (e.visibility === "hidden" || e.visibility === "collapse") {
+        motivo = "fantasma";
+        break;
+      }
+      if (Number.parseFloat(e.opacity) < 0.05) {
+        motivo = "fantasma";
+        break;
+      }
+    }
+    motivos.set(el, motivo);
+    return motivo;
+  };
+
+  // Las palabras se cuentan nodo de texto a nodo de texto y solo si su rama
+  // se pinta. `innerText` no vale: respeta `display: none` y `visibility`,
+  // pero un subárbol a `opacity: 0` le suma sus palabras como si se leyeran.
+  let palabras = 0;
+  let palabrasApagadas = 0;
+  const paseador = document.createTreeWalker(seccion, NodeFilter.SHOW_TEXT);
+  for (let nodo = paseador.nextNode(); nodo !== null; nodo = paseador.nextNode()) {
+    const t = (nodo.nodeValue ?? "").replace(/\s+/g, " ").trim();
+    if (t === "") continue;
+    const cuantas = t.split(" ").length;
+    if (noSePinta(nodo.parentElement) === null) palabras += cuantas;
+    else if (noSePinta(nodo.parentElement) === "fantasma") palabrasApagadas += cuantas;
+  }
+
+  const todos = [seccion, ...seccion.querySelectorAll("*")];
+
+  // Los fantasmas: lo que ocupa sitio y no se ve. Se nombra la RAÍZ del
+  // subárbol apagado, no cada uno de sus descendientes.
+  const fantasmas = todos
+    .filter(
+      (el) =>
+        noSePinta(el) === "fantasma" &&
+        el.parentElement !== null &&
+        noSePinta(el.parentElement) === null &&
+        (el.textContent ?? "").trim() !== "",
+    )
+    .map((el) => `${nombre(el)} a opacidad ${estilo(el).opacity}/visibilidad ${estilo(el).visibility}`);
+
   // ⚠️ Los hijos ocultos por breakpoint devuelven un rect en ceros —esquina
   // superior izquierda, alto 0— y contaminan cualquier `Math.min` sobre
   // coordenadas: un solo `display: none` deja el `top` clavado en 0 y la
-  // lámina parece meterse debajo de la barra superior siempre.
-  const hijos = [...seccion.children].filter((c) => c.getBoundingClientRect().height > 0);
-  if (hijos.length === 0) return { vacia: true };
+  // lámina parece meterse debajo de la barra superior siempre. Los fantasmas
+  // se caen por el mismo sitio, pero por otra razón: tienen caja de verdad y
+  // la moverían sin que se vea nada.
+  const hijos = [...seccion.children].filter(
+    (c) => c.getBoundingClientRect().height > 0 && noSePinta(c) === null,
+  );
+  if (hijos.length === 0) return { vacia: true, fantasmas, palabrasApagadas };
 
   const cajas = hijos.map((c) => c.getBoundingClientRect());
   const top = Math.min(...cajas.map((c) => c.top));
@@ -155,28 +269,63 @@ function medir({ id, sup, inf }) {
   const izq = Math.min(...cajas.map((c) => c.left));
   const der = Math.max(...cajas.map((c) => c.right));
 
-  // Los hermanos en flujo de una lámina no pueden pisarse: la `<section>` es
-  // una retícula con `align-content: center` y `gap`, así que dos cajas
-  // intersecándose en los dos ejes es texto encima de texto. Lo posicionado
-  // fuera de flujo queda excluido: superponerse es justo su oficio.
-  const enFlujo = hijos.filter((c) => {
-    const pos = getComputedStyle(c).position;
-    return pos !== "absolute" && pos !== "fixed";
+  /**
+   * Los contenedores de texto de la lámina, a cualquier profundidad.
+   *
+   * Se excluye lo `inline`: su rect es la UNIÓN de sus líneas, así que dos
+   * hermanos inline de un párrafo de varias líneas se «solapan» sin pisarse
+   * un píxel en pantalla. El texto de un inline lo representa su bloque.
+   * Se excluye también lo posicionado fuera de flujo: superponerse es justo
+   * su oficio.
+   */
+  const bloquesConTexto = todos.filter((el) => {
+    if (noSePinta(el) !== null) return false;
+    if (el.getBoundingClientRect().height <= 0) return false;
+    const e = estilo(el);
+    if (e.display === "inline" || e.display === "contents") return false;
+    if (e.position === "absolute" || e.position === "fixed") return false;
+    return (el.textContent ?? "").trim() !== "";
   });
+
+  // Dos cajas de texto intersecándose en los dos ejes son texto encima de
+  // texto. Los pares de ascendencia se saltan: que una tarjeta contenga a su
+  // título no es un solape, es la definición de contener.
   const solapes = [];
-  for (let i = 0; i < enFlujo.length; i += 1) {
-    for (let j = i + 1; j < enFlujo.length; j += 1) {
-      const a = enFlujo[i].getBoundingClientRect();
-      const b = enFlujo[j].getBoundingClientRect();
+  for (let i = 0; i < bloquesConTexto.length; i += 1) {
+    for (let j = i + 1; j < bloquesConTexto.length; j += 1) {
+      const A = bloquesConTexto[i];
+      const B = bloquesConTexto[j];
+      if (A.contains(B) || B.contains(A)) continue;
+      const a = A.getBoundingClientRect();
+      const b = B.getBoundingClientRect();
       const dx = Math.min(a.right, b.right) - Math.max(a.left, b.left);
       const dy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
       // Un píxel de margen: el redondeo de subpíxel de dos cajas pegadas no
       // es un solape.
-      if (dx > 1 && dy > 1) solapes.push(`${nombre(enFlujo[i])}×${nombre(enFlujo[j])}`);
+      if (dx > 1 && dy > 1) solapes.push(`${nombre(A)}×${nombre(B)}`);
     }
   }
 
-  const texto = seccion.innerText.replace(/\s+/g, " ").trim();
+  // Texto guillotinado. Una caja de alto fijo con `overflow` distinto de
+  // `visible` corta lo que le sobra SIN dejar rastro: no hay barra de
+  // desplazamiento, no hay nada asomando, la caja de la lámina cabe
+  // perfectamente y la frase acaba a media letra. `scrollHeight` sí sabe
+  // cuánto se quedó fuera.
+  const recortes = [];
+  for (const el of todos) {
+    if (noSePinta(el) !== null) continue;
+    if ((el.textContent ?? "").trim() === "") continue;
+    const e = estilo(el);
+    const sobraY = el.scrollHeight - el.clientHeight;
+    const sobraX = el.scrollWidth - el.clientWidth;
+    if (e.overflowY !== "visible" && sobraY > 1) {
+      recortes.push(`${nombre(el)} deja fuera ${sobraY} px de alto`);
+    }
+    if (e.overflowX !== "visible" && sobraX > 1) {
+      recortes.push(`${nombre(el)} deja fuera ${sobraX} px de ancho`);
+    }
+  }
+
   return {
     top: Math.round(top),
     bot: Math.round(bot),
@@ -192,7 +341,10 @@ function medir({ id, sup, inf }) {
     // sí lo sabe, porque no lo recorta nadie.
     desborda: izq < -1 || der > window.innerWidth + 1,
     solapes,
-    palabras: texto ? texto.split(" ").length : 0,
+    recortes,
+    fantasmas,
+    palabras,
+    palabrasApagadas,
     figuras: seccion.querySelectorAll("svg, img").length,
   };
 }
@@ -230,6 +382,10 @@ for (const vp of VPS) {
     await p.waitForSelector(`[data-estado="activa"] section[data-slide="${id}"]`, {
       timeout: 15000,
     });
+    // Medir con la fuente de respaldo puesta da una caja que no verá nadie:
+    // `--font-serif` carga con `display: swap` y el título es lo único que
+    // hay en la lámina.
+    await p.evaluate(() => document.fonts.ready.then(() => true));
     await p.waitForFunction(enReposo, id, { timeout: 15000, polling: "raf" });
 
     const m = await p.evaluate(medir, { id, sup: MODELO.sup, inf: MODELO.inf });
@@ -239,7 +395,10 @@ for (const vp of VPS) {
       console.log(`${etiqueta} ⚠️ LA LÁMINA ACTIVA NO ES ESTA`);
       fallos += 1;
     } else if (m.vacia) {
-      console.log(`${etiqueta} ⚠️ SIN HIJOS VISIBLES`);
+      const porFantasmas = m.fantasmas.length
+        ? ` (lo único que ocupa sitio no se pinta: ${m.fantasmas.slice(0, 2).join(", ")})`
+        : "";
+      console.log(`${etiqueta} ⚠️ SIN HIJOS VISIBLES${porFantasmas}`);
       fallos += 1;
     } else {
       const alertas = [];
@@ -254,7 +413,16 @@ for (const vp of VPS) {
         );
       }
       if (m.solapes.length) {
-        alertas.push(`⚠️ HIJOS SOLAPADOS: ${[...new Set(m.solapes)].slice(0, 3).join(", ")}`);
+        alertas.push(`⚠️ TEXTO SOBRE TEXTO: ${[...new Set(m.solapes)].slice(0, 3).join(", ")}`);
+      }
+      if (m.recortes.length) {
+        alertas.push(`⚠️ TEXTO RECORTADO: ${[...new Set(m.recortes)].slice(0, 3).join(", ")}`);
+      }
+      if (m.fantasmas.length) {
+        alertas.push(
+          `⚠️ OCUPA SITIO Y NO SE PINTA (${m.palabrasApagadas} pal): ` +
+            `${[...new Set(m.fantasmas)].slice(0, 3).join(", ")}`,
+        );
       }
       fallos += alertas.length;
       console.log(

@@ -41,7 +41,19 @@ if (r.status !== 0) {
   console.error(`No se pudo leer el modelo del deck:\n${r.stderr}`);
   process.exit(2);
 }
-const IDS = JSON.parse(r.stdout);
+// Cualquier escritura suelta a stdout desde `deck.ts` o sus imports deja de
+// ser JSON: sin la guarda muere con un SyntaxError que no señala a nadie.
+let IDS;
+try {
+  IDS = JSON.parse(r.stdout);
+} catch (e) {
+  console.error(
+    `El modelo del deck no devolvió JSON (${e.message}).\n` +
+      "Algo escribe en stdout desde src/content/deck.ts o sus imports.\n" +
+      `Salida recibida: ${JSON.stringify(r.stdout.slice(0, 400))}`,
+  );
+  process.exit(2);
+}
 
 try {
   const respuesta = await fetch(`${BASE}/deck/presentacion`, { redirect: "manual" });
