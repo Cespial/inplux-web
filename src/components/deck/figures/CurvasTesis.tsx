@@ -72,24 +72,34 @@ export function CurvasTesis() {
         />
         <circle className={styles.curvaOrigen} cx={ORIGEN.x} cy={ORIGEN.y} r={4} />
 
-        <path
-          className={`${styles.curvaTrazo} ${styles.curvaRequisito}`}
-          d={REQUISITO}
-          pathLength={1}
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          className={`${styles.curvaTrazo} ${styles.curvaProblema}`}
-          d={PROBLEMA}
-          pathLength={1}
-          vectorEffect="non-scaling-stroke"
-        />
+        {/* ⚠️ NINGUNA de las dos curvas lleva `vector-effect:
+            non-scaling-stroke`, y quitarlo fue el arreglo de un fallo que llegó
+            a estar publicado: las dos se pintaban a medias.
 
-        {/* ⚠️ Este círculo es el ÚNICO trazo de la figura sin
-            `non-scaling-stroke`, y es a propósito: ver la nota de
-            `.curvaCruce` en deck.module.css. El aro tiene que guardar una
-            proporción con su diámetro, y un trazo que no escala la rompe en
-            cuanto cambia el tamaño de la pantalla. */}
+            `non-scaling-stroke` manda calcular el trazo —y con él el patrón de
+            `stroke-dasharray`— en espacio de PANTALLA, mientras que la
+            normalización de `pathLength={1}` está definida en espacio de
+            usuario. Las dos convenciones no se componen: el guion de 1,02 acaba
+            cubriendo `1,02 / escala` de la curva, así que a partir de la escala
+            1,02 la cola se queda sin pintar y la curva termina mocha. Medido en
+            la página, con el trazado ya terminado: 85 % pintado a 1920 px
+            (escala 1,20), 96 % a 1470 y 99 % a 1440. En un proyector faltaba el
+            último 15 % de las dos, que es justo donde una llega a su etiqueta y
+            la otra se aplana.
+
+            Sin el atributo, el guion se mide en las mismas unidades que la
+            curva y las dos se pintan enteras a cualquier escala. Es pariente de
+            la trampa ya registrada en este proyecto —`pathLength` y la cola del
+            trazo sin pintar— y el precio es que el grosor pasa a escalar con el
+            dibujo, que es exactamente lo que ya hacía el nodo del cruce. */}
+        <path className={`${styles.curvaTrazo} ${styles.curvaRequisito}`} d={REQUISITO} pathLength={1} />
+        <path className={`${styles.curvaTrazo} ${styles.curvaProblema}`} d={PROBLEMA} pathLength={1} />
+
+        {/* El aro del cruce guarda una proporción con su diámetro, y por eso su
+            trazo escala con el dibujo igual que el de las dos curvas: ver la
+            nota de `.curvaCruce` en deck.module.css. El único trazo de la
+            figura que sigue sin escalar es la línea base, que es un hilo de
+            1 px y no tiene proporción que guardar. */}
         <circle className={styles.curvaCruce} cx={CRUCE.x} cy={CRUCE.y} r={7} />
 
         {/* Cada etiqueta a la altura exacta del final de su curva: no hace
