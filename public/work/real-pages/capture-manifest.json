@@ -1,5 +1,6 @@
 {
   "capturedAt": "2026-07-21",
+  "note": "Acta de procedencia: cada sourceUrl es la URL contra la que se tomó la captura en capturedAt, no la URL vigente hoy. El sha256 corresponde a esa página en esa fecha; por eso el acta no se reescribe cuando una URL cambia, solo se anota.",
   "viewport": {
     "width": 1440,
     "height": 960
@@ -20,6 +21,7 @@
     {
       "slug": "tribai",
       "sourceUrl": "https://tribai.co/asistente",
+      "sourceUrlNote": "URL pública del asistente el día de la captura. Hoy responde 301 y el asistente vive en https://app.tribai.co/, que es la URL que cita el perfil desde el 2026-08-11.",
       "file": "tribai-asistente-2026-07-21.png",
       "sha256": "ab3f121645b9d9046e3cce0921261c8b8fa4cb60164aab3c1f6378082e2d1ef7"
     },
