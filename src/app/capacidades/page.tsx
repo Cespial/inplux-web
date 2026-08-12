@@ -185,22 +185,17 @@ const evidence = [
  * La evidencia con su estado y su fecha de verificación resueltos contra
  * `work.ts`.
  *
- * Si un `slug` deja de existir en `work.ts`, o si el `productHref` que enmarca
- * la captura no es exactamente una de las fuentes que el perfil publica, esto
- * revienta el build en vez de publicar una fecha prestada: la fecha no es
- * decoración, es lo que la leyenda afirma sobre esa URL.
+ * Si un `slug` deja de existir en `work.ts` esto revienta el build. Que el
+ * `productHref` sea exactamente una de las fuentes del perfil lo exige
+ * `verificationDateFor`, que revienta por su cuenta: la comprobación vive en el
+ * contrato y no aquí, para que ninguna otra pantalla que enmarque una URL
+ * tenga que acordarse de repetirla.
  */
 const evidenceItems = evidence.map((item) => {
   const profile = getWorkProfile(item.slug);
 
   if (!profile) {
     throw new Error(`Evidencia sin perfil en work.ts: ${item.slug}`);
-  }
-
-  if (!profile.sources.some((source) => source.url === item.productHref)) {
-    throw new Error(
-      `Evidencia sin fuente en work.ts: ${item.slug} enmarca ${item.productHref} y ninguna de sus fuentes publica esa URL`,
-    );
   }
 
   return {

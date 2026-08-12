@@ -54,17 +54,26 @@ export function formatShortDate(isoDate: string) {
  * una fuente se vuelve a verificar, el pie de esa pantalla se mueve con ella y
  * no queda una fecha vieja contradiciendo al perfil.
  *
- * Si la `url` no coincide con ninguna fuente, cae a la verificación más
- * reciente del perfil antes que a una fecha inventada.
+ * Si ninguna fuente publica esa `url`, revienta. Antes caía a la verificación
+ * más reciente del perfil, y eso era peor que un build roto: la leyenda afirma
+ * esa fecha *sobre esa URL*, así que un `sourceUrl` con un carácter de más
+ * publicaba una fecha prestada sin que nadie se enterara. La comprobación vive
+ * aquí y no en cada pantalla porque un contrato que cada llamador tiene que
+ * acordarse de aplicar no es un contrato: `/capacidades` lo aplicaba y la
+ * vitrina de `/trabajo` no.
  */
 export function verificationDateFor(
   sources: readonly WorkSource[],
   url: string,
 ) {
   const matched = sources.find((source) => source.url === url);
-  const latest = sources.reduce(
-    (newest, source) => (source.verifiedAt > newest ? source.verifiedAt : newest),
-    "",
-  );
-  return formatShortDate(matched?.verifiedAt ?? latest);
+
+  if (!matched) {
+    throw new Error(
+      `Fecha de verificación sin fuente: ninguna fuente publica ${url}. ` +
+        `Las fuentes de este perfil son: ${sources.map((source) => source.url).join(", ")}`,
+    );
+  }
+
+  return formatShortDate(matched.verifiedAt);
 }
