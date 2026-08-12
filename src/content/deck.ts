@@ -29,7 +29,7 @@ const APERTURA = [
   { id: "metodo", kind: "metodo", titulo: "Cuatro tiempos" },
   { id: "espejo", kind: "espejo", titulo: "El mismo método, dos lecturas" },
   { id: "evidencia", kind: "evidencia", titulo: "Trece cosas que este sitio no puede decir" },
-  { id: "puente", kind: "puente", titulo: "Cinco dominios, la misma fábrica" },
+  { id: "puente", kind: "puente", titulo: "Dominios que no se parecen, la misma fábrica" },
 ] as const;
 
 const CIERRE = [

@@ -7,7 +7,7 @@ export type DeckSource = {
 
 export const DECK_SOURCES = [
   {
-    label: "Flyvbjerg y Budzier, Why Your IT Project May Be Riskier than You Think",
+    label: "Flyvbjerg y Budzier, Why Your IT Project Might Be Riskier Than You Think",
     url: "https://arxiv.org/abs/1304.0265",
     supports:
       "Muestra de 1.471 proyectos de TI; sobrecosto promedio de 27 %; uno de cada seis con 200 % de sobrecosto y casi 70 % de sobreplazo.",
@@ -72,10 +72,10 @@ export const DECK_COPY = {
   },
   puente: {
     pregunta: "¿Ustedes son de un sector?",
-    respuesta: "Cinco dominios distintos. La misma fábrica.",
+    respuesta: "Dominios que no se parecen. La misma fábrica.",
   },
   capacidades: {
-    pregunta: "¿Qué comparten los cinco por dentro?",
+    pregunta: "¿Qué comparten por dentro?",
     respuesta: "La fábrica es la misma; cambia el dominio.",
   },
   comoEmpezamos: {
