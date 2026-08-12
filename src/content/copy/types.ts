@@ -126,7 +126,15 @@ export type ExperienceRailCopy = {
   relationExperience: string;
   relationPartner: string;
   clientNotes: Readonly<Record<string, string>>;
-  /** Etiquetas de los productos con atribución confirmada, por slug. */
+  /**
+   * Categoría y estado de cada producto del ribbon, por slug.
+   *
+   * Necesitan una entrada por cada producto que publique `work.ts`: el
+   * componente cae al valor de `work.ts` cuando falta la clave, y ese valor
+   * está en español. El tipo es un `Record` abierto, así que TypeScript no
+   * puede exigir las claves — quien agregue un producto tiene que agregarlas
+   * aquí a mano.
+   */
   productCategories: Readonly<Record<string, string>>;
   productStatuses: Readonly<Record<string, string>>;
 };

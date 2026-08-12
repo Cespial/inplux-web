@@ -187,11 +187,15 @@ export const homeCopyEn: HomeCopy = {
       "/brand/clients/experience-08.png": "Territorial public management",
     },
     productCategories: {
+      tribai: "Taxation",
       gobia: "Public management",
+      kelsen: "Law",
       laudos: "Arbitration",
     },
     productStatuses: {
+      tribai: "Public product",
       gobia: "Active pilot",
+      kelsen: "Public explorer",
       laudos: "Open beta",
     },
   },
