@@ -257,9 +257,11 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                   Qué sostiene este <em>perfil.</em>
                 </h2>
                 <p>
-                  Cada afirmación de este perfil se apoya en una fuente pública
-                  que se puede abrir. La fecha indica cuándo fue revisada por
-                  última vez.
+                  La tabla reúne las fuentes públicas de este perfil, con lo que
+                  respalda cada una y la fecha en que se revisó por última vez.
+                  La autoría del producto es una declaración de INPLUX: cuando
+                  además está publicada en la fuente, la columna «Qué respalda»
+                  lo dice.
                 </p>
               </div>
               <table
