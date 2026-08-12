@@ -171,7 +171,8 @@ export default function TrabajoPage() {
                     </div>
                   </dl>
                   <small>
-                    Sumaremos su pantalla cuando exista un perfil público verificable.
+                    {upcomingWork.attribution}, todavía sin fuente pública que
+                    abrir. Sumaremos su pantalla cuando la tenga.
                   </small>
                 </article>
               ) : null}

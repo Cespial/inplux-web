@@ -20,8 +20,8 @@ const workProfiles = [
     shortDescription:
       "Consulta tributaria con fuentes, vigencia y herramientas visibles.",
     status: "Producto público",
-    attribution: "Solución de INPLUX",
-    socialAlt: "Tribai: Producto público. Solución de INPLUX.",
+    attribution: "Desarrollo de INPLUX",
+    socialAlt: "Tribai: Producto público. Desarrollo de INPLUX.",
   },
   {
     slug: "gobia",
@@ -38,8 +38,8 @@ const workProfiles = [
     shortDescription:
       "Análisis, redacción y monitoreo jurídico con trazabilidad.",
     status: "Explorador público",
-    attribution: "Solución de INPLUX",
-    socialAlt: "Kelsen: Explorador público. Solución de INPLUX.",
+    attribution: "Desarrollo de INPLUX",
+    socialAlt: "Kelsen: Explorador público. Desarrollo de INPLUX.",
   },
   {
     slug: "laudos",

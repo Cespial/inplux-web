@@ -75,9 +75,9 @@ export const workProfiles = [
     },
     attribution: {
       state: "confirmed",
-      label: "Solución de INPLUX",
+      label: "Desarrollo de INPLUX",
       statement:
-        "INPLUX desarrolla Tribai. Este perfil documenta el producto y sus capacidades públicas, sin convertir esa autoría en una afirmación de resultados.",
+        "Tribai es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, interfaz y disponibilidad—, no quién lo construyó.",
     },
     partners: [],
     capabilities: [
@@ -230,9 +230,9 @@ export const workProfiles = [
     },
     attribution: {
       state: "confirmed",
-      label: "Solución de INPLUX",
+      label: "Desarrollo de INPLUX",
       statement:
-        "INPLUX desarrolla Kelsen. Este perfil documenta el producto y sus capacidades públicas, sin convertir esa autoría en una afirmación de resultados.",
+        "Kelsen es un desarrollo de INPLUX. La autoría la declaramos nosotros: las fuentes de este perfil respaldan lo que el producto publica —capacidades, biblioteca y disponibilidad—, no quién lo construyó.",
     },
     partners: [],
     capabilities: [
@@ -386,7 +386,10 @@ export const workDirectory = [
     name: "MiMotoYa",
     category: "Movilidad",
     status: "En desarrollo",
-    attribution: "Sin perfil público verificable",
+    // Es un desarrollo de INPLUX como los cuatro anteriores; lo que todavía no
+    // tiene es una superficie pública que citar, y por eso `hasProfile` es
+    // falso y no hay `href`.
+    attribution: "Desarrollo de INPLUX",
     href: null,
     hasProfile: false as const,
   },
@@ -394,61 +397,4 @@ export const workDirectory = [
 
 export function getWorkProfile(slug: string) {
   return workProfiles.find((profile) => profile.slug === slug);
-}
-
-const monthLabels = [
-  "ENE",
-  "FEB",
-  "MAR",
-  "ABR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AGO",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DIC",
-] as const;
-
-/**
- * `2026-08-11` → `11 AGO 2026`.
- *
- * Es el registro compacto de los pies en monoespaciada (`CAPTURA DE NAVEGADOR ·
- * 21 JUL 2026`), no el de la tabla de evidencia de `/trabajo/[slug]`, que
- * escribe `11 DE AGO DE 2026` con su propio `formatVerifiedDate` local. Son dos
- * formatos porque son dos superficies distintas, no por descuido.
- *
- * Formatea la cadena literal y nunca construye un `Date`: el servidor y el
- * navegador imprimen exactamente lo mismo, y ninguna zona horaria puede correr
- * la fecha un día. Si la cadena no tiene la forma esperada devuelve el original,
- * que sigue siendo una fecha legible.
- */
-function formatShortDate(isoDate: string) {
-  const [year, month, day] = isoDate.split("-");
-  const monthLabel = monthLabels[Number(month) - 1];
-  return year && monthLabel && day ? `${day} ${monthLabel} ${year}` : isoDate;
-}
-
-/**
- * Fecha en que se revisó por última vez la fuente que publica esa `url`.
- *
- * Las pantallas que enmarcan una URL oficial —la vitrina de `/trabajo`, la
- * evidencia de `/capacidades`— la leen de aquí en vez de escribirla a mano: si
- * una fuente se vuelve a verificar, el pie de esa pantalla se mueve con ella y
- * no queda una fecha vieja contradiciendo al perfil.
- *
- * Si la `url` no coincide con ninguna fuente, cae a la verificación más
- * reciente del perfil antes que a una fecha inventada.
- */
-export function verificationDateFor(
-  sources: readonly WorkSource[],
-  url: string,
-) {
-  const matched = sources.find((source) => source.url === url);
-  const latest = sources.reduce(
-    (newest, source) => (source.verifiedAt > newest ? source.verifiedAt : newest),
-    "",
-  );
-  return formatShortDate(matched?.verifiedAt ?? latest);
 }
