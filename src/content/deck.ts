@@ -1,4 +1,4 @@
-import { workProfiles } from "./work";
+import { workProfiles, type WorkSlug } from "./work";
 import { DECK_COPY, DECK_SOURCES } from "./deck.copy";
 
 export { DECK_COPY, DECK_SOURCES };
@@ -38,7 +38,41 @@ const CIERRE = [
   { id: "cierre", kind: "cierre", titulo: "Cuéntanos el problema" },
 ] as const;
 
-function construir(): DeckSlide[] {
+/**
+ * Arma el deck. Sin argumento, con todos los perfiles de `work.ts`, que es el
+ * deck que se presenta por omisión.
+ *
+ * `soloPerfiles` recorta la serie de producto a un subconjunto —el deck de solo
+ * legaltech, por ejemplo— **conservando el orden de `workProfiles`**: el orden
+ * lo manda la fuente, no el orden en que se escriban los slugs aquí. Y la
+ * numeración se recalcula sobre lo que queda, así que un deck recortado sigue
+ * yendo de 1 a N sin huecos y la barra de progreso no promete láminas que no
+ * existen.
+ *
+ * Es un parámetro y no un segundo modelo a propósito: un `construirLegaltech()`
+ * paralelo sería una segunda copia del orden, del reparto de apertura y cierre
+ * y de la numeración, y las dos se separarían en la primera lámina que se
+ * añadiera a una sola de ellas.
+ *
+ * ⚠️ Un slug que no exista es un error, no un perfil que se salta en silencio.
+ * Filtrar callando deja pasar una errata como un deck sin productos: quince
+ * láminas se quedan en diez, la numeración sigue sin huecos, la prueba pasa y
+ * nadie se entera hasta la sala.
+ */
+export function construirDeck(soloPerfiles?: readonly WorkSlug[]): DeckSlide[] {
+  const perfiles =
+    soloPerfiles === undefined
+      ? workProfiles
+      : workProfiles.filter((perfil) => soloPerfiles.includes(perfil.slug));
+
+  if (soloPerfiles !== undefined) {
+    const conocidos = new Set<string>(workProfiles.map((perfil) => perfil.slug));
+    const desconocidos = soloPerfiles.filter((slug) => !conocidos.has(slug));
+    if (desconocidos.length > 0) {
+      throw new Error(`no hay perfil para: ${desconocidos.join(", ")}`);
+    }
+  }
+
   const slides: DeckSlide[] = [];
   let n = 0;
 
@@ -48,8 +82,9 @@ function construir(): DeckSlide[] {
   }
 
   // El orden de los productos es el de work.ts. Una sola fuente para el
-  // orden: reordenar allí mueve el deck y /trabajo a la vez.
-  for (const perfil of workProfiles) {
+  // orden: reordenar allí mueve el deck y /trabajo a la vez. El subconjunto
+  // filtra, nunca reordena.
+  for (const perfil of perfiles) {
     n += 1;
     slides.push({ n, id: perfil.slug, kind: "producto", titulo: perfil.name, perfil });
   }
@@ -62,7 +97,7 @@ function construir(): DeckSlide[] {
   return slides;
 }
 
-export const SLIDES: readonly DeckSlide[] = construir();
+export const SLIDES: readonly DeckSlide[] = construirDeck();
 export const TOTAL_SLIDES = SLIDES.length;
 
 export function getSlideById(id: string): DeckSlide | undefined {
