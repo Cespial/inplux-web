@@ -28,6 +28,11 @@ export const DECK_COPY = {
     cifra: { valor: 200, sufijo: " %", antetitulo: "1 de cada 6", pie: "proyectos de TI se sale" },
     cuerpo:
       "El sobrecosto promedio de un proyecto de TI es del 27 %, y con ese número se puede vivir. El problema está en la cola: uno de cada seis se va al 200 % y arrastra casi 70 % de sobreplazo.",
+    // La única palabra visible de la figura: rotula la línea contra la que se
+    // leen las seis barras. Vive aquí, pegada a la cifra, porque sin ella el
+    // 200 % no tiene con respecto a qué. El <title> del SVG NO sube: ese es el
+    // nombre accesible del dibujo, no copy, y viaja con los trazos.
+    figura: { presupuesto: "presupuesto" },
     fuente: DECK_SOURCES[0],
   },
   tesis: {
@@ -35,6 +40,14 @@ export const DECK_COPY = {
     respuesta: "El software empieza en el problema, no en el requisito.",
     cuerpo:
       "Un requisito escrito antes de entender el problema no es un plan: es una apuesta con forma de documento. Nosotros empezamos por hablar con quien hace el trabajo.",
+    // Las dos etiquetas visibles de la figura, pegadas a la respuesta que
+    // espejan. Son los dos sustantivos de `respuesta` y solo significan algo
+    // junto a ella: separadas, alguien puede cambiar el titular y dejar las
+    // curvas rotuladas con la contradicción anterior, sin que nadie se entere.
+    // El <title> del SVG NO sube aquí: es el nombre accesible del dibujo —el
+    // equivalente de un `alt`—, describe trazos concretos y tiene que viajar
+    // con ellos.
+    figura: { requisito: "Requisito primero", problema: "Problema primero" },
   },
   metodo: {
     pregunta: "¿Cómo trabajamos?",

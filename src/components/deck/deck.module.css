@@ -468,6 +468,115 @@
 }
 
 /* ===========================================================================
+   Lámina 2 · El problema
+   ===========================================================================
+
+   La lámina que más trabaja del deck: es la única con un dato duro dentro, y
+   la cifra no sube sola —sube contra una figura que explica por qué el
+   promedio engaña—. De ahí la maquetación: el argumento a la izquierda, el
+   mecanismo a la derecha, y dentro de la derecha el numeral ARRIBA y las
+   barras DEBAJO.
+
+   ⚠️ Ese orden vertical no es estético. Las barras crecen hacia la derecha, y
+   la sexta triplica su largo: puestas al lado del numeral, la que se desborda
+   iría derecha a él. Ninguna medida del arnés caza una barra que roza un
+   glifo —es el mismo hueco que dejó pasar el nodo de la portada asomando por
+   el ojo de una «ó»—, así que la única defensa es una maquetación donde la
+   colisión no pueda ocurrir. Encima y debajo no se tocan.
+
+   El compás no vive aquí: llega en variables desde `figures/SeisBarras.tsx`
+   (ver `.cifraBloque`).
+   =========================================================================== */
+
+/* El tope del `gap` es más bajo que el de la tesis y se nota solo en vertical:
+   apilada, esta lámina es la más alta del deck —texto, fuente, dos líneas de
+   rótulo, un numeral de 4 rem y seis barras— y a 390 px llegaba a dejar 9 px
+   entre el pie de la figura y el riel de progreso. */
+.problemaRejilla {
+  display: grid;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  min-width: 0;
+}
+
+/* El mismo corte que la tesis, y por la misma razón: en apaisado el ancho
+   sobra y la altura no. Apilados, el numeral y las seis barras empujaban la
+   lámina contra el riel de progreso. Mitades iguales, no 1,05/0,95: aquí la
+   columna derecha lleva un numeral de 8,5 rem y una figura de 34 rem, y pide
+   tanto sitio como el texto. */
+@media (min-width: 62rem) {
+  .problemaRejilla {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+  }
+}
+
+/* `--inicio` llega desde `COMPAS`, que sale de `RITMO`. El bloque aparece con
+   el mismo segundo con que entra la primera barra, así que el numeral ya está
+   puesto —en 0— cuando la cascada arranca.
+   Y de paso tapa el único fotograma incómodo del contador: se renderiza a su
+   valor FINAL para que no haya discrepancia de hidratación, y el efecto que lo
+   pone a cero corre después del primer pintado. Ese fotograma ocurre a
+   opacidad 0. */
+.cifraBloque {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  animation: apareceSuave 520ms var(--ease-out) var(--inicio) both;
+}
+
+.cifraTexto {
+  margin: 0;
+}
+
+/* Dos líneas escritas, no envueltas: son dos campos distintos del copy
+   —`cifra.antetitulo` y `cifra.pie`— y el corte lo decide el copy, no el
+   ancho. Mismo rótulo de mono que `.pregunta`, SIN su filete: el filete es el
+   único acento de color de la escala y aquí ya lo lleva la pregunta; dos hilos
+   teal en la misma lámina compiten y ninguno ancla nada. */
+.cifraLinea {
+  display: block;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+/* El numeral. En `--ink`, no en teal, aunque la barra que le corresponde sea
+   teal: la jerarquía de este deck es por peso y tamaño, y lo que ata la cifra
+   a la barra es que las dos terminan en el mismo instante, no que compartan
+   color.
+   `tabular-nums` para que el salto de 9 a 10 y de 99 a 100 no zarandee lo que
+   ya está escrito; la cifra crece hacia la derecha, que es la misma dirección
+   en la que crece la barra. */
+.cifra {
+  display: block;
+  margin: clamp(0.25rem, 1.2vh, 0.85rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(4rem, 11vw, 8.5rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+/* El enlace de la fuente es el propio nombre del artículo, no un «arXiv:…»
+   suelto: el texto del enlace tiene que decir a dónde lleva sin su contexto,
+   que es como lo lee quien navega por enlaces. Subrayado, porque en un pie de
+   0,75 rem el color no basta para distinguirlo del resto de la línea. */
+.pieEnlace {
+  color: var(--text-accent-on-soft);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* ===========================================================================
    Lámina 3 · Tesis
    =========================================================================== */
 
@@ -655,6 +764,7 @@
   .slot,
   .escalonado > *,
   .figura,
+  .cifraBloque,
   .mallaNodo,
   .curvaTrazo,
   .curvaCruce,

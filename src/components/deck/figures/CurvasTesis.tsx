@@ -1,3 +1,4 @@
+import { DECK_COPY } from "@/content/deck";
 import styles from "../deck.module.css";
 
 /**
@@ -20,14 +21,18 @@ import styles from "../deck.module.css";
  * óvalo en cuanto la columna cambiara de ancho, y un óvalo no se lee como un
  * nodo.
  *
- * ⚠️ Las dos etiquetas visibles NO salen de `src/content/deck.copy.ts`: hoy
- * ese archivo no tiene texto para las figuras. Son las dos palabras de la
- * propia respuesta de la lámina —«El software empieza en el problema, no en el
- * requisito»— porque una curva sin nombre no dice nada, y sin ellas la figura
- * sería decoración. Queda anotado para que el copy de figuras suba a
- * `deck.copy.ts` cuando ese archivo se pueda tocar; aquí no hay ninguna cifra
- * ni ninguna afirmación nueva.
+ * Las dos etiquetas visibles salen de `DECK_COPY.tesis.figura`, pegadas a la
+ * respuesta que espejan: son los dos sustantivos de «El software empieza en el
+ * problema, no en el requisito», y solo significan algo junto a ella. Aquí
+ * quedan el `x`/`y` de cada una, que es geometría, no texto.
+ *
+ * ⚠️ El `<title>` de abajo sí se queda escrito aquí, y no es un descuido: no
+ * es copy, es el nombre accesible del dibujo —el equivalente de un `alt`—.
+ * Describe trazos concretos, así que si se mudara lejos del SVG, el día que
+ * alguien cambie una curva la descripción mentiría y nadie se enteraría.
  */
+
+const { requisito, problema } = DECK_COPY.tesis.figura;
 
 /** Los dos trazos pasan por este punto, y por eso se cruzan aquí de verdad. */
 const CRUCE = { x: 228, y: 116 };
@@ -95,7 +100,7 @@ export function CurvasTesis() {
           y={108}
           dominantBaseline="middle"
         >
-          Requisito primero
+          {requisito}
         </text>
         <text
           className={`${styles.curvaEtiqueta} ${styles.curvaEtiquetaProblema}`}
@@ -103,7 +108,7 @@ export function CurvasTesis() {
           y={40}
           dominantBaseline="middle"
         >
-          Problema primero
+          {problema}
         </text>
       </svg>
     </figure>

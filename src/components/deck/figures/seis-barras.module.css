@@ -1,0 +1,154 @@
+/* ===========================================================================
+   Lámina 2 · Las seis barras
+
+   ⚠️ En este archivo NO hay ni un número de tiempo, y es deliberado. El compás
+   de la lámina vive en `RITMO` / `T_CIFRA`, dentro de `SeisBarras.tsx`, y
+   llega hasta aquí en cinco variables que el componente pone en el `<svg>`:
+   --inicio, --paso, --dur, --retrasoCrecida y --durCrecida. El contador lee
+   esas mismas constantes. Un segundo escrito aquí sería un segundo que puede
+   divergir del que corre la cifra, y entonces el numeral llegaría a 200 con la
+   barra todavía creciendo (o al revés), que es el único fallo que esta lámina
+   no puede permitirse.
+   =========================================================================== */
+
+.figura {
+  min-width: 0;
+  /* ⚠️ `width: 100%` explícito. El bloque de la cifra es un flex en columna con
+     `align-items: flex-start`, así que sin esto el `<figure>` se ciñe a su
+     contenido, el `width: 100%` del SVG se queda sin referencia y el dibujo
+     cae a su tamaño intrínseco: medido, 370 px en una columna de 615, un
+     tercio más pequeño de lo que le toca. Se veía en la captura y en ninguna
+     línea del arnés. */
+  width: 100%;
+  /* El aire entre el numeral y la primera barra. Es la holgura que hay que
+     volver a mirar EN LA CAPTURA si alguien sube el tamaño de la cifra: una
+     barra rozando el numeral no la detecta ninguna medida del arnés. */
+  margin: clamp(0.75rem, 2vh, 1.5rem) 0 0;
+}
+
+/* `viewBox` de relación fija y tope explícito, nunca `preserveAspectRatio="none"`:
+   con los ejes escalados por separado, la barra que crece dejaría de crecer en
+   proporción y el 200 % del dibujo dejaría de ser el 200 % del contador. */
+.lienzo {
+  display: block;
+  width: 100%;
+  /* El tope es lo que impide que la figura se coma la lámina en un proyector
+     de 1920, donde la columna mide 836 px. Y no es más bajo porque a 1920 todo
+     lo demás ya está topado —el numeral en 8,5 rem, la respuesta en 4,3— y una
+     figura pequeña deja la lámina flotando en blanco. */
+  max-width: 38rem;
+  height: auto;
+}
+
+/* La marca del presupuesto entra antes que nada: es la referencia contra la
+   que se leen las seis, y una referencia que llega tarde no es referencia.
+   Discontinua para que no se lea como el eje de una gráfica.
+
+   En `--gray-400` y no en `--gray-300`: sobre blanco el primero da 4,8:1 y el
+   segundo 2,5:1, y esta línea no es adorno —es contra lo que se mide todo lo
+   demás—. Que sea del mismo color que las barras no confunde: una es vertical
+   y discontinua, las otras son horizontales y macizas. */
+.marca {
+  stroke: var(--gray-400);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  animation: aparece var(--dur) var(--ease-out) both;
+}
+
+.marcaEtiqueta {
+  fill: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  animation: aparece var(--dur) var(--ease-out) both;
+}
+
+/* Las seis entran con la MISMA duración y el MISMO retraso base; lo único que
+   las separa es `--i`, que escala el retraso. No es una preferencia de estilo:
+   medido en un deck anterior, una cascada con duraciones distintas por
+   elemento descoordinó el contador —la cifra llegaba al final con sesenta
+   casillas todavía en pie—, porque el instante en que termina la secuencia
+   deja de ser calculable desde un solo número.
+
+   ⚠️ `transform-box: fill-box` es imprescindible, no cosmético. En SVG el
+   valor inicial de `transform-box` es `view-box`, así que `left center`
+   resolvería contra el lienzo entero y no contra la barra: al escalar, la
+   barra se despegaría de su origen en x=24 y las seis dejarían de nacer del
+   mismo punto. Con `fill-box` el origen es el borde izquierdo de cada <rect>,
+   que es lo que se quiere. */
+.barra {
+  transform-box: fill-box;
+  transform-origin: left center;
+  fill: var(--gray-400);
+  animation: entrar var(--dur) var(--ease-out) both;
+  animation-delay: calc(var(--inicio) + var(--i) * var(--paso));
+}
+
+/* La sexta es la única que sigue, y va LINEAL, igual que el contador: los dos
+   recorren el mismo tramo en el mismo tiempo, así que cualquier curva aquí
+   tendría que repetirse allí. Con lineal en los dos, la coincidencia es
+   aritmética y no depende de que nadie copie una curva.
+
+   ⚠️ El relleno del segundo tramo es `forwards`, NO `both`. Con `both`, el
+   relleno hacia atrás aplicaría `from { scaleX(1) }` durante todo su retraso,
+   y como `desbordar` va la última de la lista ganaría a `entrar`: la sexta
+   barra aparecería entera desde el primer fotograma y se perdería su entrada,
+   que es justo lo que hace que no se sepa cuál es hasta que se dispara. Con
+   `forwards` no hay relleno hacia atrás, manda `entrar` mientras dura la
+   cascada, y `desbordar` toma el control solo en su tramo y se queda con el
+   valor final. */
+.barraDesbordada {
+  fill: var(--teal);
+  animation:
+    entrar var(--dur) var(--ease-out) both,
+    desbordar var(--durCrecida) linear forwards;
+  animation-delay: calc(var(--inicio) + var(--i) * var(--paso)), var(--retrasoCrecida);
+}
+
+/* Solo en X: una barra escalada en los dos ejes engordaría, y lo que esta
+   figura afirma es que el proyecto se alargó, no que creciera. */
+@keyframes entrar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* De 1 a 3 sobre el presupuesto: 200 % por encima, que es la cifra del
+   contador. Este 3 y el `1` de la sexta barra en `PROYECTOS` son las dos
+   mitades del mismo dato. */
+@keyframes desbordar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(3);
+  }
+}
+
+@keyframes aparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Con `both` y `forwards` de relleno, duración y retraso a cero dejan cada
+   elemento en su estado FINAL: las seis barras puestas, la sexta ya triplicada
+   y la marca en su sitio. Quien pide menos movimiento ve la figura completa
+   desde el primer fotograma, igual que ve la cifra completa. */
+@media (prefers-reduced-motion: reduce) {
+  .barra,
+  .barraDesbordada,
+  .marca,
+  .marcaEtiqueta {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

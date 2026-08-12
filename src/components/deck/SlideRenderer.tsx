@@ -1,5 +1,6 @@
 import type { DeckSlide } from "@/content/deck";
 import { PortadaSlide } from "./slides/PortadaSlide";
+import { ProblemaSlide } from "./slides/ProblemaSlide";
 import { TesisSlide } from "./slides/TesisSlide";
 import { Slide } from "./Slide";
 import styles from "./deck.module.css";
@@ -24,19 +25,20 @@ export function SlideRenderer({
   // todos los kind, y añadir uno sin su rama rompe el build en vez de
   // pintar un hueco en producción.
   switch (slide.kind) {
-    // Las dos láminas con cuerpo propio. El resto sigue en el grupo genérico
+    // Las tres láminas con cuerpo propio. El resto sigue en el grupo genérico
     // —solo su título— hasta que su tarea les toque; el `switch` sin `default`
     // garantiza que ninguna se quede sin rama.
     //
-    // Ni `titulo` ni `perfil` bajan a estas dos: su texto sale de DECK_COPY,
+    // Ni `titulo` ni `perfil` bajan a estas tres: su texto sale de DECK_COPY,
     // que es más largo y más preciso que el título del modelo (el del modelo
     // es el que rotula la barra superior y el índice, y ahí tiene que caber en
     // una línea). Pasarles el título sería una prop que no usan.
     case "portada":
       return <PortadaSlide id={slide.id} />;
+    case "problema":
+      return <ProblemaSlide id={slide.id} />;
     case "tesis":
       return <TesisSlide id={slide.id} />;
-    case "problema":
     case "metodo":
     case "espejo":
     case "evidencia":
