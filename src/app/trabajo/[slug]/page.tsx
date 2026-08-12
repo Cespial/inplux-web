@@ -257,8 +257,9 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                   Qué sostiene este <em>perfil.</em>
                 </h2>
                 <p>
-                  La fecha indica cuándo fue revisada cada fuente. Si una relación
-                  no aparece de forma verificable, se mantiene como no confirmada.
+                  Cada afirmación de este perfil se apoya en una fuente pública
+                  que se puede abrir. La fecha indica cuándo fue revisada por
+                  última vez.
                 </p>
               </div>
               <table
