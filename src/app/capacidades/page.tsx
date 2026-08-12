@@ -5,7 +5,8 @@ import { CapabilitiesWorkbench } from "@/components/routes/CapabilitiesWorkbench
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { getWorkProfile, verificationDateFor } from "@/content/work";
+import { getWorkProfile } from "@/content/work";
+import { verificationDateFor } from "@/content/work-format";
 import styles from "./capacidades.module.css";
 
 export const metadata: Metadata = {

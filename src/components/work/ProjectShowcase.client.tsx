@@ -9,11 +9,11 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import {
-  verificationDateFor,
-  type WorkProfile,
-  type WorkSlug,
-} from "@/content/work";
+// El tipo se borra en compilación; la función viene de un módulo sin datos.
+// Importar `verificationDateFor` desde `@/content/work` metía el literal
+// completo de `workProfiles` en el chunk cliente de `/trabajo`.
+import type { WorkProfile, WorkSlug } from "@/content/work";
+import { verificationDateFor } from "@/content/work-format";
 import styles from "./ProjectShowcase.module.css";
 
 type InputMode = "keyboard" | "pointer";
