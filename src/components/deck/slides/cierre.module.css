@@ -1,0 +1,140 @@
+/* ===========================================================================
+   La lámina de cierre — el contacto
+
+   La única lámina del deck sin figura, y la única cuyo argumento no es una
+   idea sino una CADENA: la dirección tiene que salir de aquí escrita en la
+   libreta de alguien, o en la foto que le hizo a la pantalla.
+
+   De ahí las tres decisiones tipográficas de este archivo:
+
+     · **mono**, y no serif. Una dirección no es una frase que se lee, es un
+       literal que se transcribe. Mono es además el registro con el que la web
+       de INPLUX ya escribe sus canales directos (`.contactDirect` en
+       home.module.css), y el registro con el que este deck escribe todo lo
+       que es máquina: la pregunta, el pie, los rótulos de las figuras. Aquí
+       ese registro sube de tamaño en vez de cambiar.
+     · **`--ink`**, no teal. 16,4:1 medido sobre `--off-white`, que es el
+       peor de los dos fondos del deck y el número que publica la escala: el
+       contraste más alto que hay aquí, y el que hace falta cuando alguien
+       copia carácter a carácter desde la última fila. El teal se queda donde
+       la escala lo permite —trazos y filetes, nunca texto—: es el hilo de
+       1 px del subrayado.
+     · **peso 400**. La mono de este deck va a 500 (`.pregunta`,
+       `.cifraLinea`), que a 48 px sería un ladrillo; 300 sería el peso más
+       fino de cualquier mono del proyecto, y esto se proyecta en salas donde
+       el blanco lava el trazo. 400 es el paso intermedio y el peso «normal»
+       de una cadena literal.
+
+   ⚠️ **Este archivo no lleva bloque de `prefers-reduced-motion`, y es
+   correcto: no declara ni una animación ni una transición.** Un bloque vacío
+   sería peor que no tenerlo, porque el día que alguien añada movimiento aquí
+   creería que ya está cubierto. Si entra movimiento, el bloque entra con él.
+   Las clases que esta lámina toma prestadas de `deck.module.css` —`.lamina`,
+   `.bloque`, `.respuesta`— tampoco animan nada; las que sí animan
+   (`.escalonado`, `.figura`, `.cifraBloque`, las de las figuras) no se usan
+   aquí, y las del riel ya están en el bloque de reducción de ese archivo.
+   =========================================================================== */
+
+/* La dirección.
+
+   El `clamp` corta a 3 rem desde 1.412 px de viewport: 48 px contra los
+   68,8 px del titular, o sea 0,70. La proporción es deliberada y NO es un
+   empate: el `<h1>` sigue siendo el titular de la lámina, igual que en el
+   resto del deck. Lo que hace inconfundible a la dirección no es el tamaño, es
+   que es lo único de la lámina en mono, lo único subrayado y lo único con un
+   acento de color.
+   ⚠️ Si alguna vez se sube el techo de `.respuesta` para salas grandes —la
+   duda que dejó abierta la Tarea 8 §3 sobre los 4,3/4,7 rem a 1920—, este
+   techo sube con él: 0,70 × el techo nuevo.
+
+   `overflow-wrap: anywhere` es una RED DE SEGURIDAD, no una decisión de
+   maquetación: en los tres tamaños del arnés la dirección cabe en una línea
+   con holgura (a 390 px sobran 109 de 342). Existe porque una cadena sin
+   espacios no se rompe sola —ni por la «@» ni por el punto—: sin esto, el
+   párrafo se estira a `max-content`, se sale de la columna y `.riel` recorta
+   con su `overflow-x: hidden` lo que se pase de la pantalla, sin barra de
+   desplazamiento y sin nada asomando. Medido sin la red: 26 px comidos a
+   360 px con raíz 24 y 66 px —dos caracteres— a 320 px con raíz 24. Y el
+   arnés no lo ve: su caja se mide sobre los HIJOS DIRECTOS de la <section>, y
+   ese rect no se mueve ni un píxel entre la versión recortada y la que no.
+   Una dirección recortada es una dirección FALSA; una partida en dos líneas
+   es fea y completa. Con la red puesta, y según la raíz que ponga el usuario:
+     390 px · raíz 16/18/20 → una línea (sobra 109 / 74 / 38 px)
+     390 px · raíz 24       → dos líneas, «gerencia@inplux.» / «co»
+     320 px · raíz 20 y más → dos líneas
+   Sin tracking: la retícula de una mono es su propia promesa de que ahí no
+   falta ni sobra un carácter, y apretarla convierte la dirección en logotipo.
+   Es además lo que hace que su ancho sea previsible. */
+.correo {
+  margin: clamp(1.5rem, 4vh, 3rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: clamp(1.35rem, 3.4vw, 3rem);
+  font-weight: 400;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* El subrayado es el único trazo no tipográfico de la lámina, y hace dos
+   trabajos a la vez: es la afordancia del enlace —que no puede depender solo
+   del color (WCAG 1.4.1)— y es el filete teal de la escala, que en las demás
+   láminas va ARRIBA, sobre la pregunta. Aquí no hay pregunta en el
+   copy, así que el único acento de la lámina baja al final: de donde la
+   lámina empieza a donde la lámina termina.
+
+   1 px, como todos los hilos de este deck (la retícula de la portada, la base
+   de las curvas, el filete de `.pregunta`): sobre fondo claro el efecto no lo
+   da la luz, lo da la precisión.
+
+   El `offset` no es cosmético — es la holgura contra los descendentes de la
+   «g» y la «p», que es el único sitio de esta lámina donde algo que no es un
+   glifo puede tocar un glifo. Medido en la captura, píxel a píxel:
+     0,22 em → 4 px de aire a 1440    0,28 em → 6 px a 1440 y a 1920, 3 px a 390
+   Con 0,28 em el filete se lee como una regla debajo de la palabra y no como
+   un tachón bajo; y el subrayado sale entero, sin los huecos que dejaría
+   `skip-ink` si el trazo cruzara las colas. ⚠️ Si sube el tamaño de la
+   dirección, esto se vuelve a mirar EN LA CAPTURA: ninguna medida del arnés
+   juzga si un filete roza una cola.
+
+   `color: inherit` no es defensivo: en este proyecto no hay ninguna regla
+   global para `a`, así que un enlace sin color declarado se pinta del azul de
+   la hoja del navegador. Hereda `--ink` de `.correo`, que es donde vive la
+   decisión de contraste. */
+.correoEnlace {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--teal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+/* Sin transición: el cambio es instantáneo a propósito. Una transición aquí
+   obligaría a este archivo a traer el bloque de movimiento reducido para
+   decorar un hover que nadie usa en una sala. */
+.correoEnlace:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* El lugar. Mismo rótulo de mono que `.pregunta` —versalita, 0,08 em— y por
+   la misma razón que `.cifraLinea` de la lámina del problema, SIN su filete:
+   el filete es el único acento de color de la escala y en esta lámina ya lo
+   lleva el subrayado de la dirección.
+
+   Va en el registro de ETIQUETA y no en el de `.pie` (0,75 rem fijos): un
+   lugar no es una nota al pie ni una fuente, es el sello con el que se cierra
+   la lámina, y a 1920 px un pie de 12 px sería una línea que no se lee desde
+   ninguna butaca. La versalita la pone el CSS: en el copy la ciudad sigue
+   escrita «Medellín, Colombia», que es lo que anuncia un lector de pantalla.
+
+   El margen es más corto que el de `.pie` (2,5vh contra 3vh) para que la
+   dirección y el lugar se lean como un grupo y no como dos remates sueltos. */
+.ciudad {
+  margin: clamp(1rem, 2.5vh, 1.75rem) 0 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}

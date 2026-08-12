@@ -1,0 +1,212 @@
+/* ===========================================================================
+   La fábrica por dentro · las cuatro capas
+
+   ⚠️ En este archivo NO hay ni un número de tiempo, igual que en
+   `seis-barras.module.css` y por la misma razón: el compás vive en `RITMO`,
+   dentro de `CapasFabrica.tsx`, y llega hasta aquí en cinco variables que el
+   componente pone en el <ul> — --inicio, --paso, --durEtiqueta, --durRegla y
+   --retrasoDominio—. Un segundo escrito aquí es un segundo que puede divergir
+   del que fija el orden de entrada de la pila.
+
+   ⚠️ Y NO hay ningún conteo de productos, ni puede haberlo. La rejilla de los
+   dominios es `repeat(auto-fit, minmax(…, 1fr))`: cuenta los hijos que le
+   llegan y colapsa las pistas vacías. Escribir `repeat(5, …)` sería el sexto
+   sitio del proyecto donde ese número aparece a mano.
+
+   Gramática (DECK.md §8.3), con lo que hace y lo que NO hace esta figura:
+     · cero rellenos sólidos, cero sombras, cero degradados, cero cajas ✓
+     · rótulo del color de su forma ✓ — con una salvedad de contraste, abajo
+     · descriptor secundario en gris, nunca negro ✓
+     · si un texto no cabe, se parte en dos líneas; jamás se agranda la forma ✓
+     · conector recortado: **no lo hay, y es deliberado.** Una pila no conecta
+       con nada: las capas se APOYAN. El conector de la gramática es para los
+       nodos de un grafo. Un hilo vertical uniendo estos cuatro estratos se
+       leería como un eje, que es el arquetipo de otra lámina.
+
+   Color, medido sobre --surface-page (#ffffff), que es el papel de la lámina:
+     --gray-400 #76716a → 4,84:1   rótulos, nombres de dominio y los hilos continuos
+     --teal-on-soft #0b746c → 5,63:1  el rótulo de la capa que cambia (TEXTO)
+     --teal #0d7d74 → 5,00:1       los tramos de esa capa (TRAZO, no texto)
+   El rótulo es del color de su forma, sí, pero en el escalón que alcanza AA
+   como texto: es la misma distinción que el deck ya hace entre --teal (trazo) y
+   --teal-on-soft (texto). Del lado gris coinciden exactos, porque --gray-400 ya
+   pasa AA. --gray-300 (2,45:1) queda descartado: estos hilos SON la figura, no
+   una retícula de fondo, y ya hubo que subir por esto la marca del presupuesto
+   de la lámina del problema.
+   =========================================================================== */
+
+.capas {
+  /* La separación entre estratos. Es lo único que gobierna la altura de la
+     figura, así que es la primera palanca si esta lámina se aprieta. */
+  --capa-sep: clamp(2rem, 6vh, 4.5rem);
+
+  /* `.lamina` ya pone su `gap` entre la columna de texto y esto; el margen
+     suma el aire que falta, que a 390 px es casi todo (allí el `gap` cae a su
+     suelo de 1 rem). */
+  margin: clamp(1.25rem, 3.5vh, 2.5rem) 0 0;
+  padding: 0;
+  min-width: 0;
+  list-style: none;
+}
+
+.capa {
+  position: relative;
+  min-width: 0;
+}
+
+.capa + .capa {
+  margin-top: var(--capa-sep);
+}
+
+/* El rótulo del estrato. Mismo registro de mono en versalita que `.pregunta` y
+   que `.cifraLinea`: es el rótulo de este deck, y una figura que se inventara
+   otro registro se leería como pegada de otro sitio. Sin filete —el de
+   `.pregunta` es el único acento de la escala y ya está puesto arriba—. */
+.capaEtiqueta {
+  margin: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.05vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  animation: capaAparece var(--durEtiqueta) var(--ease-out) both;
+  animation-delay: calc(var(--inicio) + var(--i) * var(--paso));
+}
+
+/* El estrato: un hilo de 1 px de borde a borde de la lámina.
+   `:not(.capaVaria)` y no un orden de fuente: la capa que se reparte NO tiene
+   hilo propio —el suyo son los tramos de sus dominios— y quiero que eso lo diga
+   la especificidad, no la posición de la regla en el archivo.
+   El hilo es un pseudo-elemento a propósito: no es contenido, no entra en el
+   DOM, ningún lector lo anuncia y el arnés no lo cuenta como palabra ni como
+   bloque de texto. */
+.capa:not(.capaVaria)::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: clamp(0.45rem, 1vh, 0.7rem);
+  background: var(--gray-400);
+  transform-origin: left center;
+  animation: capaDibuja var(--durRegla) var(--ease-out) both;
+  animation-delay: calc(var(--inicio) + var(--i) * var(--paso));
+}
+
+/* La capa que no es la misma en todos. Va en --teal-on-soft y no en --teal
+   porque es TEXTO: sobre blanco el primero da 5,63:1 y el segundo 5,00:1, y el
+   proyecto ya tiene escrito que el teal de marca no se usa como texto en ningún
+   sitio. El trazo de sus tramos sí es --teal, porque un trazo no lo mide ese
+   umbral. */
+.capaVaria .capaEtiqueta {
+  color: var(--teal-on-soft);
+}
+
+/* Los dominios de la capa que cambia.
+   ⚠️ `repeat(auto-fit, minmax(6.5rem, 1fr))` es la pieza que hace IMPOSIBLE
+   escribir el número de productos aquí: el navegador calcula cuántas pistas de
+   6,5 rem caben, `auto-fit` colapsa las que quedan vacías y el resultado es
+   «tantas columnas como hijos, si caben». Y es además el único mecanismo de
+   móvil que hace falta: donde no caben, envuelven. Mismo DOM, decide el CSS
+   (DECK.md §8.4), sin una sola media query.
+   ⚠️ `auto-fit`, NO `auto-fill`: una letra de diferencia y la figura se rompe.
+   Con `auto-fill` a 1440 px se generarían diez pistas y los tramos ocuparían la
+   mitad del ancho, dejando media capa sin hilo.
+   ⚠️ El límite duro de ese `minmax`: a la escala de móvil el nombre entra en
+   6,5 rem mientras su palabra más larga no pase de ~16 caracteres. Hoy la
+   mayor es «Porcicultura», 12. Si algún día un `category` trae una palabra más
+   larga, se sale de su pista — y como los dominios se derivan, puede pasar sin
+   que nadie toque este archivo. */
+.dominios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  column-gap: clamp(0.6rem, 1.2vw, 1.25rem);
+  row-gap: clamp(0.5rem, 1vh, 0.75rem);
+  margin: clamp(0.4rem, 0.9vh, 0.6rem) 0 0;
+  padding: 0;
+  min-width: 0;
+  list-style: none;
+}
+
+/* Descriptor secundario: gris, caja baja y sin tracking, para que no se
+   confunda con los rótulos de capa, que son versalita con 0,08 em. */
+.dominio {
+  position: relative;
+  min-width: 0;
+  padding-bottom: clamp(0.5rem, 1.1vh, 0.7rem);
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.9vw, 0.85rem);
+  line-height: 1.45;
+  animation: capaAparece var(--durEtiqueta) var(--ease-out) both;
+  animation-delay: calc(
+    var(--inicio) + var(--i) * var(--paso) + var(--retrasoDominio)
+  );
+}
+
+/* El tramo de hilo de cada dominio. Los cortes entre uno y otro NO se dibujan:
+   son el `column-gap` de la rejilla, es decir, el hueco que deja el propio
+   reparto. La capa está partida porque está repartida, no porque alguien haya
+   pintado unas rayitas. */
+.dominio::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--teal);
+  transform-origin: left center;
+  animation: capaDibuja var(--durRegla) var(--ease-out) both;
+  animation-delay: calc(
+    var(--inicio) + var(--i) * var(--paso) + var(--retrasoDominio)
+  );
+}
+
+/* ⚠️ Ni `opacity: 0` ni `scaleX(0)` como valor BASE, aunque sea lo que dicta la
+   costumbre. El relleno `both` ya aplica el fotograma inicial durante todo el
+   retardo, y escribirlo además en la regla base significa que el día que una
+   animación no llegue a aplicarse —una consulta que no case, un `content`
+   suprimido, un navegador raro— la figura se queda invisible y en silencio. Con
+   el estado final en la regla base, el peor caso es que aparezca sin animarse.
+   Es el mismo criterio de `.escalonado > *` en deck.module.css. */
+@keyframes capaAparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Los hilos se DIBUJAN, no aparecen: la pila se construye desde su cimiento y
+   ver crecer cada estrato de izquierda a derecha es lo que la convierte en una
+   pila y no en una lista de cuatro rayas. Solo en X, y con el origen a la
+   izquierda, que es de donde nacen los cuatro. */
+@keyframes capaDibuja {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Con `both` de relleno, duración y retardo a cero dejan cada elemento en su
+   estado FINAL: los cuatro hilos enteros, los tramos del dominio puestos y los
+   rótulos legibles desde el primer fotograma.
+   Importa porque aquí los retardos llegan a 1,17 s: el bloque global de
+   `globals.css` solo toca duración e iteraciones, así que sin
+   `animation-delay: 0ms` quien pide menos movimiento vería la pila a medio
+   construir más de un segundo, y sin un solo error de consola. */
+@media (prefers-reduced-motion: reduce) {
+  .capaEtiqueta,
+  .capa::after,
+  .dominio,
+  .dominio::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
