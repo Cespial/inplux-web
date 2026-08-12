@@ -93,6 +93,7 @@ Aplican a **todas** las tareas. No se repiten en cada una.
   }
   ```
 - **Cada `<section>` de lámina lleva `data-slide="<id>"`.** Sin eso el arnés no sabe cuál es la lámina visible.
+- ⚠️ **Durante toda la transición hay DOS `[data-slide]` montados** — la entrante y la saliente. El riel marca el slot visible con `data-estado="activa"`, y ese atributo vive en el **slot**, no en la `<section>`. Todo lo que mida una lámina filtra por `[data-estado="activa"] section[data-slide="…"]`; sin ese filtro se mide la caja de la saliente la mitad de las veces, y el fallo se ve como ruido aleatorio, no como error. Contrato establecido y verificado en navegador por la Tarea 5.
 - **Commits sin trailer de atribución a Claude.** Mensaje en español, imperativo, explicando el porqué.
 - **Rama de trabajo.** F0.5 va en `fix/atribucion-tribai-kelsen`; el deck en `feat/deck`. `main` auto-despliega: no se mergea nada que no haya pasado `npm run check`.
 
@@ -1369,11 +1370,16 @@ for (const vp of VPS) {
 
   for (const id of IDS) {
     await p.goto(`${BASE}/deck/presentacion#${id}`, { waitUntil: "networkidle" });
-    await p.waitForSelector(`section[data-slide="${id}"]`, { timeout: 15000 });
+    // ⚠️ Durante la transición hay DOS [data-slide] montados: la entrante y
+    // la saliente. `data-estado="activa"` vive en el SLOT, no en la section,
+    // y es lo único que distingue cuál se está viendo. Medir sin ese filtro
+    // devuelve la caja de la lámina equivocada la mitad de las veces —
+    // contrato establecido por la Tarea 5, verificado en navegador.
+    await p.waitForSelector(`[data-estado="activa"] section[data-slide="${id}"]`, { timeout: 15000 });
     await p.waitForTimeout(2800);
 
     const m = await p.evaluate(({ id, sup, inf }) => {
-      const s = document.querySelector(`section[data-slide="${id}"]`);
+      const s = document.querySelector(`[data-estado="activa"] section[data-slide="${id}"]`);
       // Los hijos ocultos por breakpoint devuelven un rect en ceros y
       // contaminan el Math.min: hay que filtrarlos.
       const hijos = [...s.children].filter((c) => c.getBoundingClientRect().height > 0);
