@@ -16,9 +16,10 @@
     "inspect:hero": "node scripts/inspect-hero-media.mjs",
     "test:hero-inspector": "node --test scripts/inspect-hero-media.test.mjs",
     "test:deck": "node --test scripts/verify-deck-model.test.mjs",
+    "test:deck-reasons": "node --test scripts/verify-deck-reasons.test.mjs",
     "qa:deck": "node scripts/qa-deck.mjs",
     "qa:reduce": "node scripts/qa-reduce.mjs",
-    "check": "npm run lint && npm run test:hero-inspector && npm run test:deck && npm run build && npm run check:http"
+    "check": "npm run lint && npm run test:hero-inspector && npm run test:deck && npm run test:deck-reasons && npm run build && npm run check:http"
   },
   "dependencies": {
     "next": "16.2.10",

@@ -1,5 +1,6 @@
 import type { DeckSlide } from "@/content/deck";
 import { EspejoSlide } from "./slides/EspejoSlide";
+import { EvidenciaSlide } from "./slides/EvidenciaSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
 import { PortadaSlide } from "./slides/PortadaSlide";
 import { ProblemaSlide } from "./slides/ProblemaSlide";
@@ -9,10 +10,12 @@ import styles from "./deck.module.css";
 
 export function SlideRenderer({
   slide,
+  // Los motivos bajan desde la ruta —el único sitio donde se puede leer del
+  // disco— y los consume la lámina de evidencia, que no puede escribirlos
+  // como literales sin romper el build en su propia lista.
+  motivos,
 }: {
   slide: DeckSlide;
-  // Los motivos bajan desde la ruta y los consume la lámina de evidencia. Se
-  // declaran aquí —sin desestructurar— para que el riel ya los pase.
   motivos: readonly string[];
 }) {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
@@ -44,7 +47,11 @@ export function SlideRenderer({
       return <MetodoSlide id={slide.id} />;
     case "espejo":
       return <EspejoSlide id={slide.id} />;
+    // La única lámina que recibe algo más que su id, y por una razón concreta:
+    // su contenido no existe en el código fuente. Se lee del verificador en
+    // build, arriba del límite de cliente, y baja hasta aquí.
     case "evidencia":
+      return <EvidenciaSlide id={slide.id} motivos={motivos} />;
     case "puente":
     case "capacidades":
     case "como-empezamos":
