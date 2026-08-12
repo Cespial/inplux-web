@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import { useEffect, useRef, useState } from "react";
+import { TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
 import { SlideRenderer } from "./SlideRenderer";
 import { useDeckNav } from "./useDeckNav";
 import styles from "./deck.module.css";
@@ -19,6 +19,7 @@ const RECORRIDO_MINIMO = 60;
 export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   const nav = useDeckNav();
   const inicioTactil = useRef<{ x: number; y: number } | null>(null);
+  const slotActivo = useRef<HTMLDivElement | null>(null);
 
   // Dos slots, no una lista de quince. Montar las quince haría que todas las
   // animaciones de entrada terminaran antes de que nadie las viera.
@@ -38,11 +39,27 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
     setMontada({ slide: nav.slide, secuencia: nav.secuencia });
   }
 
+  // Cambiar de lámina mueve el foco a la que entra. Es lo que la anuncia —el
+  // slot lleva su nombre accesible con posición y título— y de paso resuelve
+  // que el foco se quedaba en un botón que acababa de deshabilitarse al
+  // llegar a un extremo. En la carga (secuencia 0) no se toca el foco: nadie
+  // ha pedido nada todavía.
+  useEffect(() => {
+    if (nav.secuencia === 0) return;
+    slotActivo.current?.focus({ preventScroll: true });
+  }, [nav.secuencia]);
+
   return (
     <div
       className={styles.riel}
       data-direccion={nav.direccion === 1 ? "adelante" : "atras"}
       onTouchStart={(e) => {
+        // Un segundo dedo desarma el gesto: ampliar con dos dedos no es
+        // deslizar, y sin esta guarda el pellizco se leería como avance.
+        if (e.touches.length !== 1) {
+          inicioTactil.current = null;
+          return;
+        }
         inicioTactil.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       }}
       onTouchEnd={(e) => {
@@ -79,12 +96,24 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         </div>
       )}
 
-      <div className={styles.slot} data-estado="activa" key={`activa-${nav.secuencia}`}>
+      <div
+        className={styles.slot}
+        data-estado="activa"
+        key={`activa-${nav.secuencia}`}
+        ref={slotActivo}
+        tabIndex={-1}
+        role="group"
+        aria-roledescription="lámina"
+        aria-label={`${nav.indice + 1} de ${TOTAL_SLIDES}: ${nav.slide.titulo}`}
+      >
         <SlideRenderer slide={nav.slide} motivos={motivos} />
       </div>
 
       <div className={styles.controles}>
-        <p className={styles.contadorLaminas} aria-live="polite">
+        {/* El contador ya no es una región viva: el cambio lo anuncia el foco
+            al aterrizar en la lámina, con su posición y su título. Dos
+            anuncios para el mismo movimiento sobraban. */}
+        <p className={styles.contadorLaminas}>
           <span className={styles.contadorNumero}>{nav.indice + 1}</span> / {TOTAL_SLIDES}
         </p>
 
@@ -108,25 +137,16 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         </div>
       </div>
 
-      {/* Sin JS, o antes de hidratar, las quince láminas siguen siendo
-          texto navegable: el deck se puede leer y se puede indexar. El riel
-          deja montada la portada, así que la lista la repite: se anuncia como
-          índice para que se lea como tal y no como una lámina duplicada. */}
+      {/* Sin JavaScript el recorrido no existe. Repetir aquí los quince
+          títulos ofrecía MENOS que /deck —que los publica enlazados— y metía
+          quince `data-slide` de más en el HTML construido, una trampa para
+          cualquiera que los cuente. Queda la frase y el enlace. Si algún día
+          las láminas traen su cuerpo real aquí dentro, se reconsidera. */}
       <noscript>
-        <div className={styles.sinScript}>
-          <p>
-            El recorrido lámina a lámina necesita JavaScript. Estas son las quince
-            láminas de la presentación, en orden.
-          </p>
-          {SLIDES.map((slide) => (
-            <section key={slide.id} data-slide={slide.id} aria-label={slide.titulo}>
-              <h2 className={styles.titulo}>{slide.titulo}</h2>
-            </section>
-          ))}
-          <p>
-            <a href="/deck">Volver al índice del deck</a>
-          </p>
-        </div>
+        <p className={styles.sinScript}>
+          El recorrido lámina a lámina necesita JavaScript.{" "}
+          <a href="/deck">Ver el índice de las quince láminas</a>.
+        </p>
       </noscript>
     </div>
   );

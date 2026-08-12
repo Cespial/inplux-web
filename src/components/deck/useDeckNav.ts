@@ -9,6 +9,13 @@ function indiceDesdeHash(hash: string): number {
   return encontrado === -1 ? 0 : encontrado;
 }
 
+/** ¿El evento nace dentro de algo donde se escribe? */
+function escribiendo(objetivo: EventTarget | null): boolean {
+  if (!(objetivo instanceof HTMLElement)) return false;
+  if (objetivo.isContentEditable) return true;
+  return ["INPUT", "TEXTAREA", "SELECT"].includes(objetivo.tagName);
+}
+
 export type DeckNav = {
   indice: number;
   slide: DeckSlide;
@@ -56,13 +63,23 @@ export function useDeckNav(): DeckNav {
   // El hash se escribe en un efecto, no dentro del updater: history es un
   // efecto de fuera de React y no puede vivir en una función pura.
   //
-  // La guarda es `secuencia === 0`, no un ref de «primer render». Con el ref,
-  // StrictMode monta los efectos dos veces: la segunda pasada ya lo encuentra
-  // consumido, reescribe el hash a #portada con el índice viejo y la lectura
-  // del hash que corre justo después —en la misma pasada— aterriza en la
-  // portada en vez de en la lámina pedida. Verificado en `npm run dev`
-  // abriendo /deck/presentacion#espejo. `secuencia` solo avanza cuando la
-  // lámina cambió de verdad, así que sobrevive a cualquier número de pasadas.
+  // La guarda es `secuencia === 0`, no un ref de «primer render».
+  //
+  // ⚠️ El camino que rompe con el ref es **entrar desde el índice de /deck**,
+  // no recargar. React 19.2 NO dobla los efectos durante la hidratación, así
+  // que una recarga dura de /deck/presentacion#espejo aterriza bien incluso
+  // con el ref: quien lo compruebe por ahí lo verá funcionar y creerá que la
+  // guarda sobra. El montaje que viene de una navegación de cliente sí se
+  // dobla. Traza instrumentada, versión del brief, clic en el enlace del
+  // índice (11-ago-2026):
+  //
+  //   lectura inicial, hash = #espejo    ← pasada 1, pide la lámina 5
+  //   replaceState -> portada indice 0   ← pasada 2, escribe con el índice viejo
+  //   lectura inicial, hash = #portada   ← pasada 2, lee el hash ya pisado
+  //
+  // y el deck abre en la portada con la URL reescrita a #portada. `secuencia`
+  // solo avanza cuando la lámina cambió de verdad, así que sobrevive a
+  // cualquier número de pasadas.
   useEffect(() => {
     if (estado.secuencia === 0) return;
     window.history.replaceState(null, "", `#${SLIDES[estado.indice].id}`);
@@ -82,8 +99,20 @@ export function useDeckNav(): DeckNav {
   useEffect(() => {
     const alPulsar = (evento: KeyboardEvent) => {
       if (evento.metaKey || evento.ctrlKey || evento.altKey) return;
+      // Mantener pulsada la flecha no debe recorrer el deck entero.
+      if (evento.repeat) return;
+      // Las láminas van a llevar cuerpo: si el foco está escribiendo en algún
+      // sitio, el espacio y las flechas son suyos, no del riel.
+      if (escribiendo(evento.target)) return;
       switch (evento.key) {
-        case "ArrowRight": case "PageDown": case " ": evento.preventDefault(); siguiente(); break;
+        case " ":
+          // Mayús+Espacio retrocede de página en el navegador; que aquí
+          // avanzara era lo contrario de lo que pide quien lo pulsa.
+          evento.preventDefault();
+          if (evento.shiftKey) anterior();
+          else siguiente();
+          break;
+        case "ArrowRight": case "PageDown": evento.preventDefault(); siguiente(); break;
         case "ArrowLeft": case "PageUp": evento.preventDefault(); anterior(); break;
         case "Home": evento.preventDefault(); ir(0); break;
         case "End": evento.preventDefault(); ir(TOTAL_SLIDES - 1); break;

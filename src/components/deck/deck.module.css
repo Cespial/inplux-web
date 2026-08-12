@@ -24,8 +24,11 @@
   background: var(--surface-page);
   color: var(--text-strong);
   overflow-x: hidden;
-  /* El gesto horizontal es del riel; el vertical sigue siendo del navegador. */
-  touch-action: pan-y;
+  /* El gesto horizontal es del riel; el vertical y el pellizco siguen siendo
+     del navegador. `pan-y` a secas NO incluye `pinch-zoom`: dejaba sin ampliar
+     todo el deck, que es de lo primero que necesita quien no ve bien de
+     lejos. */
+  touch-action: pan-y pinch-zoom;
 }
 
 .riel *,
@@ -47,6 +50,15 @@
 .slot[data-estado="activa"] {
   z-index: 1;
   animation: entraAdelante var(--deck-entra) var(--ease-out) var(--deck-espera) both;
+}
+
+/* El slot recibe el foco al cambiar de lámina. Con teclado se marca; el anillo
+   va por dentro porque el slot ocupa la altura entera y por fuera lo recortaría
+   el `overflow` del riel. Con ratón no llega a marcarse: `:focus-visible` no
+   casa con un foco puesto por código tras un clic. */
+.slot:focus-visible {
+  outline: 2px solid var(--teal-on-soft);
+  outline-offset: -4px;
 }
 
 .slot[data-estado="saliente"] {
@@ -191,16 +203,12 @@
    navegador lo esconde, y darle display aquí lo devolvería a la vista como
    texto crudo. La clase va dentro. */
 
+/* Sin borde superior: la caja se ciñe a la medida del texto y el filete se
+   quedaba a media página, como una raya suelta debajo de la lámina. */
 .sinScript {
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  padding: clamp(2rem, 6vh, 4rem) var(--deck-gutter);
-  border-top: 1px solid var(--border-default);
-}
-
-.sinScript p {
   max-width: 46ch;
   margin: 0;
+  padding: clamp(2rem, 6vh, 4rem) var(--deck-gutter);
   color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
@@ -210,23 +218,17 @@
   color: var(--text-accent-on-soft);
 }
 
-.sinScript .titulo {
-  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-  line-height: 1.05;
-}
-
-/* Sin JavaScript el recorrido no existe, y lo que el servidor dejó montado se
-   vuelve adorno muerto: la portada repetida encima del índice y dos botones
-   que no responden. Se retiran y la página queda siendo lo único que sí
-   funciona ahí, el índice de las quince láminas. Al imprimir, la consulta
-   devuelve `initial-only` y no `none`, así que el riel sigue en pie. */
+/* Sin JavaScript el recorrido no existe: la barra de control queda como dos
+   botones que no responden. Se retira, la lámina que el servidor montó se
+   queda —es contenido de verdad— y debajo va la frase con el enlace a /deck,
+   que es el índice que sí navega. Al imprimir, la consulta devuelve
+   `initial-only` y no `none`, así que el riel sigue en pie. */
 @media (scripting: none) {
   .riel {
     display: block;
     min-height: 0;
   }
 
-  .slot,
   .controles {
     display: none;
   }
