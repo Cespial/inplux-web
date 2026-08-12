@@ -395,7 +395,7 @@ export const workProfiles = [
       label: "Abrir demostración",
       href: "https://porkia.co/#demo",
       detail:
-        "Las pantallas de la aplicación pueden recorrerse públicamente en el navegador, con datos de ejemplo. La aplicación se entrega por inscripción a la beta cerrada.",
+        "Las pantallas de la aplicación pueden recorrerse públicamente en el navegador, con datos de ejemplo. La aplicación todavía no se entrega: el sitio inscribe a la beta cerrada y anuncia que enviará el enlace cuando esté lista.",
     },
     attribution: {
       state: "confirmed",
@@ -432,8 +432,8 @@ export const workProfiles = [
       // La demostración pública corre sobre datos de ejemplo de una granja
       // ficticia: sus cifras describen el escenario de la demo, no el producto.
       // Por eso este bloque usa etiquetas cualitativas, como el de Kelsen.
-      primaryMetric: "LOTE",
-      metricLabel: "seguido desde el parto",
+      primaryMetric: "CERDO",
+      metricLabel: "seguido desde el día del parto",
       items: [
         { label: "Cuido", value: "Bultos y consumo" },
         { label: "Sanidad", value: "Plan programado", state: "accent" },
@@ -472,8 +472,8 @@ export const workDirectory = [
     name: "MiMotoYa",
     category: "Movilidad",
     status: "En desarrollo",
-    // Es un desarrollo de INPLUX como los cuatro anteriores; lo que todavía no
-    // tiene es una superficie pública que citar, y por eso `hasProfile` es
+    // Es un desarrollo de INPLUX como los perfiles anteriores; lo que todavía
+    // no tiene es una superficie pública que citar, y por eso `hasProfile` es
     // falso y no hay `href`.
     attribution: "Desarrollo de INPLUX",
     href: null,

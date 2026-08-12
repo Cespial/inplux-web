@@ -25,7 +25,7 @@ const bannedPublicLanguage = [
   ["jerga agéntica", /\b(?:agentic|ag[eé]ntic[oa]s?|multiagente)\b/giu],
   ["afirmación autónoma no aprobada", /agentes?\s+de\s+IA|se\s+mejoran\s+solos/giu],
   ["cobertura geográfica no aprobada", /alcance\s+nacional|areaServed/giu],
-  ["logo o relación sin permiso",/Parque\s+Arv[ií]|Think\s*IT|Fourier|Observatorio\s+de\s+Datos/giu],
+  ["logo o relación sin permiso", /Parque\s+Arv[ií]|Think\s*IT|Fourier|Observatorio\s+de\s+Datos/giu],
   ["prueba social anterior", /conf[ií]an\s+en\s+nosotros/giu],
   ["impacto no demostrado", /resultados?\s+medibles?|impacto\s+medible/giu],
   ["posicionamiento profesional anterior", /tributaristas\s+que\s+construyen\s+tecnolog[ií]a/giu],
