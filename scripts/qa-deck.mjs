@@ -2,15 +2,16 @@
  * Arnés de QA del deck: mide cajas, no capturas.
  *
  * Una captura hay que mirarla; una caja se compara. Este arnés recorre las
- * quince láminas en tres tamaños y de cada una comprueba cinco cosas:
+ * quince láminas en tres tamaños y de cada una comprueba seis cosas:
  *
  *   · que su caja quepa en el hueco que dejan las dos barras del chrome;
  *   · que no se salga de lado —el riel la recorta y a ojo no se ve—;
  *   · que ningún texto se pinte encima de otro;
- *   · que ningún texto se quede recortado dentro de una caja que lo tapa;
+ *   · que ninguna línea de texto quede TAPADA por lo que se pinta encima;
+ *   · que ningún texto se quede recortado dentro de una caja que lo corta;
  *   · que todo lo que ocupa sitio se PINTE de verdad.
  *
- * Las tres últimas barren el árbol entero de la lámina, no sus hijos
+ * Las cuatro últimas barren el árbol entero de la lámina, no sus hijos
  * directos. Una lámina real es una rejilla de tarjetas, una lista o una
  * figura con pie: si la comprobación que justifica el arnés —texto encima de
  * texto— solo mirara un nivel, se apagaría con el primer contenedor.
@@ -275,8 +276,12 @@ function medir({ id, sup, inf }) {
    * Se excluye lo `inline`: su rect es la UNIÓN de sus líneas, así que dos
    * hermanos inline de un párrafo de varias líneas se «solapan» sin pisarse
    * un píxel en pantalla. El texto de un inline lo representa su bloque.
-   * Se excluye también lo posicionado fuera de flujo: superponerse es justo
-   * su oficio.
+   *
+   * Se excluye también lo posicionado fuera de flujo, PERO no queda sin
+   * vigilar: de eso se encarga el barrido de texto tapado de más abajo, que
+   * pregunta por los glifos en vez de por las cajas. Comparar la caja de un
+   * absoluto con la de un bloque marcaría cada insignia sobre una imagen y
+   * cada pie sobre una figura, que es como muere una herramienta así.
    */
   const bloquesConTexto = todos.filter((el) => {
     if (noSePinta(el) !== null) return false;
@@ -303,6 +308,87 @@ function medir({ id, sup, inf }) {
       // Un píxel de margen: el redondeo de subpíxel de dos cajas pegadas no
       // es un solape.
       if (dx > 1 && dy > 1) solapes.push(`${nombre(A)}×${nombre(B)}`);
+    }
+  }
+
+  /**
+   * Texto tapado.
+   *
+   * Un elemento fuera de flujo puede estar tapando dos cosas opuestas:
+   *
+   *   · una SUPERFICIE —una imagen, un fondo, la nada—, que es su oficio:
+   *     la insignia de una tarjeta, el pie de una figura, el número de
+   *     lámina en una esquina;
+   *   · TEXTO, que es un bug: un absoluto con el offset mal puesto encima
+   *     de un párrafo.
+   *
+   * Lo que separa los dos casos no es cómo se posiciona el elemento —los dos
+   * se posicionan igual— sino QUÉ queda debajo. Así que la pregunta no se le
+   * hace a las cajas, se le hace a los glifos: de cada texto que se pinta se
+   * toman sus rects de LÍNEA y se muestrea quién está encima en esos puntos.
+   * Si encima de una línea de texto hay algo de otra rama, ese texto no se
+   * lee, venga de donde venga —absoluto, `transform`, `z-index` o flujo
+   * normal—. Y si debajo del absoluto no hay más que superficie, no hay
+   * línea que muestrear y no hay alerta.
+   *
+   * Límite conocido: `elementFromPoint` ignora lo que lleva
+   * `pointer-events: none`. Para ese caso —fuera de flujo, con texto propio
+   * y sordo al puntero— se compara la geometría contra los mismos rects de
+   * línea, que es lo único que queda.
+   */
+  const lineas = [];
+  const paseadorLineas = document.createTreeWalker(seccion, NodeFilter.SHOW_TEXT);
+  for (let nodo = paseadorLineas.nextNode(); nodo !== null; nodo = paseadorLineas.nextNode()) {
+    if ((nodo.nodeValue ?? "").trim() === "") continue;
+    const duenno = nodo.parentElement;
+    if (duenno === null || noSePinta(duenno) !== null) continue;
+    const rango = document.createRange();
+    rango.selectNodeContents(nodo);
+    for (const linea of rango.getClientRects()) {
+      if (linea.width < 4 || linea.height < 4) continue;
+      lineas.push({ duenno, linea });
+    }
+  }
+
+  const MUESTRAS = 9;
+  const tapados = [];
+  for (const { duenno, linea } of lineas) {
+    const y = linea.top + linea.height / 2;
+    let cubiertas = 0;
+    let culpable = null;
+    for (let k = 0; k < MUESTRAS; k += 1) {
+      const x = linea.left + ((k + 0.5) * linea.width) / MUESTRAS;
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) continue;
+      const encima = document.elementFromPoint(x, y);
+      if (encima === null) continue;
+      // Lo propio y su parentela no tapan nada: si en el punto de un glifo
+      // lo de encima es el mismo elemento, un descendiente suyo o un
+      // ascendiente, ahí no hay nadie pintando por encima.
+      if (encima === duenno || duenno.contains(encima) || encima.contains(duenno)) continue;
+      cubiertas += 1;
+      culpable = encima;
+    }
+    // Una sola muestra puede ser el borde de un glifo o un redondeo; dos ya
+    // es una franja de línea que nadie lee.
+    if (cubiertas >= 2 && culpable !== null) {
+      tapados.push(`${nombre(duenno)} debajo de ${nombre(culpable)}`);
+    }
+  }
+
+  // El caso sordo al puntero, por geometría.
+  for (const el of todos) {
+    if (noSePinta(el) !== null) continue;
+    const e = estilo(el);
+    if (e.position !== "absolute" && e.position !== "fixed") continue;
+    if (e.pointerEvents !== "none") continue;
+    if ((el.textContent ?? "").trim() === "") continue;
+    const caja = el.getBoundingClientRect();
+    if (caja.height <= 0) continue;
+    for (const { duenno, linea } of lineas) {
+      if (el.contains(duenno) || duenno.contains(el)) continue;
+      const dx = Math.min(caja.right, linea.right) - Math.max(caja.left, linea.left);
+      const dy = Math.min(caja.bottom, linea.bottom) - Math.max(caja.top, linea.top);
+      if (dx > 4 && dy > 4) tapados.push(`${nombre(duenno)} debajo de ${nombre(el)}`);
     }
   }
 
@@ -341,6 +427,7 @@ function medir({ id, sup, inf }) {
     // sí lo sabe, porque no lo recorta nadie.
     desborda: izq < -1 || der > window.innerWidth + 1,
     solapes,
+    tapados,
     recortes,
     fantasmas,
     palabras,
@@ -414,6 +501,9 @@ for (const vp of VPS) {
       }
       if (m.solapes.length) {
         alertas.push(`⚠️ TEXTO SOBRE TEXTO: ${[...new Set(m.solapes)].slice(0, 3).join(", ")}`);
+      }
+      if (m.tapados.length) {
+        alertas.push(`⚠️ TEXTO TAPADO: ${[...new Set(m.tapados)].slice(0, 3).join(", ")}`);
       }
       if (m.recortes.length) {
         alertas.push(`⚠️ TEXTO RECORTADO: ${[...new Set(m.recortes)].slice(0, 3).join(", ")}`);
