@@ -148,12 +148,22 @@
 
 .heroLedger > div:nth-of-type(3) {
   border-bottom: 0;
+  grid-template-columns: auto minmax(0, 1fr);
 }
 
 .heroLedger strong {
   color: var(--work-teal);
   font: 300 clamp(2.4rem, 4vw, 4rem)/0.9 var(--font-serif);
   letter-spacing: -0.05em;
+}
+
+/* La tercera fila del ledger es una fecha, no un conteo: se tipografía en
+   mono a cuerpo de texto, no como numeral grande en serif. */
+.heroLedger > div:nth-of-type(3) strong {
+  color: var(--work-teal);
+  font: 500 clamp(0.95rem, 1.6vw, 1.1rem)/1.4 var(--font-mono);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 .heroLedger span {
@@ -792,11 +802,21 @@
   }
 
   .heroLedger > div:nth-of-type(3) {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
     border-right: 0;
   }
 
   .heroLedger strong {
     font-size: 2.4rem;
+  }
+
+  .heroLedger > div:nth-of-type(3) strong {
+    min-width: 0;
+    font-size: 0.86rem;
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .heroLedger span {
