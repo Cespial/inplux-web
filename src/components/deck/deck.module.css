@@ -1,0 +1,245 @@
+/* ===========================================================================
+   Deck · el riel
+   Dos slots apilados en la misma celda de la retícula: la lámina activa y la
+   que sale mientras dura su animación. El movimiento vive aquí, en CSS, y la
+   dirección la fija el atributo `data-direccion` del riel.
+   =========================================================================== */
+
+.riel {
+  --deck-gutter: clamp(1.5rem, 5vw, 5.5rem);
+  /* La lámina que sale se va antes de que entre la siguiente: con dos títulos
+     de este tamaño superpuestos, un fundido cruzado simétrico deja un
+     fotograma ilegible. Salida corta, entrada retrasada lo que dura la
+     salida. */
+  --deck-entra: 380ms;
+  --deck-sale: 190ms;
+  --deck-espera: 150ms;
+  --deck-shift: clamp(1.25rem, 3.5vw, 3rem);
+
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--surface-page);
+  color: var(--text-strong);
+  overflow-x: hidden;
+  /* El gesto horizontal es del riel; el vertical sigue siendo del navegador. */
+  touch-action: pan-y;
+}
+
+.riel *,
+.riel *::before,
+.riel *::after {
+  box-sizing: border-box;
+}
+
+/* ── Los dos slots ───────────────────────────────────────────────────────── */
+
+.slot {
+  grid-row: 1;
+  grid-column: 1;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.slot[data-estado="activa"] {
+  z-index: 1;
+  animation: entraAdelante var(--deck-entra) var(--ease-out) var(--deck-espera) both;
+}
+
+.slot[data-estado="saliente"] {
+  pointer-events: none;
+  animation: saleAdelante var(--deck-sale) var(--ease-in) both;
+}
+
+.riel[data-direccion="atras"] .slot[data-estado="activa"] {
+  animation-name: entraAtras;
+}
+
+.riel[data-direccion="atras"] .slot[data-estado="saliente"] {
+  animation-name: saleAtras;
+}
+
+@keyframes entraAdelante {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--deck-shift), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entraAtras {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--deck-shift) * -1), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes saleAdelante {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(calc(var(--deck-shift) * -1), 0, 0);
+  }
+}
+
+@keyframes saleAtras {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--deck-shift), 0, 0);
+  }
+}
+
+/* ── La lámina ───────────────────────────────────────────────────────────── */
+
+.lamina {
+  display: grid;
+  align-content: center;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  padding: clamp(3rem, 9vh, 6rem) var(--deck-gutter);
+  min-width: 0;
+}
+
+.titulo {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+/* ── La barra de control ─────────────────────────────────────────────────── */
+
+.controles {
+  grid-row: 2;
+  grid-column: 1;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem var(--deck-gutter) max(0.9rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-page);
+}
+
+.contadorLaminas {
+  margin: 0;
+  color: var(--text-muted);
+  font: 500 0.7rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+}
+
+.contadorNumero {
+  color: var(--text-strong);
+}
+
+.pasos {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.paso {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font: 500 0.78rem/1 var(--font-body);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-base) var(--ease-out),
+    color var(--motion-base) var(--ease-out),
+    background-color var(--motion-base) var(--ease-out);
+}
+
+.paso:hover:not(:disabled) {
+  border-color: var(--teal-on-soft);
+  background: var(--surface-teal-soft);
+  color: var(--text-accent-on-soft);
+}
+
+.paso:disabled {
+  border-color: var(--border-subtle);
+  color: var(--text-faint);
+  cursor: default;
+}
+
+/* ── El deck sin JavaScript ──────────────────────────────────────────────── */
+/* Ojo: nada de `display` sobre el propio <noscript>. Con JavaScript activo el
+   navegador lo esconde, y darle display aquí lo devolvería a la vista como
+   texto crudo. La clase va dentro. */
+
+.sinScript {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(2rem, 6vh, 4rem) var(--deck-gutter);
+  border-top: 1px solid var(--border-default);
+}
+
+.sinScript p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.sinScript a {
+  color: var(--text-accent-on-soft);
+}
+
+.sinScript .titulo {
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  line-height: 1.05;
+}
+
+/* Sin JavaScript el recorrido no existe, y lo que el servidor dejó montado se
+   vuelve adorno muerto: la portada repetida encima del índice y dos botones
+   que no responden. Se retiran y la página queda siendo lo único que sí
+   funciona ahí, el índice de las quince láminas. Al imprimir, la consulta
+   devuelve `initial-only` y no `none`, así que el riel sigue en pie. */
+@media (scripting: none) {
+  .riel {
+    display: block;
+    min-height: 0;
+  }
+
+  .slot,
+  .controles {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot,
+  .paso {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    /* El bloque global de globals.css no toca el retardo, y aquí la entrada
+       lleva uno: sin esto la lámina nueva se quedaría invisible ese rato. */
+    animation-delay: 0ms !important;
+  }
+}

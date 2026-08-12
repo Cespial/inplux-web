@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SLIDES } from "@/content/deck";
+import { PresentationDeck } from "@/components/deck/PresentationDeck.client";
 
 export const metadata: Metadata = {
   title: "Presentación — de un problema real a software en producción",
@@ -8,17 +8,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://inplux.co/deck/presentacion" },
 };
 
-export default function PresentacionPage() {
+// La ruta es un componente de servidor: aquí, y solo aquí, se puede leer del
+// disco. La Tarea 12 lee los motivos del verificador y los pasa a la lámina de
+// evidencia; hasta entonces la lista va vacía. Dejar el `async` puesto desde ya
+// evita convertir la ruta después.
+export default async function PresentacionPage() {
   return (
     <main id="main-content" tabIndex={-1}>
-      {SLIDES.map((slide, index) => {
-        const Heading = index === 0 ? "h1" : "h2";
-        return (
-          <section key={slide.id} data-slide={slide.id} aria-label={slide.titulo}>
-            <Heading>{slide.titulo}</Heading>
-          </section>
-        );
-      })}
+      <PresentationDeck motivos={[]} />
     </main>
   );
 }
