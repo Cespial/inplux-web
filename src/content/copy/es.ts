@@ -138,7 +138,7 @@ export const homeCopyEs: HomeCopy = {
     ribbonTitle: "Lo que hemos construido.",
     directoryEyebrow: "EVIDENCIA / ATRIBUCIÓN",
     directoryName: "Directorio",
-    directoryDetail: " perfiles documentados",
+    directoryDetail: " productos documentados",
     logoWallAriaLabel: "Organizaciones con las que INPLUX ha trabajado.",
     statementEyebrow: "RELACIONES REALES",
     statementTitle: "EXPERIENCIA Y ALIANZAS",

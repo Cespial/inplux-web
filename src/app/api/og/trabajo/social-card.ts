@@ -69,7 +69,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
       description:
         "Cuatro productos, cada uno con sus fuentes públicas y su fecha de verificación.",
       eyebrow: "DIRECTORIO / EVIDENCIA",
-      status: `${workProfiles.length} PERFILES DOCUMENTADOS`,
+      status: `${workProfiles.length} PRODUCTOS DOCUMENTADOS`,
       attribution: "CADA DATO CON SU FUENTE",
       sourceCount,
       version,
