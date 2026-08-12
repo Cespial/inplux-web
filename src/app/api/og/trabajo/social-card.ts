@@ -15,8 +15,7 @@ type DirectorySocialCard = {
   eyebrow: string;
   status: string;
   attribution: string;
-  confirmedCount: number;
-  observedCount: number;
+  sourceCount: number;
   version: string;
 };
 
@@ -25,7 +24,7 @@ type ProfileSocialCard = {
   kind: "profile";
   title: string;
   description: string;
-  eyebrow: "TRABAJO ATRIBUIBLE";
+  eyebrow: "PRODUCTOS / TRABAJO";
   category: string;
   status: string;
   attribution: string;
@@ -51,10 +50,10 @@ export function isWorkSocialKey(value: string): value is WorkSocialKey {
 
 export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
   if (key === "directorio") {
-    const confirmedCount = workProfiles.filter(
-      (profile) => profile.attribution.state === "confirmed",
-    ).length;
-    const observedCount = workProfiles.length - confirmedCount;
+    const sourceCount = workProfiles.reduce(
+      (total, profile) => total + profile.sources.length,
+      0,
+    );
     const version = workProfiles.reduce(
       (latest, profile) => {
         const profileVersion = latestVerification(profile);
@@ -72,8 +71,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
       eyebrow: "DIRECTORIO / EVIDENCIA",
       status: `${workProfiles.length} PERFILES DOCUMENTADOS`,
       attribution: "CADA DATO CON SU FUENTE",
-      confirmedCount,
-      observedCount,
+      sourceCount,
       version,
     };
   }
@@ -90,7 +88,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
     kind: "profile",
     title: profile.name,
     description: profile.shortDescription,
-    eyebrow: "TRABAJO ATRIBUIBLE",
+    eyebrow: "PRODUCTOS / TRABAJO",
     category: profile.category,
     status: profile.status.label,
     attribution: profile.attribution.label,

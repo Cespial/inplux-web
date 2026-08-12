@@ -162,9 +162,9 @@ export const homeCopyEn: HomeCopy = {
   },
 
   experienceRail: {
-    ribbonAriaLabel: "Products with confirmed public attribution to INPLUX",
-    ribbonEyebrow: "ATTRIBUTABLE WORK / PRODUCTS",
-    ribbonTitle: "Work we can actually claim.",
+    ribbonAriaLabel: "INPLUX products, each with its source.",
+    ribbonEyebrow: "PRODUCTS / WORK",
+    ribbonTitle: "What we've built.",
     directoryEyebrow: "EVIDENCE / ATTRIBUTION",
     directoryName: "Directory",
     directoryDetail: " documented profiles",
