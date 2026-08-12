@@ -153,7 +153,7 @@ const evidence = [
     category: "Derecho",
     headline: "Una biblioteca jurídica abierta, filtrable por vigencia.",
     description:
-      "El explorador público reúne la búsqueda, los filtros de colección, tipo, área y vigencia, y los resultados del corpus con su ficha de origen.",
+      "El explorador público reúne la búsqueda, los filtros de colección, tipo, área y vigencia, y los resultados del corpus, cada uno con su entidad emisora, su año y su número de fragmentos.",
     attribution:
       "Desarrollo de INPLUX · la autoría la declaramos nosotros; las fuentes documentan el producto",
     image: "/work/real-pages/kelsen-explorador-2026-07-21.png",
