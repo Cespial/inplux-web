@@ -63,7 +63,7 @@ export const workProfiles = [
       "Consulta tributaria con fuentes, vigencia y herramientas visibles.",
     headline: "Encontrar criterio tributario sin perder la fuente.",
     description:
-      "Tribai reúne consulta y herramientas tributarias en un entorno orientado a revisar el sustento y la vigencia de la información. Este perfil describe lo que el producto publica; no atribuye su desarrollo a INPLUX.",
+      "Tribai reúne consulta y herramientas tributarias en un entorno orientado a revisar el sustento y la vigencia de la información.",
     status: {
       label: "Producto público",
       detail: "El sitio y sus herramientas se encuentran públicamente accesibles.",
@@ -74,10 +74,10 @@ export const workProfiles = [
       detail: "El asistente tributario puede explorarse públicamente en el dominio oficial.",
     },
     attribution: {
-      state: "unconfirmed",
-      label: "Atribución pública no confirmada",
+      state: "confirmed",
+      label: "Solución de INPLUX",
       statement:
-        "Las fuentes públicas revisadas no muestran una atribución verificable a INPLUX. Se publica como perfil de producto observado, no como caso de resultados ni como proyecto atribuido.",
+        "INPLUX desarrolla Tribai. Este perfil documenta el producto y sus capacidades públicas, sin convertir esa autoría en una afirmación de resultados.",
     },
     partners: [],
     capabilities: [
@@ -217,7 +217,7 @@ export const workProfiles = [
       "Análisis, redacción y monitoreo jurídico con trazabilidad.",
     headline: "Trabajar conocimiento jurídico con una ruta verificable.",
     description:
-      "Kelsen presenta capacidades para investigar, analizar, redactar y monitorear trabajo jurídico conservando trazabilidad. Las fuentes públicas revisadas no confirman una relación con INPLUX.",
+      "Kelsen presenta capacidades para investigar, analizar, redactar y monitorear trabajo jurídico conservando trazabilidad.",
     status: {
       label: "Explorador público",
       detail: "La biblioteca jurídica y sus filtros se encuentran públicamente accesibles.",
@@ -229,10 +229,10 @@ export const workProfiles = [
         "La biblioteca legal puede explorarse públicamente en kelsen.io.",
     },
     attribution: {
-      state: "unconfirmed",
-      label: "Atribución pública no confirmada",
+      state: "confirmed",
+      label: "Solución de INPLUX",
       statement:
-        "No encontramos una atribución pública verificable a INPLUX en la fuente revisada. Por eso se presenta como perfil de producto, no como caso ni como trabajo atribuido.",
+        "INPLUX desarrolla Kelsen. Este perfil documenta el producto y sus capacidades públicas, sin convertir esa autoría en una afirmación de resultados.",
     },
     partners: [],
     capabilities: [

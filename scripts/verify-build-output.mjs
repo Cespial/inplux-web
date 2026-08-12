@@ -20,8 +20,8 @@ const workProfiles = [
     shortDescription:
       "Consulta tributaria con fuentes, vigencia y herramientas visibles.",
     status: "Producto público",
-    attribution: "Atribución pública no confirmada",
-    socialAlt: "Tribai: Producto público. Atribución pública no confirmada.",
+    attribution: "Solución de INPLUX",
+    socialAlt: "Tribai: Producto público. Solución de INPLUX.",
   },
   {
     slug: "gobia",
@@ -38,8 +38,8 @@ const workProfiles = [
     shortDescription:
       "Análisis, redacción y monitoreo jurídico con trazabilidad.",
     status: "Explorador público",
-    attribution: "Atribución pública no confirmada",
-    socialAlt: "Kelsen: Explorador público. Atribución pública no confirmada.",
+    attribution: "Solución de INPLUX",
+    socialAlt: "Kelsen: Explorador público. Solución de INPLUX.",
   },
   {
     slug: "laudos",
@@ -149,20 +149,20 @@ const pageDefinitions = {
     file: ".next/server/app/trabajo.html",
     title: "Trabajo y productos — evidencia y atribución | INPLUX",
     description:
-      "Explora por separado el trabajo públicamente atribuible a INPLUX y los productos documentados del ecosistema observado.",
+      "Los cuatro productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
     canonical: `${siteUrl}/trabajo`,
     ogTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
     ogDescription:
-      "Trabajo atribuible y ecosistema observado, con la atribución pública de cada perfil explicada por separado.",
+      "Cuatro productos documentados, cada uno con sus fuentes públicas y su fecha de verificación.",
     ogUrl: `${siteUrl}/trabajo`,
     ogImage: workSocialImage("directorio"),
     ogImageAlt:
-      "INPLUX, directorio de trabajo y productos con atribución pública diferenciada",
+      "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     twitterTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
     twitterDescription:
-      "Trabajo atribuible y ecosistema observado, con la atribución pública de cada perfil explicada por separado.",
+      "Cuatro productos documentados, cada uno con sus fuentes públicas y su fecha de verificación.",
     twitterImageAlt:
-      "INPLUX, directorio de trabajo y productos con atribución pública diferenciada",
+      "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     jsonLd: {
       type: "CollectionPage",
       name: "Trabajo y productos — evidencia y atribución",

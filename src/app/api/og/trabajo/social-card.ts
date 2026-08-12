@@ -25,7 +25,7 @@ type ProfileSocialCard = {
   kind: "profile";
   title: string;
   description: string;
-  eyebrow: "TRABAJO ATRIBUIBLE" | "ECOSISTEMA OBSERVADO";
+  eyebrow: "TRABAJO ATRIBUIBLE";
   category: string;
   status: string;
   attribution: string;
@@ -68,10 +68,10 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
       kind: "directory",
       title: "Trabajo y productos",
       description:
-        "Evidencia visible para separar el trabajo atribuible del ecosistema observado.",
+        "Cuatro productos, cada uno con sus fuentes públicas y su fecha de verificación.",
       eyebrow: "DIRECTORIO / EVIDENCIA",
       status: `${workProfiles.length} PERFILES DOCUMENTADOS`,
-      attribution: "ATRIBUCIÓN PÚBLICA DIFERENCIADA",
+      attribution: "CADA DATO CON SU FUENTE",
       confirmedCount,
       observedCount,
       version,
@@ -90,16 +90,10 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
     kind: "profile",
     title: profile.name,
     description: profile.shortDescription,
-    eyebrow:
-      profile.attribution.state === "confirmed"
-        ? "TRABAJO ATRIBUIBLE"
-        : "ECOSISTEMA OBSERVADO",
+    eyebrow: "TRABAJO ATRIBUIBLE",
     category: profile.category,
     status: profile.status.label,
-    attribution:
-      profile.attribution.state === "confirmed"
-        ? profile.attribution.label
-        : "Atribución pública no confirmada",
+    attribution: profile.attribution.label,
     attributionState: profile.attribution.state,
     version: latestVerification(profile),
   };
