@@ -3265,6 +3265,17 @@
     width: calc(100% - 1rem);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    /*
+     * El carrusel es un contenedor con scroll, así que estos dos bordes se
+     * pintan sobre su caja fija y no se van con el contenido que se desplaza:
+     * el derecho es el marco que cierra el carrusel a la vista siempre, y el
+     * inferior es la línea que lo separa del muro de logos de abajo. En
+     * escritorio el contenedor ya no dibuja el rectángulo completo (cada
+     * tarjeta pone su propio borde para que un renglón incompleto termine
+     * donde termina el contenido), de modo que aquí hay que declararlos.
+     */
+    border-right: 1px solid var(--home-line);
+    border-bottom: 1px solid var(--home-line);
   }
 
   .proofRibbonIntro,
@@ -3275,6 +3286,14 @@
     /* El carrusel móvil es un único renglón: no hay filas que dividir. */
     border-bottom: 0;
     scroll-snap-align: start;
+  }
+
+  /*
+   * La última tarjeta cede su borde derecho al del contenedor: al llegar al
+   * final del scroll caerían uno junto al otro y se vería una línea doble.
+   */
+  .proofProduct:last-child {
+    border-right: 0;
   }
 
   .proofRibbonIntro {
