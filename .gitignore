@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# arnés de QA del deck: capturas y medidas de una corrida
+/qa-out/
