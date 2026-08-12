@@ -664,7 +664,26 @@
    ⚠️ `stroke-dasharray` va a 1,02 y no a 1 con `pathLength="1"`: con un trazo
    ancho y remate redondo, una cola de longitud exacta se queda sin pintar en
    el último subpíxel y la curva termina mocha. El 2 % de holgura no se ve —el
-   patrón es más largo que la curva— y garantiza el remate. */
+   patrón es más largo que la curva— y garantiza el remate.
+
+   ⚠️ Y por eso mismo estas dos curvas NO pueden llevar `vector-effect:
+   non-scaling-stroke`: con él el guion se mide en pantalla y `pathLength` en
+   espacio de usuario, así que el patrón cubre `1,02 / escala` de la curva y a
+   partir de la escala 1,02 la cola se queda sin pintar. Estuvo publicado: 85 %
+   de las dos curvas a 1920 px. La nota entera está en `CurvasTesis.tsx`.
+
+   ⚠️ Lo que se paga por quitarlo es que estas 2,5 unidades ya no son 2,5 px:
+   el trazo escala con el dibujo, igual que el del nodo del cruce. Medido en la
+   página: 1,53 px a 390 · 2,60 px a 1440 · 3,00 px a 1920, contra los 2,5 px
+   planos de antes. Se deja en 2,5 y no se compensa, por tres razones medidas:
+   la escala NO es monótona con el ancho de la ventana —el deck apila por
+   debajo de ~1000 px, así que va 0,56 a 360, sube a 1,20 a 900, cae a 0,79 a
+   1100 y vuelve a 1,20 a partir de 1728—, con lo que un `calc()` contra `vw`
+   como el de `.curvaEtiqueta` aquí no sirve; ningún valor plano baja del ±34 %
+   de desviación (el óptimo son 2,92 unidades, y engorda el proyector, que es
+   la sala); y el extremo fino, 1,53 px, sigue por encima del aro del nodo
+   (1,22 px) y de la línea base (1 px), que ya se aceptaron a ese tamaño.
+   Si alguien lo sube, lo que hay que volver a mirar es el proyector. */
 .curvaTrazo {
   fill: none;
   stroke-linecap: round;
@@ -697,8 +716,9 @@
    la lámina, contorno teal—, distinto de los cuatro nodos macizos de la
    portada. Llega cuando las dos curvas ya están trazadas.
 
-   ⚠️ Este trazo NO lleva `non-scaling-stroke`, y es el único de la figura que
-   no lo lleva. Con él, el aro conservaba 2 px de pantalla mientras el círculo
+   ⚠️ Este trazo NO lleva `non-scaling-stroke`, y desde que las dos curvas
+   tampoco lo llevan, el único de la figura que sigue con él es la línea base.
+   Con él, el aro conservaba 2 px de pantalla mientras el círculo
    encogía, así que su grosor relativo iba de 11,9 % del diámetro a 1920 y
    13,8 % a 1440 hasta 23,4 % a 390 —el doble—: el mismo nodo pintado con dos
    gramáticas distintas según la pantalla. Sin él, el trazo escala con el
