@@ -119,14 +119,14 @@ export const workProfiles = [
         url: "https://tribai.co/",
         supports:
           "Existencia pública del producto, enfoque tributario, consulta, fuentes, vigencia y herramientas.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Asistente público de Tribai",
         url: "https://tribai.co/asistente",
         supports:
           "Disponibilidad pública de la interfaz del asistente tributario mostrada en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -196,14 +196,14 @@ export const workProfiles = [
         url: "https://gobia.co/",
         supports:
           "Descripción del producto, atribución pública a INPLUX, estado de piloto y disponibilidad de demostración.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Demo pública de Gobia",
         url: "https://www.gobia.co/demo",
         supports:
           "Disponibilidad pública del mapa y el centro de mando fiscal mostrados en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -274,14 +274,14 @@ export const workProfiles = [
         url: "https://kelsen.io/",
         supports:
           "Presentación pública de capacidades de análisis, redacción, monitoreo y trazabilidad jurídica.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Explorador público de Kelsen",
         url: "https://kelsen.io/explorador?vigencia=modificado",
         supports:
           "Disponibilidad pública de la biblioteca legal, búsqueda, filtros y resultados del corpus; es la vista exacta usada en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },
@@ -360,14 +360,14 @@ export const workProfiles = [
         url: "https://laudos.co/",
         supports:
           "Objeto del producto, beta abierta y atribución diferenciada entre INPLUX y REDEK.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
       {
         label: "Laboratorio de Predicción de Laudos",
         url: "https://laudos.co/?view=predecir",
         supports:
           "Disponibilidad pública del formulario de análisis arbitral mostrado en la captura.",
-        verifiedAt: "2026-07-21",
+        verifiedAt: "2026-08-11",
       },
     ],
   },

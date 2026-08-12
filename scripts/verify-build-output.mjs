@@ -9,7 +9,7 @@ const siteUrl = "https://inplux.co";
 const defaultOgImage = `${siteUrl}/brand/og/og-default.png`;
 const defaultOgImageAlt = "INPLUX, de un problema real a software en producción";
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
-const workSocialVersion = "2026-07-21";
+const workSocialVersion = "2026-08-11";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
 
