@@ -191,12 +191,14 @@ export const homeCopyEn: HomeCopy = {
       gobia: "Public management",
       kelsen: "Law",
       laudos: "Arbitration",
+      porkia: "Pig farming",
     },
     productStatuses: {
       tribai: "Public product",
       gobia: "Active pilot",
       kelsen: "Public explorer",
       laudos: "Open beta",
+      porkia: "Closed beta",
     },
   },
 
