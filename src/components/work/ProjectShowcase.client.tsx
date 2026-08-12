@@ -13,24 +13,21 @@ import {
 // Importar `verificationDateFor` desde `@/content/work` metía el literal
 // completo de `workProfiles` en el chunk cliente de `/trabajo`.
 import type { WorkProfile, WorkSlug } from "@/content/work";
+import { urlVisible, workCaptures } from "@/content/work-captures";
 import { formatShortDate, verificationDateFor } from "@/content/work-format";
 import styles from "./ProjectShowcase.module.css";
 
 type InputMode = "keyboard" | "pointer";
 
-type RealPage = {
-  sourceUrl: string;
-  displayUrl: string;
-  captureSrc: string;
-  /**
-   * Fecha en que se tomó la captura, copiada de `capture-manifest.json`.
-   *
-   * Vive aquí y no como una constante única del pie porque el conjunto dejó de
-   * tomarse en una sola sesión: cada captura declara la suya y el pie la lee de
-   * la pestaña activa.
-   */
-  capturedAt: string;
-  alt: string;
+/**
+ * Lo que esta vitrina añade a la captura: cómo se llama la pantalla en su
+ * pestaña y en la fila de metadatos. La ruta del PNG, la fecha en que se tomó,
+ * la URL que se enmarca y el texto alternativo NO se escriben aquí: salen de
+ * `workCaptures`, que es el único sitio donde viven y el que la prueba
+ * `verify-captures` compara contra el acta. Antes estaban escritos aquí y otra
+ * vez en `/capacidades`, con dos redacciones distintas del mismo `alt`.
+ */
+type ScreenLabels = {
   screenLabel: string;
   surfaceLabel: string;
 };
@@ -43,55 +40,45 @@ const profileOrder = [
   "porkia",
 ] as const satisfies readonly WorkSlug[];
 
-const realPages = {
+const screenLabels = {
   gobia: {
-    sourceUrl: "https://www.gobia.co/demo",
-    displayUrl: "gobia.co/demo",
-    captureSrc: "/work/real-pages/gobia-demo-2026-07-21.png",
-    capturedAt: "2026-07-21",
-    alt: "Captura real de la demo pública de Gobia, con el mapa de Medellín y su panel fiscal.",
     screenLabel: "Demo pública de Medellín",
     surfaceLabel: "Centro de mando fiscal",
   },
   laudos: {
-    sourceUrl: "https://laudos.co/?view=predecir",
-    displayUrl: "laudos.co/?view=predecir",
-    captureSrc: "/work/real-pages/laudos-prediccion-2026-07-21.png",
-    capturedAt: "2026-07-21",
-    alt: "Captura real del Laboratorio de Predicción público de Laudos.",
     screenLabel: "Laboratorio de Predicción",
     surfaceLabel: "Análisis arbitral",
   },
   tribai: {
-    sourceUrl: "https://app.tribai.co/",
-    displayUrl: "app.tribai.co",
-    captureSrc: "/work/real-pages/tribai-asistente-2026-07-21.png",
-    capturedAt: "2026-07-21",
-    alt: "Captura real del Asistente Tributario público de Tribai.",
     screenLabel: "Asistente Tributario",
     surfaceLabel: "Consulta con fuentes",
   },
   kelsen: {
-    sourceUrl: "https://kelsen.io/explorador?vigencia=modificado",
-    displayUrl: "kelsen.io/explorador?vigencia=modificado",
-    captureSrc: "/work/real-pages/kelsen-explorador-2026-07-21.png",
-    capturedAt: "2026-07-21",
-    alt: "Captura real de la Biblioteca Legal pública de Kelsen con resultados del corpus jurídico.",
     screenLabel: "Biblioteca Legal de Colombia",
     surfaceLabel: "Explorador jurídico",
   },
   porkia: {
-    sourceUrl: "https://porkia.co/#demo",
-    displayUrl: "porkia.co/#demo",
-    captureSrc: "/work/real-pages/porkia-demo-2026-08-11.png",
-    capturedAt: "2026-08-11",
-    // El teléfono que se ve en la imagen lo dibuja porkia.co: la captura no
-    // recrea ninguna interfaz, retrata la página pública tal como responde.
-    alt: "Captura real de la demostración pública de Porkia, con las pantallas de la app recorribles desde el navegador.",
     screenLabel: "Demostración navegable",
     surfaceLabel: "Finca porcícola",
   },
-} as const satisfies Record<WorkSlug, RealPage>;
+} as const satisfies Record<WorkSlug, ScreenLabels>;
+
+/**
+ * La captura de un producto con lo que esta vitrina le añade.
+ *
+ * Función y no un mapa precalculado: un mapa habría que armarlo con
+ * `Object.fromEntries`, que devuelve `Record<string, …>` y obliga a un `as` que
+ * se traga justo el error que importa —una clave de menos—. Así lo comprueba el
+ * tipo en cada llamada y no hay nada que afirmar.
+ */
+function paginaReal(slug: WorkSlug) {
+  const captura = workCaptures[slug];
+  return {
+    ...captura,
+    ...screenLabels[slug],
+    displayUrl: urlVisible(captura.sourceUrl),
+  };
+}
 
 type ProjectShowcaseProps = {
   profiles: readonly WorkProfile[];
@@ -186,7 +173,7 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
 
   if (!activeProfile) return null;
 
-  const activePage = realPages[activeProfile.slug];
+  const activePage = paginaReal(activeProfile.slug);
 
   return (
     <section id="pantallas" className={styles.showcase} aria-labelledby={`${rootId}-title`}>
@@ -225,7 +212,7 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
           <span ref={pillRef} className={styles.tTabsPill} aria-hidden="true" />
           {orderedProfiles.map((profile, index) => {
             const selected = profile.slug === activeSlug;
-            const page = realPages[profile.slug];
+            const page = paginaReal(profile.slug);
 
             return (
               <button
@@ -279,7 +266,7 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
 
         {orderedProfiles.map((profile) => {
           const selected = profile.slug === activeSlug;
-          const page = realPages[profile.slug];
+          const page = paginaReal(profile.slug);
 
           return (
             <div
@@ -310,7 +297,7 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
                 >
                   <span className={styles.captureViewport}>
                     <Image
-                      src={page.captureSrc}
+                      src={page.src}
                       alt={page.alt}
                       fill
                       priority={profile.slug === "gobia"}
