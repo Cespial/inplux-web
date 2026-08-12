@@ -33,13 +33,13 @@ export function SlideRenderer({
     case "como-empezamos":
     case "cierre":
       return (
-        <Slide id={slide.id} titulo={slide.titulo}>
+        <Slide id={slide.id}>
           <h1 className={styles.titulo}>{slide.titulo}</h1>
         </Slide>
       );
     case "producto":
       return (
-        <Slide id={slide.id} titulo={slide.titulo}>
+        <Slide id={slide.id}>
           <h1 className={styles.titulo}>{slide.perfil.name}</h1>
         </Slide>
       );

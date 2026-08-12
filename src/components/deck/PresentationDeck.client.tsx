@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import { HelpOverlay } from "./chrome/HelpOverlay.client";
+import { IndexOverlay } from "./chrome/IndexOverlay.client";
+import { ALTO_BARRA_INFERIOR, ProgressRail } from "./chrome/ProgressRail";
+import { ALTO_BARRA_SUPERIOR, TopBar } from "./chrome/TopBar";
+import chrome from "./chrome/chrome.module.css";
 import { SlideRenderer } from "./SlideRenderer";
 import { useDeckNav } from "./useDeckNav";
 import styles from "./deck.module.css";
@@ -12,12 +17,30 @@ type Montada = { slide: DeckSlide; secuencia: number };
 /** Un deslizamiento cuenta si recorre esto y es más horizontal que vertical. */
 const RECORRIDO_MINIMO = 60;
 
+// Los dos altos del chrome bajan al CSS como variables, desde las constantes y
+// no como literales repetidos: el margen de bloque de la lámina y el alto de
+// las barras salen del mismo número, así que no pueden divergir y dejar una
+// lámina metida debajo de una barra.
+const ALTOS = {
+  "--deck-barra-superior": `${ALTO_BARRA_SUPERIOR}px`,
+  "--deck-barra-inferior": `${ALTO_BARRA_INFERIOR}px`,
+} as CSSProperties;
+
 // `motivos` llega desde la ruta, que es un componente de servidor y los
 // lee del verificador en build. Un componente async NO se puede
 // renderizar desde un componente cliente, así que la lectura vive
 // arriba del límite y baja como prop. Ver la Tarea 12.
 export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
-  const nav = useDeckNav();
+  // El índice y la ayuda se montan solo cuando se piden. No es una preferencia
+  // de estilo: `verify-build-output.mjs` exige CERO `<dialog>` en el HTML
+  // construido de /deck/presentacion, y un diálogo montado desde el primer
+  // render —aunque salga cerrado— rompe `check:output`.
+  const [overlay, setOverlay] = useState<"indice" | "ayuda" | null>(null);
+  const abrirIndice = useCallback(() => setOverlay("indice"), []);
+  const abrirAyuda = useCallback(() => setOverlay("ayuda"), []);
+  const cerrarOverlay = useCallback(() => setOverlay(null), []);
+
+  const nav = useDeckNav({ alPedirIndice: abrirIndice, alPedirAyuda: abrirAyuda });
   const inicioTactil = useRef<{ x: number; y: number } | null>(null);
   const slotActivo = useRef<HTMLDivElement | null>(null);
 
@@ -44,6 +67,12 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   // que el foco se quedaba en un botón que acababa de deshabilitarse al
   // llegar a un extremo. En la carga (secuencia 0) no se toca el foco: nadie
   // ha pedido nada todavía.
+  //
+  // Cuando el salto viene del índice, este efecto corre DESPUÉS de que el
+  // diálogo devuelva el foco a quien lo abrió, así que gana la lámina, que es
+  // lo que se acaba de pedir. Si el destino era la lámina ya visible no hay
+  // cambio de secuencia, el efecto no corre, y el foco se queda en el botón
+  // que abrió el índice: también correcto.
   useEffect(() => {
     if (nav.secuencia === 0) return;
     slotActivo.current?.focus({ preventScroll: true });
@@ -51,7 +80,8 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
 
   return (
     <div
-      className={styles.riel}
+      className={`${styles.riel} ${chrome.conChrome}`}
+      style={ALTOS}
       data-direccion={nav.direccion === 1 ? "adelante" : "atras"}
       onTouchStart={(e) => {
         // Un segundo dedo desarma el gesto: ampliar con dos dedos no es
@@ -75,6 +105,14 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         else nav.anterior();
       }}
     >
+      <TopBar
+        titulo={nav.slide.titulo}
+        indice={nav.indice}
+        total={TOTAL_SLIDES}
+        alPedirIndice={abrirIndice}
+        alPedirAyuda={abrirAyuda}
+      />
+
       {/* La lámina que sale vive hasta que termina su animación. El arnés lee
           la lámina visible como `[data-estado="activa"] [data-slide]`: durante
           la transición hay dos `data-slide` en el DOM y solo una se está
@@ -96,6 +134,10 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         </div>
       )}
 
+      {/* Un solo nombre accesible para la lámina, el de este slot. La
+          <section> de dentro dejó de llevar `aria-label`: repetía el título
+          del <h1> y de paso convertía cada lámina en una región con el mismo
+          nombre que su encabezado. */}
       <div
         className={styles.slot}
         data-estado="activa"
@@ -109,33 +151,18 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         <SlideRenderer slide={nav.slide} motivos={motivos} />
       </div>
 
-      <div className={styles.controles}>
-        {/* El contador ya no es una región viva: el cambio lo anuncia el foco
-            al aterrizar en la lámina, con su posición y su título. Dos
-            anuncios para el mismo movimiento sobraban. */}
-        <p className={styles.contadorLaminas}>
-          <span className={styles.contadorNumero}>{nav.indice + 1}</span> / {TOTAL_SLIDES}
-        </p>
+      <ProgressRail
+        slides={SLIDES}
+        indice={nav.indice}
+        ir={nav.ir}
+        anterior={nav.anterior}
+        siguiente={nav.siguiente}
+      />
 
-        <div className={styles.pasos}>
-          <button
-            className={styles.paso}
-            type="button"
-            onClick={nav.anterior}
-            disabled={nav.indice === 0}
-          >
-            Lámina anterior
-          </button>
-          <button
-            className={styles.paso}
-            type="button"
-            onClick={nav.siguiente}
-            disabled={nav.indice === TOTAL_SLIDES - 1}
-          >
-            Lámina siguiente
-          </button>
-        </div>
-      </div>
+      {overlay === "indice" ? (
+        <IndexOverlay indice={nav.indice} ir={nav.ir} alCerrar={cerrarOverlay} />
+      ) : null}
+      {overlay === "ayuda" ? <HelpOverlay alCerrar={cerrarOverlay} /> : null}
 
       {/* Sin JavaScript el recorrido no existe. Repetir aquí los quince
           títulos ofrecía MENOS que /deck —que los publica enlazados— y metía

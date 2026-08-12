@@ -18,7 +18,6 @@
 
   position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--surface-page);
@@ -40,8 +39,7 @@
 /* ── Los dos slots ───────────────────────────────────────────────────────── */
 
 .slot {
-  grid-row: 1;
-  grid-column: 1;
+  grid-area: 1 / 1;
   display: grid;
   min-width: 0;
   min-height: 0;
@@ -52,13 +50,24 @@
   animation: entraAdelante var(--deck-entra) var(--ease-out) var(--deck-espera) both;
 }
 
-/* El slot recibe el foco al cambiar de lámina. Con teclado se marca; el anillo
-   va por dentro porque el slot ocupa la altura entera y por fuera lo recortaría
-   el `overflow` del riel. Con ratón no llega a marcarse: `:focus-visible` no
-   casa con un foco puesto por código tras un clic. */
+/* El slot recibe el foco al cambiar de lámina, y ocupa la pantalla entera: un
+   `outline` aquí dibuja un marco de borde a borde que, proyectado, es lo
+   primero que ve la sala cuando el presentador toca una flecha, y se lee como
+   «algo falla». El indicador se mudó al chrome —el filete de la barra superior
+   y el segmento actual del riel— en `chrome/chrome.module.css`.
+   Con ratón no llega a marcarse: `:focus-visible` no casa con un foco puesto
+   por código tras un clic. */
 .slot:focus-visible {
-  outline: 2px solid var(--teal-on-soft);
-  outline-offset: -4px;
+  outline: none;
+}
+
+/* Red de seguridad: sin `:has()` no hay quien dibuje el indicador en el
+   chrome, y un marco feo es infinitamente mejor que ningún indicador. */
+@supports not selector(:has(*)) {
+  .slot:focus-visible {
+    outline: 2px solid var(--teal-on-soft);
+    outline-offset: -4px;
+  }
 }
 
 .slot[data-estado="saliente"] {
@@ -120,12 +129,24 @@
 
 /* ── La lámina ───────────────────────────────────────────────────────────── */
 
+/* La lámina vive ENTRE las barras, y el hueco lo reserva su propio margen de
+   bloque, no un padding del contenedor: así la caja de la lámina empieza donde
+   acaba la barra superior y acaba donde empieza el riel, y el arnés puede
+   medirla contra las dos.
+   Los dos altos salen de `--deck-barra-superior` / `--deck-barra-inferior`,
+   que PresentationDeck inyecta desde ALTO_BARRA_SUPERIOR y ALTO_BARRA_INFERIOR.
+   Aquí no hay ningún `70px` escrito: una lámina puede caber en el viewport y
+   quedar igual debajo de las barras si los dos números se separan. */
 .lamina {
   display: grid;
   align-content: center;
   gap: clamp(1rem, 2vw, 1.75rem);
-  padding: clamp(3rem, 9vh, 6rem) var(--deck-gutter);
   min-width: 0;
+  min-height: calc(100vh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  min-height: calc(100dvh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  margin-block: var(--deck-barra-superior) var(--deck-barra-inferior);
+  padding-block: clamp(1.5rem, 5vh, 3.5rem);
+  padding-inline: var(--deck-gutter);
 }
 
 .titulo {
@@ -137,65 +158,6 @@
   letter-spacing: -0.045em;
   line-height: 0.94;
   text-wrap: balance;
-}
-
-/* ── La barra de control ─────────────────────────────────────────────────── */
-
-.controles {
-  grid-row: 2;
-  grid-column: 1;
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.9rem var(--deck-gutter) max(0.9rem, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--border-default);
-  background: var(--surface-page);
-}
-
-.contadorLaminas {
-  margin: 0;
-  color: var(--text-muted);
-  font: 500 0.7rem/1 var(--font-mono);
-  letter-spacing: 0.14em;
-}
-
-.contadorNumero {
-  color: var(--text-strong);
-}
-
-.pasos {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.paso {
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: var(--surface-page);
-  color: var(--text-body);
-  font: 500 0.78rem/1 var(--font-body);
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition:
-    border-color var(--motion-base) var(--ease-out),
-    color var(--motion-base) var(--ease-out),
-    background-color var(--motion-base) var(--ease-out);
-}
-
-.paso:hover:not(:disabled) {
-  border-color: var(--teal-on-soft);
-  background: var(--surface-teal-soft);
-  color: var(--text-accent-on-soft);
-}
-
-.paso:disabled {
-  border-color: var(--border-subtle);
-  color: var(--text-faint);
-  cursor: default;
 }
 
 /* ── El deck sin JavaScript ──────────────────────────────────────────────── */
@@ -218,25 +180,33 @@
   color: var(--text-accent-on-soft);
 }
 
-/* Sin JavaScript el recorrido no existe: la barra de control queda como dos
-   botones que no responden. Se retira, la lámina que el servidor montó se
-   queda —es contenido de verdad— y debajo va la frase con el enlace a /deck,
-   que es el índice que sí navega. Al imprimir, la consulta devuelve
-   `initial-only` y no `none`, así que el riel sigue en pie. */
+/* Sin JavaScript el recorrido no existe: el chrome queda como una barra y un
+   riel que no responden a nada. Se retiran —los dos llevan `data-deck-chrome`,
+   que es atributo global y por eso se alcanza desde aquí aunque su CSS viva en
+   chrome.module.css—, la lámina recupera su hueco (ya no hay barras que
+   esquivar) y debajo va la frase con el enlace a /deck, que es el índice que
+   sí navega. Al imprimir, la consulta devuelve `initial-only` y no `none`, así
+   que el riel sigue en pie. */
 @media (scripting: none) {
   .riel {
     display: block;
     min-height: 0;
   }
 
-  .controles {
+  /* El `.riel` delante no es decorativo: un selector de módulo tiene que
+     llevar al menos una clase local o el compilador lo rechaza por impuro. */
+  .riel [data-deck-chrome] {
     display: none;
+  }
+
+  .lamina {
+    min-height: 0;
+    margin-block: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .slot,
-  .paso {
+  .slot {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
