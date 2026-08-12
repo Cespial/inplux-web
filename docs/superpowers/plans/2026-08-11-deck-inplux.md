@@ -1837,12 +1837,17 @@ Cuatro nodos en línea, gramática de fondo claro:
 
 - [ ] **Step 2: El pulso**
 
-Un `<circle>` pequeño en `--teal-bright` que recorre el conector de extremo a extremo, con `offset-path` sobre la misma trayectoria:
+Un `<circle>` pequeño en `--teal-bright` que recorre el conector de extremo a extremo, con `offset-path` sobre la misma trayectoria.
+
+⚠️ **Dos correcciones a este CSS, las dos medidas durante la ejecución:**
+
+1. **Nada de `infinite` en una lámina medida.** El arnés espera a que **ninguna animación siga corriendo**, con 15 s de tope: una animación perpetua no le hace fallar, le hace **dejar de medir esa lámina en silencio**. Va `forwards`.
+2. **El pulso va `linear`, no `--ease-out`.** Si los encendidos de los nodos son lineales —que lo son por construcción— y el pulso lleva una curva, dejan de coincidir: medido, el pulso llegaba al último nodo **casi un segundo antes** que su encendido. La lámina se habría presentado con un acoplamiento inventado.
 
 ```css
 .pulso {
   offset-path: path("M 40 60 L 560 60");
-  animation: recorrer 3.2s var(--ease-out) infinite;
+  animation: recorrer 3.2s linear forwards;
 }
 @keyframes recorrer { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 @media (prefers-reduced-motion: reduce) { .pulso { display: none; } }
