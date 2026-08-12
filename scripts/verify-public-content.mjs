@@ -276,24 +276,58 @@ async function verifyPortfolio() {
 async function verifyAboutAttribution() {
   const relativePath = "src/components/about/HistoryScrolly.client.tsx";
   const source = await readFile(path.join(root, relativePath), "utf8");
-  const chapter = source.split('id: "evidencia"')[1]?.split('id: "direccion"')[0];
+  const openMarker = 'id: "evidencia"';
+  const closeMarker = 'id: "direccion"';
 
-  if (!chapter) {
+  // `indexOf` y no `split`: si el delimitador de cierre desaparece, `split`
+  // devuelve el resto del archivo y el control ensancha su alcance en silencio
+  // —bastaba renombrar el capítulo siguiente para que un «REDEK» suelto en
+  // cualquier punto posterior lo satisficiera—. Con `indexOf`, su ausencia es
+  // un error ruidoso.
+  const start = source.indexOf(openMarker);
+  const end = start === -1 ? -1 : source.indexOf(closeMarker, start + openMarker.length);
+
+  if (start === -1) {
+    errors.push(`${relativePath} no contiene el capítulo ${openMarker}`);
+    return;
+  }
+  if (end === -1) {
     errors.push(
-      `${relativePath} no contiene un capítulo «evidencia» verificable antes de «direccion»`,
+      `${relativePath}: falta el delimitador de cierre ${closeMarker} después de ${openMarker}; sin él este control no puede acotar el capítulo`,
     );
     return;
   }
 
-  if (!/REDEK/.test(chapter)) {
+  const chapter = source.slice(start, end);
+
+  // Solo las cadenas que llegan al DOM. Un comentario con la palabra REDEK no
+  // acredita nada: el crédito tiene que estar en la prosa publicada. Extraer
+  // los literales es lo que garantiza eso, porque un comentario no puede vivir
+  // dentro de una cadena.
+  const publishedCopy = chapter.match(/\bcopy:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
+  const publishedEvidence = chapter.match(/\bevidence:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
+
+  if (publishedCopy === undefined) {
     errors.push(
-      `${relativePath} debe conservar en el capítulo «evidencia» la atribución explícita a REDEK`,
+      `${relativePath}: el capítulo «evidencia» no expone un literal copy: legible; este control no puede verificar la prosa publicada`,
+    );
+    return;
+  }
+
+  if (!/REDEK/.test(publishedCopy)) {
+    errors.push(
+      `${relativePath} debe nombrar a REDEK en el copy publicado del capítulo «evidencia», no solo en un comentario`,
     );
   }
-  if (/desarrollos\s+propios/iu.test(chapter)) {
-    errors.push(
-      `${relativePath} no puede llamar «desarrollos propios» al conjunto: Laudos reparte el crédito con REDEK`,
-    );
+  for (const [field, value] of [
+    ["copy", publishedCopy],
+    ["evidence", publishedEvidence],
+  ]) {
+    if (value !== undefined && /desarrollos\s+propios/iu.test(value)) {
+      errors.push(
+        `${relativePath}: el ${field} del capítulo «evidencia» no puede llamar «desarrollos propios» al conjunto; Laudos reparte el crédito con REDEK`,
+      );
+    }
   }
 }
 
