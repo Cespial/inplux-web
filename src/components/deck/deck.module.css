@@ -165,7 +165,7 @@
 }
 
 /* ===========================================================================
-   La escala tipográfica de las quince láminas
+   La escala tipográfica del deck
    ===========================================================================
 
    La jerarquía va al revés de lo obvio. En un deck normal la pregunta es el
@@ -233,7 +233,7 @@
    Se pone JUNTO a `.respuesta`, nunca en su lugar: la respuesta sigue siendo
    el titular, solo que un paso más abajo. Existe porque la escala de arriba
    está dimensionada para una lámina de texto —portada, tesis— y trece de las
-   quince traen debajo una rejilla, una tabla o una lista.
+   casi todas las demás traen debajo una rejilla, una tabla o una lista.
 
    ⚠️ **No es un rescate: la lámina densa entra igual sin esto.** Medido sobre
    la lámina 6 simulada —trece motivos de su longitud real en una sola columna
@@ -743,10 +743,32 @@
   animation: apareceSuave 320ms var(--ease-out) 1320ms both;
 }
 
+/* ⚠️ **El tamaño se declara en unidades de LIENZO, así que lo que se ve
+   depende de la escala del SVG y no de la raíz.** Con `font-size: 16px` fijo,
+   medido en pantalla: 9,8 px a 390, 16,6 px a 1440 y 19,2 px a 1920. O sea que
+   en el teléfono estas dos palabras eran **el tipo más pequeño del deck**, un
+   23 % por debajo del suelo declarado de la escala (`.pie`, 12 px), y en el
+   proyector eran mayores que el cuerpo.
+
+   El `calc()` compensa la escala: resta un término proporcional al ancho de la
+   ventana —que es de lo que depende la escala— y lo congela con `min()` cuando
+   la figura llega a su `max-width` y deja de crecer. Medido después: 11,0 px a
+   390, 14,0 px a 1440 y 15,4 px a 1920. La etiqueta del presupuesto usa la
+   misma banda con su propia escala, para que el mismo registro no tenga dos
+   tamaños en la misma sala.
+
+   ⚠️ **Lo que esto NO arregla, y no se puede arreglar aquí: la etiqueta sigue
+   sin obedecer la preferencia de fuente del lector.** Ponerla en `rem` la haría
+   crecer con la raíz, pero también la recortaría: el hueco a la derecha de las
+   curvas son 208 unidades de lienzo y la etiqueta ocupa 174 a 16 unidades, así
+   que por encima de ~19 el `<svg>` la corta —su `overflow` es `hidden` y no
+   avisa nadie—. Para que obedezca hay que sacar las dos etiquetas del SVG y
+   maquetarlas en HTML junto a la figura, que es un rediseño de las dos figuras
+   con su propia medición. Queda pendiente, medido. */
 .curvaEtiqueta {
   fill: var(--gray-400);
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: calc(19.7px - 0.43 * min(1vw, 16px));
   letter-spacing: 0.04em;
   animation: apareceSuave 380ms var(--ease-out) both;
 }

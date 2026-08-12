@@ -261,6 +261,52 @@ async function verifyPortfolio() {
   }
 }
 
+/**
+ * La frescura de TODAS las fuentes que el deck publica.
+ *
+ * ⚠️ La puerta de arriba solo recorre el portafolio de `home.ts`, y el deck
+ * imprime «consultado …» en seis láminas —la del problema y las cinco fichas—
+ * leyendo de `deck.copy.ts` (`DECK_SOURCES`) y de `work.ts`
+ * (`workProfiles[].sources[]`), que ninguna puerta miraba. O sea que el
+ * consumidor más visible del modelo de evidencia del proyecto era el único sin
+ * caducidad: nada iba a avisar el día que esas fechas fueran de hace un año, y
+ * `check` habría seguido en verde.
+ *
+ * Se lee del fuente con la misma técnica que el portafolio —sin importar TS
+ * desde un script— y se juzga solo la fecha, que es lo único que caduca.
+ */
+async function verifySourceFreshness() {
+  const maxAgeDays = Number(process.env.CONTENT_VERIFICATION_MAX_AGE_DAYS ?? 120);
+  const now = Date.now();
+  if (!Number.isFinite(maxAgeDays) || maxAgeDays <= 0) return;
+
+  for (const relativePath of ["src/content/deck.copy.ts", "src/content/work.ts"]) {
+    const source = await readFile(path.join(root, relativePath), "utf8");
+    const fechas = [...source.matchAll(/verifiedAt\s*:\s*"([^"]+)"/g)];
+
+    if (fechas.length === 0) {
+      errors.push(`${relativePath} no declara ninguna fecha de verificación`);
+      continue;
+    }
+
+    for (const [, verifiedAt] of fechas) {
+      if (!isValidIsoDate(verifiedAt)) {
+        errors.push(`${relativePath} tiene una fecha de verificación inválida: ${verifiedAt}`);
+        continue;
+      }
+      const ageDays = (now - new Date(`${verifiedAt}T00:00:00.000Z`).getTime()) / 86_400_000;
+      if (ageDays > maxAgeDays) {
+        errors.push(
+          `Una fuente de ${relativePath} lleva ${Math.floor(ageDays)} días sin verificar (${verifiedAt}, máximo ${maxAgeDays}); el deck publica esa fecha`,
+        );
+      }
+      if (ageDays < -2) {
+        errors.push(`Una fuente de ${relativePath} tiene verifiedAt en el futuro: ${verifiedAt}`);
+      }
+    }
+  }
+}
+
 async function verifySecurityConfiguration() {
   const relativePath = "next.config.ts";
   const source = await readFile(path.join(root, relativePath), "utf8");
@@ -480,6 +526,7 @@ async function verifyLegacyFragments() {
 await verifyPublicLanguage();
 await verifySocialCards();
 await verifyPortfolio();
+await verifySourceFreshness();
 await verifySecurityConfiguration();
 await verifyBrandSystem();
 await verifyLogoPermissions();

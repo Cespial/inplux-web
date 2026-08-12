@@ -28,7 +28,18 @@ const APERTURA = [
   { id: "tesis", kind: "tesis", titulo: "El software empieza en el problema" },
   { id: "metodo", kind: "metodo", titulo: "Cuatro tiempos" },
   { id: "espejo", kind: "espejo", titulo: "El mismo método, dos lecturas" },
-  { id: "evidencia", kind: "evidencia", titulo: "Trece cosas que este sitio no puede decir" },
+  // ⚠️ El título del riel y del índice NO repite el conteo: sale del mismo
+  // copy que el <h1> de la lámina, sin su punto final. Escrito a mano, «Trece»
+  // vivía en dos casas y la prueba que lo sujeta —`verify-deck-reasons`— solo
+  // miraba una: con una regla nueva en el verificador, la prueba mandaba
+  // corregir `deck.copy.ts`, se corregía, la prueba pasaba, y el riel seguía
+  // diciendo «Trece» mientras la lámina imprimía «14 reglas activas» dos
+  // centímetros más abajo.
+  {
+    id: "evidencia",
+    kind: "evidencia",
+    titulo: DECK_COPY.evidencia.respuesta.replace(/\.$/, ""),
+  },
   { id: "puente", kind: "puente", titulo: "Dominios que no se parecen, la misma fábrica" },
 ] as const;
 

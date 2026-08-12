@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { PresentationDeck } from "@/components/deck/PresentationDeck.client";
+import { TOTAL_SLIDES } from "@/content/deck";
 import { leerMotivos } from "@/lib/banned-reasons.server";
 
+// ⚠️ **El número de láminas se deriva, no se escribe.** Decía «quince láminas»
+// y `TOTAL_SLIDES` es `SLIDES.length` sobre `workProfiles`: un producto nuevo
+// mueve el total y esta descripción —que es la que se ve en la tarjeta del
+// enlace— empezaba a mentir en silencio.
 export const metadata: Metadata = {
   title: "Presentación — de un problema real a software en producción",
-  description:
-    "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en quince láminas.",
+  description: `Cómo INPLUX convierte un problema concreto en software que funciona en producción, en ${TOTAL_SLIDES} láminas.`,
   alternates: { canonical: "https://inplux.co/deck/presentacion" },
 };
 

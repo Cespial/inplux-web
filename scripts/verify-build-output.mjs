@@ -61,6 +61,21 @@ const workProfiles = [
   },
 ];
 
+/**
+ * Las láminas del deck: las de apertura y cierre, más una por perfil.
+ *
+ * ⚠️ Este contrato existía como la cadena literal «los cinco productos» y
+ * «quince láminas» copiada de las dos descripciones publicadas, o sea que
+ * fijaba el conteo viejo: un perfil nuevo en `work.ts` dejaba las dos
+ * descripciones mintiendo **con `check:output` en verde**, porque el
+ * verificador pedía exactamente la cadena anterior. Ahora el número de
+ * productos sale del espejo de `work.ts` que este archivo ya mantiene, y el 7
+ * y el 3 son la FORMA del modelo (`construirDeck` en `src/content/deck.ts`),
+ * no un conteo de productos: si alguien añade una lámina que no es de
+ * producto, este número y el publicado se separan y el verificador lo dice.
+ */
+const deckSlideCount = 7 + workProfiles.length + 3;
+
 const pageDefinitions = {
   home: {
     file: ".next/server/app/index.html",
@@ -208,8 +223,7 @@ const pageDefinitions = {
   deck: {
     file: ".next/server/app/deck.html",
     title: "Deck — de un problema real a software en producción | INPLUX",
-    description:
-      "El índice de la presentación de INPLUX: la tesis, el método, los cinco productos y sus fuentes.",
+    description: `El índice de la presentación de INPLUX en ${deckSlideCount} láminas: la tesis, el método, los productos y sus fuentes.`,
     canonical: `${siteUrl}/deck`,
     contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
   },
@@ -217,8 +231,7 @@ const pageDefinitions = {
     file: ".next/server/app/deck/presentacion.html",
     title:
       "Presentación — de un problema real a software en producción | INPLUX",
-    description:
-      "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en quince láminas.",
+    description: `Cómo INPLUX convierte un problema concreto en software que funciona en producción, en ${deckSlideCount} láminas.`,
     canonical: `${siteUrl}/deck/presentacion`,
     contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
   },

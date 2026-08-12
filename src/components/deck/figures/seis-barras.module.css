@@ -48,17 +48,36 @@
    segundo 2,5:1, y esta línea no es adorno —es contra lo que se mide todo lo
    demás—. Que sea del mismo color que las barras no confunde: una es vertical
    y discontinua, las otras son horizontales y macizas. */
+/* ⚠️ `non-scaling-stroke`, como el resto de los trazos del deck. Sin él este
+   era **el único hilo del deck que adelgazaba en el móvil**: 1,27 px a 1440 y a
+   1920, y 0,71 px a 390 —el 44 % de su tinta perdido justo en la pantalla donde
+   el deck se lee peor—, mientras la malla de la portada, la base y las curvas
+   de la tesis lo conservan y se quedan clavadas en 1,00 px. Y no es un trazo
+   cualquiera: es la única referencia de la figura —las seis barras no
+   significan nada sin ella— y la ronda anterior ya tuvo que rescatarla del
+   `--gray-300`, que la dejaba casi invisible. Se corrigió el color y no el
+   grosor. El punteado se endereza por lo mismo: sin esto, a 390 px los 3/4 de
+   la raya y el hueco se pintan a 2,1/2,9. */
 .marca {
   stroke: var(--gray-400);
   stroke-width: 1;
   stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
   animation: aparece var(--dur) var(--ease-out) both;
 }
 
+/* Misma corrección que `.curvaEtiqueta` en `deck.module.css`, con la escala de
+   esta figura: en unidades de lienzo el tamaño lo decidía el ancho del SVG, así
+   que se veía a 9,3 px a 390 —por debajo del suelo de la escala— y a 16,5 px a
+   1440. El `min()` congela el término cuando la figura toca su `max-width`
+   (38 rem), que aquí ocurre ya a 1440. Medido después: 11,0 px a 390 y 14,0 px
+   a 1440 y 1920, la misma banda que la etiqueta de las curvas. La limitación de
+   fondo —que no obedece la preferencia de fuente del lector— está explicada
+   allí y es la misma. */
 .marcaEtiqueta {
   fill: var(--gray-400);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: calc(17px - 0.414 * min(1vw, 14.4px));
   letter-spacing: 0.06em;
   animation: aparece var(--dur) var(--ease-out) both;
 }
