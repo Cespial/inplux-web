@@ -70,7 +70,7 @@ export const workProfiles = [
     },
     access: {
       label: "Abrir asistente",
-      href: "https://tribai.co/asistente",
+      href: "https://app.tribai.co/",
       detail: "El asistente tributario puede explorarse públicamente en el dominio oficial.",
     },
     attribution: {
@@ -123,7 +123,7 @@ export const workProfiles = [
       },
       {
         label: "Asistente público de Tribai",
-        url: "https://tribai.co/asistente",
+        url: "https://app.tribai.co/",
         supports:
           "Disponibilidad pública de la interfaz del asistente tributario mostrada en la captura.",
         verifiedAt: "2026-08-11",

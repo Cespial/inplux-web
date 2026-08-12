@@ -48,8 +48,8 @@ const realPages = {
     surfaceLabel: "Análisis arbitral",
   },
   tribai: {
-    sourceUrl: "https://tribai.co/asistente",
-    displayUrl: "tribai.co/asistente",
+    sourceUrl: "https://app.tribai.co/",
+    displayUrl: "app.tribai.co",
     captureSrc: "/work/real-pages/tribai-asistente-2026-07-21.png",
     alt: "Captura real del Asistente Tributario público de Tribai.",
     screenLabel: "Asistente Tributario",
