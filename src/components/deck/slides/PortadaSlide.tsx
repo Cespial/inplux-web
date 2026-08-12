@@ -15,8 +15,12 @@ const [PRIMERA, SEGUNDA] = titulo;
  * viene partido de ahí.
  *
  * La malla es lo único que no es texto, va delante en el DOM y detrás en la
- * pintura: `.bloque` lleva `z-index: 1` y `.malla` `z-index: 0`. Sin ese par,
- * un absoluto se pinta SOBRE el contenido en flujo aunque vaya antes.
+ * pintura: `.bloque` lleva `z-index: 1` y `.malla` `z-index: 0`. ⚠️ Ese par no
+ * es lo único que la mantiene detrás —medido: quitarlo no la sube, porque el
+ * `position: relative` de `.bloque` y los contextos de apilamiento de
+ * `.escalonado` hacen lo mismo por su cuenta—, pero sí es lo único declarado
+ * PARA esto. La sonda y sus cinco escenarios están en el comentario de
+ * `.bloque`, en `deck.module.css`.
  */
 export function PortadaSlide({ id }: { id: string }) {
   return (

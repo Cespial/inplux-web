@@ -447,8 +447,25 @@ function medir({ id, sup, inf }) {
    *
    *   · pinta texto propio en ese punto —texto sobre texto, sea cual sea su
    *     fondo, que es el caso del rótulo con el offset mal puesto—;
-   *   · es contenido reemplazado —una imagen, un vídeo, un lienzo—;
-   *   · su capa de fondo llega al umbral de alfa.
+   *   · es contenido reemplazado —una imagen, un vídeo, un lienzo—, cuyo
+   *     contenido no se puede interrogar y se da por opaco;
+   *   · su capa de fondo, o su TINTA si es SVG, llega al umbral de alfa.
+   *
+   * ⚠️ **El SVG no es contenido reemplazado opaco, y darlo por tal denuncia
+   * media fase de contenido.** Un `<svg>` inline es casi todo aire: sus formas
+   * son objetivos de hit-test propios, así que `elementFromPoint` devuelve el
+   * `<svg>` exterior justo cuando el punto NO cae sobre ninguna tinta, y
+   * devuelve la forma concreta cuando sí. Con «SVG ⇒ opaco» pasaba lo peor de
+   * los dos lados: una filigrana transparente por encima de un titular se
+   * denunciaba —el caso normal de una retícula, un grano o un adorno, y la
+   * forma exacta de `MallaPortada`, que hoy se salva solo por ir debajo del
+   * texto— mientras que un `<rect>` relleno sepultando ese mismo titular NO se
+   * denunciaba, porque el que llegaba a `ocluye()` era el `<rect>`, que no
+   * estaba en la lista y cuyo `background-color` es transparente.
+   *
+   * Así que a un nodo de SVG se le pregunta por su tinta —`fill` y `stroke`
+   * con sus opacidades— y al `<svg>` exterior solo por su fondo CSS, que es
+   * lo único que pinta él. Calibrado en las dos direcciones (§8 del informe).
    *
    * El umbral sale de la cuenta de contraste, no del gusto: un velo negro
    * sobre blanco deja el fondo en (1 − alfa), y con texto oscuro encima el
@@ -487,7 +504,46 @@ function medir({ id, sup, inf }) {
     return a;
   };
 
-  const REEMPLAZADOS = new Set(["IMG", "SVG", "VIDEO", "CANVAS", "PICTURE", "IFRAME"]);
+  // Sin "SVG": su tinta sí se puede interrogar, y se interroga. `image` y
+  // `foreignObject` son los dos nodos de dentro de un SVG que sí traen
+  // contenido ajeno, y esos vuelven a ser opacos por decreto.
+  const REEMPLAZADOS = new Set([
+    "IMG",
+    "VIDEO",
+    "CANVAS",
+    "PICTURE",
+    "IFRAME",
+    "IMAGE",
+    "FOREIGNOBJECT",
+  ]);
+
+  const NS_SVG = "http://www.w3.org/2000/svg";
+
+  /**
+   * El alfa de la tinta de un nodo de SVG en el punto que se muestreó.
+   *
+   * Si `elementFromPoint` lo devolvió, con `pointer-events: auto` forzado
+   * —que en SVG se comporta como `visiblePainted`—, es que ahí pintó: o el
+   * relleno o el trazo. No se puede saber cuál de los dos, así que se toma el
+   * mayor, que es el lado del aviso.
+   *
+   * El `<svg>` exterior es otra cosa: no pinta las formas, son objetivos
+   * propios. Lo único suyo es el fondo CSS de su caja, y ese es el que decide.
+   */
+  const alfaDeTinta = (el) => {
+    const e = estilo(el);
+    if (el.tagName.toLowerCase() === "svg") return alfaDeCapa(e);
+    const conOpacidad = (pintura, opacidad) => {
+      if (pintura === "none" || pintura === "" || pintura === undefined) return 0;
+      const o = Number.parseFloat(opacidad);
+      return alfaDeColor(pintura) * (Number.isNaN(o) ? 1 : o);
+    };
+    return Math.max(
+      conOpacidad(e.fill, e.fillOpacity),
+      conOpacidad(e.stroke, e.strokeOpacity),
+      alfaDeCapa(e),
+    );
+  };
 
   /** ¿Tiene texto suyo, no el de un descendiente? */
   const textoPropio = (el) =>
@@ -496,7 +552,7 @@ function medir({ id, sup, inf }) {
   const ocluye = (el) => {
     if (textoPropio(el)) return true;
     if (REEMPLAZADOS.has(el.tagName.toUpperCase())) return true;
-    let alfa = alfaDeCapa(estilo(el));
+    let alfa = el.namespaceURI === NS_SVG ? alfaDeTinta(el) : alfaDeCapa(estilo(el));
     for (let n = el; n !== null && n !== seccion.parentElement; n = n.parentElement) {
       alfa *= Number.parseFloat(estilo(n).opacity);
     }

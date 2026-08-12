@@ -235,30 +235,40 @@
    está dimensionada para una lámina de texto —portada, tesis— y trece de las
    quince traen debajo una rejilla, una tabla o una lista.
 
-   Medido sobre la lámina más densa que viene (evidencia: trece motivos en una
-   sola columna a ancho completo, con pregunta, respuesta, cuerpo y remate),
-   contra el hueco real entre barras:
+   ⚠️ **No es un rescate: la lámina densa entra igual sin esto.** Medido sobre
+   la lámina 6 simulada —trece motivos de su longitud real en una sola columna
+   a ancho completo, con pregunta, respuesta, cuerpo y remate— contra el hueco
+   real entre barras:
 
-     1440×900   4,3 rem → caja 115→821 de 70→840   19 px de holgura
-                2,8 rem → caja 127→783 de 70→840   57 px
-     1920×1080  4,3 rem → caja 169→921 de 70→1020  99 px
-                2,8 rem → caja 194→896 de 70→1020 124 px
-     390×844    4,3 rem → caja 112→805 de 70→784   SE PASA 21 px
-                2,8 rem → caja 112→795 de 70→784   SE PASA 11 px
+                encabezado   caja               holgura
+     1440×900   199 px 26 %  121→789 de 70→840   51 px
+       2,8 rem  149 px 19 %  146→764             76 px
+     1920×1080  203 px 21 %  191→899 de 70→1020 121 px
+       2,8 rem  153 px 16 %  216→874            146 px
+     390×844    134 px 19 %  148→706 de 70→784   78 px
+       2,8 rem  124 px 17 %  153→701             83 px
 
-   Dos lecturas, y las dos importan. A 1440 el modificador multiplica por tres
-   la holgura: con la escala llena, un solo motivo que envuelva a dos líneas
-   (28 px) se come el margen entero. Y a 390 el modificador NO basta: ahí el
-   encabezado son 168 px de 714 y lo que desborda es la lista, así que la
-   lámina 6 tendrá que traer además su propio ritmo —interlínea 1,4 y 0,2 rem
-   de separación, medido: la lista baja de 295 a 269 px y la caja cierra en
-   112→769 con 15 px de sobra—. El tamaño es la primera palanca, no la única.
+   Lo que compra el modificador, dicho sin adornos: **unos 50 px de presupuesto
+   vertical a 1440 y a 1920, y 10 px a 390** —donde el `clamp` ya está tocando
+   su suelo—. En filas de motivo, a 1440 son 1,8 filas más de margen (cada una
+   cuesta 27,7 px). Útil, y no imprescindible.
 
-   El valor sale de la tipografía, no del ajuste: 2,8 rem deja la respuesta un
-   escalón entero por debajo del título de portada (4,7 rem) y del genérico
-   (5,5 rem), así que una lámina cargada nunca compite con las dos cuya única
-   materia es un título. Sigue siendo 2,2× el cuerpo y 2,8× la pregunta: la
-   inversión de la jerarquía se conserva. */
+   La razón de peso es tipográfica y se ve en el ancho, no en el alto: a
+   4,3 rem la respuesta ocupa **875 px** —`22ch`, que por fin gobierna en una
+   lámina de una columna— sobre una caja de 1.296 px, o sea dos tercios del
+   ancho, y pesa 4,6 veces el cuerpo de mono que introduce. A 2,8 rem son
+   570 px y 3 veces. Un titular no debería medir cuatro veces y media la lista
+   que resume.
+
+   2,8 rem y no 3,0 ni 2,6: deja la respuesta un escalón entero por debajo del
+   título de portada (4,7 rem) y del genérico (5,5 rem), así que una lámina
+   cargada nunca compite con las dos cuya única materia es un título; y sigue
+   siendo 2,2× el cuerpo y 2,8× la pregunta, con lo que la inversión de la
+   jerarquía —la tesis de toda la escala— se conserva entera.
+
+   ⚠️ La Tarea 12 tiene que VOLVER A MEDIR con su maquetación real. Estos
+   números son de una simulación con una lista de un ritmo elegido por mí; si
+   esa lámina llega con dos columnas, tarjetas o viñetas, no valen. */
 .respuestaCompacta {
   font-size: clamp(1.7rem, 3.4vw, 2.8rem);
 }
@@ -296,11 +306,24 @@
    lee en cada clase es lo que se mide en pantalla. */
 .bloque {
   position: relative;
-  /* Por encima de la figura de fondo. Un absoluto con z-index automático se
-     pinta SOBRE el contenido en flujo de su contenedor aunque vaya antes en
-     el DOM, así que sin este par la malla de la portada taparía el título de
-     verdad.
-     ⚠️ Es una barrera contra la OCLUSIÓN, y solo contra eso. El defecto que
+  /* Por encima de la figura de fondo — declarado, no heredado de un efecto.
+     ⚠️ Medido, y NO es lo que uno diría: quitar este par no sube la malla.
+     Sonda sobre la portada con la malla pintada de rojo opaco, preguntando
+     con elementFromPoint qué hay encima del título, a 1440 y a 390:
+       tal cual                               → TÍTULO
+       sin el par de z-index                  → TÍTULO
+       sin z-index + .bloque en static        → TÍTULO
+       sin z-index + sin .escalonado          → TÍTULO
+       sin z-index + static + sin .escalonado → MALLA
+     O sea que hay TRES cosas manteniendo la malla detrás, y basta una: este
+     par; el `position: relative` de aquí abajo (un posicionado con z-index
+     automático se pinta en el mismo grupo que el absoluto y gana por orden de
+     DOM, porque va después); y el contexto de apilamiento que la animación de
+     `.escalonado` crea en cada hijo, que hace exactamente lo mismo. Las dos
+     últimas son efectos colaterales de decisiones tomadas para otra cosa y
+     una edición posterior puede llevárselas sin enterarse. Este par es el
+     único de los tres declarado PARA esto, y por eso se queda.
+     ⚠️ Y es una barrera contra la OCLUSIÓN, solo contra eso. El defecto que
      de verdad apareció en la portada —un nodo teal asomando por los huecos de
      una «ó»— ocurrió con este par ya puesto, es decir con la malla DEBAJO del
      texto: una figura decorativa compite con los glifos desde detrás, y de
