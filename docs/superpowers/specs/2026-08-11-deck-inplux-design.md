@@ -557,7 +557,7 @@ tocar los productos.
 → *Cierra cuando:* el arnés da verde en los tres viewports y las 7 cumplen §8.3.
 
 **F3 · Productos y cierre (8–14).** Generadas desde `workProfiles`.
-→ *Cierra cuando:* la prueba de perfil huérfano pasa y las cuatro fichas leen su atribución desde
+→ *Cierra cuando:* la prueba de perfil huérfano pasa y las cinco fichas leen su atribución desde
 `work.ts`, sin copia local.
 
 **F4 · Movimiento.** Las tres animaciones de §7.5, y solo esas. Después, la barrera de §8.2.

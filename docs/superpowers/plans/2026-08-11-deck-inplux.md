@@ -35,8 +35,23 @@ El resto del spec se mantiene íntegro.
 
 ## Enmienda — noche del 11-ago-2026
 
-F0.5 creció durante su ejecución. Este plan ya refleja los números nuevos; se anota el porqué
-para que nadie los lea como erratas.
+F0.5 creció durante su ejecución.
+
+⚠️ **Este plan NO está completamente actualizado, y esa es la advertencia más importante del
+documento.** Los números de cabecera, el modelo de datos, las pruebas y los comandos del arnés sí
+se corrigieron. Los cuerpos de las tareas sin ejecutar **conservan «cuatro» en varios sitios** —
+la revisión final de F0.5 encontró siete—. Antes de ejecutar cada tarea, **cuenta los perfiles en
+`src/content/work.ts`** y trata cualquier «cuatro» del cuerpo como una errata a verificar, no como
+un dato.
+
+Donde eso más muerde: el copy destinado a `src/` (la lámina 7 decía «cuatro dominios»), el
+presupuesto de layout de esa misma lámina —medido para cuatro miniaturas, **no para cinco**— y la
+posición de las rutas nuevas en `expectedSitemapUrls`, que se compara posicionalmente y donde el
+orden ya cambió una vez.
+
+La versión anterior de este párrafo afirmaba que el plan «ya refleja los números nuevos». Era
+falso, y una desactualización visible es mucho menos peligrosa que una garantía falsa: quien
+confía en ella reproduce la clase exacta de defecto que F0.5 tardó 31 confirmaciones en erradicar.
 
 - **Cinco productos, no cuatro.** Porkia entró al portafolio y la regla de build que bloqueaba su
   nombre se retiró. El deck pasa de 14 a **15 láminas**, y se renumera solo porque las de producto
@@ -103,7 +118,7 @@ Aplican a **todas** las tareas. No se repiten en cada una.
 | `src/content/deck.copy.ts` | Todo el texto en un objeto tipado, listo para un gemelo en inglés |
 | `scripts/verify-deck-model.test.mjs` | Prueba de perfil huérfano y de conteo de láminas |
 | `src/lib/banned-reasons.server.ts` | Lee los motivos de `verify-public-content.mjs` en build. Solo lo importa la ruta, que es de servidor |
-| `scripts/verify-deck-reasons.test.mjs` | Prueba de que los motivos siguen siendo 14 |
+| `scripts/verify-deck-reasons.test.mjs` | Prueba de que los motivos siguen siendo 13 |
 | `scripts/qa-deck.mjs` | Arnés de medición de láminas |
 | `scripts/qa-reduce.mjs` | Barrera de movimiento reducido |
 | `src/app/deck/page.tsx` | Índice puntual `/deck` |
@@ -129,7 +144,7 @@ Rama: `fix/atribucion-tribai-kelsen`.
 
 ### Tarea 1: Re-verificar las fuentes y sincronizar la versión de las tarjetas OG
 
-Las ocho fuentes de los cuatro perfiles se verificaron el 2026-07-21. La Tarea 2 cambia el contenido de las tarjetas OG, y las cachés sociales indexan por URL: si el `?v=` no se mueve, el mundo sigue viendo la tarjeta vieja. La versión se deriva de `verifiedAt`, así que primero se re-verifica de verdad y después se actualiza la fecha.
+Las fuentes citadas de todos los perfiles se verificaron el 2026-07-21. La Tarea 2 cambia el contenido de las tarjetas OG, y las cachés sociales indexan por URL: si el `?v=` no se mueve, el mundo sigue viendo la tarjeta vieja. La versión se deriva de `verifiedAt`, así que primero se re-verifica de verdad y después se actualiza la fecha.
 
 **Files:**
 - Modify: `src/content/work.ts` — el campo `verifiedAt` de las 8 entradas de `sources[]`
@@ -480,7 +495,7 @@ Rama: `feat/deck`, desde `main` ya con F0.5 dentro.
 **Interfaces:**
 - Consumes: `workProfiles` de `src/content/work.ts`.
 - Produces:
-  - `SLIDES: readonly DeckSlide[]` — 14 entradas, `n` de 1 a 15
+  - `SLIDES: readonly DeckSlide[]` — 15 entradas, `n` de 1 a 15
   - `TOTAL_SLIDES: number` — 14
   - `DeckSlideKind` — unión de 11 literales
   - `getSlideById(id: string): DeckSlide | undefined`
@@ -658,7 +673,7 @@ export const DECK_COPY = {
   },
   puente: {
     pregunta: "¿Ustedes son de un sector?",
-    respuesta: "Cuatro dominios distintos. La misma fábrica.",
+    respuesta: "Cinco dominios distintos. La misma fábrica.",
   },
   capacidades: {
     pregunta: "¿Qué comparten los cuatro por dentro?",
@@ -714,7 +729,7 @@ const APERTURA = [
   { id: "metodo", kind: "metodo", titulo: "Cuatro tiempos" },
   { id: "espejo", kind: "espejo", titulo: "El mismo método, dos lecturas" },
   { id: "evidencia", kind: "evidencia", titulo: "Trece cosas que este sitio no puede decir" },
-  { id: "puente", kind: "puente", titulo: "Cuatro dominios, la misma fábrica" },
+  { id: "puente", kind: "puente", titulo: "Cinco dominios, la misma fábrica" },
 ] as const;
 
 const CIERRE = [
@@ -883,12 +898,14 @@ En `pageDefinitions`, dos entradas nuevas con la misma forma que las existentes:
 
 ⚠️ El `title` que el verificador compara es el **renderizado**, con el sufijo de plantilla que `src/app/layout.tsx` añade. Leer ahí la `title.template` antes de escribir la cadena; si no coincide, `check:output` dice exactamente qué encontró.
 
-Y en `expectedSitemapUrls`, después de `/trabajo/laudos`:
+Y en `expectedSitemapUrls`, **después de `/trabajo/porkia`**, que es la última ruta de producto desde que Porkia entró al portafolio:
 
 ```js
     `${siteUrl}/deck`,
     `${siteUrl}/deck/presentacion`,
 ```
+
+⚠️ La comparación es **posicional** (`verify-build-output.mjs`, `expectedSitemapUrls.forEach` con `expectEqual(urls[index], …)`). Insertarlas en otro sitio rompe `check:output`. **Lee el orden real del sitemap construido antes de escribir**, no te fíes de esta indicación: el orden ya cambió una vez.
 
 - [ ] **Step 4: Registrar en `verify-http-contracts.mjs`**
 
@@ -2166,15 +2183,17 @@ Sin esta lámina, lo que sigue son cuatro aplicaciones sueltas.
 - Consumes: `workProfiles`, `DECK_COPY.puente`.
 - Produces: nada.
 
-- [ ] **Step 1: La rejilla de cuatro**
+- [ ] **Step 1: La rejilla, derivada de `workProfiles`**
 
-Cuatro miniaturas, una por perfil, con `name` y `category`. Sin etiqueta de atribución aquí: las fichas de la Tarea 14 la llevan con su peso completo, y repetirla cuatro veces en miniatura la convierte en ruido.
+Una miniatura por perfil —hoy **cinco**— con `name` y `category`. Sin etiqueta de atribución aquí: las fichas de la Tarea 14 la llevan con su peso completo, y repetirla en cada miniatura la convierte en ruido.
 
-La lámina dice en voz alta que la fábrica no es de un sector: cuatro dominios distintos —tributación, gestión pública, derecho, arbitraje— y la misma forma de trabajar.
+La lámina dice en voz alta que la fábrica no es de un sector: **cinco dominios distintos —tributación, gestión pública, derecho, arbitraje y porcicultura—** y la misma forma de trabajar.
 
-- [ ] **Step 2: Cuatro caben; nueve no**
+⚠️ **La rejilla se deriva del número de perfiles, no de un número escrito a mano.** En F0.5 este patrón rompió cuatro veces; ningún `repeat(N, …)` con N literal, ninguna regla que nombre una posición.
 
-⚠️ Medido en Tensor: nueve miniaturas apiladas no caben en 844 px de alto y la lámina se mete debajo de las dos barras. Con cuatro, en 2×2 en móvil y 4×1 en escritorio, sí caben — pero el arnés lo comprueba, no se asume.
+- [ ] **Step 2: Medir cuántas caben — no está medido**
+
+⚠️ Medido en Tensor: nueve miniaturas apiladas no caben en 844 px de alto y la lámina se mete debajo de las dos barras. **Cuatro sí caben en 2×2 móvil / 4×1 escritorio; cinco NO están medidas.** Es tu trabajo medirlo, no asumirlo — y si cinco no caben en 390×844, la disposición cambia, no el contenido.
 
 - [ ] **Step 3: Medir en los tres tamaños y commit**
 
@@ -2236,7 +2255,7 @@ Una sola lámina, cuatro instancias generadas desde `workProfiles`.
 
 ⚠️ **Nada aquí menciona socios.** El campo `perfil.partners` existe y Laudos lo tiene poblado; la lámina **no lo renderiza**. Es una decisión tomada el 11-ago-2026 y registrada en §2.1a del spec: el sitio conserva la atribución del socio, el deck no la muestra. No «arreglar» esto añadiendo `partners` al render.
 
-⚠️ **No hay rama por `attribution.state`.** Tras la Tarea 2 los cuatro son `confirmed`; una rama condicional aquí sería código muerto que reintroduce una segunda copia de la verdad.
+⚠️ **No hay rama por `attribution.state`.** Tras la Tarea 2 los cinco son `confirmed`; una rama condicional aquí sería código muerto que reintroduce una segunda copia de la verdad.
 
 - [ ] **Step 2: La interfaz, diferenciada por tema**
 
