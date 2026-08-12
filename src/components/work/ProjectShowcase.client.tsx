@@ -9,7 +9,11 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import { type WorkProfile, type WorkSlug } from "@/content/work";
+import {
+  verificationDateFor,
+  type WorkProfile,
+  type WorkSlug,
+} from "@/content/work";
 import styles from "./ProjectShowcase.module.css";
 
 type InputMode = "keyboard" | "pointer";
@@ -299,7 +303,10 @@ export function ProjectShowcase({ profiles }: ProjectShowcaseProps) {
                     <span aria-hidden="true" />
                     CAPTURA REAL · {profile.name.toUpperCase()}
                   </p>
-                  <p>URL OFICIAL · VERIFICADA 21 JUL 2026</p>
+                  <p>
+                    URL OFICIAL · VERIFICADA{" "}
+                    {verificationDateFor(profile.sources, page.sourceUrl)}
+                  </p>
                 </div>
               </div>
             </div>

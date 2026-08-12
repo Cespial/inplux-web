@@ -5,6 +5,7 @@ import { CapabilitiesWorkbench } from "@/components/routes/CapabilitiesWorkbench
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { getWorkProfile, verificationDateFor } from "@/content/work";
 import styles from "./capacidades.module.css";
 
 export const metadata: Metadata = {
@@ -78,9 +79,19 @@ const capabilityLayers = [
   },
 ] as const;
 
+/**
+ * Cada pieza de evidencia enmarca la captura de una página pública.
+ *
+ * `capturedAt` es la fecha en que se tomó esa imagen: no se deriva de nada
+ * porque la captura no se ha vuelto a tomar. La fecha de verificación de la
+ * fuente sí se deriva de `work.ts` (`slug` + `productHref`), para que no quede
+ * escrita a mano en una segunda ruta y se desincronice del perfil.
+ */
 const evidence = [
   {
     number: "01",
+    slug: "gobia",
+    capturedAt: "21 JUL 2026",
     name: "Gobia",
     category: "Gestión pública",
     headline: "Una operación municipal reunida en un centro de mando.",
@@ -95,6 +106,8 @@ const evidence = [
   },
   {
     number: "02",
+    slug: "laudos",
+    capturedAt: "21 JUL 2026",
     name: "Laudos",
     category: "Arbitraje",
     headline: "Conocimiento arbitral convertido en una herramienta explorable.",
@@ -108,6 +121,26 @@ const evidence = [
     productLabel: "Abrir beta pública",
   },
 ] as const;
+
+/**
+ * La evidencia con su fecha de verificación ya resuelta contra `work.ts`.
+ *
+ * Si un `slug` deja de existir en `work.ts` esto revienta el build en vez de
+ * publicar una fecha en blanco: la fecha no es decoración, es lo que la
+ * leyenda afirma.
+ */
+const evidenceItems = evidence.map((item) => {
+  const profile = getWorkProfile(item.slug);
+
+  if (!profile) {
+    throw new Error(`Evidencia sin perfil en work.ts: ${item.slug}`);
+  }
+
+  return {
+    ...item,
+    verifiedLabel: verificationDateFor(profile.sources, item.productHref),
+  };
+});
 
 const audiences = [
   {
@@ -241,7 +274,7 @@ export default function CapacidadesPage() {
             </div>
 
             <div className={styles.evidenceGrid}>
-              {evidence.map((item) => (
+              {evidenceItems.map((item) => (
                 <article key={item.name}>
                   <figure className={styles.browserFrame}>
                     <div className={styles.browserChrome} aria-hidden="true">
@@ -255,7 +288,10 @@ export default function CapacidadesPage() {
                       height={960}
                       sizes="(max-width: 800px) 100vw, 50vw"
                     />
-                    <figcaption>Captura de la experiencia pública · verificada 21 JUL 2026</figcaption>
+                    <figcaption>
+                      Captura pública {item.capturedAt} · fuente verificada{" "}
+                      {item.verifiedLabel}
+                    </figcaption>
                   </figure>
                   <div className={styles.evidenceCopy}>
                     <div className={styles.evidenceMeta}>
