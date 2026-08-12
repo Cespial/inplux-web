@@ -1,4 +1,6 @@
 import type { DeckSlide } from "@/content/deck";
+import { workCaptures } from "@/content/work-captures";
+import { CapturaEnmarcada } from "../CapturaEnmarcada";
 import { Slide } from "../Slide";
 import deck from "../deck.module.css";
 import styles from "./producto.module.css";
@@ -14,23 +16,35 @@ type Perfil = Extract<DeckSlide, { kind: "producto" }>["perfil"];
  * lo exceptúa a propósito— y de que este archivo no sepa cuántas hay.
  *
  * ⚠️ **Aquí no se escribe ni una cadena de contenido.** Todo lo visible sale de
- * `workProfiles` en `src/content/work.ts`: el número, el dominio, el nombre, el
- * titular, el bloque de interfaz, la atribución, el estado y la fuente. No hay
- * copy de esta lámina en `deck.copy.ts` porque no hace falta ninguno — y por eso
- * añadir un producto a `work.ts` añade una lámina completa sin tocar una línea
- * de aquí.
+ * `workProfiles` en `src/content/work.ts` y de `workCaptures` en
+ * `src/content/work-captures.ts`: el número, el dominio, el nombre, el titular,
+ * el bloque de interfaz, la atribución, el estado, la fuente y la captura con su
+ * fecha. No hay copy de esta lámina en `deck.copy.ts` porque no hace falta
+ * ninguno — y por eso añadir un producto a `work.ts` y su captura al acta añade
+ * una lámina completa sin tocar una línea de aquí.
  *
  * ⚠️ **Ni un conteo de productos, tampoco en los comentarios.** Esta lámina no
  * dice cuántos productos hay ni qué número ocupa en el deck: su posición es
  * 7 + el índice del perfil, y un producto nuevo la movería.
  *
- * El pie es el que sostiene la lámina entera: sin la fuente y su fecha, la
- * ficha sería una diapositiva de producto como cualquier otra. Con ella, cada
- * cosa que la lámina afirma se puede ir a comprobar — que es exactamente lo que
- * la lámina de la evidencia acaba de prometer.
+ * **La lámina tiene dos mitades y son dos clases de cosa.** A la izquierda, lo
+ * que AFIRMAMOS: el dominio, el nombre, quién lo hizo y su tesis en una línea, y
+ * al pie la fuente con su fecha. A la derecha, lo que se PUEDE COMPROBAR: la
+ * captura de la página pública dentro de su marco, y debajo el panel con lo que
+ * esa misma superficie publica. El panel dejó de ser un bloque suelto y pasó a
+ * ser la LEYENDA de la captura: dice, a un cuerpo que se lee desde el fondo de
+ * la sala, lo que dentro de la imagen mide cinco píxeles.
+ *
+ * ⚠️ Y de ahí sale una regla de contenido que no es de diseño: **el panel y la
+ * captura no pueden decirse cosas distintas.** Un panel que anuncia una cifra y
+ * una captura que enseña otra, juntos, publican dos números para la misma
+ * magnitud delante del cliente. Cuando eso pasó —Gobia declaraba un recaudo que
+ * su propia demo no publica— se corrigió el dato en `work.ts`, no la
+ * maquetación.
  */
 export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
   const fuente = perfil.sources[0];
+  const captura = workCaptures[perfil.slug];
 
   // ⚠️ **`perfil.partners` NO se pinta en el deck, y es una divergencia
   // deliberada respecto del sitio.** El sitio conserva la atribución de las
@@ -74,71 +88,86 @@ export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
 
           <h1 className={deck.respuesta}>{perfil.name}</h1>
 
+          {/* ⚠️ **La atribución sube del pie y deja de ser letra pequeña.**
+              `DECK.md` lo pedía desde el principio —«la etiqueta de atribución
+              visible, con el mismo peso tipográfico que el nombre; no en letra
+              pequeña al pie»— y estaba compuesta en mono de 12 px, en el gris
+              más flojo de la paleta, debajo de todo. Que INPLUX construyó esto
+              no es una nota al margen de la ficha: es la mitad de lo que la
+              ficha afirma. Aquí va en cuerpo de lectura y en tinta, pegada al
+              nombre, y el pie se queda con lo que sí es una cita. */}
+          <p className={styles.atribucion}>{perfil.attribution.label}</p>
+
           {/* El titular del producto, que es su tesis en una línea. El deck no
               lo reescribe: lo lee de donde ya vive. */}
           <p className={deck.cuerpo}>{perfil.headline}</p>
 
-          {/* El pie, con las dos cosas en dos renglones y no en uno: arriba
-              quién lo hizo —una declaración de INPLUX—, abajo la fuente y su
-              fecha —una cita, que es otra clase de cosa—. El salto lo da
-              `.pieFuente`, que ya era un bloque. */}
-          <p className={deck.pie}>
-            {perfil.attribution.label}
-            <span className={styles.pieFuente}>
-              <a className={deck.pieEnlace} href={fuente.url}>
-                {fuente.label}
-              </a>
-              {" · consultado "}
-              {fuente.verifiedAt}
-            </span>
+          {/* El pie es ahora solo la cita: la fuente y la fecha en que se
+              revisó. Con la atribución arriba, este renglón tiene una sola
+              clase de cosa dentro y no hay que separar dos registros con un
+              salto de línea. */}
+          <p className={`${deck.pie} ${styles.pieFicha}`}>
+            <a className={deck.pieEnlace} href={fuente.url}>
+              {fuente.label}
+            </a>
+            {" · consultado "}
+            {fuente.verifiedAt}
           </p>
         </div>
 
-        {/* El bloque de interfaz del producto: lo que su propia superficie
-            pública muestra, con el mismo texto que /trabajo. No es una captura
-            ni una promesa: son los rótulos y valores que el producto publica, y
-            la fuente del pie es la que los respalda. */}
-        <div className={styles.panel}>
-          <p className={styles.panelRotulo}>{perfil.interface.eyebrow}</p>
+        {/* La columna de la evidencia: la captura de la página pública y, justo
+            debajo, lo que esa página publica en tipografía de sala. Las dos
+            entran juntas y con un solo compás —el de la figura de la tesis—
+            porque son una sola cosa: la prueba y su leyenda. */}
+        <div className={styles.evidencia}>
+          <CapturaEnmarcada captura={captura} sources={perfil.sources} />
 
-          <p className={styles.metrica}>
-            <span
-              className={
-                metricaEsCifra
-                  ? styles.metricaValor
-                  : `${styles.metricaValor} ${styles.metricaValorPalabra}`
-              }
-            >
-              {perfil.interface.primaryMetric}
-            </span>
-            <span className={styles.metricaPie}>{perfil.interface.metricLabel}</span>
-          </p>
+          {/* El bloque de interfaz del producto: lo que su propia superficie
+              pública muestra, con el mismo texto que /trabajo. No es una
+              promesa, y desde que la captura está encima tampoco es una
+              transcripción que haya que creerse: se ve arriba. */}
+          <div className={styles.panel}>
+            <p className={styles.panelRotulo}>{perfil.interface.eyebrow}</p>
 
-          {/* Pares rótulo/valor: `<dl>` porque eso es exactamente lo que son, y
-              así un lector de pantalla los anuncia emparejados en vez de como
-              seis textos sueltos. El `<div>` que envuelve cada par es HTML
-              válido dentro de un `<dl>` y es lo que permite maquetar la fila. */}
-          <dl className={styles.datos}>
-            {perfil.interface.items.map((item) => (
-              <div className={styles.dato} key={item.label}>
-                <dt className={styles.datoEtiqueta}>{item.label}</dt>
-                <dd
-                  className={
-                    // `state` es opcional y cada producto declara acentuado
-                    // solo el valor que él destaca, así que hay ítems que no
-                    // traen el campo: se pregunta por su presencia, no se
-                    // asume. Con `as const` en `work.ts` los que no lo
-                    // declaran ni siquiera tienen la propiedad en su tipo.
-                    "state" in item && item.state === "accent"
-                      ? `${styles.datoValor} ${styles.datoValorAcento}`
-                      : styles.datoValor
-                  }
-                >
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
+            <p className={styles.metrica}>
+              <span
+                className={
+                  metricaEsCifra
+                    ? styles.metricaValor
+                    : `${styles.metricaValor} ${styles.metricaValorPalabra}`
+                }
+              >
+                {perfil.interface.primaryMetric}
+              </span>
+              <span className={styles.metricaPie}>{perfil.interface.metricLabel}</span>
+            </p>
+
+            {/* Pares rótulo/valor: `<dl>` porque eso es exactamente lo que son, y
+                así un lector de pantalla los anuncia emparejados en vez de como
+                seis textos sueltos. El `<div>` que envuelve cada par es HTML
+                válido dentro de un `<dl>` y es lo que permite maquetar la fila. */}
+            <dl className={styles.datos}>
+              {perfil.interface.items.map((item) => (
+                <div className={styles.dato} key={item.label}>
+                  <dt className={styles.datoEtiqueta}>{item.label}</dt>
+                  <dd
+                    className={
+                      // `state` es opcional y cada producto declara acentuado
+                      // solo el valor que él destaca, así que hay ítems que no
+                      // traen el campo: se pregunta por su presencia, no se
+                      // asume. Con `as const` en `work.ts` los que no lo
+                      // declaran ni siquiera tienen la propiedad en su tipo.
+                      "state" in item && item.state === "accent"
+                        ? `${styles.datoValor} ${styles.datoValorAcento}`
+                        : styles.datoValor
+                    }
+                  >
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </div>
     </Slide>
