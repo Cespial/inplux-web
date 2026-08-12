@@ -31,7 +31,7 @@ const monthLabels = [
  * `2026-08-11` → `11 AGO 2026`.
  *
  * Es el registro compacto de los pies en monoespaciada (`CAPTURA DE NAVEGADOR ·
- * 21 JUL 2026`), no el de la tabla de evidencia de `/trabajo/[slug]`, que
+ * 11 AGO 2026`), no el de la tabla de evidencia de `/trabajo/[slug]`, que
  * escribe `11 DE AGO DE 2026` con su propio `formatVerifiedDate` local. Son dos
  * formatos porque son dos superficies distintas, no por descuido.
  *
@@ -40,7 +40,7 @@ const monthLabels = [
  * la fecha un día. Si la cadena no tiene la forma esperada devuelve el original,
  * que sigue siendo una fecha legible.
  */
-function formatShortDate(isoDate: string) {
+export function formatShortDate(isoDate: string) {
   const [year, month, day] = isoDate.split("-");
   const monthLabel = monthLabels[Number(month) - 1];
   return year && monthLabel && day ? `${day} ${monthLabel} ${year}` : isoDate;

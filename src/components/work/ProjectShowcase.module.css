@@ -116,10 +116,19 @@
   box-shadow: 0 0 1rem rgba(24, 216, 199, 0.55);
 }
 
+/*
+ * La lista de pestañas no reserva un número fijo de columnas: cuántas hay lo
+ * decide `workProfiles` en `src/content/work.ts` y cambia sin avisar. Con
+ * `grid-auto-flow: column` las pestañas se reparten siempre en un solo renglón
+ * —una columna por pestaña, del mismo ancho— así que ni el subrayado activo
+ * (`.tTabsPill`, que solo se desplaza en horizontal) ni la regla de borde de la
+ * última pestaña dependen de que alguien actualice también este CSS.
+ */
 .tTabs {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   border-bottom: 1px solid var(--showcase-line);
   background: rgba(255, 255, 255, 0.012);
 }
@@ -564,21 +573,29 @@
     padding-block: 0.8rem;
   }
 
+  /*
+   * En pantalla angosta las pestañas se deslizan, como el ribbon de la HOME.
+   * La rejilla de dos columnas que había aquí repartía las cuatro pestañas de
+   * entonces en filas exactas, y sus dos reglas de borde nombraban posiciones
+   * («la tercera», «las dos últimas») que solo eran la fila de abajo mientras
+   * hubiera cuatro. Un carrusel es un único renglón: no hay filas que dividir,
+   * así que el número de pestañas puede cambiar sin dejar ninguna línea suelta.
+   */
   .tTabs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .tTabs::-webkit-scrollbar {
+    display: none;
   }
 
   .tTab {
+    flex: 0 0 min(58%, 13rem);
     min-height: 5.7rem;
-    border-bottom: 1px solid var(--showcase-line);
-  }
-
-  .tTab:nth-child(3) {
-    border-right: 0;
-  }
-
-  .tTab:nth-last-child(-n + 2) {
-    border-bottom: 0;
+    scroll-snap-align: start;
   }
 
   .tTab strong {
