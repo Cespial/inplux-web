@@ -1,0 +1,158 @@
+/* ===========================================================================
+   Lámina 5 · El espejo
+
+   Dos lecturas del MISMO método, una a cada lado de la espina. Todo lo que
+   aquí decide una posición sale del copy: `--tramos` es el número de filas más
+   la cabecera y `--fila` es la pista de cada una. No hay ningún cuatro escrito.
+   =========================================================================== */
+
+.rejilla {
+  display: grid;
+  min-width: 0;
+  row-gap: clamp(0.35rem, 1vh, 0.6rem);
+}
+
+/* ⚠️ `display: contents` en el envoltorio de cada lado, en los DOS tamaños.
+   El envoltorio existe para agrupar el DOM —de ahí sale el orden de lectura en
+   móvil: empresa entera y después entidad entera, no «empresa, entidad,
+   empresa, entidad»—, pero no puede existir como CAJA: si existiera, en
+   escritorio la rejilla colocaría dos bloques independientes y la fila 3 de un
+   lado dejaría de estar a la altura de la fila 3 del otro en cuanto una de las
+   dos envolviera. Y esa correspondencia, altura por altura, es el argumento
+   entero de la lámina. */
+.columna {
+  display: contents;
+}
+
+.cabecera {
+  --fila: 1;
+
+  margin: 0 0 clamp(0.3rem, 0.8vh, 0.55rem);
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  animation: aparecerFila 420ms var(--ease-out) 0.28s both;
+}
+
+/* Las dos cabeceras con el MISMO peso y el MISMO tamaño. Una más grande que la
+   otra diría que hay un público preferido, y el copy no dice eso. */
+
+.fila {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+  margin: 0;
+  padding-block: clamp(0.3rem, 0.9vh, 0.55rem);
+  border-top: 1px solid var(--border);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  line-height: 1.45;
+  /* El mismo retraso a los dos lados: `--i` vale lo mismo en la fila 3 de
+     empresa y en la fila 3 de entidad. Si un lado llegara antes, la lámina
+     afirmaría una prioridad que el copy no tiene. */
+  animation: aparecerFila 420ms var(--ease-out) calc(0.4s + var(--i) * 0.12s) both;
+}
+
+/* El numeral del tiempo. Es lo que ata la fila `i` de un lado con la del otro:
+   las dos son la misma etapa del método, leída desde su lado. En mono y en
+   teal legible (--teal-on-soft, 5,30:1 sobre off-white), nunca en --teal. */
+.tiempo {
+  flex: none;
+  color: var(--text-accent-on-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+.texto {
+  min-width: 0;
+  text-wrap: pretty;
+}
+
+/* La espina. Un hilo de un píxel, en `--border` y no en teal: el único acento
+   de color de la escala es el filete sobre la pregunta, y dos hilos teal en la
+   misma lámina compiten sin que ninguno ancle nada. En móvil no existe —los
+   dos lados van uno debajo del otro y una línea vertical entre ellos no
+   separaría nada—. */
+.espina {
+  display: none;
+  width: 1px;
+  justify-self: center;
+  background: var(--border);
+}
+
+@keyframes aparecerFila {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.4rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* En móvil los dos lados van completos, uno debajo del otro, y la segunda
+   cabecera necesita aire para que no se lea como una fila más de la primera
+   tabla. En escritorio ese aire desaparece: las dos cabeceras están en la
+   misma pista. */
+.columnaDerecha .cabecera {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+}
+
+/* ── Escritorio: los dos lados, a la misma altura ────────────────────────────
+   Colocación EXPLÍCITA en las dos coordenadas. La automática no sirve aquí: con
+   `grid-auto-flow: row`, un elemento con columna definida no reinicia el cursor
+   de fila, así que la cabecera de la derecha aterrizaba en la fila 5 —debajo de
+   la última fila de la izquierda— en vez de en la 1. Con `--fila` puesto desde
+   el componente, la fila `i` de los dos lados comparte pista por construcción.
+   ⚠️ `--fila` se escribe como entero y NO como `calc()`: una línea de rejilla
+   no admite calc() en todos los motores, y ese fallo se ve como un
+   desalineamiento silencioso, no como un error. */
+@media (min-width: 56rem) {
+  .rejilla {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-rows: repeat(var(--tramos), auto);
+    column-gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  }
+
+  .columnaIzquierda > * {
+    grid-column: 1;
+  }
+
+  .columnaDerecha > * {
+    grid-column: 3;
+  }
+
+  .cabecera,
+  .fila {
+    grid-row: var(--fila);
+  }
+
+  .columnaDerecha .cabecera {
+    margin-top: 0;
+  }
+
+  .espina {
+    display: block;
+    grid-row: 1 / -1;
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cabecera,
+  .fila {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

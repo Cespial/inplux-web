@@ -1,4 +1,5 @@
 import type { DeckSlide } from "@/content/deck";
+import { EspejoSlide } from "./slides/EspejoSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
 import { PortadaSlide } from "./slides/PortadaSlide";
 import { ProblemaSlide } from "./slides/ProblemaSlide";
@@ -42,6 +43,7 @@ export function SlideRenderer({
     case "metodo":
       return <MetodoSlide id={slide.id} />;
     case "espejo":
+      return <EspejoSlide id={slide.id} />;
     case "evidencia":
     case "puente":
     case "capacidades":
