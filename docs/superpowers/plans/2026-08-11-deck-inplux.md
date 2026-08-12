@@ -1668,8 +1668,14 @@ export const T_CIFRA = {
 
 Seis `<rect>` en un SVG con `viewBox` fijo. Las seis entran con el **mismo** `animation-duration` y el **mismo** `animation-delay` base; lo que las separa es un `--i` por barra que escala el retraso:
 
+⚠️ **Dos correcciones a este CSS, las dos medidas durante la Tarea 9:**
+
+1. **La segunda animación va `forwards`, no `both`.** Con `both`, su relleno **hacia atrás** aplica `from { scaleX(1) }` durante todo el retraso — y como `desbordar` va la última de la lista y las dos escriben `transform`, gana. Resultado: la sexta barra aparece **entera desde el fotograma 0** y nunca se la ve entrar. Medido: 177,3 px a t=0,05 s con `both`; 0 px con `forwards`.
+2. **Hace falta `transform-box: fill-box`.** Sin él, `transform-origin: left center` se resuelve contra el `viewBox` y no contra la caja de la barra: la única que escala se desvía **60,8 px** (48 unidades de lienzo × 1,2664 px). Las cinco que terminan en `scaleX(1)` no se enteran, así que el defecto golpea exactamente a la barra de la que trata la lámina.
+
 ```css
 .barra {
+  transform-box: fill-box;
   transform-origin: left center;
   animation: entrar var(--dur) var(--ease-out) both;
   animation-delay: calc(var(--inicio) + var(--i) * 0.06s);
@@ -1681,7 +1687,7 @@ Seis `<rect>` en un SVG con `viewBox` fijo. Las seis entran con el **mismo** `an
 .barraDesbordada {
   animation:
     entrar var(--dur) var(--ease-out) both,
-    desbordar var(--durCrecida) linear both;
+    desbordar var(--durCrecida) linear forwards;
   animation-delay: calc(var(--inicio) + 5 * 0.06s), var(--retrasoCrecida);
 }
 
