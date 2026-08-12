@@ -65,13 +65,41 @@ export const COMPAS = {
 
 /* ── La geometría ─────────────────────────────────────────────────────────── */
 
-const LIENZO = { ancho: 480, alto: 200 };
+/**
+ * La relación del `viewBox` ES la altura de la figura, y por eso se toca aquí y
+ * no en el CSS: el SVG entra a `width: 100%`, así que su alto en pantalla sale
+ * de `ancho / alto` y del ancho de la columna, nada más. A 390 px la columna
+ * mide 342, y con 480×200 la figura ocupaba 142,5 px de una lámina que ya
+ * chocaba con el riel; con 480×168 ocupa 120.
+ *
+ * ⚠️ Lo que cambió es el AIRE entre barras, no las barras. El grosor en
+ * pantalla lo fija la escala horizontal (`ALTO × ancho/480`), así que a 1440
+ * cada barra sigue midiendo 18 px; lo que se estrecha es el hueco entre una y
+ * la siguiente, de 17,7 px a 10,1 px. La figura se lee más como un gráfico de
+ * barras y menos como un diagrama, y eso es lo único que se ve en escritorio.
+ *
+ * ⚠️ Y `Y0` NO se tocó, aunque bajarlo daba tres píxeles más. Es el aire de
+ * dentro del lienzo por encima de la primera barra, y sumado al margen de
+ * `.figura` es la holgura entre el NUMERAL y la primera barra —33 px a 1440—,
+ * la que la Tarea 9 dejó anotada como «la que no mide nadie». Bajar la cifra y
+ * de paso acercarle las barras habría sido cambiar un problema por otro.
+ */
+const LIENZO = { ancho: 480, alto: 168 };
 /** Donde nacen las seis barras. Todas empiezan en el mismo sitio. */
 const X0 = 24;
 /** El presupuesto aprobado, en unidades del lienzo. Es la unidad de la figura. */
 const PRESUPUESTO = 140;
 const ALTO = 14;
-const PASO_Y = 28;
+/**
+ * ⚠️ `PASO_Y` no puede bajar de `ALTO`: las barras se solaparían. Y el margen
+ * de abajo tampoco es libre —`LIENZO.alto` tiene que dejar sitio para la
+ * etiqueta del presupuesto, que se planta en `alto − 8`—. Con estos números la
+ * marca termina en 144, la etiqueta tiene su altura de mayúscula en 150,6 y su
+ * descendente en 163,6: 6,6 unidades de aire bajo la línea y 4,4 hasta el borde
+ * del lienzo. Cualquiera de los cuatro números que se mueva hay que rehacer esa
+ * cuenta, porque el arnés no mide dentro del SVG.
+ */
+const PASO_Y = 22;
 const Y0 = 12;
 
 /**

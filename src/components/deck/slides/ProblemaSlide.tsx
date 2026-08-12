@@ -16,9 +16,17 @@ const { pregunta, respuesta, cifra, cuerpo, fuente } = DECK_COPY.problema;
  * empezaría a mentir en silencio. Los tres números que dice —uno de cada seis,
  * doscientos por ciento— son los de `DECK_COPY.problema.cifra`, verificados
  * contra arXiv:1304.0265.
+ *
+ * ⚠️ **No empieza por el titular, a propósito.** Antes abría con «El promedio no
+ * es el riesgo:», las mismas seis palabras del <h1>, y entrar en la región le
+ * daba a un lector de pantalla la frase dos veces seguidas —exactamente la
+ * región homónima contra la que avisa `Slide.tsx`—. Quitado el prefijo, el
+ * nombre de la región dice lo que el <h1> no puede decir (el dato, en palabras)
+ * y el <h1> dice lo suyo. No se pierde ni un dato: la cifra, la proporción y el
+ * qué siguen enteros.
  */
 const ETIQUETA =
-  "El promedio no es el riesgo: uno de cada seis proyectos de tecnología de la información se sale doscientos por ciento del presupuesto.";
+  "Uno de cada seis proyectos de tecnología de la información se sale doscientos por ciento del presupuesto.";
 
 /**
  * Lámina 2 · El problema.

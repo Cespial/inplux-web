@@ -502,7 +502,7 @@
 /* El mismo corte que la tesis, y por la misma razón: en apaisado el ancho
    sobra y la altura no. Apilados, el numeral y las seis barras empujaban la
    lámina contra el riel de progreso. Mitades iguales, no 1,05/0,95: aquí la
-   columna derecha lleva un numeral de 8,5 rem y una figura de 34 rem, y pide
+   columna derecha lleva un numeral de 8,5 rem y una figura de 38 rem, y pide
    tanto sitio como el texto. */
 @media (min-width: 62rem) {
   .problemaRejilla {
@@ -552,13 +552,43 @@
    color.
    `tabular-nums` para que el salto de 9 a 10 y de 99 a 100 no zarandee lo que
    ya está escrito; la cifra crece hacia la derecha, que es la misma dirección
-   en la que crece la barra. */
+   en la que crece la barra.
+
+   ⚠️ **El suelo del `clamp` es el tamaño de MÓVIL, no un mínimo teórico.** Con
+   raíz 16 los tres tramos se reparten así: el techo (8,5 rem) manda de 1.236 px
+   de viewport para arriba, `11vw` manda en la franja intermedia y el suelo
+   manda por debajo de 436 px —a 390 px, `11vw` son 42,9 px, muy por debajo—. O
+   sea que este número solo lo ve un teléfono, y se paga en el único sitio donde
+   esta lámina no tiene margen: apilada, es la más alta del deck.
+
+   Bajó de 4 rem a 3 rem por eso. El suelo se multiplica por la fuente RAÍZ, así
+   que a 390 px valía 64 px con raíz 16 y 80 px con raíz 20: la lámina chocaba
+   con el riel con un solo píxel de más en la preferencia del usuario. Medido a
+   390 px, holgura contra el riel, antes → después:
+     raíz 16   17 → 49     raíz 18   −31 → 9
+     raíz 17   −7 → 33     raíz 20  −156 → −114
+   (la otra mitad de la ganancia la pone la figura; ver `SeisBarras.tsx`). Con
+   raíz 16 la lámina vuelve a CABER, y por eso su caja se centra en vez de
+   desbordarse hacia abajo.
+
+   ⚠️ Raíz 19 y de ahí para arriba sigue chocando, y no lo arregla este número:
+   entre raíz 18 y raíz 19 el cuerpo y el pie ganan dos líneas cada uno y la
+   lámina crece 74 px de golpe. Es un escalón de composición del texto, no del
+   numeral. Ver la nota del informe de la Tarea 9.
+
+   ⚠️ Y el numeral tiene que SEGUIR siendo el numeral, que es lo que ninguna
+   medida dice. A 390 px con raíz 16 son 48 px contra los 32 px del titular y
+   los 16 px del cuerpo: 1,5× y 3×, el elemento más grande de la lámina con
+   diferencia. Por debajo de 3 rem empieza a empatar con el titular —a 2,68 rem
+   el suelo cae por debajo de `11vw` y el numeral deja de crecer con la
+   preferencia del usuario, que es justo lo contrario de lo que se busca—. Se
+   comprueba EN LA CAPTURA, no aquí. */
 .cifra {
   display: block;
   margin: clamp(0.25rem, 1.2vh, 0.85rem) 0 0;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(4rem, 11vw, 8.5rem);
+  font-size: clamp(3rem, 11vw, 8.5rem);
   font-weight: 300;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.035em;
