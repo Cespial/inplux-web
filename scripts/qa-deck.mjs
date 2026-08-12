@@ -331,11 +331,77 @@ function medir({ id, sup, inf }) {
    * normal—. Y si debajo del absoluto no hay más que superficie, no hay
    * línea que muestrear y no hay alerta.
    *
+   * ⚠️ Estar encima no es tapar. `elementFromPoint` no sabe de alfa: para él,
+   * un degradado de legibilidad al 20 % encima de un titular tapa igual que
+   * un rótulo opaco. Y «imagen de fondo + degradado + texto encima» es de los
+   * patrones más comunes que existen en un deck: denunciarlo es la manera
+   * más rápida de que alguien deje de correr esto. Así que además de estar
+   * encima hay que OCLUIR, y ocluye lo que cumple una de tres:
+   *
+   *   · pinta texto propio en ese punto —texto sobre texto, sea cual sea su
+   *     fondo, que es el caso del rótulo con el offset mal puesto—;
+   *   · es contenido reemplazado —una imagen, un vídeo, un lienzo—;
+   *   · su capa de fondo llega al umbral de alfa.
+   *
+   * El umbral sale de la cuenta de contraste, no del gusto: un velo negro
+   * sobre blanco deja el fondo en (1 − alfa), y con texto oscuro encima el
+   * contraste cae por debajo del 4,5:1 de la AA alrededor de alfa 0,5. Se
+   * pone en 0,6 para gritar solo cuando la legibilidad ya está destruida y
+   * no en la frontera. La franja 0,5–0,6 queda callada a propósito.
+   *
    * Límite conocido: `elementFromPoint` ignora lo que lleva
-   * `pointer-events: none`. Para ese caso —fuera de flujo, con texto propio
-   * y sordo al puntero— se compara la geometría contra los mismos rects de
-   * línea, que es lo único que queda.
+   * `pointer-events: none`. Para ese caso —fuera de flujo, con texto y sordo
+   * al puntero— se compara la geometría contra los mismos rects de línea,
+   * que es lo único que queda.
    */
+  const ALFA_OCLUSIVA = 0.6;
+
+  const alfaDeColor = (color) => {
+    if (color === "transparent" || color === "") return 0;
+    const m = /^rgba?\(([^)]+)\)$/.exec(color);
+    // Un formato que no sepamos leer se da por opaco: equivocarse hacia el
+    // aviso es preferible a equivocarse hacia el silencio.
+    if (m === null) return 1;
+    const partes = m[1].split(/[,/]/).map((s) => s.trim());
+    if (partes.length < 4) return 1;
+    const a = Number.parseFloat(partes[3]);
+    return Number.isNaN(a) ? 1 : a;
+  };
+
+  /** El alfa máximo que puede llegar a pintar la capa de fondo del elemento. */
+  const alfaDeCapa = (e) => {
+    let a = alfaDeColor(e.backgroundColor);
+    if (e.backgroundImage !== "none") {
+      if (e.backgroundImage.includes("url(")) a = 1;
+      for (const trozo of e.backgroundImage.matchAll(/rgba?\([^)]+\)/g)) {
+        a = Math.max(a, alfaDeColor(trozo[0]));
+      }
+    }
+    return a;
+  };
+
+  const REEMPLAZADOS = new Set(["IMG", "SVG", "VIDEO", "CANVAS", "PICTURE", "IFRAME"]);
+
+  /** ¿Tiene texto suyo, no el de un descendiente? */
+  const textoPropio = (el) =>
+    [...el.childNodes].some((n) => n.nodeType === 3 && (n.nodeValue ?? "").trim() !== "");
+
+  const ocluye = (el) => {
+    if (textoPropio(el)) return true;
+    if (REEMPLAZADOS.has(el.tagName.toUpperCase())) return true;
+    let alfa = alfaDeCapa(estilo(el));
+    for (let n = el; n !== null && n !== seccion.parentElement; n = n.parentElement) {
+      alfa *= Number.parseFloat(estilo(n).opacity);
+    }
+    return alfa >= ALFA_OCLUSIVA;
+  };
+
+  const sordoAlPuntero = (el) => {
+    for (let n = el; n !== null && n !== seccion.parentElement; n = n.parentElement) {
+      if (estilo(n).pointerEvents === "none") return true;
+    }
+    return false;
+  };
   const lineas = [];
   const paseadorLineas = document.createTreeWalker(seccion, NodeFilter.SHOW_TEXT);
   for (let nodo = paseadorLineas.nextNode(); nodo !== null; nodo = paseadorLineas.nextNode()) {
@@ -353,6 +419,13 @@ function medir({ id, sup, inf }) {
   const MUESTRAS = 9;
   const tapados = [];
   for (const { duenno, linea } of lineas) {
+    // ⚠️ Si el propio texto es sordo al puntero, `elementFromPoint` VE A
+    // TRAVÉS de él y devuelve lo que tiene DEBAJO. Muestrear ahí invierte el
+    // mensaje: el rótulo saldría «tapado» por el párrafo al que en realidad
+    // está tapando, y quien lea la alerta iría a mover el elemento
+    // equivocado. Ese caso lo atiende el respaldo por geometría de más
+    // abajo, que sí sabe quién está encima de quién.
+    if (sordoAlPuntero(duenno)) continue;
     const y = linea.top + linea.height / 2;
     let cubiertas = 0;
     let culpable = null;
@@ -365,6 +438,9 @@ function medir({ id, sup, inf }) {
       // lo de encima es el mismo elemento, un descendiente suyo o un
       // ascendiente, ahí no hay nadie pintando por encima.
       if (encima === duenno || duenno.contains(encima) || encima.contains(duenno)) continue;
+      // Estar encima no es tapar: un velo de legibilidad al 20 % deja el
+      // texto perfectamente leído.
+      if (!ocluye(encima)) continue;
       cubiertas += 1;
       culpable = encima;
     }
