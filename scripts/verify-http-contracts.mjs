@@ -16,6 +16,8 @@ const expectedRoutes = [
   ["/trabajo/kelsen", 200],
   ["/trabajo/laudos", 200],
   ["/trabajo/porkia", 200],
+  ["/deck", 200],
+  ["/deck/presentacion", 200],
   ["/trabajo/slug-inexistente", 404],
   ["/ruta-inexistente", 404],
 ];

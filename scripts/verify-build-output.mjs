@@ -205,6 +205,23 @@ const pageDefinitions = {
       },
     ]),
   ),
+  deck: {
+    file: ".next/server/app/deck.html",
+    title: "Deck — de un problema real a software en producción | INPLUX",
+    description:
+      "El índice de la presentación de INPLUX: la tesis, el método, los cinco productos y sus fuentes.",
+    canonical: `${siteUrl}/deck`,
+    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
+  },
+  deckPresentacion: {
+    file: ".next/server/app/deck/presentacion.html",
+    title:
+      "Presentación — de un problema real a software en producción | INPLUX",
+    description:
+      "Cómo INPLUX convierte un problema concreto en software que funciona en producción, en quince láminas.",
+    canonical: `${siteUrl}/deck/presentacion`,
+    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
+  },
   capabilities: {
     file: ".next/server/app/capacidades.html",
     title: "Capacidades — sistemas compuestos para problemas reales | INPLUX",
@@ -708,6 +725,8 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/kelsen`,
     `${siteUrl}/trabajo/laudos`,
     `${siteUrl}/trabajo/porkia`,
+    `${siteUrl}/deck`,
+    `${siteUrl}/deck/presentacion`,
     `${siteUrl}/capacidades`,
     `${siteUrl}/nosotros`,
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,
