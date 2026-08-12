@@ -473,10 +473,44 @@ function medir({ id, sup, inf }) {
    * pone en 0,6 para gritar solo cuando la legibilidad ya está destruida y
    * no en la frontera. La franja 0,5–0,6 queda callada a propósito.
    *
-   * Límite conocido: `elementFromPoint` ignora lo que lleva
-   * `pointer-events: none`. Para ese caso —fuera de flujo, con texto y sordo
-   * al puntero— se compara la geometría contra los mismos rects de línea,
-   * que es lo único que queda.
+   * ── Límites conocidos de `ocluye()` ──────────────────────────────────────
+   *
+   * Todos son de la misma clase: el arnés grita de más. Ninguno lo deja
+   * callado ante un texto sepultado, que es la clase de defecto por la que
+   * existe.
+   *
+   * 1. **`pointer-events: none` que ni el parche puede desbancar** —un
+   *    `!important` en el atributo `style`—. `elementFromPoint` ve a través
+   *    de él; ese residuo lo atiende el respaldo por geometría de más abajo,
+   *    que compara cajas contra rects de línea y pierde precisión de glifo.
+   * 2. **Lo que no se puede interrogar se da por opaco:** `img`, `video`,
+   *    `canvas`, `picture`, `iframe`, y dentro de un SVG `image` y
+   *    `foreignObject`. Un PNG semitransparente encima de un texto se
+   *    denunciaría sin serlo.
+   * 3. **Un `fill` o `stroke` de gradiente o patrón (`url(#…)`) se da por
+   *    opaco**, por lo mismo.
+   * 4. **`mask` esconde tinta y el hit-test no se entera.** Chromium NO
+   *    excluye del hit-test la región que una máscara deja invisible —con
+   *    `clip-path` sí lo hace—, así que un `<rect fill="teal"
+   *    mask="url(#m)">` del que solo se ve una esquina devolvía el `<rect>`
+   *    en cualquier punto de su caja y `alfaDeTinta` leía `fill` → alfa 1 →
+   *    alerta donde no hay un píxel de tinta. Cerrado por el lado simple: si
+   *    hay máscara en el nodo o en su ascendencia dentro del SVG, no se
+   *    puede saber qué se pinta en ese punto y **no se le atribuye
+   *    oclusión**. ⚠️ El precio, declarado: una máscara que revele la forma
+   *    ENTERA encima de un título dejaría de denunciarse. Es el único sitio
+   *    donde este arnés cambia ruido por silencio, y se acepta porque una
+   *    máscara que no esconde nada no es una máscara.
+   * 5. **Un `<text>` de SVG se hit-testea por su caja, no por el glifo.**
+   *    Medido: con un `<text>I</text>` —barra angosta, mucho aire alrededor—
+   *    los 60 puntos de una rejilla dentro de su bbox devuelven el nodo. Y
+   *    `textoPropio()` corta ANTES de mirar alfa, así que cualquier `<text>`
+   *    de SVG cuya caja roce la línea de un título dispararía «texto sobre
+   *    texto» aunque los glifos no se toquen. **No está arreglado**:
+   *    hacerlo bien exige medir glifos dentro del SVG, que es
+   *    desproporcionado. Y es relevante ya: las etiquetas de las curvas de
+   *    la lámina de tesis son `<text>` de SVG, y las trece que vienen
+   *    traerán más.
    */
   const ALFA_OCLUSIVA = 0.6;
 
@@ -529,8 +563,22 @@ function medir({ id, sup, inf }) {
    *
    * El `<svg>` exterior es otra cosa: no pinta las formas, son objetivos
    * propios. Lo único suyo es el fondo CSS de su caja, y ese es el que decide.
+   *
+   * ⚠️ Y antes de nada, la máscara: ver el límite 4 de arriba. Se miran las
+   * dos vías porque `mask` en SVG es atributo de presentación y llega al
+   * estilo calculado, pero una hoja puede ponerlo también sin el atributo.
    */
+  const enmascarado = (el) => {
+    for (let n = el; n !== null && n.namespaceURI === NS_SVG; n = n.parentElement) {
+      const e = estilo(n);
+      if ((e.maskImage ?? "none") !== "none") return true;
+      if ((n.getAttribute("mask") ?? "none") !== "none") return true;
+    }
+    return false;
+  };
+
   const alfaDeTinta = (el) => {
+    if (enmascarado(el)) return 0;
     const e = estilo(el);
     if (el.tagName.toLowerCase() === "svg") return alfaDeCapa(e);
     const conOpacidad = (pintura, opacidad) => {
