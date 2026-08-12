@@ -262,6 +262,263 @@ async function verifyPortfolio() {
 }
 
 /**
+ * Lector de fuente compartido por los dos controles que vigilan contenido
+ * escrito a mano: `verifyAboutAttribution()` y `verifyProductNavigation()`.
+ *
+ * Nace de un falso verde. La regla `copy:\s*"…"` casaba el **primer** literal y
+ * lo trataba como si fuera el valor entero, sin mirar si venía seguido de un
+ * `+`. Con
+ *
+ *     copy:
+ *       "REDEK aporta el criterio legal en Laudos. … son desarrollos " +
+ *       "propios de INPLUX, sin más matices, …",
+ *
+ * el DOM publicaba «desarrollos propios» partido justo en la frontera de la
+ * concatenación y el control aprobaba la mitad que había leído. Las listas del
+ * pie tenían la misma clase de agujero por el otro lado: un ítem que el
+ * formateador parte en varias líneas no casa `\["…",\s*"…"\]`, así que
+ * desaparecía de la verificación sin ruido —un enlace a `/trabajo/sherlock`,
+ * que es un 404, viajó entero hasta el HTML construido con el build en verde—.
+ *
+ * La regla que imponen estas funciones es una sola: **lo que no se sabe leer
+ * entero se denuncia; nunca se lee a medias**. Un control que aprueba lo que no
+ * llegó a mirar es peor que no tenerlo.
+ */
+function skipTrivia(source, index) {
+  let cursor = index;
+  while (cursor < source.length) {
+    const char = source[cursor];
+    if (char === " " || char === "\t" || char === "\n" || char === "\r") {
+      cursor += 1;
+      continue;
+    }
+    if (source.startsWith("//", cursor)) {
+      const lineEnd = source.indexOf("\n", cursor);
+      cursor = lineEnd === -1 ? source.length : lineEnd + 1;
+      continue;
+    }
+    if (source.startsWith("/*", cursor)) {
+      const blockEnd = source.indexOf("*/", cursor + 2);
+      cursor = blockEnd === -1 ? source.length : blockEnd + 2;
+      continue;
+    }
+    return cursor;
+  }
+  return cursor;
+}
+
+function decodeStringLiteral(raw, quote) {
+  if (quote === '"') {
+    try {
+      return JSON.parse(`"${raw}"`);
+    } catch {
+      // Escapes que JSON no admite (`\'`); sigue el decodificador manual.
+    }
+  }
+  return raw.replace(
+    /\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|[\s\S])/gu,
+    (_whole, escape) => {
+      if (escape[0] === "u" || escape[0] === "x") {
+        return String.fromCharCode(Number.parseInt(escape.slice(1), 16));
+      }
+      return { n: "\n", r: "\r", t: "\t", b: "\b", f: "\f", v: "\v" }[escape] ?? escape;
+    },
+  );
+}
+
+function readStringLiteral(source, index) {
+  const quote = source[index];
+  if (quote !== '"' && quote !== "'" && quote !== "`") return null;
+
+  let cursor = index + 1;
+  let raw = "";
+  while (cursor < source.length && source[cursor] !== quote) {
+    if (source[cursor] === "\\") {
+      raw += source.slice(cursor, cursor + 2);
+      cursor += 2;
+      continue;
+    }
+    raw += source[cursor];
+    cursor += 1;
+  }
+  if (cursor >= source.length) return null;
+  // Una plantilla se lee como opaca: sirve para equilibrar corchetes, nunca
+  // como texto publicado —quien la quiera publicar recibirá un error.
+  return {
+    value: quote === "`" ? null : decodeStringLiteral(raw, quote),
+    end: cursor + 1,
+  };
+}
+
+/** Devuelve el interior del par equilibrado que abre en el primer `open`. */
+function readBracketed(source, index, open, close) {
+  const start = source.indexOf(open, index);
+  if (start === -1) return null;
+
+  let depth = 0;
+  let cursor = start;
+  while (cursor < source.length) {
+    const afterTrivia = skipTrivia(source, cursor);
+    if (afterTrivia !== cursor) {
+      cursor = afterTrivia;
+      continue;
+    }
+    const literal = readStringLiteral(source, cursor);
+    if (literal) {
+      cursor = literal.end;
+      continue;
+    }
+    const char = source[cursor];
+    if (char === open) depth += 1;
+    else if (char === close) {
+      depth -= 1;
+      if (depth === 0) return { inner: source.slice(start + 1, cursor), end: cursor + 1 };
+    }
+    cursor += 1;
+  }
+  return null;
+}
+
+/** Parte una lista por sus comas de primer nivel, sin romper cadenas ni anidados. */
+function splitTopLevelItems(inner) {
+  const items = [];
+  let depth = 0;
+  let itemStart = 0;
+  let cursor = 0;
+
+  while (cursor < inner.length) {
+    const afterTrivia = skipTrivia(inner, cursor);
+    if (afterTrivia !== cursor) {
+      cursor = afterTrivia;
+      continue;
+    }
+    const literal = readStringLiteral(inner, cursor);
+    if (literal) {
+      cursor = literal.end;
+      continue;
+    }
+    const char = inner[cursor];
+    if (char === "(" || char === "[" || char === "{") depth += 1;
+    else if (char === ")" || char === "]" || char === "}") depth -= 1;
+    else if (char === "," && depth === 0) {
+      items.push(inner.slice(itemStart, cursor));
+      itemStart = cursor + 1;
+    }
+    cursor += 1;
+  }
+  items.push(inner.slice(itemStart));
+
+  return items
+    .map((item) => withoutComments(item).trim())
+    .filter((item) => item.length > 0);
+}
+
+function withoutComments(source) {
+  let output = "";
+  let cursor = 0;
+
+  while (cursor < source.length) {
+    const literal = readStringLiteral(source, cursor);
+    if (literal) {
+      output += source.slice(cursor, literal.end);
+      cursor = literal.end;
+      continue;
+    }
+    if (source.startsWith("//", cursor)) {
+      const lineEnd = source.indexOf("\n", cursor);
+      cursor = lineEnd === -1 ? source.length : lineEnd;
+      continue;
+    }
+    if (source.startsWith("/*", cursor)) {
+      const blockEnd = source.indexOf("*/", cursor + 2);
+      cursor = blockEnd === -1 ? source.length : blockEnd + 2;
+      continue;
+    }
+    output += source[cursor];
+    cursor += 1;
+  }
+
+  return output;
+}
+
+/** Una cita corta y en una línea del fragmento ilegible, para el mensaje de error. */
+function quoteForMessage(fragment) {
+  const flat = fragment.replace(/\s+/gu, " ").trim();
+  return flat.length > 70 ? `${flat.slice(0, 67)}…` : flat;
+}
+
+/** Toda cadena publicada del fragmento, con sus concatenaciones ya unidas. */
+function readPublishedFragments(scope) {
+  const fragments = [];
+  let cursor = 0;
+
+  while (cursor < scope.length) {
+    const literal = readStringLiteral(scope, cursor);
+    if (!literal) {
+      cursor += 1;
+      continue;
+    }
+    if (literal.value === null) {
+      cursor = literal.end;
+      continue;
+    }
+
+    const parts = [literal.value];
+    let end = literal.end;
+    for (;;) {
+      const afterValue = skipTrivia(scope, end);
+      if (scope[afterValue] !== "+") break;
+      const next = readStringLiteral(scope, skipTrivia(scope, afterValue + 1));
+      if (!next || next.value === null) break;
+      parts.push(next.value);
+      end = next.end;
+    }
+
+    fragments.push(parts.join(""));
+    cursor = end;
+  }
+
+  return fragments;
+}
+
+/**
+ * Lee el texto que un campo publica en el DOM, uniendo los literales que estén
+ * concatenados con `+`. Devuelve `{ value }` o `{ error }`: no hay tercer caso,
+ * y en particular no hay «leí un trozo y sigo».
+ */
+function readPublishedString(scope, field) {
+  const keyMatch = scope.match(new RegExp(`[{,]\\s*${field}\\s*:`, "u"));
+  if (!keyMatch) return { error: `no declara un campo ${field}:` };
+
+  let cursor = keyMatch.index + keyMatch[0].length;
+  const parts = [];
+
+  for (;;) {
+    cursor = skipTrivia(scope, cursor);
+    const literal = readStringLiteral(scope, cursor);
+    if (!literal || literal.value === null) {
+      return {
+        error:
+          scope[cursor] === "`"
+            ? `escribe ${field}: como plantilla, y este control solo sabe leer literales de texto`
+            : `escribe ${field}: con un valor que no es un literal de texto`,
+      };
+    }
+    parts.push(literal.value);
+
+    cursor = skipTrivia(scope, literal.end);
+    if (scope[cursor] === "+") {
+      cursor += 1;
+      continue;
+    }
+    if (scope[cursor] === "," || scope[cursor] === "}") return { value: parts.join("") };
+    return {
+      error: `combina ${field}: con algo que este control no sabe resolver en tiempo de build`,
+    };
+  }
+}
+
+/**
  * El capítulo «evidencia» de `/nosotros` es la única prosa del sitio que
  * resume de una vez la autoría de todos los productos, y por eso es donde el
  * crédito de un aliado se pierde sin que nada se rompa.
@@ -298,36 +555,55 @@ async function verifyAboutAttribution() {
     return;
   }
 
-  const chapter = source.slice(start, end);
+  // Los comentarios se van antes de buscar nada: así un `// … REDEK …` no
+  // puede acreditar a nadie por accidente, y un comentario encima de `copy:`
+  // tampoco esconde el campo del lector.
+  const chapter = withoutComments(source.slice(start, end));
 
-  // Solo las cadenas que llegan al DOM. Un comentario con la palabra REDEK no
-  // acredita nada: el crédito tiene que estar en la prosa publicada. Extraer
-  // los literales es lo que garantiza eso, porque un comentario no puede vivir
-  // dentro de una cadena.
-  const publishedCopy = chapter.match(/\bcopy:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
-  const publishedEvidence = chapter.match(/\bevidence:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
-
-  if (publishedCopy === undefined) {
-    errors.push(
-      `${relativePath}: el capítulo «evidencia» no expone un literal copy: legible; este control no puede verificar la prosa publicada`,
-    );
-    return;
+  // Solo las cadenas que llegan al DOM, y **enteras**. Un comentario con la
+  // palabra REDEK no acredita nada: el crédito tiene que estar en la prosa
+  // publicada, y un comentario no puede vivir dentro de una cadena. Leer el
+  // valor completo —y no el primer literal que aparezca— es lo que impide la
+  // otra mitad del engaño: un `copy` partido con `+` publica la unión de sus
+  // trozos, así que la unión es lo que hay que juzgar.
+  const published = new Map();
+  for (const field of ["copy", "evidence"]) {
+    const result = readPublishedString(chapter, field);
+    if (result.error) {
+      errors.push(
+        `${relativePath}: el capítulo «evidencia» ${result.error}; este control no puede verificar la prosa publicada`,
+      );
+      continue;
+    }
+    published.set(field, result.value);
   }
 
-  if (!/REDEK/.test(publishedCopy)) {
+  const publishedCopy = published.get("copy");
+  if (publishedCopy !== undefined && !/REDEK/.test(publishedCopy)) {
     errors.push(
       `${relativePath} debe nombrar a REDEK en el copy publicado del capítulo «evidencia», no solo en un comentario`,
     );
   }
-  for (const [field, value] of [
-    ["copy", publishedCopy],
-    ["evidence", publishedEvidence],
-  ]) {
-    if (value !== undefined && /desarrollos\s+propios/iu.test(value)) {
+  const bannedFraming = /desarrollos\s+propios/iu;
+  for (const [field, value] of published) {
+    if (bannedFraming.test(value)) {
       errors.push(
         `${relativePath}: el ${field} del capítulo «evidencia» no puede llamar «desarrollos propios» al conjunto; Laudos reparte el crédito con REDEK`,
       );
     }
+  }
+
+  // El capítulo publica más prosa que esos dos campos —el título es un <h3> de
+  // la página, y también están el gancho y la etiqueta del enlace—. La
+  // prohibición cubre todo lo que llega al DOM, no solo los dos campos que tocó
+  // el incidente: un titular que diga «desarrollos propios» contradice a
+  // `work.ts` exactamente igual que el párrafo.
+  const alreadyJudged = new Set(published.values());
+  for (const fragment of readPublishedFragments(chapter)) {
+    if (alreadyJudged.has(fragment) || !bannedFraming.test(fragment)) continue;
+    errors.push(
+      `${relativePath}: el capítulo «evidencia» publica «${quoteForMessage(fragment)}»; no puede llamar «desarrollos propios» al conjunto, porque Laudos reparte el crédito con REDEK`,
+    );
   }
 }
 
@@ -346,7 +622,110 @@ async function verifyAboutAttribution() {
  * y cada lista del pie: falta uno y falla; sobra uno que no es perfil y falla;
  * el `href` o la etiqueta no coinciden con el `slug` y el `name` del perfil y
  * falla. El sexto producto rompe el build en vez de desaparecer del pie.
+ *
+ * Las tres listas se leen con el lector de arriba y no con expresiones
+ * regulares sueltas, porque las regulares fallaban en silencio por los dos
+ * lados: un comentario entre `kind:` y `slug:` borraba un perfil entero de la
+ * comprobación —y con él la obligación de que estuviera en los dos pies—, y un
+ * ítem del pie partido en varias líneas dejaba de existir para el control
+ * aunque el navegador lo publicara. Ahora la lista se acota con corchetes
+ * equilibrados y **cada** ítem tiene que tener la forma esperada: el que no la
+ * tenga se nombra en el error, en vez de saltárselo.
  */
+function readWorkProfiles(source, file) {
+  const anchor = "export const workProfiles";
+  const anchorIndex = source.indexOf(anchor);
+  if (anchorIndex === -1) {
+    errors.push(`${file}: no se pudo leer ${anchor}`);
+    return null;
+  }
+
+  const list = readBracketed(source, anchorIndex + anchor.length, "[", "]");
+  if (!list) {
+    errors.push(`${file}: la lista de workProfiles no cierra; este control no puede acotarla`);
+    return null;
+  }
+
+  const profiles = [];
+  for (const item of splitTopLevelItems(list.inner)) {
+    const object = item.startsWith("{") ? readBracketed(item, 0, "{", "}") : null;
+    if (!object) {
+      errors.push(
+        `${file}: workProfiles tiene un elemento que este control no sabe leer: «${quoteForMessage(item)}»`,
+      );
+      return null;
+    }
+
+    const fields = new Map();
+    for (const property of splitTopLevelItems(object.inner)) {
+      const named = property.match(/^([A-Za-z_$][\w$]*)\s*:\s*([\s\S]*)$/u);
+      if (named) fields.set(named[1], named[2].trim());
+    }
+
+    const literalOf = (key) => fields.get(key)?.match(/^"([^"]*)"$/u)?.[1];
+    const kind = literalOf("kind");
+    if (kind === undefined) {
+      errors.push(
+        `${file}: un elemento de workProfiles no declara un kind legible; este control no puede saber si es un producto publicado`,
+      );
+      return null;
+    }
+    if (kind !== "product-profile") continue;
+
+    const slug = literalOf("slug");
+    const name = literalOf("name");
+    if (!slug || !name) {
+      errors.push(
+        `${file}: un perfil de producto no expone slug y name legibles en su primer nivel`,
+      );
+      return null;
+    }
+    profiles.push({ slug, name });
+  }
+
+  if (profiles.length === 0) {
+    errors.push(`${file} no contiene perfiles de producto reconocibles`);
+    return null;
+  }
+  return profiles;
+}
+
+function readFooterEntries({ source, file, label, anchor, shape }) {
+  const anchorIndex = source.indexOf(anchor);
+  if (anchorIndex === -1) {
+    errors.push(`${file}: no se pudo leer ${label}; falta ${anchor}`);
+    return null;
+  }
+
+  const list = readBracketed(source, anchorIndex + anchor.length, "[", "]");
+  if (!list) {
+    errors.push(`${file}: no se pudo leer ${label}; su lista no cierra`);
+    return null;
+  }
+
+  const items = splitTopLevelItems(list.inner);
+  if (items.length === 0) {
+    errors.push(`${file}: ${label} no lista ningún producto`);
+    return null;
+  }
+
+  const entries = [];
+  let unreadable = false;
+  for (const item of items) {
+    const match = item.match(shape);
+    if (!match) {
+      errors.push(
+        `${file}: ${label} tiene una entrada que este control no sabe leer: «${quoteForMessage(item)}»; escríbela con la forma que espera el control o nadie verificará a dónde apunta`,
+      );
+      unreadable = true;
+      continue;
+    }
+    entries.push({ name: match[1], href: match[2] });
+  }
+
+  return unreadable ? null : entries;
+}
+
 async function verifyProductNavigation() {
   const workPath = "src/content/work.ts";
   const navigationPath = "src/content/navigation.ts";
@@ -357,44 +736,36 @@ async function verifyProductNavigation() {
     ),
   );
 
-  // Perfiles reales: cada objeto de `workProfiles` con su kind, slug y name.
-  const profiles = [
-    ...work.matchAll(
-      /kind:\s*"product-profile",\s*\n\s*slug:\s*"([^"]+)",[\s\S]*?\n\s*name:\s*"([^"]+)",/g,
-    ),
-  ].map(([, slug, name]) => ({ slug, name }));
-
-  if (profiles.length === 0) {
-    errors.push(`${workPath} no contiene perfiles de producto reconocibles`);
-    return;
-  }
+  const profiles = readWorkProfiles(work, workPath);
+  if (!profiles) return;
 
   const surfaces = [
     {
       file: navigationPath,
       label: "el pie español (productNavigation)",
-      entries: [
-        ...(navigation.split("export const productNavigation")[1] ?? "").matchAll(
-          /\["([^"]+)",\s*"([^"]+)"\]/g,
-        ),
-      ].map(([, name, href]) => ({ name, href })),
+      entries: readFooterEntries({
+        source: navigation,
+        file: navigationPath,
+        label: "el pie español (productNavigation)",
+        anchor: "export const productNavigation",
+        shape: /^\[\s*"([^"]*)"\s*,\s*"([^"]*)"\s*,?\s*\]$/u,
+      }),
     },
     {
       file: englishPath,
       label: 'el pie inglés (grupo "Products")',
-      entries: [
-        ...(english.split('label: "Products"')[1]?.split("},")[0] ?? "").matchAll(
-          /spanishRoute\("([^"]+)",\s*"([^"]+)"\)/g,
-        ),
-      ].map(([, name, href]) => ({ name, href })),
+      entries: readFooterEntries({
+        source: english,
+        file: englishPath,
+        label: 'el pie inglés (grupo "Products")',
+        anchor: 'label: "Products"',
+        shape: /^spanishRoute\(\s*"([^"]*)"\s*,\s*"([^"]*)"\s*,?\s*\)$/u,
+      }),
     },
   ];
 
   for (const surface of surfaces) {
-    if (surface.entries.length === 0) {
-      errors.push(`${surface.file}: no se pudo leer ${surface.label}`);
-      continue;
-    }
+    if (!surface.entries) continue;
 
     for (const profile of profiles) {
       const expectedHref = `/trabajo/${profile.slug}`;
