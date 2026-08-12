@@ -2,13 +2,11 @@ import type { DeckSlide } from "@/content/deck";
 import styles from "./chrome.module.css";
 
 /**
- * Alto de la banda del riel de progreso, en píxeles.
- *
- * ⚠️ Fuente única, igual que ALTO_BARRA_SUPERIOR: `PresentationDeck` la
- * inyecta como `--deck-barra-inferior` y con esa variable reserva la lámina su
- * margen inferior en `deck.module.css`. El arnés de QA la importa.
+ * Reexporte por comodidad, igual que `ALTO_BARRA_SUPERIOR` en `TopBar.tsx`. La
+ * constante vive en `./altos.ts`, que no importa CSS y por eso sí se puede
+ * cargar desde `tsx --eval`.
  */
-export const ALTO_BARRA_INFERIOR = 60;
+export { ALTO_BARRA_INFERIOR } from "./altos";
 
 export function ProgressRail({
   slides,

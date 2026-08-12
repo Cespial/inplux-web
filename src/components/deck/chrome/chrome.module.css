@@ -205,8 +205,9 @@
   background: var(--teal-on-soft);
 }
 
-/* El anillo del propio segmento se ciñe al hilo: un botón de 60 px de alto
-   marcado de borde a borde volvería a ser un marco. */
+/* Anillo fino y nítido ceñido al hilo: es el glifo de «ESTE BOTÓN tiene el
+   foco», y no lo comparte con nada. (Sobre el propio botón no, que mide 60 px
+   de alto y marcado de borde a borde volvería a ser un marco.) */
 .segmento:focus-visible {
   outline: none;
 }
@@ -230,9 +231,15 @@
   box-shadow: inset 0 -1px 0 var(--teal);
 }
 
+/* Halo blando y ancho, NO el anillo fino de arriba: ese ya significa «este
+   botón del riel tiene el foco», y dibujar los dos estados con el mismo glifo
+   los dejaba indistinguibles salvo por el filete de la barra. Aquí el hilo
+   engorda y se envuelve en teal traslúcido; allí hay una línea nítida con su
+   holgura. Nunca coinciden —el foco está en el slot o está en el botón, no en
+   los dos— así que no se pisan. */
 .conChrome:has([data-estado="activa"]:focus-visible) .segmento[data-estado="actual"]::after {
-  outline: 2px solid var(--teal);
-  outline-offset: 4px;
+  height: 10px;
+  box-shadow: 0 0 0 5px var(--accent-ring);
 }
 
 /* ── Índice y ayuda ──────────────────────────────────────────────────────── */

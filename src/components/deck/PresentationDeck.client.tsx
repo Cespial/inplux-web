@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import { ALTO_BARRA_INFERIOR, ALTO_BARRA_SUPERIOR } from "./chrome/altos";
 import { HelpOverlay } from "./chrome/HelpOverlay.client";
 import { IndexOverlay } from "./chrome/IndexOverlay.client";
-import { ALTO_BARRA_INFERIOR, ProgressRail } from "./chrome/ProgressRail";
-import { ALTO_BARRA_SUPERIOR, TopBar } from "./chrome/TopBar";
+import { ProgressRail } from "./chrome/ProgressRail";
+import { TopBar } from "./chrome/TopBar";
 import chrome from "./chrome/chrome.module.css";
 import { SlideRenderer } from "./SlideRenderer";
 import { useDeckNav } from "./useDeckNav";

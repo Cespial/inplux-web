@@ -1,15 +1,12 @@
 import styles from "./chrome.module.css";
 
 /**
- * Alto de la barra superior, en píxeles.
- *
- * ⚠️ Fuente única. `PresentationDeck` la inyecta como `--deck-barra-superior`
- * y con esa variable —no con un `70px` escrito otra vez— reserva su espacio la
- * lámina en `deck.module.css`. El arnés de QA importa esta constante para
- * comprobar que ninguna caja de lámina se mete debajo de la barra: cambiarla
- * aquí mueve el CSS y la comprobación a la vez.
+ * Reexporte por comodidad. La constante **vive en `./altos.ts`**, que no
+ * importa CSS: este archivo sí, y `tsx --eval` —con el que el arnés de QA la
+ * lee— no sabe cargar un `*.module.css`. Importarla de aquí funciona desde el
+ * bundler; desde un script de Node hay que ir a `./altos`.
  */
-export const ALTO_BARRA_SUPERIOR = 70;
+export { ALTO_BARRA_SUPERIOR } from "./altos";
 
 export function TopBar({
   titulo,
