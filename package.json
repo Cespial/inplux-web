@@ -15,7 +15,8 @@
     "check:http": "node scripts/verify-http-contracts.mjs",
     "inspect:hero": "node scripts/inspect-hero-media.mjs",
     "test:hero-inspector": "node --test scripts/inspect-hero-media.test.mjs",
-    "check": "npm run lint && npm run test:hero-inspector && npm run build && npm run check:http"
+    "test:deck": "node --test scripts/verify-deck-model.test.mjs",
+    "check": "npm run lint && npm run test:hero-inspector && npm run test:deck && npm run build && npm run check:http"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -30,6 +31,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   },
   "overrides": {
