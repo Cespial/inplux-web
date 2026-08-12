@@ -67,6 +67,7 @@ export const homeCopyEn: HomeCopy = {
           spanishRoute("Gobia", "/trabajo/gobia"),
           spanishRoute("Kelsen", "/trabajo/kelsen"),
           spanishRoute("Laudos", "/trabajo/laudos"),
+          spanishRoute("Porkia", "/trabajo/porkia"),
         ],
       },
       {

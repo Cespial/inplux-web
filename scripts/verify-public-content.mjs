@@ -297,6 +297,95 @@ async function verifyAboutAttribution() {
   }
 }
 
+/**
+ * El pie de página y `work.ts` no pueden divergir.
+ *
+ * `productNavigation` (`src/content/navigation.ts`) y el grupo «Products» de la
+ * HOME inglesa están escritos a mano, y con razón: derivarlos de `workProfiles`
+ * mete los cinco perfiles enteros en el bundle cliente (+33.387 bytes medidos),
+ * porque `src/content/copy/es.ts` lo consumen media docena de componentes
+ * cliente. El precio de escribirlos a mano es que se desincronizan en silencio:
+ * Porkia se dio de alta como quinto producto y nunca llegó a ninguno de los dos
+ * pies, en todas las rutas del sitio, sin que nada se rompiera.
+ *
+ * Este control paga ese precio. Exige biyección entre los perfiles de `work.ts`
+ * y cada lista del pie: falta uno y falla; sobra uno que no es perfil y falla;
+ * el `href` o la etiqueta no coinciden con el `slug` y el `name` del perfil y
+ * falla. El sexto producto rompe el build en vez de desaparecer del pie.
+ */
+async function verifyProductNavigation() {
+  const workPath = "src/content/work.ts";
+  const navigationPath = "src/content/navigation.ts";
+  const englishPath = "src/content/copy/en.ts";
+  const [work, navigation, english] = await Promise.all(
+    [workPath, navigationPath, englishPath].map((file) =>
+      readFile(path.join(root, file), "utf8"),
+    ),
+  );
+
+  // Perfiles reales: cada objeto de `workProfiles` con su kind, slug y name.
+  const profiles = [
+    ...work.matchAll(
+      /kind:\s*"product-profile",\s*\n\s*slug:\s*"([^"]+)",[\s\S]*?\n\s*name:\s*"([^"]+)",/g,
+    ),
+  ].map(([, slug, name]) => ({ slug, name }));
+
+  if (profiles.length === 0) {
+    errors.push(`${workPath} no contiene perfiles de producto reconocibles`);
+    return;
+  }
+
+  const surfaces = [
+    {
+      file: navigationPath,
+      label: "el pie español (productNavigation)",
+      entries: [
+        ...(navigation.split("export const productNavigation")[1] ?? "").matchAll(
+          /\["([^"]+)",\s*"([^"]+)"\]/g,
+        ),
+      ].map(([, name, href]) => ({ name, href })),
+    },
+    {
+      file: englishPath,
+      label: 'el pie inglés (grupo "Products")',
+      entries: [
+        ...(english.split('label: "Products"')[1]?.split("},")[0] ?? "").matchAll(
+          /spanishRoute\("([^"]+)",\s*"([^"]+)"\)/g,
+        ),
+      ].map(([, name, href]) => ({ name, href })),
+    },
+  ];
+
+  for (const surface of surfaces) {
+    if (surface.entries.length === 0) {
+      errors.push(`${surface.file}: no se pudo leer ${surface.label}`);
+      continue;
+    }
+
+    for (const profile of profiles) {
+      const expectedHref = `/trabajo/${profile.slug}`;
+      const entry = surface.entries.find((item) => item.href === expectedHref);
+      if (!entry) {
+        errors.push(
+          `${surface.file}: ${surface.label} no lista el producto “${profile.name}” (falta ${expectedHref}); work.ts lo publica`,
+        );
+      } else if (entry.name !== profile.name) {
+        errors.push(
+          `${surface.file}: ${surface.label} llama “${entry.name}” a ${expectedHref}; work.ts lo llama “${profile.name}”`,
+        );
+      }
+    }
+
+    for (const entry of surface.entries) {
+      if (!profiles.some((profile) => `/trabajo/${profile.slug}` === entry.href)) {
+        errors.push(
+          `${surface.file}: ${surface.label} lista “${entry.name}” (${entry.href}) y work.ts no publica ese perfil`,
+        );
+      }
+    }
+  }
+}
+
 async function verifySecurityConfiguration() {
   const relativePath = "next.config.ts";
   const source = await readFile(path.join(root, relativePath), "utf8");
@@ -517,6 +606,7 @@ await verifyPublicLanguage();
 await verifySocialCards();
 await verifyPortfolio();
 await verifyAboutAttribution();
+await verifyProductNavigation();
 await verifySecurityConfiguration();
 await verifyBrandSystem();
 await verifyLogoPermissions();
