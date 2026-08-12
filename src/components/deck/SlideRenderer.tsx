@@ -1,14 +1,29 @@
+import type { ReactElement } from "react";
 import type { DeckSlide } from "@/content/deck";
+import { CapacidadesSlide } from "./slides/CapacidadesSlide";
+import { CierreSlide } from "./slides/CierreSlide";
+import { ComoEmpezamosSlide } from "./slides/ComoEmpezamosSlide";
 import { EspejoSlide } from "./slides/EspejoSlide";
 import { EvidenciaSlide } from "./slides/EvidenciaSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
 import { PortadaSlide } from "./slides/PortadaSlide";
 import { ProblemaSlide } from "./slides/ProblemaSlide";
+import { ProductoSlide } from "./slides/ProductoSlide";
 import { PuenteSlide } from "./slides/PuenteSlide";
 import { TesisSlide } from "./slides/TesisSlide";
-import { Slide } from "./Slide";
-import styles from "./deck.module.css";
 
+/**
+ * ⚠️ **El tipo de retorno explícito es lo que hace REAL la exhaustividad del
+ * `switch` de abajo, y no es decorativo.** Sin él, TypeScript infiere
+ * `ReactElement | undefined` para esta función: un `switch` sin `default` al
+ * que le falte un `kind` se limita a devolver `undefined` por ese camino y
+ * compila en silencio. Comprobado quitando a mano la rama de una lámina:
+ * `tsc --noEmit` salió con 0 y no dijo una palabra, que es exactamente el fallo
+ * contra el que el comentario de este archivo creía estar protegiendo.
+ * Declarando `ReactElement`, el camino que no devuelve nada deja de encajar en
+ * la firma y el build se rompe con «Function lacks ending return statement».
+ * Vuelto a comprobar quitando la misma rama con el tipo puesto: rompe.
+ */
 export function SlideRenderer({
   slide,
   // Los motivos bajan desde la ruta —el único sitio donde se puede leer del
@@ -18,7 +33,7 @@ export function SlideRenderer({
 }: {
   slide: DeckSlide;
   motivos: readonly string[];
-}) {
+}): ReactElement {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
   // lámina viva a la vez, así que el documento tiene siempre exactamente un
   // <h1> y nombra lo que de verdad se está viendo; la saliente queda fuera
@@ -26,18 +41,17 @@ export function SlideRenderer({
   // construye trae uno solo porque el servidor solo monta la portada, que es
   // lo que mide `check:output`.
   //
-  // Sin `default` a propósito: TypeScript comprueba que están cubiertos
-  // todos los kind, y añadir uno sin su rama rompe el build en vez de
-  // pintar un hueco en producción.
+  // Sin `default` a propósito: con el tipo de retorno de arriba, TypeScript
+  // comprueba que están cubiertos todos los kind, y añadir uno sin su rama
+  // rompe el build en vez de pintar un hueco en producción.
   switch (slide.kind) {
-    // Las láminas con cuerpo propio. El resto sigue en el grupo genérico
-    // —solo su título— hasta que su tarea les toque; el `switch` sin `default`
-    // garantiza que ninguna se quede sin rama.
+    // Ya no queda grupo genérico: las quince láminas tienen cuerpo propio y
+    // ninguna se pinta como un título suelto.
     //
-    // Ni `titulo` ni `perfil` bajan a estas: su texto sale de DECK_COPY, que es
-    // más largo y más preciso que el título del modelo (el del modelo es el que
-    // rotula la barra superior y el índice, y ahí tiene que caber en una
-    // línea). Pasarles el título sería una prop que no usan.
+    // `titulo` no baja a ninguna: su texto sale de DECK_COPY o de `work.ts`,
+    // que es más largo y más preciso que el título del modelo (el del modelo es
+    // el que rotula la barra superior y el índice, y ahí tiene que caber en una
+    // línea). Pasarlo sería una prop que no usan.
     case "portada":
       return <PortadaSlide id={slide.id} />;
     case "problema":
@@ -48,26 +62,22 @@ export function SlideRenderer({
       return <MetodoSlide id={slide.id} />;
     case "espejo":
       return <EspejoSlide id={slide.id} />;
-    // La única lámina que recibe algo más que su id, y por una razón concreta:
-    // su contenido no existe en el código fuente. Se lee del verificador en
-    // build, arriba del límite de cliente, y baja hasta aquí.
+    // Recibe algo más que su id por una razón concreta: su contenido no existe
+    // en el código fuente. Se lee del verificador en build, arriba del límite
+    // de cliente, y baja hasta aquí.
     case "evidencia":
       return <EvidenciaSlide id={slide.id} motivos={motivos} />;
     case "puente":
       return <PuenteSlide id={slide.id} />;
     case "capacidades":
+      return <CapacidadesSlide id={slide.id} />;
     case "como-empezamos":
+      return <ComoEmpezamosSlide id={slide.id} />;
     case "cierre":
-      return (
-        <Slide id={slide.id}>
-          <h1 className={styles.titulo}>{slide.titulo}</h1>
-        </Slide>
-      );
+      return <CierreSlide id={slide.id} />;
+    // La única que recibe el perfil entero: la ficha se construye con él y no
+    // con el título del modelo, que es solo el nombre.
     case "producto":
-      return (
-        <Slide id={slide.id}>
-          <h1 className={styles.titulo}>{slide.perfil.name}</h1>
-        </Slide>
-      );
+      return <ProductoSlide id={slide.id} perfil={slide.perfil} />;
   }
 }

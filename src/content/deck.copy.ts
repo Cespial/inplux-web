@@ -90,6 +90,38 @@ export const DECK_COPY = {
   capacidades: {
     pregunta: "¿Qué comparten por dentro?",
     respuesta: "La fábrica es la misma; cambia el dominio.",
+    // Las cuatro capas de la figura, escritas DE ABAJO ARRIBA: es el orden en
+    // que se apilan y el orden en que la lámina las construye. El componente
+    // las pinta al revés —de arriba abajo, que es como se leen— y el índice de
+    // aquí es el que manda el compás. Ver `figures/CapasFabrica.tsx`.
+    //
+    // ⚠️ **Estas cuatro cadenas son COPY NUEVO y necesitan la firma del dueño
+    // del copy.** No se derivan de `workProfiles`: son una lectura editorial de
+    // cómo está hecho lo que vendemos. Hay evidencia consistente en el modelo
+    // de contenido —todos los perfiles declaran `sources`, todos declaran un
+    // bloque `interface`, y sus `capabilities` hablan de fuentes, vigencia,
+    // criterio y trazabilidad—, pero es evidencia consistente, no una fuente.
+    // Es lo único de esta lámina que no sale de un archivo de contenido
+    // anterior, y por eso vive aquí, donde se firma el copy, y no en el
+    // componente. Si el dueño no las firma, la lámina se queda sin figura y hay
+    // que rehacerla, no reetiquetarla.
+    //
+    // ⚠️ Y NO se intente derivarlas de las `capabilities` de cada perfil por su
+    // posición en el arreglo —«la segunda de cada producto es la capa de
+    // reglas»—: es clasificar por el orden en vez de por el contenido, que es
+    // el error que ya costó una vez.
+    //
+    // ⚠️ `dominios` marca LA capa que no es la misma en todos los productos, y
+    // es la mitad visual de «cambia el dominio». Es una bandera en el objeto y
+    // NO un índice en el arreglo, a propósito: reordenar las capas no puede
+    // dejar el acento puesto en la que no es. Los nombres de los dominios no
+    // se escriben en ninguna parte — salen de `workProfiles`.
+    capas: [
+      { nombre: "Datos y fuentes", dominios: false },
+      { nombre: "Reglas del dominio", dominios: true },
+      { nombre: "Interfaz de trabajo", dominios: false },
+      { nombre: "Trazabilidad", dominios: false },
+    ],
   },
   comoEmpezamos: {
     pregunta: "¿Y con lo mío?",

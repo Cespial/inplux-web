@@ -1,0 +1,176 @@
+/* ===========================================================================
+   La ficha de producto — la serie
+
+   Una sola hoja para todas las fichas: la serie es el argumento y las fichas
+   tienen que ser idénticas en forma para que lo único que cambie sea el
+   dominio. Por eso aquí no hay ni una regla que nombre un producto, ni un
+   `:nth-child` que dé a uno de ellos un trato distinto.
+
+   ⚠️ Y no hay ningún conteo de productos, ni puede haberlo: esta hoja se
+   aplica a UNA ficha cada vez y no sabe cuántas hermanas tiene.
+
+   El arquetipo, contra sus vecinas: la lámina del puente reparte miniaturas
+   con un filete ARRIBA en una fila de borde a borde; esta parte la lámina en
+   dos columnas y pone a la derecha un panel de pares rótulo/valor con filetes
+   ENTRE las filas. La del puente afirma que los dominios no se parecen; esta
+   enseña uno por dentro.
+
+   Color: los valores en `--ink`, los rótulos en `--gray-400` (4,84:1 sobre
+   blanco) y el valor destacado de cada producto en `--teal-on-soft` (5,63:1),
+   que es el único teal que este proyecto admite como TEXTO.
+   =========================================================================== */
+
+.rejilla {
+  display: grid;
+  align-items: center;
+  gap: clamp(1.5rem, 3.5vh, 2.5rem);
+  min-width: 0;
+}
+
+/* El mismo corte que la tesis y el problema, y por la misma razón: en apaisado
+   el ancho sobra y la altura no. La columna del argumento pesa algo más que la
+   del panel —el titular es lo que manda en la lámina—, así que el reparto no es
+   de mitades. */
+@media (min-width: 62rem) {
+  .rejilla {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+  }
+}
+
+/* El pie de la ficha lleva dos cosas de distinto rango —quién lo hizo y en qué
+   estado está, arriba; la fuente y su fecha, debajo— y el salto las separa sin
+   gastar un margen: `.pie` ya trae su interlínea de 1,5. Es un bloque dentro
+   del párrafo para que la fuente empiece SIEMPRE en renglón propio, y no donde
+   la deje caer el ancho de la atribución. */
+.pieFuente {
+  display: block;
+}
+
+/* ── El panel de interfaz ──────────────────────────────────────────────────
+   Lo que el producto publica en su propia superficie. Sin marco, sin relleno y
+   sin sombra: la gramática del deck es de hilos, y una tarjeta aquí convertiría
+   la ficha en un catálogo. */
+
+.panel {
+  min-width: 0;
+  animation: panelEntra 520ms var(--ease-out) 410ms both;
+}
+
+/* El rótulo que el propio producto se pone. Mismo registro de mono en versalita
+   que `.pregunta`, sin su filete: el filete es el único acento de color de la
+   escala y en esta lámina ya lo lleva la pregunta. */
+.panelRotulo {
+  margin: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+
+.metrica {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  margin: clamp(0.6rem, 1.5vh, 1rem) 0 0;
+}
+
+/* La métrica principal. Serif, como todo lo que en este deck es una cifra, pero
+   MUY por debajo del numeral de la lámina del problema (8,5 rem): allí la cifra
+   es el argumento entero de la lámina; aquí es un dato entre otros y el titular
+   sigue siendo el nombre del producto.
+   ⚠️ No siempre es un número —hay productos cuya métrica publicada es una
+   palabra—, así que esto tiene que leerse bien como cifra y como palabra: de ahí
+   el serif y no la mono. `tabular-nums` no estorba a las palabras y evita que
+   los millares zarandeen la línea. */
+.metricaValor {
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.4vw, 3.2rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.metricaPie {
+  color: var(--text-muted, var(--gray-400));
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  line-height: 1.4;
+}
+
+.datos {
+  margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
+  padding: 0;
+  min-width: 0;
+}
+
+/* Cada par en su fila, con el rótulo a la izquierda y el valor a la derecha. El
+   filete va ARRIBA de cada fila: así el bloque de la métrica queda cerrado por
+   abajo y las filas se leen como un registro, no como tarjetas. `gap` y no un
+   `justify-content` a secas para que un valor largo pueda envolver sin pisar su
+   rótulo. */
+.dato {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35rem clamp(0.75rem, 1.5vw, 1.5rem);
+  padding: clamp(0.5rem, 1.2vh, 0.75rem) 0;
+  border-top: 1px solid var(--border);
+  min-width: 0;
+}
+
+.datoEtiqueta {
+  min-width: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  line-height: 1.45;
+}
+
+/* `dd` trae un margen de la hoja del navegador que hay que retirar: sin esto la
+   columna de valores queda desplazada 40 px y deja de alinearse a la derecha. */
+.datoValor {
+  margin: 0;
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: end;
+}
+
+/* El valor que el propio producto destaca. En `--teal-on-soft` y no en `--teal`
+   porque es TEXTO, que es la distinción que el deck hace en todas partes. */
+.datoValorAcento {
+  color: var(--teal-on-soft);
+}
+
+/* El panel entra como un bloque, con el mismo compás con que entra la figura de
+   la tesis (520 ms tras 410 ms), para que la ficha tenga el ritmo del resto del
+   deck. No hay escalonado fila a fila: un panel de datos no es una secuencia y
+   contarlo con el reloj sería adorno. */
+@keyframes panelEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

@@ -1,0 +1,125 @@
+/* ===========================================================================
+   Los mismos cuatro tiempos, aplicados a tu reto
+
+   ⚠️ En este archivo NO está escrito el número CUATRO en ninguna parte, ni
+   como pistas de la rejilla ni como un `:nth-child`. Las columnas son dos y la
+   rejilla reparte los tiempos que le lleguen: si `method` ganara un quinto,
+   esta hoja seguiría estando bien y saldrían tres filas. El número de tiempos
+   sale de `src/content/home.ts` y de ningún otro sitio.
+
+   El arquetipo, contra sus vecinas y contra la lámina del método:
+     · la del método es una FILA de nodos con una vía y un pulso —y por debajo
+       de 640 px, una escalera vertical con aros—;
+     · la de la fábrica por dentro son bandas HORIZONTALES de borde a borde;
+     · esta es un registro de entradas con un filete VERTICAL a la izquierda de
+       cada una. Sin aros, sin vía y sin pulso: los cuatro tiempos ya se
+       recorrieron una vez y aquí se enumeran, no se recorren.
+
+   Color, sobre --surface-page (#ffffff):
+     --gray-400 #76716a → 4,84:1   el numeral
+     --ink #1a1918                 el título del tiempo
+     --text-muted #6e6b68 → 5,3:1  su desarrollo
+   El filete va en --border y no en --teal: el único acento de color de la
+   escala es el filete de `.pregunta`, y cuatro hilos teal aquí lo dejarían sin
+   anclar nada — es la misma corrección que ya hubo que hacerle a la lámina del
+   problema.
+   =========================================================================== */
+
+/* ⚠️ Los coeficientes en `vh` de este bloque son la palanca de la lámina, y
+   están puestos con la medida delante, no a ojo. Apilada a 390×844 esta lámina
+   lleva cuatro entradas de tres líneas cada una y llegó a medir 653 px en un
+   hueco útil de 629,6: cabía en pantalla —el arnés dijo `ok` en los tres
+   tamaños— pero dejaba 19 px contra el riel, el número más ajustado del deck
+   después de lo que le pasó a la lámina del problema. En la captura de móvil se
+   veía: «qué mejorar después.» terminaba pegado a la barra inferior.
+   Bajando los cuatro ritmos verticales —esta separación, este margen y los dos
+   de dentro de la entrada— la lámina vuelve a CABER y por eso su caja se centra
+   en vez de desbordarse. Se movieron tamaños de espacio, no copy, que es la
+   regla escrita en la escala. */
+.registro {
+  display: grid;
+  gap: clamp(0.9rem, 1.9vh, 1.75rem) clamp(1.5rem, 3.5vw, 3.5rem);
+  margin: clamp(0.6rem, 1.6vh, 1.5rem) 0 0;
+  padding: 0;
+  min-width: 0;
+  list-style: none;
+  animation: registroEntra 520ms var(--ease-out) 410ms both;
+}
+
+/* Dos columnas en apaisado, una apilada. Dos y no cuatro: en cuatro pistas los
+   desarrollos caen a ~300 px y se parten en seis líneas de dos palabras, que es
+   el reparto de la lámina del método —donde funciona porque allí lo que manda
+   es la fila de nodos, no el texto—. Aquí lo que se lee es el texto. */
+@media (min-width: 62rem) {
+  .registro {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* La entrada del registro. El filete a la izquierda es lo único que la marca:
+   cero relleno, cero marco, cero sombra. */
+.tiempo {
+  min-width: 0;
+  padding-left: clamp(0.9rem, 1.8vw, 1.4rem);
+  border-left: 1px solid var(--border);
+}
+
+.numero {
+  display: block;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+
+.tituloTiempo {
+  max-width: 24ch;
+  margin: clamp(0.15rem, 0.45vh, 0.35rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.copyTiempo {
+  max-width: 44ch;
+  margin: clamp(0.25rem, 0.6vh, 0.45rem) 0 0;
+  color: var(--text-muted, var(--gray-400));
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 1vw, 1rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* El registro entra como un bloque, con el mismo compás con que entra la figura
+   de la tesis (520 ms tras 410 ms). Sin escalonado entrada a entrada: el orden
+   de los cuatro tiempos ya lo enseñó la lámina del método con su pulso, y
+   volver a contarlo con el reloj aquí sería adorno. Esta lámina y la de cierre
+   son las dos más quietas del deck a propósito: es la desaceleración del final.
+   ⚠️ El valor BASE es el estado final —opacidad 1, sin desplazamiento—: el
+   relleno `both` ya aplica el primer fotograma durante el retardo, y declarar
+   además `opacity: 0` en la regla base dejaría la lámina invisible y en
+   silencio el día que la animación no llegue a aplicarse. */
+@keyframes registroEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .registro {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
