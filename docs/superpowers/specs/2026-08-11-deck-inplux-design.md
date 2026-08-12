@@ -2,6 +2,7 @@
 
 > **Estado:** aprobado el 11-ago-2026. Cierra la fase F0 («Decidir») del pliego `DECK.md`.
 > **Alcance:** dos entregas independientes — F0.5 (atribución en el sitio) y F1–F6 (el deck).
+> **Enmendado la noche del 11-ago-2026** — ver §0.
 > **Este archivo es `.md` a propósito.** `scripts/verify-public-content.mjs` escanea `src/` y
 > `public/` con las extensiones `.css .html .json .svg .ts .tsx .txt .webmanifest`. No escanea
 > `docs/`, y `.md` no está en la lista. Por eso aquí se pueden nombrar las reglas sin romper
@@ -9,9 +10,37 @@
 
 ---
 
+## 0. Enmienda — noche del 11-ago-2026
+
+Durante la ejecución de F0.5 el dueño amplió el encargo. Lo que sigue del documento se lee **con
+estas correcciones encima**; no se reescribió el cuerpo porque el registro de lo que se aprobó
+por la mañana tiene valor propio.
+
+| Qué decía | Qué rige ahora | Por qué |
+|---|---|---|
+| Cuatro productos | **Cinco.** Porkia entra al portafolio | El dueño confirmó su autoría y autorizó retirar la regla de build que bloqueaba el nombre |
+| Etiqueta «Solución de INPLUX» para Tribai y Kelsen | **«Desarrollo de INPLUX»** | Instrucción literal del dueño: son desarrollos suyos. Gobia conserva «Solución» porque es la única etiqueta respaldada palabra por palabra por su fuente |
+| Deck de **14** láminas | **15** | Una lámina de producto más, generada sola desde `workProfiles` |
+| Lámina 6: «Catorce cosas…» | **«Trece cosas…»** | `bannedPublicLanguage` pasó de 14 reglas a 13 al retirar la de Porkia |
+| F0.5 toca 5 archivos | **Muchos más** | `attribution.state` gobernaba comportamiento, no solo texto: filtraba el ribbon de la portada, alimentaba las tarjetas OG y decidía qué publicaba `/en` |
+| `/capacidades` y `/nosotros` fuera de alcance | **Dentro de F0.5** | Contaban la historia de dos productos; el dueño pidió cerrarlas en la misma rama |
+
+**La autoría es una declaración de INPLUX, no una cita.** Ninguna fuente pública de Tribai,
+Kelsen ni Porkia atribuye el desarrollo a INPLUX; Gobia y Laudos sí. La prosa del sitio dice las
+dos cosas como cosas distintas: la tabla reúne las fuentes públicas de cada producto, y la
+autoría se declara. Eso reemplaza a §5.2 del pliego («Lo que no reclamamos»), que ya no tiene
+contenido.
+
+**Lección que conviene no perder:** el defecto recurrente de esta rama fue **rejillas acopladas a
+un conteo fijo de productos**. Apareció tres veces —el ribbon de la portada, las pestañas de la
+vitrina, las columnas de una lista— y cada vez el síntoma fue distinto. Todo lo que se construya
+en el deck deriva su disposición del número de ítems, nunca de un número escrito a mano.
+
+---
+
 ## 1. Qué se construye
 
-Una presentación de **14 láminas** en `inplux.co/deck/presentacion`, más un índice puntual en
+Una presentación de **15 láminas** en `inplux.co/deck/presentacion`, más un índice puntual en
 `inplux.co/deck`. Navegable con teclado y gestos, hash por lámina, fondo claro.
 
 Tesis vertebral, literal del sitio (`src/content/copy/es.ts:113`):
@@ -104,10 +133,10 @@ atribución.
 
 ---
 
-## 4. El guion — 14 láminas
+## 4. El guion — 15 láminas
 
-El pliego proponía ~18 con tres separadores de acto. Sin actos y con la lámina espejo, quedan 14.
-Menos láminas, ninguna de relleno.
+El pliego proponía ~18 con tres separadores de acto. Sin actos y con la lámina espejo quedaban 14;
+con Porkia (§0) son 15. Ninguna de relleno.
 
 | # | id | `kind` | Lámina | Arquetipo |
 |---|---|---|---|---|
@@ -116,27 +145,33 @@ Menos láminas, ninguna de relleno.
 | 3 | `tesis` | `tesis` | El software empieza en el problema, no en el requisito | Curvas cruzadas |
 | 4 | `metodo` | `metodo` | Entender → Definir → Construir → Lanzar | Línea de tiempo |
 | 5 | `espejo` | `espejo` | El mismo método, dos lecturas: empresa / entidad | Espina simétrica |
-| 6 | `evidencia` | `evidencia` | **Catorce cosas que este sitio no puede decir** | Log de build |
+| 6 | `evidencia` | `evidencia` | **Trece cosas que este sitio no puede decir** | Log de build |
 | 7 | `puente` | `puente` | La fábrica no es de un sector | Rejilla de 4 |
 | 8 | `tribai` | `producto` | Tribai — Tributación | Ficha + interfaz `tributary` |
 | 9 | `gobia` | `producto` | Gobia — Gestión pública | Ficha + interfaz `civic` |
 | 10 | `kelsen` | `producto` | Kelsen — Derecho | Ficha + interfaz `legal` |
 | 11 | `laudos` | `producto` | Laudos — Arbitraje | Ficha + interfaz `arbitration` |
-| 12 | `capacidades` | `capacidades` | La fábrica por dentro | Capas |
-| 13 | `como-empezamos` | `como-empezamos` | Los cuatro tiempos aplicados a tu reto | Hub radial |
-| 14 | `cierre` | `cierre` | `gerencia@inplux.co` · Medellín | Tipografía |
+| 12 | `porkia` | `producto` | Porkia — Porcicultura | Ficha + interfaz `livestock` |
+| 13 | `capacidades` | `capacidades` | La fábrica por dentro | Capas |
+| 14 | `como-empezamos` | `como-empezamos` | Los cuatro tiempos aplicados a tu reto | Hub radial |
+| 15 | `cierre` | `cierre` | `gerencia@inplux.co` · Medellín | Tipografía |
 
-**El orden de 8–11 es el de `workProfiles` en `work.ts`.** Una sola fuente para el orden: si hay
-que reordenar, se reordena ahí y `/trabajo` se mueve con el deck.
+**El orden de 8–12 es el de `workProfiles` en `work.ts`.** Una sola fuente para el orden: si hay
+que reordenar, se reordena ahí y `/trabajo` se mueve con el deck. Y el conteo **nunca** se escribe
+a mano: si entra un sexto producto, el deck se renumera solo (§0).
 
 ### 4.1 Arquetipos — verificación de §2.5
 
-Barras → curvas → línea de tiempo → espina → log → rejilla → **[serie de 4 fichas]** → capas →
+Barras → curvas → línea de tiempo → espina → log → rejilla → **[serie de 5 fichas]** → capas →
 hub → tipografía. Ningún arquetipo se repite en láminas contiguas.
 
-Las cuatro fichas de producto repiten estructura **a propósito**: son una serie, y la serie es
+Las cinco fichas de producto repiten estructura **a propósito**: son una serie, y la serie es
 el argumento de la lámina 7. Lo que varía en cada una es la figura de interfaz, que ya viene
-diferenciada por `interface.theme` (`tributary` · `civic` · `legal` · `arbitration`).
+diferenciada por `interface.theme` (`tributary` · `civic` · `legal` · `arbitration` · `livestock`).
+
+⚠️ La lámina 7 («la fábrica no es de un sector») **gana fuerza** con Porkia: cuatro dominios
+jurídico-administrativos más una app para porcicultores de 50 a 300 cerdos es un argumento mucho
+más difícil de rebatir que cuatro variaciones sobre lo mismo.
 
 ### 4.2 Lámina 2 — la cifra
 
@@ -190,11 +225,11 @@ La simetría es el argumento.
 
 ---
 
-## 5. Lámina 6 — «Catorce cosas que este sitio no puede decir»
+## 5. Lámina 6 — «Trece cosas que este sitio no puede decir»
 
-> **Nota de precisión.** El titular dice *cosas*, no *frases*: cada una de las catorce reglas
+> **Nota de precisión.** El titular dice *cosas*, no *frases*: cada una de las trece reglas
 > bloquea una familia de expresiones, no una cadena única — la regla de logos, por ejemplo,
-> cubre cuatro nombres. «Catorce frases» sería impreciso, y este deck no puede permitirse una
+> cubre cuatro nombres. «Trece frases» sería impreciso, y este deck no puede permitirse una
 > imprecisión justo en la lámina que habla de rigor.
 
 Reemplaza a «Lo que no reclamamos» del pliego, que se queda sin las dos columnas al pasar los
@@ -203,7 +238,7 @@ depende de la atribución**.
 
 ### 5.1 Contenido
 
-Las catorce etiquetas son literalmente los motivos de `bannedPublicLanguage` en
+las trece etiquetas son literalmente los motivos de `bannedPublicLanguage` en
 `scripts/verify-public-content.mjs`:
 
 1. cifra de trayectoria sin evidencia
@@ -215,11 +250,15 @@ Las catorce etiquetas son literalmente los motivos de `bannedPublicLanguage` en
 7. jerga agéntica
 8. afirmación autónoma no aprobada
 9. cobertura geográfica no aprobada
-10. producto fuera del portafolio
-11. logo o relación sin permiso
-12. prueba social anterior
-13. impacto no demostrado
-14. posicionamiento profesional anterior
+10. logo o relación sin permiso
+11. prueba social anterior
+12. impacto no demostrado
+13. posicionamiento profesional anterior
+
+⚠️ Eran catorce hasta la noche del 11-ago-2026, cuando se retiró «producto fuera del portafolio»
+para poder publicar Porkia (§0). **Esto es exactamente lo que la prueba de §5.3 existe para
+atrapar**, y se disparó antes de que la lámina estuviera construida: la lista es viva, y el
+titular de la lámina tiene que seguirla.
 
 Con el remate:
 
@@ -242,11 +281,11 @@ patrón de jerga es:
 ["jerga agéntica", /\b(?:agentic|ag[eé]ntic[oa]s?|multiagente)\b/giu],
 ```
 
-`ag[eé]ntic[oa]s?` coincide con la propia etiqueta del motivo. Escribir los catorce motivos como
+`ag[eé]ntic[oa]s?` coincide con la propia etiqueta del motivo. Escribir los trece motivos como
 literales en un `.tsx` **falla el build en esa línea**. La regla se muerde la cola.
 
 **Consecuencia de diseño:** la lectura en build de §5.3 no es una elegancia opcional. Es la
-única forma de construir esta lámina. Los catorce motivos **nunca** aparecen como literales en
+única forma de construir esta lámina. Los trece motivos **nunca** aparecen como literales en
 `src/`.
 
 ### 5.3 De dónde salen los motivos, y cómo no envejecen
@@ -258,7 +297,7 @@ Funciona porque el `.mjs` **no está bajo `src/` ni `public/`**: el verificador 
 sí mismo. Y lo que llega al HTML es salida de build, que tampoco se escanea — `check:content`
 corre sobre las fuentes, antes de `next build`.
 
-Con una prueba que falla si el conteo deja de ser 14: si alguien añade o quita una regla, o se
+Con una prueba que falla si el conteo deja de ser 13: si alguien añade o quita una regla, o se
 actualiza el titular de la lámina, o falla el test. Nunca queda desincronizada en silencio.
 
 ⚠️ El módulo lector vive en `scripts/` o en la capa de servidor, **no** como constante en un
@@ -267,7 +306,7 @@ línea de la jerga — que es exactamente el comportamiento que la lámina está
 
 ### 5.4 Animación
 
-Un log de build que corre. Las catorce líneas aparecen escalonadas y la última pinta
+Un log de build que corre. Las trece líneas aparecen escalonadas y la última pinta
 `✗ check:content` con el conteo. Es el mecanismo — la prueba corriendo — no un resultado.
 
 ---
@@ -511,7 +550,7 @@ Cada fase termina en algo que se puede mirar. No se pasa a la siguiente sin cerr
 **F1 · Andamiaje.** Rutas registradas en `verify-build-output.mjs`. Modelo de datos de §6.2 con su
 prueba de perfil huérfano. Riel de dos slots, teclado, gestos, hash, índice. Láminas en blanco con
 su `data-slide`.
-→ *Cierra cuando:* `npm run check` pasa y se recorren las 14 láminas vacías con →.
+→ *Cierra cuando:* `npm run check` pasa y se recorren las 15 láminas vacías con →.
 
 **F2 · Apertura (láminas 1–7).** Es el 70 % del valor del deck. Completa, con figuras, antes de
 tocar los productos.
