@@ -16,9 +16,9 @@ const { pregunta, respuesta } = DECK_COPY.capacidades;
  *
  * Una sola columna a todo el ancho, no la rejilla de dos de `tesis` y
  * `problema`. No es variedad por variedad: la figura son estratos
- * horizontales, y un estrato de media columna es una raya. A 1.440 px los
- * hilos miden 1.296 px y se leen como capas; en media columna medirían 615 y
- * se leerían como subrayados.
+ * horizontales, y un estrato de media columna es una raya. A 1.440 px cruzan
+ * los 1.296 px de la lámina y se leen como capas; en media columna medirían 615
+ * y se leerían como subrayados.
  *
  * De ahí también `.respuestaCompacta`. Es el caso exacto para el que se
  * dimensionó (ver el modificador en `deck.module.css`): en una lámina de una
@@ -30,7 +30,11 @@ const { pregunta, respuesta } = DECK_COPY.capacidades;
  * la lámina como la unión de los rects de los hijos DIRECTOS de la <section>,
  * así que con un envoltorio de más la medida seguiría saliendo igual, pero el
  * `gap` de `.lamina` —que es lo que separa el texto de la figura— dejaría de
- * aplicarse y habría que reponerlo a mano.
+ * aplicarse y habría que reponerlo a mano. Y con `data-deck-llena` en el
+ * segundo hijo —lo pone `CapasFabrica`— `.lamina` pasa además a
+ * `align-content: stretch` y la pila recibe TODO el alto sobrante: es el
+ * mecanismo contra las dos bandas muertas, y solo funciona si la figura es hija
+ * directa.
  *
  * Sin `etiqueta`: no hace falta un nombre propio para la región. El de
  * `problema` existe porque allí un dato viaja en una cifra que no se anuncia;

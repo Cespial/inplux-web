@@ -153,6 +153,31 @@
   padding-inline: var(--deck-gutter);
 }
 
+/* Una lámina que declara `data-deck-llena` en un hijo directo REPARTE el alto
+   en vez de centrarlo: el encabezado ocupa lo que pide y la figura se queda con
+   todo lo demás.
+
+   Es el mecanismo contra la banda muerta. Medido contra el build de este mismo
+   árbol antes de tocarlo, con el método de `comparacion-tensor.md` §0 (lienzo
+   y = 72…690, tinta = contraste > 1,15:1): ocho de las quince láminas tenían
+   0,00 % de tinta en el sexto INFERIOR y siete en el superior, y el contenido
+   vivía encajonado en el tercio central. Centrar una figura que podría llenar
+   es lo que produce esas dos bandas.
+
+   El gancho es un ATRIBUTO global y no una clase porque las clases de un módulo
+   van cifradas y esta regla vive en este archivo, no en el de la figura: es el
+   mismo mecanismo por el que el chrome se marca con `data-deck-chrome`.
+
+   ⚠️ Sin `:has()` no se rompe nada: la lámina vuelve a centrar y la figura
+   conserva el alto de su contenido, que es la composición de antes. Se degrada
+   a lo de ayer, no a una lámina rota — por eso aquí no hace falta el `@supports`
+   que sí lleva `.slot:focus-visible`, donde lo que se perdía era el indicador
+   de foco. */
+.lamina:has(> [data-deck-llena]) {
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
 .titulo {
   max-width: 18ch;
   margin: 0;
@@ -492,9 +517,12 @@
    apilada, esta lámina es la más alta del deck —texto, fuente, dos líneas de
    rótulo, un numeral de 4 rem y seis barras— y a 390 px llegaba a dejar 9 px
    entre el pie de la figura y el riel de progreso. */
+/* El aire entre filas es más corto que entre columnas y va en `vh`: en apaisado
+   lo que falta es alto, no ancho, y este `row-gap` es lo primero que hay que
+   poder ceder cuando la ventana es baja. */
 .problemaRejilla {
   display: grid;
-  align-items: center;
+  align-items: start;
   gap: clamp(1.25rem, 3vh, 2rem);
   min-width: 0;
 }
@@ -502,12 +530,28 @@
 /* El mismo corte que la tesis, y por la misma razón: en apaisado el ancho
    sobra y la altura no. Apilados, el numeral y las seis barras empujaban la
    lámina contra el riel de progreso. Mitades iguales, no 1,05/0,95: aquí la
-   columna derecha lleva un numeral de 8,5 rem y una figura de 38 rem, y pide
-   tanto sitio como el texto. */
+   columna derecha lleva el numeral y la fuente, y pide tanto sitio como el
+   texto. */
 @media (min-width: 62rem) {
   .problemaRejilla {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(2rem, 4.5vw, 4.5rem);
+    column-gap: clamp(2rem, 4.5vw, 4.5rem);
+    row-gap: clamp(0.6rem, 1.6vh, 1.6rem);
+    /* `end`: el bloque de la cifra es más corto que el de texto y se apoya en
+       la misma línea de base que él, así la fila queda cerrada por abajo y la
+       figura arranca de una sola horizontal. */
+    align-items: end;
+  }
+
+  /* ⚠️ La figura ocupa LAS DOS COLUMNAS, y ahí está el cambio de la lámina: de
+     615 px de ancho a 1.296, o sea 3,7 veces el área con el mismo dibujo y sin
+     tocar un segundo del compás.
+
+     Se selecciona por etiqueta y no por clase porque la clase de la figura vive
+     en OTRO módulo (`seis-barras.module.css`) y los módulos no se cruzan. Es la
+     única `<figure>` de la lámina. */
+  .problemaRejilla > figure {
+    grid-column: 1 / -1;
   }
 }
 
@@ -582,13 +626,22 @@
    diferencia. Por debajo de 3 rem empieza a empatar con el titular —a 2,68 rem
    el suelo cae por debajo de `11vw` y el numeral deja de crecer con la
    preferencia del usuario, que es justo lo contrario de lo que se busca—. Se
-   comprueba EN LA CAPTURA, no aquí. */
+   comprueba EN LA CAPTURA, no aquí.
+
+   ⚠️ **El SUELO no se toca; sube solo el TECHO, de 8,5rem a 12rem.** El suelo
+   de 3rem es el tamaño de móvil y está calibrado contra el riel; el techo solo
+   lo ve quien tiene sitio. Medido: 136 → 158 px a 1440, 136 → 192 px a 1920, y
+   48 px a 390 sin mover un píxel, porque ahí manda el suelo. El rango
+   tipográfico de la lámina pasa de 136/11 = 12,4× a 192/11 = 17,5×, que es la
+   3ª recomendación del diagnóstico —la escala es geometría pura y sobrevive
+   intacta al fondo claro—. Comprobado además que «200 %» sigue cabiendo en su
+   columna. */
 .cifra {
   display: block;
   margin: clamp(0.25rem, 1.2vh, 0.85rem) 0 0;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 11vw, 8.5rem);
+  font-size: clamp(3rem, 11vw, 12rem);
   font-weight: 300;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.035em;
