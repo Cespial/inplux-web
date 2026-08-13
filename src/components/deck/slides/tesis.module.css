@@ -1,0 +1,33 @@
+/* ===========================================================================
+   Lámina 3 · La cabecera
+
+   La lámina va en DOS FILAS —cabecera y figura—, y de eso se encarga
+   `.lamina:has(> [data-deck-llena])` en `deck.module.css`. Aquí solo vive la
+   cabecera, que se parte en dos columnas para que su ALTURA sea la de la
+   respuesta y no la suma de respuesta más cuerpo: cada píxel que no gasta la
+   cabecera se lo lleva la figura, que es la que tiene que llenar la lámina.
+
+   Por debajo de 62 rem se apila, que es donde el ancho no da para dos medidas
+   de texto.
+   =========================================================================== */
+
+.cabecera {
+  display: grid;
+  gap: clamp(1rem, 2.5vh, 1.75rem);
+  min-width: 0;
+}
+
+@media (min-width: 62rem) {
+  .cabecera {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+}
+
+/* El cuerpo no lleva el margen superior de `.cuerpo`: aquí no va debajo de la
+   respuesta, va a su lado, y ese margen lo descolgaba media línea por debajo
+   de la línea base con la que tiene que alinearse. */
+.cuerpoColumna {
+  margin-top: 0;
+}

@@ -12,31 +12,45 @@
    =========================================================================== */
 
 .figura {
-  min-width: 0;
-  /* ⚠️ `width: 100%` explícito. El bloque de la cifra es un flex en columna con
-     `align-items: flex-start`, así que sin esto el `<figure>` se ciñe a su
-     contenido, el `width: 100%` del SVG se queda sin referencia y el dibujo
-     cae a su tamaño intrínseco: medido, 370 px en una columna de 615, un
-     tercio más pequeño de lo que le toca. Se veía en la captura y en ninguna
-     línea del arnés. */
+  position: relative;
   width: 100%;
-  /* El aire entre el numeral y la primera barra. Es la holgura que hay que
-     volver a mirar EN LA CAPTURA si alguien sube el tamaño de la cifra: una
-     barra rozando el numeral no la detecta ninguna medida del arnés. */
-  margin: clamp(0.75rem, 2vh, 1.5rem) 0 0;
+  min-width: 0;
+  /* El aire lo pone el `row-gap` de la rejilla de la lámina, no un margen de
+     aquí: con los dos, el hueco entre el bloque de texto y el rótulo del
+     presupuesto se contaba dos veces. */
+  margin: 0;
+
+  /* El hueco real entre las dos barras del chrome, con los mismos altos que
+     inyecta PresentationDeck. Aquí no hay ningún 70 ni 60 escrito. */
+  --hueco: calc(100vh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  --hueco: calc(100dvh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+
+  /* ⚠️ **El tope se declara en ANCHO y no en alto, y esa es la decisión que
+     hace que el rótulo caiga donde debe.** Un `max-height` sobre el SVG lo deja
+     con caja más ancha que dibujo (letterbox), y entonces `--marcaX` —que es una
+     fracción de la CAJA— deja de coincidir con la línea. Topando el ancho, caja
+     y dibujo son siempre la misma cosa.
+
+     La cuenta: al bloque de texto de la izquierda se le reservan 26rem de alto y
+     lo que sobre es para la figura; ese alto por la relación del viewBox da el
+     ancho. Medido, el tope solo muerde en ventanas bajas —a 1440×754 la figura
+     pasa de 1296 a 998 px de ancho— y no muerde a 1440×900, 1920×1080 ni
+     390×844, donde la figura va a sangre entre márgenes.
+
+     Y 26rem, no 26 × 16px: la reserva crece con la preferencia de fuente del
+     lector, que es exactamente cuando el bloque de texto engorda. El
+     `max(5rem, …)` es la red: sin él, con una raíz enorme la resta se iría a
+     negativo y el tope colapsaría la figura a cero — mucho peor que una figura
+     pequeña, porque eso no se ve en ninguna medida. */
+  max-width: calc(max(5rem, var(--hueco) - 26rem) * var(--relacion));
 }
 
-/* `viewBox` de relación fija y tope explícito, nunca `preserveAspectRatio="none"`:
-   con los ejes escalados por separado, la barra que crece dejaría de crecer en
-   proporción y el 200 % del dibujo dejaría de ser el 200 % del contador. */
+/* `viewBox` de relación fija, nunca `preserveAspectRatio="none"`: con los ejes
+   escalados por separado, la barra que crece dejaría de crecer en proporción y
+   el 200 % del dibujo dejaría de ser el 200 % del contador. */
 .lienzo {
   display: block;
   width: 100%;
-  /* El tope es lo que impide que la figura se coma la lámina en un proyector
-     de 1920, donde la columna mide 836 px. Y no es más bajo porque a 1920 todo
-     lo demás ya está topado —el numeral en 8,5 rem, la respuesta en 4,3— y una
-     figura pequeña deja la lámina flotando en blanco. */
-  max-width: 38rem;
   height: auto;
 }
 
@@ -44,43 +58,52 @@
    que se leen las seis, y una referencia que llega tarde no es referencia.
    Discontinua para que no se lea como el eje de una gráfica.
 
-   En `--gray-400` y no en `--gray-300`: sobre blanco el primero da 4,8:1 y el
-   segundo 2,5:1, y esta línea no es adorno —es contra lo que se mide todo lo
+   En `--gray-400` y no en `--gray-300`: sobre blanco el primero da 4,84:1 y el
+   segundo 2,45:1, y esta línea no es adorno —es contra lo que se mide todo lo
    demás—. Que sea del mismo color que las barras no confunde: una es vertical
-   y discontinua, las otras son horizontales y macizas. */
-/* ⚠️ `non-scaling-stroke`, como el resto de los trazos del deck. Sin él este
-   era **el único hilo del deck que adelgazaba en el móvil**: 1,27 px a 1440 y a
-   1920, y 0,71 px a 390 —el 44 % de su tinta perdido justo en la pantalla donde
-   el deck se lee peor—, mientras la malla de la portada, la base y las curvas
-   de la tesis lo conservan y se quedan clavadas en 1,00 px. Y no es un trazo
-   cualquiera: es la única referencia de la figura —las seis barras no
-   significan nada sin ella— y la ronda anterior ya tuvo que rescatarla del
-   `--gray-300`, que la dejaba casi invisible. Se corrigió el color y no el
-   grosor. El punteado se endereza por lo mismo: sin esto, a 390 px los 3/4 de
-   la raya y el hueco se pintan a 2,1/2,9. */
+   y discontinua, las otras son horizontales y macizas.
+
+   ⚠️ **El grosor es 2 y no 1, y el motivo es de píxel, no de gusto.** Con
+   `non-scaling-stroke` el trazo se resuelve en unidades de dispositivo, y a
+   DPR 1 —el proyector de sala, y el portátil no retina al que se manda el
+   enlace— una línea de 1 px cae centrada en una coordenada fraccionaria: el
+   motor la reparte entre dos píxeles y lo que llega a la retina es el promedio.
+   Medido sobre el PNG: 1,77:1 a 1920, 2,03:1 a 390 y 2,20:1 a 1440 — la única
+   referencia de la figura pintada por debajo del 3:1 que WCAG 1.4.11 exige a un
+   objeto gráfico necesario para entender el contenido, y más tenue cuanto más
+   grande la pantalla. Con 2 px el trazo contiene SIEMPRE un píxel entero, sea
+   cual sea la fracción en que caiga su centro, así que se pinta en el color del
+   token: **4,84:1**. A DPR 2 no cambia nada, porque allí ya llegaba.
+
+   ⚠️ `non-scaling-stroke` importa más que antes: el lienzo pasó de 480 a 960
+   unidades, así que sin él este hilo se pintaría a la mitad de grosor en el
+   móvil que en la sala, y el punteado 3/4 se resolvería a 2,1/2,9. */
 .marca {
   stroke: var(--gray-400);
-  stroke-width: 1;
+  stroke-width: 2;
   stroke-dasharray: 3 4;
   vector-effect: non-scaling-stroke;
   animation: aparece var(--dur) var(--ease-out) both;
 }
 
-/* Misma corrección que `.curvaEtiqueta` en `deck.module.css`, con la escala de
-   esta figura: en unidades de lienzo el tamaño lo decidía el ancho del SVG, así
-   que se veía a 9,3 px a 390 —por debajo del suelo de la escala— y a 16,5 px a
-   1440. El `min()` congela el término cuando la figura toca su `max-width`
-   (38 rem), que aquí ocurre ya a 1440. Medido después: 10,1 px a 360, 11,0 px a
-   390, 14,0 px de 1440 en adelante — y 17,9 px en la franja apilada de
-   640–992 px, donde la escala ya topó y el `vw` sigue creciendo. Las dos
-   limitaciones de fondo —la escala no es monótona con el ancho, y la etiqueta no
-   obedece la preferencia de fuente del lector— están explicadas en
-   `.curvaEtiqueta` y son las mismas. */
+/* El rótulo de la marca, en HTML y ENCIMA del dibujo. `margin-left` en
+   porcentaje resuelve contra el ancho del contenedor —que aquí ES el ancho del
+   dibujo, ver `.figura`— y `translateX(-50%)` lo centra sobre la línea.
+   `width: max-content` para que el porcentaje no lo aplaste.
+
+   El porqué de que vaya arriba y no debajo está en el comentario del
+   componente: debajo, la sexta barra teal cruza la marca y se queda con la
+   palabra. */
 .marcaEtiqueta {
-  fill: var(--gray-400);
+  display: block;
+  width: max-content;
+  margin: 0 0 0.3rem var(--marcaX);
+  color: var(--gray-400);
   font-family: var(--font-mono);
-  font-size: calc(17px - 0.414 * min(1vw, 14.4px));
+  font-size: clamp(0.66rem, 0.8vw, 0.78rem);
   letter-spacing: 0.06em;
+  line-height: 1.3;
+  transform: translateX(-50%);
   animation: aparece var(--dur) var(--ease-out) both;
 }
 
@@ -91,12 +114,23 @@
    casillas todavía en pie—, porque el instante en que termina la secuencia
    deja de ser calculable desde un solo número.
 
+   ⚠️ **El relleno macizo es una desviación de la gramática, y va escrita aquí
+   porque es aquí donde se toma.** `barras()` de `estilo-s50/assets/figuras.js`
+   (línea 111) pinta `fill-opacity="0.18"` CON contorno del mismo color, nunca
+   macizo. Estas seis son macizas, y con el lienzo ensanchado son también la
+   mayor parte de la tinta nueva de la lámina. El motivo es el diagnóstico de
+   §4.1 de `comparacion-tensor.md`: a dos metros los trazos de menos de ~2 px se
+   desvanecen y lo que sobrevive es la masa; un relleno al 18 % de una barra de
+   34 px de grosor da 1,28:1 y es exactamente lo que la sala pierde primero.
+   Entre cumplir la letra del catálogo y que la figura llegue al fondo de la
+   sala, esta lámina elige lo segundo — y aquí queda dicho, para que la próxima
+   ronda discuta la decisión y no la descubra.
+
    ⚠️ `transform-box: fill-box` es imprescindible, no cosmético. En SVG el
    valor inicial de `transform-box` es `view-box`, así que `left center`
    resolvería contra el lienzo entero y no contra la barra: al escalar, la
-   barra se despegaría de su origen en x=24 y las seis dejarían de nacer del
-   mismo punto. Con `fill-box` el origen es el borde izquierdo de cada <rect>,
-   que es lo que se quiere. */
+   barra se despegaría de su origen y las seis dejarían de nacer del mismo
+   punto. */
 .barra {
   transform-box: fill-box;
   transform-origin: left center;

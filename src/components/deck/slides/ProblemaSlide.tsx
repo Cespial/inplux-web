@@ -52,20 +52,6 @@ export function ProblemaSlide({ id }: { id: string }) {
           <p className={styles.pregunta}>{pregunta}</p>
           <h1 className={styles.respuesta}>{respuesta}</h1>
           <p className={styles.cuerpo}>{cuerpo}</p>
-          {/* ⚠️ El título del artículo va en `<span lang>`. El documento
-              declara `es-CO` y sin esa marca un lector de pantalla en español
-              pronuncia el título inglés con fonemas españoles (SC 3.1.2, AA).
-              Es el enlace de la única fuente dura del deck: justo el texto que
-              alguien va a querer leer para ir a comprobar la cifra.
-              El idioma sale de la fuente, no de aquí. */}
-          <p className={styles.pie}>
-            <a className={styles.pieEnlace} href={fuente.url}>
-              {fuente.label}{" "}
-              <span lang={fuente.labelIdioma.lang}>{fuente.labelIdioma.texto}</span>
-            </a>
-            {` · ${fuente.muestra} · consultado `}
-            {fuente.verifiedAt}
-          </p>
         </div>
 
         <div className={styles.cifraBloque} style={COMPAS}>
@@ -88,8 +74,41 @@ export function ProblemaSlide({ id }: { id: string }) {
               />
             </span>
           </p>
-          <SeisBarras />
+
+          {/* ⚠️ **La fuente se mudó AQUÍ, debajo del numeral, y no es
+              maquetación.** §7.2 del diagnóstico: el rigor compuesto como pie de
+              página se lee como pie de página. La fuente del 200 % pegada al
+              200 % es la fuente de lo que respalda; al final de la columna de
+              texto era una nota legal.
+
+              ⚠️ El título del artículo va en `<span lang>`. El documento declara
+              `es-CO` y sin esa marca un lector de pantalla en español pronuncia
+              el título inglés con fonemas españoles (SC 3.1.2, AA). Es el enlace
+              de la única fuente dura del deck: justo el texto que alguien va a
+              querer leer para ir a comprobar la cifra. El idioma sale de la
+              fuente, no de aquí. */}
+          <p className={styles.pie}>
+            <a className={styles.pieEnlace} href={fuente.url}>
+              {fuente.label}{" "}
+              <span lang={fuente.labelIdioma.lang}>{fuente.labelIdioma.texto}</span>
+            </a>
+            {` · ${fuente.muestra} · consultado `}
+            {fuente.verifiedAt}
+          </p>
         </div>
+
+        {/* ⚠️ Tercer hijo de la rejilla, ya NO hijo del bloque de la cifra: en
+            apaisado ocupa las dos columnas (ver `.problemaRejilla > figure` en
+            `deck.module.css`) y pasa de 615 px de ancho a 1.296, o sea 3,7 veces
+            el área con el mismo dibujo y sin tocar un segundo del compás.
+            Apilado queda donde estaba, al final.
+
+            ⚠️ Y el orden vertical se conserva por la razón de siempre: las
+            barras crecen hacia la derecha y la sexta triplica su largo; puestas
+            al lado del numeral, la que se desborda iría derecha a él. Ninguna
+            medida del arnés caza una barra que roza un glifo. Encima y debajo no
+            se tocan. */}
+        <SeisBarras />
       </div>
     </Slide>
   );

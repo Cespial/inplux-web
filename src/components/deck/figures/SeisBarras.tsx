@@ -68,39 +68,41 @@ export const COMPAS = {
 /**
  * La relación del `viewBox` ES la altura de la figura, y por eso se toca aquí y
  * no en el CSS: el SVG entra a `width: 100%`, así que su alto en pantalla sale
- * de `ancho / alto` y del ancho de la columna, nada más. A 390 px la columna
- * mide 342, y con 480×200 la figura ocupaba 142,5 px de una lámina que ya
- * chocaba con el riel; con 480×168 ocupa 120.
+ * de `ancho / alto` y del ancho de su caja, nada más.
  *
- * ⚠️ Lo que cambió es el AIRE entre barras, no las barras. El grosor en
- * pantalla lo fija la escala horizontal (`ALTO × ancho/480`), así que a 1440
- * cada barra sigue midiendo 18 px; lo que se estrecha es el hueco entre una y
- * la siguiente, de 17,7 px a 10,1 px. La figura se lee más como un gráfico de
- * barras y menos como un diagrama, y eso es lo único que se ve en escritorio.
+ * ⚠️ **960 × 200 (relación 4,8) sustituye a 480 × 168 (2,857), y el número no
+ * es cosmético: es lo que permite que la figura ocupe LAS DOS COLUMNAS.** A
+ * ancho completo (1.296 px a 1440) una relación de 2,857 daría 454 px de alto
+ * y la lámina no cabría en el hueco entre barras; 4,8 da 270 px y sí cabe. En
+ * el móvil, donde la lámina se apila y la figura mide 342 px de ancho, la misma
+ * relación la baja de 120 px a 71 px, que es holgura en la lámina más ajustada
+ * del deck.
  *
- * ⚠️ Y `Y0` NO se tocó, aunque bajarlo daba tres píxeles más. Es el aire de
- * dentro del lienzo por encima de la primera barra, y sumado al margen de
- * `.figura` es la holgura entre el NUMERAL y la primera barra —33 px a 1440—,
- * la que la Tarea 9 dejó anotada como «la que no mide nadie». Bajar la cifra y
- * de paso acercarle las barras habría sido cambiar un problema por otro.
+ * ⚠️ Lo que NO cambia es el grosor de barra en pantalla, porque lo fija la
+ * escala horizontal (`ALTO × ancho/960`): 33,7 px a 1440 (antes 18), 45 px a
+ * 1920 (antes 24) y 8,9 px a 390 (antes 10,0). La figura engorda en la sala y
+ * se queda igual en el teléfono, que es el reparto que pide el diagnóstico —«a
+ * dos metros lo que sobrevive es la masa»—.
  */
-const LIENZO = { ancho: 480, alto: 168 };
-/** Donde nacen las seis barras. Todas empiezan en el mismo sitio. */
-const X0 = 24;
-/** El presupuesto aprobado, en unidades del lienzo. Es la unidad de la figura. */
-const PRESUPUESTO = 140;
-const ALTO = 14;
+const LIENZO = { ancho: 960, alto: 200 };
+
 /**
- * ⚠️ `PASO_Y` no puede bajar de `ALTO`: las barras se solaparían. Y el margen
- * de abajo tampoco es libre —`LIENZO.alto` tiene que dejar sitio para la
- * etiqueta del presupuesto, que se planta en `alto − 8`—. Con estos números la
- * marca termina en 144, la etiqueta tiene su altura de mayúscula en 150,6 y su
- * descendente en 163,6: 6,6 unidades de aire bajo la línea y 4,4 hasta el borde
- * del lienzo. Cualquiera de los cuatro números que se mueva hay que rehacer esa
- * cuenta, porque el arnés no mide dentro del SVG.
+ * Todas las barras nacen en el borde del lienzo, no adentro: así el dibujo
+ * comparte el margen izquierdo con el bloque de texto de la lámina y la lámina
+ * tiene una sola vertical de arranque.
  */
-const PASO_Y = 22;
-const Y0 = 12;
+const X0 = 0;
+/** El presupuesto aprobado, en unidades del lienzo. Es la unidad de la figura. */
+const PRESUPUESTO = 300;
+const ALTO = 25;
+/**
+ * ⚠️ `PASO_Y` no puede bajar de `ALTO`: las barras se solaparían. Con estos
+ * números las seis ocupan de y=6 a y=191 y quedan 9 unidades hasta el borde del
+ * lienzo — que ya NO tienen que alojar la etiqueta del presupuesto, porque esa
+ * etiqueta salió del SVG y además se mudó ARRIBA (ver `.marcaEtiqueta`).
+ */
+const PASO_Y = 32;
+const Y0 = 6;
 
 /**
  * Cada barra, en múltiplos del presupuesto. Las cinco primeras aterrizan a
@@ -121,12 +123,61 @@ const MARCA_X = X0 + PRESUPUESTO;
 const ULTIMA = PROYECTOS.length - 1;
 const FONDO_BARRAS = Y0 + ULTIMA * PASO_Y + ALTO;
 
+/**
+ * La geometría que el CSS necesita, publicada como variables para que ningún
+ * número viva en dos archivos:
+ *
+ *   --relacion  el tope de ancho de la figura se calcula como
+ *               «alto disponible × relación» (ver el módulo). Si mañana el
+ *               viewBox cambia, el tope se recalcula solo.
+ *   --marcaX    la posición del rótulo `presupuesto`, en fracción del ancho
+ *               del dibujo. Es la MISMA cuenta que sitúa la línea dentro del
+ *               SVG, hecha una vez.
+ */
+const GEOMETRIA = {
+  "--relacion": String(LIENZO.ancho / LIENZO.alto),
+  "--marcaX": `${(MARCA_X / LIENZO.ancho) * 100}%`,
+} as CSSProperties;
+
 export function SeisBarras() {
   return (
-    <figure className={styles.figura}>
+    // ⚠️ **`COMPAS` va en el `<figure>`, no solo en el `<svg>`.** El rótulo del
+    // presupuesto es hermano del SVG, y su `animation: aparece var(--dur) …`
+    // necesita `--dur`. Puesto solo en el `<svg>`, en el `<span>` la `var()` no
+    // resuelve, la declaración queda inválida en tiempo de valor computado y
+    // colapsa entera a `animation-name: none`: el rótulo aparecería a opacidad
+    // 1 en el fotograma cero, mientras la línea que rotula todavía está
+    // entrando, y su línea del bloque de movimiento reducido no gobernaría
+    // nada. En el `<figure>` lo heredan los dos.
+    <figure className={styles.figura} style={{ ...GEOMETRIA, ...COMPAS }}>
+      {/* ⚠️ **El rótulo va ENCIMA de las barras, y esto se decidió mirando la
+          captura ampliada, no una medida.** Debajo, la marca discontinua llega
+          hasta la unidad 191 y la sexta barra —teal, maciza, el objeto más
+          contrastado de la lámina— la cruza y la tapa: lo único que ataba la
+          palabra a su línea era un trozo de 6 unidades por debajo de la barra, y
+          a 20 % de reducción ese trozo desaparece y `presupuesto` queda leyéndose
+          como el pie de la barra que se desborda. La lámina acabaría rotulando
+          el sobrecosto como si fuera el presupuesto, que es lo contrario de lo
+          que dice. Arriba, la línea nace limpia y no hay nada entre la palabra y
+          su marca.
+
+          Y es HTML, fuera del SVG, por dos razones más:
+          (a) Tamaño: dentro del lienzo el cuerpo se escala con el dibujo, y con
+          960 unidades de ancho caía a 5,5 px en el móvil. Aquí es un `clamp` en
+          rem —10,6 a 12,5 px— y obedece la preferencia de fuente del lector, que
+          un <text> de SVG no obedece.
+          (b) Arnés: un <text> de SVG se mide por su caja entera —límite
+          declarado nº 5—, así que sacarlo quita de esta lámina la única fuente
+          posible de falso positivo por texto.
+          Va `aria-hidden` porque la palabra ya está dicha, con su contexto,
+          dentro del <title> del dibujo: suelta en el orden de lectura sería un
+          «presupuesto» sin oración. */}
+      <span className={styles.marcaEtiqueta} aria-hidden="true">
+        {DECK_COPY.problema.figura.presupuesto}
+      </span>
+
       <svg
         className={styles.lienzo}
-        style={COMPAS}
         viewBox={`0 0 ${LIENZO.ancho} ${LIENZO.alto}`}
         role="img"
         aria-labelledby="deck-problema-barras-titulo"
@@ -144,7 +195,7 @@ export function SeisBarras() {
 
         {/* La única referencia de la figura. Discontinua a propósito: una línea
             entera se leería como el eje de una gráfica, y esto no tiene eje. */}
-        <line className={styles.marca} x1={MARCA_X} y1={4} x2={MARCA_X} y2={FONDO_BARRAS + 8} />
+        <line className={styles.marca} x1={MARCA_X} y1={0} x2={MARCA_X} y2={FONDO_BARRAS + 6} />
 
         {PROYECTOS.map((factor, i) => (
           <rect
@@ -156,7 +207,7 @@ export function SeisBarras() {
             y={Y0 + i * PASO_Y}
             width={Math.round(PRESUPUESTO * factor)}
             height={ALTO}
-            rx={1.5}
+            rx={2}
             // El instante de cada barra sale de aquí y solo de aquí: duración y
             // retraso base son COMUNES a las seis y lo único que las separa es
             // este índice. Una cascada con duraciones distintas por elemento
@@ -164,13 +215,6 @@ export function SeisBarras() {
             style={{ "--i": i } as CSSProperties}
           />
         ))}
-
-        {/* Al pie del lienzo, lo más lejos posible del numeral: un <text> de
-            SVG se hit-testea por su caja entera, así que uno pegado a un
-            titular le regala un falso positivo al arnés. */}
-        <text className={styles.marcaEtiqueta} x={MARCA_X} y={LIENZO.alto - 8} textAnchor="middle">
-          {DECK_COPY.problema.figura.presupuesto}
-        </text>
       </svg>
     </figure>
   );

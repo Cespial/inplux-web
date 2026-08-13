@@ -2,63 +2,260 @@
    Lámina 7 · El puente
 
    ⚠️ Ni un `repeat(N, …)` con N escrito, ni una regla que nombre una posición.
-   Las pistas las decide `auto-fit` con un mínimo en `rem`: con los perfiles de
-   hoy y una lámina de 1.296 px salen pistas de ~250 px; con 342 px salen dos
-   de ~163 px y tres filas. El día que `work.ts` gane o pierda un perfil, esta
-   hoja no se entera y sigue estando bien — que es exactamente lo que en F0.5
-   falló seis veces.
+   Las pistas las decide `auto-fit` con un mínimo pequeño en `rem`, y el mínimo
+   es pequeño A PROPÓSITO: lo que fija cuántas columnas hay son los perfiles que
+   existan, no el mínimo. Con 14rem, a raíz 19 solo caben cuatro pistas en
+   1.296 px y la vitrina se parte en 4 + 1; con 9rem caben siete a raíz 16 y 18
+   y seis a raíz 19, `auto-fit` colapsa las vacías y quedan cinco iguales en las
+   tres. El día que `work.ts` gane o pierda un perfil, esta hoja no se entera y
+   sigue estando bien — que es exactamente lo que en F0.5 falló seis veces.
+
+   Color, medido sobre el papel real de la lámina (`#ffffff`; con el `#f8f8f7`
+   declarado, un escalón menos y todos siguen pasando):
+     --gray-400 #76716a → 4,84:1   caída del nodo, estado, acta
+     --gray-300 #a8a5a0 → 2,45:1   el hilo del marco de la miniatura
+     --teal     #0d7d74 → 5,00:1   el aro (TRAZO)
+     --teal-on-soft #0b746c → 5,63:1  el rótulo del nodo (TEXTO)
+     --ink      #1a1918 → 17,56:1  dominio y nombre
    =========================================================================== */
 
-.rejilla {
+/* Apilada, una sola columna: es una decisión de maqueta —«en vertical, una
+   ficha por línea»—, no un conteo de perfiles. Las pistas de verdad se declaran
+   en el bloque de apaisado. */
+.vitrina {
   display: grid;
-  /* El mínimo es lo que fija cuántas pistas caben, y 9,5 rem no es un número
-     redondo: es el ancho por debajo del cual «Gestión pública» —el dominio más
-     largo— se parte en dos líneas y las miniaturas dejan de tener la misma
-     altura. */
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-  gap: clamp(0.9rem, 2vw, 1.75rem);
+  grid-template-columns: 1fr;
+  gap: clamp(0.75rem, 1.5vw, 1.4rem);
   min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* El filete superior es el mismo en todas, y esa es la afirmación de la
-   lámina dicha sin palabras: los dominios cambian, la fábrica no. Un hilo de
-   1 px en `--border`, no una tarjeta: cero rellenos, cero sombras, cero cajas.
-   Si cada miniatura llevara marco, la lámina diría «un catálogo» en vez de
-   «una fábrica». */
+@media (min-width: 62rem) {
+  .vitrina {
+    grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  }
+}
+
+/* El filete superior es el mismo en todas, y esa es la afirmación de la lámina
+   dicha sin palabras: los dominios cambian, la fábrica no. Es el RIEL del que
+   cuelga cada nodo. Un hilo de 1 px en `--border`, no una tarjeta: cero
+   rellenos, cero sombras, cero cajas. */
 .ficha {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: clamp(0.35rem, 0.9vh, 0.6rem);
   min-width: 0;
-  padding-top: clamp(0.6rem, 1.5vh, 0.9rem);
+  padding-top: clamp(0.4rem, 1vh, 0.7rem);
   border-top: 1px solid var(--border);
   animation: entraFicha 420ms var(--ease-out) calc(0.4s + var(--i) * 0.09s) both;
 }
 
-/* El dominio manda sobre el nombre, y es al revés de lo que uno haría. La
-   lámina no está presentando productos —eso lo hacen las fichas que siguen, una
-   por producto—: está afirmando que los dominios no se parecen. El sustantivo
-   del argumento es «porcicultura», no «Porkia». */
-.dominio {
-  color: var(--gray-400);
+.nodoFila {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  /* El alto del SVG del nodo. Vive aquí porque el rótulo lo necesita para
+     alinearse con el aro, y así el número está una sola vez. */
+  --nodoAlto: 2.1rem;
+}
+
+.nodo {
+  display: block;
+  flex: none;
+  /* 18 × 28 de `viewBox`: el ancho es 9/14 del alto. */
+  width: calc(var(--nodoAlto) * 0.642857);
+  height: var(--nodoAlto);
+}
+
+/* Nodo hueco: relleno del papel de la lámina, contorno del color del nodo.
+
+   ⚠️ **Grosor 1,5 y no 1, y es aritmética de píxel, no gusto.** Con
+   `non-scaling-stroke` el trazo se resuelve en unidades de dispositivo. A DPR 1
+   —el proyector de la sala, y el portátil no retina al que se manda el enlace—
+   una línea de 1 px cae centrada en una coordenada fraccionaria, el motor la
+   reparte entre dos píxeles y lo que llega a la retina es el promedio: medido
+   sobre el PNG, 2,30–2,37:1, por debajo del 3:1 que WCAG 1.4.11 pide a un
+   objeto gráfico necesario para entender el contenido. Con 1,5 px la cobertura
+   del píxel más oscuro nunca baja de 0,75, o sea **3,19:1** en el peor caso y
+   5,00:1 cuando cae alineado. A DPR 2 ya llegaba y no cambia.
+
+   ⚠️ El precio, declarado: 1,5 px sobre un diámetro de 16,8 px es el **8,9 %**,
+   por encima del 6–7 % de la gramática de s50. Es la misma desviación consciente
+   que el nodo del cruce de la tesis y por el mismo motivo, un escalón más
+   arriba: entre un aro fiel al catálogo que la sala no ve y un aro que se ve,
+   este deck ya eligió una vez. */
+.nodoAro {
+  fill: var(--surface-page);
+  stroke: var(--teal);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ⚠️ La caída va en `--gray-400`, no en `--gray-300`. Es el conector de la
+   gramática —lo que dice que el nodo CUELGA del riel— y en `--gray-300` se
+   pintaba a 1,48:1 a DPR 1: si el conector no se ve, el nodo no cuelga de nada.
+   Con `--gray-400` a 1,5 px el peor caso es 3,00:1. */
+.nodoCaida {
+  stroke: var(--gray-400);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* La etiqueta del nodo, del color del nodo — pero en `--teal-on-soft`, que es
+   el único teal que alcanza AA como TEXTO (5,63:1). `--teal` se queda para el
+   aro y la caída, que no son texto.
+
+   ⚠️ `margin-top` alinea la primera línea del rótulo con el CENTRO DEL ARO, y
+   no con el borde de arriba del SVG. Sin esto la etiqueta quedaba ~15 px por
+   encima del aro, en otra columna óptica y del color equivocado, y lo que se
+   leía eran tres objetos sueltos —tick, etiqueta, círculo— en vez de un nodo con
+   su nombre. El desplazamiento se DERIVA: `--nodoCy` es la fracción del alto a
+   la que vive el centro del aro y la publica el componente desde la misma
+   constante con la que dibuja el `<circle>`; `0.65em` es media altura de línea
+   de este rótulo. */
+.rotulo {
+  min-width: 0;
+  margin-top: calc(var(--nodoAlto) * var(--nodoCy) - 0.65em);
+  color: var(--teal-on-soft);
   font-family: var(--font-mono);
-  font-size: clamp(0.68rem, 0.85vw, 0.78rem);
+  font-size: clamp(0.6rem, 0.72vw, 0.7rem);
   font-weight: 500;
   letter-spacing: 0.08em;
   line-height: 1.3;
+}
+
+/* El marco ES el nodo: frontera cerrada, interior del papel. Sobre fondo claro
+   la luminancia no separa la figura del fondo —la captura de Tribai da 1,07:1
+   contra el papel y la de Kelsen 1,01:1— y lo que separa es el borde.
+
+   ⚠️ **El hilo es `--gray-300` y no `--border`, y esto lo decidió la captura.**
+   Con `--border` (1,21:1 pintado) y sin sombra, las tres capturas oscuras
+   —Gobia, Laudos, Porkia— se sostienen solas porque la imagen tiene su propia
+   silueta, pero las dos claras flotan como rectángulos pálidos sin borde, y a
+   una reducción del 20 % desaparecen. `--gray-300` da 2,45:1: sigue siendo un
+   hilo y no una caja —no se lee como tarjeta, que es lo que la sombra sí haría—
+   y les devuelve frontera a las dos que la necesitan. */
+.marco {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
+  background: var(--surface-page);
+}
+
+/* 3:2 es la relación nativa del acta (1440 × 960): la miniatura no recorta nada
+   en apaisado. `object-fit: cover` está para el único caso en que sí recorta
+   —la ventana baja, ver el `max-height`— y `object-position: top` para que lo
+   que se pierda sea siempre el pie de la página capturada, nunca su cabecera. */
+.miniatura {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: top center;
+
+  --hueco: calc(100vh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  --hueco: calc(100dvh - var(--deck-barra-superior) - var(--deck-barra-inferior));
+  /* El tope que salva la ventana baja: a 1440×754 la miniatura pasa de 162 a
+     152 px y la lámina conserva holgura contra el riel. No muerde a 1440×900,
+     1920×1080 ni 390×844. */
+  max-height: max(4rem, min(calc(var(--hueco) * 0.24), calc(var(--hueco) - 26rem)));
+}
+
+.dominio {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* `margin-top: auto` sí trabaja aquí —a diferencia de `.pie` en la escala—
+   porque la ficha es un ítem de rejilla y se estira a la altura de la fila: hay
+   espacio libre de verdad que repartir. Es lo que deja los cinco pies alineados
+   aunque un dominio envuelva a dos líneas. */
+.pieFicha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin: auto 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.78vw, 0.75rem);
+  letter-spacing: 0.06em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
 .nombre {
   color: var(--ink);
-  font-family: var(--font-body);
-  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
+}
+
+/* El descriptor secundario, en gris: es la gramática del nodo y además es la
+   higiene probatoria que el diagnóstico dice que escondemos. «Beta cerrada»
+   dicho en el índice vale más que dicho tarde. */
+.estado {
+  color: var(--gray-400);
+}
+
+.acta {
+  margin: clamp(0.45rem, 1.2vh, 1rem) 0 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.78vw, 0.75rem);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+/* Apilada, la ficha se pone en fila: la miniatura a la izquierda y el rótulo
+   debajo del dominio. Cinco filas caben; cinco columnas de 3:2, no. Y se cae el
+   rótulo del nodo —con él, el nodo—: a 342 px de ancho, `EXPEDIENTE / ANÁLISIS`
+   al lado de una miniatura de 103 px es una línea que no cabe sin robarle sitio
+   a lo único que esta lámina afirma.
+   ⚠️ Queda declarado: en el teléfono la mitad «la misma fábrica» no la dice el
+   nodo, la dice el filete superior, que sí sigue siendo el mismo en las cinco.
+   El acta, en cambio, se queda: es la procedencia. */
+@media (max-width: 61.999rem) {
+  .ficha {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(0.6rem, 2vw, 1rem);
+  }
+
+  .nodoFila {
+    display: none;
+  }
+
+  .marco {
+    flex: 0 0 30%;
+  }
+
+  .miniatura {
+    aspect-ratio: 16 / 9;
+  }
+
+  .fichaTexto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+}
+
+/* En apaisado el envoltorio de texto desaparece de la maqueta: sus dos hijos
+   pasan a ser hijos directos de la ficha y heredan su `gap`. Así el mismo árbol
+   sirve para las dos disposiciones sin duplicar marcado. */
+@media (min-width: 62rem) {
+  .fichaTexto {
+    display: contents;
+  }
 }
 
 @keyframes entraFicha {

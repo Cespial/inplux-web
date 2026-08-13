@@ -1,0 +1,355 @@
+/* ===========================================================================
+   Lámina 3 · El trazado de la tesis
+   =========================================================================== */
+
+/* La figura es hija DIRECTA de la lámina y lleva `data-deck-llena`, así que
+   recibe la fila `minmax(0, 1fr)` entera. `place-items: center` centra la caja
+   dentro de esa fila cuando sobra alto —el caso del proyector—, y `min-height:
+   0` es lo que permite que la fila mande sobre el contenido en vez de al
+   revés. */
+.figura {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  animation: entraFigura 520ms var(--ease-out) 410ms both;
+}
+
+/* ⚠️ `aspect-ratio` TIENE que ser la relación del `viewBox` —llega en
+   `--relacion` desde el componente, calculada con las mismas dos constantes
+   que dibujan las curvas—, y no es cosmético: los dos rótulos se colocan con
+   porcentajes que SON las coordenadas del lienzo, y esa igualdad solo se
+   sostiene si la caja y el `viewBox` tienen la misma relación. Con otra
+   relación aparece letterbox —el SVG se centra dentro de su caja, porque
+   `meet` no recorta— y cada rótulo se separa del final de su curva por la
+   mitad del sobrante.
+
+   ⚠️ Y por eso aquí NO hay `max-height`. Con `width: 100%` la relación fija el
+   alto; añadir `max-height: 100%` no encoge la caja conservando la relación
+   —eso solo lo hace un elemento reemplazado—, sino que le recorta el alto y la
+   deja MÁS ANCHA que su relación, que es exactamente el letterbox de arriba.
+   El alto del lienzo está elegido contra el hueco medido bajo la cabecera en
+   las tres ventanas del arnés; ver la nota de `LIENZO` en `TrazadoTesis.tsx`. */
+.caja {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  aspect-ratio: var(--relacion);
+}
+
+.lienzo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Las cuñas: la magnitud, no el adorno ────────────────────────────────────
+   El hueco entre las dos curvas ES la distancia entre las dos maneras de
+   empezar, y cambia de signo en el cruce.
+
+   Relleno y contorno son los del catálogo, verificados en el fuente:
+   `barras()` de `estilo-s50/assets/figuras.js:111` pinta `fill-opacity="0.18"`
+   **con** `stroke` del mismo color a `stroke-width="0.8"` sobre un lienzo de
+   400 de ancho. Lo que se porta es la proporción, no el número: 0,8/400 sobre
+   1.600 son 3,2 unidades, o sea 2,6 px a 1440.
+
+   ⚠️ La opacidad es la MISMA para las dos, y eso es deliberado. Compuestas
+   sobre el papel de la lámina dan 1,26:1 la gris y 1,28:1 la teal: cuentan
+   como tinta para la medida de densidad —el umbral es 1,15:1— y no llegan ni
+   de lejos a 3:1. Un relleno así se evapora a tres metros, así que **no es él
+   quien sostiene la cuña**: la sostienen su contorno a color pleno y las dos
+   curvas que la bordean. Subir la opacidad hasta que el relleno solo aguantara
+   la sala pediría α ≈ 0,53, y eso ya es un relleno sólido, que es lo que esta
+   gramática no tiene.
+
+   `stroke-linejoin: round` porque las dos cuñas terminan en vértices muy
+   agudos —el origen y el cruce— y un `miter` los dispara en una púa. */
+.cuna {
+  fill-opacity: 0.18;
+  stroke-width: 3.2;
+  stroke-linejoin: round;
+}
+
+.cunaRequisito {
+  fill: var(--gray-400);
+  stroke: var(--gray-400);
+  animation: apareceCuna 640ms var(--ease-out) 1380ms both;
+}
+
+.cunaProblema {
+  fill: var(--teal);
+  stroke: var(--teal);
+  animation: apareceCuna 640ms var(--ease-out) 1560ms both;
+}
+
+/* El suelo. Un hilo de 1 px de pantalla pase lo que pase con la escala: no
+   tiene proporción que guardar, así que aquí `non-scaling-stroke` sí procede
+   —y no lleva `stroke-dasharray` ni `pathLength`, que es lo que convierte ese
+   atributo en la trampa registrada—.
+
+   En `--gray-300` y no en `--border`, que es lo que llevaba: es la misma
+   decisión que se tomó para el hilo del marco de las miniaturas de la lámina
+   puente. Una frontera de figura se pinta en `--gray-300` en todo el deck;
+   `--border` da 1,28:1 y a esa distancia el suelo del que salen las dos curvas
+   deja de existir justo donde las dos se tocan.
+
+   ⚠️ **Medido en el PNG final da 1,62:1, no los 2,45:1 del token**, y el
+   motivo está registrado en este proyecto: con `non-scaling-stroke` a DPR 1
+   una línea de 1 px cae centrada en coordenada fraccionaria, el motor la
+   reparte entre dos filas de píxeles y llega el promedio. Se queda en 1 px, y
+   la regla que separa este caso del de la marca del presupuesto —que sí subió
+   a 2 px por esto mismo— es cuál de los dos PORTA información: aquella era la
+   única referencia contra la que se leían seis barras y estaba obligada al 3:1
+   de WCAG 1.4.11; este suelo no tiene escala ni marcas, no se lee nada contra
+   él, y a 2 px una raya de 1.150 px de largo cruzando la lámina entera deja de
+   ser un suelo y empieza a ser un subrayado. */
+.suelo {
+  fill: none;
+  stroke: var(--gray-300);
+  stroke-width: 1;
+}
+
+/* El punto de partida, no un nodo rotulado: por eso va macizo y en el gris más
+   claro de los dos. Un nodo de esta gramática es hueco, y el único nodo de
+   esta figura es el del cruce. */
+.origen {
+  fill: var(--gray-300);
+}
+
+/* Las dos curvas se dibujan, no aparecen. El argumento de la lámina es
+   temporal —una empieza rápido y se aplana, la otra arranca lenta y la
+   adelanta—, así que verlas trazarse ES la explicación; verlas ya hechas
+   obliga a reconstruirla. Salen del mismo punto y con 180 ms de diferencia.
+
+   ⚠️ `stroke-dasharray` va a 1,02 y no a 1 con `pathLength="1"`: con trazo
+   ancho y remate redondo, una cola de longitud exacta se queda sin pintar en
+   el último subpíxel y la curva termina mocha. El 2 % de holgura no se ve.
+
+   ⚠️ Y por eso mismo estas dos curvas NO pueden llevar `vector-effect:
+   non-scaling-stroke`: con él el guion se mide en pantalla y `pathLength` en
+   espacio de usuario, así que el patrón cubre `1,02 / escala` de la curva y a
+   partir de la escala 1,02 la cola se queda sin pintar. Estuvo publicado: 85 %
+   de las dos curvas a 1920 px. La nota entera está en `TrazadoTesis.tsx`.
+
+   El grosor es 4 unidades y no 2,5 porque el lienzo pasó de 560 a 1.600 de
+   ancho: a 1440 la escala es 0,81 —contra 1,04 del lienzo antiguo—, así que
+   4 × 0,81 = 3,2 px, del mismo orden que los 2,6 px de antes. */
+.trazo {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1.02;
+  animation: dibujaTrazo 900ms var(--ease-out) both;
+}
+
+/* ⚠️ La curva del requisito va en `--gray-400` y no en `--gray-300`, que es lo
+   que llevaba, y son dos arreglos en un solo cambio:
+
+     · `--gray-300` da **2,45:1** contra el papel. Es la mitad del argumento de
+       la lámina —sin ella no hay cruce— y estaba por debajo del 3:1 que este
+       deck le pide a todo trazo que porte información. `--gray-400` da
+       **4,84:1**, del mismo orden que el teal de la otra curva (4,70:1): las
+       dos son iguales de fuertes porque las dos son iguales de importantes, y
+       lo que las distingue es la FORMA, que es lo que la lámina afirma;
+     · la gramática de s50 pide etiqueta DEL COLOR DEL NODO. El rótulo ya iba
+       en `--gray-400` —obligado, porque `--gray-300` como texto reprueba AA— y
+       la curva en `--gray-300`: una desviación que había que declarar. Con la
+       curva en `--gray-400` la desviación desaparece en vez de justificarse. */
+.trazoRequisito {
+  stroke: var(--gray-400);
+  stroke-width: 4;
+  animation-delay: 480ms;
+}
+
+.trazoProblema {
+  stroke: var(--teal);
+  stroke-width: 4;
+  animation-delay: 660ms;
+}
+
+/* El cruce es el argumento, así que se marca: nodo HUECO —relleno del papel de
+   la lámina, contorno teal—. Llega cuando las dos curvas ya están trazadas y
+   las dos cuñas puestas: 1.560 ms es el instante en que termina la segunda
+   curva, y este aro entra después. La versión anterior entraba a 1.320 ms, o
+   sea 240 ms ANTES de que se terminara de dibujar la curva cuyo cruce marca,
+   contra lo que decía su propio comentario.
+
+   Sin `non-scaling-stroke`: el aro guarda una proporción con su diámetro
+   —2,4/34 = 7,1 %— y esa proporción tiene que ser la MISMA en las tres
+   pantallas. A este diámetro el 7,1 % cae dentro del 6–7 % que la gramática de
+   s50 pide para un nodo, cosa que en el lienzo antiguo (r = 7) era
+   geométricamente imposible: allí el aro iba al 14,3 %, con su desviación
+   declarada. El lienzo ancho la borra.
+
+   ⚠️ Este aro y el que marca cada tiempo en la lámina del método son el mismo
+   OBJETO de la gramática —hueco, teal, aro de ~7 % del diámetro— pero NO
+   tienen el mismo diámetro en pantalla, y no pueden tenerlo: este escala con
+   el lienzo y el de la otra lámina está acotado por un `clamp` en `rem`.
+   Igualarlos exigiría una constante compartida entre un SVG que escala y una
+   caja de CSS que no. Lo que sí se conserva es la gramática, que es lo que se
+   lee. Queda dicho para que nadie lo «arregle» creyendo que es un descuido. */
+.cruce {
+  fill: var(--surface-page);
+  stroke: var(--teal);
+  stroke-width: 2.4;
+  animation: apareceSuave 320ms var(--ease-out) 1740ms both;
+}
+
+/* ── Los rótulos, en HTML ────────────────────────────────────────────────────
+   ⚠️ No son `<text>` de SVG, y esa es la razón de que existan estas reglas.
+   Dos cosas que se arreglan de golpe:
+     · el límite declarado nº 5 del arnés —un `<text>` se hit-testea por su
+       caja entera— deja de aplicar, porque ya no hay ninguno;
+     · el tamaño vuelve a `rem`, así que obedece la preferencia de fuente del
+       lector. Era el pendiente que `.curvaEtiqueta` dejó medido y por escrito,
+       junto con el `calc(19.7px - 0.43 * min(1vw, 16px))` que compensaba una
+       escala que no es monótona con el ancho de la ventana. Ese `calc` ya no
+       existe.
+   `left` / `top` llegan en línea desde el componente, calculados con las
+   mismas constantes que dibujan las curvas. `translateY(-50%)` centra el
+   rótulo en la altura del final de su curva, que es lo que hacía
+   `dominant-baseline="middle"`. */
+.rotulo {
+  position: absolute;
+  margin: 0;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 0.95vw, 0.95rem);
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  animation: apareceSuave 380ms var(--ease-out) both;
+}
+
+.rotuloRequisito {
+  animation-delay: 1900ms;
+}
+
+/* La etiqueta de la curva teal se pinta en teal, y por eso va en
+   `--teal-on-soft` (#0b746c) y no en `--teal` (#0d7d74): sobre `--off-white`
+   el primero da 5,30:1 y el de marca 4,70:1, que pasa AA por dos centésimas y
+   no deja margen para ningún cambio de superficie. El trazo de la curva sí es
+   `--teal`, porque un trazo no es texto y no lo mide ese umbral. */
+.rotuloProblema {
+  color: var(--teal-on-soft);
+  animation-delay: 2020ms;
+}
+
+/* ── Bajo 62 rem ─────────────────────────────────────────────────────────────
+   A 390 px el hueco a la derecha de las curvas son 370 unidades de lienzo, o
+   sea 79 px, y ninguno de los dos rótulos entra. Se sueltan del valor absoluto
+   y bajan a una fila debajo de la figura, con el mismo color y el mismo orden
+   —gris a la izquierda, teal a la derecha—, que es el orden en que acaban las
+   curvas. Nada se recorta y no hay una segunda copia del texto: es el mismo
+   nodo, con `position: static`.
+
+   ⚠️ Las DOS columnas van declaradas, y no es de adorno. Con
+   `grid-template-rows` a secas y los dos rótulos pedidos en la fila 2, la
+   auto-colocación mete el primero en la columna 1 y **le abre al segundo una
+   columna 2 implícita**; el `.lienzo`, que se coloca después y sin posición
+   definida, cae entonces en la columna 1 sola y el SVG se queda con el ancho
+   de un rótulo de mono en vez de con el de la caja. Con las dos columnas
+   escritas y `grid-column` en los tres hijos no hay pista implícita que
+   crear. */
+@media (max-width: 61.999rem) {
+  .caja {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 0.75rem;
+    aspect-ratio: auto;
+  }
+
+  .lienzo {
+    grid-row: 1;
+    grid-column: 1 / -1;
+    aspect-ratio: var(--relacion);
+    height: auto;
+  }
+
+  .rotulo {
+    position: static;
+    transform: none;
+  }
+
+  .rotuloRequisito {
+    grid-row: 2;
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .rotuloProblema {
+    grid-row: 2;
+    grid-column: 2;
+    justify-self: end;
+  }
+}
+
+@keyframes dibujaTrazo {
+  from {
+    stroke-dashoffset: 1.02;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* La cuña no se desliza ni escala: aparece. Escalarla haría que el hueco entre
+   las curvas se leyera como si estuviera creciendo, y no crece. Y aparece
+   cuando su propio borde ya está trazado —1.380 ms la gris, 1.560 ms la
+   teal—, que es cuando terminan las dos curvas que la bordean. La versión
+   anterior las traía a 900 y 1.140 ms: la cuña gris empezaba a pintarse sobre
+   una curva dibujada al 47 % y la teal sobre una al 27 %, o sea masa antes que
+   contorno, que es justo lo que su comentario decía evitar. */
+@keyframes apareceCuna {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes apareceSuave {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes entraFigura {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Con `both` de relleno, duración y retardo a cero dejan cada elemento en su
+   estado final: las dos curvas trazadas enteras, las dos cuñas puestas, el
+   nodo del cruce dibujado y los dos rótulos visibles. El bloque global de
+   `globals.css` NO toca el retardo, y aquí llegan a 2,02 s: sin esta regla,
+   quien pide menos movimiento vería la lámina a medio pintar dos segundos y
+   sin un solo error de consola.
+
+   ⚠️ `.rotulo` conserva su `transform` porque el suyo no es de entrada: es el
+   `translateY(-50%)` que lo centra en el final de su curva. Aquí solo se anula
+   la animación, que solo toca la opacidad. */
+@media (prefers-reduced-motion: reduce) {
+  .figura,
+  .cuna,
+  .trazo,
+  .cruce,
+  .rotulo {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
