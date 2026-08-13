@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
 import type { DeckSlide } from "@/content/deck";
+import type { ReglaBloqueada } from "@/lib/banned-reasons.server";
 import { CapacidadesSlide } from "./slides/CapacidadesSlide";
 import { CierreSlide } from "./slides/CierreSlide";
-import { ComoEmpezamosSlide } from "./slides/ComoEmpezamosSlide";
 import { EspejoSlide } from "./slides/EspejoSlide";
 import { EvidenciaSlide } from "./slides/EvidenciaSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
@@ -30,16 +30,16 @@ export function SlideRenderer({
   // la serie completa —el puente la enseña y las capas reparten sus dominios— y
   // las dos leían `workProfiles` global, así que en un deck recortado enseñaban
   // productos que ese deck no presenta. Bajan por aquí, desde quien sí sabe qué
-  // deck se está presentando, por el mismo camino que `motivos`.
+  // deck se está presentando, por el mismo camino que `reglas`.
   perfiles,
-  // Los motivos bajan desde la ruta —el único sitio donde se puede leer del
-  // disco— y los consume la lámina de evidencia, que no puede escribirlos
-  // como literales sin romper el build en su propia lista.
-  motivos,
+  // Las reglas bajan desde la ruta —el único sitio donde se puede leer del
+  // disco— y las consume la lámina de evidencia, que no puede escribir sus
+  // frases como literales sin romper el build en su propia lista.
+  reglas,
 }: {
   slide: DeckSlide;
   perfiles: readonly Extract<DeckSlide, { kind: "producto" }>["perfil"][];
-  motivos: readonly string[];
+  reglas: readonly ReglaBloqueada[];
 }): ReactElement {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
   // lámina viva a la vez, así que el documento tiene siempre exactamente un
@@ -73,13 +73,11 @@ export function SlideRenderer({
     // en el código fuente. Se lee del verificador en build, arriba del límite
     // de cliente, y baja hasta aquí.
     case "evidencia":
-      return <EvidenciaSlide id={slide.id} motivos={motivos} />;
+      return <EvidenciaSlide id={slide.id} reglas={reglas} />;
     case "puente":
       return <PuenteSlide id={slide.id} perfiles={perfiles} />;
     case "capacidades":
       return <CapacidadesSlide id={slide.id} perfiles={perfiles} />;
-    case "como-empezamos":
-      return <ComoEmpezamosSlide id={slide.id} />;
     case "cierre":
       return <CierreSlide id={slide.id} />;
     // La única que recibe el perfil entero: la ficha se construye con él y no

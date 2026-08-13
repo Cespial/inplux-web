@@ -13,6 +13,12 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "design-system/**",
+    // ⚠️ El árbol de trabajo de las herramientas de agente, que puede contener
+    // una COPIA entera del repositorio (`.claude/worktrees/…`). Sin esta línea,
+    // `npm run lint` entra ahí, vuelve a recorrer el proyecto —esta vez con el
+    // `design-system/` que la línea de arriba solo ignora en la raíz— y falla
+    // por archivos que no son fuente de este sitio.
+    ".claude/**",
   ]),
 ]);
 

@@ -2,7 +2,7 @@ import { getImageProps } from "next/image";
 import ReactDOM from "react-dom";
 import { perfilesDe, type DeckSlide } from "@/content/deck";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
-import { leerMotivos } from "@/lib/banned-reasons.server";
+import { leerReglas } from "@/lib/banned-reasons.server";
 import { CAPTURA_SIZES } from "./CapturaEnmarcada";
 import { PresentationDeck } from "./PresentationDeck.client";
 
@@ -85,7 +85,7 @@ export async function PaginaDeDeck({
   // porque uno de ellos coincide con su propio patrón bloqueado y escribirlos
   // bajo `src/` rompe el build en su propia lista. Ver
   // `src/lib/banned-reasons.server.ts`.
-  const motivos = await leerMotivos();
+  const reglas = await leerReglas();
 
   // `fetchPriority: "low"`: se quieren en la caché antes de la serie de
   // producto, no antes del titular de la portada. Con prioridad normal, las
@@ -110,7 +110,7 @@ export async function PaginaDeDeck({
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <PresentationDeck slides={slides} hrefIndice={hrefIndice} motivos={motivos} />
+      <PresentationDeck slides={slides} hrefIndice={hrefIndice} reglas={reglas} />
     </main>
   );
 }

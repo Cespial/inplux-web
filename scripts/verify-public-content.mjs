@@ -15,20 +15,100 @@ const textExtensions = new Set([
   ".webmanifest",
 ]);
 
+/**
+ * La lista de lenguaje bloqueado. Cada regla trae tres cosas:
+ *
+ *   `motivo`   — el nombre interno de la regla. Es lo que sale por consola
+ *                cuando algo la rompe, y está escrito para quien mantiene el
+ *                repositorio.
+ *   `patron`   — lo que se busca en `src/` y en `public/`.
+ *   `ejemplo`  — **la frase, tal como la escribiría un sitio del sector.**
+ *
+ * ⚠️ **El `ejemplo` vive AQUÍ, y ese es el único sitio del proyecto donde
+ * puede vivir.** `verifyPublicLanguage()` escanea `src/` y `public/`
+ * —comentarios incluidos, porque escanea el texto del archivo— y no escanea
+ * `scripts/`. Una de estas frases escrita como literal bajo `src/` rompe
+ * `npm run build` en la línea que la escribe. La lámina 6 del deck las enseña
+ * leyéndolas de aquí en tiempo de build (`src/lib/banned-reasons.server.ts`),
+ * que es la única forma de enseñarlas sin decirlas.
+ *
+ * ⚠️ **El ejemplo no es una glosa: es una frase que ESTA regla rechaza**, y lo
+ * comprueba `verifyBannedExamples()` unas líneas más abajo. Un ejemplo que
+ * dejara de casar con su patrón convertiría la lámina en una promesa sin
+ * respaldo, y el build lo impide.
+ *
+ * ⚠️ Un `ejemplo` en `null` significa «esta regla no se puede citar sin
+ * romperla». Hoy solo lo está el logo de un tercero: cualquier frase que case
+ * con ese patrón nombra a una organización, y publicarla en un deck comercial
+ * es exactamente la relación sin permiso que la regla prohíbe. La lámina lo
+ * dice con esas palabras en vez de rellenar el hueco con un nombre.
+ */
 const bannedPublicLanguage = [
-  ["cifra de trayectoria sin evidencia", /(?:\+\s*)?(?:25|31)\s+a[ñn]os/giu],
-  ["cifra de cobertura sin evidencia", /(?:\+\s*)?50\s+municipios/giu],
-  ["cifra de proyectos sin evidencia", /(?:\+\s*)?100\s+proyectos/giu],
-  ["cifra jurídica sin evidencia", /44\s+estatutos/giu],
-  ["promesa genérica de velocidad", /\ben\s+(?:d[ií]as|semanas)\b/giu],
-  ["posicionamiento tributario anterior", /hub\s+de\s+inteligencia\s+tributaria/giu],
-  ["jerga agéntica", /\b(?:agentic|ag[eé]ntic[oa]s?|multiagente)\b/giu],
-  ["afirmación autónoma no aprobada", /agentes?\s+de\s+IA|se\s+mejoran\s+solos/giu],
-  ["cobertura geográfica no aprobada", /alcance\s+nacional|areaServed/giu],
-  ["logo o relación sin permiso", /Parque\s+Arv[ií]|Think\s*IT|Fourier|Observatorio\s+de\s+Datos/giu],
-  ["prueba social anterior", /conf[ií]an\s+en\s+nosotros/giu],
-  ["impacto no demostrado", /resultados?\s+medibles?|impacto\s+medible/giu],
-  ["posicionamiento profesional anterior", /tributaristas\s+que\s+construyen\s+tecnolog[ií]a/giu],
+  {
+    motivo: "cifra de trayectoria sin evidencia",
+    patron: /(?:\+\s*)?(?:25|31)\s+a[ñn]os/giu,
+    ejemplo: "+25 años de experiencia",
+  },
+  {
+    motivo: "cifra de cobertura sin evidencia",
+    patron: /(?:\+\s*)?50\s+municipios/giu,
+    ejemplo: "más de 50 municipios",
+  },
+  {
+    motivo: "cifra de proyectos sin evidencia",
+    patron: /(?:\+\s*)?100\s+proyectos/giu,
+    ejemplo: "+100 proyectos entregados",
+  },
+  {
+    motivo: "cifra jurídica sin evidencia",
+    patron: /44\s+estatutos/giu,
+    ejemplo: "44 estatutos analizados",
+  },
+  {
+    motivo: "promesa genérica de velocidad",
+    patron: /\ben\s+(?:d[ií]as|semanas)\b/giu,
+    ejemplo: "tu plataforma, en semanas",
+  },
+  {
+    motivo: "posicionamiento tributario anterior",
+    patron: /hub\s+de\s+inteligencia\s+tributaria/giu,
+    ejemplo: "el hub de inteligencia tributaria",
+  },
+  {
+    motivo: "jerga agéntica",
+    patron: /\b(?:agentic|ag[eé]ntic[oa]s?|multiagente)\b/giu,
+    ejemplo: "flujos agénticos de punta a punta",
+  },
+  {
+    motivo: "afirmación autónoma no aprobada",
+    patron: /agentes?\s+de\s+IA|se\s+mejoran\s+solos/giu,
+    ejemplo: "agentes de IA que se mejoran solos",
+  },
+  {
+    motivo: "cobertura geográfica no aprobada",
+    patron: /alcance\s+nacional|areaServed/giu,
+    ejemplo: "con alcance nacional",
+  },
+  {
+    motivo: "logo o relación sin permiso",
+    patron: /Parque\s+Arv[ií]|Think\s*IT|Fourier|Observatorio\s+de\s+Datos/giu,
+    ejemplo: null,
+  },
+  {
+    motivo: "prueba social anterior",
+    patron: /conf[ií]an\s+en\s+nosotros/giu,
+    ejemplo: "empresas que confían en nosotros",
+  },
+  {
+    motivo: "impacto no demostrado",
+    patron: /resultados?\s+medibles?|impacto\s+medible/giu,
+    ejemplo: "resultados medibles desde el día uno",
+  },
+  {
+    motivo: "posicionamiento profesional anterior",
+    patron: /tributaristas\s+que\s+construyen\s+tecnolog[ií]a/giu,
+    ejemplo: "tributaristas que construyen tecnología",
+  },
 ];
 
 const approvedLogoAltAttributes = [
@@ -120,14 +200,49 @@ async function verifyPublicLanguage() {
             ),
           )
         : source;
-    for (const [reason, pattern] of bannedPublicLanguage) {
-      pattern.lastIndex = 0;
-      for (const match of sourceForLanguageCheck.matchAll(pattern)) {
+    for (const { motivo, patron } of bannedPublicLanguage) {
+      patron.lastIndex = 0;
+      for (const match of sourceForLanguageCheck.matchAll(patron)) {
         errors.push(
-          `${file}:${lineNumberFor(sourceForLanguageCheck, match.index)} contiene ${reason}: “${match[0]}”`,
+          `${file}:${lineNumberFor(sourceForLanguageCheck, match.index)} contiene ${motivo}: “${match[0]}”`,
         );
       }
     }
+  }
+}
+
+/**
+ * Los ejemplos se comprueban contra su propia regla.
+ *
+ * La lámina 6 del deck enseña estas frases y afirma que escribirlas rompe el
+ * build. **Esta puerta es lo que hace verdadera esa afirmación**: si alguien
+ * retoca un ejemplo hasta que su patrón deje de cazarlo —una tilde, un plural,
+ * una palabra de más—, la lámina seguiría enseñándolo y ya no sería cierto que
+ * el sitio no compila con él escrito. Aquí el build se detiene antes.
+ *
+ * No hace falta escanear ningún archivo: los patrones están en memoria y las
+ * frases también.
+ */
+function verifyBannedExamples() {
+  const vistos = new Map();
+
+  for (const { motivo, patron, ejemplo } of bannedPublicLanguage) {
+    if (ejemplo === null) continue;
+
+    patron.lastIndex = 0;
+    if (!patron.test(ejemplo)) {
+      errors.push(
+        `El ejemplo de “${motivo}” («${ejemplo}») ya no lo caza su propio patrón; la lámina 6 lo publica como frase bloqueada`,
+      );
+    }
+
+    // Dos reglas con la misma frase dejarían la lámina repitiendo un renglón y,
+    // peor, harían pasar por dos prohibiciones lo que es una.
+    const anterior = vistos.get(ejemplo);
+    if (anterior !== undefined) {
+      errors.push(`Los motivos “${anterior}” y “${motivo}” declaran el mismo ejemplo: «${ejemplo}»`);
+    }
+    vistos.set(ejemplo, motivo);
   }
 }
 
@@ -524,6 +639,7 @@ async function verifyLegacyFragments() {
 }
 
 await verifyPublicLanguage();
+verifyBannedExamples();
 await verifySocialCards();
 await verifyPortfolio();
 await verifySourceFreshness();
@@ -540,6 +656,6 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    "Control editorial aprobado: copy, portafolio, contacto, migración, logos, OG y seguridad.",
+    "Control editorial aprobado: copy, ejemplos, portafolio, contacto, migración, logos, OG y seguridad.",
   );
 }

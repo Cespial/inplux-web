@@ -81,11 +81,16 @@ const workProfiles = [
  * descripciones mintiendo **con `check:output` en verde**, porque el
  * verificador pedía exactamente la cadena anterior. Ahora el número de
  * productos sale del espejo de `work.ts` que este archivo ya mantiene, y el 7
- * y el 3 son la FORMA del modelo (`construirDeck` en `src/content/deck.ts`),
+ * y el 2 son la FORMA del modelo (`construirDeck` en `src/content/deck.ts`),
  * no un conteo de productos: si alguien añade una lámina que no es de
  * producto, este número y el publicado se separan y el verificador lo dice.
+ *
+ * El cierre bajó de 3 a 2 al retirar `como-empezamos`. Es exactamente el caso
+ * que este comentario describe, y funcionó: con el `3` puesto, las dos
+ * descripciones publicadas —que sí derivan su cifra del modelo— empezaron a
+ * decir 14 mientras el verificador seguía exigiendo 15.
  */
-const deckSlideCount = 7 + workProfiles.length + 3;
+const deckSlideCount = 7 + workProfiles.length + 2;
 
 /**
  * El deck dirigido a legaltech: la misma apertura y el mismo cierre, la serie
