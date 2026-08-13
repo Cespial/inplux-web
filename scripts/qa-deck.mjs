@@ -2,7 +2,8 @@
  * Arnés de QA del deck: mide cajas, no capturas.
  *
  * Una captura hay que mirarla; una caja se compara. Este arnés recorre las
- * quince láminas en tres tamaños y de cada una comprueba seis cosas:
+ * láminas del modelo —las lee de `deck.ts`, no de una lista de aquí— en tres
+ * tamaños, y de cada una comprueba seis cosas:
  *
  *   · que su caja quepa en el hueco que dejan las dos barras del chrome;
  *   · que no se salga de lado —el riel la recorta y a ojo no se ve—;

@@ -374,7 +374,7 @@ desarrollo»?) o que los actos deben ser otros.
 | # | id | Lámina |
 |---|---|---|
 | 16 | `capacidades` | Lo que comparten los cuatro: la fábrica por dentro |
-| 17 | `como-empezamos` | Los cuatro tiempos aplicados a *tu* reto |
+| ~~17~~ | ~~`como-empezamos`~~ | **Retirada.** Publicaba los cuatro tiempos de `method` palabra por palabra, los mismos que la lámina 4: dos láminas con el mismo texto en la misma presentación. Lo que añadía —«con *tu* reto»— lo dice el titular de la 4. No volver a proponerla. |
 | 18 | `cierre` | Contacto — `gerencia@inplux.co`, Medellín |
 
 ### 7.1 La lámina 2 necesita una cifra con fuente

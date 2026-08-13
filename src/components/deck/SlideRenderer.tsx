@@ -2,7 +2,6 @@ import type { ReactElement } from "react";
 import type { DeckSlide } from "@/content/deck";
 import { CapacidadesSlide } from "./slides/CapacidadesSlide";
 import { CierreSlide } from "./slides/CierreSlide";
-import { ComoEmpezamosSlide } from "./slides/ComoEmpezamosSlide";
 import { EspejoSlide } from "./slides/EspejoSlide";
 import { EvidenciaSlide } from "./slides/EvidenciaSlide";
 import { MetodoSlide } from "./slides/MetodoSlide";
@@ -71,8 +70,6 @@ export function SlideRenderer({
       return <PuenteSlide id={slide.id} />;
     case "capacidades":
       return <CapacidadesSlide id={slide.id} />;
-    case "como-empezamos":
-      return <ComoEmpezamosSlide id={slide.id} />;
     case "cierre":
       return <CierreSlide id={slide.id} />;
     // La única que recibe el perfil entero: la ficha se construye con él y no

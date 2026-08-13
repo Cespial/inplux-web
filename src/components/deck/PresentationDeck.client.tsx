@@ -45,8 +45,8 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   const inicioTactil = useRef<{ x: number; y: number } | null>(null);
   const slotActivo = useRef<HTMLDivElement | null>(null);
 
-  // Dos slots, no una lista de quince. Montar las quince haría que todas las
-  // animaciones de entrada terminaran antes de que nadie las viera.
+  // Dos slots, no una lista con el deck entero. Montarlas todas haría que
+  // todas las animaciones de entrada terminaran antes de que nadie las viera.
   const [montada, setMontada] = useState<Montada>({
     slide: nav.slide,
     secuencia: nav.secuencia,
@@ -77,7 +77,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   // ⚠️ **Salvo si quien pidió el cambio está en el riel.** Medido con teclado
   // real: foco en «Lámina siguiente» → Enter → el foco acababa en el slot y
   // volver al mismo botón costaba **18 tabulaciones** (los dos botones de la
-  // barra superior y los quince segmentos del riel). Quien conduce el deck
+  // barra superior y un segmento de riel por lámina). Quien conduce el deck
   // desde el riel es justamente quien no usa las flechas —conmutador, teclado
   // en pantalla, navegación por tabulación— y no podía repetir la acción sin
   // recorrer el riel entero.

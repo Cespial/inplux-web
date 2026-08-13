@@ -13,7 +13,6 @@ export type DeckSlideKind =
   | "puente"
   | "producto"
   | "capacidades"
-  | "como-empezamos"
   | "cierre";
 
 type WorkProfileEntry = (typeof workProfiles)[number];
@@ -43,9 +42,15 @@ const APERTURA = [
   { id: "puente", kind: "puente", titulo: "Dominios que no se parecen, la misma fábrica" },
 ] as const;
 
+// ⚠️ Aquí vivía `como-empezamos` —«¿Y con lo mío?»—, y se quitó por lo que
+// decía, no por lo que ocupaba: publicaba los cuatro tiempos de `method`
+// PALABRA POR PALABRA, los mismos que la lámina 4. Dos láminas con el mismo
+// texto en la misma presentación es algo que un cliente ve en la sala, y lo
+// que la segunda añadía —«con tu reto»— lo dice el titular de la de método sin
+// gastar una lámina. El presupuesto que liberó se lo lleva la figura del
+// método, que es donde ese argumento se demuestra en vez de repetirse.
 const CIERRE = [
   { id: "capacidades", kind: "capacidades", titulo: "La fábrica por dentro" },
-  { id: "como-empezamos", kind: "como-empezamos", titulo: "Los cuatro tiempos, con tu reto" },
   { id: "cierre", kind: "cierre", titulo: "Cuéntanos el problema" },
 ] as const;
 
@@ -66,9 +71,9 @@ const CIERRE = [
  * añadiera a una sola de ellas.
  *
  * ⚠️ Un slug que no exista es un error, no un perfil que se salta en silencio.
- * Filtrar callando deja pasar una errata como un deck sin productos: quince
- * láminas se quedan en diez, la numeración sigue sin huecos, la prueba pasa y
- * nadie se entera hasta la sala.
+ * Filtrar callando deja pasar una errata como un deck sin productos: el deck
+ * entero se queda en su apertura y su cierre, la numeración sigue sin huecos,
+ * la prueba pasa y nadie se entera hasta la sala.
  */
 export function construirDeck(soloPerfiles?: readonly WorkSlug[]): DeckSlide[] {
   const perfiles =

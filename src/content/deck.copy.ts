@@ -153,10 +153,6 @@ export const DECK_COPY = {
       { nombre: "Trazabilidad", dominios: false },
     ],
   },
-  comoEmpezamos: {
-    pregunta: "¿Y con lo mío?",
-    respuesta: "Los mismos cuatro tiempos, aplicados a tu reto.",
-  },
   cierre: {
     respuesta: "Cuéntanos el problema.",
     correo: "gerencia@inplux.co",
