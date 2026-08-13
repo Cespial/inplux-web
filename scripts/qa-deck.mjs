@@ -67,6 +67,20 @@ const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
 const SALIDA = "qa-out";
 
 const VPS = [
+  /**
+   * ⚠️ **1440 × 754 antes que 1440 × 900, y no es una ventana más: es LA
+   * ventana.** 900 es la altura de la pantalla; 754 es lo que queda dentro de
+   * un portátil de 1440 × 900 con la barra del navegador y el dock puestos, y
+   * es la ventana con la que se mide la densidad del deck
+   * (`comparacion-tensor.md` §0). La diferencia son 146 px de alto, que es más
+   * de lo que ocupa la cabecera de cualquier lámina.
+   *
+   * Ya costó una lámina: la figura de la tesis cabía a 900 y se salía 59 px por
+   * debajo del riel a 754, así que la corrida del arnés salía verde con la
+   * lámina rota en la sala. Un arnés que solo mide la ventana generosa avala lo
+   * que el proyector no.
+   */
+  { n: "portatil", width: 1440, height: 754 },
   { n: "escritorio", width: 1440, height: 900 },
   { n: "proyector", width: 1920, height: 1080 },
   { n: "movil", width: 390, height: 844 },
