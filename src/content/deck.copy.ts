@@ -112,6 +112,24 @@ export const DECK_COPY = {
     respuesta: "Trece cosas que este sitio no puede decir.",
     cuerpo: "No es una guía de estilo. Es una prueba automática.",
     remate: "Si alguien las escribe, el sitio no compila.",
+    figura: {
+      /**
+       * El pie del muro, y no es una disculpa por un hueco: es la regla más
+       * dura de las trece, dicha por lo que le pasa.
+       *
+       * Las doce frases del muro se leen del verificador. La decimotercera no
+       * se puede leer igual porque su patrón solo caza NOMBRES de terceros:
+       * enseñar cualquiera de ellos en un deck comercial es exactamente la
+       * relación sin permiso que la regla prohíbe. Así que el muro enseña doce
+       * y esta línea dice por qué no son trece. El titular sigue contando
+       * reglas —trece—, no renglones.
+       *
+       * ⚠️ En singular a propósito: `verify-deck-reasons.test.mjs` exige que
+       * haya exactamente una regla sin ejemplo publicable, para que esta frase
+       * no empiece a mentir el día que aparezca una segunda.
+       */
+      sinCita: "La que falta nombra a un cliente. Enseñarla sería romperla.",
+    },
   },
   puente: {
     pregunta: "¿Ustedes son de un sector?",
@@ -152,10 +170,6 @@ export const DECK_COPY = {
       { nombre: "Interfaz de trabajo", dominios: false },
       { nombre: "Trazabilidad", dominios: false },
     ],
-  },
-  comoEmpezamos: {
-    pregunta: "¿Y con lo mío?",
-    respuesta: "Los mismos cuatro tiempos, aplicados a tu reto.",
   },
   cierre: {
     respuesta: "Cuéntanos el problema.",

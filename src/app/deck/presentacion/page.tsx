@@ -6,7 +6,7 @@ import { PresentationDeck } from "@/components/deck/PresentationDeck.client";
 import { TOTAL_SLIDES } from "@/content/deck";
 import { workProfiles } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
-import { leerMotivos } from "@/lib/banned-reasons.server";
+import { leerReglas } from "@/lib/banned-reasons.server";
 
 // ⚠️ **El número de láminas se deriva, no se escribe.** Decía «quince láminas»
 // y `TOTAL_SLIDES` es `SLIDES.length` sobre `workProfiles`: un producto nuevo
@@ -60,12 +60,13 @@ const precargas = workProfiles.map((perfil) => {
 });
 
 // La ruta es un componente de servidor: aquí, y solo aquí, se puede leer del
-// disco. Los motivos de la lámina 6 salen de `scripts/verify-public-content.mjs`
-// en tiempo de build y bajan como prop, porque uno de ellos coincide con su
-// propio patrón bloqueado y escribirlos bajo `src/` rompe el build en su propia
-// lista. Ver `src/lib/banned-reasons.server.ts`.
+// disco. Las reglas de la lámina 6 —el nombre de cada una y la frase que caza—
+// salen de `scripts/verify-public-content.mjs` en tiempo de build y bajan como
+// prop, porque cada una de esas frases coincide con su propio patrón bloqueado
+// y escribirlas bajo `src/` rompe el build en su propia lista. Ver
+// `src/lib/banned-reasons.server.ts`.
 export default async function PresentacionPage() {
-  const motivos = await leerMotivos();
+  const reglas = await leerReglas();
 
   for (const precarga of precargas) {
     ReactDOM.preload(precarga.src, {
@@ -78,7 +79,7 @@ export default async function PresentacionPage() {
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <PresentationDeck motivos={motivos} />
+      <PresentationDeck reglas={reglas} />
     </main>
   );
 }

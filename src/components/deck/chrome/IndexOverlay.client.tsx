@@ -10,7 +10,7 @@ import { SLIDES, TOTAL_SLIDES } from "@/content/deck";
 import styles from "./chrome.module.css";
 
 /**
- * El índice de las quince láminas. `<dialog>` nativo con `showModal()`, el
+ * El índice de las láminas del modelo. `<dialog>` nativo con `showModal()`, el
  * mismo patrón de `src/components/site/ContactDialog.tsx`.
  *
  * ⚠️ Se monta solo cuando se pide, no siempre. `verify-build-output.mjs` exige

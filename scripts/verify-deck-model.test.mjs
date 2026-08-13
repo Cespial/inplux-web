@@ -79,10 +79,29 @@ test("cada perfil de work.ts tiene su lámina de producto", () => {
   );
 });
 
-test("el deck tiene 15 láminas numeradas de 1 a 15 sin huecos", () => {
+// El conteo va escrito a mano A PROPÓSITO, y es la única cifra del archivo que
+// lo está: es la red contra una lámina que entra o sale sin que nadie lo
+// decida. Bajó de 15 a 14 al retirar `como-empezamos`, que publicaba los
+// cuatro tiempos de `method` palabra por palabra —los mismos que la lámina del
+// método— y por eso se quitó. Si esta cifra vuelve a moverse, que sea porque
+// alguien la movió aquí a la vez.
+test("el deck tiene 14 láminas numeradas de 1 a 14 sin huecos", () => {
   const deck = loadDeck();
-  assert.equal(deck.total, 15);
-  assert.deepEqual(deck.numbers, Array.from({ length: 15 }, (_, i) => i + 1));
+  assert.equal(deck.total, 14);
+  assert.deepEqual(deck.numbers, Array.from({ length: 14 }, (_, i) => i + 1));
+});
+
+test("`como-empezamos` está fuera del modelo, no escondida", () => {
+  const deck = loadDeck();
+  assert.ok(
+    !deck.ids.includes("como-empezamos"),
+    "`como-empezamos` volvió al modelo: repetía palabra por palabra los cuatro tiempos de la lámina del método",
+  );
+  assert.ok(!deck.kinds.includes("como-empezamos"), "quedó un `kind` de `como-empezamos`");
+  // Y el cierre sigue siendo el cierre: la lámina que se fue estaba EN MEDIO,
+  // así que lo que hay que comprobar es que `capacidades` desemboca en
+  // `cierre` y no que el deck termine en algo.
+  assert.deepEqual(deck.ids.slice(-2), ["capacidades", "cierre"]);
 });
 
 test("ningún id se repite", () => {
@@ -167,7 +186,6 @@ function leerConteos() {
       process.stdout.write(JSON.stringify({
         tiempos: method.length,
         metodoRespuesta: DECK_COPY.metodo.respuesta,
-        comoEmpezamosRespuesta: DECK_COPY.comoEmpezamos.respuesta,
         fuente: DECK_SOURCES[0],
       }));
     `],
@@ -177,21 +195,23 @@ function leerConteos() {
   return JSON.parse(result.stdout);
 }
 
-test("si `method` deja de tener cuatro tiempos, los dos titulares que lo dicen caen", () => {
-  const { tiempos, metodoRespuesta, comoEmpezamosRespuesta } = leerConteos();
+test("si `method` deja de tener cuatro tiempos, el titular que lo dice cae", () => {
+  const { tiempos, metodoRespuesta } = leerConteos();
 
   // `method` vive en `home.ts` y lo comparte la portada del sitio: puede crecer
-  // por una razón que no tiene nada que ver con el deck, y estos dos titulares
-  // —y los dos títulos del riel que los espejan— se quedarían mintiendo con
-  // `npm run check` en verde.
+  // por una razón que no tiene nada que ver con el deck, y este titular —y el
+  // título del riel que lo espeja— se quedaría mintiendo con `npm run check`
+  // en verde.
+  //
+  // Era una pareja: el otro titular vivía en `como-empezamos`, la lámina que
+  // repetía estos mismos cuatro tiempos y que ya no existe. La regla no
+  // cambia; lo que queda es un solo sitio donde el conteo está escrito.
   assert.equal(
     tiempos,
     4,
-    "cambió el número de tiempos de `method`: actualiza los titulares de las láminas del método y de «¿y con lo mío?», y sus títulos en `deck.ts`",
+    "cambió el número de tiempos de `method`: actualiza el titular de la lámina del método y su título en `deck.ts`",
   );
-  for (const titular of [metodoRespuesta, comoEmpezamosRespuesta]) {
-    assert.match(titular, /uatro/, `«${titular}» ya no dice cuatro`);
-  }
+  assert.match(metodoRespuesta, /uatro/, `«${metodoRespuesta}» ya no dice cuatro`);
 });
 
 test("la muestra que el pie imprime es la que la fuente declara respaldar", () => {

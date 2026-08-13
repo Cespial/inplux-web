@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import type { ReglaBloqueada } from "@/lib/banned-reasons.server";
 import { ALTO_BARRA_INFERIOR, ALTO_BARRA_SUPERIOR } from "./chrome/altos";
 import { HelpOverlay } from "./chrome/HelpOverlay.client";
 import { IndexOverlay } from "./chrome/IndexOverlay.client";
@@ -27,11 +28,12 @@ const ALTOS = {
   "--deck-barra-inferior": `${ALTO_BARRA_INFERIOR}px`,
 } as CSSProperties;
 
-// `motivos` llega desde la ruta, que es un componente de servidor y los
-// lee del verificador en build. Un componente async NO se puede
-// renderizar desde un componente cliente, así que la lectura vive
-// arriba del límite y baja como prop. Ver la Tarea 12.
-export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
+// `reglas` llega desde la ruta, que es un componente de servidor y las lee del
+// verificador en build. Un componente async NO se puede renderizar desde un
+// componente cliente, así que la lectura vive arriba del límite y baja como
+// prop. El `import type` de abajo se borra en el empaquetado: lo que cruza el
+// límite son datos, nunca el lector.
+export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[] }) {
   // El índice y la ayuda se montan solo cuando se piden. No es una preferencia
   // de estilo: `verify-build-output.mjs` exige CERO `<dialog>` en el HTML
   // construido de /deck/presentacion, y un diálogo montado desde el primer
@@ -45,8 +47,8 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   const inicioTactil = useRef<{ x: number; y: number } | null>(null);
   const slotActivo = useRef<HTMLDivElement | null>(null);
 
-  // Dos slots, no una lista de quince. Montar las quince haría que todas las
-  // animaciones de entrada terminaran antes de que nadie las viera.
+  // Dos slots, no una lista con el deck entero. Montarlas todas haría que
+  // todas las animaciones de entrada terminaran antes de que nadie las viera.
   const [montada, setMontada] = useState<Montada>({
     slide: nav.slide,
     secuencia: nav.secuencia,
@@ -77,7 +79,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
   // ⚠️ **Salvo si quien pidió el cambio está en el riel.** Medido con teclado
   // real: foco en «Lámina siguiente» → Enter → el foco acababa en el slot y
   // volver al mismo botón costaba **18 tabulaciones** (los dos botones de la
-  // barra superior y los quince segmentos del riel). Quien conduce el deck
+  // barra superior y un segmento de riel por lámina). Quien conduce el deck
   // desde el riel es justamente quien no usa las flechas —conmutador, teclado
   // en pantalla, navegación por tabulación— y no podía repetir la acción sin
   // recorrer el riel entero.
@@ -154,7 +156,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
             if (e.target === e.currentTarget) setSaliente(null);
           }}
         >
-          <SlideRenderer slide={saliente.slide} motivos={motivos} />
+          <SlideRenderer slide={saliente.slide} reglas={reglas} />
         </div>
       )}
 
@@ -172,7 +174,7 @@ export function PresentationDeck({ motivos }: { motivos: readonly string[] }) {
         aria-roledescription="lámina"
         aria-label={`${nav.indice + 1} de ${TOTAL_SLIDES}: ${nav.slide.titulo}`}
       >
-        <SlideRenderer slide={nav.slide} motivos={motivos} />
+        <SlideRenderer slide={nav.slide} reglas={reglas} />
       </div>
 
       <ProgressRail

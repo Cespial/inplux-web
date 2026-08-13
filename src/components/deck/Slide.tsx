@@ -5,7 +5,7 @@ import styles from "./deck.module.css";
  * La caja de una lámina. `data-slide` es el contrato con el arnés de QA.
  *
  * Sin `aria-label` por defecto, a propósito: el nombre accesible de la lámina
- * lo pone el slot del riel —«12 de 15: Porkia»— y el título visible lo pone el
+ * lo pone el slot del riel —«12 de 14: Porkia»— y el título visible lo pone el
  * <h1> de dentro. Etiquetar además la <section> con el mismo texto la
  * convertía en una región homónima de su propio encabezado y dejaba al lector
  * de pantalla anunciando tres variaciones del mismo título.

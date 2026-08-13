@@ -40,8 +40,8 @@ const { pregunta, respuesta, cuerpo } = DECK_COPY.tesis;
  * respuesta a 4,3 rem la cabecera pide 269 px y la figura se sale 59 px por
  * debajo del riel. **A 1440 × 900 —una de las tres ventanas del arnés— cabía,
  * así que la corrida habría salido verde con la lámina rota en la sala.** Es
- * el mismo acantilado que dejó fuera a la figura de `como-empezamos`, y aquí
- * se cierra midiendo las dos alturas, no solo la del arnés.
+ * el mismo acantilado por el que ya se descartó una figura antes, y aquí se
+ * cierra midiendo las dos alturas, no solo la del arnés.
  */
 export function TesisSlide({ id }: { id: string }) {
   return (
