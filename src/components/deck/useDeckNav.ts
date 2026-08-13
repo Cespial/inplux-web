@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import type { DeckSlide } from "@/content/deck";
 
-function indiceDesdeHash(hash: string): number {
+function indiceDesdeHash(slides: readonly DeckSlide[], hash: string): number {
   const id = hash.replace(/^#/, "");
-  const encontrado = SLIDES.findIndex((slide) => slide.id === id);
+  const encontrado = slides.findIndex((slide) => slide.id === id);
   return encontrado === -1 ? 0 : encontrado;
 }
 
@@ -56,6 +56,15 @@ function documentoSeDesplaza(): boolean {
 
 /** Los atajos que el chrome atiende y el riel se limita a encaminar. */
 export type AtajosDeck = {
+  /**
+   * Las láminas que se conducen.
+   *
+   * ⚠️ **Llegan por parámetro y ya no de `SLIDES`.** El riel leía el deck
+   * completo, así que un deck recortado se podía recorrer hasta una lámina que
+   * no existía en él: `Fin` iba a la número 15 de otro deck y el hash de una
+   * lámina ausente resolvía a un índice que la lista de este no tiene.
+   */
+  slides: readonly DeckSlide[];
   /** `i` */
   alPedirIndice?: () => void;
   /** `?` */
@@ -81,30 +90,39 @@ type Estado = { indice: number; direccion: 1 | -1; secuencia: number };
 // `alPedirIndice` y `alPedirAyuda` se desestructuran a propósito: el efecto del
 // teclado los lleva en su lista de dependencias y un objeto de opciones nuevo
 // en cada render volvería a registrar el listener en cada pasada.
-export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): DeckNav {
+export function useDeckNav({ slides, alPedirIndice, alPedirAyuda }: AtajosDeck): DeckNav {
+  // El tope se lee del deck que se conduce, no de una constante del módulo.
+  const total = slides.length;
+
   // Arranca siempre en 0 para que servidor y primer render del cliente
   // coincidan. El hash se aplica en el efecto, ya hidratado.
   const [estado, setEstado] = useState<Estado>({ indice: 0, direccion: 1, secuencia: 0 });
 
-  const ir = useCallback((n: number) => {
-    setEstado((actual) => {
-      const destino = Math.max(0, Math.min(TOTAL_SLIDES - 1, n));
-      if (destino === actual.indice) return actual;
-      return {
-        indice: destino,
-        direccion: destino > actual.indice ? 1 : -1,
-        secuencia: actual.secuencia + 1,
-      };
-    });
-  }, []);
+  const ir = useCallback(
+    (n: number) => {
+      setEstado((actual) => {
+        const destino = Math.max(0, Math.min(total - 1, n));
+        if (destino === actual.indice) return actual;
+        return {
+          indice: destino,
+          direccion: destino > actual.indice ? 1 : -1,
+          secuencia: actual.secuencia + 1,
+        };
+      });
+    },
+    [total],
+  );
 
-  const mover = useCallback((delta: 1 | -1) => {
-    setEstado((actual) => {
-      const destino = Math.max(0, Math.min(TOTAL_SLIDES - 1, actual.indice + delta));
-      if (destino === actual.indice) return actual;
-      return { indice: destino, direccion: delta, secuencia: actual.secuencia + 1 };
-    });
-  }, []);
+  const mover = useCallback(
+    (delta: 1 | -1) => {
+      setEstado((actual) => {
+        const destino = Math.max(0, Math.min(total - 1, actual.indice + delta));
+        if (destino === actual.indice) return actual;
+        return { indice: destino, direccion: delta, secuencia: actual.secuencia + 1 };
+      });
+    },
+    [total],
+  );
 
   const siguiente = useCallback(() => mover(1), [mover]);
   const anterior = useCallback(() => mover(-1), [mover]);
@@ -134,11 +152,11 @@ export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): De
   // cualquier número de pasadas.
   useEffect(() => {
     if (estado.secuencia === 0) return;
-    window.history.replaceState(null, "", `#${SLIDES[estado.indice].id}`);
-  }, [estado.secuencia, estado.indice]);
+    window.history.replaceState(null, "", `#${slides[estado.indice].id}`);
+  }, [slides, estado.secuencia, estado.indice]);
 
   useEffect(() => {
-    const alCambiarHash = () => ir(indiceDesdeHash(window.location.hash));
+    const alCambiarHash = () => ir(indiceDesdeHash(slides, window.location.hash));
     window.addEventListener("hashchange", alCambiarHash);
     // La lectura inicial del hash pasa por el mismo callback y en un
     // microtask: llamar setState en el cuerpo del efecto encadena renders y
@@ -146,7 +164,7 @@ export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): De
     // que las dos pasadas de StrictMode aterrizan en la misma lámina.
     if (window.location.hash) queueMicrotask(alCambiarHash);
     return () => window.removeEventListener("hashchange", alCambiarHash);
-  }, [ir]);
+  }, [ir, slides]);
 
   useEffect(() => {
     const alPulsar = (evento: KeyboardEvent) => {
@@ -180,7 +198,7 @@ export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): De
         case "ArrowRight": case "PageDown": evento.preventDefault(); siguiente(); break;
         case "ArrowLeft": case "PageUp": evento.preventDefault(); anterior(); break;
         case "Home": evento.preventDefault(); ir(0); break;
-        case "End": evento.preventDefault(); ir(TOTAL_SLIDES - 1); break;
+        case "End": evento.preventDefault(); ir(total - 1); break;
         // El índice y la ayuda salen por aquí y no por un listener propio del
         // chrome: así heredan las mismas guardas —tecla repetida, tecla nacida
         // en un campo editable, diálogo ya abierto— en vez de copiarlas.
@@ -191,11 +209,11 @@ export function useDeckNav({ alPedirIndice, alPedirAyuda }: AtajosDeck = {}): De
     };
     window.addEventListener("keydown", alPulsar);
     return () => window.removeEventListener("keydown", alPulsar);
-  }, [siguiente, anterior, ir, alPedirIndice, alPedirAyuda]);
+  }, [siguiente, anterior, ir, total, alPedirIndice, alPedirAyuda]);
 
   return {
     indice: estado.indice,
-    slide: SLIDES[estado.indice],
+    slide: slides[estado.indice],
     direccion: estado.direccion,
     secuencia: estado.secuencia,
     ir,

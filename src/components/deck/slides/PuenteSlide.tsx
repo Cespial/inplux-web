@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { DECK_COPY } from "@/content/deck";
-import { workProfiles } from "@/content/work";
+import { DECK_COPY, type DeckSlide } from "@/content/deck";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
 import { formatShortDate } from "@/content/work-format";
 import { Slide } from "../Slide";
@@ -27,20 +26,30 @@ const ROTULO_FIGURA = {
   remate: "cada una se ve completa en su lámina",
 } as const;
 
+/** Los perfiles que esta lámina enseña: los del deck que la contiene. */
+type Perfiles = readonly Extract<DeckSlide, { kind: "producto" }>["perfil"][];
+
 /**
  * El acta de la vitrina, derivada. Ni el conteo ni las fechas se escriben: el
- * número sale de `workProfiles.length` y el rango, de las `capturedAt` del acta
- * de procedencia (`public/work/real-pages/capture-manifest.json`, contra la que
+ * número sale de los perfiles QUE ESTE DECK PRESENTA y el rango, de las
+ * `capturedAt` del acta de procedencia
+ * (`public/work/real-pages/capture-manifest.json`, contra la que
  * `scripts/verify-captures.test.mjs` compara fichero, fecha, URL y `sha256`).
  * Si mañana se recaptura Porkia, esta línea cambia sola; si entra un sexto
  * producto, dice seis.
+ *
+ * ⚠️ **Los perfiles llegan por parámetro y ya no de `workProfiles`.** Leyendo
+ * el global, un deck recortado pintaba en esta vitrina los cinco productos y
+ * declaraba «5 capturas de navegador» mientras la serie de fichas que venía
+ * detrás traía cuatro: el conteo era derivado y aun así mentía, porque estaba
+ * derivado de la fuente equivocada.
  */
-function actaDeLaVitrina() {
-  const fechas = workProfiles.map((perfil) => workCaptures[perfil.slug].capturedAt).sort();
+function actaDeLaVitrina(perfiles: Perfiles) {
+  const fechas = perfiles.map((perfil) => workCaptures[perfil.slug].capturedAt).sort();
   const primera = formatShortDate(fechas[0]);
   const ultima = formatShortDate(fechas[fechas.length - 1]);
   const rango = primera === ultima ? primera : `${primera} – ${ultima}`;
-  return `${workProfiles.length} ${ROTULO_FIGURA.acta} · ${rango} · ${ROTULO_FIGURA.remate}`;
+  return `${perfiles.length} ${ROTULO_FIGURA.acta} · ${rango} · ${ROTULO_FIGURA.remate}`;
 }
 
 /**
@@ -149,6 +158,13 @@ function NodoDominio() {
  * En F0.5 ese defecto apareció seis veces. Aquí no hay ningún `repeat(N, …)`
  * con N literal ni ninguna regla que nombre una posición.
  *
+ * ⚠️ **Y los perfiles son los del deck que la monta, no los de `work.ts`.** Ver
+ * `actaDeLaVitrina`. La lámina, además, no entra en el deck dirigido a
+ * legaltech: su argumento —«la fábrica no es de un sector»— es justo el
+ * contrario del que sirve en esa sala, y con una serie de un solo terreno la
+ * frase deja de ser cierta. La decisión y su motivo viven en `SIN_PUENTE`, en
+ * `src/content/deck.ts`.
+ *
  * ⚠️ **Sin sombra en el marco**, a diferencia de `CapturaEnmarcada`. Allí la
  * captura es el objeto de la lámina y la sombra es parte de la frontera que
  * sustituye al halo; aquí son cinco objetos pequeños en fila y cinco sombras
@@ -156,7 +172,7 @@ function NodoDominio() {
  * lo pagan las dos capturas claras (Tribai y Kelsen), y por eso el hilo del
  * marco no es `--border`: ver `.marco` en el módulo.
  */
-export function PuenteSlide({ id }: { id: string }) {
+export function PuenteSlide({ id, perfiles }: { id: string; perfiles: Perfiles }) {
   return (
     <Slide id={id}>
       <div className={`${deck.bloque} ${deck.escalonado}`}>
@@ -165,7 +181,7 @@ export function PuenteSlide({ id }: { id: string }) {
       </div>
 
       <ul className={styles.vitrina}>
-        {workProfiles.map((perfil, i) => {
+        {perfiles.map((perfil, i) => {
           const captura = workCaptures[perfil.slug];
           return (
             <li className={styles.ficha} key={perfil.slug} style={{ "--i": i } as CSSProperties}>
@@ -210,7 +226,7 @@ export function PuenteSlide({ id }: { id: string }) {
           procedencia de la lámina —cuántas capturas, tomadas cuándo—, que es
           justo la prueba de que ni el conteo ni las fechas están escritos. En un
           deck que se manda por enlace, el móvil no es el caso raro. */}
-      <p className={styles.acta}>{actaDeLaVitrina()}</p>
+      <p className={styles.acta}>{actaDeLaVitrina(perfiles)}</p>
     </Slide>
   );
 }

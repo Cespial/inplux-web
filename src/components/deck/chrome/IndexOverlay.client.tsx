@@ -6,12 +6,17 @@ import {
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { SLIDES, TOTAL_SLIDES } from "@/content/deck";
+import type { DeckSlide } from "@/content/deck";
 import styles from "./chrome.module.css";
 
 /**
- * El índice de las quince láminas. `<dialog>` nativo con `showModal()`, el
- * mismo patrón de `src/components/site/ContactDialog.tsx`.
+ * El índice de las láminas del deck que se está presentando. `<dialog>` nativo
+ * con `showModal()`, el mismo patrón de
+ * `src/components/site/ContactDialog.tsx`.
+ *
+ * ⚠️ **Las láminas llegan por parámetro y ya no de `SLIDES`.** Este panel leía
+ * el deck completo, así que en un deck recortado listaba —y ofrecía saltar a—
+ * láminas que ese deck no monta, con el número de otro deck en su encabezado.
  *
  * ⚠️ Se monta solo cuando se pide, no siempre. `verify-build-output.mjs` exige
  * **cero** `<dialog>` en el HTML construido de /deck/presentacion; un diálogo
@@ -19,10 +24,12 @@ import styles from "./chrome.module.css";
  * Por eso `showModal()` vive en el efecto de montaje y no en un manejador.
  */
 export function IndexOverlay({
+  slides,
   indice,
   ir,
   alCerrar,
 }: {
+  slides: readonly DeckSlide[];
   indice: number;
   ir: (n: number) => void;
   alCerrar: () => void;
@@ -80,7 +87,7 @@ export function IndexOverlay({
       <div className={styles.panel}>
         <div className={styles.cabecera}>
           <h2 className={styles.panelTitulo} id="deck-indice-titulo" ref={titulo} tabIndex={-1}>
-            Las {TOTAL_SLIDES} láminas
+            Las {slides.length} láminas
           </h2>
           <button className={styles.cerrar} type="button" onClick={cerrar}>
             Cerrar
@@ -92,7 +99,7 @@ export function IndexOverlay({
 
         <div className={styles.cuerpo}>
           <ol className={styles.listaIndice}>
-            {SLIDES.map((slide, n) => (
+            {slides.map((slide, n) => (
               <li key={slide.id}>
                 {/* Se navega y se cierra por `close()`, no desmontando: así el
                     navegador devuelve el foco a quien abrió el índice cuando

@@ -1,4 +1,4 @@
-import { DECK_COPY } from "@/content/deck";
+import { DECK_COPY, type DeckSlide } from "@/content/deck";
 import { CapasFabrica } from "../figures/CapasFabrica";
 import { Slide } from "../Slide";
 import styles from "../deck.module.css";
@@ -42,7 +42,15 @@ const { pregunta, respuesta } = DECK_COPY.capacidades;
  * capas y los dominios. El nombre lo pone el slot del riel y el título visible
  * el <h1>.
  */
-export function CapacidadesSlide({ id }: { id: string }) {
+export function CapacidadesSlide({
+  id,
+  // Los perfiles bajan hasta la figura, que reparte SUS dominios: la lámina no
+  // los mira, solo los encamina. Ver `CapasFabrica`.
+  perfiles,
+}: {
+  id: string;
+  perfiles: readonly Extract<DeckSlide, { kind: "producto" }>["perfil"][];
+}) {
   return (
     <Slide id={id}>
       <div className={`${styles.bloque} ${styles.escalonado}`}>
@@ -50,7 +58,7 @@ export function CapacidadesSlide({ id }: { id: string }) {
         <h1 className={`${styles.respuesta} ${styles.respuestaCompacta}`}>{respuesta}</h1>
       </div>
 
-      <CapasFabrica />
+      <CapasFabrica perfiles={perfiles} />
     </Slide>
   );
 }
