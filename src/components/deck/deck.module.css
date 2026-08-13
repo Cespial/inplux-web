@@ -310,8 +310,8 @@
 
 /* ⚠️ Aquí NO va `margin-top: auto`, aunque «pie» invite a pensar en pegarlo
    abajo. `auto` solo reparte espacio LIBRE, y aquí no hay ninguno: `.bloque`
-   se ciñe a su contenido porque `.lamina` es `align-content: center` y
-   `.tesisRejilla` es `align-items: center`. Con cero espacio libre, `auto`
+   se ciñe a su contenido porque `.lamina` es `align-content: center` mientras
+   no haya un `data-deck-llena` que la estire. Con cero espacio libre, `auto`
    resuelve a cero y la declaración no hacía nada — el aire lo daba el
    `padding-top`, que es lo único que estaba trabajando. Y si el bloque se
    estirara, un pie clavado al borde inferior pelearía con el centrado
@@ -406,6 +406,20 @@
   to {
     opacity: 1;
   }
+}
+
+/* El envoltorio común de una figura, y su sitio en el orden de lectura: entra
+   a 410 ms, que es el mismo retardo con el que `.escalonado` suelta a su
+   cuarto hijo, así que la figura aterriza detrás del último renglón de texto y
+   nunca antes que el titular.
+   Vive aquí, y no en el bloque de una lámina, porque la comparte más de una.
+   Una figura que además REPARTE el alto de la lámina no usa esta clase: lleva
+   `data-deck-llena` y su propio envoltorio en el módulo de la figura, donde
+   puede declarar el `min-height: 0` que la fila necesita. */
+.figura {
+  min-width: 0;
+  margin: 0;
+  animation: laminaEntra 520ms var(--ease-out) 410ms both;
 }
 
 /* ===========================================================================
@@ -659,206 +673,6 @@
   text-underline-offset: 0.2em;
 }
 
-/* ===========================================================================
-   Lámina 3 · Tesis
-   =========================================================================== */
-
-.tesisRejilla {
-  display: grid;
-  align-items: center;
-  gap: clamp(1.75rem, 4vh, 3rem);
-  min-width: 0;
-}
-
-@media (min-width: 62rem) {
-  .tesisRejilla {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(2rem, 5vw, 5rem);
-  }
-}
-
-/* ⚠️ `max-width` explícito y `viewBox` de relación fija. Un SVG con
-   <circle> dentro NO puede llevar `preserveAspectRatio="none"`: al cambiar el
-   ancho, el círculo del cruce se deformaría en óvalo y el nodo dejaría de
-   leerse como un nodo. */
-.figura {
-  min-width: 0;
-  margin: 0;
-  animation: laminaEntra 520ms var(--ease-out) 410ms both;
-}
-
-.curvas {
-  display: block;
-  width: 100%;
-  /* El tope es lo que impide que la figura se coma la lámina en un proyector
-     de 1920: sin él la columna la estira y el trazo engorda hasta competir con
-     el titular, que es quien manda. */
-  max-width: 42rem;
-  height: auto;
-  margin-inline: auto;
-}
-
-.curvaBase {
-  fill: none;
-  stroke: var(--border);
-  stroke-width: 1;
-}
-
-.curvaOrigen {
-  fill: var(--gray-300);
-}
-
-/* Las dos curvas se dibujan, no aparecen. El argumento de la lámina es
-   temporal —una empieza rápido y se aplana, la otra arranca lenta y la
-   adelanta—, así que verlas trazarse ES la explicación; verlas ya hechas
-   obliga a reconstruirla. Salen del mismo punto y con 180 ms de diferencia,
-   lo justo para que se distingan.
-
-   ⚠️ `stroke-dasharray` va a 1,02 y no a 1 con `pathLength="1"`: con un trazo
-   ancho y remate redondo, una cola de longitud exacta se queda sin pintar en
-   el último subpíxel y la curva termina mocha. El 2 % de holgura no se ve —el
-   patrón es más largo que la curva— y garantiza el remate.
-
-   ⚠️ Y por eso mismo estas dos curvas NO pueden llevar `vector-effect:
-   non-scaling-stroke`: con él el guion se mide en pantalla y `pathLength` en
-   espacio de usuario, así que el patrón cubre `1,02 / escala` de la curva y a
-   partir de la escala 1,02 la cola se queda sin pintar. Estuvo publicado: 85 %
-   de las dos curvas a 1920 px. La nota entera está en `CurvasTesis.tsx`.
-
-   ⚠️ Lo que se paga por quitarlo es que estas 2,5 unidades ya no son 2,5 px:
-   el trazo escala con el dibujo, igual que el del nodo del cruce. Medido en la
-   página: 1,53 px a 390 · 2,60 px a 1440 · 3,00 px a 1920, contra los 2,5 px
-   planos de antes. Se deja en 2,5 y no se compensa, por tres razones medidas:
-   la escala NO es monótona con el ancho de la ventana —el deck apila por
-   debajo de ~1000 px, así que va 0,56 a 360, sube a 1,20 a 900, cae a 0,79 a
-   1100 y vuelve a 1,20 a partir de 1728—, con lo que un `calc()` contra `vw`
-   como el de `.curvaEtiqueta` aquí no sirve; ningún valor plano baja del ±34 %
-   de desviación (el óptimo son 2,92 unidades, y engorda el proyector, que es
-   la sala); y el extremo fino, 1,53 px, sigue por encima del aro del nodo
-   (1,22 px) y de la línea base (1 px), que ya se aceptaron a ese tamaño.
-   Si alguien lo sube, lo que hay que volver a mirar es el proyector. */
-.curvaTrazo {
-  fill: none;
-  stroke-linecap: round;
-  stroke-dasharray: 1.02;
-  animation: dibujaCurva 900ms var(--ease-out) both;
-}
-
-.curvaRequisito {
-  stroke: var(--gray-300);
-  stroke-width: 2.5;
-  animation-delay: 480ms;
-}
-
-.curvaProblema {
-  stroke: var(--teal);
-  stroke-width: 2.5;
-  animation-delay: 660ms;
-}
-
-@keyframes dibujaCurva {
-  from {
-    stroke-dashoffset: 1.02;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* El cruce es el argumento, así que se marca: nodo HUECO —relleno del fondo de
-   la lámina, contorno teal—, distinto de los cuatro nodos macizos de la
-   portada. Llega cuando las dos curvas ya están trazadas.
-
-   ⚠️ Este trazo NO lleva `non-scaling-stroke`, y desde que las dos curvas
-   tampoco lo llevan, el único de la figura que sigue con él es la línea base.
-   Con él, el aro conservaba 2 px de pantalla mientras el círculo
-   encogía, así que su grosor relativo iba de 11,9 % del diámetro a 1920 y
-   13,8 % a 1440 hasta 23,4 % a 390 —el doble—: el mismo nodo pintado con dos
-   gramáticas distintas según la pantalla. Sin él, el trazo escala con el
-   dibujo y el grosor queda clavado en 2/14 = 14,3 % en los tres tamaños
-   (2,40 px a 1920 · 2,08 px a 1440 · 1,22 px a 390). Medido, no deducido.
-
-   Y por qué 14,3 % y no el 6–7 % que pide DECK.md §8.3, que es una desviación
-   consciente: ese 6–7 % está escrito para los nodos ROTULADOS de estilo-s50,
-   que miden 30–40 unidades porque llevan texto dentro. Este nodo tiene el
-   diámetro acotado por los dos lados. Por arriba, porque marca un cruce y su
-   hueco borra el trozo de curva que cubre: agrandarlo hasta 24 unidades para
-   alcanzar el 6–7 % taparía justo lo que señala. Por abajo, porque a 390 la
-   figura escala a 0,61 y un aro del 6,5 % —0,91 unidades— se pintaría a
-   0,55 px, o sea gris claro y roto, en la pantalla donde el deck ya se lee
-   peor. Entre esos dos topes el 6–7 % no existe, así que la regla que sí se
-   puede cumplir, y la que de verdad importaba, es la otra: que la proporción
-   sea la MISMA en las tres pantallas. */
-.curvaCruce {
-  fill: var(--surface-page);
-  stroke: var(--teal);
-  stroke-width: 2;
-  animation: apareceSuave 320ms var(--ease-out) 1320ms both;
-}
-
-/* ⚠️ **El tamaño se declara en unidades de LIENZO, así que lo que se ve
-   depende de la escala del SVG y no de la raíz.** Con `font-size: 16px` fijo,
-   medido en pantalla: 9,8 px a 390, 16,6 px a 1440 y 19,2 px a 1920. O sea que
-   en el teléfono estas dos palabras eran **el tipo más pequeño del deck**, un
-   23 % por debajo del suelo declarado de la escala (`.pie`, 12 px), y en el
-   proyector eran mayores que el cuerpo.
-
-   El `calc()` compensa la escala: resta un término proporcional al ancho de la
-   ventana —que es de lo que depende la escala— y lo congela con `min()` cuando
-   la figura llega a su `max-width` y deja de crecer. La etiqueta del
-   presupuesto hace lo mismo con su propia escala, para que el mismo registro no
-   tenga dos tamaños en la misma sala.
-
-   ⚠️ **La compensación NO es completa, y la razón está escrita unas líneas más
-   arriba, en la nota de `.curvaTrazo`: la escala no es monótona con el ancho de
-   la ventana.** El deck apila por debajo de 62 rem, así que la figura pasa de
-   media columna a la columna entera y la escala salta. Medido en la página, en
-   catorce anchos:
-
-     ancho    360   390   640   700   800   900  1000  1100  1440  1728  1920
-     escala  0,56  0,61  1,03  1,13  1,20  1,20  0,72  0,79  1,04  1,20  1,20
-     antes    8,9   9,8  16,5  18,0  19,2  19,2  11,5  12,7  16,6  19,2  19,2
-     ahora   10,1  11,0  17,4  18,8  19,5  19,0  11,1  11,9  14,0  15,4  15,4
-
-   O sea: sube el suelo del teléfono (8,9 → 10,1) y baja el proyector
-   (19,2 → 15,4), que son los dos extremos que se ven en la sala y en el enlace;
-   en la franja apilada de 640–992 px deja las cosas como estaban (19,2 → 19,5),
-   porque ahí el `vw` crece mientras la escala ya topó. La banda de los tres
-   tamaños del arnés es 11,0 · 14,0 · 15,4.
-
-   Comprobado además que la etiqueta no se recorta en ninguno de los catorce
-   anchos: el `<svg>` tiene `overflow: hidden` y cortaría sin avisar.
-
-   ⚠️ **Lo que esto NO arregla, y no se puede arreglar aquí: la etiqueta sigue
-   sin obedecer la preferencia de fuente del lector.** Ponerla en `rem` la haría
-   crecer con la raíz, pero también la recortaría: el hueco a la derecha de las
-   curvas son 208 unidades de lienzo y la etiqueta ocupa 174 a 16 unidades, así
-   que por encima de ~19 el `<svg>` la corta —su `overflow` es `hidden` y no
-   avisa nadie—. Para que obedezca hay que sacar las dos etiquetas del SVG y
-   maquetarlas en HTML junto a la figura, que es un rediseño de las dos figuras
-   con su propia medición. Queda pendiente, medido. */
-.curvaEtiqueta {
-  fill: var(--gray-400);
-  font-family: var(--font-mono);
-  font-size: calc(19.7px - 0.43 * min(1vw, 16px));
-  letter-spacing: 0.04em;
-  animation: apareceSuave 380ms var(--ease-out) both;
-}
-
-.curvaEtiquetaRequisito {
-  animation-delay: 1180ms;
-}
-
-/* La etiqueta de la curva teal se pinta en teal, y por eso va en
-   --teal-on-soft (#0b746c) y no en --teal (#0d7d74): sobre --off-white el
-   primero da 5,30:1 y el de marca 4,70:1, que pasa AA por dos centésimas y no
-   deja margen para ningún cambio de superficie. El trazo de la curva sí es
-   --teal, porque un trazo no es texto y no lo mide ese umbral. */
-.curvaEtiquetaProblema {
-  fill: var(--teal-on-soft);
-  animation-delay: 1320ms;
-}
-
 /* ── El deck sin JavaScript ──────────────────────────────────────────────── */
 /* Ojo: nada de `display` sobre el propio <noscript>. Con JavaScript activo el
    navegador lo esconde, y darle display aquí lo devolvería a la vista como
@@ -909,18 +723,16 @@
   .escalonado > *,
   .figura,
   .cifraBloque,
-  .mallaNodo,
-  .curvaTrazo,
-  .curvaCruce,
-  .curvaEtiqueta {
+  .mallaNodo {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     /* El bloque global de globals.css no toca el retardo, y aquí las entradas
-       llevan uno —hasta 1,32 s en el nodo del cruce—: sin esto la lámina se
-       quedaría a medio pintar todo ese rato justo a quien pidió menos
-       movimiento. Con `both` de relleno, duración y retardo a cero dejan cada
-       elemento en su estado final: la curva entera trazada, el nodo puesto. */
+       llevan uno —410 ms la figura, 410 el último hijo del escalonado—: sin
+       esto la lámina se quedaría a medio pintar todo ese rato justo a quien
+       pidió menos movimiento. Con `both` de relleno, duración y retardo a cero
+       dejan cada elemento en su estado final. Las figuras con módulo propio
+       repiten este bloque en el suyo, con sus propios retardos. */
     animation-delay: 0ms !important;
   }
 }
