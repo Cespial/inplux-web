@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { DECK_COPY } from "@/content/deck";
 import styles from "./trazado-tesis.module.css";
 
@@ -153,7 +154,7 @@ const rotulo = (y: number) => ({
  * Escribirla a mano en el módulo sería el sitio exacto donde las dos se
  * separarían el día que alguien cambie el lienzo.
  */
-const CAJA = { "--relacion": `${LIENZO.ancho} / ${LIENZO.alto}` } as React.CSSProperties;
+const CAJA = { "--relacion": `${LIENZO.ancho} / ${LIENZO.alto}` } as CSSProperties;
 
 export function TrazadoTesis() {
   return (
