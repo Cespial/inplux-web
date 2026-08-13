@@ -35,6 +35,16 @@
  *   npm run build && npm run start -- -p 3210      (en otra terminal)
  *   QA_BASE=http://localhost:3210 npm run qa:deck
  *   QA_BASE=http://localhost:3210 npm run qa:deck -- portada evidencia
+ *   QA_BASE=http://localhost:3210 QA_DECK=legaltech npm run qa:deck
+ *
+ * ⚠️ **Hay más de un deck y el arnés tiene que poder medirlos todos.** El deck
+ * dirigido a legaltech no es el general con menos fichas: monta una serie de
+ * producto distinta y **sin la lámina `puente`**, y las láminas que hablan de la
+ * serie entera —la vitrina del puente, las capas de la fábrica— reparten un
+ * número distinto de piezas, que es justo lo que esta herramienta mide. Un arnés
+ * atado a `/deck/presentacion` habría dejado la variante sin medir. `QA_DECK`
+ * elige cuál se recorre y su nombre manda también en la carpeta de capturas,
+ * para que dos corridas no se pisen los PNG.
  *
  * Sale con 1 si alguna lámina falla cualquiera de las cinco o si la consola
  * escupió un error; con 2 si no hay servidor o no se pudo leer el modelo. NO
@@ -64,7 +74,25 @@ const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
  */
 const PUERTO_CANONICO = 3210;
 const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
-const SALIDA = "qa-out";
+
+/**
+ * Los decks que se pueden recorrer: de qué export del modelo salen sus ids y en
+ * qué ruta viven. Los dos datos juntos y en un solo sitio, porque medir el deck
+ * A con los ids del deck B es un fallo que se lee como «la lámina activa no es
+ * esta» quince veces seguidas y no señala a nadie.
+ */
+const DECKS = {
+  general: { export: "SLIDES", ruta: "/deck/presentacion" },
+  legaltech: { export: "SLIDES_LEGALTECH", ruta: "/deck/legaltech/presentacion" },
+};
+
+const DECK = process.env.QA_DECK ?? "general";
+if (!Object.hasOwn(DECKS, DECK)) {
+  console.error(`QA_DECK=${DECK} no existe. Los decks son: ${Object.keys(DECKS).join(", ")}`);
+  process.exit(2);
+}
+const { export: EXPORT_MODELO, ruta: RUTA } = DECKS[DECK];
+const SALIDA = `qa-out/${DECK}`;
 
 const VPS = [
   /**
@@ -105,7 +133,7 @@ function leerModelo() {
       "tsx",
       "--eval",
       `
-      import { SLIDES } from "./src/content/deck.ts";
+      import { ${EXPORT_MODELO} as SLIDES } from "./src/content/deck.ts";
       import { ALTO_BARRA_SUPERIOR, ALTO_BARRA_INFERIOR }
         from "./src/components/deck/chrome/altos.ts";
       process.stdout.write(JSON.stringify({
@@ -141,7 +169,13 @@ const MODELO = leerModelo();
 const IDS = process.argv.slice(2).length ? process.argv.slice(2) : MODELO.ids;
 const DESCONOCIDOS = IDS.filter((id) => !MODELO.ids.includes(id));
 if (DESCONOCIDOS.length) {
-  console.error(`Estas láminas no existen en el modelo: ${DESCONOCIDOS.join(", ")}`);
+  // El nombre del deck va en el mensaje a propósito: `puente` existe en el
+  // general y no en el dirigido, así que «no existe en el modelo» sin decir en
+  // cuál manda a buscar una errata que no hay.
+  console.error(
+    `Estas láminas no existen en el deck ${DECK}: ${DESCONOCIDOS.join(", ")}\n` +
+      `Las suyas son: ${MODELO.ids.join(", ")}`,
+  );
   process.exit(2);
 }
 
@@ -149,12 +183,12 @@ if (DESCONOCIDOS.length) {
 // dice a nadie qué le falta.
 let PRIMERA_RESPUESTA = "";
 try {
-  const r = await fetch(`${BASE}/deck/presentacion`, { redirect: "manual" });
+  const r = await fetch(`${BASE}${RUTA}`, { redirect: "manual" });
   if (r.status >= 400) throw new Error(`respondió ${r.status}`);
   PRIMERA_RESPUESTA = await r.text();
 } catch (e) {
   console.error(
-    `No hay deck en ${BASE} (${e.message}).\n` +
+    `No hay deck ${DECK} en ${BASE}${RUTA} (${e.message}).\n` +
       `Levántalo en otra terminal:  npm run build && npm run start -- -p ${PUERTO_CANONICO}`,
   );
   process.exit(2);
@@ -201,7 +235,7 @@ if (esLocal(BASE)) {
   if (local !== null && local !== "" && !PRIMERA_RESPUESTA.includes(local)) {
     const servido = /\\"b\\":\\"([\w-]+)\\"/.exec(PRIMERA_RESPUESTA)?.[1] ?? "no identificado";
     console.warn(
-      `⚠️ ${BASE} NO está sirviendo este build.\n` +
+      `⚠️ ${BASE}${RUTA} NO está sirviendo este build.\n` +
         `   .next/BUILD_ID local: ${local}\n` +
         `   build que contesta:   ${servido}\n` +
         "   Suele ser un servidor de otra sesión que se quedó escuchando en el puerto.\n" +
@@ -790,7 +824,7 @@ for (const vp of VPS) {
 
   for (const id of IDS) {
     visitando = id;
-    await p.goto(`${BASE}/deck/presentacion#${id}`, { waitUntil: "load" });
+    await p.goto(`${BASE}${RUTA}#${id}`, { waitUntil: "load" });
 
     // ⚠️ El `data-estado="activa"` vive en el SLOT, no en la `<section>`.
     // Durante la transición hay dos `[data-slide]` montados y sin ese filtro

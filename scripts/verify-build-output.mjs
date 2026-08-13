@@ -13,6 +13,12 @@ const workSocialVersion = "2026-08-11";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
 
+/** Los nombres de una lista de perfiles, en prosa, como los publica el sitio. */
+const enProsa = (perfiles) =>
+  new Intl.ListFormat("es-CO", { style: "long", type: "conjunction" }).format(
+    perfiles.map((perfil) => perfil.name),
+  );
+
 const workProfiles = [
   {
     slug: "tribai",
@@ -22,6 +28,7 @@ const workProfiles = [
     status: "Producto público",
     attribution: "Desarrollo de INPLUX",
     socialAlt: "Tribai: Producto público. Desarrollo de INPLUX.",
+    capture: "/work/real-pages/tribai-asistente-2026-07-21.png",
   },
   {
     slug: "gobia",
@@ -31,6 +38,7 @@ const workProfiles = [
     status: "Piloto activo",
     attribution: "Solución de INPLUX",
     socialAlt: "Gobia: Piloto activo. Solución de INPLUX.",
+    capture: "/work/real-pages/gobia-demo-2026-07-21.png",
   },
   {
     slug: "kelsen",
@@ -40,6 +48,7 @@ const workProfiles = [
     status: "Explorador público",
     attribution: "Desarrollo de INPLUX",
     socialAlt: "Kelsen: Explorador público. Desarrollo de INPLUX.",
+    capture: "/work/real-pages/kelsen-explorador-2026-07-21.png",
   },
   {
     slug: "laudos",
@@ -49,6 +58,7 @@ const workProfiles = [
     status: "Beta abierta",
     attribution: "Desarrollo técnico de INPLUX",
     socialAlt: "Laudos: Beta abierta. Desarrollo técnico de INPLUX.",
+    capture: "/work/real-pages/laudos-prediccion-2026-07-21.png",
   },
   {
     slug: "porkia",
@@ -58,6 +68,7 @@ const workProfiles = [
     status: "Beta cerrada",
     attribution: "Desarrollo de INPLUX",
     socialAlt: "Porkia: Beta cerrada. Desarrollo de INPLUX.",
+    capture: "/work/real-pages/porkia-demo-2026-08-11.png",
   },
 ];
 
@@ -80,6 +91,27 @@ const workProfiles = [
  * decir 14 mientras el verificador seguía exigiendo 15.
  */
 const deckSlideCount = 7 + workProfiles.length + 2;
+
+/**
+ * El deck dirigido a legaltech: la misma apertura y el mismo cierre, la serie
+ * de producto recortada a cuatro y **sin la lámina `puente`**.
+ *
+ * Los cuatro slugs se escriben aquí porque son una SELECCIÓN —la decisión del
+ * dueño del 11-ago-2026, que vive en `PERFILES_LEGALTECH` en
+ * `src/content/deck.ts`— y este archivo es el espejo que la sujeta desde fuera:
+ * meter un quinto producto a la variante obliga a darlo de alta también aquí, y
+ * hasta que se haga, el control del HTML dice qué sobra.
+ *
+ * ⚠️ El conteo NO se escribe: sale del conteo del deck general menos la lámina
+ * que la variante no lleva y menos los productos que no presenta. Así, el día
+ * que el deck general gane o pierda una lámina —y ya está pasando: la que
+ * repetía los cuatro tiempos se va—, este número se mueve con él en vez de
+ * quedarse fijado en un valor que nadie recuerda de dónde salió.
+ */
+const legaltechSlugs = ["tribai", "gobia", "kelsen", "laudos"];
+const legaltechProfiles = workProfiles.filter((profile) => legaltechSlugs.includes(profile.slug));
+const deckLegaltechSlideCount =
+  deckSlideCount - 1 - (workProfiles.length - legaltechProfiles.length);
 
 const pageDefinitions = {
   home: {
@@ -239,6 +271,29 @@ const pageDefinitions = {
     description: `Cómo INPLUX convierte un problema concreto en software que funciona en producción, en ${deckSlideCount} láminas.`,
     canonical: `${siteUrl}/deck/presentacion`,
     contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
+    deck: { slides: deckSlideCount, profiles: workProfiles },
+  },
+  // ── El deck dirigido ───────────────────────────────────────────────────────
+  // Dos rutas fuera del índice y fuera del sitemap. Se dan de alta aquí, y no
+  // solo en `verify-http-contracts.mjs`, porque un 200 no dice qué se está
+  // sirviendo: lo que hay que sujetar es que la variante trae SUS cuatro
+  // productos y no los cinco del deck general.
+  deckLegaltech: {
+    file: ".next/server/app/deck/legaltech.html",
+    title: "Deck legaltech — de un problema real a software en producción | INPLUX",
+    description: `El índice de la presentación de INPLUX en ${deckLegaltechSlideCount} láminas: la tesis, el método y los productos ${enProsa(legaltechProfiles)}, con sus fuentes.`,
+    canonical: `${siteUrl}/deck/legaltech`,
+    noindex: true,
+    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
+  },
+  deckLegaltechPresentacion: {
+    file: ".next/server/app/deck/legaltech/presentacion.html",
+    title: "Presentación legaltech — de un problema real a software en producción | INPLUX",
+    description: `Cómo INPLUX convierte un problema concreto en software que funciona en producción, en ${deckLegaltechSlideCount} láminas, con los productos ${enProsa(legaltechProfiles)}.`,
+    canonical: `${siteUrl}/deck/legaltech/presentacion`,
+    noindex: true,
+    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
+    deck: { slides: deckLegaltechSlideCount, profiles: legaltechProfiles },
   },
   capabilities: {
     file: ".next/server/app/capacidades.html",
@@ -644,8 +699,8 @@ function verifyAttribution(name, html) {
   );
 }
 
-/** Los enlaces de un `<nav>` del HTML construido: su `href` y su texto visible. */
-function readNavigationLinks(html, ariaLabel) {
+/** El interior de un `<nav>` del HTML construido, buscado por su nombre accesible. */
+function sliceNav(html, ariaLabel) {
   const opening = new RegExp(
     `<nav\\b[^>]*\\baria-label="${ariaLabel.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")}"[^>]*>`,
     "i",
@@ -657,24 +712,121 @@ function readNavigationLinks(html, ariaLabel) {
   const navTags = /<(\/?)nav\b[^>]*>/gi;
   navTags.lastIndex = bodyStart;
   let depth = 1;
-  let bodyEnd = -1;
   for (let tag = navTags.exec(html); tag !== null; tag = navTags.exec(html)) {
     depth += tag[1] === "/" ? -1 : 1;
-    if (depth === 0) {
-      bodyEnd = tag.index;
-      break;
-    }
+    if (depth === 0) return html.slice(bodyStart, tag.index);
   }
-  if (bodyEnd === -1) return null;
+  return null;
+}
 
-  return [...html.slice(bodyStart, bodyEnd).matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)].map(
-    (anchor) => ({
-      href: readAttributes(anchor[1]).href ?? "",
-      label: decodeHtml(anchor[2].replace(/<[^>]*>/g, ""))
-        .replace(/\s+/g, " ")
-        .trim(),
-    }),
+/** Los enlaces de un `<nav>` del HTML construido: su `href` y su texto visible. */
+function readNavigationLinks(html, ariaLabel) {
+  const body = sliceNav(html, ariaLabel);
+  if (body === null) return null;
+
+  return [...body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)].map((anchor) => ({
+    href: readAttributes(anchor[1]).href ?? "",
+    label: decodeHtml(anchor[2].replace(/<[^>]*>/g, ""))
+      .replace(/\s+/g, " ")
+      .trim(),
+  }));
+}
+
+/**
+ * Los títulos de las láminas, leídos del riel del HTML construido.
+ *
+ * ⚠️ **Es el único sitio del documento donde el deck entero está escrito.** El
+ * riel monta una lámina cada vez, así que del cuerpo solo se construye la
+ * portada; el índice es un `<dialog>` que ni siquiera se monta hasta que
+ * alguien lo pide. Lo que sí sale entero en el HTML es el riel de progreso: un
+ * botón por lámina, cada uno con su título en el `aria-label`. Por ahí se puede
+ * juzgar QUÉ deck se está sirviendo sin abrir un navegador.
+ *
+ * El prefijo «Ir a » lo escribe `ProgressRail.tsx` y de paso separa los
+ * segmentos de los dos botones de paso, que se llaman «Lámina anterior» y
+ * «Lámina siguiente». Si allí cambia el prefijo, aquí sale una lista vacía y el
+ * control lo canta: es ruidoso, que es lo que se quiere.
+ */
+const PREFIJO_SEGMENTO = "Ir a ";
+
+function readRailTitles(html) {
+  const body = sliceNav(html, "Láminas");
+  if (body === null) return null;
+
+  return [...body.matchAll(/<button\b([^>]*)>/gi)]
+    .map((button) => readAttributes(button[1])["aria-label"] ?? "")
+    .filter((label) => label.startsWith(PREFIJO_SEGMENTO))
+    .map((label) => label.slice(PREFIJO_SEGMENTO.length));
+}
+
+/**
+ * Qué deck sirve una ruta de presentación: cuántas láminas trae su riel y qué
+ * productos son los suyos, **en el HTML construido**.
+ *
+ * Existe por el deck dirigido. Recortar la serie de producto es un parámetro
+ * del modelo, pero las láminas que hablan de la serie ENTERA leían
+ * `workProfiles` global: el deck de cuatro productos enseñaba cinco en la
+ * vitrina del puente y cinco dominios en las capas de la fábrica. Un control
+ * sobre el modelo no lo habría visto —el modelo estaba bien— y uno sobre el
+ * código fuente tampoco. Se juzga lo que recibe el navegador.
+ */
+function verifyDeckShape(name, html, { slides, profiles }) {
+  const titulos = readRailTitles(html);
+  if (titulos === null) {
+    errors.push(
+      `${name}: el HTML publicado no trae el riel de láminas <nav aria-label="Láminas">; sin él nadie verifica qué deck se está sirviendo`,
+    );
+    return;
+  }
+
+  expectEqual(titulos.length, slides, `${name} láminas en el riel`);
+
+  // Un segmento es de producto si su título es el nombre de un producto
+  // documentado: el título de la lámina de producto ES `perfil.name`.
+  const documentados = workProfiles.map((profile) => profile.name);
+  expectEqual(
+    titulos.filter((titulo) => documentados.includes(titulo)).join(" · "),
+    profiles.map((profile) => profile.name).join(" · "),
+    `${name} láminas de producto en el riel`,
   );
+
+  // Las capturas anunciadas en la cabecera son las de las fichas que este deck
+  // monta. Una de más es media pantalla de descarga que ninguna lámina va a
+  // pintar, compitiendo por el ancho de banda con las que sí.
+  //
+  // ⚠️ Solo se miran las precargas que apuntan al acta de capturas
+  // (`/work/real-pages/`): en la cabecera hay otras imágenes anunciadas —el
+  // logo, por ejemplo— que no son de este deck ni de ningún deck, y contarlas
+  // convertiría este control en un conteo que hay que ajustar cada vez que
+  // alguien precargue cualquier otra cosa.
+  //
+  // ⚠️ Y el atributo se lee como `imageSrcSet`: React serializa la prop de
+  // `ReactDOM.preload` con esa caja exacta, no como `imagesrcset`.
+  const ACTA = encodeURIComponent("/work/real-pages/");
+  const destino = (attributes) => `${attributes.href ?? ""} ${attributes.imageSrcSet ?? ""}`;
+  const precargas = collectElements(html, "link").filter(
+    (attributes) =>
+      attributes.rel === "preload" &&
+      attributes.as === "image" &&
+      destino(attributes).includes(ACTA),
+  );
+  expectEqual(precargas.length, profiles.length, `${name} capturas precargadas`);
+
+  const anunciada = (profile) =>
+    precargas.filter((attributes) =>
+      destino(attributes).includes(encodeURIComponent(profile.capture)),
+    );
+
+  for (const profile of profiles) {
+    expectEqual(anunciada(profile).length, 1, `${name} precarga de la captura de ${profile.name}`);
+  }
+  for (const profile of workProfiles) {
+    if (profiles.includes(profile)) continue;
+    expect(
+      anunciada(profile).length === 0,
+      `${name}: precarga la captura de ${profile.name} y ese producto no está en este deck`,
+    );
+  }
 }
 
 /**
@@ -763,6 +915,13 @@ async function verifyGeneratedRoutes() {
     expect(
       !urls.includes(`${siteUrl}/marca`),
       "sitemap: la guía interna /marca no debe publicarse como ruta indexable",
+    );
+    // El deck dirigido se manda por enlace a una sala concreta y no es una
+    // página pública: ni él ni su índice entran al sitemap. Se comprueba por
+    // prefijo para que ninguna ruta futura bajo `/deck/legaltech` se cuele.
+    expect(
+      !urls.some((url) => url.startsWith(`${siteUrl}/deck/legaltech`)),
+      "sitemap: el deck dirigido a legaltech no debe publicarse como ruta indexable",
     );
     expect(
       !/<(?:lastmod|changefreq|priority)>/.test(sitemap),
@@ -883,6 +1042,7 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
   verifyIds(name, html, definition.legacyFragments);
   if (definition.attribution) verifyAttribution(name, html);
   if (definition.productFooter) verifyProductFooter(name, html, definition.productFooter);
+  if (definition.deck) verifyDeckShape(name, html, definition.deck);
 }
 
 await verifyGeneratedRoutes();

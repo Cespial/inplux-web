@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { SLIDES, TOTAL_SLIDES, type DeckSlide } from "@/content/deck";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { perfilesDe, type DeckSlide } from "@/content/deck";
 import type { ReglaBloqueada } from "@/lib/banned-reasons.server";
 import { ALTO_BARRA_INFERIOR, ALTO_BARRA_SUPERIOR } from "./chrome/altos";
 import { HelpOverlay } from "./chrome/HelpOverlay.client";
@@ -31,9 +31,32 @@ const ALTOS = {
 // `reglas` llega desde la ruta, que es un componente de servidor y las lee del
 // verificador en build. Un componente async NO se puede renderizar desde un
 // componente cliente, así que la lectura vive arriba del límite y baja como
-// prop. El `import type` de abajo se borra en el empaquetado: lo que cruza el
+// prop. El `import type` de arriba se borra en el empaquetado: lo que cruza el
 // límite son datos, nunca el lector.
-export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[] }) {
+//
+// ⚠️ **`slides` también llega por prop, y ese es el mecanismo entero del deck
+// dirigido.** Este componente importaba `SLIDES` y `TOTAL_SLIDES` del módulo,
+// así que había UN solo deck posible: una segunda ruta con otro subconjunto
+// habría enseñado igual las láminas del general. Quien monta el riel dice qué
+// láminas conduce; el riel no lo decide.
+export function PresentationDeck({
+  slides,
+  // La ruta que publica el índice de ESTE deck. Sin JavaScript el recorrido no
+  // existe y lo único que queda es ese enlace: con `/deck` escrito aquí, quien
+  // abriera el deck dirigido sin JS aterrizaba en el índice del general —otras
+  // láminas, otros productos— sin ninguna señal de que había cambiado de deck.
+  hrefIndice,
+  reglas,
+}: {
+  slides: readonly DeckSlide[];
+  hrefIndice: string;
+  reglas: readonly ReglaBloqueada[];
+}) {
+  const total = slides.length;
+  // Los perfiles de la serie, para las dos láminas que hablan de ella entera.
+  // `useMemo` porque este componente se vuelve a pintar en cada cambio de
+  // lámina y el arreglo baja como prop hasta la figura.
+  const perfiles = useMemo(() => perfilesDe(slides), [slides]);
   // El índice y la ayuda se montan solo cuando se piden. No es una preferencia
   // de estilo: `verify-build-output.mjs` exige CERO `<dialog>` en el HTML
   // construido de /deck/presentacion, y un diálogo montado desde el primer
@@ -43,7 +66,7 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
   const abrirAyuda = useCallback(() => setOverlay("ayuda"), []);
   const cerrarOverlay = useCallback(() => setOverlay(null), []);
 
-  const nav = useDeckNav({ alPedirIndice: abrirIndice, alPedirAyuda: abrirAyuda });
+  const nav = useDeckNav({ slides, alPedirIndice: abrirIndice, alPedirAyuda: abrirAyuda });
   const inicioTactil = useRef<{ x: number; y: number } | null>(null);
   const slotActivo = useRef<HTMLDivElement | null>(null);
 
@@ -134,7 +157,7 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
       <TopBar
         titulo={nav.slide.titulo}
         indice={nav.indice}
-        total={TOTAL_SLIDES}
+        total={total}
         alPedirIndice={abrirIndice}
         alPedirAyuda={abrirAyuda}
       />
@@ -156,7 +179,7 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
             if (e.target === e.currentTarget) setSaliente(null);
           }}
         >
-          <SlideRenderer slide={saliente.slide} reglas={reglas} />
+          <SlideRenderer slide={saliente.slide} perfiles={perfiles} reglas={reglas} />
         </div>
       )}
 
@@ -172,13 +195,13 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
         tabIndex={-1}
         role="group"
         aria-roledescription="lámina"
-        aria-label={`${nav.indice + 1} de ${TOTAL_SLIDES}: ${nav.slide.titulo}`}
+        aria-label={`${nav.indice + 1} de ${total}: ${nav.slide.titulo}`}
       >
-        <SlideRenderer slide={nav.slide} reglas={reglas} />
+        <SlideRenderer slide={nav.slide} perfiles={perfiles} reglas={reglas} />
       </div>
 
       <ProgressRail
-        slides={SLIDES}
+        slides={slides}
         indice={nav.indice}
         ir={nav.ir}
         anterior={nav.anterior}
@@ -186,7 +209,7 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
       />
 
       {overlay === "indice" ? (
-        <IndexOverlay indice={nav.indice} ir={nav.ir} alCerrar={cerrarOverlay} />
+        <IndexOverlay slides={slides} indice={nav.indice} ir={nav.ir} alCerrar={cerrarOverlay} />
       ) : null}
       {overlay === "ayuda" ? <HelpOverlay alCerrar={cerrarOverlay} /> : null}
 
@@ -196,13 +219,13 @@ export function PresentationDeck({ reglas }: { reglas: readonly ReglaBloqueada[]
           construido, una trampa para cualquiera que los cuente. Queda la frase
           y el enlace. Si algún día las láminas traen su cuerpo real aquí
           dentro, se reconsidera.
-          ⚠️ El número sale de `TOTAL_SLIDES`, no escrito: este texto se
+          ⚠️ El número sale del deck que se monta, no escrito: este texto se
           publica dentro del `<noscript>` del HTML construido y decía «las
           quince láminas». */}
       <noscript>
         <p className={styles.sinScript}>
           El recorrido lámina a lámina necesita JavaScript.{" "}
-          <a href="/deck">Ver el índice de las {TOTAL_SLIDES} láminas</a>.
+          <a href={hrefIndice}>Ver el índice de las {total} láminas</a>.
         </p>
       </noscript>
     </div>

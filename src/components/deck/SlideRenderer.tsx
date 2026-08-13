@@ -26,12 +26,19 @@ import { TesisSlide } from "./slides/TesisSlide";
  */
 export function SlideRenderer({
   slide,
+  // Los perfiles del DECK ENTERO, no los de esta lámina. Dos láminas hablan de
+  // la serie completa —el puente la enseña y las capas reparten sus dominios— y
+  // las dos leían `workProfiles` global, así que en un deck recortado enseñaban
+  // productos que ese deck no presenta. Bajan por aquí, desde quien sí sabe qué
+  // deck se está presentando, por el mismo camino que `reglas`.
+  perfiles,
   // Las reglas bajan desde la ruta —el único sitio donde se puede leer del
   // disco— y las consume la lámina de evidencia, que no puede escribir sus
   // frases como literales sin romper el build en su propia lista.
   reglas,
 }: {
   slide: DeckSlide;
+  perfiles: readonly Extract<DeckSlide, { kind: "producto" }>["perfil"][];
   reglas: readonly ReglaBloqueada[];
 }): ReactElement {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
@@ -68,9 +75,9 @@ export function SlideRenderer({
     case "evidencia":
       return <EvidenciaSlide id={slide.id} reglas={reglas} />;
     case "puente":
-      return <PuenteSlide id={slide.id} />;
+      return <PuenteSlide id={slide.id} perfiles={perfiles} />;
     case "capacidades":
-      return <CapacidadesSlide id={slide.id} />;
+      return <CapacidadesSlide id={slide.id} perfiles={perfiles} />;
     case "cierre":
       return <CierreSlide id={slide.id} />;
     // La única que recibe el perfil entero: la ficha se construye con él y no

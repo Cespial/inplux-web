@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
-import { DECK_COPY } from "@/content/deck";
-import { workProfiles } from "@/content/work";
+import { DECK_COPY, type DeckSlide } from "@/content/deck";
 import styles from "./capas-fabrica.module.css";
 
 /**
@@ -25,8 +24,15 @@ import styles from "./capas-fabrica.module.css";
  *
  * ⚠️ **Ni un conteo escrito.** El número de estratos sale de
  * `DECK_COPY.capacidades.capas.length`; el de piezas, de los `category`
- * distintos de `workProfiles`. Los dos bajan al CSS como `--capas` y `--tramos`
- * y de ahí salen la rejilla, el compás y la duración de cada trazo.
+ * distintos de los perfiles QUE ESTE DECK PRESENTA. Los dos bajan al CSS como
+ * `--capas` y `--tramos` y de ahí salen la rejilla, el compás y la duración de
+ * cada trazo.
+ *
+ * ⚠️ **Y los perfiles llegan por parámetro, no de `workProfiles` global.** Este
+ * archivo leía la fuente entera, así que en un deck recortado la capa partida
+ * pintaba «Porcicultura» —un dominio que ese deck no presenta— junto a los
+ * cuatro que sí, delante de quien había venido a ver los suyos. La figura
+ * reparte los dominios DEL DECK; cuál sea el deck no es asunto suyo.
  *
  * ⚠️ Y NO hay ningún mapeo capacidad→capa. Sería clasificar por la posición de
  * un elemento en un arreglo en vez de por su contenido, que es el error que ya
@@ -54,6 +60,9 @@ export const RITMO = {
   dominio: 0.28, // s que espera la capa partida antes de empezar a rayarse
 } as const;
 
+/** Los perfiles que esta figura reparte: los del deck que la contiene. */
+type Perfiles = readonly Extract<DeckSlide, { kind: "producto" }>["perfil"][];
+
 /**
  * Los dominios, derivados de los perfiles. Nunca escritos.
  *
@@ -62,7 +71,9 @@ export const RITMO = {
  * leería como una errata en la sala. Hoy los cinco son distintos y el `Set` no
  * quita nada, que es justo la señal de que está bien puesto.
  */
-const DOMINIOS = [...new Set(workProfiles.map((perfil) => perfil.category))];
+function dominiosDe(perfiles: Perfiles) {
+  return [...new Set(perfiles.map((perfil) => perfil.category))];
+}
 
 /**
  * De abajo arriba es el orden del compás —la pila se construye desde su
@@ -76,15 +87,22 @@ const EN_PANTALLA = DECK_COPY.capacidades.capas
   .map((capa, desdeAbajo) => ({ capa, desdeAbajo }))
   .reverse();
 
-const COMPAS = {
-  "--capas": DECK_COPY.capacidades.capas.length,
-  "--tramos": DOMINIOS.length,
-  "--inicio": `${RITMO.inicio}s`,
-  "--paso": `${RITMO.paso}s`,
-  "--durEtiqueta": `${RITMO.etiqueta}s`,
-  "--durRegla": `${RITMO.regla}s`,
-  "--retrasoDominio": `${RITMO.dominio}s`,
-} as CSSProperties;
+/**
+ * El compás baja al CSS con los dos conteos dentro, así que se arma con los
+ * dominios del deck que se está presentando: `--tramos` es lo que parte la capa
+ * de dominios y tiene que valer lo mismo que piezas se pintan.
+ */
+function compasCon(tramos: number) {
+  return {
+    "--capas": DECK_COPY.capacidades.capas.length,
+    "--tramos": tramos,
+    "--inicio": `${RITMO.inicio}s`,
+    "--paso": `${RITMO.paso}s`,
+    "--durEtiqueta": `${RITMO.etiqueta}s`,
+    "--durRegla": `${RITMO.regla}s`,
+    "--retrasoDominio": `${RITMO.dominio}s`,
+  } as CSSProperties;
+}
 
 /** Prefijo de los `id` del rayado. El sufijo sale siempre de un índice. */
 const TRAMA = "deck-capacidades-trama";
@@ -128,13 +146,15 @@ function Trama({ id }: { id: string }) {
   );
 }
 
-export function CapasFabrica() {
+export function CapasFabrica({ perfiles }: { perfiles: Perfiles }) {
+  const dominios = dominiosDe(perfiles);
+
   return (
     // ⚠️ `data-deck-llena` es el contrato con `.lamina` para que esta lámina
     // REPARTA el alto en vez de centrar. Atributo global y no una clase porque
     // la regla vive en `deck.module.css` y las clases de un módulo van
     // cifradas: el mismo mecanismo que `data-deck-chrome`.
-    <ul className={styles.pila} style={COMPAS} data-deck-llena>
+    <ul className={styles.pila} style={compasCon(dominios.length)} data-deck-llena>
       {EN_PANTALLA.map(({ capa, desdeAbajo }) => (
         <li
           key={capa.nombre}
@@ -147,7 +167,7 @@ export function CapasFabrica() {
 
           {capa.dominios ? (
             <ul className={styles.dominios}>
-              {DOMINIOS.map((dominio, tramo) => (
+              {dominios.map((dominio, tramo) => (
                 <li
                   key={dominio}
                   className={styles.dominio}

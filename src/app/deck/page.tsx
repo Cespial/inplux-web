@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { IndiceDeDeck } from "@/components/deck/IndiceDeDeck";
 import { SLIDES } from "@/content/deck";
 
 // ⚠️ **Ningún conteo escrito a mano, tampoco aquí.** Esta descripción decía
@@ -16,17 +16,5 @@ export const metadata: Metadata = {
 };
 
 export default function DeckPage() {
-  return (
-    <main id="main-content" tabIndex={-1}>
-      <h1>De un problema real a software en producción</h1>
-      <Link href="/deck/presentacion">Ver la presentación</Link>
-      <ol>
-        {SLIDES.map((slide) => (
-          <li key={slide.id}>
-            <Link href={`/deck/presentacion#${slide.id}`}>{slide.titulo}</Link>
-          </li>
-        ))}
-      </ol>
-    </main>
-  );
+  return <IndiceDeDeck slides={SLIDES} hrefPresentacion="/deck/presentacion" />;
 }
