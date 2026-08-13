@@ -1,73 +1,214 @@
 /* ===========================================================================
-   Lámina 6 · El registro de lo que no se puede decir
+   Lámina 6 · El muro de frases
 
-   ⚠️ La lista que esta hoja maqueta NO puede aparecer escrita en ningún
-   archivo bajo `src/` —ni aquí, ni en un comentario de aquí—: uno de sus
-   motivos coincide con su propio patrón bloqueado y `check:content` escanea
-   también los `.css`. Ver `EvidenciaSlide.tsx` y
-   `scripts/verify-deck-reasons.test.mjs`.
+   Doce frases del sector, cada una tachada por la regla que la rechaza, y un
+   raíl del que salen los doce tachones: el mecanismo es una prueba que
+   RECHAZA, y eso es lo que se ve. Antes había trece renglones de mono gris con
+   los nombres internos de las reglas: 3,23 % de tinta y cero píxeles
+   saturados en toda la lámina.
 
-   ⚠️ **El ancho de línea es el límite duro de esta lámina, y está medido.** A
-   390 px la columna útil mide 342 px; el mono a 0,7 rem avanza ~6,7 px por
-   carácter, o sea unos 50 caracteres. El motivo más largo mide 36. El margen
-   es de catorce caracteres, y por eso las líneas van DESNUDAS: una viñeta, un
-   numeral o un par de comillas se comen un tercio de esa holgura, y el primer
-   motivo que envuelva parte la lista en dos ritmos y empuja la lámina contra
-   el riel de progreso. Lo que dice que esto es una lista lo dice la
-   tipografía, no un glifo.
+   ⚠️ Ni las frases ni los motivos pueden aparecer escritos en ningún archivo
+   bajo `src/` —ni aquí, ni en un comentario de aquí—: cada frase coincide con
+   su propio patrón bloqueado y `check:content` escanea también los `.css`. Ver
+   `EvidenciaSlide.tsx` y `scripts/verify-deck-reasons.test.mjs`.
+
+   ⚠️ **Aquí no hay ni un segundo escrito.** El compás entero llega en
+   variables desde el componente (`COMPAS`), por el mismo motivo que en
+   `SeisBarras.tsx`: si un tiempo vive en dos archivos, un día alguien toca uno
+   y no el otro y el cierre entra antes que el último tachón.
    =========================================================================== */
 
-.registro {
+/* ── La cabecera ─────────────────────────────────────────────────────────────
+   Dos columnas por la misma razón que en la tesis: así su ALTURA es la de la
+   respuesta y no la suma de respuesta más cuerpo, y cada píxel que no gasta
+   arriba se lo lleva el muro, que es lo que hay que mirar. Por debajo de 62 rem
+   se apila, que es donde el ancho no da para dos medidas de texto. */
+
+.cabecera {
+  display: grid;
+  gap: clamp(0.75rem, 2vh, 1.5rem);
   min-width: 0;
+}
+
+/* ⚠️ Las MISMAS dos pistas del muro y del cierre, y con el mismo hueco: la
+   lámina entera se apoya en dos verticales —el margen y el arranque de la
+   segunda columna— y ninguna pieza empieza a medio camino. Con una cabecera de
+   1,15fr / 0,85fr, el cuerpo arrancaba 98 px a la derecha de las frases que
+   tiene debajo y de la conclusión que tiene al pie: tres arranques distintos en
+   una lámina cuyo argumento es la precisión. */
+@media (min-width: 62rem) {
+  .cabecera {
+    grid-template-columns: repeat(var(--columnas), minmax(0, 1fr));
+    align-items: end;
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+  }
+}
+
+/* El cuerpo no lleva el margen superior de `.cuerpo`: aquí no va debajo de la
+   respuesta, va a su lado, y ese margen lo descolgaba media línea por debajo de
+   la línea base con la que tiene que alinearse. */
+.cuerpoColumna {
+  margin-top: 0;
+}
+
+/* ── El muro ─────────────────────────────────────────────────────────────────
+   Tres filas y en este orden, que es el del mecanismo: el comando que recorre
+   la lista, el registro —que se queda con todo el alto sobrante— y la nota que
+   explica por qué son doce frases y trece reglas. */
+
+.muro {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.5rem, 1.2vh, 0.9rem);
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+}
+
+/* La sangría es la distancia del raíl al texto, y vive UNA vez: la usan el
+   `padding` de la fila y el origen del tachón, que nace EN el raíl. Si se
+   escribieran por separado, el tachón dejaría de salir de la línea el día que
+   una de las dos cambie. */
+.registro {
+  --sangria: clamp(0.7rem, 1.2vw, 1rem);
+
+  display: grid;
+  min-width: 0;
+  min-height: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* El registro corre: cada regla aterriza detrás de la anterior, como la salida
-   de una comprobación que se está ejecutando. Es el argumento de la lámina
-   —«no es una guía de estilo, es una prueba automática»— y sin el escalonado
-   trece líneas grises aparecen de golpe y se leen como una lista de deseos.
-   70 ms entre líneas: lo justo para que se vea correr sin que haya que
-   esperarla. */
-.motivo {
-  color: var(--gray-400);
-  font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
-  line-height: 1.9;
-  letter-spacing: 0.01em;
-  /* En dos columnas, una regla partida entre el pie de una y la cabeza de la
-     otra es ilegible. */
-  break-inside: avoid;
-  animation: entraLinea 220ms var(--ease-out) calc(0.3s + var(--i) * 0.07s) both;
-}
+/* Dos pistas a partir de 62 rem —el mismo corte que usa la cabecera— y ningún
+   número escrito: `--columnas` y `--filas` bajan del componente, calculadas con
+   el largo real de la lista. `grid-auto-flow: column` con las filas fijadas es
+   lo que conserva el orden de lectura: la columna izquierda entera y luego la
+   derecha.
 
-/* Dos columnas a partir de 40 rem, y ninguna de las dos baja de los ~58
-   caracteres de línea que el motivo más largo necesita. Es `columns` y no una
-   rejilla a propósito: reparte las reglas que haya, sin que ningún número esté
-   escrito, y el orden de lectura sigue siendo de arriba abajo y luego a la
-   derecha. Bajo 40 rem, una sola columna: trece líneas de mono repartidas en
-   dos pistas de 165 px no las lee nadie. */
-@media (min-width: 40rem) {
+   ⚠️ Las filas son `minmax(min-content, 1fr)`, no `minmax(0, 1fr)`: reparten
+   el alto sobrante —que es el mecanismo contra la banda muerta— pero no se
+   encogen por debajo de su texto. Con `0` de mínimo, una ventana baja apretaba
+   las filas hasta solapar los renglones entre sí, que es un defecto que el
+   arnés denuncia y la sala ve. */
+@media (min-width: 62rem) {
   .registro {
-    /* Visto en la captura: a ancho completo de lámina las dos pistas miden
-       619 px para un texto de 400, y la segunda columna aterrizaba tan lejos
-       de la primera que las dos dejaban de leerse como una sola lista. El tope
-       las junta y deja el registro como un bloque, que es lo que es. */
-    max-width: 60rem;
-    columns: 2;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(var(--columnas), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--filas), minmax(min-content, 1fr));
     column-gap: clamp(1.5rem, 4vw, 4rem);
   }
 }
 
+/* El raíl es el `border-left` de las filas, no una línea aparte, y por eso NO
+   hay `row-gap`: los bordes de filas contiguas se tocan y forman una sola
+   vertical continua por columna. Un hilo suelto en un pseudo-elemento del
+   registro no sabría dividirse en dos al pasar a dos pistas.
+
+   `--gray-400` y no un gris más tenue: es 4,77:1 sobre el blanco de la lámina.
+   El raíl sostiene la lectura del peine —doce tachones saliendo de una sola
+   vertical—, así que carga información y tiene que pasar de 3:1. */
+.fila {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  /* ⚠️ **El tramo del medio es de teléfono y está medido.** En apaisado no
+     manda —ahí las filas reparten el alto sobrante y el `padding` solo fija su
+     mínimo—; en un 390 × 844 sí, y con `0.6vh` las doce filas sumaban 121 px de
+     aire y la lámina se salía 5 px por debajo del riel. A `0.45vh` son 91 px y
+     la lámina vuelve a caber con margen. */
+  padding-block: clamp(0.1rem, 0.45vh, 0.5rem);
+  padding-left: var(--sangria);
+  border-left: 1px solid var(--gray-400);
+  animation: entraFila 240ms var(--ease-out)
+    calc(var(--fila-inicio) + var(--i) * var(--fila-paso)) both;
+}
+
+/* La frase, con la voz con la que se escribiría en el sitio del que sale: la
+   del cuerpo del deck, no la del mono del registro anterior. Es lo que la hace
+   reconocible al instante — y lo que multiplica la tinta de la lámina, porque
+   una sans de 1,35 rem cubre mucho más papel que un mono de 0,7.
+
+   `inline-block` para que el tachón mida la FRASE y no la fila: un tachón que
+   llegara hasta el borde de la columna dejaría de leerse como tachón y pasaría
+   a leerse como una barra, o sea como un dato que aquí no existe.
+
+   ⚠️ `text-decoration: none` desactiva el tachado por omisión de `<s>` porque
+   lo pinta `::after`, que es lo que se puede animar. El elemento sigue siendo
+   `<s>` a propósito: sin este archivo, el navegador vuelve a tacharlas solo.
+
+   ⚠️ **El suelo del `clamp` es el tamaño de móvil y es lo que decide si la
+   frase envuelve.** Medido a 390 px: a la frase le quedan 330 px y la sans
+   avanza 0,47 em por carácter, así que con raíz 16 el suelo (14,4 px) da unos
+   49 caracteres de línea. La frase más larga tiene 39 y ocupa 262 px. Con raíz
+   20 el suelo sube a 18 px, caben 39 justos y la frase más larga empieza a
+   envolver: es el mismo acantilado de preferencia de fuente que ya está
+   documentado en la lámina 2. Envolver aquí no es leer peor, es leer MAL —el
+   tachón es una línea absoluta centrada en la caja y cruzaría por el hueco
+   entre los dos renglones—, y por eso el otro lado lo cierra
+   `verify-deck-reasons.test.mjs`, que no deja crecer las frases.
+
+   El techo no es cosmético: sube el cuerpo de la lámina de 21 a 25,6 px a
+   1440. Es la materia que el diagnóstico echaba en falta —esta lámina tenía el
+   3,23 % de tinta y el mayor cuerpo del deck en 45 px—, y a dos metros lo que
+   sobrevive es la masa. */
+.frase {
+  position: relative;
+  display: inline-block;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.8vw, 1.6rem);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+/* El tachón. Nace en el raíl —de ahí la sangría en negativo— y muere un pelo
+   después de la última letra: sale de la vertical, cruza la frase y se acaba.
+   Doce de estos, uno por fila, son el peine.
+
+   `--teal` es el único color de la lámina, y es el que la lámina afirma: 4,99:1
+   sobre el blanco, muy por encima del 3:1 que este deck le exige a cualquier
+   trazo que porte información. Sobre la tinta de la frase queda a 3,5:1, así
+   que el tachón se ve también donde cruza los glifos.
+
+   El grosor crece con el cuerpo (`0.09em`) pero no baja de 2 px: a 390 px un
+   tachón de hairline se pierde, y lo que se pierde es la lámina entera. */
+.frase::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -0.12em;
+  left: calc(-1 * var(--sangria));
+  height: max(2px, 0.09em);
+  background: var(--teal);
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left center;
+  animation: tacha 280ms var(--ease-out)
+    calc(var(--tachon-inicio) + var(--i) * var(--tachon-paso)) both;
+}
+
+/* La nota del pie del muro: por qué son doce renglones y trece reglas. Va
+   sangrada como las frases —no como el raíl— para que se lea como pie de la
+   lista y no como una fila más sin tachar. */
+.nota {
+  max-width: 62ch;
+  margin: 0;
+  padding-left: var(--sangria);
+  color: var(--text-muted, var(--gray-400));
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
 /* ⚠️ La separación entre la línea de salida y el remate era menor que la que
-   hay entre dos reglas de la lista —26 px contra 36—, así que el remate, que es
-   la frase que CIERRA la lámina y la única en negrita del deck, se leía como un
-   pie de la línea de comando. La proximidad es lo que agrupa: para que se lea
-   como conclusión y no como apéndice tiene que estar más lejos de la salida que
-   las reglas entre sí. En apaisado y no a 390 px: ahí la lámina va justa —con
-   la raíz del navegador en 18 px le quedan pocos píxeles— y el defecto es de
-   composición de sala. */
+   hay entre dos reglas de la lista, así que el remate, que es la frase que
+   CIERRA la lámina y la única en negrita del deck, se leía como un pie de la
+   línea de comando. La proximidad es lo que agrupa: para que se lea como
+   conclusión y no como apéndice tiene que estar más lejos de la salida que las
+   filas entre sí. */
 .cierre {
   display: flex;
   flex-direction: column;
@@ -78,13 +219,36 @@
 
 @media (min-width: 40rem) {
   .cierre {
-    gap: clamp(0.75rem, 1.6vh, 1.15rem);
+    gap: clamp(0.5rem, 1.2vh, 0.9rem);
   }
 }
 
-/* El pie del registro: el mismo recuento que se acaba de recorrer, con el
-   nombre real del comando que lo aplica. En mono y en gris, un escalón por
-   debajo de las reglas: es el pie de la lista, no una regla más. */
+/* En apaisado el cierre se parte en las MISMAS dos pistas del muro —mismo
+   `repeat(var(--columnas))`, mismo `column-gap`—, así que el remate arranca
+   exactamente en la vertical de la segunda columna de frases.
+
+   No es simetría por gusto: con las dos líneas del pie apiladas a la izquierda,
+   el cuarto inferior derecho de la lámina se quedaba vacío —el mayor hueco
+   continuo de la lámina— y el remate, que es la conclusión, quedaba de pie de
+   página debajo de una línea de comando. Repartido, el pie ocupa el ancho de la
+   lámina y la frase que cierra el argumento vuelve a leerse como conclusión. */
+@media (min-width: 62rem) {
+  .cierre {
+    display: grid;
+    grid-template-columns: repeat(var(--columnas), minmax(0, 1fr));
+    align-items: end;
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .remate {
+    grid-column: 2;
+  }
+}
+
+/* La cabeza del registro: el nombre real del comando que recorre la lista y el
+   número de REGLAS que aplica. En mono y en gris, un escalón por debajo de las
+   frases —es quien las tacha, no una de ellas—, y alineada con el raíl, no con
+   el texto: la vertical que baja de esta línea es la que va tachando. */
 .salida {
   margin: 0;
   color: var(--gray-400);
@@ -107,16 +271,24 @@
   text-wrap: pretty;
 }
 
-/* El pie y el remate entran cuando ya ha aterrizado la última regla, y ese
-   instante se calcula con `--n` —el largo real de la lista— y no con un número
-   escrito: el día que el verificador gane una regla, el remate sigue llegando
-   después de ella. */
-.salida,
-.remate {
-  animation: entraLinea 260ms var(--ease-out) calc(0.3s + var(--n) * 0.07s + 0.15s) both;
+/* El comando entra ANTES del primer tachón: primero se ve quién va a recorrer
+   la lista y después se ve lo que hace. Al revés, el orden de la lámina sería
+   el de una consecuencia sin causa. */
+.salida {
+  animation: entraFila 240ms var(--ease-out) var(--salida-inicio) both;
 }
 
-@keyframes entraLinea {
+/* La nota y el remate entran cuando ya ha caído el último tachón, y ese
+   instante se calcula con `--n` —el largo real del muro— y no con un número
+   escrito: el día que el verificador gane una regla, el cierre sigue llegando
+   después de ella. */
+.nota,
+.remate {
+  animation: entraFila 260ms var(--ease-out)
+    calc(var(--tachon-inicio) + var(--n) * var(--tachon-paso) + var(--cierre-tras)) both;
+}
+
+@keyframes entraFila {
   from {
     opacity: 0;
     transform: translate3d(0, 0.35rem, 0);
@@ -127,8 +299,24 @@
   }
 }
 
+/* Solo la escala horizontal: el tachón se pinta de izquierda a derecha, como lo
+   haría una comprobación que recorre la línea. El `translateY` no es parte de
+   la animación —centra el trazo sobre la frase— y por eso se repite en los dos
+   fotogramas: si se quedara solo en la regla, el navegador lo descartaría
+   durante la animación y el tachón saltaría al borde de abajo. */
+@keyframes tacha {
+  from {
+    transform: translateY(-50%) scaleX(0);
+  }
+  to {
+    transform: translateY(-50%) scaleX(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .motivo,
+  .fila,
+  .frase::after,
+  .nota,
   .salida,
   .remate {
     animation-duration: 0.01ms !important;

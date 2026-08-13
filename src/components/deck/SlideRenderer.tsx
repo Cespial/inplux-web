@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import type { DeckSlide } from "@/content/deck";
+import type { ReglaBloqueada } from "@/lib/banned-reasons.server";
 import { CapacidadesSlide } from "./slides/CapacidadesSlide";
 import { CierreSlide } from "./slides/CierreSlide";
 import { EspejoSlide } from "./slides/EspejoSlide";
@@ -25,13 +26,13 @@ import { TesisSlide } from "./slides/TesisSlide";
  */
 export function SlideRenderer({
   slide,
-  // Los motivos bajan desde la ruta —el único sitio donde se puede leer del
-  // disco— y los consume la lámina de evidencia, que no puede escribirlos
-  // como literales sin romper el build en su propia lista.
-  motivos,
+  // Las reglas bajan desde la ruta —el único sitio donde se puede leer del
+  // disco— y las consume la lámina de evidencia, que no puede escribir sus
+  // frases como literales sin romper el build en su propia lista.
+  reglas,
 }: {
   slide: DeckSlide;
-  motivos: readonly string[];
+  reglas: readonly ReglaBloqueada[];
 }): ReactElement {
   // Cada lámina titula con <h1>, no solo la portada. En el riel hay una sola
   // lámina viva a la vez, así que el documento tiene siempre exactamente un
@@ -65,7 +66,7 @@ export function SlideRenderer({
     // en el código fuente. Se lee del verificador en build, arriba del límite
     // de cliente, y baja hasta aquí.
     case "evidencia":
-      return <EvidenciaSlide id={slide.id} motivos={motivos} />;
+      return <EvidenciaSlide id={slide.id} reglas={reglas} />;
     case "puente":
       return <PuenteSlide id={slide.id} />;
     case "capacidades":
