@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-08-22T17:44:56.294Z",
+  "background": "#FFFFFF",
+  "inkRatio": 0.67,
+  "files": {
+    "inplux-whatsapp-640.png": {
+      "size": 640,
+      "inkWidth": 428.8,
+      "inkHeight": 250.1,
+      "scale": 5.1048,
+      "halfDiagonal": 248.2,
+      "cropRadius": 320,
+      "marginInsideCrop": 71.8,
+      "bytes": 6972,
+      "hasAlpha": false,
+      "sha256": "8bcd0f608ab0fdab28cbb31a1ac0dc78c1d76e26b0f4b4fb1d0c06377b236efc"
+    },
+    "inplux-whatsapp-1024.png": {
+      "size": 1024,
+      "inkWidth": 686.1,
+      "inkHeight": 400.2,
+      "scale": 8.1676,
+      "halfDiagonal": 397.1,
+      "cropRadius": 512,
+      "marginInsideCrop": 114.9,
+      "bytes": 12087,
+      "hasAlpha": false,
+      "sha256": "be4d6f2f2c102e98d6d490077550715d4e671f137a5753c363424f8a4be73f12"
+    }
+  }
+}
