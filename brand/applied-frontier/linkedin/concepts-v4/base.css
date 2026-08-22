@@ -1,0 +1,175 @@
+/* ============================================================================
+   INPLUX — Applied Frontier — conceptos v4
+   Campo base compartido por los seis conceptos.
+
+   Todo lo que hay aquí es CONSTANTE entre conceptos: lienzo, zonas de
+   exclusión, grano, viñeta, lift del avatar y cartela. Sólo cambia la escena.
+   Así la comparación mide el concepto, no el acabado.
+
+   Lienzo         1584 × 396 (4:1) — portada de perfil personal
+   Avatar         círculo centro (207, 365) r 160 · holgura r 186
+   Botón editar   rect x 1462–1560 · y 8–140
+   Carril libre   x 432 → 1544 · y 40 → 372
+   ========================================================================== */
+
+@font-face {
+  font-family: "Geist INPLUX";
+  src: url("fonts/Geist-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Geist Mono INPLUX";
+  src: url("fonts/GeistMono-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+:root {
+  --ink: #0c0c0b;
+  --ivory: #f9f5ef;
+  --signal: #00d7ca;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+.cover {
+  width: 1584px;
+  height: 396px;
+}
+
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+body {
+  color: var(--ivory);
+  font-family: "Geist INPLUX", sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ink);
+}
+
+/* --- Capas del campo ------------------------------------------------------
+   La escena de cada concepto vive entre .field y .grain. */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 1584px;
+  height: 396px;
+  pointer-events: none;
+}
+
+.field {
+  z-index: -6;
+}
+.lift {
+  z-index: -5;
+}
+.scene {
+  z-index: 1;
+}
+.grain {
+  z-index: 6;
+  opacity: 0.034;
+}
+.edge-shade {
+  z-index: 7;
+  box-shadow:
+    inset 210px 0 190px -180px rgba(0, 0, 0, 0.6),
+    inset -230px 0 200px -190px rgba(0, 0, 0, 0.62),
+    inset 0 96px 96px -96px rgba(0, 0, 0, 0.5),
+    inset 0 -104px 104px -104px rgba(0, 0, 0, 0.55);
+}
+
+/* --- Cartela --------------------------------------------------------------
+   `APPLIED FRONTIER.` deja de ser titular y pasa a ser firma: pequeña, en el
+   carril izquierdo, a la altura del retrato. La lee quien ya está mirando. */
+
+.wordmark {
+  position: absolute;
+  z-index: 8;
+  left: 432px;
+  top: 280px;
+  margin: 0;
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 520;
+  letter-spacing: -1.9px;
+  white-space: nowrap;
+  color: var(--ivory);
+}
+
+/* --- Capa de prueba ------------------------------------------------------- */
+
+.proof-layer {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+body.proof .proof-layer {
+  display: block;
+}
+
+.proof-shape {
+  position: absolute;
+  border-style: dashed;
+}
+
+.proof-avatar {
+  left: 47px;
+  top: 205px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border-width: 3px;
+  border-color: rgba(255, 92, 92, 0.95);
+}
+
+.proof-avatar-clear {
+  left: 21px;
+  top: 179px;
+  width: 372px;
+  height: 372px;
+  border-radius: 50%;
+  border-width: 2px;
+  border-color: rgba(255, 92, 92, 0.4);
+}
+
+.proof-button {
+  left: 1450px;
+  top: 0;
+  width: 122px;
+  height: 152px;
+  border-width: 3px;
+  border-color: rgba(255, 92, 92, 0.95);
+}
+
+.proof-rail {
+  left: 432px;
+  top: 40px;
+  width: 1112px;
+  height: 332px;
+  border-width: 2px;
+  border-color: rgba(0, 215, 202, 0.85);
+}

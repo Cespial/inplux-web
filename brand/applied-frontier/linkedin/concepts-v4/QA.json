@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-08-22T15:41:28.588Z",
+  "canvas": "1584×396",
+  "concepts": {
+    "A": {
+      "id": "a-artefacto",
+      "name": "El artefacto",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 442244,
+      "megabytes": 0.422,
+      "hasProfile": true
+    },
+    "B": {
+      "id": "b-frontera",
+      "name": "La frontera es una línea",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 450742,
+      "megabytes": 0.43,
+      "hasProfile": true
+    },
+    "C": {
+      "id": "c-registro",
+      "name": "Registro de ejecución",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 423938,
+      "megabytes": 0.404,
+      "hasProfile": true
+    },
+    "D": {
+      "id": "d-estado",
+      "name": "Estado de sistema",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 407289,
+      "megabytes": 0.388,
+      "hasProfile": true
+    },
+    "E": {
+      "id": "e-estratos",
+      "name": "Estratos en ejecución",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 417912,
+      "megabytes": 0.399,
+      "hasProfile": true
+    },
+    "F": {
+      "id": "f-objeto",
+      "name": "Un solo objeto",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "tealOutsideSignal": 0,
+      "bytes": 477149,
+      "megabytes": 0.455,
+      "hasProfile": true
+    }
+  }
+}

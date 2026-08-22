@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1584, initial-scale=1" />
+    <title>INPLUX — Applied Frontier — concepto A · El artefacto</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+    .a-blur { filter: blur(2.6px); }
+    .a-persp { position:absolute; inset:0; perspective: 2100px; perspective-origin: 48% 46%; }
+    .a-plane {
+      position:absolute; left:646px; top:18px; width:706px;
+      transform: rotateX(54deg) rotateZ(-19deg);
+      transform-origin: 50% 50%;
+      font-family:"Geist Mono INPLUX",monospace;
+    }
+    .a-head {
+      display:flex; gap:58px; padding:0 0 20px 6px;
+      font-size:16px; font-weight:660; letter-spacing:3.4px; color:rgba(249,245,239,.15);
+    }
+    .a-row {
+      display:flex; align-items:center; gap:18px;
+      height:58px; padding:0 22px; margin-bottom:16px;
+      background:rgba(249,245,239,.03);
+      border:1px solid rgba(249,245,239,.055);
+      border-radius:10px;
+    }
+    .a-row.is-focus {
+      background:rgba(0,215,202,.05);
+      border-color:rgba(0,215,202,.2);
+      box-shadow:0 0 44px rgba(0,215,202,.10);
+    }
+    .a-row.is-hidden { visibility:hidden; }
+    .a-bar { height:10px; border-radius:5px; background:rgba(249,245,239,.14); }
+    .a-chip { height:18px; border-radius:9px; background:rgba(249,245,239,.075); flex:none; }
+    .a-dot { width:13px; height:13px; border-radius:50%; background:#F9F5EF; flex:none; margin-left:auto; }
+    .a-dot.signal { background:#00D7CA; opacity:1; }
+    </style>
+  </head>
+  <body>
+    <main class="cover" aria-label="INPLUX Applied Frontier — El artefacto">
+    <svg class="layer field" viewBox="0 0 1584 396" aria-hidden="true">
+      <defs>
+        <pattern id="baseGrid" width="44" height="44" patternUnits="userSpaceOnUse">
+          <path d="M44 0H0V44" fill="none" stroke="#F9F5EF" stroke-opacity=".022" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="1584" height="396" fill="#0c0c0b"/>
+      <rect width="1584" height="396" fill="url(#baseGrid)"/>
+    </svg>
+    <svg class="layer lift" viewBox="0 0 1584 396" aria-hidden="true">
+      <defs>
+        <radialGradient id="baseLift" cx="207" cy="365" r="330" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#F9F5EF" stop-opacity=".07"/>
+          <stop offset=".45" stop-color="#F9F5EF" stop-opacity=".026"/>
+          <stop offset="1" stop-color="#F9F5EF" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1584" height="396" fill="url(#baseLift)"/>
+    </svg>
+
+    <div class="layer scene">
+      <div class="a-blur"><div class="a-persp"><div class="a-plane">
+        <div class="a-head">
+          <span>ENTRADA</span><span>ESTADO</span><span>FUENTE</span>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:62%"></i>
+          <i class="a-chip" style="width:46px"></i><i class="a-chip" style="width:30px"></i>
+          <i class="a-dot" style="opacity:0.13"></i>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:81%"></i>
+          <i class="a-chip" style="width:62px"></i>
+          <i class="a-dot" style="opacity:0.09"></i>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:48%"></i>
+          <i class="a-chip" style="width:38px"></i><i class="a-chip" style="width:54px"></i>
+          <i class="a-dot" style="opacity:0.15"></i>
+        </div>
+        <div class="a-row is-focus is-hidden">
+          <i class="a-bar" style="width:70%"></i>
+          <i class="a-chip" style="width:50px"></i><i class="a-chip" style="width:26px"></i>
+          <i class="a-dot"></i>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:93%"></i>
+          <i class="a-chip" style="width:42px"></i>
+          <i class="a-dot" style="opacity:0.08"></i>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:55%"></i>
+          <i class="a-chip" style="width:34px"></i>
+          <i class="a-dot" style="opacity:0.11"></i>
+        </div>
+        <div class="a-row">
+          <i class="a-bar" style="width:86%"></i>
+          <i class="a-chip" style="width:58px"></i><i class="a-chip" style="width:40px"></i>
+          <i class="a-dot" style="opacity:0.07"></i>
+        </div>
+      </div></div></div>
+      <div class="a-persp"><div class="a-plane">
+        <div class="a-head" style="visibility:hidden">
+          <span>ENTRADA</span><span>ESTADO</span><span>FUENTE</span>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:62%"></i>
+          <i class="a-chip" style="width:46px"></i><i class="a-chip" style="width:30px"></i>
+          <i class="a-dot" style="opacity:0.13"></i>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:81%"></i>
+          <i class="a-chip" style="width:62px"></i>
+          <i class="a-dot" style="opacity:0.09"></i>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:48%"></i>
+          <i class="a-chip" style="width:38px"></i><i class="a-chip" style="width:54px"></i>
+          <i class="a-dot" style="opacity:0.15"></i>
+        </div>
+        <div class="a-row is-focus">
+          <i class="a-bar" style="width:70%"></i>
+          <i class="a-chip" style="width:50px"></i><i class="a-chip" style="width:26px"></i>
+          <i class="a-dot signal"></i>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:93%"></i>
+          <i class="a-chip" style="width:42px"></i>
+          <i class="a-dot" style="opacity:0.08"></i>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:55%"></i>
+          <i class="a-chip" style="width:34px"></i>
+          <i class="a-dot" style="opacity:0.11"></i>
+        </div>
+        <div class="a-row is-hidden">
+          <i class="a-bar" style="width:86%"></i>
+          <i class="a-chip" style="width:58px"></i><i class="a-chip" style="width:40px"></i>
+          <i class="a-dot" style="opacity:0.07"></i>
+        </div>
+      </div></div>
+    </div>
+    <svg class="layer" style="z-index:2" viewBox="0 0 1584 396" aria-hidden="true">
+      <defs>
+        <radialGradient id="aGlow" cx="1040" cy="204" r="250" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#00D7CA" stop-opacity=".075"/>
+          <stop offset="1" stop-color="#00D7CA" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1584" height="396" fill="url(#aGlow)"/>
+    </svg>
+
+    <p class="wordmark">APPLIED FRONTIER.</p>
+
+    <svg class="layer grain" viewBox="0 0 1584 396" aria-hidden="true" preserveAspectRatio="none">
+      <defs>
+        <filter id="baseGrain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="17" stitchTiles="stitch"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"/>
+        </filter>
+      </defs>
+      <rect width="1584" height="396" filter="url(#baseGrain)"/>
+    </svg>
+    <div class="layer edge-shade" aria-hidden="true"></div>
+
+    <div class="proof-layer" aria-hidden="true">
+      <div class="proof-shape proof-avatar-clear"></div>
+      <div class="proof-shape proof-avatar"></div>
+      <div class="proof-shape proof-button"></div>
+      <div class="proof-shape proof-rail"></div>
+    </div>
+    </main>
+  </body>
+</html>
