@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-08-22T16:22:17.022Z",
+  "bench": "E",
+  "treatments": {
+    "00-base": {
+      "name": "Línea base",
+      "wordmark": {
+        "x": 432,
+        "y": 280,
+        "width": 323.03125,
+        "height": 38
+      },
+      "signals": 1,
+      "megabytes": 0.399
+    },
+    "01-metadata": {
+      "name": "Metadata de sistema",
+      "wordmark": {
+        "x": 432,
+        "y": 56,
+        "width": 328,
+        "height": 13
+      },
+      "signals": 1,
+      "megabytes": 0.395
+    },
+    "02-lockup": {
+      "name": "Lockup con el símbolo",
+      "wordmark": {
+        "x": 436.6400146484375,
+        "y": 268.5299987792969,
+        "width": 280.5631103515625,
+        "height": 28.420013427734375
+      },
+      "signals": 1,
+      "megabytes": 0.396
+    },
+    "02b-lockup-grabado": {
+      "name": "Lockup grabado",
+      "wordmark": {
+        "x": 436.6400146484375,
+        "y": 268.5299987792969,
+        "width": 280.5631103515625,
+        "height": 28.420013427734375
+      },
+      "signals": 1,
+      "megabytes": 0.395
+    },
+    "03-grabada": {
+      "name": "Grabada",
+      "wordmark": {
+        "x": 432,
+        "y": 272,
+        "width": 392.1875,
+        "height": 46
+      },
+      "signals": 1,
+      "megabytes": 0.398
+    },
+    "04-canto": {
+      "name": "En el canto",
+      "wordmark": {
+        "x": 432,
+        "y": 40,
+        "width": 20,
+        "height": 332
+      },
+      "signals": 1,
+      "megabytes": 0.395
+    },
+    "05-en-escena": {
+      "name": "Tumbada en la escena",
+      "wordmark": {
+        "x": 464.5083312988281,
+        "y": 295.2799987792969,
+        "width": 498.5384216308594,
+        "height": 44.6400146484375
+      },
+      "signals": 1,
+      "megabytes": 0.398
+    },
+    "06-ninguna": {
+      "name": "Ninguna",
+      "wordmark": null,
+      "signals": 1,
+      "megabytes": 0.392
+    }
+  }
+}
