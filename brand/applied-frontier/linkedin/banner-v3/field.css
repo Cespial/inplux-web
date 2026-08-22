@@ -1,0 +1,216 @@
+/* ============================================================================
+   INPLUX — Applied Frontier — Campo óptico v3
+   Gramática compartida por los dos masters de LinkedIn.
+
+   Un solo sistema, dos proporciones:
+     · perfil personal  1584 × 396  (4:1)
+     · página empresa   4200 × 700  (6:1)
+
+   Todo lo que aquí se define es independiente de la proporción. La
+   composición vive en profile.css y company.css.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Geist INPLUX";
+  src: url("fonts/Geist-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Geist Mono INPLUX";
+  src: url("fonts/GeistMono-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+:root {
+  --ink: #0c0c0b;
+  --ink-raised: #141513;
+  --ivory: #f9f5ef;
+  --signal: #00d7ca;
+
+  /* Estratos: módulo 42:13, paso canónico +21/−18.
+     La pendiente del paso gobierna TODOS los planos oblicuos del campo. */
+  --estratos-slope: -0.857142857; /* −18 / 21 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+body {
+  color: var(--ivory);
+  font-family: "Geist INPLUX", sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Planos de profundidad
+   Tres tiers ópticos. El foco selectivo es la única cosa que el campo hace:
+   nada del contenido tipográfico ni la geometría canónica se desenfoca jamás.
+   --------------------------------------------------------------------------- */
+
+.plane {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.plane--far {
+  z-index: -6;
+}
+.plane--mid {
+  z-index: -5;
+}
+.plane--lift {
+  z-index: -4;
+}
+.plane--bloom {
+  z-index: -3;
+}
+.plane--near {
+  z-index: -2;
+}
+.plane--marks {
+  z-index: -1;
+}
+
+/* El plano delantero desenfocado: entra por el ángulo inferior izquierdo y
+   amortigua la llegada de la foto de perfil en vez de chocar con ella. */
+.plane--near {
+  mix-blend-mode: screen;
+}
+
+/* ---------------------------------------------------------------------------
+   Grano procedural
+   No es decoración: LinkedIn recomprime a JPEG y los degradados oscuros
+   grandes bandean. El grano actúa como dither y lo evita.
+   --------------------------------------------------------------------------- */
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Viñeta de borde
+   Cierra el campo sin oscurecer la zona esencial.
+   --------------------------------------------------------------------------- */
+
+.edge-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Tipografía
+   --------------------------------------------------------------------------- */
+
+.content {
+  position: absolute;
+  z-index: 4;
+}
+
+.system-label {
+  display: flex;
+  align-items: center;
+  /* La caja se ajusta a la tinta: el exportador mide getBoundingClientRect y
+     una caja de ancho completo daría un falso choque con el botón de editar. */
+  width: fit-content;
+  margin: 0;
+  font-family: "Geist Mono INPLUX", monospace;
+  line-height: 1;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(249, 245, 239, 0.56);
+  white-space: nowrap;
+}
+
+.system-label::before {
+  content: "";
+  display: block;
+  background: rgba(249, 245, 239, 0.32);
+}
+
+.title {
+  margin: 0;
+  font-weight: 520;
+  color: var(--ivory);
+  white-space: nowrap;
+}
+
+.descriptor {
+  margin: 0;
+  font-family: "Geist Mono INPLUX", monospace;
+  font-weight: 520;
+  text-transform: uppercase;
+  color: rgba(249, 245, 239, 0.8);
+  white-space: nowrap;
+}
+
+.descriptor span {
+  display: block;
+}
+
+.endmark {
+  position: absolute;
+  z-index: 4;
+  margin: 0;
+  font-family: "Geist Mono INPLUX", monospace;
+  font-weight: 620;
+  text-transform: uppercase;
+  color: rgba(249, 245, 239, 0.3);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Capa de prueba — sólo se dibuja cuando el exportador añade body.proof
+   --------------------------------------------------------------------------- */
+
+.proof-layer {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+body.proof .proof-layer {
+  display: block;
+}
+
+.proof-shape {
+  position: absolute;
+  border-style: dashed;
+}
+
+.proof-label {
+  position: absolute;
+  background: var(--ink);
+  font-family: "Geist Mono INPLUX", monospace;
+  font-weight: 660;
+  text-transform: uppercase;
+  white-space: nowrap;
+}

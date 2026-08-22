@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Prueba de tolerancia al recorte — perfil</title>
+    <link rel="stylesheet" href="field.css" />
+    <style>
+      html,
+      body {
+        width: 1720px;
+        height: 1096px;
+        background: #0c0c0b;
+      }
+
+      .sheet {
+        width: 1720px;
+        height: 1096px;
+        padding: 40px 68px;
+        font-family: "Geist Mono INPLUX", monospace;
+        color: rgba(249, 245, 239, 0.55);
+      }
+
+      .row + .row {
+        margin-top: 20px;
+      }
+
+      .row__label {
+        margin: 0 0 8px;
+        font-size: 13px;
+        font-weight: 640;
+        letter-spacing: 2.2px;
+        text-transform: uppercase;
+      }
+
+      .row__label b {
+        color: var(--signal);
+        font-weight: 640;
+      }
+
+      /* Cada ventana recorta la MISMA imagen maestra desplazándola, que es lo
+         que hace LinkedIn al ajustar la portada a otra proporción. */
+      .window {
+        position: relative;
+        overflow: hidden;
+        background: #000;
+        border: 1px solid rgba(249, 245, 239, 0.12);
+      }
+
+      .window img {
+        position: absolute;
+        display: block;
+      }
+
+      .w-full {
+        width: 1584px;
+        height: 396px;
+      }
+      .w-full img {
+        left: 0;
+        top: 0;
+        width: 1584px;
+        height: 396px;
+      }
+
+      /* Recorte vertical: LinkedIn conserva el ancho y come alto. */
+      .w-vertical {
+        width: 1584px;
+        height: 292px;
+      }
+      .w-vertical img {
+        left: 0;
+        top: -52px;
+        width: 1584px;
+        height: 396px;
+      }
+
+      .pair {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+      }
+
+      /* Recorte lateral: conserva el alto y come ancho. Al 45 %. */
+      .w-sides {
+        width: 594px;
+        height: 178px;
+      }
+      .w-sides img {
+        left: -84px;
+        top: 0;
+        width: 713px;
+        height: 178px;
+      }
+
+      /* Reducción de lectura: la pieza al 45 % de su tamaño maestro. */
+      .w-small {
+        width: 713px;
+        height: 178px;
+      }
+      .w-small img {
+        left: 0;
+        top: 0;
+        width: 713px;
+        height: 178px;
+      }
+
+      .note {
+        margin: 14px 0 0;
+        font-size: 12px;
+        line-height: 1.6;
+        letter-spacing: 0.4px;
+        color: rgba(249, 245, 239, 0.34);
+        max-width: 1100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="row">
+        <p class="row__label">01 · Maestro <b>1584 × 396</b> — titular, descriptor y señal en su sitio</p>
+        <div class="window w-full">
+          <img src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+        </div>
+      </div>
+
+      <div class="row">
+        <p class="row__label">
+          02 · Recorte vertical <b>−26 % de alto</b> — sobreviven titular, primera línea del descriptor y
+          líder teal; la segunda línea se pierde
+        </p>
+        <div class="window w-vertical">
+          <img src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+        </div>
+      </div>
+
+      <div class="row pair">
+        <div>
+          <p class="row__label">03 · Recorte lateral <b>−17 % de ancho</b></p>
+          <div class="window w-sides">
+            <img src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+          </div>
+        </div>
+        <div>
+          <p class="row__label">04 · Reducción de lectura al <b>45 %</b></p>
+          <div class="window w-small">
+            <img src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+          </div>
+        </div>
+      </div>
+
+      <p class="note">
+        LinkedIn no publica coordenadas de recorte para móvil. Estas tres ventanas son una simulación
+        conservadora del paquete, no una especificación oficial: comprueban que el titular, el descriptor
+        y el evento teal siguen presentes cuando la portada se ajusta a una proporción más corta, se come
+        los lados o se lee en miniatura. Los extremos del campo — regla de ticks, corchetes, Matrix y
+        Frontier Crop — son prescindibles por diseño.
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,341 @@
+{
+  "generatedAt": "2026-08-22T03:46:57.021Z",
+  "masters": {
+    "profile": {
+      "source": "inplux-linkedin-profile-cover-v3-1584x396.html",
+      "canvas": "1584×396",
+      "ratio": "4:1",
+      "fonts": {
+        "geist": true,
+        "geistMono": true
+      },
+      "guards": {
+        "rail": {
+          "x": 432,
+          "y": 40,
+          "right": 1544,
+          "bottom": 372
+        },
+        "avatar": {
+          "cx": 207,
+          "cy": 365,
+          "r": 160,
+          "clearance": 186
+        },
+        "editButton": {
+          "x": 1450,
+          "y": 0,
+          "right": 1572,
+          "bottom": 152
+        }
+      },
+      "textBounds": {
+        ".system-label": {
+          "x": 432,
+          "y": 56,
+          "width": 387.796875,
+          "height": 17
+        },
+        ".title": {
+          "x": 432,
+          "y": 99,
+          "width": 486.421875,
+          "height": 186.53125
+        },
+        ".descriptor": {
+          "x": 432,
+          "y": 310,
+          "width": 538.203125,
+          "height": 58
+        },
+        ".endmark": {
+          "x": 1422.796875,
+          "y": 334,
+          "width": 97.203125,
+          "height": 18
+        }
+      },
+      "construction": {
+        "declared": {
+          "moduleWidth": 84,
+          "moduleHeight": 26,
+          "stepX": 42,
+          "stepY": -36
+        },
+        "modules": [
+          {
+            "x": 1056,
+            "y": 344,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof0)"
+          },
+          {
+            "x": 1098,
+            "y": 308,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof1)"
+          },
+          {
+            "x": 1140,
+            "y": 272,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof2)"
+          },
+          {
+            "x": 1182,
+            "y": 236,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof3)"
+          },
+          {
+            "x": 1224,
+            "y": 200,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof4)"
+          },
+          {
+            "x": 1266,
+            "y": 164,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#F9F5EF",
+            "blur": "url(#fDof5)"
+          },
+          {
+            "x": 1308,
+            "y": 128,
+            "width": 84,
+            "height": 26,
+            "rx": 13,
+            "fill": "#00D7CA",
+            "blur": "none"
+          }
+        ],
+        "signalEvents": 1,
+        "rasterImagesInCover": 0,
+        "focusPullStates": 7
+      }
+    },
+    "company": {
+      "source": "inplux-linkedin-company-cover-v3-4200x700.html",
+      "canvas": "4200×700",
+      "ratio": "6:1",
+      "fonts": {
+        "geist": true,
+        "geistMono": true
+      },
+      "guards": {
+        "safeArea": {
+          "x": 900,
+          "y": 120,
+          "right": 3300,
+          "bottom": 580
+        }
+      },
+      "textBounds": {
+        ".system-label": {
+          "x": 1000,
+          "y": 222,
+          "width": 595.609375,
+          "height": 26
+        },
+        ".title": {
+          "x": 1000,
+          "y": 290,
+          "width": 1329.484375,
+          "height": 140.390625
+        },
+        ".descriptor": {
+          "x": 2420,
+          "y": 280,
+          "width": 669.890625,
+          "height": 162
+        },
+        ".endmark": {
+          "x": 3864.390625,
+          "y": 556,
+          "width": 165.609375,
+          "height": 31
+        }
+      },
+      "construction": {
+        "declared": {
+          "moduleWidth": 126,
+          "moduleHeight": 39,
+          "stepX": 63,
+          "stepY": -54
+        },
+        "modules": [
+          {
+            "x": 3320,
+            "y": 512,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof0)"
+          },
+          {
+            "x": 3383,
+            "y": 458,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof1)"
+          },
+          {
+            "x": 3446,
+            "y": 404,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof2)"
+          },
+          {
+            "x": 3509,
+            "y": 350,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof3)"
+          },
+          {
+            "x": 3572,
+            "y": 296,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof4)"
+          },
+          {
+            "x": 3635,
+            "y": 242,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#F9F5EF",
+            "blur": "url(#cDof5)"
+          },
+          {
+            "x": 3698,
+            "y": 188,
+            "width": 126,
+            "height": 39,
+            "rx": 19.5,
+            "fill": "#00D7CA",
+            "blur": "none"
+          }
+        ],
+        "signalEvents": 1,
+        "rasterImagesInCover": 0,
+        "focusPullStates": 7
+      }
+    }
+  },
+  "proofs": {
+    "proof-insitu-profile.png": {
+      "source": "proof-insitu-profile.html",
+      "width": 1664,
+      "height": 812
+    },
+    "proof-insitu-company.png": {
+      "source": "proof-insitu-company.html",
+      "width": 1208,
+      "height": 560
+    },
+    "proof-crop-tolerance.png": {
+      "source": "proof-crop-tolerance.html",
+      "width": 1720,
+      "height": 1096
+    },
+    "inplux-linkedin-banner-v3-review-board.png": {
+      "source": "inplux-linkedin-banner-v3-review-board.html",
+      "width": 1800,
+      "height": 1760
+    }
+  },
+  "checks": {
+    "inplux-linkedin-profile-cover-v3-1584x396.png": {
+      "bytes": 475334,
+      "megabytes": 0.453,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "4e821ecf012fe9f4ef6821b9d27245fa763ee1878e70b2332d95be71ffe94d22"
+    },
+    "inplux-linkedin-profile-cover-v3-1584x396.jpg": {
+      "bytes": 56839,
+      "megabytes": 0.054,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "c263187a3af821240ddee7ac7766a9f9e1fa7e575218f3ad054e3ae926f86e35"
+    },
+    "inplux-linkedin-profile-cover-v3-3168x792.png": {
+      "bytes": 1596243,
+      "megabytes": 1.522,
+      "width": 3168,
+      "height": 792,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "ec7d3b3743a216425981128d5d73fd466024c91386f38705eb35e6fb1159b9e0"
+    },
+    "inplux-linkedin-company-cover-v3-4200x700.png": {
+      "bytes": 1829325,
+      "megabytes": 1.745,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "dafa293271db3fdf7f5ad321395e8321eae41222733702a2d49ef59ad75c0c15"
+    },
+    "inplux-linkedin-company-cover-v3-4200x700.jpg": {
+      "bytes": 145742,
+      "megabytes": 0.139,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "e0593fdec2c5ca5ccbff34ce2a625dee8d828f76bd2261a03eeaed4e4fa376da"
+    },
+    "inplux-linkedin-company-cover-v3-preview-1128x188.png": {
+      "bytes": 100879,
+      "megabytes": 0.096,
+      "width": 1128,
+      "height": 188,
+      "space": "srgb",
+      "hasProfile": true,
+      "withinLimit": true,
+      "sha256": "4195ef85c7069c0bd2e808992b11d307146fe4ec37fa85dae5cb6c3cb15a654a"
+    }
+  },
+  "uploadLimitBytes": 3145728,
+  "oversized": []
+}

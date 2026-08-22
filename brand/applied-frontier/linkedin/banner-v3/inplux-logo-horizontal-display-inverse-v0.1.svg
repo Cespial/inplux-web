@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 403 112" role="img" aria-labelledby="title desc">
+  <title id="title">INPLUX — firma horizontal display inversa v0.1</title>
+  <desc id="desc">Propuesta promocional con Estratos ampliado y gap reducido; las formas del símbolo y wordmark permanecen intactas.</desc>
+  <g id="estratos" transform="translate(19.3 17.8) scale(.84)" shape-rendering="geometricPrecision">
+    <rect x="8" y="57" width="42" height="13" rx="6.5" fill="#F9F5EF"/>
+    <rect x="29" y="39" width="42" height="13" rx="6.5" fill="#F9F5EF"/>
+    <rect x="50" y="21" width="42" height="13" rx="6.5" fill="#00D7CA"/>
+  </g>
+  <g id="wordmark" fill="#F9F5EF" transform="translate(116.2 82) scale(.06980 -.06980)">
+    <path transform="translate(0 0)" d="M71.5 0V745H207.75V0Z"/>
+    <path transform="translate(309 0)" d="M71.5 0V745H178.25L587.5 193 532.75 181.75V745H669V0H561.5L157.5 556 207.75 567.25V0Z"/>
+    <path transform="translate(1080 0)" d="M71.5 0V745H350Q426 745 484.375 717.625 542.75 690.25 575.875 637.625 609 585 609 509.5 609 435.5 575.5 383 542 330.5 483.75 302.75 425.5 275 350 275H207.75V0ZM207.75 395H351.75Q388.5 395 415.5 409.375 442.5 423.75 457.625 449.625 472.75 475.5 472.75 509.75 472.75 544.75 457.625 570.5 442.5 596.25 415.5 610.625 388.5 625 351.75 625H207.75Z"/>
+    <path transform="translate(1758 0)" d="M71.5 0V745H207.75V120H526.5V0Z"/>
+    <path transform="translate(2331 0)" d="M359-12Q273.25-12 206.5 24 139.75 60 101.875 122.75 64 185.5 64 265.5V745H200.25V273Q200.25 226.5 220.75 189.75 241.25 153 277.125 132.375 313 111.75 359 111.75 405.75 111.75 441.25 132.375 476.75 153 497.25 189.75 517.75 226.5 517.75 273V745H654V265.5Q654 185.5 616.125 122.75 578.25 60 511.625 24 445-12 359-12Z"/>
+    <path transform="translate(3079 0)" d="M11 0 254.5 374.75 13 745H169L366.75 442H294.75L491.5 745H647.5L406.75 374.75 649.75 0H493.75L294.75 307.25 366.75 306.5 166.5 0Z"/>
+  </g>
+</svg>

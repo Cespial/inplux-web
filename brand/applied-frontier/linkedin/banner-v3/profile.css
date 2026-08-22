@@ -1,0 +1,158 @@
+/* ============================================================================
+   Master A — Portada de PERFIL PERSONAL — 1584 × 396 (4:1)
+
+   Restricciones duras medidas sobre la interfaz real de LinkedIn
+   (captura 1300×808, banner 1266×315, escalado a 1584×396):
+
+     · avatar        círculo centro (207, 365) r = 160  → holgura r = 186
+     · botón editar  rect x 1462–1560, y 8–140          → holgura x ≥ 1450
+     · esquinas      radio de tarjeta ≈ 10
+
+   De ahí sale el carril de contenido: x 432 → 1544.
+   El exportador falla si un nodo de texto entra en cualquiera de las zonas.
+   ========================================================================== */
+
+html,
+body,
+.cover {
+  width: 1584px;
+  height: 396px;
+}
+
+/* --- Carril de contenido ------------------------------------------------- */
+
+.content {
+  left: 432px;
+  top: 56px;
+  width: 1112px;
+  height: 312px;
+}
+
+.system-label {
+  font-size: 17px;
+  letter-spacing: 2.6px;
+  gap: 15px;
+}
+
+.system-label::before {
+  width: 40px;
+  height: 1.5px;
+}
+
+.title {
+  position: absolute;
+  left: 0;
+  top: 43px;
+  font-size: 106px;
+  line-height: 0.88;
+  letter-spacing: -5.2px;
+}
+
+.descriptor {
+  position: absolute;
+  left: 0;
+  top: 254px;
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.3px;
+}
+
+.endmark {
+  right: 64px;
+  top: 334px;
+  font-size: 14px;
+  letter-spacing: 2.4px;
+}
+
+/* --- Viñeta -------------------------------------------------------------- */
+
+.edge-shade {
+  box-shadow:
+    inset 210px 0 190px -180px rgba(0, 0, 0, 0.6),
+    inset -230px 0 200px -190px rgba(0, 0, 0, 0.62),
+    inset 0 96px 96px -96px rgba(0, 0, 0, 0.5),
+    inset 0 -104px 104px -104px rgba(0, 0, 0, 0.55);
+}
+
+/* --- Desenfoque por tier ------------------------------------------------- */
+
+.plane--far {
+  filter: blur(26px);
+}
+
+.plane--mid {
+  filter: blur(9px);
+}
+
+.plane--near {
+  filter: blur(46px);
+  opacity: 0.42;
+}
+
+.grain {
+  opacity: 0.034;
+}
+
+/* --- Capa de prueba ------------------------------------------------------ */
+
+.proof-avatar {
+  left: 47px;
+  top: 205px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border-width: 3px;
+  border-color: rgba(255, 92, 92, 0.95);
+}
+
+.proof-avatar-clear {
+  left: 21px;
+  top: 179px;
+  width: 372px;
+  height: 372px;
+  border-radius: 50%;
+  border-width: 2px;
+  border-color: rgba(255, 92, 92, 0.4);
+}
+
+.proof-button {
+  left: 1450px;
+  top: 0;
+  width: 122px;
+  height: 152px;
+  border-width: 3px;
+  border-color: rgba(255, 92, 92, 0.95);
+}
+
+.proof-rail {
+  left: 432px;
+  top: 40px;
+  width: 1112px;
+  height: 330px;
+  border-width: 2px;
+  border-color: rgba(0, 215, 202, 0.85);
+}
+
+.proof-label {
+  padding: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+}
+
+.proof-label--rail {
+  left: 432px;
+  top: 14px;
+  color: var(--signal);
+}
+
+.proof-label--avatar {
+  left: 47px;
+  top: 175px;
+  color: #ff5c5c;
+}
+
+.proof-label--button {
+  left: 1310px;
+  top: 158px;
+  color: #ff5c5c;
+}

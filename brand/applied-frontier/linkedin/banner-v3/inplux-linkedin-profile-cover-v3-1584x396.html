@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1584, initial-scale=1" />
+    <title>INPLUX — Applied Frontier — portada de perfil v3</title>
+    <link rel="stylesheet" href="field.css" />
+    <link rel="stylesheet" href="profile.css" />
+  </head>
+  <body>
+    <main
+      class="cover"
+      aria-label="INPLUX Applied Frontier. Fábrica de software agéntica para legaltech y gobierno."
+    >
+      <!-- ===================================================================
+           PLANO LEJANO — rieles oblicuos sobre la pendiente de Estratos
+           (−18/21). Fuera de foco: blur 26.
+           =================================================================== -->
+      <svg class="plane plane--far" viewBox="0 0 1584 396" aria-hidden="true">
+        <rect width="1584" height="396" fill="#0c0c0b" />
+        <g>
+          <polygon points="-560,470 -240,470 343,-30 23,-30" fill="#141513" />
+          <polygon points="60,470 230,470 813,-30 643,-30" fill="#111210" />
+          <polygon points="1210,470 1460,470 2043,-30 1793,-30" fill="#131412" />
+          <polygon points="1000,470 1064,470 1647,-30 1583,-30" fill="#171815" />
+        </g>
+      </svg>
+
+      <!-- ===================================================================
+           PLANO MEDIO — retícula nítida-ish + rieles con filo. Blur 9.
+           =================================================================== -->
+      <svg class="plane plane--mid" viewBox="0 0 1584 396" aria-hidden="true">
+        <defs>
+          <pattern id="pGridMinor" width="44" height="44" patternUnits="userSpaceOnUse">
+            <path d="M44 0H0V44" fill="none" stroke="#F9F5EF" stroke-opacity=".03" stroke-width="1" />
+          </pattern>
+        </defs>
+        <rect width="1584" height="396" fill="url(#pGridMinor)" />
+        <polygon
+          points="-250,470 -158,470 425,-30 333,-30"
+          fill="#1e201c"
+          fill-opacity=".5"
+          stroke="#F9F5EF"
+          stroke-opacity=".04"
+        />
+        <polygon
+          points="1448,470 1568,470 2151,-30 2031,-30"
+          fill="#1d1f1c"
+          fill-opacity=".5"
+          stroke="#F9F5EF"
+          stroke-opacity=".035"
+        />
+        <g stroke="#F9F5EF" stroke-opacity=".05" stroke-width="1" fill="none">
+          <path d="M228 470 811 -30" stroke-dasharray="6 14" />
+          <path d="M1332 470 1915 -30" stroke-dasharray="3 16" />
+        </g>
+      </svg>
+
+      <!-- ===================================================================
+           LIFT DEL AVATAR — un plano levantado justo donde aterriza la foto,
+           para que el anillo blanco no apoye sobre negro muerto.
+           =================================================================== -->
+      <svg class="plane plane--lift" viewBox="0 0 1584 396" aria-hidden="true">
+        <defs>
+          <radialGradient id="pLift" cx="207" cy="365" r="330" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#F9F5EF" stop-opacity=".075" />
+            <stop offset=".45" stop-color="#F9F5EF" stop-opacity=".028" />
+            <stop offset="1" stop-color="#F9F5EF" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="1584" height="396" fill="url(#pLift)" />
+      </svg>
+
+      <!-- ===================================================================
+           BLOOM — el único evento de luz de la pieza. Halo en capas + núcleo
+           especular + destello anamórfico. Centro (1350, 141).
+           =================================================================== -->
+      <svg class="plane plane--bloom" viewBox="0 0 1584 396" aria-hidden="true">
+        <defs>
+          <radialGradient id="pBloomOuter" cx="1350" cy="141" r="186" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#00D7CA" stop-opacity=".072" />
+            <stop offset=".5" stop-color="#00D7CA" stop-opacity=".022" />
+            <stop offset="1" stop-color="#00D7CA" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="pBloomMid" cx="1350" cy="141" r="76" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#3CF0E2" stop-opacity=".15" />
+            <stop offset="1" stop-color="#00D7CA" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="pBloomCore" cx="1350" cy="141" r="34" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#8FFBF0" stop-opacity=".3" />
+            <stop offset="1" stop-color="#00D7CA" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="pFlare" x1="1196" y1="141" x2="1504" y2="141" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#00D7CA" stop-opacity="0" />
+            <stop offset=".5" stop-color="#5FF3E7" stop-opacity=".13" />
+            <stop offset="1" stop-color="#00D7CA" stop-opacity="0" />
+          </linearGradient>
+          <filter id="fFlare" x="-20%" y="-400%" width="140%" height="900%">
+            <feGaussianBlur stdDeviation="5" />
+          </filter>
+        </defs>
+        <rect width="1584" height="396" fill="url(#pBloomOuter)" />
+        <rect width="1584" height="396" fill="url(#pBloomMid)" />
+        <rect width="1584" height="396" fill="url(#pBloomCore)" />
+        <rect x="1196" y="138.5" width="308" height="5" fill="url(#pFlare)" filter="url(#fFlare)" />
+      </svg>
+
+      <!-- ===================================================================
+           PLANO DELANTERO — dos rieles desenfocados que entran por el ángulo
+           inferior izquierdo. Amortiguan la llegada de la foto de perfil
+           en vez de chocar con ella. Blur 44, mezcla screen.
+           =================================================================== -->
+      <svg class="plane plane--near" viewBox="0 0 1584 396" aria-hidden="true">
+        <polygon points="-86,470 214,470 436,280 136,280" fill="#232520" />
+        <polygon points="260,470 320,470 542,280 482,280" fill="#2b2d28" />
+        <polygon points="1512,470 1596,470 1818,280 1734,280" fill="#1b1d1a" />
+      </svg>
+
+      <!-- ===================================================================
+           CAMPO NÍTIDO — Estratos, traza primaria, marcas técnicas.
+           Nada aquí lleva blur: la geometría canónica jamás se desenfoca.
+           =================================================================== -->
+      <svg class="plane plane--marks" viewBox="0 0 1584 396" aria-hidden="true">
+        <defs>
+          <!-- Caída de foco a lo largo de la traza. La profundidad es una
+               propiedad óptica del campo, no una deformación de la geometría:
+               el módulo 42:13 y el paso +21/−18 se conservan exactos en los
+               siete estados. Sólo el líder queda perfectamente nítido. -->
+          <filter id="fDof0" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="5" />
+          </filter>
+          <filter id="fDof1" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="3.6" />
+          </filter>
+          <filter id="fDof2" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="2.6" />
+          </filter>
+          <filter id="fDof3" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="1.8" />
+          </filter>
+          <filter id="fDof4" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="1.1" />
+          </filter>
+          <filter id="fDof5" x="-45%" y="-140%" width="190%" height="380%">
+            <feGaussianBlur stdDeviation="0.5" />
+          </filter>
+          <!-- Objeto de primer plano fuera de foco: se recorta contra el
+               borde inferior, como un cuerpo entre la cámara y la escena. -->
+          <filter id="fForeground" x="-30%" y="-90%" width="160%" height="280%">
+            <feGaussianBlur stdDeviation="34" />
+          </filter>
+          <linearGradient id="pLeaderSpec" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#C9FFF8" stop-opacity=".85" />
+            <stop offset="1" stop-color="#C9FFF8" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+
+        <!-- Matrix: cápsulas 42:13 en la esquina superior izquierda,
+             por encima de la zona del avatar (que empieza en y = 205). -->
+        <g fill="#F9F5EF" opacity=".038" transform="translate(38 118) scale(1.5)">
+          <rect x="8" y="57" width="42" height="13" rx="6.5" />
+          <rect x="29" y="39" width="42" height="13" rx="6.5" />
+          <rect x="50" y="21" width="42" height="13" rx="6.5" />
+          <rect x="71" y="3" width="42" height="13" rx="6.5" />
+        </g>
+        <g fill="#F9F5EF" opacity=".026" transform="translate(196 62) scale(1.1)">
+          <rect x="8" y="57" width="42" height="13" rx="6.5" />
+          <rect x="29" y="39" width="42" height="13" rx="6.5" />
+          <rect x="50" y="21" width="42" height="13" rx="6.5" />
+        </g>
+
+        <!-- Frontier Crop: ampliación deliberadamente incompleta. Nunca un
+             segundo logo. -->
+        <g fill="#F9F5EF" opacity=".024" transform="translate(1430 236) scale(7.4)">
+          <rect x="8" y="57" width="42" height="13" rx="6.5" />
+          <rect x="29" y="39" width="42" height="13" rx="6.5" />
+        </g>
+
+        <!-- Regla de ticks en el borde superior -->
+        <g stroke="#F9F5EF" stroke-width="1" fill="none">
+          <g stroke-opacity=".055">
+            <path d="M74 0v6M118 0v6M162 0v6M250 0v6M294 0v6M338 0v6M426 0v6M470 0v6M514 0v6M602 0v6M646 0v6M690 0v6M778 0v6M822 0v6M866 0v6M954 0v6M998 0v6M1042 0v6M1130 0v6M1174 0v6M1218 0v6M1306 0v6M1350 0v6M1394 0v6" />
+          </g>
+          <g stroke-opacity=".095">
+            <path d="M30 0v13M206 0v13M382 0v13M558 0v13M734 0v13M910 0v13M1086 0v13M1262 0v13M1438 0v13" />
+          </g>
+        </g>
+
+        <!-- Carril izquierdo: declara dónde empieza el contenido y se detiene
+             justo antes del avatar. -->
+        <path d="M406 40V190" stroke="#F9F5EF" stroke-opacity=".13" stroke-width="1.5" />
+
+        <!-- Corchete superior izquierdo -->
+        <g stroke="#F9F5EF" stroke-opacity=".1" stroke-width="1.5" fill="none">
+          <path d="M30 54V30h24" />
+        </g>
+
+        <!-- Traza primaria: módulo 42:13 escalado ×2, paso +42/−36
+             (canónico +21/−18). Siete estados, un solo líder teal. -->
+        <g
+          id="primary-trace"
+          shape-rendering="geometricPrecision"
+          data-module-width="84"
+          data-module-height="26"
+          data-step-x="42"
+          data-step-y="-36"
+        >
+          <path
+            d="M1058 392 1392 106"
+            fill="none"
+            stroke="#F9F5EF"
+            stroke-opacity=".055"
+            stroke-width="1.5"
+            stroke-dasharray="5 13"
+          />
+          <rect class="trace-module" x="1056" y="344" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".05" filter="url(#fDof0)" />
+          <rect class="trace-module" x="1098" y="308" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".062" filter="url(#fDof1)" />
+          <rect class="trace-module" x="1140" y="272" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".072" filter="url(#fDof2)" />
+          <rect class="trace-module" x="1182" y="236" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".086" filter="url(#fDof3)" />
+          <rect class="trace-module" x="1224" y="200" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".105" filter="url(#fDof4)" />
+          <rect class="trace-module" x="1266" y="164" width="84" height="26" rx="13" fill="#F9F5EF" opacity=".14" filter="url(#fDof5)" />
+          <rect class="trace-module trace-leader" x="1308" y="128" width="84" height="26" rx="13" fill="#00D7CA" />
+        </g>
+
+        <!-- Reflejo especular sobre el líder: lo convierte en un cuerpo que
+             emite luz, no en un rectángulo teal. -->
+        <path
+          d="M1327 129.6h46a1 1 0 0 1 0 2h-46a1 1 0 0 1 0-2Z"
+          fill="url(#pLeaderSpec)"
+          opacity=".9"
+        />
+
+        <!-- Mira de registro sobre el líder: las marcas técnicas ganan su
+             lugar registrando la única señal de la pieza. -->
+        <g stroke="#F9F5EF" stroke-opacity=".2" stroke-width="1.25" fill="none">
+          <path d="M1288 126v-16h16" />
+          <path d="M1412 156v16h-16" />
+        </g>
+
+        <!-- Cruz de registro -->
+        <g stroke="#F9F5EF" stroke-opacity=".09" stroke-width="1.25">
+          <path d="M1490 348h16M1498 340v16" />
+        </g>
+
+        <!-- Cápsula de primer plano: mismo módulo 42:13, muy ampliada, muy
+             fuera de foco y recortada contra el borde inferior. Cierra la
+             escena por delante y da escala al conjunto. -->
+        <rect
+          x="1146"
+          y="374"
+          width="420"
+          height="130"
+          rx="65"
+          fill="#F9F5EF"
+          opacity=".055"
+          filter="url(#fForeground)"
+        />
+      </svg>
+
+      <!-- ===================================================================
+           TIPOGRAFÍA — carril x 432 → 1544, fuera del avatar y del botón.
+           =================================================================== -->
+      <section class="content">
+        <p class="system-label">INPLUX / APPLIED SYSTEM 01</p>
+        <h1 class="title">APPLIED<br />FRONTIER.</h1>
+        <p class="descriptor">
+          <span>FÁBRICA DE SOFTWARE AGÉNTICA.</span>
+          <span>LEGALTECH + GOBIERNO · SOLUCIONES A LA MEDIDA.</span>
+        </p>
+      </section>
+
+      <p class="endmark">INPLUX.CO</p>
+
+      <!-- ===================================================================
+           GRANO — dither procedural contra el bandeo de la recompresión JPEG
+           de LinkedIn. No es textura importada: se genera en el render.
+           =================================================================== -->
+      <svg class="grain" viewBox="0 0 1584 396" aria-hidden="true" preserveAspectRatio="none">
+        <defs>
+          <filter id="fGrain" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="17" stitchTiles="stitch" />
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 0.5
+                      0 0 0 0 0.5
+                      0 0 0 0 0.5
+                      0 0 0 1 0"
+            />
+          </filter>
+        </defs>
+        <rect width="1584" height="396" filter="url(#fGrain)" />
+      </svg>
+
+      <div class="edge-shade" aria-hidden="true"></div>
+
+      <!-- ===================================================================
+           PRUEBA — sólo visible cuando el exportador añade body.proof
+           =================================================================== -->
+      <div class="proof-layer" aria-hidden="true">
+        <div class="proof-shape proof-avatar-clear"></div>
+        <div class="proof-shape proof-avatar"></div>
+        <div class="proof-shape proof-button"></div>
+        <div class="proof-shape proof-rail"></div>
+        <div class="proof-label proof-label--rail">Carril de contenido 432 → 1544</div>
+        <div class="proof-label proof-label--avatar">Avatar r160 + holgura r186</div>
+        <div class="proof-label proof-label--button">Botón editar</div>
+      </div>
+    </main>
+  </body>
+</html>

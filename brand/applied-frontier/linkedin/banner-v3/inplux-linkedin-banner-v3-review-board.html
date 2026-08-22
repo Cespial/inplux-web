@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>INPLUX — LinkedIn banner v3 — tablero de revisión</title>
+    <link rel="stylesheet" href="field.css" />
+    <style>
+      html,
+      body {
+        width: 1800px;
+        height: 1760px;
+        background: #0c0c0b;
+      }
+
+      .board {
+        width: 1800px;
+        height: 1760px;
+        padding: 52px 56px;
+      }
+
+      .head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-bottom: 22px;
+        border-bottom: 1px solid rgba(249, 245, 239, 0.12);
+      }
+
+      .head__mark {
+        margin: 0;
+        font-size: 40px;
+        font-weight: 560;
+        letter-spacing: -1.6px;
+        color: var(--ivory);
+      }
+
+      .head__mark span {
+        color: rgba(249, 245, 239, 0.4);
+      }
+
+      .head__meta {
+        margin: 0;
+        text-align: right;
+        font-family: "Geist Mono INPLUX", monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        font-weight: 620;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(249, 245, 239, 0.42);
+      }
+
+      .head__meta b {
+        color: var(--signal);
+        font-weight: 620;
+      }
+
+      .section {
+        margin-top: 26px;
+      }
+
+      .section__label {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        margin: 0 0 12px;
+        font-family: "Geist Mono INPLUX", monospace;
+        font-size: 13px;
+        font-weight: 640;
+        letter-spacing: 2.2px;
+        text-transform: uppercase;
+        color: rgba(249, 245, 239, 0.58);
+      }
+
+      .section__label i {
+        font-style: normal;
+        color: rgba(249, 245, 239, 0.3);
+      }
+
+      .frame {
+        display: block;
+        border: 1px solid rgba(249, 245, 239, 0.1);
+      }
+
+      .frame--profile {
+        width: 1688px;
+        height: 422px;
+      }
+
+      .frame--company {
+        width: 1688px;
+        height: 281px;
+      }
+
+      .pair {
+        display: flex;
+        gap: 28px;
+        align-items: flex-start;
+      }
+
+      .frame--insitu-profile {
+        width: 1024px;
+        height: 500px;
+      }
+
+      .frame--insitu-company {
+        width: 636px;
+        height: 295px;
+      }
+
+      .foot {
+        display: flex;
+        gap: 46px;
+        margin-top: 26px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(249, 245, 239, 0.12);
+        font-family: "Geist Mono INPLUX", monospace;
+        font-size: 12px;
+        line-height: 1.85;
+        letter-spacing: 0.5px;
+        color: rgba(249, 245, 239, 0.4);
+      }
+
+      .foot h3 {
+        margin: 0 0 6px;
+        font-size: 12px;
+        font-weight: 660;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(249, 245, 239, 0.72);
+      }
+
+      .foot p {
+        margin: 0;
+        max-width: 400px;
+      }
+
+      .foot b {
+        color: var(--signal);
+        font-weight: 620;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <div class="head">
+        <p class="head__mark">APPLIED FRONTIER. <span>— LinkedIn v3</span></p>
+        <p class="head__meta">
+          Campo óptico · módulo 42:13 · paso +21/−18<br />
+          <b>Un solo evento teal</b> · siete estados de foco
+        </p>
+      </div>
+
+      <div class="section">
+        <p class="section__label">01 · Perfil personal <i>1584 × 396 · 4:1</i></p>
+        <img class="frame frame--profile" src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+      </div>
+
+      <div class="section">
+        <p class="section__label">02 · Página de empresa <i>4200 × 700 · 6:1</i></p>
+        <img class="frame frame--company" src="inplux-linkedin-company-cover-v3-4200x700.png" alt="" />
+      </div>
+
+      <div class="section pair">
+        <div>
+          <p class="section__label">03 · In-situ perfil <i>foto y botón en su posición real</i></p>
+          <img class="frame frame--insitu-profile" src="proofs/proof-insitu-profile.png" alt="" />
+        </div>
+        <div>
+          <p class="section__label">04 · In-situ Página</p>
+          <img class="frame frame--insitu-company" src="proofs/proof-insitu-company.png" alt="" />
+        </div>
+      </div>
+
+      <div class="foot">
+        <div>
+          <h3>Lo que resuelve v3</h3>
+          <p>
+            El maestro v2 era 6:1 sobre un perfil que es 4:1. LinkedIn recortaba 700 px por lado y el
+            titular caía bajo la foto. v3 tiene un maestro por destino.
+          </p>
+        </div>
+        <div>
+          <h3>Zonas de exclusión</h3>
+          <p>
+            Avatar <b>centro (207, 365) r 160</b>, holgura r 186. Botón editar <b>x 1462–1560</b>.
+            El exportador falla si un nodo de texto entra en cualquiera de las dos.
+          </p>
+        </div>
+        <div>
+          <h3>Profundidad</h3>
+          <p>
+            Caída de foco a lo largo de la traza: siete estados, del más desenfocado al líder
+            perfectamente nítido. La geometría canónica nunca se deforma.
+          </p>
+        </div>
+        <div>
+          <h3>Grano</h3>
+          <p>
+            Dither procedural contra el bandeo de la recompresión JPEG de LinkedIn. No hay ninguna
+            textura raster importada en las portadas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,133 @@
+/* ============================================================================
+   Master B — Portada de PÁGINA DE EMPRESA — 4200 × 700 (6:1)
+
+   La Página superpone el logo cuadrado sobre el ángulo inferior izquierdo de
+   la portada, y LinkedIn muestra la pieza reducida a ~1128 × 188. De ahí la
+   zona esencial conservadora heredada de v2:
+
+     · zona esencial   x 900–3300, y 120–580
+     · carril          x 1000 → 4030
+     · logo de Página  se mantiene libre todo x < 900
+
+   Mismo campo, mismo módulo 42:13, mismo paso +21/−18. Sólo cambia la
+   composición, porque cambia la proporción.
+   ========================================================================== */
+
+html,
+body,
+.cover {
+  width: 4200px;
+  height: 700px;
+}
+
+/* --- Carril de contenido ------------------------------------------------- */
+
+.content {
+  left: 1000px;
+  top: 222px;
+  width: 3030px;
+  height: 280px;
+}
+
+.system-label {
+  font-size: 26px;
+  letter-spacing: 4px;
+  gap: 24px;
+}
+
+.system-label::before {
+  width: 62px;
+  height: 2px;
+}
+
+.title {
+  position: absolute;
+  left: 0;
+  top: 68px;
+  font-size: 156px;
+  line-height: 0.9;
+  letter-spacing: -7.6px;
+}
+
+.descriptor {
+  position: absolute;
+  left: 1420px;
+  top: 58px;
+  font-size: 40px;
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+}
+
+.endmark {
+  right: 170px;
+  top: 556px;
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+/* --- Viñeta -------------------------------------------------------------- */
+
+.edge-shade {
+  box-shadow:
+    inset 520px 0 420px -420px rgba(0, 0, 0, 0.66),
+    inset -520px 0 420px -420px rgba(0, 0, 0, 0.66),
+    inset 0 170px 170px -170px rgba(0, 0, 0, 0.55),
+    inset 0 -180px 180px -180px rgba(0, 0, 0, 0.58);
+}
+
+/* --- Desenfoque por tier ------------------------------------------------- */
+
+.plane--far {
+  filter: blur(44px);
+}
+
+.plane--mid {
+  filter: blur(15px);
+}
+
+.plane--near {
+  filter: blur(76px);
+  opacity: 0.42;
+}
+
+.grain {
+  opacity: 0.034;
+}
+
+/* --- Capa de prueba ------------------------------------------------------ */
+
+.proof-safe {
+  left: 900px;
+  top: 120px;
+  width: 2400px;
+  height: 460px;
+  border-width: 4px;
+  border-color: rgba(0, 215, 202, 0.85);
+}
+
+.proof-logo {
+  left: 150px;
+  top: 430px;
+  width: 470px;
+  height: 470px;
+  border-width: 4px;
+  border-color: rgba(255, 92, 92, 0.95);
+}
+
+.proof-label {
+  padding: 10px 16px;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.proof-label--safe {
+  left: 900px;
+  top: 76px;
+  color: var(--signal);
+}
+
+.proof-label--logo {
+  left: 150px;
+  top: 386px;
+  color: #ff5c5c;
+}

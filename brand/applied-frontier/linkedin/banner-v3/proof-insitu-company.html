@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Prueba in-situ — Página de empresa</title>
+    <link rel="stylesheet" href="field.css" />
+    <style>
+      html,
+      body {
+        width: 1208px;
+        height: 560px;
+        background: #f4f2ee;
+      }
+
+      .stage {
+        width: 1208px;
+        height: 560px;
+        padding: 40px;
+      }
+
+      .card {
+        position: relative;
+        width: 1128px;
+        background: #fff;
+        border: 1px solid #e3e0da;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      /* LinkedIn muestra la portada de Página reducida a 1128 × 188. */
+      .card__cover {
+        display: block;
+        width: 1128px;
+        height: 188px;
+      }
+
+      .card__logo {
+        position: absolute;
+        left: 24px;
+        top: 122px;
+        width: 132px;
+        height: 132px;
+        border-radius: 10px;
+        background: #fff;
+        border: 2px solid #e3e0da;
+        padding: 10px;
+      }
+
+      .card__body {
+        padding: 148px 32px 36px;
+        font-family: "Geist INPLUX", sans-serif;
+        color: #1a1918;
+      }
+
+      .card__name {
+        margin: 0;
+        font-size: 34px;
+        font-weight: 620;
+        letter-spacing: -1px;
+      }
+
+      .card__tagline {
+        margin: 6px 0 0;
+        font-size: 18px;
+        color: #2c2b29;
+      }
+
+      .card__meta {
+        margin: 8px 0 0;
+        font-size: 15px;
+        color: #6e6b68;
+      }
+
+      .card__actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .btn {
+        padding: 9px 20px;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 620;
+      }
+
+      .btn--primary {
+        background: #0a66c2;
+        color: #fff;
+      }
+
+      .btn--ghost {
+        border: 1.5px solid #0a66c2;
+        color: #0a66c2;
+      }
+
+      .stamp {
+        position: absolute;
+        right: 40px;
+        top: 8px;
+        font-family: "Geist Mono INPLUX", monospace;
+        font-size: 12px;
+        font-weight: 640;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #8a8784;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <p class="stamp">Prueba in-situ · Página · 4200 × 700 mostrado a 1128 × 188</p>
+      <div class="card">
+        <img class="card__cover" src="inplux-linkedin-company-cover-v3-4200x700.png" alt="" />
+        <img class="card__logo" src="inplux-linkedin-page-logo-400.png" alt="" />
+        <div class="card__body">
+          <h1 class="card__name">INPLUX</h1>
+          <p class="card__tagline">Fábrica de software agéntica para legaltech y gobierno.</p>
+          <p class="card__meta">Desarrollo de software · Medellín, Antioquia</p>
+          <div class="card__actions">
+            <div class="btn btn--primary">+ Seguir</div>
+            <div class="btn btn--ghost">Contáctanos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

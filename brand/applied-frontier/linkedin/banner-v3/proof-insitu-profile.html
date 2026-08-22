@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Prueba in-situ — perfil personal</title>
+    <link rel="stylesheet" href="field.css" />
+    <style>
+      html,
+      body {
+        width: 1664px;
+        height: 812px;
+        background: #f4f2ee;
+      }
+
+      .stage {
+        width: 1664px;
+        height: 812px;
+        padding: 40px;
+      }
+
+      .card {
+        position: relative;
+        width: 1584px;
+        background: #fff;
+        border: 1px solid #e3e0da;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .card__cover {
+        display: block;
+        width: 1584px;
+        height: 396px;
+      }
+
+      /* Disco del avatar en la posición EXACTA medida sobre la interfaz real:
+         centro (207, 365) medido desde el borde superior de la portada, r = 160. */
+      .card__avatar {
+        position: absolute;
+        left: 47px;
+        top: 205px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+      }
+
+      /* Botón de editar de LinkedIn, x 1462–1560, y 8–140. */
+      .card__edit {
+        position: absolute;
+        left: 1478px;
+        top: 32px;
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        background: rgba(160, 160, 160, 0.62);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        color: #33322f;
+      }
+
+      .card__body {
+        padding: 232px 56px 44px;
+        font-family: "Geist INPLUX", sans-serif;
+        color: #1a1918;
+      }
+
+      .card__name {
+        margin: 0;
+        font-size: 42px;
+        font-weight: 620;
+        letter-spacing: -1.2px;
+      }
+
+      .card__headline {
+        margin: 8px 0 0;
+        font-size: 22px;
+        font-weight: 400;
+        color: #2c2b29;
+      }
+
+      .card__meta {
+        margin: 10px 0 0;
+        font-size: 18px;
+        color: #6e6b68;
+      }
+
+      .card__actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .btn {
+        padding: 11px 24px;
+        border-radius: 999px;
+        font-size: 18px;
+        font-weight: 620;
+      }
+
+      .btn--primary {
+        background: #0a66c2;
+        color: #fff;
+      }
+
+      .btn--ghost {
+        border: 1.5px solid #0a66c2;
+        color: #0a66c2;
+      }
+
+      .stamp {
+        position: absolute;
+        right: 40px;
+        top: 8px;
+        font-family: "Geist Mono INPLUX", monospace;
+        font-size: 13px;
+        font-weight: 640;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #8a8784;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <p class="stamp">Prueba in-situ · portada v3 · 1584 × 396</p>
+      <div class="card">
+        <img class="card__cover" src="inplux-linkedin-profile-cover-v3-1584x396.png" alt="" />
+        <img class="card__avatar" src="proofs/avatar-reference-320.png" alt="" />
+        <div class="card__edit">✎</div>
+        <div class="card__body">
+          <h1 class="card__name">Cristian Espinal</h1>
+          <p class="card__headline">CTO @ inplux.co | B.A., M.A. in Economics and Ph.D. (c) in Engineering.</p>
+          <p class="card__meta">Medellín, Antioquia, Colombia · Contact info</p>
+          <div class="card__actions">
+            <div class="btn btn--primary">Open to</div>
+            <div class="btn btn--ghost">Add section</div>
+            <div class="btn btn--ghost">Enhance profile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
