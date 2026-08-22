@@ -1,0 +1,11 @@
+There is a frontier between what AI can already do and what a public institution can actually use. On one side, capabilities that move every week. On the other, case files, regulations, deadlines and accountability. Almost no one crosses it.
+
+INPLUX is an agentic software factory working exactly at that crossing. We turn legal, regulatory and institutional problems into software that reaches production: usable, verifiable, and with someone answerable for it.
+
+"Agentic" describes how we work, not who decides. AI takes part in research, development, testing and documentation in a coordinated way; critical decisions and validation stay human. In legaltech and government that is not a nuance — it is the entry requirement.
+
+Our work is in production across public procurement, tax, law and arbitration — Gobia, TribAI, Kelsen and Laudos.
+
+Applied Frontier: frontier capability, applied all the way.
+
+Medellín, Colombia. inplux.co
