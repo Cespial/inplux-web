@@ -1,0 +1,291 @@
+{
+  "generatedAt": "2026-08-23T00:33:38.190Z",
+  "formats": {
+    "perfil": {
+      "canvas": "1584×396",
+      "ratio": "4:1",
+      "variants": {
+        "01-disolucion": {
+          "name": "Disolución",
+          "capsules": 81,
+          "bounds": {
+            "x0": 499,
+            "y0": 73,
+            "x1": 1015,
+            "y1": 341
+          },
+          "pitch": 9.07,
+          "bar": 5.04,
+          "scale": 5.3,
+          "megabytes": 0.239
+        },
+        "02-limpia": {
+          "name": "Limpia",
+          "capsules": 21,
+          "bounds": {
+            "x0": 569,
+            "y0": 73,
+            "x1": 1015,
+            "y1": 323
+          },
+          "pitch": 9.07,
+          "bar": 5.04,
+          "scale": 5.3,
+          "megabytes": 0.233
+        },
+        "03-fina": {
+          "name": "Barrido fino",
+          "capsules": 158,
+          "bounds": {
+            "x0": 502,
+            "y0": 71,
+            "x1": 1015,
+            "y1": 340
+          },
+          "pitch": 5.99,
+          "bar": 3,
+          "scale": 5.3,
+          "megabytes": 0.241
+        },
+        "04-grande": {
+          "name": "A sangre",
+          "capsules": 97,
+          "bounds": {
+            "x0": 426,
+            "y0": 41,
+            "x1": 1070,
+            "y1": 378
+          },
+          "pitch": 10.01,
+          "bar": 6.01,
+          "scale": 6.625,
+          "megabytes": 0.245
+        }
+      }
+    },
+    "pagina": {
+      "canvas": "4200×700",
+      "ratio": "6:1",
+      "variants": {
+        "01-disolucion": {
+          "name": "Disolución",
+          "capsules": 81,
+          "bounds": {
+            "x0": 1794,
+            "y0": 100,
+            "x1": 2825,
+            "y1": 635
+          },
+          "pitch": 18.13,
+          "bar": 10.08,
+          "scale": 10.6,
+          "megabytes": 0.927
+        },
+        "02-limpia": {
+          "name": "Limpia",
+          "capsules": 21,
+          "bounds": {
+            "x0": 1935,
+            "y0": 100,
+            "x1": 2825,
+            "y1": 600
+          },
+          "pitch": 18.13,
+          "bar": 10.08,
+          "scale": 10.6,
+          "megabytes": 0.914
+        },
+        "03-fina": {
+          "name": "Barrido fino",
+          "capsules": 158,
+          "bounds": {
+            "x0": 1799,
+            "y0": 96,
+            "x1": 2825,
+            "y1": 634
+          },
+          "pitch": 11.98,
+          "bar": 5.99,
+          "scale": 10.6,
+          "megabytes": 0.93
+        },
+        "04-grande": {
+          "name": "A sangre",
+          "capsules": 97,
+          "bounds": {
+            "x0": 1702,
+            "y0": 58,
+            "x1": 2895,
+            "y1": 684
+          },
+          "pitch": 18.57,
+          "bar": 11.14,
+          "scale": 12.286,
+          "megabytes": 0.937
+        }
+      }
+    }
+  },
+  "files": {
+    "inplux-marca-perfil-01-disolucion.png": {
+      "bytes": 250225,
+      "megabytes": 0.239,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "efa02150ff8f2605d2208d714ed60f1f5734de3eaf60ded5b1cfc682dc43e677"
+    },
+    "inplux-marca-perfil-01-disolucion.jpg": {
+      "bytes": 27672,
+      "megabytes": 0.026,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "10e21a52154f512bf692a2f769d682ab8322c97dda7cea79590c76ccf19c1da6"
+    },
+    "inplux-marca-perfil-01-disolucion-2x.png": {
+      "bytes": 804862,
+      "megabytes": 0.768,
+      "width": 3168,
+      "height": 792,
+      "space": "srgb",
+      "sha256": "d59eab057a84224bfbc644564d66a63a4a14268875aaf69df46b7df590b47419"
+    },
+    "inplux-marca-perfil-02-limpia.png": {
+      "bytes": 243915,
+      "megabytes": 0.233,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "bf361e7328b40c80c305718a985c8ca40efc2d5791e792cc1642a75839e26ab1"
+    },
+    "inplux-marca-perfil-02-limpia.jpg": {
+      "bytes": 24114,
+      "megabytes": 0.023,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "12108f39463af561c335d42d1e305c7520370b1cdf11b3909fafc60aae763867"
+    },
+    "inplux-marca-perfil-02-limpia-2x.png": {
+      "bytes": 784402,
+      "megabytes": 0.748,
+      "width": 3168,
+      "height": 792,
+      "space": "srgb",
+      "sha256": "ee48cd86ebe4ef6df5c9e6cbc4a9b30c635457a26d2eb0e55f359a4086157911"
+    },
+    "inplux-marca-perfil-03-fina.png": {
+      "bytes": 252204,
+      "megabytes": 0.241,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "66c3d3a6e1f9b3790cd3895a604da23ab55f9fb7d16242375d28ee39c6f5ea55"
+    },
+    "inplux-marca-perfil-03-fina.jpg": {
+      "bytes": 30628,
+      "megabytes": 0.029,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "d1010b0c66c81edb0787500b99ae0efeebf555e17deb8ef61143007362bd1241"
+    },
+    "inplux-marca-perfil-03-fina-2x.png": {
+      "bytes": 811618,
+      "megabytes": 0.774,
+      "width": 3168,
+      "height": 792,
+      "space": "srgb",
+      "sha256": "8d25021f9fff540f70c5d4b0615818f04b22ea7dd723fb7e4b8f15c8a82fa219"
+    },
+    "inplux-marca-perfil-04-grande.png": {
+      "bytes": 257197,
+      "megabytes": 0.245,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "cc72a2a667eeaef9b1f0ca5df1e90b8ff8245bbb236a836b5eaafb31193ec4c0"
+    },
+    "inplux-marca-perfil-04-grande.jpg": {
+      "bytes": 36207,
+      "megabytes": 0.035,
+      "width": 1584,
+      "height": 396,
+      "space": "srgb",
+      "sha256": "5d9e4b33136af17c330d80878939d69c772cd1ffba4255c96bc685ea2b98b869"
+    },
+    "inplux-marca-perfil-04-grande-2x.png": {
+      "bytes": 830773,
+      "megabytes": 0.792,
+      "width": 3168,
+      "height": 792,
+      "space": "srgb",
+      "sha256": "09afb4ff5f7abae7106ebcebed148172b5a67b401b768d49ecb30c6bd03dc8d2"
+    },
+    "inplux-marca-pagina-01-disolucion.png": {
+      "bytes": 971902,
+      "megabytes": 0.927,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "c97853882d68e8620692a1223d5438ebd70323263507ec164970ab308eb5d2d6"
+    },
+    "inplux-marca-pagina-01-disolucion.jpg": {
+      "bytes": 83062,
+      "megabytes": 0.079,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "82a7440cbdcd2dddf0992176ed0b2d9cb898c56140d8c6b3092ea718ffca41b0"
+    },
+    "inplux-marca-pagina-02-limpia.png": {
+      "bytes": 958250,
+      "megabytes": 0.914,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "e87ee100753a13c6b19d7492588431e2184d669f7becd0659dc83e0414cf54f1"
+    },
+    "inplux-marca-pagina-02-limpia.jpg": {
+      "bytes": 76352,
+      "megabytes": 0.073,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "535bb6554076c98e535e94fb7815147edeb6be10555ec8835988ab6ee24f2f14"
+    },
+    "inplux-marca-pagina-03-fina.png": {
+      "bytes": 975565,
+      "megabytes": 0.93,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "c8b35f82335f6148b94bf6a7b5609a478ee768b95e483d3f1b3c58504c42886e"
+    },
+    "inplux-marca-pagina-03-fina.jpg": {
+      "bytes": 94536,
+      "megabytes": 0.09,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "35590a7081a2b300157df7fdb92cae49b2ca0bcb8e26ceb3c6d4ef6afa91aa7b"
+    },
+    "inplux-marca-pagina-04-grande.png": {
+      "bytes": 982986,
+      "megabytes": 0.937,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "9e8f85206c488a97a43086e84f3d109667ffd9eab5e686a1812f6e4bd80043aa"
+    },
+    "inplux-marca-pagina-04-grande.jpg": {
+      "bytes": 98651,
+      "megabytes": 0.094,
+      "width": 4200,
+      "height": 700,
+      "space": "srgb",
+      "sha256": "3d63ae768d2a9aadba04f29f11fd34400f7ae3b9c1bc2678e49c3d5876f1e4bb"
+    }
+  }
+}

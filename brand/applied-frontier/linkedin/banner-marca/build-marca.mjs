@@ -1,42 +1,38 @@
 /* ============================================================================
    INPLUX — banner de marca sola
-   Portada de perfil 1584 × 396, sin una sola palabra.
+   Portadas de LinkedIn sin una sola palabra.
 
      node brand/applied-frontier/linkedin/banner-marca/build-marca.mjs
 
    La referencia (banner de Karri Saarinen) dibuja un círculo con barras
-   horizontales de extremos redondeados que se rompen en fragmentos hacia el
-   ángulo inferior izquierdo.
+   horizontales de extremos redondeados que se rompen en fragmentos hacia un
+   ángulo.
 
-   Una barra horizontal de extremos redondeados ES el módulo de Estratos. Su
-   técnica y nuestra geometría son la misma primitiva — así que en vez de
-   copiar su círculo, dibujamos la marca con su propio módulo: el Estratos
-   grande construido con cápsulas Estratos diminutas.
-
-   La disolución va sobre el vector canónico +21/−18: se deshace por detrás y
+   Una barra horizontal de extremos redondeados ES el módulo de Estratos: la
+   técnica ajena y nuestra geometría son la misma primitiva. Así que no se
+   copia el círculo — se dibuja la marca con cápsulas Estratos diminutas, y la
+   disolución corre sobre el vector canónico +21/−18: se deshace por detrás y
    se resuelve hacia adelante, donde está la cápsula teal.
 
-   Zonas de exclusión de la interfaz que la composición respeta:
-     · avatar        círculo centro (207, 365) r 160 · holgura r 186
-     · botón editar  rect x 1450–1572 · y 0–152
+   Ruido → estructura → señal. El argumento dibujado, no escrito.
+
+   El generador es determinista: PRNG con semilla, nunca Math.random. Un
+   banner que cambia cada vez que se regenera no es un activo de marca.
    ========================================================================== */
 
 import sharp from "sharp";
-import { writeFile, mkdir } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = (f) => join(here, f);
 
-const W = 1584;
-const H = 396;
 const INK = "#0C0C0B";
 const IVORY = "#F9F5EF";
 const SIGNAL = "#00D7CA";
-
-const AVATAR = { cx: 207, cy: 365, clearance: 186 };
-const EDIT = { x: 1450, y: 0, right: 1572, bottom: 152 };
+const LIMIT_BYTES = 3 * 1024 * 1024;
 
 /* Geometría canónica: tres cápsulas 42:13 sobre el paso +21/−18. */
 const MARK = [
@@ -46,7 +42,86 @@ const MARK = [
 ];
 const MARK_BOX = { x: 8, y: 21, w: 84, h: 49 };
 
-/* PRNG con semilla: el banner tiene que salir idéntico en cada corrida. */
+/* --------------------------------------------------------------------------
+   Formatos y sus zonas de exclusión, medidas sobre la interfaz real.
+   -------------------------------------------------------------------------- */
+
+const FORMATS = {
+  perfil: {
+    id: "perfil",
+    label: "Perfil personal",
+    W: 1584,
+    H: 396,
+    ratio: "4:1",
+    avatar: { cx: 207, cy: 365, clearance: 186 },
+    blocks: [{ name: "el botón de editar", x: 1450, y: 0, right: 1572, bottom: 152 }],
+    place: { scale: 5.3, cx: 792, cy: 198 },
+  },
+  pagina: {
+    id: "pagina",
+    label: "Página de empresa",
+    W: 4200,
+    H: 700,
+    ratio: "6:1",
+    avatar: null,
+    blocks: [{ name: "el logo de Página", x: 0, y: 380, right: 900, bottom: 700 }],
+    place: { scale: 10.6, cx: 2380, cy: 350 },
+  },
+};
+
+const VARIANTS = [
+  {
+    id: "01-disolucion",
+    name: "Disolución",
+    note: "La cápsula de atrás se deshace en fragmentos, la del medio sostiene, la teal queda entera.",
+    rows: 7.6,
+    barRatio: 0.556,
+    dissolveStart: 0.34,
+    dissolveEnd: -0.06,
+    strays: 34,
+    seed: 7,
+  },
+  {
+    id: "02-limpia",
+    name: "Limpia",
+    note: "Sin disolución: sólo la marca en líneas de barrido. La más silenciosa.",
+    rows: 7.6,
+    barRatio: 0.556,
+    solid: true,
+    strays: 0,
+    dissolveStart: 0,
+    dissolveEnd: 0,
+    seed: 7,
+  },
+  {
+    id: "03-fina",
+    name: "Barrido fino",
+    note: "Paso corto y barra delgada: la marca se vuelve trama y gana densidad de instrumento.",
+    rows: 11.5,
+    barRatio: 0.5,
+    dissolveStart: 0.36,
+    dissolveEnd: -0.04,
+    strays: 52,
+    seed: 21,
+  },
+  {
+    id: "04-grande",
+    name: "A sangre",
+    note: "La marca crece hasta rozar los bordes. Más presencia, menos aire.",
+    rows: 8.6,
+    barRatio: 0.6,
+    scaleFactor: 1.25,
+    dissolveStart: 0.3,
+    dissolveEnd: -0.1,
+    strays: 40,
+    seed: 3,
+  },
+];
+
+/* --------------------------------------------------------------------------
+   Construcción
+   -------------------------------------------------------------------------- */
+
 const mulberry32 = (seed) => () => {
   seed |= 0;
   seed = (seed + 0x6d2b79f5) | 0;
@@ -68,40 +143,36 @@ const chordAt = (cap, y) => {
 
 /* Progreso sobre el vector canónico: 0 detrás, 1 delante. */
 const makeProgress = (box) => {
-  const ux = 21 / Math.hypot(21, 18);
-  const uy = -18 / Math.hypot(21, 18);
-  const corners = [
+  const norm = Math.hypot(21, 18);
+  const ux = 21 / norm;
+  const uy = -18 / norm;
+  const proj = [
     [box.x, box.y],
     [box.x + box.w, box.y],
     [box.x, box.y + box.h],
     [box.x + box.w, box.y + box.h],
   ].map(([x, y]) => x * ux + y * uy);
-  const lo = Math.min(...corners);
-  const hi = Math.max(...corners);
+  const lo = Math.min(...proj);
+  const hi = Math.max(...proj);
   return (x, y) => clamp01((x * ux + y * uy - lo) / (hi - lo));
 };
 
-/* --------------------------------------------------------------------------
-   Construcción de la marca en líneas de barrido.
-   -------------------------------------------------------------------------- */
+const buildMark = (format, variant) => {
+  const rand = mulberry32(variant.seed);
+  /* La marca nunca ocupa más del 86 % del alto: las esquirlas de la
+     disolución se extienden por debajo de su caja y necesitan ese margen.
+     El tope se deriva del lienzo, no se ajusta a ojo por formato. */
+  const maxScale = (format.H * 0.86) / MARK_BOX.h;
+  const scale = Math.min(format.place.scale * (variant.scaleFactor ?? 1), maxScale);
+  /* El paso se deriva de la altura de la cápsula, no del ancho del lienzo:
+     así el barrido tiene la misma densidad óptica en 4:1 y en 6:1. */
+  const pitch = (13 * scale) / variant.rows;
+  const bar = pitch * variant.barRatio;
 
-const buildMark = ({
-  scale,
-  cx,
-  cy,
-  pitch,
-  barHeight,
-  dissolveStart,
-  dissolveEnd,
-  strayCount,
-  seed,
-  solid = false,
-}) => {
-  const rand = mulberry32(seed);
   const boxW = MARK_BOX.w * scale;
   const boxH = MARK_BOX.h * scale;
-  const left = cx - boxW / 2;
-  const top = cy - boxH / 2;
+  const left = format.place.cx - boxW / 2;
+  const top = format.place.cy - boxH / 2;
 
   const caps = MARK.map((m) => ({
     x: left + (m.x - MARK_BOX.x) * scale,
@@ -117,7 +188,7 @@ const buildMark = ({
   const bounds = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
 
   const push = (x, y, w, h, fill, opacity) => {
-    if (w < 1.2) return;
+    if (w < h * 0.4) return;
     shapes.push(
       `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${h.toFixed(2)}" ` +
         `rx="${(h / 2).toFixed(2)}" fill="${fill}"${opacity < 1 ? ` opacity="${opacity.toFixed(3)}"` : ""}/>`,
@@ -131,40 +202,44 @@ const buildMark = ({
   for (const cap of caps) {
     const fill = cap.teal ? SIGNAL : IVORY;
     const rows = Math.floor(cap.h / pitch);
-    const inset = (cap.h - (rows - 1) * pitch - barHeight) / 2;
+    const inset = (cap.h - (rows - 1) * pitch - bar) / 2;
 
     for (let r = 0; r < rows; r += 1) {
       const y = cap.y + inset + r * pitch;
-      const chord = chordAt(cap, y + barHeight / 2);
+      const chord = chordAt(cap, y + bar / 2);
       if (!chord) continue;
 
-      const t = progress((chord.x0 + chord.x1) / 2, y + barHeight / 2);
-      const d = solid ? 0 : clamp01((dissolveStart - t) / (dissolveStart - dissolveEnd));
+      const t = progress((chord.x0 + chord.x1) / 2, y + bar / 2);
+      const d = variant.solid
+        ? 0
+        : clamp01((variant.dissolveStart - t) / (variant.dissolveStart - variant.dissolveEnd));
 
       if (d <= 0.02) {
-        push(chord.x0, y, chord.x1 - chord.x0, barHeight, fill, 1);
+        push(chord.x0, y, chord.x1 - chord.x0, bar, fill, 1);
         continue;
       }
 
-      /* La barra se parte en celdas; cada una sobrevive con probabilidad
-         decreciente y se desplaza un poco. Así se deshace por el borde
-         de atrás sin dejar de leerse la forma. */
+      /* La barra se parte en celdas largas; cada una sobrevive con
+         probabilidad cuadrática, así que sólo se rompe de verdad cerca del
+         borde de atrás y la forma sigue leyéndose. */
       const span = chord.x1 - chord.x0;
-      const cells = Math.max(2, Math.round(span / (barHeight * 7.6)));
+      const cells = Math.max(2, Math.round(span / (bar * 7.6)));
       const cellW = span / cells;
 
       for (let c = 0; c < cells; c += 1) {
-        const localT = progress(chord.x0 + (c + 0.5) * cellW, y + barHeight / 2);
-        const localD = clamp01((dissolveStart - localT) / (dissolveStart - dissolveEnd));
+        const localD = clamp01(
+          (variant.dissolveStart - progress(chord.x0 + (c + 0.5) * cellW, y + bar / 2)) /
+            (variant.dissolveStart - variant.dissolveEnd),
+        );
         if (rand() < localD * localD * 0.96) continue;
 
         const shrink = 1 - localD * 0.3;
-        const jitter = (rand() - 0.5) * localD * barHeight * 1.5;
+        const jitter = (rand() - 0.5) * localD * bar * 1.5;
         push(
           chord.x0 + c * cellW + (cellW * (1 - shrink)) / 2 + jitter,
           y,
-          cellW * shrink - barHeight * 0.55,
-          barHeight,
+          cellW * shrink - bar * 0.55,
+          bar,
           fill,
           1 - localD * 0.35,
         );
@@ -172,120 +247,164 @@ const buildMark = ({
     }
   }
 
-  /* Esquirlas sueltas más allá del borde deshecho: la forma no termina en un
-     filo, se disipa. */
-  for (let i = 0; i < strayCount; i += 1) {
-    const t = rand();
-    const along = box.x - boxW * 0.16 + t * boxW * 0.62;
-    const across = box.y + boxH * (0.42 + rand() * 0.62);
-    const size = barHeight * (0.9 + rand() * 2.6);
-    const opacity = 0.1 + rand() * 0.4;
-    push(along, across, size, barHeight, IVORY, opacity);
+  /* Esquirlas más allá del borde deshecho: la forma no termina en un filo,
+     se disipa. */
+  for (let i = 0; i < variant.strays; i += 1) {
+    push(
+      box.x - boxW * 0.16 + rand() * boxW * 0.62,
+      box.y + boxH * (0.42 + rand() * 0.62),
+      bar * (0.9 + rand() * 2.6),
+      bar,
+      IVORY,
+      0.1 + rand() * 0.4,
+    );
   }
 
-  return { shapes, bounds, caps, box };
+  return { shapes, bounds, meta: { pitch, bar, scale } };
 };
 
-/* --------------------------------------------------------------------------
-   Variantes
-   -------------------------------------------------------------------------- */
-
-const VARIANTS = [
-  {
-    id: "01-disolucion",
-    name: "La marca deshaciéndose",
-    note: "La marca dibujada con su propio módulo, disuelta por el ángulo de atrás y resuelta en la cápsula teal.",
-    params: { scale: 5.3, cx: 792, cy: 198, pitch: 9, barHeight: 5, dissolveStart: 0.34, dissolveEnd: -0.06, strayCount: 34, seed: 7 },
-  },
-  {
-    id: "02-limpia",
-    name: "La marca en barrido, entera",
-    note: "El mismo dibujo sin disolución: sólo la marca resuelta en líneas de barrido. La versión más silenciosa.",
-    params: { scale: 5.3, cx: 792, cy: 198, pitch: 9, barHeight: 5, solid: true, strayCount: 0, dissolveStart: 0, dissolveEnd: 0, seed: 7 },
-  },
-  {
-    id: "03-fina",
-    name: "Barrido fino",
-    note: "Paso más corto y barra más delgada: la marca se vuelve trama y gana densidad de instrumento.",
-    params: { scale: 5.3, cx: 792, cy: 198, pitch: 6, barHeight: 3, dissolveStart: 0.36, dissolveEnd: -0.04, strayCount: 52, seed: 21 },
-  },
-  {
-    id: "04-grande",
-    name: "A sangre",
-    note: "La marca crece hasta casi tocar los bordes. Menos aire, más presencia; el barrido se lee como estructura.",
-    params: { scale: 6.6, cx: 830, cy: 198, pitch: 10, barHeight: 6, dissolveStart: 0.3, dissolveEnd: -0.1, strayCount: 40, seed: 3 },
-  },
-];
-
-const svgFor = (v) => {
-  const { shapes, bounds } = buildMark(v.params);
-
-  /* La composición no puede invadir la interfaz de LinkedIn. */
-  const nx = Math.max(bounds.x0, Math.min(AVATAR.cx, bounds.x1));
-  const ny = Math.max(bounds.y0, Math.min(AVATAR.cy, bounds.y1));
-  if (Math.hypot(AVATAR.cx - nx, AVATAR.cy - ny) < AVATAR.clearance) {
-    throw new Error(`${v.id}: la marca invade la zona de la foto de perfil`);
+const assertClear = (format, variant, bounds) => {
+  const label = `${format.id} · ${variant.id}`;
+  if (format.avatar) {
+    const { cx, cy, clearance } = format.avatar;
+    const nx = Math.max(bounds.x0, Math.min(cx, bounds.x1));
+    const ny = Math.max(bounds.y0, Math.min(cy, bounds.y1));
+    if (Math.hypot(cx - nx, cy - ny) < clearance) {
+      throw new Error(`${label}: la marca invade la zona de la foto de perfil`);
+    }
   }
-  if (bounds.x0 < EDIT.right && bounds.x1 > EDIT.x && bounds.y0 < EDIT.bottom && bounds.y1 > EDIT.y) {
-    throw new Error(`${v.id}: la marca invade el botón de editar`);
+  for (const b of format.blocks) {
+    if (bounds.x0 < b.right && bounds.x1 > b.x && bounds.y0 < b.bottom && bounds.y1 > b.y) {
+      throw new Error(`${label}: la marca invade ${b.name}`);
+    }
   }
+  if (bounds.x0 < 0 || bounds.y0 < 0 || bounds.x1 > format.W || bounds.y1 > format.H) {
+    throw new Error(`${label}: la marca se sale del lienzo`);
+  }
+};
+
+const svgFor = (format, variant) => {
+  const { shapes, bounds, meta } = buildMark(format, variant);
+  assertClear(format, variant, bounds);
 
   return {
     bounds,
     count: shapes.length,
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    meta,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${format.W}" height="${format.H}" viewBox="0 0 ${format.W} ${format.H}">
   <defs>
     <filter id="grain" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="17" stitchTiles="stitch"/>
       <feColorMatrix type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"/>
     </filter>
-    <radialGradient id="bloom" cx="${v.params.cx + 108}" cy="${v.params.cy - 96}" r="230" gradientUnits="userSpaceOnUse">
+    <radialGradient id="bloom" cx="${(format.place.cx + format.W * 0.068).toFixed(1)}" cy="${(format.place.cy - format.H * 0.24).toFixed(1)}" r="${(format.W * 0.145).toFixed(1)}" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="${SIGNAL}" stop-opacity=".085"/>
       <stop offset="1" stop-color="${SIGNAL}" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="${W}" height="${H}" fill="${INK}"/>
-  <rect width="${W}" height="${H}" fill="url(#bloom)"/>
+  <rect width="${format.W}" height="${format.H}" fill="${INK}"/>
+  <rect width="${format.W}" height="${format.H}" fill="url(#bloom)"/>
   ${shapes.join("\n  ")}
-  <rect width="${W}" height="${H}" filter="url(#grain)" opacity="0.03"/>
+  <rect width="${format.W}" height="${format.H}" filter="url(#grain)" opacity="0.03"/>
 </svg>`,
   };
 };
 
-await mkdir(out("proofs"), { recursive: true });
-
-for (const v of VARIANTS) {
-  const { svg, bounds, count } = svgFor(v);
-  await writeFile(out(`marca-${v.id}.svg`), `${svg}\n`, "utf8");
-  await sharp(Buffer.from(svg), { density: 72 * 3 })
-    .resize(W, H, { kernel: "lanczos3" })
-    .flatten({ background: INK })
-    .withIccProfile("srgb")
-    .png({ compressionLevel: 9, adaptiveFiltering: true })
-    .withMetadata({ density: 72 })
-    .toFile(out(`marca-${v.id}.png`));
-
-  console.log(
-    `  ${v.id.padEnd(16)} ${String(count).padStart(4)} cápsulas · ` +
-      `caja x ${Math.round(bounds.x0)}–${Math.round(bounds.x1)} · y ${Math.round(bounds.y0)}–${Math.round(bounds.y1)}`,
-  );
-}
-
-console.log("\nCuatro variantes en banner-marca/");
-
 /* --------------------------------------------------------------------------
-   Prueba in-situ: la portada con la foto y el botón en su posición medida.
+   Salida
    -------------------------------------------------------------------------- */
 
-const AV = join(here, "../concepts-v4/proofs/avatar-reference-320.png");
+await mkdir(out("proofs"), { recursive: true });
+const AVATAR_REF = join(here, "../concepts-v4/proofs/avatar-reference-320.png");
+const PAGE_LOGO = join(here, "../banner-v3/inplux-linkedin-page-logo-400.png");
 
-for (const v of VARIANTS) {
-  const card = await sharp({
-    create: { width: 1584, height: 620, channels: 3, background: "#ffffff" },
-  })
+const qa = { generatedAt: new Date().toISOString(), formats: {}, files: {} };
+
+const record = async (name) => {
+  const bytes = await readFile(out(name));
+  const meta = await sharp(bytes).metadata();
+  if (bytes.length > LIMIT_BYTES) throw new Error(`${name}: supera el tope de ${LIMIT_BYTES} bytes`);
+  if (!meta.hasProfile) throw new Error(`${name}: falta el perfil ICC`);
+  qa.files[name] = {
+    bytes: bytes.length,
+    megabytes: Number((bytes.length / 1048576).toFixed(3)),
+    width: meta.width,
+    height: meta.height,
+    space: meta.space,
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+  };
+  return qa.files[name];
+};
+
+for (const format of Object.values(FORMATS)) {
+  qa.formats[format.id] = { canvas: `${format.W}×${format.H}`, ratio: format.ratio, variants: {} };
+  console.log(`\n${format.label} · ${format.W} × ${format.H} · ${format.ratio}`);
+
+  for (const variant of VARIANTS) {
+    const { svg, bounds, count, meta } = svgFor(format, variant);
+    const base = `inplux-marca-${format.id}-${variant.id}`;
+
+    await writeFile(out(`${base}.svg`), `${svg}\n`, "utf8");
+    const raster = await sharp(Buffer.from(svg), { density: 72 * 3 })
+      .resize(format.W, format.H, { kernel: "lanczos3" })
+      .flatten({ background: INK })
+      .toBuffer();
+
+    await sharp(raster)
+      .withIccProfile("srgb")
+      .png({ compressionLevel: 9, adaptiveFiltering: true })
+      .withMetadata({ density: 72 })
+      .toFile(out(`${base}.png`));
+    await sharp(raster)
+      .withIccProfile("srgb")
+      .jpeg({ quality: 93, chromaSubsampling: "4:4:4", mozjpeg: true })
+      .withMetadata({ density: 72 })
+      .toFile(out(`${base}.jpg`));
+
+    const png = await record(`${base}.png`);
+    await record(`${base}.jpg`);
+
+    if (format.id === "perfil") {
+      /* Maestro retina: el grano se genera de nuevo a esa densidad. */
+      await sharp(Buffer.from(svg), { density: 72 * 4 })
+        .resize(format.W * 2, format.H * 2, { kernel: "lanczos3" })
+        .flatten({ background: INK })
+        .withIccProfile("srgb")
+        .png({ compressionLevel: 9, adaptiveFiltering: true })
+        .toFile(out(`${base}-2x.png`));
+      await record(`${base}-2x.png`);
+    } else {
+      await sharp(raster)
+        .resize(1128, 188, { fit: "fill", kernel: "lanczos3" })
+        .withIccProfile("srgb")
+        .png({ compressionLevel: 9 })
+        .toFile(out(`proofs/preview-${variant.id}-1128x188.png`));
+    }
+
+    qa.formats[format.id].variants[variant.id] = {
+      name: variant.name,
+      capsules: count,
+      bounds: Object.fromEntries(Object.entries(bounds).map(([key, v]) => [key, Math.round(v)])),
+      pitch: Number(meta.pitch.toFixed(2)),
+      bar: Number(meta.bar.toFixed(2)),
+      scale: Number(meta.scale.toFixed(3)),
+      megabytes: png.megabytes,
+    };
+
+    console.log(
+      `  ${variant.id.padEnd(15)} ${String(count).padStart(4)} cápsulas · ` +
+        `paso ${meta.pitch.toFixed(1)} / barra ${meta.bar.toFixed(1)} · ${String(png.megabytes).padStart(6)} MB`,
+    );
+  }
+}
+
+/* --- Pruebas in-situ ------------------------------------------------------ */
+
+for (const variant of VARIANTS) {
+  const card = await sharp({ create: { width: 1584, height: 620, channels: 3, background: "#ffffff" } })
     .composite([
-      { input: out(`marca-${v.id}.png`), top: 0, left: 0 },
-      { input: await sharp(AV).resize(320, 320).png().toBuffer(), top: 205, left: 47 },
+      { input: out(`inplux-marca-perfil-${variant.id}.png`), top: 0, left: 0 },
+      { input: await sharp(AVATAR_REF).resize(320, 320).png().toBuffer(), top: 205, left: 47 },
       {
         input: Buffer.from(
           `<svg width="76" height="76"><circle cx="38" cy="38" r="38" fill="#a0a0a0" fill-opacity=".62"/></svg>`,
@@ -296,11 +415,31 @@ for (const v of VARIANTS) {
     ])
     .png()
     .toBuffer();
-
   await sharp({ create: { width: 1664, height: 700, channels: 3, background: "#f4f2ee" } })
     .composite([{ input: card, top: 40, left: 40 }])
     .png({ compressionLevel: 9 })
-    .toFile(out(`proofs/insitu-${v.id}.png`));
+    .toFile(out(`proofs/insitu-perfil-${variant.id}.png`));
+
+  const pageCard = await sharp({ create: { width: 1128, height: 400, channels: 3, background: "#ffffff" } })
+    .composite([
+      { input: out(`proofs/preview-${variant.id}-1128x188.png`), top: 0, left: 0 },
+      {
+        input: await sharp(PAGE_LOGO)
+          .resize(112, 112)
+          .extend({ top: 9, bottom: 9, left: 9, right: 9, background: "#ffffff" })
+          .png()
+          .toBuffer(),
+        top: 122,
+        left: 24,
+      },
+    ])
+    .png()
+    .toBuffer();
+  await sharp({ create: { width: 1208, height: 480, channels: 3, background: "#f4f2ee" } })
+    .composite([{ input: pageCard, top: 40, left: 40 }])
+    .png({ compressionLevel: 9 })
+    .toFile(out(`proofs/insitu-pagina-${variant.id}.png`));
 }
 
-console.log("Pruebas in-situ en banner-marca/proofs/");
+await writeFile(out("QA.json"), `${JSON.stringify(qa, null, 2)}\n`, "utf8");
+console.log("\nPruebas in-situ de los dos formatos en proofs/");

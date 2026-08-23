@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1584" height="396" viewBox="0 0 1584 396">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="17" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"/>
+    </filter>
+    <radialGradient id="bloom" cx="899.7" cy="103.0" r="229.7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00D7CA" stop-opacity=".085"/>
+      <stop offset="1" stop-color="#00D7CA" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1584" height="396" fill="#0C0C0B"/>
+  <rect width="1584" height="396" fill="url(#bloom)"/>
+  <rect x="582.71" y="263.68" width="195.99" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="574.56" y="272.75" width="212.28" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="570.61" y="281.81" width="220.17" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="569.40" y="290.88" width="222.60" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="570.61" y="299.95" width="220.17" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="574.56" y="309.01" width="212.28" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="582.71" y="318.08" width="195.99" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="694.01" y="168.28" width="195.99" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="685.86" y="177.35" width="212.28" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="681.91" y="186.41" width="220.17" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="680.70" y="195.48" width="222.60" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="681.91" y="204.55" width="220.17" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="685.86" y="213.61" width="212.28" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="694.01" y="222.68" width="195.99" height="5.04" rx="2.52" fill="#F9F5EF"/>
+  <rect x="805.31" y="72.88" width="195.99" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="797.16" y="81.95" width="212.28" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="793.21" y="91.01" width="220.17" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="792.00" y="100.08" width="222.60" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="793.21" y="109.15" width="220.17" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="797.16" y="118.21" width="212.28" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect x="805.31" y="127.28" width="195.99" height="5.04" rx="2.52" fill="#00D7CA"/>
+  <rect width="1584" height="396" filter="url(#grain)" opacity="0.03"/>
+</svg>
