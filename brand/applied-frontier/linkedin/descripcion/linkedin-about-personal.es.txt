@@ -1,0 +1,11 @@
+Soy economista y dirijo ingeniería. Esa combinación rara es todo mi trabajo: construyo software que lee normas — y que cita la fuente.
+
+Llegué por un camino torcido. Investigación y economía primero. Después datos y finanzas, liderando iniciativas de IA y automatización en PRGX LATAM. Después proyectos de transformación digital en entidades públicas, privadas y académicas. En cada etapa me encontré el mismo problema: las instituciones tienen preguntas que sus propios documentos ya responden, y nadie puede leerlos todos a tiempo.
+
+Hoy soy CTO de INPLUX, una fábrica de software agéntica para legaltech y gobierno. Tenemos cuatro productos en producción: Gobia en contratación pública, TribAI en materia tributaria, Kelsen en derecho colombiano y Laudos en arbitraje.
+
+Mi trabajo ahí se reduce a una cosa: responder por lo que el software afirma. En estos dominios una cita alucinada no es un reporte de error, es un riesgo jurídico. Por eso la trazabilidad y la verificación no son una funcionalidad del producto — son el producto.
+
+Economista, M.A. en Economía de EAFIT y PhD(c) en Ingeniería de la Universidad Nacional de Colombia.
+
+IA aplicada · sistemas RAG · sistemas multiagente · automatización · productos de datos · legaltech · govtech · entornos regulados

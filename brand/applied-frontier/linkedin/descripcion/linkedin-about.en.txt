@@ -1,8 +1,8 @@
-There is a frontier between what AI can already do and what a public institution can actually use. On one side, capabilities that move every week. On the other, case files, regulations, deadlines and accountability. Almost no one crosses it.
+Most AI in law and government stops at the demo. The model answers, the room applauds, and nothing ever reaches the system of record.
 
-INPLUX is an agentic software factory working exactly at that crossing. We turn legal, regulatory and institutional problems into software that reaches production: usable, verifiable, and with someone answerable for it.
+INPLUX builds the last mile. We turn legal, regulatory and institutional problems into software that reaches production — usable, verifiable, and with someone answerable for what it says.
 
-"Agentic" describes how we work, not who decides. AI takes part in research, development, testing and documentation in a coordinated way; critical decisions and validation stay human. In legaltech and government that is not a nuance — it is the entry requirement.
+We are an agentic software factory: humans and agents build together, and a person signs off on what ships. In legaltech and government that is not a nuance, it is the entry requirement. A hallucinated citation is not a bug report. It is a legal risk.
 
 Our work is in production across public procurement, tax, law and arbitration — Gobia, TribAI, Kelsen and Laudos.
 

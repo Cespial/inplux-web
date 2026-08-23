@@ -1,8 +1,8 @@
-Hay una frontera entre lo que la IA ya puede hacer y lo que una entidad pública puede realmente usar. De un lado, capacidades que avanzan cada semana. Del otro, expedientes, normas, plazos y responsabilidad. Casi nadie la cruza.
+Casi toda la IA en derecho y gobierno se detiene en la demo. El modelo responde, la sala aplaude, y nada llega nunca al expediente.
 
-INPLUX es una fábrica de software agéntica que trabaja exactamente en ese cruce. Convertimos problemas jurídicos, normativos e institucionales en software que entra en producción: usable, verificable y con alguien que responde por él.
+INPLUX construye la última milla. Convertimos problemas jurídicos, normativos e institucionales en software que entra en producción: usable, verificable y con alguien que responde por lo que afirma.
 
-«Agéntica» describe cómo trabajamos, no quién decide. La IA participa de forma coordinada en investigación, desarrollo, pruebas y documentación; las decisiones críticas y la validación siguen siendo humanas. En legaltech y en gobierno eso no es un matiz: es el requisito de entrada.
+Somos una fábrica de software agéntica: humanos y agentes construimos juntos, y una persona firma lo que sale. En legaltech y en gobierno eso no es un matiz, es el requisito de entrada. Una cita alucinada no es un reporte de error. Es un riesgo jurídico.
 
 Nuestro trabajo está en producción en contratación pública, tributación, derecho y arbitraje — Gobia, TribAI, Kelsen y Laudos.
 
