@@ -1,6 +1,6 @@
 # INPLUX — portadas de marca sola
 
-Portadas de LinkedIn sin una sola palabra. Preparadas el 22 de agosto de 2026.
+Portadas de LinkedIn sin una sola palabra. Preparadas el 23 de agosto de 2026.
 
 ## De dónde sale
 
@@ -20,51 +20,72 @@ se resuelve hacia adelante, donde está la cápsula teal.
 círculo no puede decir eso; esta marca sí.
 
 No se reutiliza ningún activo, forma, textura ni composición de terceros. La
-única herencia es una técnica de dibujo — barras horizontales — que además ya
-era nuestra.
+única herencia es una técnica de dibujo que además ya era nuestra.
 
 ## Qué subir
 
-### Perfil personal · 1584 × 396
+| Destino | Archivo |
+| --- | --- |
+| **Perfil personal** `1584 × 396` | `inplux-marca-perfil-01-disolucion.png` |
+| Alternativa retina | `inplux-marca-perfil-01-disolucion-2x.png` |
+| **Página de empresa** `4200 × 700` | `inplux-marca-pagina-01-disolucion.png` |
 
-1. `inplux-marca-perfil-01-disolucion.png`
-2. Retina: `inplux-marca-perfil-01-disolucion-2x.png`
-3. JPEG: `inplux-marca-perfil-01-disolucion.jpg`
+Los `.jpg` son la alternativa compatible. Nada de `proofs/` ni de
+`emplazamiento/` se sube: son revisión interna.
 
-### Página de empresa · 4200 × 700
+Para probar otra variante, cambia `01-disolucion` por `02-limpia`, `03-fina` o
+`04-densa`.
 
-1. `inplux-marca-pagina-01-disolucion.png`
-2. JPEG: `inplux-marca-pagina-01-disolucion.jpg`
+## El emplazamiento
 
-Cambia `01-disolucion` por la variante que elijas. Nada de `proofs/` se sube.
+**Tercio derecho, a media altura.** Sale del estudio en
+`study-emplazamiento.mjs`, que prueba siete sitios con la misma escena.
+
+- En la **esquina** la marca queda arrinconada, no colocada.
+- **Centrada** —que es lo que hace la referencia— queda descolgada, porque la
+  foto de perfil ocupa la izquierda y rompe la simetría que justificaría
+  centrarla. Saarinen tampoco centra respecto al lienzo: centra respecto a lo
+  que queda visible. Copiar la posición sin copiar la razón habría sido el
+  error.
+- El **tercio derecho a media altura** le da aire por los cuatro lados y deja
+  el retrato con su propio espacio.
 
 ## Las cuatro variantes
 
 | | Nombre | Qué hace |
 | --- | --- | --- |
-| `01` | Disolución | La cápsula de atrás se deshace, la del medio sostiene, la teal queda entera. **Recomendada.** |
-| `02` | Limpia | Sin disolución: sólo la marca en barrido. La más silenciosa y la más cercana en tono a la referencia. |
-| `03` | Barrido fino | Paso corto y barra delgada. La más bonita de cerca; a 3 px de barra corre riesgo de titilar tras la recompresión de LinkedIn. |
-| `04` | A sangre | La marca crece hasta el tope. Más presencia, menos aire. |
+| `01` | Disolución | **La elegida.** La cápsula de atrás se deshace, la del medio sostiene, la teal queda entera. |
+| `02` | Limpia | Sin disolución: sólo la marca en barrido. La más silenciosa. |
+| `03` | Barrido fino | Paso corto y barra delgada. La más bonita de cerca. |
+| `04` | Disolución densa | Más esquirlas y rotura más temprana; el rastro llega más lejos hacia el retrato. |
 
 ## Decisiones de construcción
 
 **El paso del barrido se deriva de la altura de la cápsula, no del ancho del
-lienzo.** Por eso las dos proporciones producen exactamente el mismo número de
-cápsulas por variante — 81, 21, 158 y 97 — y la densidad óptica es idéntica en
-4:1 y en 6:1. Atarlo al lienzo daba un 6:1 con cuatro líneas por cápsula.
+lienzo.** Atado al lienzo, el maestro 6:1 salía con cuatro líneas por cápsula y
+el dibujo se perdía.
 
-**El generador es determinista.** Usa un PRNG con semilla (`mulberry32`), nunca
-`Math.random`. Un banner que cambia cada vez que se regenera no es un activo de
-marca: no se puede versionar, comparar ni reproducir.
+**La barra tiene un grosor mínimo, y es distinto por formato.** LinkedIn muestra
+la portada de Página reducida a `1128 × 188`, un factor de `0.269`. Una barra de
+3,6 px en ese maestro llegaría a un píxel escaso en pantalla, así que el mínimo
+sube en la misma proporción. El build **falla** si alguna barra llega a menos de
+`1.4 px` en pantalla.
 
-**La escala tiene tope derivado del lienzo.** La marca nunca ocupa más del 86 %
-del alto, porque las esquirlas de la disolución se extienden por debajo de su
-caja. El tope se calcula; no se ajusta a ojo por formato.
+**La marca es proporcionalmente mayor en la Página que en el perfil.** No es una
+inconsistencia: con el 33 % de alto que usa el perfil, la trama no sobrevive la
+reducción a 1128 px. El tamaño lo fija la legibilidad en pantalla, no la
+simetría entre maestros.
 
-**La rotura es cuadrática, no lineal.** Una probabilidad lineal deshacía el 70 %
-de la marca y la volvía ruido. Con `d²` sólo se rompe de verdad cerca del borde
-de atrás, y la forma se sigue leyendo.
+**El halo se dimensiona con la marca, no con el lienzo.** Atado al lienzo, una
+marca pequeña quedaba envuelta en una nube que no le pertenecía.
+
+**El generador es determinista.** PRNG con semilla (`mulberry32`), nunca
+`Math.random`. Un banner que cambia cada vez que se regenera no se puede
+versionar, comparar ni reproducir — y entonces no es un activo de marca.
+
+**La rotura es cuadrática, no lineal.** Con probabilidad lineal se deshacía el
+70 % de la marca y quedaba ruido. Con `d²` sólo se rompe cerca del borde de
+atrás y la forma sobrevive.
 
 ## Zonas de exclusión
 
@@ -77,32 +98,28 @@ Medidas sobre la interfaz real, no estimadas.
 | Página | Logo de Página | rect `x 0–900` · `y 380–700` |
 
 `build-marca.mjs` **aborta el render** si la caja de la composición entra en
-cualquiera de ellas o si se sale del lienzo. Ya ocurrió: la variante `04` a 6:1
-se salía por abajo y el build la detuvo.
+cualquiera de ellas o si se sale del lienzo. Ya ocurrió durante el desarrollo:
+una variante grande a 6:1 se salía por abajo y el build la detuvo.
 
-## Reproducción
+También falla si un archivo supera `3 MB`, si le falta el perfil ICC o si
+conserva canal alfa.
+
+## Archivos fuente
+
+| Archivo | Papel |
+| --- | --- |
+| `mark-engine.mjs` | el dibujo: trama, disolución, esquirlas y zonas de exclusión |
+| `build-marca.mjs` | la composición: formatos, emplazamiento, variantes y export |
+| `study-emplazamiento.mjs` | el estudio de los siete emplazamientos |
+| `QA.json` | resultado del último build, con hashes |
 
 ```sh
 node brand/applied-frontier/linkedin/banner-marca/build-marca.mjs
 ```
 
-Genera los dos formatos, las cuatro variantes, los SVG editables, los JPEG, el
-maestro retina del perfil, el preview `1128 × 188` de la Página, las ocho
-pruebas in-situ y `QA.json` con los hashes.
-
-El build falla si un archivo supera `3 MB` o si le falta el perfil ICC.
-
-## Pruebas incluidas
-
-| Archivo | Qué demuestra |
-| --- | --- |
-| `proofs/insitu-perfil-*.png` | la portada con la foto y el botón en su posición medida |
-| `proofs/insitu-pagina-*.png` | la Página con el logo superpuesto, a `1128 × 188` |
-| `proofs/preview-*-1128x188.png` | la reducción real que hace LinkedIn en la Página |
-
 ## Nota sobre la variante fina
 
-`03-fina` usa barras de 3 px en el maestro de perfil. Se ve espectacular a
-tamaño completo, pero LinkedIn recomprime y las tramas de un píxel impar son lo
-primero que se degrada. Si la eliges, revisa el resultado ya subido antes de
-darla por buena. `02-limpia` es la apuesta sin riesgo.
+`03-fina` es la más bonita a tamaño completo, pero usa la trama más apretada que
+el mínimo permite. Si la eliges, revisa el resultado **ya subido** antes de
+darla por buena: la recompresión de LinkedIn es lo que decide, no el maestro.
+`02-limpia` es la apuesta sin riesgo.
