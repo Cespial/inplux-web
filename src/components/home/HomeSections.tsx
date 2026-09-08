@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { homeCopyEs } from "@/content/copy/es";
 import type {
   ApiChapterCopy,
@@ -12,6 +13,7 @@ import { pressStories } from "@/content/press";
 import { workProfiles } from "@/content/work";
 import { FactoryRun } from "./FactoryRun.client";
 import { ProjectCreateDemo } from "./ProjectCreateDemo.client";
+import { ribbonFillSpan } from "./ribbonGrid";
 import styles from "./home.module.css";
 
 /**
@@ -94,7 +96,7 @@ const clientLogos = [
   },
   {
     src: "/brand/clients/experience-08.png",
-    name: "Municipio de Necoclí",
+    name: "Municipio de Vegachí",
     relation: "partner-experience",
     width: 192,
     height: 180,
@@ -146,6 +148,13 @@ export function ExperienceRail({
     (product) => product.attribution.state === "confirmed",
   );
 
+  // La intro y el enlace al directorio son las dos celdas fijas del ribbon.
+  const ribbonCells = featuredProducts.length + 2;
+  const ribbonStyle = {
+    "--ribbon-fill-3": String(ribbonFillSpan(ribbonCells, 3)),
+    "--ribbon-fill-4": String(ribbonFillSpan(ribbonCells, 4)),
+  } as CSSProperties;
+
   return (
     <section
       id="trabajo-real"
@@ -154,6 +163,7 @@ export function ExperienceRail({
     >
       <div
         className={styles.proofRibbon}
+        style={ribbonStyle}
         role="region"
         aria-label={copy.ribbonAriaLabel}
         tabIndex={0}

@@ -393,24 +393,37 @@
 }
 
 /*
- * El ribbon no tiene un conteo de columnas fijo: el número de tarjetas
- * (productos confirmados + el enlace al directorio) vive en
- * `src/content/work.ts` y cambia sin avisar. `display: flex` + `flex-wrap`
- * hace que la disposición se derive del ancho disponible y del número de
- * ítems reales, en vez de reservar N columnas fijas que se quedan a medio
- * llenar cuando el conteo cambia. Cada tarjeta dibuja su propio borde
- * derecho e inferior (ver `.proofRibbonIntro, .proofProduct` más abajo), así
- * que un renglón incompleto termina donde termina el contenido — nunca deja
- * una celda vacía con bordes que prometan una tarjeta que no está.
+ * El ribbon es una retícula real, no un flujo que se acomoda: las columnas
+ * coinciden de renglón a renglón y el rectángulo cierra a la derecha. El
+ * número de tarjetas (productos confirmados + el enlace al directorio) vive
+ * en `src/content/work.ts` y cambia sin avisar, así que el renglón final lo
+ * cierra la última tarjeta estirándose sobre las columnas que sobran: el
+ * componente precalcula ese tramo para cada conteo de columnas y lo pasa en
+ * `--ribbon-fill-N`. Así nunca queda una celda vacía con bordes que prometan
+ * una tarjeta que no está, ni un renglón que termine antes que el de arriba.
  */
 .proofRibbon {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   width: calc(100% - (var(--home-gutter) * 1.16));
   max-width: 1400px;
   margin-inline: auto;
   border-left: 1px solid var(--home-line);
   scrollbar-width: none;
+}
+
+.proofRibbon > :last-child {
+  grid-column: span var(--ribbon-fill-3, 1);
+}
+
+@media (min-width: 1024px) {
+  .proofRibbon {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .proofRibbon > :last-child {
+    grid-column: span var(--ribbon-fill-4, 1);
+  }
 }
 
 .proofRibbon::-webkit-scrollbar {
@@ -432,7 +445,6 @@
 }
 
 .proofRibbonIntro {
-  flex: 0 0 17rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -454,7 +466,6 @@
 }
 
 .proofProduct {
-  flex: 0 0 15.5rem;
   position: relative;
   display: grid;
   align-content: space-between;
@@ -489,26 +500,41 @@
   transform: scale(0.98);
 }
 
+/*
+ * El muro de logos es un carrusel horizontal: `--logo-cols` dice cuántas
+ * celdas caben a la vista y de ahí sale el ancho de cada una. Es la única
+ * medida del muro; el celda-ancho no se repite en ninguna otra regla para
+ * que no vuelvan a convivir dos retículas distintas sobre el mismo elemento.
+ */
 .logoWall {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  --logo-cols: 4;
+  display: flex;
   width: calc(100% - (var(--home-gutter) * 1.16));
   max-width: 1400px;
   margin-inline: auto;
   border-inline: 1px solid var(--home-line);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
 }
 
 .logoCell {
   position: relative;
   display: grid;
+  flex: 0 0 calc(100% / var(--logo-cols));
   min-width: 0;
   height: 8rem;
   place-items: center;
   overflow: hidden;
-  border-bottom: 1px dashed var(--home-line);
   border-right: 1px solid var(--home-line);
+  padding-inline: 1.25rem;
   color: var(--home-muted);
   outline: none;
+  scroll-snap-align: start;
+}
+
+.logoCell:last-child {
+  border-right: 0;
 }
 
 .logoRelation {
@@ -522,22 +548,15 @@
   text-transform: uppercase;
 }
 
-.logoCell:nth-last-child(-n + 6) {
-  border-bottom: 0;
-}
-
-.logoCell:nth-child(6n),
-.logoCell:last-child {
-  border-right: 0;
-}
-
-.logoCell:nth-child(5) {
-  border-right: 0;
-}
-
 .logoCell img {
   width: auto;
-  max-width: 8.75rem;
+  /*
+   * Dos topes, no uno: 8.75rem es el tamaño óptico al que se acuerdan todas
+   * las marcas entre sí, y 100% es el ancho útil de la celda. El segundo es
+   * el que manda cuando la celda es más angosta que el tope óptico — sin él
+   * los logos anchos se salían de su celda y `overflow: hidden` los cortaba.
+   */
+  max-width: min(8.75rem, 100%);
   height: auto;
   max-height: 3.25rem;
   object-fit: contain;
@@ -608,18 +627,6 @@
   font-weight: 500;
 }
 
-.logoStatement {
-  grid-column: 3 / span 2;
-  grid-row: 1;
-}
-
-.logoWall {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-
 .logoWall::-webkit-scrollbar {
   display: none;
 }
@@ -629,35 +636,21 @@
   outline-offset: -3px;
 }
 
-.logoCell {
-  flex: 0 0 calc(100% / 6);
-  width: auto;
-  border-bottom: 0;
-  scroll-snap-align: start;
-}
-
-.logoCell:nth-last-child(-n + 6) {
-  border-bottom: 0;
-}
-
-.logoCell:nth-child(6n) {
-  border-right: 1px solid var(--home-line);
-}
-
-.logoCell:last-child {
-  border-right: 0;
-}
-
+/* El rótulo del muro ocupa dos celdas, en cualquier conteo de columnas. */
 .logoStatement {
-  flex-basis: calc(100% / 3);
-  grid-column: auto;
-  grid-row: auto;
+  flex-basis: calc(200% / var(--logo-cols));
 }
 
 .logoRailHint {
   margin-top: 0.2rem;
   color: var(--home-teal);
   font-size: 0.5rem;
+}
+
+@media (min-width: 1200px) {
+  .logoWall {
+    --logo-cols: 6;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3326,16 +3319,23 @@
     flex: none;
     width: auto;
     height: 4rem;
+    padding-inline: 0.85rem;
     border-right: 1px solid var(--home-line);
     border-bottom: 1px dashed var(--home-line);
   }
 
-  .logoCell:nth-last-child(-n + 6) {
-    border-bottom: 1px dashed var(--home-line);
+  /*
+   * En móvil el rótulo de la relación cae encima del logo en vez de a su
+   * lado, porque la celda es mucho más baja. El padding superior le reserva
+   * su propia banda y el tope del logo se ajusta a la altura que queda.
+   */
+  .logoCell:not(.logoStatement) {
+    height: 5.25rem;
+    padding-block: 1.75rem 0.5rem;
   }
 
-  .logoCell:not(.logoStatement):nth-child(odd) {
-    border-right: 0;
+  .logoCell:not(.logoStatement) img {
+    max-height: 2.5rem;
   }
 
   .logoCell:nth-last-child(-n + 2) {
@@ -3345,17 +3345,15 @@
   .logoStatement {
     grid-column: 1 / -1;
     grid-row: 1;
+    flex-basis: auto;
     border-right: 0;
   }
 
-  .logoCell:nth-child(5) {
-    border-right: 1px solid var(--home-line);
-  }
-
-  .logoCell:not(.logoStatement) {
-    border-right: 1px solid var(--home-line);
-  }
-
+  /*
+   * En dos columnas el borde derecho lo lleva la celda de la izquierda. Con
+   * el rótulo ocupando el primer renglón completo, la columna izquierda es
+   * la celda 1 y luego las pares; la derecha, la 2 y luego las impares.
+   */
   .logoWall .logoCell:nth-child(1),
   .logoWall .logoCell:nth-child(n + 4):nth-child(even) {
     border-right: 1px solid var(--home-line);
