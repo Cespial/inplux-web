@@ -36,7 +36,11 @@ export const teamMembers = [
   {
     slug: "jaime-alonso-cano-pino",
     name: "Jaime Alonso Cano Pino",
-    alternateName: ["Jaime Cano Pino", "Jaime Alonso Cano", "Jaime Cano"],
+    // «Jaime Cano» se retiró a propósito el 08-sep-2026: es el string exacto del
+    // titular «Consejo de Estado inhabilitó a diputado Jaime Cano», un homónimo
+    // real. Declararlo aquí le dice a Google que esta persona también se llama
+    // así, y el «Pino» es justamente lo que la distingue. No reintroducir.
+    alternateName: ["Jaime Cano Pino", "Jaime Alonso Cano"],
     givenName: "Jaime Alonso",
     familyName: "Cano Pino",
     code: "DIR–01",
@@ -61,6 +65,7 @@ export const teamMembers = [
       "Dirección de producto",
     ],
     sameAs: [
+      "https://jaimecanopino.com",
       "https://www.linkedin.com/in/jaime-alonso-cano-pino-a11a6246/",
       "https://alponiente.com/author/jaimealonsocano/",
     ],
