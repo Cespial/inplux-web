@@ -1,0 +1,111 @@
+{
+  "artboards": [
+    {
+      "file": "Laudos.dc.html",
+      "title": "9 · Trabajo · Laudos",
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Servicios.dc.html",
+      "title": "8 · Qué construimos",
+      "x": 1180,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Kelsen.dc.html",
+      "title": "7 · Trabajo · Kelsen",
+      "x": 2360,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Columna.dc.html",
+      "title": "6 · Columna · Al Poniente",
+      "x": 0,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Metodo.dc.html",
+      "title": "5 · Cómo trabajamos",
+      "x": 1180,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Gobia.dc.html",
+      "title": "4 · Trabajo · Gobia",
+      "x": 2360,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Commonplace.dc.html",
+      "title": "3 · Prensa · The Commonplace",
+      "x": 0,
+      "y": 2940,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Tribai.dc.html",
+      "title": "2 · Trabajo · Tribai",
+      "x": 1180,
+      "y": 2940,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Main.dc.html",
+      "title": "1 · Marca",
+      "x": 2360,
+      "y": 2940,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaD.dc.html",
+      "title": "10 · Evento · Día D (Parte 5)",
+      "x": 0,
+      "y": 4410,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Avatar.dc.html",
+      "title": "Avatar 1080 × 1080",
+      "x": 1180,
+      "y": 4410,
+      "w": 1080,
+      "h": 1080
+    }
+  ],
+  "annotations": [
+    {
+      "id": "orden",
+      "x": 0,
+      "y": -260,
+      "w": 1400,
+      "text": "Se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\nOrden de publicación: 1 Marca · 2 Tribai · 3 Commonplace · 4 Gobia · 5 Método · 6 Columna · 7 Kelsen · 8 Qué construimos · 9 Laudos.\nExportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md."
+    },
+    {
+      "id": "diad",
+      "x": 2360,
+      "y": 4410,
+      "w": 640,
+      "text": "Día D: reservada para la Parte 5. La fecha de publicación se decide con el plan de 36 días."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
