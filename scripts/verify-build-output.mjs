@@ -1047,6 +1047,24 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
 
 await verifyGeneratedRoutes();
 
+// ── Verificación de Search Console ──────────────────────────────────────────
+// Google avisa al verificar por etiqueta: si la meta desaparece de la home, la
+// propiedad https://inplux.co/ pierde la verificación y con ella el acceso a
+// Search Console. Nada visible se rompe al quitarla, así que lo vigila el
+// build. El valor se fija LITERAL a propósito: cambiarlo equivale a perderla.
+{
+  const homeHtml = await readFile(path.join(root, ".next/server/app/index.html"), "utf8");
+  const etiqueta =
+    'name="google-site-verification" content="NtbZyIVhM4El76G13EPJ3euuE-5ISxt7OA9JGbUAy5Q"';
+  if (!homeHtml.includes(etiqueta)) {
+    errors.push(
+      "la home perdió la etiqueta de verificación de Google Search Console " +
+        "(metadata.verification.google en src/app/layout.tsx). Sin ella la propiedad " +
+        "https://inplux.co/ queda sin verificar.",
+    );
+  }
+}
+
 if (errors.length > 0) {
   console.error(`\nControl del HTML final falló con ${errors.length} problema(s):\n`);
   errors.sort().forEach((error) => console.error(`- ${error}`));
