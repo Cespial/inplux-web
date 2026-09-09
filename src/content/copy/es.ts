@@ -159,7 +159,6 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/experience-06-transparent.png": "Desarrollo urbano",
       "/brand/clients/experience-07.png": "Tecnología para la gestión pública",
       "/brand/clients/municipio-cisneros.png": "Gestión pública territorial",
-      "/brand/clients/experience-08.png": "Gestión pública territorial",
     },
     productCategories: {},
     productStatuses: {},

@@ -126,15 +126,70 @@ const clientLogos = [
     height: 200,
     renderWidth: 52,
   },
-  {
-    src: "/brand/clients/experience-08.png",
-    name: "Municipio de Vegachí",
-    relation: "partner-experience",
-    width: 192,
-    height: 180,
-    renderWidth: 55,
-  },
 ] as const;
+
+/**
+ * Las entidades acreditadas en el RUP se NOMBRAN, no se dibujan.
+ *
+ * Casi todas son heráldica municipal, y un escudo no sobrevive a la celda del
+ * muro: a 52px de alto no se lee ni con el filtro de silueta ni en gris con
+ * detalle —Santo Domingo sale literalmente como un círculo liso—, así que el
+ * escudo no aporta identidad, sólo mancha. El nombre compuesto en la mono del
+ * sitio se lee a cualquier tamaño y no depende de conseguir trece archivos que
+ * además no existen todos en fuentes abiertas.
+ *
+ * `lugar` sale del propio certificado o del dominio oficial del municipio; se
+ * omite cuando no consta, antes que suponerlo.
+ */
+const clientNames = [
+  { name: "Municipio de Buriticá", place: "Antioquia" },
+  { name: "Municipio de Yalí", place: "Antioquia" },
+  { name: "Municipio de Santo Domingo", place: "Antioquia" },
+  { name: "Municipio de El Bagre", place: "Antioquia" },
+  { name: "Municipio de Valparaíso", place: "Antioquia" },
+  { name: "Municipio de Caracolí", place: "Antioquia" },
+  { name: "Municipio de Caucasia", place: "Antioquia" },
+  { name: "Municipio de San Roque", place: "Antioquia" },
+  // El escudo de Vegachí es heráldica con relleno: en la celda del muro
+  // colapsaba en una mancha blanca. Se nombra, como el resto de municipios.
+  { name: "Municipio de Vegachí", place: "Antioquia" },
+  { name: "Hospital San Camilo de Lelis", place: "E.S.E. · Vegachí" },
+  { name: "Hospital San Pío X", place: "E.S.E." },
+  { name: "Servicios Públicos de Caracolí", place: "E.S.P." },
+  { name: "Servicios Públicos de Giraldo", place: "E.S.P." },
+  { name: "EDEREM", place: "Buriticá" },
+  { name: "Logistics and Services Company", place: "" },
+  { name: "INCA Ingeniería y Consultoría", place: "" },
+  /*
+   * Falta a propósito la tercera contraparte propia del RUP: está en la lista
+   * de «logo o relación sin permiso» de `scripts/verify-public-content.mjs`,
+   * que bloquea el build si se nombra. Es una decisión ya registrada en el
+   * proyecto, no un olvido; para incorporarla hay que aprobar antes el permiso
+   * y sacarla de esa lista.
+   */
+] as const;
+
+function ClientNameCell({
+  client,
+  copy,
+}: {
+  client: (typeof clientNames)[number];
+  copy: ExperienceRailCopy;
+}) {
+  return (
+    <div
+      className={`${styles.logoCell} ${styles.logoNamed}`}
+      role="group"
+      aria-label={`${copy.relationExperience}: ${client.name}${client.place ? `. ${client.place}` : ""}`}
+    >
+      <span className={styles.logoRelation}>{copy.relationExperience}</span>
+      <span className={styles.logoName} aria-hidden="true">
+        <strong>{client.name}</strong>
+        {client.place ? <small>{client.place}</small> : null}
+      </span>
+    </div>
+  );
+}
 
 function ClientLogoCell({
   client,
@@ -193,7 +248,7 @@ export function ExperienceRail({
    * columnas sobrantes, así el bloque cierra en rectángulo entre en la lista
    * quien entre.
    */
-  const wallCells = clientLogos.length + 1;
+  const wallCells = clientLogos.length + clientNames.length + 1;
   const wallStyle = {
     "--wall-fill-2": String(fillSpan(wallCells, 2)),
     "--wall-fill-4": String(fillSpan(wallCells, 4)),
@@ -250,6 +305,9 @@ export function ExperienceRail({
       >
         {clientLogos.map((client) => (
           <ClientLogoCell client={client} copy={copy} key={client.src} />
+        ))}
+        {clientNames.map((client) => (
+          <ClientNameCell client={client} copy={copy} key={client.name} />
         ))}
         <div className={`${styles.logoCell} ${styles.logoStatement}`}>
           <p>

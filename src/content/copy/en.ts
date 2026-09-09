@@ -188,7 +188,6 @@ export const homeCopyEn: HomeCopy = {
       "/brand/clients/experience-06-transparent.png": "Urban development",
       "/brand/clients/experience-07.png": "Technology for public management",
       "/brand/clients/municipio-cisneros.png": "Territorial public management",
-      "/brand/clients/experience-08.png": "Territorial public management",
     },
     productCategories: {
       tribai: "Taxation",
