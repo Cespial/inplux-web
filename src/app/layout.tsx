@@ -41,6 +41,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://inplux.co"),
+  // Verificación de Google Search Console (propiedad de prefijo https://inplux.co).
+  // Se hace por etiqueta y no por DNS porque el DNS de inplux.co vive en
+  // Cloudflare, fuera de este repo. Next la emite como
+  // <meta name="google-site-verification" content="…">.
+  verification: { google: "NtbZyIVhM4El76G13EPJ3euuE-5ISxt7OA9JGbUAy5Q" },
   title: {
     default: "INPLUX | Fábrica de software a la medida",
     template: "%s | INPLUX",
