@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Genera los artboards .dc.html de la primera tanda de Instagram a partir de DESIGN.md.
-Todo el copy es literal del sitio (src/content/*.ts) o de fuentes verificadas."""
+Todo el copy es literal del sitio (src/content/*.ts) o de fuentes verificadas.
+Las capturas JPG viven junto a los .dc.html para que un render local y el lienzo resuelvan el mismo nombre."""
 import json, pathlib
 
 FONTS = ('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;1,6..72,300'
@@ -127,11 +128,11 @@ producto('Gobia', 'ink', 'Trabajo / Gestión pública · Piloto activo',
 
 producto('Kelsen', 'paper', 'Trabajo / Derecho · Por solicitud',
          f'Trabajar conocimiento jurídico con una ruta {em("verificable", T["paper"])}.',
-         'kelsen.jpg', 'kelsen.io/explorador', 'Kelsen · captura real · 21 JUL 2026')
+         'kelsen.jpg', 'kelsen.io/explorador?vigencia=modificado', 'Kelsen · captura real · 21 JUL 2026')
 
 producto('Laudos', 'paper', 'Trabajo / Arbitraje · Beta abierta',
          f'Explorar conocimiento arbitral con {em("estructura", T["paper"])}.',
-         'laudos.jpg', 'laudos.co', 'Laudos · con REDEK · captura real · 21 JUL 2026')
+         'laudos.jpg', 'laudos.co/?view=predecir', 'Laudos · con REDEK · captura real · 21 JUL 2026')
 
 pieza('Commonplace', 'ink', 'Prensa / Selección editorial externa',
       'Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace.', 88,
@@ -141,14 +142,14 @@ pieza('Columna', 'ink', 'Columna / Al Poniente',
       f'Lo que la máquina no puede {em("firmar", T["ink"])}.', 112,
       'Jaime Alonso Cano Pino · 12 JUN 2026', 'Columna firmada · publicación del equipo')
 
-lista('Metodo', 'paper', '05 / Cómo trabajamos', f'Cómo {em("trabajamos", T["paper"])}.', [
+lista('Metodo', 'paper', 'Fábrica / Cómo trabajamos', f'Cómo {em("trabajamos", T["paper"])}.', [
     ('01', 'Entendemos el reto', 'Hablamos con las personas involucradas, revisamos el contexto y definimos qué debería cambiar.'),
     ('02', 'Definimos el producto', 'Convertimos el reto en prioridades, flujos y criterios claros para construir la primera versión útil.'),
     ('03', 'Construimos y probamos', 'Diseñamos la experiencia, desarrollamos el software y revisamos su funcionamiento, sus riesgos y su utilidad.'),
     ('04', 'Lanzamos y evolucionamos', 'Ponemos una versión útil en producción, observamos cómo funciona y decidimos contigo qué mejorar después.'),
 ])
 
-lista('Servicios', 'ink', '02 / Qué construimos', f'Qué {em("construimos", T["ink"])}.', [
+lista('Servicios', 'ink', 'Fábrica / Qué construimos', f'Qué {em("construimos", T["ink"])}.', [
     ('01', 'Lanzar un producto digital', 'Convertimos una oportunidad o una idea en una primera versión útil, preparada para aprender, crecer y evolucionar.'),
     ('02', 'Mejorar una operación', 'Construimos herramientas que conectan personas, procesos, reglas y datos alrededor de la forma real de trabajar.'),
     ('03', 'Automatizar trabajo y conocimiento', 'Convertimos tareas repetitivas y conocimiento disperso en flujos trazables, con revisión humana donde importa.'),

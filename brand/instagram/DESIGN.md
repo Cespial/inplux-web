@@ -22,7 +22,9 @@ evidencia** de que llevamos un problema real a software en producción.
 **Remate (literal):**
 > La IA acelera el trabajo. Personas expertas dirigen y validan las decisiones críticas.
 
-**Eyebrow canónico:** `FÁBRICA DE SOFTWARE A LA MEDIDA`
+**Eyebrow canónico:** `FÁBRICA DE SOFTWARE A LA MEDIDA` (puede cerrar con `· MEDELLÍN`).
+Los kickers de método y servicios van como `FÁBRICA / …`, sin la numeración de secciones del
+sitio: en Instagram un `02 /` se lee como número de publicación.
 **Pie canónico:** «Software con criterio y dirección humana.»
 
 **Voz:** primera persona plural. Frases cortas, con verbo. Sin hipérbole, sin promesas.
@@ -72,12 +74,14 @@ Prohibido: verde lima, degradados, fondos fríos o azulados, sombras duras.
 | Palabra acentuada | Newsreader *italic* | 300 | = titular | | color acento |
 | Kicker / eyebrow | **Geist** | 500 | 26 px | 1 | +0.08em, MAYÚSCULAS, separador `·` o `/` |
 | Cuerpo | Geist | 300–400 | 30–34 px | 1.4 | 0 |
+| Texto de ítem en listas | Geist | 300 | 26 px | 1.35 | 0 |
 | Título de ítem | Newsreader | 300 | 48–56 px | 1.1 | −0.01em |
 | Meta / pie / URL | **Geist Mono** | 400 | 22–24 px | 1 | 0 |
 | Wordmark | Geist | 600 | 26 px | 1 | +0.14em, `INPLUX` |
 
 Regla firma del sitio: un titular en serif con **exactamente una** palabra en itálica de color acento.
-Los titulares terminan en punto.
+Los titulares terminan en punto. **Excepción:** los títulos de prensa y de columnas ajenas se citan tal
+cual; solo se acentúa una palabra cuando el título es nuestro. Un título largo de prensa puede bajar a 88 px.
 
 ### Retícula
 - Margen: **88 px** en los cuatro lados. Columna útil: 904 px.
@@ -106,7 +110,7 @@ Los titulares terminan en punto.
 ```
 
 El lockup del pie es **símbolo Estratos (44 px) + `INPLUX`**. En el post de marca sola el
-símbolo va grande (≥ 300 px) y sin wordmark.
+símbolo va grande (≥ 300 px) y el pie lleva solo el wordmark, sin el lockup pequeño.
 
 ---
 

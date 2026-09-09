@@ -137,7 +137,7 @@ Captura real del laboratorio de predicción, 21 de julio de 2026.
 **Caption**
 Somos aliados de El Día D.
 
-Miércoles 14 de octubre de 2026, Auditorio Fundadores de la Universidad EAFIT, Medellín. Un día de founders, inversionistas, operadores y builders organizado por @10ampro.
+Miércoles 14 de octubre de 2026, de 10:00 a. m. a 5:00 p. m., Auditorio Fundadores de la Universidad EAFIT, Medellín. Un día de founders, inversionistas, operadores y builders organizado por @10ampro.
 
 Nuestro lugar en la lista: software, de un problema real a producción.
 eldiad.10am.pro
