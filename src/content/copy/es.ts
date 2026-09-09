@@ -145,6 +145,7 @@ export const homeCopyEs: HomeCopy = {
     relationExperience: "Experiencia",
     relationPartner: "Aliado",
     clientNotes: {
+      "/brand/clients/creame.png": "Emprendimiento e innovación",
       "/brand/clients/alcaldia-caucasia.png": "Gestión pública territorial",
       "/brand/clients/alcaldia-caracoli.png": "Gestión pública territorial",
       "/brand/clients/alcaldia-san-roque.png": "Gestión pública territorial",

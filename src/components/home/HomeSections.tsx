@@ -31,6 +31,14 @@ const clientLogos = [
     renderWidth: 70,
   },
   {
+    src: "/brand/clients/creame.png",
+    name: "Creame",
+    relation: "partner-experience",
+    width: 480,
+    height: 184,
+    renderWidth: 136,
+  },
+  {
     src: "/brand/clients/maria-cano.png",
     name: "Fundación Universitaria María Cano",
     relation: "partner-experience",
