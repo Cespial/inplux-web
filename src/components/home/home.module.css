@@ -526,7 +526,7 @@
   position: relative;
   display: grid;
   min-width: 0;
-  height: 7rem;
+  height: 7.75rem;
   place-items: center;
   overflow: hidden;
   border-right: 1px solid var(--home-line);
@@ -620,7 +620,13 @@
    */
   max-width: min(8.75rem, 100%);
   height: auto;
-  max-height: 3.25rem;
+  /*
+   * 4.25rem y no 3.25: los lockups de alcaldía apilan escudo sobre nombre, y a
+   * 52px de alto el nombre queda ilegible —el tope de ancho ni siquiera llega a
+   * aplicarse—. Los logotipos apaisados no cambian: a ellos los sigue limitando
+   * el ancho.
+   */
+  max-height: 4.25rem;
   object-fit: contain;
   filter: grayscale(1) brightness(0) invert(1);
   opacity: 0.58;
@@ -3331,12 +3337,12 @@
    * su propia banda y el tope del logo se ajusta a la altura que queda.
    */
   .logoCell {
-    height: 5.25rem;
+    height: 5.75rem;
     padding: 1.75rem 0.85rem 0.5rem;
   }
 
   .logoCell img {
-    max-height: 2.5rem;
+    max-height: 3rem;
   }
 
   .logoNamed {
