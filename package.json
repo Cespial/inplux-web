@@ -19,9 +19,10 @@
     "test:deck-reasons": "node --test scripts/verify-deck-reasons.test.mjs",
     "test:captures": "node --test scripts/verify-captures.test.mjs",
     "test:ribbon": "node --test scripts/verify-grid-fill.test.mjs",
+    "test:aviso": "node --test scripts/verify-ally-notice.test.mjs",
     "qa:deck": "node scripts/qa-deck.mjs",
     "qa:reduce": "node scripts/qa-reduce.mjs",
-    "check": "npm run lint && npm run test:hero-inspector && npm run test:deck && npm run test:deck-reasons && npm run test:captures && npm run test:ribbon && npm run build && npm run check:http"
+    "check": "npm run lint && npm run test:hero-inspector && npm run test:deck && npm run test:deck-reasons && npm run test:captures && npm run test:ribbon && npm run test:aviso && npm run build && npm run check:http"
   },
   "dependencies": {
     "next": "16.2.10",

@@ -128,6 +128,29 @@ type ProductLabels =
   | Readonly<Record<WorkSlug, string>>
   | Readonly<Record<string, never>>;
 
+/**
+ * El aviso de aliados del Día D. Es temporal: caduca solo el 15 de octubre de
+ * 2026 (ver `ALLY_NOTICE_EXPIRES` en `src/content/dia-d.ts`).
+ */
+export type AllyNoticeCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  whenLabel: string;
+  when: string;
+  whereLabel: string;
+  where: string;
+  roleLabel: string;
+  role: string;
+  alliesEyebrow: string;
+  /** Descriptor de cada aliado, por `id`. Los del propio sitio del evento. */
+  allyNotes: Readonly<Record<string, string>>;
+  cta: string;
+  dismiss: string;
+  closeLabel: string;
+  dialogLabel: string;
+};
+
 export type ExperienceRailCopy = {
   ribbonAriaLabel: string;
   ribbonEyebrow: string;
@@ -450,6 +473,7 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
+  allyNotice: AllyNoticeCopy;
   experienceRail: ExperienceRailCopy;
   factoryScrolly: FactoryScrollyCopy;
   solutions: SolutionsCopy;
