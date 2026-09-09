@@ -145,6 +145,10 @@ export const homeCopyEs: HomeCopy = {
     relationExperience: "Experiencia",
     relationPartner: "Aliado",
     clientNotes: {
+      "/brand/clients/alcaldia-caucasia.png": "Gestión pública territorial",
+      "/brand/clients/alcaldia-caracoli.png": "Gestión pública territorial",
+      "/brand/clients/alcaldia-san-roque.png": "Gestión pública territorial",
+      "/brand/clients/hospital-san-pio-x.png": "Salud pública · Caracolí",
       "/brand/clients/corantioquia.png": "Autoridad ambiental regional",
       "/brand/clients/maria-cano.png": "Educación superior y salud",
       "/brand/clients/esumer.png": "Educación superior y emprendimiento",
@@ -159,7 +163,6 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/experience-06-transparent.png": "Desarrollo urbano",
       "/brand/clients/experience-07.png": "Tecnología para la gestión pública",
       "/brand/clients/municipio-cisneros.png": "Gestión pública territorial",
-      "/brand/clients/experience-08.png": "Gestión pública territorial",
     },
     productCategories: {},
     productStatuses: {},

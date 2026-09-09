@@ -536,6 +536,38 @@
   outline: none;
 }
 
+/*
+ * La celda nombrada: las entidades acreditadas en el RUP no traen marca que
+ * sobreviva a esta altura de celda, así que se componen con el mismo tono y la
+ * misma mono que el resto del muro. No lleva la ficha de detalle del hover
+ * porque no esconde nada: el nombre ya está a la vista.
+ */
+.logoNamed {
+  /* el rótulo de la relación va posicionado arriba: se le reserva su banda */
+  padding-block: 1.85rem 0.6rem;
+}
+
+.logoName {
+  display: grid;
+  gap: 0.28rem;
+  text-align: center;
+  color: var(--home-ivory);
+  opacity: 0.72;
+}
+
+.logoName strong {
+  font: 600 0.72rem/1.22 var(--home-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logoName small {
+  color: var(--home-muted);
+  font: 500 0.58rem/1.2 var(--home-mono);
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+}
+
 .logoStatement {
   grid-column: span var(--wall-fill-2, 1);
   justify-items: start;
@@ -3305,6 +3337,20 @@
 
   .logoCell img {
     max-height: 2.5rem;
+  }
+
+  .logoNamed {
+    height: auto;
+    min-height: 5.25rem;
+    padding-block: 1.6rem 0.6rem;
+  }
+
+  .logoName strong {
+    font-size: 0.64rem;
+  }
+
+  .logoName small {
+    font-size: 0.53rem;
   }
 
   .logoStatement {

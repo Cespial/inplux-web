@@ -123,12 +123,14 @@ function loadRibbon() {
       // La intro y el enlace al directorio son las dos celdas fijas del ribbon.
       const celdasReales = confirmados.length + 2;
 
-      // El muro: un logo por relación más el rótulo que cierra el renglón.
-      // Se cuenta partiendo la fuente, no con una expresión regular: este
-      // código viaja dentro de una plantilla de JS y ahí las barras invertidas
-      // se cuecen antes de llegar a esbuild.
+      // El muro: una celda por relación —con logotipo o nombrada— más el
+      // rótulo que cierra el renglón. Se cuenta partiendo la fuente, no con una
+      // expresión regular: este código viaja dentro de una plantilla de JS y
+      // ahí las barras invertidas se cuecen antes de llegar a esbuild.
       const fuente = readFileSync("src/components/home/HomeSections.tsx", "utf8");
-      const celdasMuro = fuente.split('src: "/brand/clients/').length;
+      const conLogo = fuente.split('src: "/brand/clients/').length - 1;
+      const nombradas = fuente.split("place: ").length - 1;
+      const celdasMuro = conLogo + nombradas + 1;
 
       // Se interroga el conteo REAL y, en la misma pasada, todos los conteos
       // que el ribbon podría llegar a tener: la retícula tiene que cerrar
@@ -201,7 +203,16 @@ test("el conteo real de tarjetas cierra la retícula en los conteos de columna v
 test("el conteo real de logos cierra la retícula del muro", () => {
   const { celdasMuro, tramos } = loadRibbon();
 
-  assert.ok(celdasMuro >= 5, `el muro quedó con ${celdasMuro} celdas: revisar clientLogos`);
+  // Guarda contra un conteo obsoleto: el muro mezcla celdas con logotipo y
+  // celdas nombradas, y una prueba que sólo contara las primeras pasaría por
+  // casualidad mientras la retícula real se rompe.
+  const enDom = (tsx.match(/<Client(Logo|Name)Cell/g) || []).length;
+  assert.equal(
+    enDom,
+    2,
+    "el muro dejó de pintar los dos tipos de celda: revisar el conteo de esta prueba",
+  );
+  assert.ok(celdasMuro >= 20, `el muro quedó con ${celdasMuro} celdas: revisar clientLogos y clientNames`);
 
   for (const columnas of columnasDeclaradas("logoWall").filter((n) => tramos[n])) {
     const span = tramos[columnas][celdasMuro - 1];
