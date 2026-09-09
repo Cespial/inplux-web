@@ -155,14 +155,6 @@ lista('Servicios', 'ink', 'Fábrica / Qué construimos', f'Qué {em("construimos
     ('03', 'Automatizar trabajo y conocimiento', 'Convertimos tareas repetitivas y conocimiento disperso en flujos trazables, con revisión humana donde importa.'),
 ])
 
-t = T['ink']
-page('DiaD', 'ink', [
-    kicker('Aliados / El Día D · 10ampro', t),
-    col([headline(f'Somos aliados de El {em("Día D", t)}.', t, 112),
-         body('Miércoles 14 de octubre de 2026<br>Auditorio Fundadores · Universidad EAFIT · Medellín<br>10:00 a. m. – 5:00 p. m.', t, 34)], 48),
-    col([meta('eldiad.10am.pro', t, 26, t['fg']), row([meta('Software · De un problema real a producción', t, 22), lockup(t)])], 36),
-])
-
 # Avatar 1080×1080
 t = T['ink']
 pathlib.Path('Avatar.dc.html').write_text(head(t) +
@@ -202,6 +194,24 @@ cita('Mencion', 'ink', 'Nos mencionan / @10ampro',
      'El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro',
      'Reel de @10ampro con Hernán Jaramillo (holdmybirra)', 'Sobre Tribai · app.tribai.co')
 
+foto('DiaD', 'Aliados / El Día D · 10ampro',
+     f'Somos aliados de El {em("Día D", T["ink"])}.',
+     'Miércoles 14 de octubre de 2026 · Auditorio Fundadores · Universidad EAFIT · Medellín · 10:00 a. m. – 5:00 p. m.',
+     'Software · De un problema real a producción · eldiad.10am.pro', 'medellin.jpg')
+
+foto('Segovia', 'Trabajo / Participación ciudadana · Segovia, Antioquia',
+     f'{em("1.549", T["ink"])} personas ya votaron por las obras de su vereda o barrio.',
+     'Presupuesto participativo · Alcaldía de Segovia · corte 8 SEP 2026 · abierta hasta el 3 OCT',
+     'participativo-segovia.vercel.app', 'segovia.jpg')
+
+cita('Egonomista', 'paper', 'Nos mencionan / @egonomista',
+     'Hay plataformas que organizan su información, hacen buena parte de los cálculos y lo llevan paso a paso',
+     'Reel de @egonomista sobre 3 plataformas para declarar renta · 05 SEP 2026', 'Tribai entre las tres · app.tribai.co')
+
+producto('Porkia', 'paper', 'Trabajo / Porcicultura · Por solicitud',
+         f'Llevar una finca porcícola sin volver al {em("cuaderno", T["paper"])}.',
+         'porkia.jpg', 'porkia.co/#demo', 'Porkia · captura real · 11 AGO 2026')
+
 # canvas.json — se lee como el grid de Instagram (más reciente arriba a la izquierda)
 W, H, GX, GY = 1080, 1350, 100, 120
 def at(cx, ry, h=H): return dict(x=cx * (W + GX), y=ry * (H + GY), w=W, h=h)
@@ -216,10 +226,13 @@ canvas = {
     dict(file='Tribai.dc.html',      title='3 · Trabajo · Tribai',            **at(0, 2)),
     dict(file='Harvard.dc.html',     title='2 · Reconocimiento · ODR 2026',   **at(1, 2)),
     dict(file='Main.dc.html',        title='1 · Marca',                       **at(2, 2)),
-    dict(file='DiaD.dc.html',        title='10 · Evento · Día D (tanda 2)',   **at(0, 3)),
-    dict(file='Metodo.dc.html',      title='11 · Cómo trabajamos (tanda 2)',  **at(1, 3)),
-    dict(file='Servicios.dc.html',   title='13 · Qué construimos (tanda 2)',  **at(2, 3)),
-    dict(file='Avatar.dc.html',      title='Avatar 1080 × 1080',              **at(0, 4, 1080)),
+    dict(file='DiaD.dc.html',        title='10 · Evento · Día D (tanda 2)',       **at(0, 3)),
+    dict(file='Segovia.dc.html',     title='12 · Trabajo · Segovia (tanda 2)',    **at(1, 3)),
+    dict(file='Metodo.dc.html',      title='11 · Cómo trabajamos (tanda 2)',      **at(2, 3)),
+    dict(file='Servicios.dc.html',   title='13 · Qué construimos (tanda 2)',      **at(0, 4)),
+    dict(file='Egonomista.dc.html',  title='14 · Nos mencionan · egonomista',     **at(1, 4)),
+    dict(file='Porkia.dc.html',      title='15 · Trabajo · Porkia (tanda 2)',     **at(2, 4)),
+    dict(file='Avatar.dc.html',      title='Avatar 1080 × 1080',                  **at(0, 5, 1080)),
   ],
   'annotations': [
     dict(id='orden', x=0, y=-260, w=1400,
@@ -227,7 +240,7 @@ canvas = {
               'Tanda 1 (9 al 28 de septiembre): 1 Marca · 2 Reconocimiento ODR 2026 · 3 Tribai · 4 Nos mencionan 10ampro · 5 Gobia · 6 Columna · 7 Kelsen · 8 Commonplace · 9 Laudos.\n'
               'Exportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md; calendario en METRICOOL.md.'),
     dict(id='tanda2', x=0, y=4210, w=1400,
-         text='Fila de reserva, tanda 2 (30 de septiembre al Día D): Aliados del Día D, Cómo trabajamos, Qué construimos. Faltan por diseñar: audiograma Blu Radio, mención de @egonomista, equipo con fotos reales, Porkia.'),
+         text='Tanda 2 (30 de septiembre al Día D): Aliados del Día D, Segovia (publicar con la cifra final tras el cierre del 3 de octubre, o antes con el visto bueno de la Alcaldía), Cómo trabajamos, Qué construimos, mención de @egonomista, Porkia. Faltan: audiograma Blu Radio y equipo con fotos reales.'),
   ],
   'launch': {'view': 'canvas'},
 }

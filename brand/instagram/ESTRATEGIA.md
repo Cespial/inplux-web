@@ -26,6 +26,7 @@ orden de peso:
 | Panel 11 del XIV Congreso Nacional e Internacional de Arbitraje | Comité Colombiano de Arbitraje | 7-may-2026 | Tanda 2 |
 | Nueve columnas firmadas en Al Poniente | Al Poniente (publicación del equipo, no cobertura) | press.ts | Una por tanda, rotuladas como columna |
 | Cinco productos en producción con capturas fechadas | Los propios productos | capture-manifest.json | Cuatro por tanda |
+| **1.549 votos reales** en el presupuesto participativo de Segovia, Antioquia, a 16 días de abierta la votación (corte 8-sep 20:27; cierra 3-oct) | Alcaldía de Segovia | Monitor de producción de la plataforma (solo lectura) | Post 12 de la tanda 2 · **la cifra no está publicada por la Alcaldía**: confirmar antes |
 | Diez clientes con logo en inplux.co | Clientes | inplux.co | Cuando haya foto o testimonio real, no antes |
 
 Regla: **ninguna pieza de opinión propia sin una prueba de tercero al lado en la misma
@@ -82,17 +83,22 @@ reel de @egonomista y del reel de @10ampro en historias, guardados en el highlig
 |---|---|---|---|---|
 | 10 | Mié 30-sep | Somos aliados de El Día D | Evento | Nada, ya diseñado |
 | 11 | Vie 02-oct | Cómo trabajamos | Método | Nada, ya diseñado |
-| 12 | Lun 05-oct | Audiograma Blu Radio 1 | Radio | Audio y fecha de la entrevista |
+| 12 | Lun 05-oct | 1.549 personas ya votaron · Segovia (foto aérea; cifra final tras el cierre del 3-oct) | Trabajo | Visto bueno de la Alcaldía para publicar la cifra |
 | 13 | Mié 07-oct | Qué construimos | Método | Nada, ya diseñado |
 | 14 | Vie 09-oct | Tribai entre las 3 plataformas · @egonomista | Nos mencionan | Nada |
 | 15 | Lun 12-oct (festivo) | Jaime y Cristian: quiénes construyen | Personas | Fotos reales |
 | 16 | Mar 13-oct | Mañana, Día D: agenda y dónde encontrarnos | Evento | Confirmar espacio físico de INPLUX en el evento |
 | 17 | Mié 14-oct | Historias en vivo todo el día; al cierre, una foto real del auditorio | Evento | Estar allí con el teléfono |
 | 18 | Jue 15-oct | Lo que vimos en el Día D, con fotos reales | Evento | Fotos del día |
-| 19 | Vie 16-oct | Audiograma Blu Radio 2 o Panel del Comité de Arbitraje | Radio / Evento | Audio |
+| 19 | Vie 16-oct | Audiograma Blu Radio 1 o Panel del Comité de Arbitraje | Radio / Evento | Audio y fecha de la entrevista |
 
-Si el 12 de octubre no hay fotos reales del equipo, ese día sale Porkia (Trabajo) y la
-pieza de personas espera.
+Si el 12 de octubre no hay fotos reales del equipo, ese día sale Porkia (Trabajo, ya
+diseñada) y la pieza de personas espera.
+
+⚠️ **Segovia:** la plataforma oculta los conteos durante la votación a propósito y los
+resultados se publican el 3 de octubre. El total de participación (no el reparto por línea)
+es lo único que se cuenta, y solo con acuerdo de la Alcaldía. Publicado el 5 de octubre con
+la cifra final, la pieza es más fuerte y no adelanta nada.
 
 ---
 

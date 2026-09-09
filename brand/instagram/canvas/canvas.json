@@ -81,9 +81,17 @@
       "h": 1350
     },
     {
+      "file": "Segovia.dc.html",
+      "title": "12 · Trabajo · Segovia (tanda 2)",
+      "x": 1180,
+      "y": 4410,
+      "w": 1080,
+      "h": 1350
+    },
+    {
       "file": "Metodo.dc.html",
       "title": "11 · Cómo trabajamos (tanda 2)",
-      "x": 1180,
+      "x": 2360,
       "y": 4410,
       "w": 1080,
       "h": 1350
@@ -91,8 +99,24 @@
     {
       "file": "Servicios.dc.html",
       "title": "13 · Qué construimos (tanda 2)",
+      "x": 0,
+      "y": 5880,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Egonomista.dc.html",
+      "title": "14 · Nos mencionan · egonomista",
+      "x": 1180,
+      "y": 5880,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Porkia.dc.html",
+      "title": "15 · Trabajo · Porkia (tanda 2)",
       "x": 2360,
-      "y": 4410,
+      "y": 5880,
       "w": 1080,
       "h": 1350
     },
@@ -100,7 +124,7 @@
       "file": "Avatar.dc.html",
       "title": "Avatar 1080 × 1080",
       "x": 0,
-      "y": 5880,
+      "y": 7350,
       "w": 1080,
       "h": 1080
     }
@@ -118,7 +142,7 @@
       "x": 0,
       "y": 4210,
       "w": 1400,
-      "text": "Fila de reserva, tanda 2 (30 de septiembre al Día D): Aliados del Día D, Cómo trabajamos, Qué construimos. Faltan por diseñar: audiograma Blu Radio, mención de @egonomista, equipo con fotos reales, Porkia."
+      "text": "Tanda 2 (30 de septiembre al Día D): Aliados del Día D, Segovia (publicar con la cifra final tras el cierre del 3 de octubre, o antes con el visto bueno de la Alcaldía), Cómo trabajamos, Qué construimos, mención de @egonomista, Porkia. Faltan: audiograma Blu Radio y equipo con fotos reales."
     }
   ],
   "launch": {

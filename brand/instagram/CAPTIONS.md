@@ -191,3 +191,34 @@ app.tribai.co
 #tribai #declaraciónderenta #medellín
 
 **Alt:** Cita sobre fondo claro que atribuye a egonomista la recomendación de Tribai entre tres plataformas para declarar renta.
+
+---
+
+## 12 · Trabajo — Segovia — lun 05-oct (con la cifra final; antes solo con visto bueno de la Alcaldía)
+**Caption**
+1.549 personas ya votaron por las obras de su vereda o barrio.
+
+Es el presupuesto participativo de Segovia, Antioquia. Construimos la plataforma con la Alcaldía: cada persona elige con su cédula y un celular, en unos cinco minutos, en qué se invierte la plata de su comunidad. La votación está abierta hasta el 3 de octubre.
+
+Corte del 8 de septiembre. Antes de publicar, actualizar la cifra y confirmar con la Alcaldía que se puede contar.
+participativo-segovia.vercel.app
+
+[Etiquetar la cuenta oficial de la Alcaldía de Segovia solo con su acuerdo.]
+
+#govtech #participaciónciudadana #segovia #fábricadesoftware
+
+**Alt:** Fotografía aérea de Segovia, Antioquia, con el texto: 1.549 personas ya votaron por las obras de su vereda o barrio.
+
+---
+
+## 15 · Trabajo — Porkia — lun 12-oct (si no hay fotos reales del equipo)
+**Caption**
+Llevar una finca porcícola sin volver al cuaderno.
+
+Porkia registra lotes, cuido, sanidad y cuentas de una finca porcícola desde el celular. Beta cerrada, acceso por solicitud, en porkia.co.
+
+Captura real de la demo, 11 de agosto de 2026.
+
+#agrotech #fábricadesoftware #medellín
+
+**Alt:** Captura de pantalla de la demo de Porkia dentro de un marco de navegador con la dirección porkia.co.

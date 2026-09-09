@@ -147,8 +147,11 @@ símbolo va grande (≥ 300 px) y el pie lleva solo el wordmark, sin el lockup p
 1. **Capturas reales** de producto, siempre en marco de navegador con la URL viva y la
    fecha del acta en el pie. Son la prueba. Nunca mockups inventados.
 2. **Fotografía real** de eventos y personas: color natural o blanco y negro. Sin tinte.
+   Regla práctica: blanco y negro para letreros, salas y escenarios (Harvard); color con la
+   saturación bajada a ~0,8 para paisajes y territorio (Segovia), porque el lugar es el dato.
 3. **Imagen generada (Midjourney)** solo como **textura o atmósfera**, en la línea de las
-   que ya usa el sitio (`public/brand/about/*.webp`: bodegones de papel y aluminio,
+   que ya usa el sitio (el post de aliados del Día D usa `contexto-medellin.webp` como fondo
+   mientras no haya foto real del evento; se reemplaza el 14 de octubre) (`public/brand/about/*.webp`: bodegones de papel y aluminio,
    arquitectura entre niebla). Nunca personas generadas, nunca «oficina feliz» de stock.
 4. Prohibido: fotos de stock teñidas, flechas decorativas, íconos emoji, mosaicos de logos.
 
