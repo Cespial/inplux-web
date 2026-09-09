@@ -35,15 +35,15 @@ a la segunda semana.
 | # | Fecha | Publicación | Superficie |
 |---|---|---|---|
 | 1 | Mié 09-sep | Marca — «De un problema real a software en producción.» | Tinta |
-| 2 | Vie 11-sep | Trabajo — Tribai | Papel |
-| 3 | Lun 14-sep | Prensa — The Commonplace | Tinta |
-| 4 | Mié 16-sep | Trabajo — Gobia | Tinta |
-| 5 | Vie 18-sep | Método — Cómo trabajamos | Papel |
+| 2 | Vie 11-sep | Reconocimiento — Amparo.help en el hackathon de ODR 2026 | Foto + degradado |
+| 3 | Lun 14-sep | Trabajo — Tribai | Papel |
+| 4 | Mié 16-sep | Nos mencionan — @10ampro, «El cerebro tributario de Colombia…» | Tinta |
+| 5 | Vie 18-sep | Trabajo — Gobia | Papel |
 | 6 | Lun 21-sep | Columna — «Lo que la máquina no puede firmar» | Tinta |
 | 7 | Mié 23-sep | Trabajo — Kelsen | Papel |
-| 8 | Vie 25-sep | Qué construimos | Tinta |
+| 8 | Vie 25-sep | Prensa — The Commonplace | Tinta |
 | 9 | Lun 28-sep | Trabajo — Laudos | Papel |
-| 10 | por definir en la Parte 5 | Evento — Aliados del Día D | Tinta |
+| 10 | Mié 30-sep | Evento — Aliados del Día D (abre la tanda 2; ver ESTRATEGIA.md §4) | Tinta |
 
 Cada publicación lleva una historia el mismo día (la misma imagen, sin texto extra, con
 enlace a inplux.co) que se guarda en el highlight «Trabajo».
@@ -71,4 +71,5 @@ enlace a inplux.co) que se guarda en el highlight «Trabajo».
 - [ ] Instagram conectado vía Facebook, autopublicación activa
 - [ ] 5 competidores cargados
 - [ ] 9 publicaciones + 9 historias programadas según el calendario
+- [ ] Reposts en historias de los reels de @10ampro y @egonomista esta semana, guardados en el highlight «Prensa»
 - [ ] Vercel Analytics revisado para ver referer instagram.com

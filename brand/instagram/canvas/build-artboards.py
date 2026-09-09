@@ -122,8 +122,8 @@ producto('Tribai', 'paper', 'Trabajo / Tributación · Público',
          f'Encontrar criterio tributario sin perder la {em("fuente", T["paper"])}.',
          'tribai.jpg', 'app.tribai.co', 'Tribai · captura real · 21 JUL 2026')
 
-producto('Gobia', 'ink', 'Trabajo / Gestión pública · Piloto activo',
-         f'Hacer visible la operación de un {em("municipio", T["ink"])}.',
+producto('Gobia', 'paper', 'Trabajo / Gestión pública · Piloto activo',
+         f'Hacer visible la operación de un {em("municipio", T["paper"])}.',
          'gobia.jpg', 'gobia.co/demo', 'Gobia · captura real · 21 JUL 2026')
 
 producto('Kelsen', 'paper', 'Trabajo / Derecho · Por solicitud',
@@ -169,30 +169,65 @@ pathlib.Path('Avatar.dc.html').write_text(head(t) +
     f'<div style="box-sizing: border-box; width: 1080px; height: 1080px; display: flex; align-items: center; justify-content: center; background: {t["bg"]}; overflow: hidden;">'
     f'<div style="margin-top: 36px;">{mark(800, t["fg"], t["accent"])}</div></div>\n' + TAIL, encoding='utf-8')
 
+
+def foto(name, kick, title_html, meta_text, label, img):
+    """Reconocimiento / evento: fotografía real a sangre, degradado tinta desde abajo, titular en serif."""
+    t = T['ink']
+    overlay = ('<div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; '
+               'background: linear-gradient(to top, rgba(26,25,24,0.97) 0%, rgba(26,25,24,0.82) 34%, rgba(26,25,24,0.38) 62%, rgba(26,25,24,0.12) 100%);"></div>'
+               '<div style="position: absolute; top: 0; right: 0; left: 0; height: 360px; '
+               'background: linear-gradient(to bottom, rgba(26,25,24,0.78) 0%, rgba(26,25,24,0.0) 100%);"></div>')
+    photo = (f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; height: 1350px; object-fit: cover; display: block;">')
+    top = f'<div style="position: relative;">{kicker(kick, t)}</div>'
+    bottom = ('<div style="position: relative; display: flex; flex-direction: column; gap: 36px;">'
+              + headline(title_html, t, 96) + meta(meta_text, t, 24, t['fg'])
+              + row([meta(label, t, 22), lockup(t)]) + '</div>')
+    page(name, 'ink', [photo, overlay, top, bottom])
+
+def cita(name, theme, kick, quote_html, lines, label):
+    """Nos mencionan: cita textual de un tercero, entre comillas angulares."""
+    t = T[theme]
+    page(name, theme, [
+        kicker(kick, t),
+        headline('&#171;' + quote_html + '&#187;', t, 84),
+        col([meta(lines, t, 26, t['fg']), row([meta(label, t, 22), lockup(t)])], 36),
+    ])
+
+foto('Harvard', 'Reconocimiento / ODR 2026 · Boston',
+     f'Amparo.help ganó un lugar en el hackathon de ODR {em("2026", T["ink"])}.',
+     'American Arbitration Association · odr.com · Suffolk University · JUN 2026',
+     'Encuentro ODR 2026 · Harvard Business School', 'harvard.jpg')
+
+cita('Mencion', 'ink', 'Nos mencionan / @10ampro',
+     'El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro',
+     'Reel de @10ampro con Hernán Jaramillo (holdmybirra)', 'Sobre Tribai · app.tribai.co')
+
 # canvas.json — se lee como el grid de Instagram (más reciente arriba a la izquierda)
 W, H, GX, GY = 1080, 1350, 100, 120
 def at(cx, ry, h=H): return dict(x=cx * (W + GX), y=ry * (H + GY), w=W, h=h)
 canvas = {
   'artboards': [
-    dict(file='Laudos.dc.html',      title='9 · Trabajo · Laudos',       **at(0, 0)),
-    dict(file='Servicios.dc.html',   title='8 · Qué construimos',        **at(1, 0)),
-    dict(file='Kelsen.dc.html',      title='7 · Trabajo · Kelsen',       **at(2, 0)),
-    dict(file='Columna.dc.html',     title='6 · Columna · Al Poniente',  **at(0, 1)),
-    dict(file='Metodo.dc.html',      title='5 · Cómo trabajamos',        **at(1, 1)),
-    dict(file='Gobia.dc.html',       title='4 · Trabajo · Gobia',        **at(2, 1)),
-    dict(file='Commonplace.dc.html', title='3 · Prensa · The Commonplace', **at(0, 2)),
-    dict(file='Tribai.dc.html',      title='2 · Trabajo · Tribai',       **at(1, 2)),
-    dict(file='Main.dc.html',        title='1 · Marca',                  **at(2, 2)),
-    dict(file='DiaD.dc.html',        title='10 · Evento · Día D (Parte 5)', **at(0, 3)),
-    dict(file='Avatar.dc.html',      title='Avatar 1080 × 1080',         **at(1, 3, 1080)),
+    dict(file='Laudos.dc.html',      title='9 · Trabajo · Laudos',            **at(0, 0)),
+    dict(file='Commonplace.dc.html', title='8 · Prensa · The Commonplace',    **at(1, 0)),
+    dict(file='Kelsen.dc.html',      title='7 · Trabajo · Kelsen',            **at(2, 0)),
+    dict(file='Columna.dc.html',     title='6 · Columna · Al Poniente',       **at(0, 1)),
+    dict(file='Gobia.dc.html',       title='5 · Trabajo · Gobia',             **at(1, 1)),
+    dict(file='Mencion.dc.html',     title='4 · Nos mencionan · 10ampro',     **at(2, 1)),
+    dict(file='Tribai.dc.html',      title='3 · Trabajo · Tribai',            **at(0, 2)),
+    dict(file='Harvard.dc.html',     title='2 · Reconocimiento · ODR 2026',   **at(1, 2)),
+    dict(file='Main.dc.html',        title='1 · Marca',                       **at(2, 2)),
+    dict(file='DiaD.dc.html',        title='10 · Evento · Día D (tanda 2)',   **at(0, 3)),
+    dict(file='Metodo.dc.html',      title='11 · Cómo trabajamos (tanda 2)',  **at(1, 3)),
+    dict(file='Servicios.dc.html',   title='13 · Qué construimos (tanda 2)',  **at(2, 3)),
+    dict(file='Avatar.dc.html',      title='Avatar 1080 × 1080',              **at(0, 4, 1080)),
   ],
   'annotations': [
     dict(id='orden', x=0, y=-260, w=1400,
          text='Se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\n'
-              'Orden de publicación: 1 Marca · 2 Tribai · 3 Commonplace · 4 Gobia · 5 Método · 6 Columna · 7 Kelsen · 8 Qué construimos · 9 Laudos.\n'
-              'Exportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md.'),
-    dict(id='diad', x=2360, y=4410, w=640,
-         text='Día D: reservada para la Parte 5. La fecha de publicación se decide con el plan de 36 días.'),
+              'Tanda 1 (9 al 28 de septiembre): 1 Marca · 2 Reconocimiento ODR 2026 · 3 Tribai · 4 Nos mencionan 10ampro · 5 Gobia · 6 Columna · 7 Kelsen · 8 Commonplace · 9 Laudos.\n'
+              'Exportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md; calendario en METRICOOL.md.'),
+    dict(id='tanda2', x=0, y=4210, w=1400,
+         text='Fila de reserva, tanda 2 (30 de septiembre al Día D): Aliados del Día D, Cómo trabajamos, Qué construimos. Faltan por diseñar: audiograma Blu Radio, mención de @egonomista, equipo con fotos reales, Porkia.'),
   ],
   'launch': {'view': 'canvas'},
 }

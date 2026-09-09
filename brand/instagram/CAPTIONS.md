@@ -21,7 +21,24 @@ inplux.co
 
 ---
 
-## 2 · Trabajo — Tribai — vie 11-sep
+## 2 · Reconocimiento — ODR 2026 — vie 11-sep
+**Caption**
+Amparo.help ganó un lugar en el hackathon de ODR 2026.
+
+En junio pasamos una semana en Boston, en el encuentro de Online Dispute Resolution en Harvard Business School. En el hackathon de la American Arbitration Association y odr.com, en Suffolk University, llevamos Amparo.help: un prototipo para resolver disputas de salud sin abogados ni costos de juzgado, con la decisión final en manos humanas.
+
+El reconocimiento confirmó algo: el valor no estaba solo en el modelo, sino en cómo rediseñamos el proceso.
+amparo.help
+
+[Etiquetar las cuentas oficiales de la American Arbitration Association, odr.com y Suffolk University; verificar handles antes de publicar.]
+
+#legaltech #odr #medellín #fábricadesoftware
+
+**Alt:** Fotografía en blanco y negro del letrero de Harvard Business School con el texto «Amparo.help ganó un lugar en el hackathon de ODR 2026».
+
+---
+
+## 3 · Trabajo — Tribai — lun 14-sep
 **Caption**
 Encontrar criterio tributario sin perder la fuente.
 
@@ -35,19 +52,23 @@ Captura real del asistente, 21 de julio de 2026.
 
 ---
 
-## 3 · Prensa — The Commonplace — lun 14-sep
+## 4 · Nos mencionan — @10ampro — mié 16-sep
 **Caption**
-Dos investigaciones del equipo sobre IA y trabajo fueron seleccionadas por The Commonplace, el boletín internacional de Workforce Futures, en su edición del 6 de abril de 2026.
+«El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro».
 
-Investigar cómo cambia el trabajo con IA es parte de cómo construimos software: primero entender, después programar.
+Así presentó @10ampro a Tribai en un reel con Hernán Jaramillo. Gracias por contarlo.
 
-#ia #trabajo #investigación #medellín
+Tribai es consulta tributaria con fuentes visibles, construida en Medellín. Es pública: app.tribai.co
 
-**Alt:** Texto sobre fondo oscuro: «Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace», con la fecha 6 de abril de 2026.
+[Etiquetar @10ampro y la cuenta de Hernán Jaramillo (holdmybirra). Fecha del reel por confirmar para el pie.]
+
+#tribai #10ampro #medellín #fábricadesoftware
+
+**Alt:** Cita sobre fondo oscuro: «El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro», atribuida a un reel de 10ampro.
 
 ---
 
-## 4 · Trabajo — Gobia — mié 16-sep
+## 5 · Trabajo — Gobia — vie 18-sep
 **Caption**
 Hacer visible la operación de un municipio.
 
@@ -58,21 +79,6 @@ Captura real, 21 de julio de 2026.
 #govtech #fábricadesoftware #medellín
 
 **Alt:** Captura de pantalla de la demo de Gobia con el mapa de Medellín y un panel fiscal, dentro de un marco de navegador oscuro.
-
----
-
-## 5 · Método — vie 18-sep
-**Caption**
-Cómo trabajamos.
-
-01 Entendemos el reto. 02 Definimos el producto. 03 Construimos y probamos. 04 Lanzamos y evolucionamos.
-
-No hace falta llegar con los requisitos definidos. Empezamos por el problema, las personas involucradas y el resultado esperado.
-Hablemos: inplux.co
-
-#fábricadesoftware #softwarealamedida #medellín
-
-**Alt:** Lista numerada de cuatro pasos sobre fondo claro: entendemos el reto, definimos el producto, construimos y probamos, lanzamos y evolucionamos.
 
 ---
 
@@ -104,18 +110,15 @@ Captura real del explorador público, 21 de julio de 2026.
 
 ---
 
-## 8 · Qué construimos — vie 25-sep
+## 8 · Prensa — The Commonplace — vie 25-sep
 **Caption**
-Qué construimos.
+Dos investigaciones del equipo sobre IA y trabajo fueron seleccionadas por The Commonplace, el boletín internacional de Workforce Futures, en su edición del 6 de abril de 2026.
 
-Lanzar un producto digital. Mejorar una operación. Automatizar trabajo y conocimiento.
+Investigar cómo cambia el trabajo con IA es parte de cómo construimos software: primero entender, después programar.
 
-Aplicaciones web y móviles, plataformas, portales, herramientas internas y automatizaciones alrededor de un problema concreto.
-inplux.co
+#ia #trabajo #investigación #medellín
 
-#fábricadesoftware #softwarealamedida #medellín
-
-**Alt:** Tres bloques numerados sobre fondo oscuro: lanzar un producto digital, mejorar una operación, automatizar trabajo y conocimiento.
+**Alt:** Texto sobre fondo oscuro: «Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace», con la fecha 6 de abril de 2026.
 
 ---
 
@@ -133,7 +136,7 @@ Captura real del laboratorio de predicción, 21 de julio de 2026.
 
 ---
 
-## 10 · Evento — Aliados del Día D — fecha por definir (Parte 5)
+## 10 · Evento — Aliados del Día D — mié 30-sep
 **Caption**
 Somos aliados de El Día D.
 
@@ -145,3 +148,46 @@ eldiad.10am.pro
 #eldiad #10ampro #medellín #fábricadesoftware
 
 **Alt:** Texto sobre fondo oscuro: «Somos aliados de El Día D», con fecha, lugar y el nombre de INPLUX.
+
+---
+
+## 11 · Método — vie 02-oct
+**Caption**
+Cómo trabajamos.
+
+01 Entendemos el reto. 02 Definimos el producto. 03 Construimos y probamos. 04 Lanzamos y evolucionamos.
+
+No hace falta llegar con los requisitos definidos. Empezamos por el problema, las personas involucradas y el resultado esperado.
+Hablemos: inplux.co
+
+#fábricadesoftware #softwarealamedida #medellín
+
+**Alt:** Lista numerada de cuatro pasos sobre fondo claro: entendemos el reto, definimos el producto, construimos y probamos, lanzamos y evolucionamos.
+
+---
+
+## 13 · Qué construimos — mié 07-oct
+**Caption**
+Qué construimos.
+
+Lanzar un producto digital. Mejorar una operación. Automatizar trabajo y conocimiento.
+
+Aplicaciones web y móviles, plataformas, portales, herramientas internas y automatizaciones alrededor de un problema concreto.
+inplux.co
+
+#fábricadesoftware #softwarealamedida #medellín
+
+**Alt:** Tres bloques numerados sobre fondo oscuro: lanzar un producto digital, mejorar una operación, automatizar trabajo y conocimiento.
+
+---
+
+## 14 · Nos mencionan — @egonomista — vie 09-oct
+**Caption**
+Tribai, entre las tres plataformas que @egonomista recomienda para preparar la declaración de renta.
+
+Como dice él: automatizar no significa confiar a ciegas. Por eso cada respuesta de Tribai muestra su fuente y su vigencia. La responsabilidad sigue siendo de quien firma.
+app.tribai.co
+
+#tribai #declaraciónderenta #medellín
+
+**Alt:** Cita sobre fondo claro que atribuye a egonomista la recomendación de Tribai entre tres plataformas para declarar renta.

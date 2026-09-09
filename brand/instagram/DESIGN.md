@@ -123,6 +123,9 @@ símbolo va grande (≥ 300 px) y el pie lleva solo el wordmark, sin el lockup p
 | **Prensa** (externa) | Tinta | Titular de la pieza en serif, medio, fecha | Solo piezas con `editorialStatus` externo. |
 | **Columna** (firmada) | Tinta o papel | Título de la columna, autor, medio, fecha | Kicker dice `COLUMNA / AL PONIENTE`. Es publicación del equipo, nunca se presenta como cobertura. |
 | **Método / Qué construimos** | Papel o tinta | Lista numerada 01–04 con copy literal de `home.ts` | Sin cifras inventadas. |
+| **Reconocimiento** (foto + degradado) | Fotografía real a sangre, blanco y negro | Foto propia del hecho (letrero, sala, escenario), degradado tinta desde abajo `rgba(26,25,24,.97)→.12`, kicker arriba, titular 96 px abajo, fuente y fecha en mono | Solo fotos tomadas por el equipo o cedidas. Nombrar a la institución que reconoce, no solo el lugar. |
+| **Nos mencionan** (cita) | Tinta o papel | Cita textual entre « », 84 px, quién lo dijo y dónde, sobre qué producto | Literal, sin recortar el sentido. Sin capturas del video ni rostros ajenos. |
+| **Radio** (audiograma) | Tinta | Onda de audio, frase clave en serif, «Blu Radio · programa · fecha», 20–40 s | Solo con el audio real y la fecha confirmada. |
 | **Equipo** | Papel | Fotografía real, nombre completo, rol | Requiere foto real. Sin foto real no se publica. |
 | **Evento** (Día D, paneles) | Tinta | Fecha, lugar, rol de INPLUX | Datos verificados en la fuente del evento. |
 
@@ -130,10 +133,11 @@ símbolo va grande (≥ 300 px) y el pie lleva solo el wordmark, sin el lockup p
 
 ## 6. Ritmo del grid
 
-- Se piensa en **tandas de 9** (3 filas). En cada tanda: 4 Trabajo, 2 Prensa/Columna,
-  2 Método/Qué construimos/Equipo, 1 Marca.
+- Se piensa en **tandas de 9** (3 filas). En cada tanda: 4 Trabajo, 2 pruebas de tercero
+  (Reconocimiento, Nos mencionan, Prensa), 1 Columna, 1 Método/Equipo, 1 Marca. Ver ESTRATEGIA.md §1.
 - Alternar tinta y papel para que el grid no forme bloques del mismo tono.
 - La primera tanda (2026-09-09 → 2026-09-28) está en `canvas/` y su orden en `CAPTIONS.md`.
+- Fotografía real: `brand/instagram/fotos/`, con fecha y lugar en el nombre del archivo.
 - Nunca dos publicaciones seguidas del mismo producto.
 
 ---
@@ -181,7 +185,9 @@ brand/instagram/
 ├── DESIGN.md                  ← este documento
 ├── PERFIL.md                  ← nombre, bio, categoría, enlace, highlights, a quién seguir
 ├── METRICOOL.md               ← conexión, calendario y checklist
+├── ESTRATEGIA.md              ← tesis, inventario de pruebas, tandas 1 y 2, distribución
 ├── CAPTIONS.md                ← textos, alt y hashtags de la primera tanda
+├── fotos/                     ← fotografías reales (Boston, ODR 2026)
 ├── avatar-inplux-1080.png     ← avatar listo para subir
 ├── avatar-inplux-1080.svg
 ├── avatar-inplux-preview-circle.png
