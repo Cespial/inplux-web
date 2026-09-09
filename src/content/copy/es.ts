@@ -143,7 +143,6 @@ export const homeCopyEs: HomeCopy = {
     statementEyebrow: "RELACIONES REALES",
     statementTitle: "EXPERIENCIA Y ALIANZAS",
     relationExperience: "Experiencia",
-    relationPartner: "Aliado",
     clientNotes: {
       "/brand/clients/alcaldia-buritica.png": "Gestión pública territorial",
       "/brand/clients/alcaldia-yali.png": "Gestión pública territorial",
@@ -154,7 +153,6 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/hospital-san-camilo-de-lelis.png": "Salud pública · Vegachí",
       "/brand/clients/esp-caracoli.png": "Servicios públicos domiciliarios",
       "/brand/clients/ederem.png": "Desarrollo municipal · Buriticá",
-      "/brand/clients/logistics-and-services.png": "Logística y servicios",
       "/brand/clients/inca-ingenieros.png": "Ingeniería y consultoría",
       "/brand/clients/creame.png": "Emprendimiento e innovación",
       "/brand/clients/alcaldia-caucasia.png": "Gestión pública territorial",
@@ -166,7 +164,6 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/esumer.png": "Educación superior y emprendimiento",
       "/brand/clients/ipsmedic.png": "Prestación de servicios de salud",
       "/brand/clients/parque-arvi.png": "Turismo, territorio y sostenibilidad",
-      "/brand/clients/think-it.png": "Aliado tecnológico",
       "/brand/clients/experience-03.png":
         "Gestión y servicios interinstitucionales",
       "/brand/clients/politecnico-jaime-isaza.png": "Educación superior pública",

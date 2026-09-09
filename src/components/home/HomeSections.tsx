@@ -71,14 +71,6 @@ const clientLogos = [
     renderWidth: 50,
   },
   {
-    src: "/brand/clients/think-it.png",
-    name: "Think IT",
-    relation: "partner",
-    width: 577,
-    height: 140,
-    renderWidth: 140,
-  },
-  {
     src: "/brand/clients/experience-03.png",
     name: "Corporación Interuniversitaria de Servicios",
     relation: "partner-experience",
@@ -244,14 +236,6 @@ const clientLogos = [
     renderWidth: 63,
   },
   {
-    src: "/brand/clients/logistics-and-services.png",
-    name: "Logistics and Services",
-    relation: "partner-experience",
-    width: 420,
-    height: 90,
-    renderWidth: 140,
-  },
-  {
     src: "/brand/clients/inca-ingenieros.png",
     name: "INCA Ingenieros",
     relation: "partner-experience",
@@ -323,10 +307,12 @@ function ClientLogoCell({
   client: (typeof clientLogos)[number];
   copy: ExperienceRailCopy;
 }) {
-  const relation =
-    client.relation === "partner"
-      ? copy.relationPartner
-      : copy.relationExperience;
+  /*
+   * Todas las relaciones del muro son experiencia. Hubo una celda de aliado
+   * —una sola—, y con ella se fue la bifurcación: un ternario cuya segunda
+   * rama no puede ocurrir es código muerto, y el tipo lo delataba.
+   */
+  const relation = copy.relationExperience;
   const note = copy.clientNotes[client.src];
 
   return (
