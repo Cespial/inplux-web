@@ -175,6 +175,10 @@ export const homeCopyEn: HomeCopy = {
     relationExperience: "Experience",
     relationPartner: "Partner",
     clientNotes: {
+      "/brand/clients/alcaldia-caucasia.png": "Territorial public management",
+      "/brand/clients/alcaldia-caracoli.png": "Territorial public management",
+      "/brand/clients/alcaldia-san-roque.png": "Territorial public management",
+      "/brand/clients/hospital-san-pio-x.png": "Public health · Caracolí",
       "/brand/clients/corantioquia.png": "Regional environmental authority",
       "/brand/clients/maria-cano.png": "Higher education and health",
       "/brand/clients/esumer.png": "Higher education and entrepreneurship",

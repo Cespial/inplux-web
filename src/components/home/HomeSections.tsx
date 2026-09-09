@@ -126,6 +126,38 @@ const clientLogos = [
     height: 200,
     renderWidth: 52,
   },
+  {
+    src: "/brand/clients/alcaldia-caucasia.png",
+    name: "Alcaldía de Caucasia",
+    relation: "partner-experience",
+    width: 265,
+    height: 81,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/alcaldia-caracoli.png",
+    name: "Alcaldía de Caracolí",
+    relation: "partner-experience",
+    width: 200,
+    height: 73,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/alcaldia-san-roque.png",
+    name: "Alcaldía de San Roque",
+    relation: "partner-experience",
+    width: 200,
+    height: 99,
+    renderWidth: 105,
+  },
+  {
+    src: "/brand/clients/hospital-san-pio-x.png",
+    name: "E.S.E. Hospital San Pío X",
+    relation: "partner-experience",
+    width: 140,
+    height: 113,
+    renderWidth: 64,
+  },
 ] as const;
 
 /**
@@ -147,25 +179,23 @@ const clientNames = [
   { name: "Municipio de Santo Domingo", place: "Antioquia" },
   { name: "Municipio de El Bagre", place: "Antioquia" },
   { name: "Municipio de Valparaíso", place: "Antioquia" },
-  { name: "Municipio de Caracolí", place: "Antioquia" },
-  { name: "Municipio de Caucasia", place: "Antioquia" },
-  { name: "Municipio de San Roque", place: "Antioquia" },
   // El escudo de Vegachí es heráldica con relleno: en la celda del muro
   // colapsaba en una mancha blanca. Se nombra, como el resto de municipios.
   { name: "Municipio de Vegachí", place: "Antioquia" },
   { name: "Hospital San Camilo de Lelis", place: "E.S.E. · Vegachí" },
-  { name: "Hospital San Pío X", place: "E.S.E." },
   { name: "Servicios Públicos de Caracolí", place: "E.S.P." },
   { name: "Servicios Públicos de Giraldo", place: "E.S.P." },
   { name: "EDEREM", place: "Buriticá" },
   { name: "Logistics and Services Company", place: "" },
   { name: "INCA Ingeniería y Consultoría", place: "" },
   /*
-   * Falta a propósito la tercera contraparte propia del RUP: está en la lista
-   * de «logo o relación sin permiso» de `scripts/verify-public-content.mjs`,
-   * que bloquea el build si se nombra. Es una decisión ya registrada en el
-   * proyecto, no un olvido; para incorporarla hay que aprobar antes el permiso
-   * y sacarla de esa lista.
+   * Falta a propósito la tercera contraparte propia del RUP: su nombre está
+   * vetado por una de las reglas de lenguaje público de
+   * `scripts/verify-public-content.mjs`, que bloquea el build si aparece bajo
+   * `src/`. Es una decisión ya registrada en el proyecto, no un olvido; para
+   * incorporarla hay que levantar antes ese veto. (El nombre de la regla no se
+   * escribe aquí: los literales de las reglas sólo pueden vivir en `scripts/`,
+   * y `verify-deck-reasons` lo comprueba.)
    */
 ] as const;
 
