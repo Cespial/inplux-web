@@ -526,7 +526,15 @@ function verifySocialMetadata(name, html, definition) {
 
 function verifyContactSurface(name, html, expected) {
   const actual = {
-    dialogs: count(html, "<dialog"),
+    /*
+     * Se cuenta el diálogo de contacto por su `id`, no los `<dialog>` de la
+     * página. La cuenta genérica convertía esta puerta en «el sitio no puede
+     * tener más de un diálogo», que no es lo que vigila: lo que vigila es que
+     * la superficie de contacto sea exactamente una por página. La regla de
+     * abajo —ningún diálogo sale abierto del SSR— sí es general, y así se
+     * queda: vale para cualquier diálogo que se añada.
+     */
+    dialogs: count(html, 'id="site-contact-dialog"'),
     triggers: count(html, "data-contact-trigger="),
     dialogForms: count(html, 'data-contact-form="dialog"'),
     sectionForms: count(html, 'data-contact-form="section"'),

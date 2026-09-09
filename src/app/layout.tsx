@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
+import { AllyNotice } from "@/components/site/AllyNotice.client";
 import "./globals.css";
 
 const geist = localFont({
@@ -134,7 +135,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/*
+          Aviso temporal de aliados del Día D. Se retira solo pasado el evento
+          —ver `ALLY_NOTICE_EXPIRES` en `src/content/dia-d.ts`— y va aquí, y no
+          en cada página, porque el anuncio acompaña la entrada al sitio, entre
+          por donde entre quien llega.
+        */}
+        <AllyNotice />
+      </body>
     </html>
   );
 }

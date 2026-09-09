@@ -1,0 +1,307 @@
+/*
+ * Aviso de aliados del Día D.
+ *
+ * Es temporal: cuando pase el 14 de octubre de 2026 esta hoja se retira junto
+ * con su componente, `src/content/dia-d.ts` y `public/brand/diad/`.
+ *
+ * La paleta es la de INPLUX con un solo préstamo: el dorado del evento, que es
+ * lo que hace reconocible el anuncio de inmediato sin cambiar el resto del
+ * sitio. Los logotipos se pintan en silueta con el mismo filtro del muro de la
+ * portada, que se queda sólo con el canal alfa; así los seis conviven aunque
+ * vengan con tintas y cajas distintas.
+ */
+.dialog {
+  --diad-oro: #c4a464;
+  --diad-oro-claro: #d9b97a;
+  --diad-negro: #0c0c0b;
+  --diad-marfil: #f9f5ef;
+  --diad-linea: #363533;
+  --diad-mute: #a09a92;
+
+  width: min(46rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  overflow: auto;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  padding: 0;
+  color: var(--diad-marfil);
+}
+
+.dialog::backdrop {
+  background: rgba(6, 6, 5, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.panel {
+  position: relative;
+  border: 1px solid var(--diad-linea);
+  /* El filete dorado sólo arriba: firma el aviso sin encajonarlo. */
+  border-top: 2px solid var(--diad-oro);
+  background: var(--diad-negro);
+  padding: 2.1rem 2.25rem 1.9rem;
+}
+
+/*
+ * Un resplandor muy tenue en la esquina superior, del color del evento. Es lo
+ * único decorativo de la pieza y va detrás del contenido.
+ */
+.panel::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 auto;
+  height: 12rem;
+  background: radial-gradient(
+    60% 100% at 18% 0%,
+    rgba(196, 164, 100, 0.13),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--diad-oro-claro);
+  font: 500 0.6875rem/1.2 var(--font-mono-face), "Geist Mono", ui-monospace, monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.close {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--diad-linea);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--diad-mute);
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.close:hover,
+.close:focus-visible {
+  border-color: var(--diad-oro);
+  color: var(--diad-marfil);
+}
+
+.title {
+  margin-top: 1.5rem;
+  max-width: 20ch;
+  font: 300 clamp(1.9rem, 1.4rem + 2vw, 2.9rem) / 1.03 var(--font-serif),
+    "Newsreader", Georgia, serif;
+  letter-spacing: -0.035em;
+}
+
+/* El título recibe el foco al abrir; no debe dibujar anillo por ello. */
+.title:focus {
+  outline: none;
+}
+
+.title:focus-visible {
+  outline: 2px solid var(--diad-oro);
+  outline-offset: 0.35rem;
+}
+
+.lead {
+  margin-top: 0.9rem;
+  max-width: 46ch;
+  color: #cfc9c0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1.1rem 1.6rem;
+  margin-top: 1.7rem;
+  border-top: 1px solid var(--diad-linea);
+  padding-top: 1.3rem;
+}
+
+.facts dt {
+  color: var(--diad-oro);
+  font: 500 0.625rem/1.2 var(--font-mono-face), "Geist Mono", ui-monospace, monospace;
+  letter-spacing: 0.16em;
+}
+
+.facts dd {
+  margin: 0.42rem 0 0;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.allies {
+  margin-top: 1.7rem;
+  border-top: 1px solid var(--diad-linea);
+  padding-top: 1.3rem;
+}
+
+.alliesEyebrow {
+  color: var(--diad-oro);
+  font: 500 0.625rem/1.2 var(--font-mono-face), "Geist Mono", ui-monospace, monospace;
+  letter-spacing: 0.16em;
+}
+
+.allyList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem 1.4rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.allyList li {
+  display: grid;
+  min-width: 0;
+  height: 2.9rem;
+  place-items: center;
+}
+
+.allyList a {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.allyList img {
+  width: auto;
+  max-width: min(7.5rem, 100%);
+  height: auto;
+  max-height: 2.5rem;
+  object-fit: contain;
+  /* Mismo tratamiento que el muro de la portada: sólo sobrevive el alfa. */
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.66;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.4rem;
+  margin-top: 1.9rem;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--diad-oro);
+  border-radius: 999px;
+  background: var(--diad-oro);
+  padding: 0.72rem 1.35rem;
+  color: #17130b;
+  font: 600 0.78rem/1 var(--font-mono-face), "Geist Mono", ui-monospace, monospace;
+  letter-spacing: 0.09em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background-color 170ms ease,
+    color 170ms ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  background: var(--diad-oro-claro);
+}
+
+.dismiss {
+  border: 0;
+  background: transparent;
+  padding: 0.4rem 0;
+  color: var(--diad-mute);
+  cursor: pointer;
+  font: 500 0.75rem/1 var(--font-mono-face), "Geist Mono", ui-monospace, monospace;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: color 170ms ease;
+}
+
+.dismiss:hover,
+.dismiss:focus-visible {
+  color: var(--diad-marfil);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .allyList li:hover img {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 560px) {
+  .panel {
+    padding: 1.6rem 1.25rem 1.5rem;
+  }
+
+  .title {
+    margin-top: 1.2rem;
+  }
+
+  .allyList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .actions {
+    gap: 0.75rem;
+  }
+
+  .cta {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .dismiss {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/*
+ * La entrada es la única animación de la pieza, y sólo para quien la acepte:
+ * un aviso que aparece de golpe delante de la portada ya es bastante.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .dialog[open] .panel {
+    animation: entrar 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes entrar {
+    from {
+      opacity: 0;
+      transform: translateY(0.6rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
