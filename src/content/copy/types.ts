@@ -139,7 +139,6 @@ export type ExperienceRailCopy = {
   logoWallAriaLabel: string;
   statementEyebrow: string;
   statementTitle: string;
-  statementHint: string;
   relationExperience: string;
   relationPartner: string;
   clientNotes: Readonly<Record<string, string>>;
