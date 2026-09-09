@@ -71,14 +71,6 @@ const clientLogos = [
     renderWidth: 50,
   },
   {
-    src: "/brand/clients/think-it.png",
-    name: "Think IT",
-    relation: "partner",
-    width: 577,
-    height: 140,
-    renderWidth: 140,
-  },
-  {
     src: "/brand/clients/experience-03.png",
     name: "Corporación Interuniversitaria de Servicios",
     relation: "partner-experience",
@@ -166,6 +158,91 @@ const clientLogos = [
     height: 113,
     renderWidth: 64,
   },
+  {
+    src: "/brand/clients/alcaldia-buritica.png",
+    name: "Alcaldía de Buriticá",
+    relation: "partner-experience",
+    width: 420,
+    height: 159,
+    renderWidth: 140,
+  },
+  {
+    /*
+     * De Yalí se usa sólo el logotipo. Su lockup apila un escudo alto sobre el
+     * nombre, y en la celda —que limita por altura— el nombre quedaba en cuatro
+     * píxeles, ilegible. El logotipo solo conserva su tipografía y se lee.
+     */
+    src: "/brand/clients/alcaldia-yali.png",
+    name: "Alcaldía de Yalí",
+    relation: "partner-experience",
+    width: 420,
+    height: 84,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/alcaldia-santo-domingo.png",
+    name: "Alcaldía de Santo Domingo",
+    relation: "partner-experience",
+    width: 270,
+    height: 204,
+    renderWidth: 90,
+  },
+  {
+    src: "/brand/clients/alcaldia-el-bagre.png",
+    name: "Alcaldía de El Bagre",
+    relation: "partner-experience",
+    width: 171,
+    height: 204,
+    renderWidth: 57,
+  },
+  {
+    src: "/brand/clients/alcaldia-valparaiso.png",
+    name: "Alcaldía de Valparaíso",
+    relation: "partner-experience",
+    width: 207,
+    height: 204,
+    renderWidth: 69,
+  },
+  {
+    src: "/brand/clients/alcaldia-vegachi.png",
+    name: "Alcaldía de Vegachí",
+    relation: "partner-experience",
+    width: 420,
+    height: 201,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/hospital-san-camilo-de-lelis.png",
+    name: "E.S.E. Hospital San Camilo de Lelis",
+    relation: "partner-experience",
+    width: 211,
+    height: 104,
+    renderWidth: 138,
+  },
+  {
+    src: "/brand/clients/esp-caracoli.png",
+    name: "Empresa de Servicios Públicos de Caracolí",
+    relation: "partner-experience",
+    width: 204,
+    height: 204,
+    renderWidth: 68,
+  },
+  {
+    src: "/brand/clients/ederem.png",
+    name: "EDEREM",
+    relation: "partner-experience",
+    width: 189,
+    height: 204,
+    renderWidth: 63,
+  },
+  {
+    src: "/brand/clients/inca-ingenieros.png",
+    name: "INCA Ingenieros",
+    relation: "partner-experience",
+    width: 174,
+    height: 204,
+    renderWidth: 58,
+  },
 ] as const;
 
 /**
@@ -182,20 +259,14 @@ const clientLogos = [
  * omite cuando no consta, antes que suponerlo.
  */
 const clientNames = [
-  { name: "Municipio de Buriticá", place: "Antioquia" },
-  { name: "Municipio de Yalí", place: "Antioquia" },
-  { name: "Municipio de Santo Domingo", place: "Antioquia" },
-  { name: "Municipio de El Bagre", place: "Antioquia" },
-  { name: "Municipio de Valparaíso", place: "Antioquia" },
-  // El escudo de Vegachí es heráldica con relleno: en la celda del muro
-  // colapsaba en una mancha blanca. Se nombra, como el resto de municipios.
-  { name: "Municipio de Vegachí", place: "Antioquia" },
-  { name: "Hospital San Camilo de Lelis", place: "E.S.E. · Vegachí" },
-  { name: "Servicios Públicos de Caracolí", place: "E.S.P." },
+  /*
+   * La E.S.P. de Giraldo no tiene marca propia localizable. El único activo
+   * gráfico de Giraldo que existe es el de la ALCALDÍA, y son dos personas
+   * jurídicas distintas: el RUP acredita a la empresa de servicios públicos,
+   * no al municipio. Usar uno por otro sería una atribución falsa, así que la
+   * entidad se nombra.
+   */
   { name: "Servicios Públicos de Giraldo", place: "E.S.P." },
-  { name: "EDEREM", place: "Buriticá" },
-  { name: "Logistics and Services Company", place: "" },
-  { name: "INCA Ingeniería y Consultoría", place: "" },
   /*
    * Falta a propósito la tercera contraparte propia del RUP: su nombre está
    * vetado por una de las reglas de lenguaje público de
@@ -236,10 +307,12 @@ function ClientLogoCell({
   client: (typeof clientLogos)[number];
   copy: ExperienceRailCopy;
 }) {
-  const relation =
-    client.relation === "partner"
-      ? copy.relationPartner
-      : copy.relationExperience;
+  /*
+   * Todas las relaciones del muro son experiencia. Hubo una celda de aliado
+   * —una sola—, y con ella se fue la bifurcación: un ternario cuya segunda
+   * rama no puede ocurrir es código muerto, y el tipo lo delataba.
+   */
+  const relation = copy.relationExperience;
   const note = copy.clientNotes[client.src];
 
   return (

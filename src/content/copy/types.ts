@@ -140,7 +140,6 @@ export type ExperienceRailCopy = {
   statementEyebrow: string;
   statementTitle: string;
   relationExperience: string;
-  relationPartner: string;
   clientNotes: Readonly<Record<string, string>>;
   /** Categoría y estado de cada producto del ribbon, por slug. Ver `ProductLabels`. */
   productCategories: ProductLabels;
