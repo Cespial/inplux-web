@@ -13,7 +13,7 @@ import { pressStories } from "@/content/press";
 import { workProfiles } from "@/content/work";
 import { FactoryRun } from "./FactoryRun.client";
 import { ProjectCreateDemo } from "./ProjectCreateDemo.client";
-import { ribbonFillSpan } from "./ribbonGrid";
+import { fillSpan } from "./gridFill";
 import styles from "./home.module.css";
 
 /**
@@ -22,6 +22,38 @@ import styles from "./home.module.css";
  * nota descriptiva sí se traduce y llega desde el diccionario de copy.
  */
 const clientLogos = [
+  {
+    src: "/brand/clients/corantioquia.png",
+    name: "CORANTIOQUIA",
+    relation: "partner-experience",
+    width: 300,
+    height: 222,
+    renderWidth: 70,
+  },
+  {
+    src: "/brand/clients/maria-cano.png",
+    name: "Fundación Universitaria María Cano",
+    relation: "partner-experience",
+    width: 480,
+    height: 167,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/esumer.png",
+    name: "Institución Universitaria Esumer",
+    relation: "partner-experience",
+    width: 401,
+    height: 133,
+    renderWidth: 140,
+  },
+  {
+    src: "/brand/clients/ipsmedic.png",
+    name: "+IPSMEDIC",
+    relation: "partner-experience",
+    width: 141,
+    height: 121,
+    renderWidth: 61,
+  },
   {
     src: "/brand/clients/parque-arvi.png",
     name: "Parque Arví Corporación",
@@ -151,8 +183,21 @@ export function ExperienceRail({
   // La intro y el enlace al directorio son las dos celdas fijas del ribbon.
   const ribbonCells = featuredProducts.length + 2;
   const ribbonStyle = {
-    "--ribbon-fill-3": String(ribbonFillSpan(ribbonCells, 3)),
-    "--ribbon-fill-4": String(ribbonFillSpan(ribbonCells, 4)),
+    "--ribbon-fill-3": String(fillSpan(ribbonCells, 3)),
+    "--ribbon-fill-4": String(fillSpan(ribbonCells, 4)),
+  } as CSSProperties;
+
+  /*
+   * El muro ya no se desplaza: se ven todas las relaciones a la vez, que es lo
+   * que sostiene el argumento. El rótulo va al final y es el que absorbe las
+   * columnas sobrantes, así el bloque cierra en rectángulo entre en la lista
+   * quien entre.
+   */
+  const wallCells = clientLogos.length + 1;
+  const wallStyle = {
+    "--wall-fill-2": String(fillSpan(wallCells, 2)),
+    "--wall-fill-4": String(fillSpan(wallCells, 4)),
+    "--wall-fill-6": String(fillSpan(wallCells, 6)),
   } as CSSProperties;
 
   return (
@@ -199,25 +244,19 @@ export function ExperienceRail({
       </div>
       <div
         className={styles.logoWall}
+        style={wallStyle}
         role="region"
         aria-label={copy.logoWallAriaLabel}
-        tabIndex={0}
       >
-        {clientLogos.slice(0, 2).map((client) => (
+        {clientLogos.map((client) => (
           <ClientLogoCell client={client} copy={copy} key={client.src} />
         ))}
         <div className={`${styles.logoCell} ${styles.logoStatement}`}>
           <p>
             {copy.statementEyebrow}
             <strong>{copy.statementTitle}</strong>
-            <span className={styles.logoRailHint} aria-hidden="true">
-              {copy.statementHint}
-            </span>
           </p>
         </div>
-        {clientLogos.slice(2).map((client) => (
-          <ClientLogoCell client={client} copy={copy} key={client.src} />
-        ))}
       </div>
     </section>
   );

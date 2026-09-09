@@ -386,8 +386,12 @@
 }
 
 .experienceRail {
+  /*
+   * La línea que cierra la sección la pone el último renglón del muro, que
+   * ahora siempre está completo. Si la pusiera también la sección se verían
+   * dos trazos pegados.
+   */
   overflow: hidden;
-  border-bottom: 1px solid var(--home-line);
   background: var(--home-black);
   scroll-margin-top: 4rem;
 }
@@ -501,40 +505,66 @@
 }
 
 /*
- * El muro de logos es un carrusel horizontal: `--logo-cols` dice cuántas
- * celdas caben a la vista y de ahí sale el ancho de cada una. Es la única
- * medida del muro; el celda-ancho no se repite en ninguna otra regla para
- * que no vuelvan a convivir dos retículas distintas sobre el mismo elemento.
+ * El muro no se desplaza: enseña TODAS las relaciones a la vez, porque el
+ * argumento es el conjunto y un carrusel esconde la mitad. Es una retícula
+ * completa, con el mismo trato que el ribbon de arriba: el borde izquierdo lo
+ * pone el contenedor y cada celda dibuja el suyo derecho e inferior, de modo
+ * que la última columna y el último renglón cierran el rectángulo sin líneas
+ * dobles ni cuentas de `nth-child`. El rótulo, al final, absorbe las columnas
+ * que sobran (`--wall-fill-N`) para que ningún renglón quede a medias.
  */
 .logoWall {
-  --logo-cols: 4;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   width: calc(100% - (var(--home-gutter) * 1.16));
   max-width: 1400px;
   margin-inline: auto;
-  border-inline: 1px solid var(--home-line);
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
+  border-left: 1px solid var(--home-line);
 }
 
 .logoCell {
   position: relative;
   display: grid;
-  flex: 0 0 calc(100% / var(--logo-cols));
   min-width: 0;
-  height: 8rem;
+  height: 7rem;
   place-items: center;
   overflow: hidden;
   border-right: 1px solid var(--home-line);
+  border-bottom: 1px solid var(--home-line);
   padding-inline: 1.25rem;
   color: var(--home-muted);
   outline: none;
-  scroll-snap-align: start;
 }
 
-.logoCell:last-child {
-  border-right: 0;
+.logoStatement {
+  grid-column: span var(--wall-fill-2, 1);
+  justify-items: start;
+  padding-inline: 1.35rem;
+  text-align: left;
+}
+
+.logoStatement p {
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .logoWall {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .logoStatement {
+    grid-column: span var(--wall-fill-4, 1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .logoWall {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .logoStatement {
+    grid-column: span var(--wall-fill-6, 1);
+  }
 }
 
 .logoRelation {
@@ -625,54 +655,6 @@
 .logoCell strong {
   color: var(--home-ivory);
   font-weight: 500;
-}
-
-.logoWall::-webkit-scrollbar {
-  display: none;
-}
-
-.logoWall:focus-visible {
-  outline: 2px solid var(--home-teal);
-  outline-offset: -3px;
-}
-
-/* El rótulo del muro ocupa dos celdas, en cualquier conteo de columnas. */
-.logoStatement {
-  flex-basis: calc(200% / var(--logo-cols));
-}
-
-.logoRailHint {
-  margin-top: 0.2rem;
-  color: var(--home-teal);
-  font-size: 0.5rem;
-}
-
-@media (min-width: 1200px) {
-  .logoWall {
-    --logo-cols: 6;
-  }
-}
-
-@media (min-width: 768px) {
-  .logoWall {
-    padding-bottom: 0.3rem;
-    scrollbar-color: var(--home-teal) #1d1c1a;
-    scrollbar-width: thin;
-  }
-
-  .logoWall::-webkit-scrollbar {
-    display: block;
-    height: 0.3rem;
-  }
-
-  .logoWall::-webkit-scrollbar-track {
-    background: #1d1c1a;
-  }
-
-  .logoWall::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: var(--home-teal);
-  }
 }
 
 .scrolly {
@@ -3308,20 +3290,7 @@
   }
 
   .logoWall {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
     width: calc(100% - 1rem);
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-
-  .logoCell {
-    flex: none;
-    width: auto;
-    height: 4rem;
-    padding-inline: 0.85rem;
-    border-right: 1px solid var(--home-line);
-    border-bottom: 1px dashed var(--home-line);
   }
 
   /*
@@ -3329,39 +3298,18 @@
    * lado, porque la celda es mucho más baja. El padding superior le reserva
    * su propia banda y el tope del logo se ajusta a la altura que queda.
    */
-  .logoCell:not(.logoStatement) {
+  .logoCell {
     height: 5.25rem;
-    padding-block: 1.75rem 0.5rem;
+    padding: 1.75rem 0.85rem 0.5rem;
   }
 
-  .logoCell:not(.logoStatement) img {
+  .logoCell img {
     max-height: 2.5rem;
   }
 
-  .logoCell:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-
   .logoStatement {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    flex-basis: auto;
-    border-right: 0;
-  }
-
-  /*
-   * En dos columnas el borde derecho lo lleva la celda de la izquierda. Con
-   * el rótulo ocupando el primer renglón completo, la columna izquierda es
-   * la celda 1 y luego las pares; la derecha, la 2 y luego las impares.
-   */
-  .logoWall .logoCell:nth-child(1),
-  .logoWall .logoCell:nth-child(n + 4):nth-child(even) {
-    border-right: 1px solid var(--home-line);
-  }
-
-  .logoWall .logoCell:nth-child(2),
-  .logoWall .logoCell:nth-child(n + 5):nth-child(odd) {
-    border-right: 0;
+    height: 4rem;
+    padding-block: 0.75rem;
   }
 
   .scrolly {
@@ -4098,9 +4046,6 @@
     font-size: 0.75rem;
   }
 
-  .logoRailHint {
-    display: none;
-  }
 }
 
 @media (max-width: 639px) {

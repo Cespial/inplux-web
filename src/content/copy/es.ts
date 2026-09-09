@@ -142,10 +142,13 @@ export const homeCopyEs: HomeCopy = {
     logoWallAriaLabel: "Organizaciones con las que INPLUX ha trabajado.",
     statementEyebrow: "RELACIONES REALES",
     statementTitle: "EXPERIENCIA Y ALIANZAS",
-    statementHint: "DESLIZA PARA VER 10 →",
     relationExperience: "Experiencia",
     relationPartner: "Aliado",
     clientNotes: {
+      "/brand/clients/corantioquia.png": "Autoridad ambiental regional",
+      "/brand/clients/maria-cano.png": "Educación superior y salud",
+      "/brand/clients/esumer.png": "Educación superior y emprendimiento",
+      "/brand/clients/ipsmedic.png": "Prestación de servicios de salud",
       "/brand/clients/parque-arvi.png": "Turismo, territorio y sostenibilidad",
       "/brand/clients/think-it.png": "Aliado tecnológico",
       "/brand/clients/experience-03.png":
