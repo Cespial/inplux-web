@@ -175,6 +175,7 @@ export const homeCopyEn: HomeCopy = {
     relationExperience: "Experience",
     relationPartner: "Partner",
     clientNotes: {
+      "/brand/clients/creame.png": "Entrepreneurship and innovation",
       "/brand/clients/alcaldia-caucasia.png": "Territorial public management",
       "/brand/clients/alcaldia-caracoli.png": "Territorial public management",
       "/brand/clients/alcaldia-san-roque.png": "Territorial public management",
