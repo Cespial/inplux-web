@@ -9,9 +9,12 @@ RAIZ = pathlib.Path(__file__).parent.parent
 DIAS = {'lun': 'lunes', 'mar': 'martes', 'mié': 'miércoles', 'jue': 'jueves',
         'vie': 'viernes', 'sáb': 'sábado', 'dom': 'domingo'}
 
-# Las únicas piezas con fotografía: ahí gana el JPG. En el resto el PNG pesa menos
-# y no ensucia los remates finos de la Newsreader.
-CON_FOTO = {'02', '13', '19'}
+def formato(base):
+    """En las piezas tipográficas el PNG pesa menos que el JPG y no ensucia los remates
+    finos de la Newsreader. En las que llevan fotografía se dispara por encima del mega y
+    ahí gana el JPG. El umbral decide solo, sin listas que se desactualicen."""
+    png = RAIZ / 'exports' / 'png' / f'{base}.png'
+    return 'jpg' if png.exists() and png.stat().st_size > 500_000 else 'png'
 
 
 def calendario():
@@ -56,7 +59,7 @@ def publicaciones():
         dia, resto_fecha = fecha.split(' ', 1)
         yield dict(
             n=n.zfill(2), fecha=fecha, dia=DIAS.get(dia, dia), fecha_corta=resto_fecha,
-            titulo=titulo, base=base, ext='jpg' if n.zfill(2) in CON_FOTO else 'png',
+            titulo=titulo, base=base, ext=formato(base),
             caption='\n\n'.join(caption), alt=alt, tags=tags,
             pendientes=pendientes, etiquetas=etiquetas,
             diad='Día D' in titulo, iso=base[:10])
@@ -77,7 +80,7 @@ def historias():
             continue
         base = encontrados[0].stem
         cuando, nota = tabla.get(base, ('', ''))
-        salida.append(dict(n=f'{i:02d}', base=base, cuando=cuando,
+        salida.append(dict(n=f'{i:02d}', base=base, cuando=cuando, ext=formato(base),
                            nota=nota.replace('**', ''),
                            titulo=h['titulo'].replace('Historia · ', '')))
     return salida

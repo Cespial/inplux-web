@@ -8,8 +8,10 @@ texto alternativo, máximo 5 hashtags. Los hechos de producto vienen del sitio y
 `public/work/real-pages/capture-manifest.json`; los del evento, de eldiad.10am.pro
 consultada el 17 de septiembre de 2026.
 
-**Archivos:** `exports/jpg/<fecha>_<n>_<slug>.jpg` es lo que se sube;
-`exports/png/` es el maestro. Las historias van en `exports/*/historia_NN_*`.
+**Archivos:** el nombre de cada pieza es `<fecha>_<n>_<slug>`. `exports/png/` es el maestro
+de todas; `exports/jpg/` es la conversión. Lo que se sube depende de la pieza: **PNG** en las
+tipográficas, **JPG** en las que llevan fotografía, que es donde el PNG pasa del mega.
+`canvas/build-entrega.py` elige por tamaño y arma la carpeta que se envía.
 
 > ⚠️ **Antes de programar:** tres publicaciones tienen datos pendientes y están marcadas
 > con `[ ]` en su caption: la fecha del reel de @10ampro (n.º 5), la cifra de Segovia
@@ -134,7 +136,7 @@ Etiquetar: @10ampro.
 
 `#eldiad #10ampro #ia #medellín`
 
-**Alt:** Texto sobre fondo oscuro: «Capital en IA, robótica, defensa y energía», con el nombre de Joe McCann, trader e inversionista, y la fecha del Día D.
+**Alt:** Fotografía de un mar oscuro y agitado, con el texto «Capital en IA, robótica, defensa y energía», el nombre de Joe McCann, trader e inversionista, y la fecha del Día D.
 
 ---
 
@@ -149,7 +151,7 @@ La columna completa está en alponiente.com.
 
 `#ia #criterio #medellín`
 
-**Alt:** Título de columna sobre fondo oscuro: «Lo que la máquina no puede firmar», con el nombre del autor y la fecha.
+**Alt:** Bodegón de hojas de papel y piezas de aluminio sobre piedra, con el título de columna «Lo que la máquina no puede firmar», el nombre del autor y la fecha.
 
 ---
 
@@ -298,7 +300,7 @@ Etiquetar: @10ampro y la cuenta oficial de Celsia.
 
 `#eldiad #10ampro #energía #medellín`
 
-**Alt:** Texto sobre fondo oscuro: «Celsia y el Energy Valley», con el nombre de Ricardo Sierra, CEO de Celsia, y la fecha del Día D.
+**Alt:** Fotografía nocturna de Medellín iluminada vista desde la montaña entre nubes, con el texto «Celsia y el Energy Valley», el nombre de Ricardo Sierra, CEO de Celsia, y la fecha del Día D.
 
 ---
 
@@ -383,7 +385,7 @@ Etiquetar: @10ampro.
 
 `#eldiad #10ampro #energía #medellín`
 
-**Alt:** Texto sobre fondo oscuro: «Infraestructura de carga eléctrica», con el nombre de André Joffroy, founder y CIO de Zaps, y la fecha del Día D.
+**Alt:** Edificio de vidrio iluminado al anochecer entre árboles, con el texto «Infraestructura de carga eléctrica», el nombre de André Joffroy, founder y CIO de Zaps, y la fecha del Día D.
 
 ---
 
@@ -401,7 +403,7 @@ Etiquetar: @10ampro.
 
 `#eldiad #10ampro #salud #medellín`
 
-**Alt:** Texto sobre fondo oscuro: «Péptidos y longevidad», con los nombres de los médicos Camilo Ospina y Andrés Palacio y la fecha del Día D.
+**Alt:** Hojas grandes a contraluz en verde azulado y dorado, con el texto «Péptidos y longevidad», los nombres de los médicos Camilo Ospina y Andrés Palacio y la fecha del Día D.
 
 ---
 
@@ -487,7 +489,7 @@ Etiquetar: @10ampro.
 
 `#eldiad #10ampro #medellín #fábricadesoftware`
 
-**Alt:** Texto sobre fondo oscuro: «Hoy es el Día D», con la fecha, el horario y el lugar.
+**Alt:** Fotografía nocturna de Medellín entre niebla, con las luces de la ciudad y el texto «Hoy es el Día D», la fecha, el horario y el lugar.
 
 ---
 

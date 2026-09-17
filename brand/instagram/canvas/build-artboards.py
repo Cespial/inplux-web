@@ -109,6 +109,48 @@ def pieza(name, theme, kick, title_html, size, lines, label):
         col([meta(lines, t, 26, t['fg']), row([meta(label, t, 22), lockup(t)])], 36),
     ])
 
+VELO = ('<div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; '
+        'background: linear-gradient(to top, rgba(26,25,24,0.97) 0%, rgba(26,25,24,0.82) 34%, rgba(26,25,24,0.38) 62%, rgba(26,25,24,0.12) 100%);"></div>'
+        '<div style="position: absolute; top: 0; right: 0; left: 0; height: 360px; '
+        'background: linear-gradient(to bottom, rgba(26,25,24,0.78) 0%, rgba(26,25,24,0.0) 100%);"></div>')
+
+
+def credito_html(texto, t):
+    """Crédito de licencia, discreto, arriba a la derecha. Vacío si la imagen es propia."""
+    if not texto:
+        return '<span></span>'
+    return (f'<span style="font-family: {MONO}; font-size: 18px; line-height: 1; '
+            f'color: rgba(255,255,255,0.55);">{texto}</span>')
+
+
+VELO_ALTO = ('<div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; '
+             'background: linear-gradient(to top, rgba(26,25,24,0.97) 0%, rgba(26,25,24,0.86) 30%, '
+             'rgba(26,25,24,0.55) 55%, rgba(26,25,24,0.30) 100%);"></div>'
+             '<div style="position: absolute; top: 0; right: 0; left: 0; height: 560px; '
+             'background: linear-gradient(to bottom, rgba(26,25,24,0.82) 0%, rgba(26,25,24,0.0) 100%);"></div>')
+
+
+def fondo(img):
+    """Fotografía a sangre para una historia, con el mismo velo tinta del feed."""
+    return [f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; '
+            f'height: 1920px; object-fit: cover; display: block;">', VELO_ALTO]
+
+
+def rel(html):
+    return f'<div style="position: relative;">{html}</div>'
+
+
+def foto(name, kick, title_html, meta_text, label, img, credito='', size=96, alto=1350):
+    """Reconocimiento / evento: fotografía a sangre, degradado tinta desde abajo, titular en serif."""
+    t = T['ink']
+    photo = (f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; '
+             f'height: {alto}px; object-fit: cover; display: block;">')
+    top = f'<div style="position: relative;">{row([kicker(kick, t), credito_html(credito, t)])}</div>'
+    bottom = ('<div style="position: relative; display: flex; flex-direction: column; gap: 36px;">'
+              + headline(title_html, t, size) + meta(meta_text, t, 24, t['fg'])
+              + row([meta(label, t, 22), lockup(t)]) + '</div>')
+    page(name, 'ink', [photo, VELO, top, bottom], h=alto)
+
 # ---------- artboards ----------
 t = T['ink']
 page('Main', 'ink', [
@@ -138,9 +180,10 @@ pieza('Commonplace', 'ink', 'Prensa / Selección editorial externa',
       'Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace.', 88,
       'The Commonplace · Workforce Futures · 06 ABR 2026', 'Selección editorial externa')
 
-pieza('Columna', 'ink', 'Columna / Al Poniente',
-      f'Lo que la máquina no puede {em("firmar", T["ink"])}.', 112,
-      'Jaime Alonso Cano Pino · 12 JUN 2026', 'Columna firmada · publicación del equipo')
+foto('Columna', 'Columna / Al Poniente',
+     f'Lo que la máquina no puede {em("firmar", T["ink"])}.',
+     'Jaime Alonso Cano Pino · 12 JUN 2026', 'Columna firmada · publicación del equipo',
+     'banco-mesa-de-criterio.jpg', '', 112)
 
 lista('Metodo', 'paper', 'Fábrica / Cómo trabajamos', f'Cómo {em("trabajamos", T["paper"])}.', [
     ('01', 'Entendemos el reto', 'Hablamos con las personas involucradas, revisamos el contexto y definimos qué debería cambiar.'),
@@ -161,20 +204,6 @@ pathlib.Path('Avatar.dc.html').write_text(head(t) +
     f'<div style="box-sizing: border-box; width: 1080px; height: 1080px; display: flex; align-items: center; justify-content: center; background: {t["bg"]}; overflow: hidden;">'
     f'<div style="margin-top: 36px;">{mark(800, t["fg"], t["accent"])}</div></div>\n' + TAIL, encoding='utf-8')
 
-
-def foto(name, kick, title_html, meta_text, label, img):
-    """Reconocimiento / evento: fotografía real a sangre, degradado tinta desde abajo, titular en serif."""
-    t = T['ink']
-    overlay = ('<div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; '
-               'background: linear-gradient(to top, rgba(26,25,24,0.97) 0%, rgba(26,25,24,0.82) 34%, rgba(26,25,24,0.38) 62%, rgba(26,25,24,0.12) 100%);"></div>'
-               '<div style="position: absolute; top: 0; right: 0; left: 0; height: 360px; '
-               'background: linear-gradient(to bottom, rgba(26,25,24,0.78) 0%, rgba(26,25,24,0.0) 100%);"></div>')
-    photo = (f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; height: 1350px; object-fit: cover; display: block;">')
-    top = f'<div style="position: relative;">{kicker(kick, t)}</div>'
-    bottom = ('<div style="position: relative; display: flex; flex-direction: column; gap: 36px;">'
-              + headline(title_html, t, 96) + meta(meta_text, t, 24, t['fg'])
-              + row([meta(label, t, 22), lockup(t)]) + '</div>')
-    page(name, 'ink', [photo, overlay, top, bottom])
 
 def cita(name, theme, kick, quote_html, lines, label):
     """Nos mencionan: cita textual de un tercero, entre comillas angulares."""
@@ -236,10 +265,14 @@ def tabla(name, theme, kick, title_html, filas, foot):
         row([meta(foot, t, 22), lockup(t)]),
     ])
 
-def ponente(name, title_html, quien, papel):
-    """Día D: el tema en serif, la persona en la línea de datos. Sin retratos ajenos."""
-    pieza(name, 'ink', 'El Día D / Quién habla', title_html, 104,
-          f'{quien} · {papel}', FUENTE)
+def ponente(name, title_html, quien, papel, img=None):
+    """Día D: el tema en serif, la persona en la línea de datos. Nunca el retrato ajeno;
+    cuando hay imagen es una atmósfera que dice algo del tema, no la cara de nadie."""
+    if img:
+        foto(name, 'El Día D / Quién habla', title_html, f'{quien} · {papel}', FUENTE, img)
+    else:
+        pieza(name, 'ink', 'El Día D / Quién habla', title_html, 104,
+              f'{quien} · {papel}', FUENTE)
 
 tabla('DiaDAliados', 'ink', 'El Día D / Aliados',
       f'Siete aliados. Nosotros somos el {em("software", T["ink"])}.', [
@@ -253,19 +286,19 @@ tabla('DiaDAliados', 'ink', 'El Día D / Aliados',
       ], FUENTE)
 
 ponente('DiaDMcCann', f'Capital en IA, robótica, defensa y {em("energía", T["ink"])}.',
-        'Joe McCann', 'trader e inversionista')
+        'Joe McCann', 'trader e inversionista', 'banco-solution-product.jpg')
 
 ponente('DiaDSantos', f'El PIB que ya ocurre {em("onchain", T["ink"])}.',
         'Santiago Santos', 'inversionista en Ethereum y Solana')
 
 ponente('DiaDSierra', f'Celsia y el {em("Energy Valley", T["ink"])}.',
-        'Ricardo Sierra', 'CEO de Celsia')
+        'Ricardo Sierra', 'CEO de Celsia', 'banco-sector-public.jpg')
 
 ponente('DiaDJoffroy', f'Infraestructura de carga {em("eléctrica", T["ink"])}.',
-        'André Joffroy', 'founder y CIO de Zaps')
+        'André Joffroy', 'founder y CIO de Zaps', 'banco-sector-private.jpg')
 
 ponente('DiaDLongevidad', f'Péptidos y {em("longevidad", T["ink"])}.',
-        'Camilo Ospina y Andrés Palacio', 'médicos')
+        'Camilo Ospina y Andrés Palacio', 'médicos', 'banco-solution-knowledge.jpg')
 
 lista('DiaDPrincipios', 'ink', 'El Día D / Cómo opera',
       f'Tres reglas del {em("Día D", T["ink"])}.', [
@@ -279,6 +312,8 @@ cita('DiaDPublico', 'ink', 'El Día D / Para quién es',
      'Fundadores, inversionistas, operadores, médicos, builders',
      FUENTE)
 
+# Sin foto: la única del campus con licencia limpia (Bloque 38, 2002) no es el Auditorio
+# Fundadores y su amarillo pelea con la paleta. Mejor tipográfico que una foto que no prueba nada.
 pieza('DiaDLugar', 'ink', 'El Día D / Dónde',
       f'Auditorio Fundadores, {em("EAFIT", T["ink"])}.', 104,
       CUANDO, FUENTE)
@@ -294,8 +329,9 @@ pieza('DiaDFaltan2', 'ink', 'El Día D / Cuenta regresiva',
 pieza('DiaDManana', 'ink', 'El Día D / Cuenta regresiva',
       f'{em("Mañana", T["ink"])} es el Día&nbsp;D.', 120, CUANDO, FUENTE)
 
-pieza('DiaDHoy', 'ink', 'El Día D / Hoy',
-      f'Hoy es el {em("Día D", T["ink"])}.', 128, CUANDO, FUENTE)
+foto('DiaDHoy', 'El Día D / Hoy',
+     f'Hoy es el {em("Día D", T["ink"])}.',
+     CUANDO, FUENTE, 'banco-solution-public-service.jpg', '', 120)
 
 # ---------- historias 1080 × 1920 ----------
 # Zonas seguras: 250 px arriba, 320 px abajo (DESIGN.md §2).
@@ -319,33 +355,36 @@ def story_cuenta(dias):
         grande, pie, px = em(str(dias), t), 'días para el Día D.', 300
     num = (f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {px}px; line-height: 0.9; '
            f'letter-spacing: -0.03em; color: {t["fg"]};">{grande}</div>')
-    story(f'StCuenta{dias:02d}', 'ink', [
-        kicker('El Día D / 14 de octubre', t),
-        col([num, headline(pie, t, 64)], 48),
-        col([meta(CUANDO, t, 24, t['fg']), row([meta(FUENTE, t, 22), lockup(t)])], 32),
-    ])
+    cuerpo = [
+        rel(kicker('El Día D / 14 de octubre', t)),
+        rel(col([num, headline(pie, t, 64)], 48)),
+        rel(col([meta(CUANDO, t, 24, t['fg']), row([meta(FUENTE, t, 22), lockup(t)])], 32)),
+    ]
+    img = 'banco-solution-public-service.jpg' if dias == 0 else None
+    story(f'StCuenta{dias:02d}', 'ink', (fondo(img) + cuerpo) if img else cuerpo)
 
 for d in (14, 7, 3, 1, 0):
     story_cuenta(d)
 
-def story_ponente(name, title_html, quien, papel):
+def story_ponente(name, title_html, quien, papel, img=None):
     t = T['ink']
-    story(name, 'ink', [
-        kicker('El Día D / Quién habla', t),
-        col([headline(title_html, t, 96), meta(f'{quien} · {papel}', t, 30, t['fg'])], 44),
-        col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32),
-    ])
+    cuerpo = [
+        rel(row([kicker('El Día D / Quién habla', t), credito_html('', t)])),
+        rel(col([headline(title_html, t, 96), meta(f'{quien} · {papel}', t, 30, t['fg'])], 44)),
+        rel(col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32)),
+    ]
+    story(name, 'ink', (fondo(img) + cuerpo) if img else cuerpo)
 
 story_ponente('StMcCann', f'Capital en IA, robótica, defensa y {em("energía", T["ink"])}.',
-              'Joe McCann', 'trader e inversionista')
+              'Joe McCann', 'trader e inversionista', 'banco-solution-product.jpg')
 story_ponente('StSantos', f'El PIB que ya ocurre {em("onchain", T["ink"])}.',
               'Santiago Santos', 'inversionista en Ethereum y Solana')
 story_ponente('StSierra', f'Celsia y el {em("Energy Valley", T["ink"])}.',
-              'Ricardo Sierra', 'CEO de Celsia')
+              'Ricardo Sierra', 'CEO de Celsia', 'banco-sector-public.jpg')
 story_ponente('StJoffroy', f'Infraestructura de carga {em("eléctrica", T["ink"])}.',
-              'André Joffroy', 'founder y CIO de Zaps')
+              'André Joffroy', 'founder y CIO de Zaps', 'banco-sector-private.jpg')
 story_ponente('StLongevidad', f'Péptidos y {em("longevidad", T["ink"])}.',
-              'Camilo Ospina y Andrés Palacio', 'médicos')
+              'Camilo Ospina y Andrés Palacio', 'médicos', 'banco-solution-knowledge.jpg')
 
 t = T['ink']
 _pr = ''.join(
@@ -360,8 +399,9 @@ story('StPrincipios', 'ink', [
 ])
 
 story('StAliados', 'ink', [
-    col([kicker('El Día D / Aliados', t), headline(f'Somos el {em("software", t)} del Día D.', t, 96)]),
-    meta('Veronorte · EAFIT · Makeno · MBS &amp; Associates · MacroWise · Celsia · INPLUX', t, 26, t['fg']),
+    kicker('El Día D / Aliados', t),
+    col([headline(f'Somos el {em("software", t)} del Día D.', t, 96),
+         meta('Veronorte · EAFIT · Makeno · MBS &amp; Associates · MacroWise · Celsia · INPLUX', t, 26, t['fg'])], 44),
     col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32),
 ])
 

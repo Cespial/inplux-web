@@ -30,7 +30,7 @@ def copiar():
         origen = RAIZ / 'exports' / p['ext'] / f"{p['base']}.{p['ext']}"
         shutil.copy(origen, CARPETA / 'publicaciones' / origen.name)
     for h in HIST:
-        origen = RAIZ / 'exports' / 'png' / f"{h['base']}.png"
+        origen = RAIZ / 'exports' / h['ext'] / f"{h['base']}.{h['ext']}"
         shutil.copy(origen, CARPETA / 'historias' / origen.name)
     shutil.copy(RAIZ / 'exports' / 'png' / 'avatar.png',
                 CARPETA / 'perfil' / 'avatar-inplux-1080.png')
@@ -71,8 +71,82 @@ def hoja():
                         '; '.join(p['pendientes']), ''])
         for h in HIST:
             w.writerow(['H' + h['n'], '', '', '', 'Historia',
-                        f"historias/{h['base']}.png", h['titulo'], '',
+                        f"historias/{h['base']}.{h['ext']}", h['titulo'], '',
                         h['nota'] or '', ''])
+
+
+# ---------------------------------------------------------------- lista de tomas
+
+TOMAS = [
+    ('Antes del 10 de octubre', [
+        ('El Auditorio Fundadores por fuera',
+         'Con el nombre visible si lo hay. De día o al atardecer. El campus de EAFIT es abierto.',
+         'Hoy la publicación 24 es solo tipografía porque no existe una foto del auditorio con '
+         'licencia usable. Con esta foto esa pieza pasa a ser evidencia.'),
+        ('Retratos de Jaime y Cristian',
+         'Plano medio, luz natural, fondo neutro, uno por persona. Y una de los dos trabajando, '
+         'sin posar.',
+         'Habilita la publicación de equipo, que está diseñada desde hace semanas y no se puede '
+         'armar sin fotos reales. Nunca se publica con foto de banco.'),
+    ]),
+    ('El 14 de octubre, durante el evento', [
+        ('La valla o pantalla de aliados con el logo de INPLUX visible',
+         'De frente, que se lea. Es la toma más importante del día.',
+         'Es la prueba de que fuimos aliados. Sin ella, el cierre del evento se cuenta de oídas.'),
+        ('El auditorio lleno desde atrás, antes de arrancar',
+         'Horizontal y vertical. Sin rostros identificables en primer plano.',
+         'Va en la historia de cierre y en la publicación posterior al evento.'),
+        ('El escenario en uso, desde el público',
+         'Contraluz está bien. No hace falta que se distinga quién habla.',
+         'Sirve para historias en vivo durante la jornada.'),
+        ('Detalles del día',
+         'La escarapela, la agenda impresa, el café, la entrada. Cosas, no personas.',
+         'Son las texturas que rellenan las historias sin tener que mostrar caras ajenas.'),
+        ('Alguien del equipo en el evento',
+         'Plano medio, sin posar, haciendo algo.',
+         'Es lo único que permite decir «estuvimos» en primera persona.'),
+        ('La salida, al cierre',
+         'El auditorio vaciándose, o la ciudad al salir.',
+         'Cierra la serie el 15 de octubre.'),
+    ]),
+]
+
+REGLAS_FOTO = [
+    'Vertical, 4:5 o 9:16. Nada cuadrado ni horizontal si se puede evitar.',
+    'Dejar aire arriba y abajo del encuadre: ahí va el texto y no puede tapar lo importante.',
+    'Luz natural o la del lugar. Sin flash directo.',
+    'Sin filtros, sin retoque de color, sin marcos. El tratamiento se lo damos nosotros.',
+    'Enviar el archivo original de la cámara o del celular, por Drive o AirDrop. '
+    'Por WhatsApp no, porque lo comprime y no hay vuelta atrás.',
+    'Nombrar así: fecha-lugar-tema.jpg, por ejemplo 2026-10-14-eafit-valla-aliados.jpg',
+]
+
+
+def tomas_txt():
+    lineas = ['INPLUX · Instagram · fotos que faltan',
+              'Lo que no podemos resolver sin cámara.', '=' * 72, '']
+    for bloque, items in TOMAS:
+        lineas += [bloque.upper(), '']
+        for titulo, como, para in items:
+            lineas += [f'  {titulo}', f'    Cómo: {como}', f'    Para qué: {para}', '']
+        lineas += ['-' * 72, '']
+    lineas += ['CÓMO ENTREGARLAS', '']
+    lineas += [f'  - {r}' for r in REGLAS_FOTO]
+    (CARPETA / 'fotos-que-faltan.txt').write_text('\n'.join(lineas), encoding='utf-8')
+
+
+def tomas_html():
+    bloques = ''
+    for titulo_bloque, items in TOMAS:
+        filas = ''.join(
+            f'<div class="toma"><b>{H.escape(t)}</b>'
+            f'<p class="como">{H.escape(c)}</p>'
+            f'<p class="para"><span>Para qué</span> {H.escape(pa)}</p></div>'
+            for t, c, pa in items)
+        bloques += f'<div class="bloque-tomas"><h3>{H.escape(titulo_bloque)}</h3>{filas}</div>'
+    reglas = ''.join(f'<li>{H.escape(r)}</li>' for r in REGLAS_FOTO)
+    return (f'<div class="tomas">{bloques}</div>'
+            f'<div class="panel" style="margin-top:20px"><h3>Cómo entregarlas</h3><ul>{reglas}</ul></div>')
 
 
 # ---------------------------------------------------------------- documento
@@ -102,7 +176,7 @@ def tarjeta(p):
 def tarjeta_hist(h):
     nota = f'<span class="hnota">{H.escape(h["nota"])}</span>' if h['nota'] else ''
     return f'''<figure class="hist">
-  <img src="historias/{h['base']}.png" alt="{H.escape(h['titulo'])}" loading="lazy" width="1080" height="1920">
+  <img src="historias/{h['base']}.{h['ext']}" alt="{H.escape(h['titulo'])}" loading="lazy" width="1080" height="1920">
   <figcaption><b>{H.escape(h['titulo'])}</b><span>{H.escape(h['cuando'])}</span>{nota}</figcaption>
 </figure>'''
 
@@ -195,6 +269,17 @@ p{max-width:64ch}
 .hist figcaption b{font-weight:500;font-size:13px}
 .hist figcaption span{font-family:var(--mono);font-size:11px;color:var(--suave)}
 .hist .hnota{color:var(--avisoborde)}
+.tomas{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:28px}
+.bloque-tomas{background:var(--tarjeta);border:1px solid var(--linea);border-radius:12px;padding:22px}
+.bloque-tomas h3{margin-bottom:18px}
+.toma{padding:14px 0;border-top:1px solid var(--linea)}
+.toma:first-of-type{border-top:0;padding-top:0}
+.toma b{display:block;font-weight:500;font-size:16px;margin-bottom:5px}
+.toma p{margin:0;max-width:none}
+.toma .como{font-size:14px;color:var(--suave)}
+.toma .para{font-size:13px;color:var(--suave);margin-top:6px}
+.toma .para span{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--acento);margin-right:5px}
 @media (max-width:720px){.pieza{grid-template-columns:1fr}.lamina{max-width:280px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 '''
@@ -335,6 +420,12 @@ def documento(artefacto=False):
 {chr(10).join(tarjeta_hist(h) for h in HIST)}
   </div>
 
+  <h2>Las fotos que <em>faltan</em>.</h2>
+  <p class="entrada">Estas no las podemos resolver nosotros: hay que ir y tomarlas. Las del 14
+  de octubre son de ese día y no se pueden repetir, así que conviene que alguien llegue con el
+  encargo claro. Está también en <b>fotos-que-faltan.txt</b>, por si hay que reenviarlo suelto.</p>
+  {tomas_html()}
+
   <h2>Si algo se <em>traba</em>.</h2>
   <p class="entrada">Las publicaciones marcadas dependen de datos que están por confirmar con
   terceros. Ninguna bloquea a las demás: si una no se puede publicar el día que le toca, se
@@ -360,6 +451,7 @@ if __name__ == '__main__':
         shutil.rmtree(CARPETA)
     copiar()
     texto_plano()
+    tomas_txt()
     hoja()
     documento()
     documento(artefacto=True)
