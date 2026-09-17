@@ -86,7 +86,7 @@ def producto(name, theme, kick, title_html, img, url, meta_text):
         row([meta(meta_text, t), lockup(t)]),
     ])
 
-def lista(name, theme, kick, title_html, items):
+def lista(name, theme, kick, title_html, items, foot='inplux.co'):
     t = T[theme]
     rows = ''.join(
         f'<div style="display: flex; gap: 32px; padding: 26px 0; border-top: 1px solid {t["line"]};">'
@@ -98,7 +98,7 @@ def lista(name, theme, kick, title_html, items):
     page(name, theme, [
         col([kicker(kick, t), headline(title_html, t, 96)]),
         f'<div style="display: flex; flex-direction: column;">{rows}</div>',
-        row([meta('inplux.co', t), lockup(t)]),
+        row([meta(foot, t), lockup(t)]),
     ])
 
 def pieza(name, theme, kick, title_html, size, lines, label):
@@ -200,8 +200,8 @@ foto('DiaD', 'Aliados / El Día D · 10ampro',
      'Software · De un problema real a producción · eldiad.10am.pro', 'medellin.jpg')
 
 foto('Segovia', 'Trabajo / Participación ciudadana · Segovia, Antioquia',
-     f'{em("1.549", T["ink"])} personas ya votaron por las obras de su vereda o barrio.',
-     'Presupuesto participativo · Alcaldía de Segovia · corte 8 SEP 2026 · abierta hasta el 3 OCT',
+     f'La gente de Segovia votó las obras de su vereda desde el {em("celular", T["ink"])}.',
+     'Presupuesto participativo · Alcaldía de Segovia · votación cerrada el 13 SEP 2026',
      'participativo-segovia.vercel.app', 'segovia.jpg')
 
 cita('Egonomista', 'paper', 'Nos mencionan / @egonomista',
@@ -212,37 +212,267 @@ producto('Porkia', 'paper', 'Trabajo / Porcicultura · Por solicitud',
          f'Llevar una finca porcícola sin volver al {em("cuaderno", T["paper"])}.',
          'porkia.jpg', 'porkia.co/#demo', 'Porkia · captura real · 11 AGO 2026')
 
+# ---------- Día D · 14 de octubre de 2026 ----------
+# Todo el contenido es literal de eldiad.10am.pro, consultada el 17 SEP 2026.
+# INPLUX es aliado con la etiqueta «Software»: no anunciamos agenda propia, stand ni tarima.
+
+FUENTE = 'El Día D · 14 OCT 2026 · eldiad.10am.pro'
+CUANDO = 'Miércoles 14 de octubre de 2026 · 10:00 a. m. – 5:00 p. m. · Auditorio Fundadores · EAFIT · Medellín'
+
+def tabla(name, theme, kick, title_html, filas, foot):
+    """Aliados: categoría en mono a la izquierda, nombre en serif a la derecha."""
+    t = T[theme]
+    rows = ''.join(
+        f'<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 32px; '
+        f'padding: 24px 0; border-top: 1px solid {t["line"]};">'
+        f'<div style="font-family: {MONO}; font-size: 23px; line-height: 1.3; letter-spacing: 0.06em; '
+        f'text-transform: uppercase; color: {t["muted"]};">{cat}</div>'
+        f'<div style="font-family: {SERIF}; font-weight: 300; font-size: 46px; line-height: 1.1; '
+        f'letter-spacing: -0.01em; color: {t["accent"] if mio else t["fg"]};">{quien}</div>'
+        f'</div>' for cat, quien, mio in filas)
+    page(name, theme, [
+        col([kicker(kick, t), headline(title_html, t, 88)]),
+        f'<div style="display: flex; flex-direction: column;">{rows}</div>',
+        row([meta(foot, t, 22), lockup(t)]),
+    ])
+
+def ponente(name, title_html, quien, papel):
+    """Día D: el tema en serif, la persona en la línea de datos. Sin retratos ajenos."""
+    pieza(name, 'ink', 'El Día D / Quién habla', title_html, 104,
+          f'{quien} · {papel}', FUENTE)
+
+tabla('DiaDAliados', 'ink', 'El Día D / Aliados',
+      f'Siete aliados. Nosotros somos el {em("software", T["ink"])}.', [
+          ('Capital', 'Veronorte', False),
+          ('Sede', 'Universidad EAFIT', False),
+          ('Logística', 'Makeno', False),
+          ('Sociedades en el exterior', 'MBS &amp; Associates', False),
+          ('Epistemic Capital', 'MacroWise', False),
+          ('Energía', 'Celsia', False),
+          ('Software', 'INPLUX', True),
+      ], FUENTE)
+
+ponente('DiaDMcCann', f'Capital en IA, robótica, defensa y {em("energía", T["ink"])}.',
+        'Joe McCann', 'trader e inversionista')
+
+ponente('DiaDSantos', f'El PIB que ya ocurre {em("onchain", T["ink"])}.',
+        'Santiago Santos', 'inversionista en Ethereum y Solana')
+
+ponente('DiaDSierra', f'Celsia y el {em("Energy Valley", T["ink"])}.',
+        'Ricardo Sierra', 'CEO de Celsia')
+
+ponente('DiaDJoffroy', f'Infraestructura de carga {em("eléctrica", T["ink"])}.',
+        'André Joffroy', 'founder y CIO de Zaps')
+
+ponente('DiaDLongevidad', f'Péptidos y {em("longevidad", T["ink"])}.',
+        'Camilo Ospina y Andrés Palacio', 'médicos')
+
+lista('DiaDPrincipios', 'ink', 'El Día D / Cómo opera',
+      f'Tres reglas del {em("Día D", T["ink"])}.', [
+          ('01', 'Open Source Capital', 'Compartir tesis y aprendizajes en vez de guardarlos.'),
+          ('02', 'Collective Intelligence', 'La sincronización de personas inteligentes en un mismo lugar.'),
+          ('03', 'Network Sharing', 'Activar las redes propias para acelerar a la gente correcta.'),
+      ], FUENTE)
+
+cita('DiaDPublico', 'ink', 'El Día D / Para quién es',
+     'Estar cerca de las mejores conversaciones es una forma de capital',
+     'Fundadores, inversionistas, operadores, médicos, builders',
+     FUENTE)
+
+pieza('DiaDLugar', 'ink', 'El Día D / Dónde',
+      f'Auditorio Fundadores, {em("EAFIT", T["ink"])}.', 104,
+      CUANDO, FUENTE)
+
+pieza('DiaDSoftware', 'paper', 'El Día D / Por qué estamos',
+      f'Después de las conversaciones, alguien tiene que {em("construirlo", T["paper"])}.', 96,
+      'INPLUX es el aliado de software del Día D · De un problema real a producción',
+      'inplux.co')
+
+pieza('DiaDFaltan2', 'ink', 'El Día D / Cuenta regresiva',
+      f'Faltan {em("dos", T["ink"])} días.', 128, CUANDO, FUENTE)
+
+pieza('DiaDManana', 'ink', 'El Día D / Cuenta regresiva',
+      f'{em("Mañana", T["ink"])} es el Día&nbsp;D.', 120, CUANDO, FUENTE)
+
+pieza('DiaDHoy', 'ink', 'El Día D / Hoy',
+      f'Hoy es el {em("Día D", T["ink"])}.', 128, CUANDO, FUENTE)
+
+# ---------- historias 1080 × 1920 ----------
+# Zonas seguras: 250 px arriba, 320 px abajo (DESIGN.md §2).
+
+def story(name, theme, children):
+    t = T[theme]
+    pathlib.Path(f'{name}.dc.html').write_text(
+        head(t) +
+        f'<div style="position: relative; box-sizing: border-box; width: 1080px; height: 1920px; '
+        f'padding: 250px 88px 320px; display: flex; flex-direction: column; justify-content: space-between; '
+        f'background: {t["bg"]}; color: {t["fg"]}; font-family: {SANS}; overflow: hidden;">'
+        + ''.join(children) + '</div>\n' + TAIL, encoding='utf-8')
+
+def story_cuenta(dias):
+    t = T['ink']
+    if dias == 0:
+        grande, pie, px = em('Hoy', t), 'es el Día D.', 240
+    elif dias == 1:
+        grande, pie, px = em('Mañana', t), 'es el Día D.', 170
+    else:
+        grande, pie, px = em(str(dias), t), 'días para el Día D.', 300
+    num = (f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {px}px; line-height: 0.9; '
+           f'letter-spacing: -0.03em; color: {t["fg"]};">{grande}</div>')
+    story(f'StCuenta{dias:02d}', 'ink', [
+        kicker('El Día D / 14 de octubre', t),
+        col([num, headline(pie, t, 64)], 48),
+        col([meta(CUANDO, t, 24, t['fg']), row([meta(FUENTE, t, 22), lockup(t)])], 32),
+    ])
+
+for d in (14, 7, 3, 1, 0):
+    story_cuenta(d)
+
+def story_ponente(name, title_html, quien, papel):
+    t = T['ink']
+    story(name, 'ink', [
+        kicker('El Día D / Quién habla', t),
+        col([headline(title_html, t, 96), meta(f'{quien} · {papel}', t, 30, t['fg'])], 44),
+        col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32),
+    ])
+
+story_ponente('StMcCann', f'Capital en IA, robótica, defensa y {em("energía", T["ink"])}.',
+              'Joe McCann', 'trader e inversionista')
+story_ponente('StSantos', f'El PIB que ya ocurre {em("onchain", T["ink"])}.',
+              'Santiago Santos', 'inversionista en Ethereum y Solana')
+story_ponente('StSierra', f'Celsia y el {em("Energy Valley", T["ink"])}.',
+              'Ricardo Sierra', 'CEO de Celsia')
+story_ponente('StJoffroy', f'Infraestructura de carga {em("eléctrica", T["ink"])}.',
+              'André Joffroy', 'founder y CIO de Zaps')
+story_ponente('StLongevidad', f'Péptidos y {em("longevidad", T["ink"])}.',
+              'Camilo Ospina y Andrés Palacio', 'médicos')
+
+t = T['ink']
+_pr = ''.join(
+    f'<div style="display: flex; gap: 30px; padding: 30px 0; border-top: 1px solid {t["line"]};">'
+    f'<div style="flex: 0 0 60px; font-family: {MONO}; font-size: 24px; line-height: 1.5; color: {t["accent"]};">{n}</div>'
+    f'<div style="font-family: {SERIF}; font-weight: 300; font-size: 52px; line-height: 1.15; color: {t["fg"]};">{ttl}</div>'
+    f'</div>' for n, ttl in [('01', 'Open Source Capital'), ('02', 'Collective Intelligence'), ('03', 'Network Sharing')])
+story('StPrincipios', 'ink', [
+    col([kicker('El Día D / Cómo opera', t), headline(f'Tres reglas del {em("Día D", t)}.', t, 88)]),
+    f'<div style="display: flex; flex-direction: column;">{_pr}</div>',
+    col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32),
+])
+
+story('StAliados', 'ink', [
+    col([kicker('El Día D / Aliados', t), headline(f'Somos el {em("software", t)} del Día D.', t, 96)]),
+    meta('Veronorte · EAFIT · Makeno · MBS &amp; Associates · MacroWise · Celsia · INPLUX', t, 26, t['fg']),
+    col([meta(CUANDO, t, 24), row([meta(FUENTE, t, 22), lockup(t)])], 32),
+])
+
+# Plantillas para el 14 de octubre: la foto real se pega encima en la app de historias.
+_hueco = (f'<div style="flex: 1; margin: 44px 0; border-radius: 14px; border: 1px dashed {t["line"]}; '
+          f'display: flex; align-items: center; justify-content: center;">'
+          f'<span style="font-family: {MONO}; font-size: 24px; color: {t["muted"]};">[ foto real del día ]</span></div>')
+story('StVivo', 'ink', [
+    kicker('El Día D / En vivo', t), _hueco,
+    col([meta('Auditorio Fundadores · EAFIT · Medellín', t, 26, t['fg']),
+         row([meta(FUENTE, t, 22), lockup(t)])], 32),
+])
+story('StCierre', 'ink', [
+    col([kicker('El Día D / Cierre', t), headline(f'Lo que vimos en el {em("Día D", t)}.', t, 96)]),
+    _hueco,
+    col([meta('14 de octubre de 2026 · Medellín', t, 26, t['fg']),
+         row([meta('inplux.co', t, 22), lockup(t)])], 32),
+])
+
+# ---------- calendario: una publicación diaria del 17 SEP al 14 OCT de 2026 ----------
+# Las piezas del Día D no van dos días seguidos hasta el 7 de octubre; del 8 al 14 sí,
+# porque esa es la semana del evento.
+CALENDARIO = [
+    ('2026-09-17', 'Main',           'Marca',                          'marca'),
+    ('2026-09-18', 'Harvard',        'Reconocimiento · ODR 2026',      'reconocimiento-odr-2026'),
+    ('2026-09-19', 'Tribai',         'Trabajo · Tribai',               'tribai'),
+    ('2026-09-20', 'DiaDAliados',    'Día D · Siete aliados',          'dia-d-aliados'),
+    ('2026-09-21', 'Mencion',        'Nos mencionan · @10ampro',       'nos-mencionan-10ampro'),
+    ('2026-09-22', 'Gobia',          'Trabajo · Gobia',                'gobia'),
+    ('2026-09-23', 'DiaDMcCann',     'Día D · Joe McCann',             'dia-d-mccann'),
+    ('2026-09-24', 'Columna',        'Columna · Al Poniente',          'columna'),
+    ('2026-09-25', 'Kelsen',         'Trabajo · Kelsen',               'kelsen'),
+    ('2026-09-26', 'DiaDPrincipios', 'Día D · Tres reglas',            'dia-d-principios'),
+    ('2026-09-27', 'Commonplace',    'Prensa · The Commonplace',       'commonplace'),
+    ('2026-09-28', 'Laudos',         'Trabajo · Laudos',               'laudos'),
+    ('2026-09-29', 'DiaD',           'Día D · Somos aliados',          'dia-d-somos-aliados'),
+    ('2026-09-30', 'Metodo',         'Cómo trabajamos',                'como-trabajamos'),
+    ('2026-10-01', 'DiaDSantos',     'Día D · Santiago Santos',        'dia-d-santos'),
+    ('2026-10-02', 'Egonomista',     'Nos mencionan · @egonomista',    'nos-mencionan-egonomista'),
+    ('2026-10-03', 'DiaDSierra',     'Día D · Ricardo Sierra',         'dia-d-sierra'),
+    ('2026-10-04', 'Servicios',      'Qué construimos',                'que-construimos'),
+    ('2026-10-05', 'Segovia',        'Trabajo · Segovia',              'segovia'),
+    ('2026-10-06', 'DiaDPublico',    'Día D · Para quién es',          'dia-d-publico'),
+    ('2026-10-07', 'Porkia',         'Trabajo · Porkia',               'porkia'),
+    ('2026-10-08', 'DiaDJoffroy',    'Día D · André Joffroy',          'dia-d-joffroy'),
+    ('2026-10-09', 'DiaDLongevidad', 'Día D · Longevidad',             'dia-d-longevidad'),
+    ('2026-10-10', 'DiaDLugar',      'Día D · El lugar',               'dia-d-lugar'),
+    ('2026-10-11', 'DiaDSoftware',   'Día D · Por qué estamos',        'dia-d-por-que-estamos'),
+    ('2026-10-12', 'DiaDFaltan2',    'Día D · Faltan dos días',        'dia-d-faltan-2'),
+    ('2026-10-13', 'DiaDManana',     'Día D · Mañana',                 'dia-d-manana'),
+    ('2026-10-14', 'DiaDHoy',        'Día D · Hoy',                    'dia-d-hoy'),
+]
+
+HISTORIAS = [
+    ('StAliados',    'Historia · Somos el software del Día D'),
+    ('StPrincipios', 'Historia · Tres reglas'),
+    ('StMcCann',     'Historia · Joe McCann'),
+    ('StSantos',     'Historia · Santiago Santos'),
+    ('StSierra',     'Historia · Ricardo Sierra'),
+    ('StJoffroy',    'Historia · André Joffroy'),
+    ('StLongevidad', 'Historia · Longevidad'),
+    ('StCuenta14',   'Historia · Faltan 14 días'),
+    ('StCuenta07',   'Historia · Faltan 7 días'),
+    ('StCuenta03',   'Historia · Faltan 3 días'),
+    ('StCuenta01',   'Historia · Mañana'),
+    ('StCuenta00',   'Historia · Hoy'),
+    ('StVivo',       'Historia · Plantilla en vivo'),
+    ('StCierre',     'Historia · Plantilla de cierre'),
+]
+
+pathlib.Path('calendario.json').write_text(json.dumps(
+    {'feed': [dict(n=i + 1, fecha=f, artboard=a, titulo=t, slug=s)
+              for i, (f, a, t, s) in enumerate(CALENDARIO)],
+     'historias': [dict(artboard=a, titulo=t) for a, t in HISTORIAS]},
+    ensure_ascii=False, indent=2), encoding='utf-8')
+
 # canvas.json — se lee como el grid de Instagram (más reciente arriba a la izquierda)
 W, H, GX, GY = 1080, 1350, 100, 120
-def at(cx, ry, h=H): return dict(x=cx * (W + GX), y=ry * (H + GY), w=W, h=h)
+def at(cx, ry, w=W, h=H): return dict(x=cx * (W + GX), y=ry * (H + GY), w=w, h=h)
+
+total = len(CALENDARIO)
+artboards = []
+for i, (fecha, ab, titulo, _slug) in enumerate(CALENDARIO):
+    idx = total - (i + 1)                     # 0 = publicación más reciente
+    artboards.append(dict(file=f'{ab}.dc.html',
+                          title=f'{i + 1} · {fecha[8:]}-{["","ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][int(fecha[5:7])]} · {titulo}',
+                          **at(idx % 3, idx // 3)))
+
+fila_hist = (total + 2) // 3 + 1
+for j, (ab, titulo) in enumerate(HISTORIAS):
+    artboards.append(dict(file=f'{ab}.dc.html', title=titulo,
+                          **at(j % 3, fila_hist + j // 3, h=1920)))
+
+artboards.append(dict(file='Avatar.dc.html', title='Avatar 1080 × 1080',
+                      **at(0, fila_hist + (len(HISTORIAS) + 2) // 3 + 1, h=1080)))
+
 canvas = {
-  'artboards': [
-    dict(file='Laudos.dc.html',      title='9 · Trabajo · Laudos',            **at(0, 0)),
-    dict(file='Commonplace.dc.html', title='8 · Prensa · The Commonplace',    **at(1, 0)),
-    dict(file='Kelsen.dc.html',      title='7 · Trabajo · Kelsen',            **at(2, 0)),
-    dict(file='Columna.dc.html',     title='6 · Columna · Al Poniente',       **at(0, 1)),
-    dict(file='Gobia.dc.html',       title='5 · Trabajo · Gobia',             **at(1, 1)),
-    dict(file='Mencion.dc.html',     title='4 · Nos mencionan · 10ampro',     **at(2, 1)),
-    dict(file='Tribai.dc.html',      title='3 · Trabajo · Tribai',            **at(0, 2)),
-    dict(file='Harvard.dc.html',     title='2 · Reconocimiento · ODR 2026',   **at(1, 2)),
-    dict(file='Main.dc.html',        title='1 · Marca',                       **at(2, 2)),
-    dict(file='DiaD.dc.html',        title='10 · Evento · Día D (tanda 2)',       **at(0, 3)),
-    dict(file='Segovia.dc.html',     title='12 · Trabajo · Segovia (tanda 2)',    **at(1, 3)),
-    dict(file='Metodo.dc.html',      title='11 · Cómo trabajamos (tanda 2)',      **at(2, 3)),
-    dict(file='Servicios.dc.html',   title='13 · Qué construimos (tanda 2)',      **at(0, 4)),
-    dict(file='Egonomista.dc.html',  title='14 · Nos mencionan · egonomista',     **at(1, 4)),
-    dict(file='Porkia.dc.html',      title='15 · Trabajo · Porkia (tanda 2)',     **at(2, 4)),
-    dict(file='Avatar.dc.html',      title='Avatar 1080 × 1080',                  **at(0, 5, 1080)),
-  ],
+  'artboards': artboards,
   'annotations': [
-    dict(id='orden', x=0, y=-260, w=1400,
-         text='Se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\n'
-              'Tanda 1 (9 al 28 de septiembre): 1 Marca · 2 Reconocimiento ODR 2026 · 3 Tribai · 4 Nos mencionan 10ampro · 5 Gobia · 6 Columna · 7 Kelsen · 8 Commonplace · 9 Laudos.\n'
-              'Exportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md; calendario en METRICOOL.md.'),
-    dict(id='tanda2', x=0, y=4210, w=1400,
-         text='Tanda 2 (30 de septiembre al Día D): Aliados del Día D, Segovia (publicar con la cifra final tras el cierre del 3 de octubre, o antes con el visto bueno de la Alcaldía), Cómo trabajamos, Qué construimos, mención de @egonomista, Porkia. Faltan: audiograma Blu Radio y equipo con fotos reales.'),
+    dict(id='orden', x=0, y=-300, w=1500,
+         text='FEED — se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\n'
+              'Una publicación diaria del 17 de septiembre al 14 de octubre de 2026 (28 en total), con el Día D de 10ampro como remate.\n'
+              'Catorce piezas son del Día D; no van dos días seguidos hasta el 7 de octubre. Del 8 al 14 sí, porque es la semana del evento.\n'
+              'Exportar cada artboard como PNG 1080 × 1350. Captions, alt y hashtags en brand/instagram/CAPTIONS.md.'),
+    dict(id='historias', x=0, y=(fila_hist * (H + GY)) - 300, w=1500,
+         text='HISTORIAS 1080 × 1920 — zonas seguras de 250 px arriba y 320 px abajo.\n'
+              'La cuenta regresiva se publica los días 30 de septiembre (faltan 14), 7, 11, 13 y 14 de octubre.\n'
+              'Las dos últimas son plantillas: la foto real del día se pega encima desde la app de Instagram.\n'
+              'En todas, sticker de enlace a eldiad.10am.pro y mención a @10ampro.'),
   ],
   'launch': {'view': 'canvas'},
 }
 pathlib.Path('canvas.json').write_text(json.dumps(canvas, ensure_ascii=False, indent=2), encoding='utf-8')
-print('artboards:', sorted(p.name for p in pathlib.Path('.').glob('*.dc.html')))
+print(f'artboards: {len(list(pathlib.Path(".").glob("*.dc.html")))} · feed {total} · historias {len(HISTORIAS)}')

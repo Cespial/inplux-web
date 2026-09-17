@@ -1,0 +1,258 @@
+{
+  "feed": [
+    {
+      "n": 1,
+      "fecha": "2026-09-17",
+      "artboard": "Main",
+      "titulo": "Marca",
+      "slug": "marca"
+    },
+    {
+      "n": 2,
+      "fecha": "2026-09-18",
+      "artboard": "Harvard",
+      "titulo": "Reconocimiento · ODR 2026",
+      "slug": "reconocimiento-odr-2026"
+    },
+    {
+      "n": 3,
+      "fecha": "2026-09-19",
+      "artboard": "Tribai",
+      "titulo": "Trabajo · Tribai",
+      "slug": "tribai"
+    },
+    {
+      "n": 4,
+      "fecha": "2026-09-20",
+      "artboard": "DiaDAliados",
+      "titulo": "Día D · Siete aliados",
+      "slug": "dia-d-aliados"
+    },
+    {
+      "n": 5,
+      "fecha": "2026-09-21",
+      "artboard": "Mencion",
+      "titulo": "Nos mencionan · @10ampro",
+      "slug": "nos-mencionan-10ampro"
+    },
+    {
+      "n": 6,
+      "fecha": "2026-09-22",
+      "artboard": "Gobia",
+      "titulo": "Trabajo · Gobia",
+      "slug": "gobia"
+    },
+    {
+      "n": 7,
+      "fecha": "2026-09-23",
+      "artboard": "DiaDMcCann",
+      "titulo": "Día D · Joe McCann",
+      "slug": "dia-d-mccann"
+    },
+    {
+      "n": 8,
+      "fecha": "2026-09-24",
+      "artboard": "Columna",
+      "titulo": "Columna · Al Poniente",
+      "slug": "columna"
+    },
+    {
+      "n": 9,
+      "fecha": "2026-09-25",
+      "artboard": "Kelsen",
+      "titulo": "Trabajo · Kelsen",
+      "slug": "kelsen"
+    },
+    {
+      "n": 10,
+      "fecha": "2026-09-26",
+      "artboard": "DiaDPrincipios",
+      "titulo": "Día D · Tres reglas",
+      "slug": "dia-d-principios"
+    },
+    {
+      "n": 11,
+      "fecha": "2026-09-27",
+      "artboard": "Commonplace",
+      "titulo": "Prensa · The Commonplace",
+      "slug": "commonplace"
+    },
+    {
+      "n": 12,
+      "fecha": "2026-09-28",
+      "artboard": "Laudos",
+      "titulo": "Trabajo · Laudos",
+      "slug": "laudos"
+    },
+    {
+      "n": 13,
+      "fecha": "2026-09-29",
+      "artboard": "DiaD",
+      "titulo": "Día D · Somos aliados",
+      "slug": "dia-d-somos-aliados"
+    },
+    {
+      "n": 14,
+      "fecha": "2026-09-30",
+      "artboard": "Metodo",
+      "titulo": "Cómo trabajamos",
+      "slug": "como-trabajamos"
+    },
+    {
+      "n": 15,
+      "fecha": "2026-10-01",
+      "artboard": "DiaDSantos",
+      "titulo": "Día D · Santiago Santos",
+      "slug": "dia-d-santos"
+    },
+    {
+      "n": 16,
+      "fecha": "2026-10-02",
+      "artboard": "Egonomista",
+      "titulo": "Nos mencionan · @egonomista",
+      "slug": "nos-mencionan-egonomista"
+    },
+    {
+      "n": 17,
+      "fecha": "2026-10-03",
+      "artboard": "DiaDSierra",
+      "titulo": "Día D · Ricardo Sierra",
+      "slug": "dia-d-sierra"
+    },
+    {
+      "n": 18,
+      "fecha": "2026-10-04",
+      "artboard": "Servicios",
+      "titulo": "Qué construimos",
+      "slug": "que-construimos"
+    },
+    {
+      "n": 19,
+      "fecha": "2026-10-05",
+      "artboard": "Segovia",
+      "titulo": "Trabajo · Segovia",
+      "slug": "segovia"
+    },
+    {
+      "n": 20,
+      "fecha": "2026-10-06",
+      "artboard": "DiaDPublico",
+      "titulo": "Día D · Para quién es",
+      "slug": "dia-d-publico"
+    },
+    {
+      "n": 21,
+      "fecha": "2026-10-07",
+      "artboard": "Porkia",
+      "titulo": "Trabajo · Porkia",
+      "slug": "porkia"
+    },
+    {
+      "n": 22,
+      "fecha": "2026-10-08",
+      "artboard": "DiaDJoffroy",
+      "titulo": "Día D · André Joffroy",
+      "slug": "dia-d-joffroy"
+    },
+    {
+      "n": 23,
+      "fecha": "2026-10-09",
+      "artboard": "DiaDLongevidad",
+      "titulo": "Día D · Longevidad",
+      "slug": "dia-d-longevidad"
+    },
+    {
+      "n": 24,
+      "fecha": "2026-10-10",
+      "artboard": "DiaDLugar",
+      "titulo": "Día D · El lugar",
+      "slug": "dia-d-lugar"
+    },
+    {
+      "n": 25,
+      "fecha": "2026-10-11",
+      "artboard": "DiaDSoftware",
+      "titulo": "Día D · Por qué estamos",
+      "slug": "dia-d-por-que-estamos"
+    },
+    {
+      "n": 26,
+      "fecha": "2026-10-12",
+      "artboard": "DiaDFaltan2",
+      "titulo": "Día D · Faltan dos días",
+      "slug": "dia-d-faltan-2"
+    },
+    {
+      "n": 27,
+      "fecha": "2026-10-13",
+      "artboard": "DiaDManana",
+      "titulo": "Día D · Mañana",
+      "slug": "dia-d-manana"
+    },
+    {
+      "n": 28,
+      "fecha": "2026-10-14",
+      "artboard": "DiaDHoy",
+      "titulo": "Día D · Hoy",
+      "slug": "dia-d-hoy"
+    }
+  ],
+  "historias": [
+    {
+      "artboard": "StAliados",
+      "titulo": "Historia · Somos el software del Día D"
+    },
+    {
+      "artboard": "StPrincipios",
+      "titulo": "Historia · Tres reglas"
+    },
+    {
+      "artboard": "StMcCann",
+      "titulo": "Historia · Joe McCann"
+    },
+    {
+      "artboard": "StSantos",
+      "titulo": "Historia · Santiago Santos"
+    },
+    {
+      "artboard": "StSierra",
+      "titulo": "Historia · Ricardo Sierra"
+    },
+    {
+      "artboard": "StJoffroy",
+      "titulo": "Historia · André Joffroy"
+    },
+    {
+      "artboard": "StLongevidad",
+      "titulo": "Historia · Longevidad"
+    },
+    {
+      "artboard": "StCuenta14",
+      "titulo": "Historia · Faltan 14 días"
+    },
+    {
+      "artboard": "StCuenta07",
+      "titulo": "Historia · Faltan 7 días"
+    },
+    {
+      "artboard": "StCuenta03",
+      "titulo": "Historia · Faltan 3 días"
+    },
+    {
+      "artboard": "StCuenta01",
+      "titulo": "Historia · Mañana"
+    },
+    {
+      "artboard": "StCuenta00",
+      "titulo": "Historia · Hoy"
+    },
+    {
+      "artboard": "StVivo",
+      "titulo": "Historia · Plantilla en vivo"
+    },
+    {
+      "artboard": "StCierre",
+      "titulo": "Historia · Plantilla de cierre"
+    }
+  ]
+}

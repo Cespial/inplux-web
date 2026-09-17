@@ -128,6 +128,9 @@ símbolo va grande (≥ 300 px) y el pie lleva solo el wordmark, sin el lockup p
 | **Radio** (audiograma) | Tinta | Onda de audio, frase clave en serif, «Blu Radio · programa · fecha», 20–40 s | Solo con el audio real y la fecha confirmada. |
 | **Equipo** | Papel | Fotografía real, nombre completo, rol | Requiere foto real. Sin foto real no se publica. |
 | **Evento** (Día D, paneles) | Tinta | Fecha, lugar, rol de INPLUX | Datos verificados en la fuente del evento. |
+| **Evento · aliados** (tabla) | Tinta | Categoría en mono a la izquierda, quién en serif a la derecha; la fila propia en color acento | Las categorías son las que publica el organizador, no las que nos gustaría. |
+| **Evento · quién habla** | Tinta | Kicker `EL DÍA D / QUIÉN HABLA`, el tema en serif, la persona y su cargo en la línea de datos | El titular es el **tema**, nunca el nombre: no somos quien los invita. Sin retratos: no tenemos derechos sobre la imagen de terceros. |
+| **Evento · cuenta regresiva** | Tinta | Número o palabra en serif enorme, la frase debajo, datos del evento al pie | Solo en historias. En el feed la cuenta regresiva ocupa los últimos tres días y nada más. |
 
 ---
 
@@ -181,22 +184,53 @@ pendiente describirlo o guardarlo antes de guionizar.
 
 ---
 
-## 10. Archivos
+## 10. Qué archivo se sube
+
+Instagram vuelve a comprimir todo a JPEG al subirlo, así que lo que importa es de dónde
+parte esa compresión. Regla, medida sobre estas piezas:
+
+- **Piezas tipográficas** (fondo plano y texto): se sube el **PNG**. Es más liviano que el
+  JPG equivalente (60–110 KB contra 85–160 KB) y no mete artefactos en los remates finos de
+  la Newsreader.
+- **Piezas con fotografía** (Harvard, Día D, Segovia): se sube el **JPG**. Ahí el PNG pesa
+  más de un mega y el JPG a calidad 92 baja a un tercio sin diferencia visible.
+
+Ambos salen en 1080 × 1350 (historias 1080 × 1920) con perfil **sRGB** incrustado. Nunca
+reescalar ni recortar después de exportar: el recorte del grid ya está previsto en el
+margen de 88 px.
+
+---
+
+## 11. Archivos
 
 ```
 brand/instagram/
 ├── DESIGN.md                  ← este documento
 ├── PERFIL.md                  ← nombre, bio, categoría, enlace, highlights, a quién seguir
 ├── METRICOOL.md               ← conexión, calendario y checklist
-├── ESTRATEGIA.md              ← tesis, inventario de pruebas, tandas 1 y 2, distribución
-├── CAPTIONS.md                ← textos, alt y hashtags de la primera tanda
-├── fotos/                     ← fotografías reales (Boston, ODR 2026)
+├── ESTRATEGIA.md              ← tesis, inventario de pruebas, calendario diario, reglas del Día D
+├── CAPTIONS.md                ← las 28 publicaciones con caption, alt y hashtags
+├── fotos/                     ← fotografías reales (Boston, ODR 2026, Segovia)
 ├── avatar-inplux-1080.png     ← avatar listo para subir
 ├── avatar-inplux-1080.svg
 ├── avatar-inplux-preview-circle.png
-└── canvas/                    ← artboards de /design (fuente de la primera tanda)
-    ├── build-artboards.py     ← genera los .dc.html
-    ├── *.dc.html              ← un artboard por publicación
-    ├── canvas.json
-    └── img/                   ← capturas reales reducidas (< 70 KB)
+├── exports/
+│   ├── png/                   ← maestros
+│   └── jpg/                   ← calidad 92, sRGB
+└── canvas/
+    ├── build-artboards.py     ← genera los .dc.html y el calendario
+    ├── render.py              ← .dc.html → PNG → JPG, con verificación de tamaño
+    ├── calendario.json        ← qué artboard sale qué día
+    ├── canvas.json            ← disposición del lienzo
+    ├── *.dc.html              ← un artboard por pieza (28 feed + 14 historias + avatar)
+    └── *.jpg                  ← capturas y fotos reducidas, junto a los .dc.html
 ```
+
+Los nombres de exportación son `<fecha>_<n>_<slug>` para el feed y `historia_<n>_<slug>`
+para las verticales, de modo que ordenarlos alfabéticamente es ordenarlos por día de
+publicación.
+
+`render.py` existe por una trampa: `chrome --headless=new --screenshot` escribe el PNG y
+después se cuelga. El script corre cada render con `timeout` y mata el proceso; si además
+el artboard lleva una captura o una foto, el archivo tiene que estar **junto** al `.dc.html`
+para que el render local lo resuelva.

@@ -53,52 +53,89 @@ segundos, onda de audio sobre tinta, la frase clave en serif, «Blu Radio · fec
 
 ---
 
-## 3. Tanda 1 reordenada (9 al 28 de septiembre)
+## 3. Calendario: una publicación diaria del 17 de septiembre al 14 de octubre
 
-La tanda original tenía dos piezas de método y ninguna prueba de tercero fuerte. Se
-reemplazan Método y Qué construimos por el reconocimiento de ODR 2026 y la mención de
-10ampro; pasan a la tanda 2.
+Reprogramado el 17 de septiembre de 2026. El calendario anterior (tandas de 9 empezando el
+9 de septiembre) venció sin publicar: el perfil seguía sin cuenta profesional ni Metricool.
+Quedan 28 días hasta el Día D y se usan todos, uno por día.
+
+**Catorce de las 28 son del Día D.** No van dos días seguidos hasta el 7 de octubre, para
+que el grid no se convierta en el afiche de un evento ajeno. Del 8 al 14 sí van seguidas:
+es la semana del evento y ahí la densidad juega a favor.
 
 | # | Fecha | Publicación | Familia |
 |---|---|---|---|
-| 1 | Mié 09-sep | De un problema real a software en producción | Marca |
-| 2 | Vie 11-sep | Amparo.help ganó un lugar en el hackathon de ODR 2026 | Reconocimiento (foto Harvard) |
-| 3 | Lun 14-sep | Tribai | Trabajo |
-| 4 | Mié 16-sep | «El cerebro tributario de Colombia…» · @10ampro | Nos mencionan |
-| 5 | Vie 18-sep | Gobia | Trabajo |
-| 6 | Lun 21-sep | Lo que la máquina no puede firmar | Columna |
-| 7 | Mié 23-sep | Kelsen | Trabajo |
-| 8 | Vie 25-sep | The Commonplace | Prensa |
-| 9 | Lun 28-sep | Laudos | Trabajo |
+| 1 | Jue 17-sep | De un problema real a software en producción | Marca |
+| 2 | Vie 18-sep | Amparo.help ganó un lugar en el hackathon de ODR 2026 | Reconocimiento |
+| 3 | Sáb 19-sep | Tribai | Trabajo |
+| 4 | Dom 20-sep | Siete aliados. Nosotros somos el software | **Día D** |
+| 5 | Lun 21-sep | «El cerebro tributario de Colombia…» · @10ampro | Nos mencionan |
+| 6 | Mar 22-sep | Gobia | Trabajo |
+| 7 | Mié 23-sep | Capital en IA, robótica, defensa y energía · Joe McCann | **Día D** |
+| 8 | Jue 24-sep | Lo que la máquina no puede firmar | Columna |
+| 9 | Vie 25-sep | Kelsen | Trabajo |
+| 10 | Sáb 26-sep | Tres reglas del Día D | **Día D** |
+| 11 | Dom 27-sep | The Commonplace | Prensa |
+| 12 | Lun 28-sep | Laudos | Trabajo |
+| 13 | Mar 29-sep | Somos aliados de El Día D | **Día D** |
+| 14 | Mié 30-sep | Cómo trabajamos | Método |
+| 15 | Jue 01-oct | El PIB que ya ocurre onchain · Santiago Santos | **Día D** |
+| 16 | Vie 02-oct | Tribai entre las 3 plataformas · @egonomista | Nos mencionan |
+| 17 | Sáb 03-oct | Celsia y el Energy Valley · Ricardo Sierra | **Día D** |
+| 18 | Dom 04-oct | Qué construimos | Método |
+| 19 | Lun 05-oct | Segovia votó desde el celular | Trabajo |
+| 20 | Mar 06-oct | «Estar cerca de las mejores conversaciones…» | **Día D** |
+| 21 | Mié 07-oct | Porkia | Trabajo |
+| 22 | Jue 08-oct | Infraestructura de carga eléctrica · André Joffroy | **Día D** |
+| 23 | Vie 09-oct | Péptidos y longevidad · Ospina y Palacio | **Día D** |
+| 24 | Sáb 10-oct | Auditorio Fundadores, EAFIT | **Día D** |
+| 25 | Dom 11-oct | Después de las conversaciones, alguien tiene que construirlo | **Día D** |
+| 26 | Lun 12-oct | Faltan dos días | **Día D** |
+| 27 | Mar 13-oct | Mañana es el Día D | **Día D** |
+| 28 | Mié 14-oct | Hoy es el Día D | **Día D** |
 
-Historias de la tanda 1: cada publicación el mismo día; además, esta semana, repost del
-reel de @egonomista y del reel de @10ampro en historias, guardados en el highlight
-«Prensa».
+Después del 14 de octubre quedan pendientes, con material que hoy no existe: las fotos
+reales del evento (publicación de cierre), el audiograma de Blu Radio y la pieza de equipo
+con fotos de Jaime y Cristian.
+
+### Historias (1080 × 1920)
+
+Catorce piezas verticales, todas del Día D, en `exports/*/historia_*`. Se publican el mismo
+día que su publicación hermana, salvo la cuenta regresiva, que sale el 30 de septiembre
+(faltan 14), el 7 de octubre (faltan 7), el 11 (faltan 3), el 13 (mañana) y el 14 (hoy).
+Las dos últimas son plantillas con un hueco marcado para pegar encima la foto real del día.
+
+En todas: **sticker de enlace a eldiad.10am.pro** y **mención a @10ampro**, que es lo que
+permite que 10ampro pueda repostearlas. Todas al highlight nuevo **«Día D»**.
 
 ---
 
-## 4. Tanda 2: del 30 de septiembre al Día D
+## 4. Qué se puede decir del Día D y qué no
 
-| # | Fecha | Publicación | Familia | Depende de |
-|---|---|---|---|---|
-| 10 | Mié 30-sep | Somos aliados de El Día D | Evento | Nada, ya diseñado |
-| 11 | Vie 02-oct | Cómo trabajamos | Método | Nada, ya diseñado |
-| 12 | Lun 05-oct | 1.549 personas ya votaron · Segovia (foto aérea; cifra final tras el cierre del 3-oct) | Trabajo | Visto bueno de la Alcaldía para publicar la cifra |
-| 13 | Mié 07-oct | Qué construimos | Método | Nada, ya diseñado |
-| 14 | Vie 09-oct | Tribai entre las 3 plataformas · @egonomista | Nos mencionan | Nada |
-| 15 | Lun 12-oct (festivo) | Jaime y Cristian: quiénes construyen | Personas | Fotos reales |
-| 16 | Mar 13-oct | Mañana, Día D: agenda y dónde encontrarnos | Evento | Confirmar espacio físico de INPLUX en el evento |
-| 17 | Mié 14-oct | Historias en vivo todo el día; al cierre, una foto real del auditorio | Evento | Estar allí con el teléfono |
-| 18 | Jue 15-oct | Lo que vimos en el Día D, con fotos reales | Evento | Fotos del día |
-| 19 | Vie 16-oct | Audiograma Blu Radio 1 o Panel del Comité de Arbitraje | Radio / Evento | Audio y fecha de la entrevista |
+Todo lo publicado sale de eldiad.10am.pro, consultada el 17 de septiembre de 2026. INPLUX
+figura ahí como aliado en la categoría **Software**, junto a Veronorte (capital), EAFIT
+(sede), Makeno (logística), MBS & Associates (sociedades en el exterior), MacroWise
+(epistemic capital) y Celsia (energía).
 
-Si el 12 de octubre no hay fotos reales del equipo, ese día sale Porkia (Trabajo, ya
-diseñada) y la pieza de personas espera.
+**Se puede:** nombrar a los invitados y su campo tal como los describe la página; citar los
+tres principios y la definición literal del público; dar fecha, hora y lugar; decir que
+somos el aliado de software.
 
-⚠️ **Segovia:** la plataforma oculta los conteos durante la votación a propósito y los
-resultados se publican el 3 de octubre. El total de participación (no el reparto por línea)
-es lo único que se cuenta, y solo con acuerdo de la Alcaldía. Publicado el 5 de octubre con
-la cifra final, la pieza es más fuerte y no adelanta nada.
+**No se puede:**
+- **Precio.** La página dice USD 300 y la estrategia de la semana pasada decía que subía a
+  USD 400 el 13 de septiembre. El dato está en conflicto y no somos taquilla: se omite.
+- **Stand, tarima o agenda propia.** Solo hay logo en la lista de aliados. Nada de «ven a
+  buscarnos» hasta que 10ampro confirme un espacio.
+- **El afterparty del rooftop de El Zarzo.** Está reservado a 80 suscriptores Alpha. No es
+  nuestro para ofrecerlo.
+- **Retratos de los invitados.** No tenemos derechos sobre sus fotos. Las piezas de «quién
+  habla» son tipográficas a propósito.
+
+⚠️ **Segovia (publicación 19):** la votación cerró el 13 de septiembre y la Alcaldía todavía
+no publica los resultados. La pieza se rehizo **sin la cifra**. Cuando la Alcaldía publique,
+añadir el total de participación como primera línea y volver a renderizar. Nunca el reparto
+por línea de inversión. Si el 5 de octubre no hay autorización, correr la publicación un día
+y adelantar la 20.
 
 ---
 

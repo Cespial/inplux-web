@@ -1,96 +1,136 @@
 {
   "artboards": [
     {
-      "file": "Laudos.dc.html",
-      "title": "9 · Trabajo · Laudos",
+      "file": "Main.dc.html",
+      "title": "1 · 17-SEP · Marca",
       "x": 0,
-      "y": 0,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Commonplace.dc.html",
-      "title": "8 · Prensa · The Commonplace",
-      "x": 1180,
-      "y": 0,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Kelsen.dc.html",
-      "title": "7 · Trabajo · Kelsen",
-      "x": 2360,
-      "y": 0,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Columna.dc.html",
-      "title": "6 · Columna · Al Poniente",
-      "x": 0,
-      "y": 1470,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Gobia.dc.html",
-      "title": "5 · Trabajo · Gobia",
-      "x": 1180,
-      "y": 1470,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Mencion.dc.html",
-      "title": "4 · Nos mencionan · 10ampro",
-      "x": 2360,
-      "y": 1470,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Tribai.dc.html",
-      "title": "3 · Trabajo · Tribai",
-      "x": 0,
-      "y": 2940,
+      "y": 13230,
       "w": 1080,
       "h": 1350
     },
     {
       "file": "Harvard.dc.html",
-      "title": "2 · Reconocimiento · ODR 2026",
-      "x": 1180,
-      "y": 2940,
+      "title": "2 · 18-SEP · Reconocimiento · ODR 2026",
+      "x": 2360,
+      "y": 11760,
       "w": 1080,
       "h": 1350
     },
     {
-      "file": "Main.dc.html",
-      "title": "1 · Marca",
+      "file": "Tribai.dc.html",
+      "title": "3 · 19-SEP · Trabajo · Tribai",
+      "x": 1180,
+      "y": 11760,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDAliados.dc.html",
+      "title": "4 · 20-SEP · Día D · Siete aliados",
+      "x": 0,
+      "y": 11760,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Mencion.dc.html",
+      "title": "5 · 21-SEP · Nos mencionan · @10ampro",
       "x": 2360,
-      "y": 2940,
+      "y": 10290,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Gobia.dc.html",
+      "title": "6 · 22-SEP · Trabajo · Gobia",
+      "x": 1180,
+      "y": 10290,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDMcCann.dc.html",
+      "title": "7 · 23-SEP · Día D · Joe McCann",
+      "x": 0,
+      "y": 10290,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Columna.dc.html",
+      "title": "8 · 24-SEP · Columna · Al Poniente",
+      "x": 2360,
+      "y": 8820,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Kelsen.dc.html",
+      "title": "9 · 25-SEP · Trabajo · Kelsen",
+      "x": 1180,
+      "y": 8820,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDPrincipios.dc.html",
+      "title": "10 · 26-SEP · Día D · Tres reglas",
+      "x": 0,
+      "y": 8820,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Commonplace.dc.html",
+      "title": "11 · 27-SEP · Prensa · The Commonplace",
+      "x": 2360,
+      "y": 7350,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Laudos.dc.html",
+      "title": "12 · 28-SEP · Trabajo · Laudos",
+      "x": 1180,
+      "y": 7350,
       "w": 1080,
       "h": 1350
     },
     {
       "file": "DiaD.dc.html",
-      "title": "10 · Evento · Día D (tanda 2)",
+      "title": "13 · 29-SEP · Día D · Somos aliados",
       "x": 0,
-      "y": 4410,
-      "w": 1080,
-      "h": 1350
-    },
-    {
-      "file": "Segovia.dc.html",
-      "title": "12 · Trabajo · Segovia (tanda 2)",
-      "x": 1180,
-      "y": 4410,
+      "y": 7350,
       "w": 1080,
       "h": 1350
     },
     {
       "file": "Metodo.dc.html",
-      "title": "11 · Cómo trabajamos (tanda 2)",
+      "title": "14 · 30-SEP · Cómo trabajamos",
+      "x": 2360,
+      "y": 5880,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDSantos.dc.html",
+      "title": "15 · 01-OCT · Día D · Santiago Santos",
+      "x": 1180,
+      "y": 5880,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "Egonomista.dc.html",
+      "title": "16 · 02-OCT · Nos mencionan · @egonomista",
+      "x": 0,
+      "y": 5880,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDSierra.dc.html",
+      "title": "17 · 03-OCT · Día D · Ricardo Sierra",
       "x": 2360,
       "y": 4410,
       "w": 1080,
@@ -98,33 +138,209 @@
     },
     {
       "file": "Servicios.dc.html",
-      "title": "13 · Qué construimos (tanda 2)",
-      "x": 0,
-      "y": 5880,
+      "title": "18 · 04-OCT · Qué construimos",
+      "x": 1180,
+      "y": 4410,
       "w": 1080,
       "h": 1350
     },
     {
-      "file": "Egonomista.dc.html",
-      "title": "14 · Nos mencionan · egonomista",
-      "x": 1180,
-      "y": 5880,
+      "file": "Segovia.dc.html",
+      "title": "19 · 05-OCT · Trabajo · Segovia",
+      "x": 0,
+      "y": 4410,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDPublico.dc.html",
+      "title": "20 · 06-OCT · Día D · Para quién es",
+      "x": 2360,
+      "y": 2940,
       "w": 1080,
       "h": 1350
     },
     {
       "file": "Porkia.dc.html",
-      "title": "15 · Trabajo · Porkia (tanda 2)",
-      "x": 2360,
-      "y": 5880,
+      "title": "21 · 07-OCT · Trabajo · Porkia",
+      "x": 1180,
+      "y": 2940,
       "w": 1080,
       "h": 1350
+    },
+    {
+      "file": "DiaDJoffroy.dc.html",
+      "title": "22 · 08-OCT · Día D · André Joffroy",
+      "x": 0,
+      "y": 2940,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDLongevidad.dc.html",
+      "title": "23 · 09-OCT · Día D · Longevidad",
+      "x": 2360,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDLugar.dc.html",
+      "title": "24 · 10-OCT · Día D · El lugar",
+      "x": 1180,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDSoftware.dc.html",
+      "title": "25 · 11-OCT · Día D · Por qué estamos",
+      "x": 0,
+      "y": 1470,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDFaltan2.dc.html",
+      "title": "26 · 12-OCT · Día D · Faltan dos días",
+      "x": 2360,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDManana.dc.html",
+      "title": "27 · 13-OCT · Día D · Mañana",
+      "x": 1180,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "DiaDHoy.dc.html",
+      "title": "28 · 14-OCT · Día D · Hoy",
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1350
+    },
+    {
+      "file": "StAliados.dc.html",
+      "title": "Historia · Somos el software del Día D",
+      "x": 0,
+      "y": 16170,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StPrincipios.dc.html",
+      "title": "Historia · Tres reglas",
+      "x": 1180,
+      "y": 16170,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StMcCann.dc.html",
+      "title": "Historia · Joe McCann",
+      "x": 2360,
+      "y": 16170,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StSantos.dc.html",
+      "title": "Historia · Santiago Santos",
+      "x": 0,
+      "y": 17640,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StSierra.dc.html",
+      "title": "Historia · Ricardo Sierra",
+      "x": 1180,
+      "y": 17640,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StJoffroy.dc.html",
+      "title": "Historia · André Joffroy",
+      "x": 2360,
+      "y": 17640,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StLongevidad.dc.html",
+      "title": "Historia · Longevidad",
+      "x": 0,
+      "y": 19110,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCuenta14.dc.html",
+      "title": "Historia · Faltan 14 días",
+      "x": 1180,
+      "y": 19110,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCuenta07.dc.html",
+      "title": "Historia · Faltan 7 días",
+      "x": 2360,
+      "y": 19110,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCuenta03.dc.html",
+      "title": "Historia · Faltan 3 días",
+      "x": 0,
+      "y": 20580,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCuenta01.dc.html",
+      "title": "Historia · Mañana",
+      "x": 1180,
+      "y": 20580,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCuenta00.dc.html",
+      "title": "Historia · Hoy",
+      "x": 2360,
+      "y": 20580,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StVivo.dc.html",
+      "title": "Historia · Plantilla en vivo",
+      "x": 0,
+      "y": 22050,
+      "w": 1080,
+      "h": 1920
+    },
+    {
+      "file": "StCierre.dc.html",
+      "title": "Historia · Plantilla de cierre",
+      "x": 1180,
+      "y": 22050,
+      "w": 1080,
+      "h": 1920
     },
     {
       "file": "Avatar.dc.html",
       "title": "Avatar 1080 × 1080",
       "x": 0,
-      "y": 7350,
+      "y": 24990,
       "w": 1080,
       "h": 1080
     }
@@ -133,16 +349,16 @@
     {
       "id": "orden",
       "x": 0,
-      "y": -260,
-      "w": 1400,
-      "text": "Se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\nTanda 1 (9 al 28 de septiembre): 1 Marca · 2 Reconocimiento ODR 2026 · 3 Tribai · 4 Nos mencionan 10ampro · 5 Gobia · 6 Columna · 7 Kelsen · 8 Commonplace · 9 Laudos.\nExportar cada artboard como PNG (1080 × 1350). Captions y alt en brand/instagram/CAPTIONS.md; calendario en METRICOOL.md."
+      "y": -300,
+      "w": 1500,
+      "text": "FEED — se lee como el grid de Instagram: la publicación más reciente arriba a la izquierda.\nUna publicación diaria del 17 de septiembre al 14 de octubre de 2026 (28 en total), con el Día D de 10ampro como remate.\nCatorce piezas son del Día D; no van dos días seguidos hasta el 7 de octubre. Del 8 al 14 sí, porque es la semana del evento.\nExportar cada artboard como PNG 1080 × 1350. Captions, alt y hashtags en brand/instagram/CAPTIONS.md."
     },
     {
-      "id": "tanda2",
+      "id": "historias",
       "x": 0,
-      "y": 4210,
-      "w": 1400,
-      "text": "Tanda 2 (30 de septiembre al Día D): Aliados del Día D, Segovia (publicar con la cifra final tras el cierre del 3 de octubre, o antes con el visto bueno de la Alcaldía), Cómo trabajamos, Qué construimos, mención de @egonomista, Porkia. Faltan: audiograma Blu Radio y equipo con fotos reales."
+      "y": 15870,
+      "w": 1500,
+      "text": "HISTORIAS 1080 × 1920 — zonas seguras de 250 px arriba y 320 px abajo.\nLa cuenta regresiva se publica los días 30 de septiembre (faltan 14), 7, 11, 13 y 14 de octubre.\nLas dos últimas son plantillas: la foto real del día se pega encima desde la app de Instagram.\nEn todas, sticker de enlace a eldiad.10am.pro y mención a @10ampro."
     }
   ],
   "launch": {
