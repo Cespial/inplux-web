@@ -1,0 +1,802 @@
+<title>Camino al Día D</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --papel: #f8f8f7; --tinta: #1a1918; --texto: #1a1918; --suave: #6e6b68;
+  --linea: #e5e3e0; --acento: #0d7d74; --tarjeta: #ffffff; --alza: rgba(13,125,116,.07);
+  --serif: Newsreader, Georgia, 'Times New Roman', serif;
+  --sans: Geist, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papel: #141312; --tinta: #f8f8f7; --texto: #f2f1ef; --suave: #a8a5a0;
+    --linea: rgba(255,255,255,.13); --acento: #15dcc4; --tarjeta: #1f1e1d; --alza: rgba(21,220,196,.09);
+  }
+}
+:root[data-theme="dark"] {
+  --papel: #141312; --tinta: #f8f8f7; --texto: #f2f1ef; --suave: #a8a5a0;
+  --linea: rgba(255,255,255,.13); --acento: #15dcc4; --tarjeta: #1f1e1d; --alza: rgba(21,220,196,.09);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--papel); color: var(--texto);
+  font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.envoltura { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 56px 96px; }
+h1 {
+  font-family: var(--serif); font-weight: 300; font-size: clamp(42px, 8vw, 78px);
+  line-height: 1.02; letter-spacing: -.02em; margin: 0 0 22px; text-wrap: balance;
+}
+h1 em { font-style: italic; color: var(--acento); }
+.sobre { font-family: var(--sans); font-weight: 500; font-size: 13px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--suave); margin: 0 0 20px; }
+.entrada { max-width: 62ch; color: var(--suave); font-size: 16px; margin: 0 0 12px; }
+.entrada b { color: var(--texto); font-weight: 500; }
+.cifras { display: flex; flex-wrap: wrap; gap: 30px; margin: 34px 0 0;
+  padding-top: 26px; border-top: 1px solid var(--linea); }
+.cifra b { display: block; font-family: var(--serif); font-weight: 300; font-size: 40px;
+  line-height: 1; letter-spacing: -.02em; }
+.cifra span { font-family: var(--mono); font-size: 12px; color: var(--suave); }
+.barra { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  margin: 44px 0 30px; padding-block: 12px; background: var(--papel);
+  border-bottom: 1px solid var(--linea); }
+.filtro { font: 500 12px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase;
+  padding: 9px 15px; border-radius: 999px; border: 1px solid var(--linea);
+  background: transparent; color: var(--suave); cursor: pointer; }
+.filtro[aria-pressed="true"] { background: var(--texto); color: var(--papel); border-color: var(--texto); }
+.filtro:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.lista { display: flex; flex-direction: column; gap: 16px; }
+.pieza { display: grid; grid-template-columns: 232px 1fr; gap: 26px;
+  padding: 22px; background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 12px; }
+.pieza.es-diad { background: var(--alza); }
+.lamina img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--linea); }
+.texto { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.texto header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; }
+.num { font-family: var(--serif); font-size: 34px; font-weight: 300; line-height: 1;
+  letter-spacing: -.02em; color: var(--acento); font-variant-numeric: tabular-nums; }
+.cuando { font-family: var(--mono); font-size: 12px; color: var(--suave); }
+.etiqueta { font: 500 11px/1 var(--sans); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--suave); padding: 5px 9px; border: 1px solid var(--linea); border-radius: 4px; }
+.etiqueta.t-diad { color: var(--acento); border-color: var(--acento); }
+.copy { font-family: var(--sans); font-size: 15px; line-height: 1.55; white-space: pre-wrap;
+  padding: 15px 16px; background: var(--papel); border: 1px solid var(--linea);
+  border-radius: 8px; user-select: all; overflow-wrap: anywhere; }
+.copiar { align-self: flex-start; font: 500 11px/1 var(--sans); letter-spacing: .06em;
+  text-transform: uppercase; padding: 8px 13px; border-radius: 6px;
+  border: 1px solid var(--linea); background: transparent; color: var(--suave); cursor: pointer; }
+.copiar:hover { color: var(--texto); border-color: var(--texto); }
+.copiar:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.tags { font-family: var(--mono); font-size: 12px; color: var(--acento); margin: 0; overflow-wrap: anywhere; }
+.alt { font-size: 13px; color: var(--suave); margin: 0; }
+.alt b { font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--texto); margin-right: 6px; }
+.notas { margin: 0; padding: 12px 14px 12px 30px; border-radius: 8px;
+  border-left: 3px solid var(--acento); background: var(--alza); font-size: 13px; }
+.notas li + li { margin-top: 6px; }
+.archivo { font-family: var(--mono); font-size: 11px; color: var(--suave); margin: 0;
+  padding-top: 10px; border-top: 1px solid var(--linea); overflow-wrap: anywhere; }
+h2 { font-family: var(--serif); font-weight: 300; font-size: 42px; letter-spacing: -.02em;
+  margin: 76px 0 8px; }
+h2 em { font-style: italic; color: var(--acento); }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 18px; margin-top: 28px; }
+.hist { margin: 0; }
+.hist img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--linea); }
+.hist figcaption { font-family: var(--mono); font-size: 11px; color: var(--suave); margin-top: 8px; }
+.vacio { color: var(--suave); font-size: 14px; padding: 30px 0; }
+@media (max-width: 720px) {
+  .pieza { grid-template-columns: 1fr; }
+  .lamina { max-width: 280px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="envoltura">
+  <p class="sobre">INPLUX &middot; @inplux_ &middot; del 17 de septiembre al 14 de octubre de 2026</p>
+  <h1>Veintiocho publicaciones camino al <em>Día D</em>.</h1>
+  <p class="entrada">Una publicación diaria hasta el <b>miércoles 14 de octubre</b>, cuando el Día D de 10ampro reúne a fundadores, inversionistas, operadores, médicos y builders en el Auditorio Fundadores de EAFIT. INPLUX figura en la lista de aliados con la etiqueta <b>Software</b>.</p>
+  <p class="entrada">Cada pieza está lista para subir. El caption se copia tal cual; el texto alternativo va en el campo de accesibilidad de Instagram. Las piezas marcadas tienen algo pendiente que solo el equipo puede cerrar.</p>
+
+  <div class="cifras">
+    <div class="cifra"><b>28</b><span>publicaciones</span></div>
+    <div class="cifra"><b>14</b><span>del Día D</span></div>
+    <div class="cifra"><b>14</b><span>historias</span></div>
+    <div class="cifra"><b>3</b><span>con pendientes</span></div>
+  </div>
+
+  <div class="barra" role="group" aria-label="Filtrar publicaciones">
+    <button class="filtro" data-f="todas" aria-pressed="true">Todas</button>
+    <button class="filtro" data-f="diad" aria-pressed="false">Solo Día D</button>
+    <button class="filtro" data-f="pend" aria-pressed="false">Con pendientes</button>
+  </div>
+
+  <div class="lista" id="lista">
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-17_01_marca.jpg" alt="Fondo oscuro con el símbolo de INPLUX, tres barras ascendentes, y el texto «De un problema real a software en producción»." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">1</span>
+      <span class="cuando">jueves 17-sep</span>
+      <span class="etiqueta">Marca</span>
+    </header>
+    <div class="copy" id="c1">De un problema real a software en producción.
+
+Esa frase es lo que hacemos. INPLUX diseña, construye y evoluciona productos digitales para empresas y entidades. La IA acelera el trabajo. Personas expertas dirigen y validan las decisiones críticas.
+
+Desde hoy este espacio muestra el trabajo, no promesas.
+inplux.co</div>
+    <button class="copiar" data-obj="c1">Copiar caption</button>
+    <p class="tags">#fábricadesoftware #medellín #softwarealamedida</p>
+    <p class="alt"><b>Alt</b> Fondo oscuro con el símbolo de INPLUX, tres barras ascendentes, y el texto «De un problema real a software en producción».</p>
+    
+    <p class="archivo">exports/jpg/2026-09-17_01_marca.jpg &middot; exports/png/2026-09-17_01_marca.png</p>
+  </div>
+</article>
+<article class="pieza es-pendiente" data-diad="0" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-18_02_reconocimiento-odr-2026.jpg" alt="Fotografía en blanco y negro del letrero de Harvard Business School con el texto «Amparo.help ganó un lugar en el hackathon de ODR 2026»." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">2</span>
+      <span class="cuando">viernes 18-sep</span>
+      <span class="etiqueta">Reconocimiento · ODR 2026</span>
+    </header>
+    <div class="copy" id="c2">Amparo.help ganó un lugar en el hackathon de ODR 2026.
+
+En junio pasamos una semana en Boston, en el encuentro de Online Dispute Resolution en Harvard Business School. En el hackathon de la American Arbitration Association y odr.com, en Suffolk University, llevamos Amparo.help: un prototipo para resolver disputas de salud sin abogados ni costos de juzgado, con la decisión final en manos humanas.
+
+El reconocimiento confirmó algo: el valor no estaba solo en el modelo, sino en cómo rediseñamos el proceso.
+amparo.help</div>
+    <button class="copiar" data-obj="c2">Copiar caption</button>
+    <p class="tags">#legaltech #odr #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Fotografía en blanco y negro del letrero de Harvard Business School con el texto «Amparo.help ganó un lugar en el hackathon de ODR 2026».</p>
+    <ul class="notas"><li>Precisar el puesto exacto («ganó un lugar»: ¿primero, finalista, mención?).
+Etiquetar las cuentas oficiales de la American Arbitration Association, odr.com y Suffolk University; verificar handles antes de publicar.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-18_02_reconocimiento-odr-2026.jpg &middot; exports/png/2026-09-18_02_reconocimiento-odr-2026.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-19_03_tribai.jpg" alt="Captura de pantalla del asistente tributario de Tribai dentro de un marco de navegador con la dirección app.tribai.co." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">3</span>
+      <span class="cuando">sábado 19-sep</span>
+      <span class="etiqueta">Trabajo · Tribai</span>
+    </header>
+    <div class="copy" id="c3">Encontrar criterio tributario sin perder la fuente.
+
+Tribai es una consulta tributaria con fuentes visibles: cada respuesta muestra de dónde sale y si sigue vigente. Es público y está en app.tribai.co.
+
+Captura real del asistente, 21 de julio de 2026.</div>
+    <button class="copiar" data-obj="c3">Copiar caption</button>
+    <p class="tags">#fábricadesoftware #legaltech #medellín</p>
+    <p class="alt"><b>Alt</b> Captura de pantalla del asistente tributario de Tribai dentro de un marco de navegador con la dirección app.tribai.co.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-19_03_tribai.jpg &middot; exports/png/2026-09-19_03_tribai.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-20_04_dia-d-aliados.jpg" alt="Lista de siete aliados del Día D con su categoría: Veronorte en capital, la Universidad EAFIT como sede, Makeno en logística, MBS &amp; Associates en sociedades en el exterior, MacroWise en epistemic capital, Celsia en energía e INPLUX en software." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">4</span>
+      <span class="cuando">domingo 20-sep</span>
+      <span class="etiqueta t-diad">Día D · Siete aliados</span>
+    </header>
+    <div class="copy" id="c4">Siete aliados. Nosotros somos el software.
+
+El 14 de octubre el Día D reúne en Medellín a fundadores, inversionistas, operadores, médicos y builders. @10ampro organizó la lista de aliados por categorías: capital, sede, logística, sociedades en el exterior, epistemic capital, energía y software.
+
+La última es la nuestra. De un problema real a producción.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c4">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Lista de siete aliados del Día D con su categoría: Veronorte en capital, la Universidad EAFIT como sede, Makeno en logística, MBS &amp; Associates en sociedades en el exterior, MacroWise en epistemic capital, Celsia en energía e INPLUX en software.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-20_04_dia-d-aliados.jpg &middot; exports/png/2026-09-20_04_dia-d-aliados.png</p>
+  </div>
+</article>
+<article class="pieza es-pendiente" data-diad="0" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-21_05_nos-mencionan-10ampro.jpg" alt="Cita sobre fondo oscuro: «El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro», atribuida a un reel de 10ampro." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">5</span>
+      <span class="cuando">lunes 21-sep</span>
+      <span class="etiqueta">Nos mencionan · @10ampro</span>
+    </header>
+    <div class="copy" id="c5">«El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro».
+
+Así presentó @10ampro a Tribai en un reel con Hernán Jaramillo. Gracias por contarlo.
+
+Tribai es consulta tributaria con fuentes visibles, construida en Medellín. Es pública: app.tribai.co</div>
+    <button class="copiar" data-obj="c5">Copiar caption</button>
+    <p class="tags">#tribai #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Cita sobre fondo oscuro: «El cerebro tributario de Colombia construido con AI por los Alphas de 10ampro», atribuida a un reel de 10ampro.</p>
+    <ul class="notas"><li>Confirmar la fecha del reel para el pie de la pieza.
+Etiquetar: @10ampro y la cuenta de Hernán Jaramillo (holdmybirra). Comentar además desde @inplux_ en el reel original el mismo día.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-21_05_nos-mencionan-10ampro.jpg &middot; exports/png/2026-09-21_05_nos-mencionan-10ampro.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-22_06_gobia.jpg" alt="Captura de pantalla de la demo de Gobia con el mapa de Medellín y un panel fiscal, dentro de un marco de navegador oscuro." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">6</span>
+      <span class="cuando">martes 22-sep</span>
+      <span class="etiqueta">Trabajo · Gobia</span>
+    </header>
+    <div class="copy" id="c6">Hacer visible la operación de un municipio.
+
+Gobia reúne información y seguimiento municipal en un solo entorno. Está en piloto activo y la demo pública se puede recorrer en gobia.co/demo.
+
+Captura real, 21 de julio de 2026.</div>
+    <button class="copiar" data-obj="c6">Copiar caption</button>
+    <p class="tags">#govtech #fábricadesoftware #medellín</p>
+    <p class="alt"><b>Alt</b> Captura de pantalla de la demo de Gobia con el mapa de Medellín y un panel fiscal, dentro de un marco de navegador oscuro.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-22_06_gobia.jpg &middot; exports/png/2026-09-22_06_gobia.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-23_07_dia-d-mccann.jpg" alt="Texto sobre fondo oscuro: «Capital en IA, robótica, defensa y energía», con el nombre de Joe McCann, trader e inversionista, y la fecha del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">7</span>
+      <span class="cuando">miércoles 23-sep</span>
+      <span class="etiqueta t-diad">Día D · Joe McCann</span>
+    </header>
+    <div class="copy" id="c7">Capital en IA, robótica, defensa y energía.
+
+Es el terreno de Joe McCann, trader e inversionista, uno de los invitados del Día D. Miércoles 14 de octubre, Auditorio Fundadores de EAFIT, Medellín.
+
+Somos el aliado de software del evento. Vamos a estar ahí.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c7">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #ia #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Capital en IA, robótica, defensa y energía», con el nombre de Joe McCann, trader e inversionista, y la fecha del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-23_07_dia-d-mccann.jpg &middot; exports/png/2026-09-23_07_dia-d-mccann.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-24_08_columna.jpg" alt="Título de columna sobre fondo oscuro: «Lo que la máquina no puede firmar», con el nombre del autor y la fecha." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">8</span>
+      <span class="cuando">jueves 24-sep</span>
+      <span class="etiqueta">Columna · Al Poniente</span>
+    </header>
+    <div class="copy" id="c8">Lo que la máquina no puede firmar.
+
+Columna de Jaime Alonso Cano Pino en Al Poniente, 12 de junio de 2026, sobre responsabilidad, revisión y lo que permanece bajo dirección humana cuando la IA hace parte del trabajo.
+
+La columna completa está en alponiente.com.</div>
+    <button class="copiar" data-obj="c8">Copiar caption</button>
+    <p class="tags">#ia #criterio #medellín</p>
+    <p class="alt"><b>Alt</b> Título de columna sobre fondo oscuro: «Lo que la máquina no puede firmar», con el nombre del autor y la fecha.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-24_08_columna.jpg &middot; exports/png/2026-09-24_08_columna.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-25_09_kelsen.jpg" alt="Captura de pantalla del explorador legal de Kelsen con resultados del corpus jurídico, dentro de un marco de navegador." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">9</span>
+      <span class="cuando">viernes 25-sep</span>
+      <span class="etiqueta">Trabajo · Kelsen</span>
+    </header>
+    <div class="copy" id="c9">Trabajar conocimiento jurídico con una ruta verificable.
+
+Kelsen es investigación jurídica con trazabilidad a la fuente: normas, jurisprudencia y vigencia en un mismo explorador. Acceso por solicitud.
+
+Captura real del explorador público, 21 de julio de 2026.</div>
+    <button class="copiar" data-obj="c9">Copiar caption</button>
+    <p class="tags">#legaltech #fábricadesoftware #medellín</p>
+    <p class="alt"><b>Alt</b> Captura de pantalla del explorador legal de Kelsen con resultados del corpus jurídico, dentro de un marco de navegador.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-25_09_kelsen.jpg &middot; exports/png/2026-09-25_09_kelsen.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-26_10_dia-d-principios.jpg" alt="Lista numerada de tres reglas del Día D sobre fondo oscuro: Open Source Capital, Collective Intelligence y Network Sharing, cada una con una línea de explicación." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">10</span>
+      <span class="cuando">sábado 26-sep</span>
+      <span class="etiqueta t-diad">Día D · Tres reglas</span>
+    </header>
+    <div class="copy" id="c10">Tres reglas del Día D.
+
+01 Open Source Capital: compartir tesis y aprendizajes en vez de guardarlos. 02 Collective Intelligence: la sincronización de personas inteligentes en un mismo lugar. 03 Network Sharing: activar las redes propias para acelerar a la gente correcta.
+
+Así opera el evento que organiza @10ampro el 14 de octubre. Se parece bastante a como trabajamos cuando construimos software con un cliente.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c10">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Lista numerada de tres reglas del Día D sobre fondo oscuro: Open Source Capital, Collective Intelligence y Network Sharing, cada una con una línea de explicación.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-26_10_dia-d-principios.jpg &middot; exports/png/2026-09-26_10_dia-d-principios.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-27_11_commonplace.jpg" alt="Texto sobre fondo oscuro: «Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace», con la fecha 6 de abril de 2026." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">11</span>
+      <span class="cuando">domingo 27-sep</span>
+      <span class="etiqueta">Prensa · The Commonplace</span>
+    </header>
+    <div class="copy" id="c11">Dos investigaciones del equipo sobre IA y trabajo fueron seleccionadas por The Commonplace, el boletín internacional de Workforce Futures, en su edición del 6 de abril de 2026.
+
+Investigar cómo cambia el trabajo con IA es parte de cómo construimos software: primero entender, después programar.</div>
+    <button class="copiar" data-obj="c11">Copiar caption</button>
+    <p class="tags">#ia #trabajo #investigación #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Dos investigaciones sobre IA y trabajo, destacadas por The Commonplace», con la fecha 6 de abril de 2026.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-27_11_commonplace.jpg &middot; exports/png/2026-09-27_11_commonplace.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-28_12_laudos.jpg" alt="Captura de pantalla del laboratorio de predicción de Laudos dentro de un marco de navegador." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">12</span>
+      <span class="cuando">lunes 28-sep</span>
+      <span class="etiqueta">Trabajo · Laudos</span>
+    </header>
+    <div class="copy" id="c12">Explorar conocimiento arbitral con estructura.
+
+Laudos es búsqueda de laudos y jurisprudencia arbitral, cocreada con REDEK. Está en beta abierta en laudos.co.
+
+Captura real del laboratorio de predicción, 21 de julio de 2026.</div>
+    <button class="copiar" data-obj="c12">Copiar caption</button>
+    <p class="tags">#arbitraje #legaltech #medellín</p>
+    <p class="alt"><b>Alt</b> Captura de pantalla del laboratorio de predicción de Laudos dentro de un marco de navegador.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-28_12_laudos.jpg &middot; exports/png/2026-09-28_12_laudos.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-09-29_13_dia-d-somos-aliados.jpg" alt="Fotografía de Medellín entre niebla con el texto «Somos aliados de El Día D», la fecha, el lugar y el nombre de INPLUX." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">13</span>
+      <span class="cuando">martes 29-sep</span>
+      <span class="etiqueta t-diad">Día D · Somos aliados</span>
+    </header>
+    <div class="copy" id="c13">Somos aliados de El Día D.
+
+Miércoles 14 de octubre de 2026, de 10:00 a. m. a 5:00 p. m., Auditorio Fundadores de la Universidad EAFIT, Medellín. Un día de founders, inversionistas, operadores y builders organizado por @10ampro.
+
+Nuestro lugar en la lista: software, de un problema real a producción.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c13">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Fotografía de Medellín entre niebla con el texto «Somos aliados de El Día D», la fecha, el lugar y el nombre de INPLUX.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro. Pedirle por mensaje la colaboración (coautor) antes de publicar: si acepta, la publicación aparece en las dos cuentas.</li></ul>
+    <p class="archivo">exports/jpg/2026-09-29_13_dia-d-somos-aliados.jpg &middot; exports/png/2026-09-29_13_dia-d-somos-aliados.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-09-30_14_como-trabajamos.jpg" alt="Lista numerada de cuatro pasos sobre fondo claro: entendemos el reto, definimos el producto, construimos y probamos, lanzamos y evolucionamos." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">14</span>
+      <span class="cuando">miércoles 30-sep</span>
+      <span class="etiqueta">Cómo trabajamos</span>
+    </header>
+    <div class="copy" id="c14">Cómo trabajamos.
+
+01 Entendemos el reto. 02 Definimos el producto. 03 Construimos y probamos. 04 Lanzamos y evolucionamos.
+
+No hace falta llegar con los requisitos definidos. Empezamos por el problema, las personas involucradas y el resultado esperado.
+Hablemos: inplux.co</div>
+    <button class="copiar" data-obj="c14">Copiar caption</button>
+    <p class="tags">#fábricadesoftware #softwarealamedida #medellín</p>
+    <p class="alt"><b>Alt</b> Lista numerada de cuatro pasos sobre fondo claro: entendemos el reto, definimos el producto, construimos y probamos, lanzamos y evolucionamos.</p>
+    
+    <p class="archivo">exports/jpg/2026-09-30_14_como-trabajamos.jpg &middot; exports/png/2026-09-30_14_como-trabajamos.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-01_15_dia-d-santos.jpg" alt="Texto sobre fondo oscuro: «El PIB que ya ocurre onchain», con el nombre de Santiago Santos, inversionista en Ethereum y Solana, y la fecha del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">15</span>
+      <span class="cuando">jueves 01-oct</span>
+      <span class="etiqueta t-diad">Día D · Santiago Santos</span>
+    </header>
+    <div class="copy" id="c15">El PIB que ya ocurre onchain.
+
+Santiago Santos, inversionista en Ethereum y Solana, lleva esa tesis al Día D el miércoles 14 de octubre, en el Auditorio Fundadores de EAFIT.
+
+Somos el aliado de software del evento.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c15">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «El PIB que ya ocurre onchain», con el nombre de Santiago Santos, inversionista en Ethereum y Solana, y la fecha del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-01_15_dia-d-santos.jpg &middot; exports/png/2026-10-01_15_dia-d-santos.png</p>
+  </div>
+</article>
+<article class="pieza es-pendiente" data-diad="0" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-02_16_nos-mencionan-egonomista.jpg" alt="Cita sobre fondo claro que atribuye a egonomista la recomendación de Tribai entre tres plataformas para declarar renta." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">16</span>
+      <span class="cuando">viernes 02-oct</span>
+      <span class="etiqueta">Nos mencionan · @egonomista</span>
+    </header>
+    <div class="copy" id="c16">Tribai, entre las tres plataformas que @egonomista recomienda para preparar la declaración de renta.
+
+Como dice él: automatizar no significa confiar a ciegas. Por eso cada respuesta de Tribai muestra su fuente y su vigencia. La responsabilidad sigue siendo de quien firma.
+app.tribai.co</div>
+    <button class="copiar" data-obj="c16">Copiar caption</button>
+    <p class="tags">#tribai #declaraciónderenta #medellín</p>
+    <p class="alt"><b>Alt</b> Cita sobre fondo claro que atribuye a egonomista la recomendación de Tribai entre tres plataformas para declarar renta.</p>
+    <ul class="notas"><li>Etiquetar: @egonomista. Comentar además desde @inplux_ en el reel original.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-02_16_nos-mencionan-egonomista.jpg &middot; exports/png/2026-10-02_16_nos-mencionan-egonomista.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-03_17_dia-d-sierra.jpg" alt="Texto sobre fondo oscuro: «Celsia y el Energy Valley», con el nombre de Ricardo Sierra, CEO de Celsia, y la fecha del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">17</span>
+      <span class="cuando">sábado 03-oct</span>
+      <span class="etiqueta t-diad">Día D · Ricardo Sierra</span>
+    </header>
+    <div class="copy" id="c17">Celsia y el Energy Valley.
+
+Ricardo Sierra, CEO de Celsia, habla de energía en el Día D. Celsia también es aliado del evento, en la categoría de energía; nosotros en la de software.
+
+Miércoles 14 de octubre, Auditorio Fundadores de EAFIT, Medellín.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c17">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #energía #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Celsia y el Energy Valley», con el nombre de Ricardo Sierra, CEO de Celsia, y la fecha del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro y la cuenta oficial de Celsia.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-03_17_dia-d-sierra.jpg &middot; exports/png/2026-10-03_17_dia-d-sierra.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-10-04_18_que-construimos.jpg" alt="Tres bloques numerados sobre fondo oscuro: lanzar un producto digital, mejorar una operación, automatizar trabajo y conocimiento." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">18</span>
+      <span class="cuando">domingo 04-oct</span>
+      <span class="etiqueta">Qué construimos</span>
+    </header>
+    <div class="copy" id="c18">Qué construimos.
+
+Lanzar un producto digital. Mejorar una operación. Automatizar trabajo y conocimiento.
+
+Aplicaciones web y móviles, plataformas, portales, herramientas internas y automatizaciones alrededor de un problema concreto.
+inplux.co</div>
+    <button class="copiar" data-obj="c18">Copiar caption</button>
+    <p class="tags">#fábricadesoftware #softwarealamedida #medellín</p>
+    <p class="alt"><b>Alt</b> Tres bloques numerados sobre fondo oscuro: lanzar un producto digital, mejorar una operación, automatizar trabajo y conocimiento.</p>
+    
+    <p class="archivo">exports/jpg/2026-10-04_18_que-construimos.jpg &middot; exports/png/2026-10-04_18_que-construimos.png</p>
+  </div>
+</article>
+<article class="pieza es-pendiente" data-diad="0" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-05_19_segovia.jpg" alt="Fotografía aérea de Segovia, Antioquia, con el texto: «La gente de Segovia votó las obras de su vereda desde el celular»." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">19</span>
+      <span class="cuando">lunes 05-oct</span>
+      <span class="etiqueta">Trabajo · Segovia</span>
+    </header>
+    <div class="copy" id="c19">La gente de Segovia votó las obras de su vereda desde el celular.
+
+Es el presupuesto participativo de Segovia, Antioquia. Construimos la plataforma con la Alcaldía: cada persona elige con su cédula y un celular, en unos cinco minutos, en qué se invierte la plata de su comunidad. La votación cerró el 13 de septiembre.
+
+participativo-segovia.vercel.app</div>
+    <button class="copiar" data-obj="c19">Copiar caption</button>
+    <p class="tags">#govtech #participaciónciudadana #segovia #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Fotografía aérea de Segovia, Antioquia, con el texto: «La gente de Segovia votó las obras de su vereda desde el celular».</p>
+    <ul class="notas"><li>Bloqueante. La Alcaldía todavía no publica los resultados. Cuando lo haga, añadir la cifra final de participación como primera línea («N personas votaron…») y actualizar la pieza. Nunca publicar el reparto por línea de inversión. Si el 5 de octubre aún no hay autorización, correr esta publicación y adelantar la n.º 20.
+Etiquetar la cuenta oficial de la Alcaldía de Segovia solo con su acuerdo.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-05_19_segovia.jpg &middot; exports/png/2026-10-05_19_segovia.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-06_20_dia-d-publico.jpg" alt="Cita sobre fondo oscuro: «Estar cerca de las mejores conversaciones es una forma de capital», con la lista de a quién está dirigido el Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">20</span>
+      <span class="cuando">martes 06-oct</span>
+      <span class="etiqueta t-diad">Día D · Para quién es</span>
+    </header>
+    <div class="copy" id="c20">«Estar cerca de las mejores conversaciones es una forma de capital».
+
+Así define @10ampro a quién va dirigido el Día D: fundadores, inversionistas, operadores, médicos, builders. Y dice con la misma claridad para quién no es: para quien busque frases lindas, networking transaccional o confirmar lo que ya cree.
+
+Miércoles 14 de octubre, EAFIT, Medellín.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c20">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Cita sobre fondo oscuro: «Estar cerca de las mejores conversaciones es una forma de capital», con la lista de a quién está dirigido el Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-06_20_dia-d-publico.jpg &middot; exports/png/2026-10-06_20_dia-d-publico.png</p>
+  </div>
+</article>
+<article class="pieza" data-diad="0" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-10-07_21_porkia.jpg" alt="Captura de pantalla de la demo de Porkia dentro de un marco de navegador con la dirección porkia.co." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">21</span>
+      <span class="cuando">miércoles 07-oct</span>
+      <span class="etiqueta">Trabajo · Porkia</span>
+    </header>
+    <div class="copy" id="c21">Llevar una finca porcícola sin volver al cuaderno.
+
+Porkia registra lotes, cuido, sanidad y cuentas de una finca porcícola desde el celular. Beta cerrada, acceso por solicitud, en porkia.co.
+
+Captura real de la demo, 11 de agosto de 2026.</div>
+    <button class="copiar" data-obj="c21">Copiar caption</button>
+    <p class="tags">#agrotech #fábricadesoftware #medellín</p>
+    <p class="alt"><b>Alt</b> Captura de pantalla de la demo de Porkia dentro de un marco de navegador con la dirección porkia.co.</p>
+    
+    <p class="archivo">exports/jpg/2026-10-07_21_porkia.jpg &middot; exports/png/2026-10-07_21_porkia.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-08_22_dia-d-joffroy.jpg" alt="Texto sobre fondo oscuro: «Infraestructura de carga eléctrica», con el nombre de André Joffroy, founder y CIO de Zaps, y la fecha del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">22</span>
+      <span class="cuando">jueves 08-oct</span>
+      <span class="etiqueta t-diad">Día D · André Joffroy</span>
+    </header>
+    <div class="copy" id="c22">Infraestructura de carga eléctrica.
+
+André Joffroy, founder y CIO de Zaps, en el Día D. Es de las conversaciones donde el software deja de ser accesorio: cargar un carro es al mismo tiempo un problema de energía, de ubicación y de datos.
+
+Miércoles 14 de octubre, Auditorio Fundadores de EAFIT.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c22">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #energía #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Infraestructura de carga eléctrica», con el nombre de André Joffroy, founder y CIO de Zaps, y la fecha del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-08_22_dia-d-joffroy.jpg &middot; exports/png/2026-10-08_22_dia-d-joffroy.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-09_23_dia-d-longevidad.jpg" alt="Texto sobre fondo oscuro: «Péptidos y longevidad», con los nombres de los médicos Camilo Ospina y Andrés Palacio y la fecha del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">23</span>
+      <span class="cuando">viernes 09-oct</span>
+      <span class="etiqueta t-diad">Día D · Longevidad</span>
+    </header>
+    <div class="copy" id="c23">Péptidos y longevidad.
+
+Camilo Ospina y Andrés Palacio, médicos, llevan al Día D una conversación que casi nunca se cruza con la de capital y tecnología. En este evento sí.
+
+Miércoles 14 de octubre, Auditorio Fundadores de EAFIT, Medellín.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c23">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #salud #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Péptidos y longevidad», con los nombres de los médicos Camilo Ospina y Andrés Palacio y la fecha del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-09_23_dia-d-longevidad.jpg &middot; exports/png/2026-10-09_23_dia-d-longevidad.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-10_24_dia-d-lugar.jpg" alt="Texto sobre fondo oscuro: «Auditorio Fundadores, EAFIT», con la fecha, el horario y la ciudad del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">24</span>
+      <span class="cuando">sábado 10-oct</span>
+      <span class="etiqueta t-diad">Día D · El lugar</span>
+    </header>
+    <div class="copy" id="c24">Auditorio Fundadores, EAFIT.
+
+Miércoles 14 de octubre, de 10:00 a. m. a 5:00 p. m., en Medellín. Ese día el Día D junta capital, tecnología, energía, salud, infraestructura y construcción en un mismo auditorio.
+
+Somos el aliado de software.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c24">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #eafit #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Auditorio Fundadores, EAFIT», con la fecha, el horario y la ciudad del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro y la cuenta oficial de EAFIT.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-10_24_dia-d-lugar.jpg &middot; exports/png/2026-10-10_24_dia-d-lugar.png</p>
+  </div>
+</article>
+<article class="pieza es-diad" data-diad="1" data-pend="0">
+  <div class="lamina"><img src="exports/jpg/2026-10-11_25_dia-d-por-que-estamos.jpg" alt="Texto sobre fondo claro: «Después de las conversaciones, alguien tiene que construirlo», con la nota de que INPLUX es el aliado de software del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">25</span>
+      <span class="cuando">domingo 11-oct</span>
+      <span class="etiqueta t-diad">Día D · Por qué estamos</span>
+    </header>
+    <div class="copy" id="c25">Después de las conversaciones, alguien tiene que construirlo.
+
+Por eso somos el aliado de software del Día D. Un día así deja tesis, contactos y decisiones; convertirlas en producto es otro trabajo, y es el nuestro.
+
+Si el miércoles sales con algo por construir, hablemos.
+inplux.co</div>
+    <button class="copiar" data-obj="c25">Copiar caption</button>
+    <p class="tags">#eldiad #fábricadesoftware #softwarealamedida #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo claro: «Después de las conversaciones, alguien tiene que construirlo», con la nota de que INPLUX es el aliado de software del Día D.</p>
+    
+    <p class="archivo">exports/jpg/2026-10-11_25_dia-d-por-que-estamos.jpg &middot; exports/png/2026-10-11_25_dia-d-por-que-estamos.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-12_26_dia-d-faltan-2.jpg" alt="Texto sobre fondo oscuro: «Faltan dos días», con la fecha, el horario y el lugar del Día D." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">26</span>
+      <span class="cuando">lunes 12-oct</span>
+      <span class="etiqueta t-diad">Día D · Faltan dos días</span>
+    </header>
+    <div class="copy" id="c26">Faltan dos días.
+
+Miércoles 14 de octubre, de 10:00 a. m. a 5:00 p. m., Auditorio Fundadores de la Universidad EAFIT, Medellín.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c26">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Faltan dos días», con la fecha, el horario y el lugar del Día D.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-12_26_dia-d-faltan-2.jpg &middot; exports/png/2026-10-12_26_dia-d-faltan-2.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-13_27_dia-d-manana.jpg" alt="Texto sobre fondo oscuro: «Mañana es el Día D», con la fecha, el horario y el lugar." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">27</span>
+      <span class="cuando">martes 13-oct</span>
+      <span class="etiqueta t-diad">Día D · Mañana</span>
+    </header>
+    <div class="copy" id="c27">Mañana es el Día D.
+
+De 10:00 a. m. a 5:00 p. m. en el Auditorio Fundadores de EAFIT, Medellín. Vamos a estar ahí como aliado de software.
+
+Contamos el día por historias.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c27">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Mañana es el Día D», con la fecha, el horario y el lugar.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-13_27_dia-d-manana.jpg &middot; exports/png/2026-10-13_27_dia-d-manana.png</p>
+  </div>
+</article>
+<article class="pieza es-diad es-pendiente" data-diad="1" data-pend="1">
+  <div class="lamina"><img src="exports/jpg/2026-10-14_28_dia-d-hoy.jpg" alt="Texto sobre fondo oscuro: «Hoy es el Día D», con la fecha, el horario y el lugar." loading="lazy" width="1080" height="1350"></div>
+  <div class="texto">
+    <header>
+      <span class="num">28</span>
+      <span class="cuando">miércoles 14-oct</span>
+      <span class="etiqueta t-diad">Día D · Hoy</span>
+    </header>
+    <div class="copy" id="c28">Hoy es el Día D.
+
+Auditorio Fundadores de EAFIT, de 10:00 a. m. a 5:00 p. m. Fundadores, inversionistas, operadores, médicos y builders, en Medellín.
+
+Lo contamos todo el día por historias.
+eldiad.10am.pro</div>
+    <button class="copiar" data-obj="c28">Copiar caption</button>
+    <p class="tags">#eldiad #10ampro #medellín #fábricadesoftware</p>
+    <p class="alt"><b>Alt</b> Texto sobre fondo oscuro: «Hoy es el Día D», con la fecha, el horario y el lugar.</p>
+    <ul class="notas"><li>Etiquetar: @10ampro.</li></ul>
+    <p class="archivo">exports/jpg/2026-10-14_28_dia-d-hoy.jpg &middot; exports/png/2026-10-14_28_dia-d-hoy.png</p>
+  </div>
+</article>
+  </div>
+
+  <h2>Catorce <em>historias</em>.</h2>
+  <p class="entrada">Verticales de 1080 &times; 1920, todas del Día D. Se publican el mismo día que su publicación hermana, salvo la cuenta regresiva. En todas: sticker de enlace a eldiad.10am.pro y mención a @10ampro, que es lo que permite que 10ampro las repostee. Las dos últimas son plantillas: la foto real del día se pega encima desde la app.</p>
+  <div class="rejilla">
+<figure class="hist">
+  <img src="exports/jpg/historia_01_aliados.jpg" alt="Historia · Somos el software del Día D" loading="lazy" width="1080" height="1920">
+  <figcaption>Somos el software del Día D</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_02_principios.jpg" alt="Historia · Tres reglas" loading="lazy" width="1080" height="1920">
+  <figcaption>Tres reglas</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_03_mccann.jpg" alt="Historia · Joe McCann" loading="lazy" width="1080" height="1920">
+  <figcaption>Joe McCann</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_04_santos.jpg" alt="Historia · Santiago Santos" loading="lazy" width="1080" height="1920">
+  <figcaption>Santiago Santos</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_05_sierra.jpg" alt="Historia · Ricardo Sierra" loading="lazy" width="1080" height="1920">
+  <figcaption>Ricardo Sierra</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_06_joffroy.jpg" alt="Historia · André Joffroy" loading="lazy" width="1080" height="1920">
+  <figcaption>André Joffroy</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_07_longevidad.jpg" alt="Historia · Longevidad" loading="lazy" width="1080" height="1920">
+  <figcaption>Longevidad</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_08_cuenta14.jpg" alt="Historia · Faltan 14 días" loading="lazy" width="1080" height="1920">
+  <figcaption>Faltan 14 días</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_09_cuenta07.jpg" alt="Historia · Faltan 7 días" loading="lazy" width="1080" height="1920">
+  <figcaption>Faltan 7 días</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_10_cuenta03.jpg" alt="Historia · Faltan 3 días" loading="lazy" width="1080" height="1920">
+  <figcaption>Faltan 3 días</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_11_cuenta01.jpg" alt="Historia · Mañana" loading="lazy" width="1080" height="1920">
+  <figcaption>Mañana</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_12_cuenta00.jpg" alt="Historia · Hoy" loading="lazy" width="1080" height="1920">
+  <figcaption>Hoy</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_13_vivo.jpg" alt="Historia · Plantilla en vivo" loading="lazy" width="1080" height="1920">
+  <figcaption>Plantilla en vivo</figcaption>
+</figure>
+<figure class="hist">
+  <img src="exports/jpg/historia_14_cierre.jpg" alt="Historia · Plantilla de cierre" loading="lazy" width="1080" height="1920">
+  <figcaption>Plantilla de cierre</figcaption>
+</figure>
+  </div>
+</div>
+
+<script>
+(function () {
+  var lista = document.getElementById('lista');
+  var piezas = Array.prototype.slice.call(lista.querySelectorAll('.pieza'));
+  var botones = Array.prototype.slice.call(document.querySelectorAll('.filtro'));
+
+  botones.forEach(function (b) {
+    b.addEventListener('click', function () {
+      botones.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      var f = b.dataset.f;
+      piezas.forEach(function (p) {
+        p.hidden = (f === 'diad' && p.dataset.diad !== '1') ||
+                   (f === 'pend' && p.dataset.pend !== '1');
+      });
+    });
+  });
+
+  lista.addEventListener('click', function (ev) {
+    var b = ev.target.closest('.copiar');
+    if (!b) return;
+    var texto = document.getElementById(b.dataset.obj).textContent;
+    var previo = b.textContent;
+    function avisar(msg) {
+      b.textContent = msg;
+      setTimeout(function () { b.textContent = previo; }, 1600);
+    }
+    try {
+      navigator.clipboard.writeText(texto).then(
+        function () { avisar('Copiado'); },
+        function () { seleccionar(b); }
+      );
+    } catch (e) { seleccionar(b); }
+  });
+
+  function seleccionar(b) {
+    var nodo = document.getElementById(b.dataset.obj);
+    var r = document.createRange();
+    r.selectNodeContents(nodo);
+    var s = window.getSelection();
+    s.removeAllRanges();
+    s.addRange(r);
+    b.textContent = 'Seleccionado, copia con Cmd+C';
+    setTimeout(function () { b.textContent = 'Copiar caption'; }, 2600);
+  }
+})();
+</script>
