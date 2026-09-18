@@ -202,7 +202,8 @@ lista('Servicios', 'ink', 'Fábrica / Qué construimos', f'Qué {em("construimos
 t = T['ink']
 pathlib.Path('Avatar.dc.html').write_text(head(t) +
     f'<div style="box-sizing: border-box; width: 1080px; height: 1080px; display: flex; align-items: center; justify-content: center; background: {t["bg"]}; overflow: hidden;">'
-    f'<div style="margin-top: 36px;">{mark(800, t["fg"], t["accent"])}</div></div>\n' + TAIL, encoding='utf-8')
+    # La caja visible del símbolo (y 21–70 de 100) queda 4,5 unidades por encima del centro: × 8 = 36 px.
+    f'<div style="transform: translateY(36px);">{mark(800, t["fg"], t["accent"])}</div></div>\n' + TAIL, encoding='utf-8')
 
 
 def cita(name, theme, kick, quote_html, lines, label):
@@ -279,11 +280,59 @@ tabla('DiaDAliados', 'ink', 'El Día D / Aliados',
           ('Capital', 'Veronorte', False),
           ('Sede', 'Universidad EAFIT', False),
           ('Logística', 'Makeno', False),
-          ('Sociedades en el exterior', 'MBS &amp; Associates', False),
+          ('Trust y sociedades en el exterior', 'MBS &amp; Associates', False),
           ('Epistemic Capital', 'MacroWise', False),
           ('Energía', 'Celsia', False),
           ('Software', 'INPLUX', True),
       ], FUENTE)
+
+# ---------- Fijada en el perfil: los siete aliados con su logo ----------
+# Logos tal como los publica el organizador en eldiad.10am.pro (consultada el 18 SEP 2026).
+# Veronorte y EAFIT vienen en blanco sobre negro sólido: se pasaron a blanco con la
+# luminancia como transparencia. Todos van recortados a su borde visible, y la altura de
+# cada uno es la que tiene visible en la página del organizador × ESCALA: así se conserva
+# el equilibrio óptico que ellos ajustaron en su CSS (MacroWise bajito, MBS alto…).
+ALIADOS = [  # (categoría del organizador, archivo, alto visible en su página, nombre)
+    ('Capital', 'aliado-veronorte.png', 31.9, 'Veronorte'),
+    ('Sede', 'aliado-eafit.png', 32.5, 'Universidad EAFIT'),
+    ('Logística', 'aliado-makeno.png', 22.3, 'Makeno'),
+    ('Trust y sociedades en el exterior', 'aliado-mbs.svg', 46, 'MBS &amp; Associates'),
+    ('Epistemic Capital', 'aliado-macrowise.png', 24.1, 'MacroWise'),
+    ('Energía', 'aliado-celsia.png', 37.2, 'Celsia'),
+]
+ESCALA = 1.7
+
+def logo_inplux(alto):
+    """Logo horizontal oficial (public/brand/logos), con el viewBox recortado a su borde visible."""
+    svg = pathlib.Path('../../../public/brand/logos/inplux-logo-horizontal-inverse.svg').read_text(encoding='utf-8')
+    ancho = round(alto * 367.5 / 53)
+    return svg.replace('viewBox="0 0 403.0 112.0"',
+                       f'viewBox="16.75 30 367.5 53" width="{ancho}" height="{alto}" style="display: block;"')
+
+def fijada(name):
+    t = T['ink']
+    etiqueta = lambda texto, color: (f'<div style="font-family: {MONO}; font-size: 18px; line-height: 1.3; letter-spacing: 0.04em; white-space: nowrap; '
+                                     f'text-transform: uppercase; color: {color};">{texto}</div>')
+    celdas = ''.join(
+        f'<div style="display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 24px 0 28px; border-top: 1px solid {t["line"]};">'
+        f'{etiqueta(f"{i:02d} · {cat}", t["muted"])}'
+        f'<div style="height: 80px; display: flex; align-items: center;">'
+        f'<img src="{img}" alt="{nombre}" style="display: block; height: {round(alto * ESCALA)}px; width: auto;"></div></div>'
+        for i, (cat, img, alto, nombre) in enumerate(ALIADOS, 1))
+    nuestra = (f'<div style="display: flex; flex-direction: column; gap: 28px; padding-top: 26px; border-top: 2px solid {t["accent"]};">'
+               f'{etiqueta("07 · Software", t["accent"])}'
+               + row([logo_inplux(60),
+                      f'<div style="font-family: {SERIF}; font-style: italic; font-weight: 300; font-size: 38px; line-height: 1.1; '
+                      f'text-align: right; color: {t["fg"]};">De un problema real<br>a producción.</div>'], 'flex-end')
+               + '</div>')
+    page(name, 'ink', [
+        col([row([kicker('El Día D / Aliados', t), meta('14 OCT 2026', t, 22)]),
+             headline(f'Somos el {em("software", t)}<br>del Día D.', t, 104)]),
+        col([f'<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px;">{celdas}</div>', nuestra], 0),
+        row([meta('Auditorio Fundadores · EAFIT · Medellín', t, 22), meta('eldiad.10am.pro', t, 22)]),
+    ])
+
+fijada('DiaDFijada')
 
 ponente('DiaDMcCann', f'Capital en IA, robótica, defensa y {em("energía", T["ink"])}.',
         'Joe McCann', 'trader e inversionista', 'banco-solution-product.jpg')
@@ -497,6 +546,8 @@ for j, (ab, titulo) in enumerate(HISTORIAS):
 
 artboards.append(dict(file='Avatar.dc.html', title='Avatar 1080 × 1080',
                       **at(0, fila_hist + (len(HISTORIAS) + 2) // 3 + 1, h=1080)))
+artboards.append(dict(file='DiaDFijada.dc.html', title='Fijada en el perfil · Aliados del Día D',
+                      **at(1, fila_hist + (len(HISTORIAS) + 2) // 3 + 1)))
 
 canvas = {
   'artboards': artboards,

@@ -61,6 +61,7 @@ def main():
         slug = h['artboard'].replace('St', 'historia-').lower()
         trabajos.append((h['artboard'], f'historia_{i:02d}_{slug[9:]}', 1080, 1920, f'H{i:2d} · {h["titulo"]}'))
     trabajos.append(('Avatar', 'avatar', 1080, 1080, 'Avatar'))
+    trabajos.append(('DiaDFijada', 'fijada_dia-d-aliados', 1080, 1350, 'Fijada · Aliados del Día D'))
 
     solo = sys.argv[1:] if len(sys.argv) > 1 else None
     for artboard, nombre, w, h, etiqueta in trabajos:

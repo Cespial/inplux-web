@@ -34,6 +34,9 @@ def copiar():
         shutil.copy(origen, CARPETA / 'historias' / origen.name)
     shutil.copy(RAIZ / 'exports' / 'png' / 'avatar.png',
                 CARPETA / 'perfil' / 'avatar-inplux-1080.png')
+    # La publicación fijada va con el perfil: su caption está en CAPTIONS.md, «Fijada en el perfil».
+    shutil.copy(RAIZ / 'exports' / 'png' / 'fijada_dia-d-aliados.png',
+                CARPETA / 'perfil' / 'fijada-aliados-dia-d.png')
 
 
 # ---------------------------------------------------------------- texto plano

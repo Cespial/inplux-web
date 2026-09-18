@@ -85,7 +85,7 @@ Etiquetar: @10ampro.
 
 `#eldiad #10ampro #medellín #fábricadesoftware`
 
-**Alt:** Lista de siete aliados del Día D con su categoría: Veronorte en capital, la Universidad EAFIT como sede, Makeno en logística, MBS & Associates en sociedades en el exterior, MacroWise en epistemic capital, Celsia en energía e INPLUX en software.
+**Alt:** Lista de siete aliados del Día D con su categoría: Veronorte en capital, la Universidad EAFIT como sede, Makeno en logística, MBS & Associates en trust y sociedades en el exterior, MacroWise en epistemic capital, Celsia en energía e INPLUX en software.
 
 ---
 
@@ -490,6 +490,30 @@ Etiquetar: @10ampro.
 `#eldiad #10ampro #medellín #fábricadesoftware`
 
 **Alt:** Fotografía nocturna de Medellín entre niebla, con las luces de la ciudad y el texto «Hoy es el Día D», la fecha, el horario y el lugar.
+
+---
+
+## Fijada en el perfil
+
+Va fuera del calendario: se publica cuanto antes y se fija de primera en el perfil hasta el
+14 de octubre. Ese día se reemplaza por la primera foto real del evento. Los logos son los
+que publica el organizador en eldiad.10am.pro (consultada el 18 de septiembre de 2026).
+
+### Aliados del Día D con sus logos
+`fijada_dia-d-aliados.png`
+
+Somos el software del Día D.
+
+El 14 de octubre, @10ampro reúne en el Auditorio Fundadores de EAFIT, en Medellín, a fundadores, inversionistas, operadores, médicos y builders. Siete aliados sostienen la jornada: Veronorte en capital, la Universidad EAFIT como sede, Makeno en logística, MBS & Associates en trust y sociedades en el exterior, MacroWise en epistemic capital y Celsia en energía.
+
+Nosotros ponemos el software. De un problema real a producción.
+eldiad.10am.pro
+
+Etiquetar: @10ampro. Pedirle por mensaje la colaboración (coautor) antes de publicar: si acepta, la pieza aparece también en su perfil. Etiquetar en la imagen a cada aliado solo con su cuenta oficial, verificada en la app.
+
+`#eldiad #10ampro #medellín #fábricadesoftware`
+
+**Alt:** Pieza sobre fondo oscuro con el titular «Somos el software del Día D» y los logos de los siete aliados del evento con su categoría: Veronorte en capital, Universidad EAFIT como sede, Makeno en logística, MBS & Associates en trust y sociedades en el exterior, MacroWise en epistemic capital, Celsia en energía e INPLUX en software, con la frase «De un problema real a producción».
 
 ---
 
