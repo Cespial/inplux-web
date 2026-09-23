@@ -522,7 +522,8 @@ Etiquetar: @10ampro. Pedirle por mensaje la colaboración (coautor) antes de pub
 Va fuera del calendario diario: carrusel de tres láminas + una historia, publicados el mismo
 día. Datos de INMERXIA tomados de inmerxia.co el 22 de septiembre de 2026. **Antes de
 publicar:** confirmar con cada organizador que podemos decir «patrocinamos» (el Día D nos
-lista como aliado de software; INMERXIA todavía no nos lista en su página).
+lista como aliado de software; INMERXIA todavía no nos lista en su página) y que la lámina 2
+puede llevar el cartel oficial de 10ampro, porque sale con las caras de sus cohosts.
 
 ### Carrusel de patrocinio con El Día D e INMERXIA
 `patrocinio_1_portada.png` · `patrocinio_2_dia-d.png` · `patrocinio_3_inmerxia.png` (en ese orden)
@@ -540,7 +541,7 @@ Etiquetar: @10ampro en la lámina 2 y @inmerx.iacolombia en la lámina 3. Propon
 
 `#eldiad #inmerxia #medellín #fábricadesoftware #ia`
 
-**Alt:** Carrusel de tres láminas sobre fondo oscuro. La primera dice «Patrocinamos dos de los grandes eventos de tecnología de Medellín» y lista El Día D, el 14 de octubre en el Auditorio Fundadores de EAFIT, e INMERXIA, del 9 al 13 de noviembre. La segunda detalla El Día D: miércoles 14 de octubre de 10:00 a. m. a 5:00 p. m., organiza 10ampro, INPLUX pone el software. La tercera lleva el logo de INMERXIA y su agenda: Talks en el Planetario de Medellín, talleres en el C4TA de la Comuna 13, Ciudad Joven en City Hall Medellín, y el Foro Colombiano de IA y La Expo en el Fórum UPB.
+**Alt:** Carrusel de tres láminas. La primera, sobre una fotografía de Medellín de noche entre nubes, dice «Patrocinamos dos de los grandes eventos de tecnología de Medellín» y muestra el logo de 10ampro con El Día D, 14 de octubre en EAFIT, y el logo de INMERXIA, Semana de la IA, del 9 al 13 de noviembre en el Fórum UPB. La segunda lleva el cartel oficial del Día D de 10ampro con la fecha y el lugar. La tercera, sobre un edificio de vidrio iluminado, lleva el logo de INMERXIA y su agenda: Talks en el Planetario de Medellín, talleres en el C4TA de la Comuna 13, Ciudad Joven en City Hall Medellín, y el Foro Colombiano de IA y La Expo en el Fórum UPB.
 
 ---
 

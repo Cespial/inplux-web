@@ -489,49 +489,78 @@ def fila(izq, der, sub, t, tam=56, acento=True):
 def filas(items, t, tam=56, acento=True):
     return '<div style="display: flex; flex-direction: column;">' + ''.join(fila(*i, t, tam, acento) for i in items) + '</div>'
 
-LOGO_INMERXIA = '<img src="evento-inmerxia.png" alt="INMERXIA" style="display: block; height: 64px; width: auto;">'
-EVENTOS = [
-    ('14 OCT', 'El Día D', 'Auditorio Fundadores · EAFIT · @10ampro'),
-    ('9–13 NOV', 'INMERXIA', 'Semana de la IA en Colombia · @inmerx.iacolombia'),
-]
+LOGO_INMERXIA = lambda alto: f'<img src="evento-inmerxia.png" alt="INMERXIA" style="display: block; height: {alto}px; width: auto;">'
+LOGO_10AM = lambda alto: f'<img src="evento-10ampro.png" alt="10ampro" style="display: block; width: {alto}px; height: {alto}px;">'
 t = T['ink']
 
+VELO_FUERTE = ('<div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; '
+               'background: linear-gradient(to top, rgba(26,25,24,0.98) 0%, rgba(26,25,24,0.92) 42%, '
+               'rgba(26,25,24,0.45) 70%, rgba(26,25,24,0.20) 100%);"></div>'
+               '<div style="position: absolute; top: 0; right: 0; left: 0; height: 320px; '
+               'background: linear-gradient(to bottom, rgba(26,25,24,0.80) 0%, rgba(26,25,24,0.0) 100%);"></div>')
+
+def a_sangre(img, alto=1350, pos='center'):
+    return (f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; height: {alto}px; '
+            f'object-fit: cover; object-position: {pos}; display: block;">')
+
+def celda_evento(logo, nombre, dato, t, grande=False):
+    """Un evento del patrocinio: logo del organizador, nombre en serif, fecha y lugar en mono."""
+    return (f'<div style="flex: 1; display: flex; flex-direction: column; gap: {28 if grande else 22}px; '
+            f'padding-top: 30px; border-top: 2px solid {t["accent"]};">'
+            f'<div style="height: {120 if grande else 88}px; display: flex; align-items: center; gap: 22px;">{logo}</div>'
+            + (f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {64 if grande else 50}px; line-height: 1.02; '
+               f'letter-spacing: -0.01em; color: {t["fg"]};">{nombre}</div>' if nombre else '')
+            + meta(dato, t, 24 if grande else 21, t['fg']) + '</div>')
+
+def dos_eventos(t, grande=False):
+    k = 1.35 if grande else 1
+    dia_d = celda_evento(LOGO_10AM(round(88 * k)), 'El Día D', '14 OCT · EAFIT', t, grande)
+    inmx = celda_evento(LOGO_INMERXIA(round(62 * k)), 'Semana de la&nbsp;IA', '9–13 NOV · FÓRUM UPB', t, grande)
+    return f'<div style="display: flex; gap: 48px;">{dia_d}{inmx}</div>'
+
+def rel_col(children, gap=40):
+    return f'<div style="position: relative; display: flex; flex-direction: column; gap: {gap}px;">' + ''.join(children) + '</div>'
+
+# 1/3 · Portada: Medellín de noche a sangre, los dos eventos con el logo de cada organizador.
 page('PatrocinioPortada', 'ink', [
-    col([row([kicker('Patrocinio / 2026', t), meta('MEDELLÍN', t, 22)]),
-         headline(f'Patrocinamos dos de los grandes eventos de {em("tecnología", t)} de Medellín.', t, 96)]),
-    filas(EVENTOS, t, 72),
-    row([meta('1 / 3', t, 22), lockup(t)]),
+    a_sangre('banco-sector-public.jpg', pos='center 30%'), VELO_FUERTE,
+    rel(row([kicker('Patrocinio / 2026', t), meta('MEDELLÍN', t, 22, t['fg'])])),
+    rel_col([headline(f'Patrocinamos dos de los grandes eventos de {em("tecnología", t)} de Medellín.', t, 88),
+             dos_eventos(t),
+             row([logo_inplux(40), meta('1 / 3', t, 22)])], 56),
 ])
 
+# 2/3 · El Día D: el cartel oficial de 10ampro, enmarcado y con crédito.
+cartel = (f'<div style="position: relative; border-radius: 14px; overflow: hidden; border: 1px solid {t["line"]};">'
+          f'<img src="evento-dia-d-cartel.jpg" alt="" style="display: block; width: 100%; height: auto;"></div>')
 page('PatrocinioDiaD', 'ink', [
-    col([row([kicker('El Día D / Patrocinio', t), meta('14 OCT 2026', t, 22)]),
-         headline(f'Un día para founders, inversionistas y {em("builders", t)}.', t, 96)]),
-    filas([
-        ('Cuándo', 'Miércoles 14 de octubre', '10:00 a. m. – 5:00 p. m.'),
-        ('Dónde', 'Auditorio Fundadores', 'Universidad EAFIT · Medellín'),
-        ('Organiza', '10ampro', '@10ampro'),
-        ('Nosotros', 'El software', 'De un problema real a producción'),
-    ], t, 48, False),
-    row([meta('eldiad.10am.pro · 2 / 3', t, 22), lockup(t)]),
+    row([f'<div style="display: flex; align-items: center; gap: 24px;">{LOGO_10AM(84)}{kicker("El Día D / Patrocinio", t)}</div>',
+         meta('14 OCT 2026', t, 22)]),
+    headline(f'Founders, inversionistas y {em("builders", t)} en un mismo lugar.', t, 80),
+    col([cartel, meta('Cartel oficial · @10ampro', t, 18)], 14),
+    col([meta('Miércoles 14 OCT · 10 a. m. – 5 p. m. · Auditorio Fundadores, EAFIT', t, 22, t['fg']),
+         row([meta('eldiad.10am.pro · 2 / 3', t, 22), lockup(t)])], 28),
 ])
 
+# 3/3 · INMERXIA: arquitectura encendida a sangre, el logo grande y la agenda de la semana.
 page('PatrocinioInmerxia', 'ink', [
-    col([row([LOGO_INMERXIA, meta('9–13 NOV 2026', t, 22)]),
-         headline(f'La semana de la inteligencia {em("artificial", t)} en Colombia.', t, 88)], 48),
-    filas([
-        ('9 NOV', 'INMERXIA Talks', 'Planetario de Medellín'),
-        ('10 NOV', 'Talleres y masterclass', 'C4TA · Comuna 13'),
-        ('11 NOV', 'Ciudad Joven', 'City Hall Medellín'),
-        ('12–13 NOV', 'Foro Colombiano de IA y La Expo', 'Centro de Eventos Fórum UPB'),
-    ], t, 44),
-    row([meta('inmerxia.co · 3 / 3', t, 22), lockup(t)]),
+    a_sangre('banco-sector-private.jpg', pos='center 35%'), VELO_FUERTE,
+    rel(row([LOGO_INMERXIA(92), meta('9–13 NOV 2026', t, 22, t['fg'])])),
+    rel_col([headline(f'La semana de la inteligencia {em("artificial", t)} en Colombia.', t, 84),
+             filas([
+                 ('9 NOV', 'INMERXIA Talks', 'Planetario de Medellín'),
+                 ('10 NOV', 'Talleres y masterclass', 'C4TA · Comuna 13'),
+                 ('11 NOV', 'Ciudad Joven', 'City Hall Medellín'),
+                 ('12–13 NOV', 'Foro Colombiano de IA y La Expo', 'Centro de Eventos Fórum UPB'),
+             ], t, 40),
+             row([meta('inmerxia.co · 3 / 3', t, 22), lockup(t)])], 44),
 ])
 
-story('StPatrocinio', 'ink', [
-    kicker('Patrocinio / 2026', t),
-    col([headline(f'Este semestre patrocinamos dos eventos de {em("tecnología", t)}.', t, 96),
-         filas(EVENTOS, t, 80)], 64),
-    row([meta('inplux.co', t, 22), lockup(t)]),
+story('StPatrocinio', 'ink', fondo('banco-solution-public-service.jpg') + [
+    rel(kicker('Patrocinio / 2026', t)),
+    rel_col([headline(f'Este semestre patrocinamos dos eventos de {em("tecnología", t)}.', t, 96),
+             dos_eventos(t, grande=True)], 72),
+    rel(row([meta('eldiad.10am.pro · inmerxia.co', t, 22, t['fg']), logo_inplux(40)])),
 ])
 
 # ---------- calendario: una publicación diaria del 17 SEP al 14 OCT de 2026 ----------
