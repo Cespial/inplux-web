@@ -517,7 +517,38 @@ Etiquetar: @10ampro. Pedirle por mensaje la colaboración (coautor) antes de pub
 
 ---
 
+## Patrocinio del segundo semestre
+
+Va fuera del calendario diario: carrusel de tres láminas + una historia, publicados el mismo
+día. Datos de INMERXIA tomados de inmerxia.co el 22 de septiembre de 2026. **Antes de
+publicar:** confirmar con cada organizador que podemos decir «patrocinamos» (el Día D nos
+lista como aliado de software; INMERXIA todavía no nos lista en su página).
+
+### Carrusel de patrocinio con El Día D e INMERXIA
+`patrocinio_1_portada.png` · `patrocinio_2_dia-d.png` · `patrocinio_3_inmerxia.png` (en ese orden)
+
+Este semestre patrocinamos dos de los grandes eventos de tecnología de Medellín.
+
+El 14 de octubre estaremos en El Día D, de @10ampro, en el Auditorio Fundadores de EAFIT: un día para founders, inversionistas, operadores y builders.
+
+Del 9 al 13 de noviembre estaremos en INMERXIA, la Semana de la Inteligencia Artificial en Colombia, @inmerx.iacolombia: cinco días entre el Planetario de Medellín, el C4TA de la Comuna 13 y el Fórum UPB.
+
+Si vas a estar, hablemos.
+eldiad.10am.pro · inmerxia.co
+
+Etiquetar: @10ampro en la lámina 2 y @inmerx.iacolombia en la lámina 3. Proponer a los dos la colaboración (coautor) antes de publicar; Instagram admite hasta 5 coautores, así que el carrusel puede salir en las tres cuentas.
+
+`#eldiad #inmerxia #medellín #fábricadesoftware #ia`
+
+**Alt:** Carrusel de tres láminas sobre fondo oscuro. La primera dice «Patrocinamos dos de los grandes eventos de tecnología de Medellín» y lista El Día D, el 14 de octubre en el Auditorio Fundadores de EAFIT, e INMERXIA, del 9 al 13 de noviembre. La segunda detalla El Día D: miércoles 14 de octubre de 10:00 a. m. a 5:00 p. m., organiza 10ampro, INPLUX pone el software. La tercera lleva el logo de INMERXIA y su agenda: Talks en el Planetario de Medellín, talleres en el C4TA de la Comuna 13, Ciudad Joven en City Hall Medellín, y el Foro Colombiano de IA y La Expo en el Fórum UPB.
+
+---
+
 ## Historias (1080 × 1920)
+
+**`patrocinio_historia.png`** (fuera de la tabla, va con el carrusel de patrocinio): mención a
+@10ampro y a @inmerx.iacolombia, y dos stickers de enlace, eldiad.10am.pro e inmerxia.co.
+Guardarla en un highlight «Eventos».
 
 Van fuera del calendario del feed: se publican el mismo día que su publicación hermana o
 cuando toque la cuenta regresiva. En todas, **sticker de enlace a eldiad.10am.pro** y

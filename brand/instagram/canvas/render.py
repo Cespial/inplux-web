@@ -62,6 +62,10 @@ def main():
         trabajos.append((h['artboard'], f'historia_{i:02d}_{slug[9:]}', 1080, 1920, f'H{i:2d} · {h["titulo"]}'))
     trabajos.append(('Avatar', 'avatar', 1080, 1080, 'Avatar'))
     trabajos.append(('DiaDFijada', 'fijada_dia-d-aliados', 1080, 1350, 'Fijada · Aliados del Día D'))
+    for i, (ab, slug) in enumerate([('PatrocinioPortada', 'portada'), ('PatrocinioDiaD', 'dia-d'),
+                                    ('PatrocinioInmerxia', 'inmerxia')], 1):
+        trabajos.append((ab, f'patrocinio_{i}_{slug}', 1080, 1350, f'Patrocinio {i}/3'))
+    trabajos.append(('StPatrocinio', 'patrocinio_historia', 1080, 1920, 'Patrocinio · historia'))
 
     solo = sys.argv[1:] if len(sys.argv) > 1 else None
     for artboard, nombre, w, h, etiqueta in trabajos:

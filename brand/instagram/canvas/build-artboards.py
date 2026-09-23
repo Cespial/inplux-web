@@ -470,6 +470,70 @@ story('StCierre', 'ink', [
          row([meta('inplux.co', t, 22), lockup(t)])], 32),
 ])
 
+# ---------- Patrocinio · segundo semestre 2026: El Día D + INMERXIA ----------
+# Pieza fuera del calendario diario (carrusel de 3 + una historia), como la fijada.
+# Datos de INMERXIA tal como los publica inmerxia.co (consultada el 22 SEP 2026); el logo
+# es el de su cabecera, blanco sobre transparente, recortado a su borde visible.
+# No se nombra una categoría de patrocinio: ninguno de los dos sitios lista aún la nuestra
+# con esa palabra (el Día D dice «Aliados · Software»; INMERXIA todavía no nos lista).
+
+def fila(izq, der, sub, t, tam=56, acento=True):
+    """Fecha o etiqueta en mono a la izquierda; nombre en serif y detalle en mono a la derecha."""
+    return (f'<div style="display: flex; gap: 40px; padding: 28px 0; border-top: 1px solid {t["line"]};">'
+            f'<div style="flex: 0 0 210px; font-family: {MONO}; font-size: 24px; line-height: 1.6; letter-spacing: 0.04em; '
+            f'text-transform: uppercase; color: {t["accent"] if acento else t["muted"]};">{izq}</div>'
+            f'<div style="display: flex; flex-direction: column; gap: 12px;">'
+            f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {tam}px; line-height: 1.08; letter-spacing: -0.01em; color: {t["fg"]};">{der}</div>'
+            + (meta(sub, t, 22) if sub else '') + '</div></div>')
+
+def filas(items, t, tam=56, acento=True):
+    return '<div style="display: flex; flex-direction: column;">' + ''.join(fila(*i, t, tam, acento) for i in items) + '</div>'
+
+LOGO_INMERXIA = '<img src="evento-inmerxia.png" alt="INMERXIA" style="display: block; height: 64px; width: auto;">'
+EVENTOS = [
+    ('14 OCT', 'El Día D', 'Auditorio Fundadores · EAFIT · @10ampro'),
+    ('9–13 NOV', 'INMERXIA', 'Semana de la IA en Colombia · @inmerx.iacolombia'),
+]
+t = T['ink']
+
+page('PatrocinioPortada', 'ink', [
+    col([row([kicker('Patrocinio / 2026', t), meta('MEDELLÍN', t, 22)]),
+         headline(f'Patrocinamos dos de los grandes eventos de {em("tecnología", t)} de Medellín.', t, 96)]),
+    filas(EVENTOS, t, 72),
+    row([meta('1 / 3', t, 22), lockup(t)]),
+])
+
+page('PatrocinioDiaD', 'ink', [
+    col([row([kicker('El Día D / Patrocinio', t), meta('14 OCT 2026', t, 22)]),
+         headline(f'Un día para founders, inversionistas y {em("builders", t)}.', t, 96)]),
+    filas([
+        ('Cuándo', 'Miércoles 14 de octubre', '10:00 a. m. – 5:00 p. m.'),
+        ('Dónde', 'Auditorio Fundadores', 'Universidad EAFIT · Medellín'),
+        ('Organiza', '10ampro', '@10ampro'),
+        ('Nosotros', 'El software', 'De un problema real a producción'),
+    ], t, 48, False),
+    row([meta('eldiad.10am.pro · 2 / 3', t, 22), lockup(t)]),
+])
+
+page('PatrocinioInmerxia', 'ink', [
+    col([row([LOGO_INMERXIA, meta('9–13 NOV 2026', t, 22)]),
+         headline(f'La semana de la inteligencia {em("artificial", t)} en Colombia.', t, 88)], 48),
+    filas([
+        ('9 NOV', 'INMERXIA Talks', 'Planetario de Medellín'),
+        ('10 NOV', 'Talleres y masterclass', 'C4TA · Comuna 13'),
+        ('11 NOV', 'Ciudad Joven', 'City Hall Medellín'),
+        ('12–13 NOV', 'Foro Colombiano de IA y La Expo', 'Centro de Eventos Fórum UPB'),
+    ], t, 44),
+    row([meta('inmerxia.co · 3 / 3', t, 22), lockup(t)]),
+])
+
+story('StPatrocinio', 'ink', [
+    kicker('Patrocinio / 2026', t),
+    col([headline(f'Este semestre patrocinamos dos eventos de {em("tecnología", t)}.', t, 96),
+         filas(EVENTOS, t, 80)], 64),
+    row([meta('inplux.co', t, 22), lockup(t)]),
+])
+
 # ---------- calendario: una publicación diaria del 17 SEP al 14 OCT de 2026 ----------
 # Las piezas del Día D no van dos días seguidos hasta el 7 de octubre; del 8 al 14 sí,
 # porque esa es la semana del evento.
@@ -548,6 +612,13 @@ artboards.append(dict(file='Avatar.dc.html', title='Avatar 1080 × 1080',
                       **at(0, fila_hist + (len(HISTORIAS) + 2) // 3 + 1, h=1080)))
 artboards.append(dict(file='DiaDFijada.dc.html', title='Fijada en el perfil · Aliados del Día D',
                       **at(1, fila_hist + (len(HISTORIAS) + 2) // 3 + 1)))
+_fp = fila_hist + (len(HISTORIAS) + 2) // 3 + 2
+for j, (ab, titulo) in enumerate([('PatrocinioPortada', 'Patrocinio · 1/3 · Portada'),
+                                  ('PatrocinioDiaD', 'Patrocinio · 2/3 · El Día D'),
+                                  ('PatrocinioInmerxia', 'Patrocinio · 3/3 · INMERXIA')]):
+    artboards.append(dict(file=f'{ab}.dc.html', title=titulo, **at(j, _fp)))
+artboards.append(dict(file='StPatrocinio.dc.html', title='Historia · Patrocinio 2026',
+                      **at(0, _fp + 1, h=1920)))
 
 canvas = {
   'artboards': artboards,
