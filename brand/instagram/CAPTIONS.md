@@ -517,22 +517,23 @@ Etiquetar: @10ampro. Pedirle por mensaje la colaboración (coautor) antes de pub
 
 ---
 
-## Patrocinio del segundo semestre
+## Eventos del segundo semestre
 
 Va fuera del calendario diario: carrusel de tres láminas + una historia, publicados el mismo
-día. Datos de INMERXIA tomados de inmerxia.co el 22 de septiembre de 2026. **Antes de
-publicar:** confirmar con cada organizador que podemos decir «patrocinamos» (el Día D nos
-lista como aliado de software; INMERXIA todavía no nos lista en su página) y que la lámina 2
-puede llevar el cartel oficial de 10ampro, porque sale con las caras de sus cohosts.
+día. **Rol de INPLUX (confirmado por el usuario el 22-sep):** en El Día D somos
+**patrocinadores**; en INMERXIA somos **participantes**. Nunca «patrocinamos dos eventos».
+Datos de INMERXIA tomados de inmerxia.co el 22 de septiembre de 2026. **Antes de publicar:**
+pedir permiso a 10ampro para usar su cartel oficial en la lámina 2, porque lleva las caras de sus
+cohosts.
 
-### Carrusel de patrocinio con El Día D e INMERXIA
-`patrocinio_1_portada.png` · `patrocinio_2_dia-d.png` · `patrocinio_3_inmerxia.png` (en ese orden)
+### Carrusel El Día D e INMERXIA
+`patrocinio_1_portada.jpg` · `patrocinio_2_dia-d.jpg` · `patrocinio_3_inmerxia.jpg` (en ese orden)
 
-Este semestre patrocinamos dos de los grandes eventos de tecnología de Medellín.
+Este semestre estamos en dos de los grandes eventos de tecnología de Medellín.
 
-El 14 de octubre estaremos en El Día D, de @10ampro, en el Auditorio Fundadores de EAFIT: un día para founders, inversionistas, operadores y builders.
+El 14 de octubre somos patrocinadores de El Día D, de @10ampro, en el Auditorio Fundadores de EAFIT: un día para founders, inversionistas, operadores y builders.
 
-Del 9 al 13 de noviembre estaremos en INMERXIA, la Semana de la Inteligencia Artificial en Colombia, @inmerx.iacolombia: cinco días entre el Planetario de Medellín, el C4TA de la Comuna 13 y el Fórum UPB.
+Del 9 al 13 de noviembre participamos en INMERXIA, la Semana de la Inteligencia Artificial en Colombia, de @inmerx.iacolombia: cinco días entre el Planetario de Medellín, el C4TA de la Comuna 13 y el Fórum UPB.
 
 Si vas a estar, hablemos.
 eldiad.10am.pro · inmerxia.co
@@ -541,13 +542,13 @@ Etiquetar: @10ampro en la lámina 2 y @inmerx.iacolombia en la lámina 3. Propon
 
 `#eldiad #inmerxia #medellín #fábricadesoftware #ia`
 
-**Alt:** Carrusel de tres láminas. La primera, sobre una fotografía de Medellín de noche entre nubes, dice «Patrocinamos dos de los grandes eventos de tecnología de Medellín» y muestra el logo de 10ampro con El Día D, 14 de octubre en EAFIT, y el logo de INMERXIA, Semana de la IA, del 9 al 13 de noviembre en el Fórum UPB. La segunda lleva el cartel oficial del Día D de 10ampro con la fecha y el lugar. La tercera, sobre un edificio de vidrio iluminado, lleva el logo de INMERXIA y su agenda: Talks en el Planetario de Medellín, talleres en el C4TA de la Comuna 13, Ciudad Joven en City Hall Medellín, y el Foro Colombiano de IA y La Expo en el Fórum UPB.
+**Alt:** Carrusel de tres láminas. La primera, sobre una fotografía de Medellín de noche entre nubes, dice «Este semestre estamos en dos de los grandes eventos de tecnología de Medellín». Debajo, con la etiqueta «Patrocinamos», el logo de 10ampro con El Día D, 14 de octubre en EAFIT, y con la etiqueta «Participamos», el logo de INMERXIA, Semana de la IA, del 9 al 13 de noviembre en el Fórum UPB. La segunda lleva el cartel oficial del Día D de 10ampro con la fecha y el lugar. La tercera, sobre un edificio de vidrio iluminado, lleva el logo de INMERXIA, la etiqueta «Participamos» y la agenda: Talks en el Planetario de Medellín, talleres en el C4TA de la Comuna 13, Ciudad Joven en City Hall Medellín, y el Foro Colombiano de IA y La Expo en el Fórum UPB.
 
 ---
 
 ## Historias (1080 × 1920)
 
-**`patrocinio_historia.png`** (fuera de la tabla, va con el carrusel de patrocinio): mención a
+**`patrocinio_historia.png`** (fuera de la tabla, va con el carrusel de eventos: «Patrocinamos» El Día D, «Participamos» en INMERXIA): mención a
 @10ampro y a @inmerx.iacolombia, y dos stickers de enlace, eldiad.10am.pro e inmerxia.co.
 Guardarla en un highlight «Eventos».
 

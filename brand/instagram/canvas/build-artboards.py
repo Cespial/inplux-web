@@ -470,12 +470,12 @@ story('StCierre', 'ink', [
          row([meta('inplux.co', t, 22), lockup(t)])], 32),
 ])
 
-# ---------- Patrocinio · segundo semestre 2026: El Día D + INMERXIA ----------
+# ---------- Eventos · segundo semestre 2026: El Día D (patrocinamos) + INMERXIA (participamos) ----------
 # Pieza fuera del calendario diario (carrusel de 3 + una historia), como la fijada.
 # Datos de INMERXIA tal como los publica inmerxia.co (consultada el 22 SEP 2026); el logo
 # es el de su cabecera, blanco sobre transparente, recortado a su borde visible.
-# No se nombra una categoría de patrocinio: ninguno de los dos sitios lista aún la nuestra
-# con esa palabra (el Día D dice «Aliados · Software»; INMERXIA todavía no nos lista).
+# Rol de INPLUX, confirmado por el usuario el 22 SEP 2026: en el Día D somos patrocinadores;
+# en INMERXIA somos participantes (no patrocinadores). Nunca «patrocinamos dos eventos».
 
 def fila(izq, der, sub, t, tam=56, acento=True):
     """Fecha o etiqueta en mono a la izquierda; nombre en serif y detalle en mono a la derecha."""
@@ -503,19 +503,20 @@ def a_sangre(img, alto=1350, pos='center'):
     return (f'<img src="{img}" alt="" style="position: absolute; top: 0; left: 0; width: 1080px; height: {alto}px; '
             f'object-fit: cover; object-position: {pos}; display: block;">')
 
-def celda_evento(logo, nombre, dato, t, grande=False):
-    """Un evento del patrocinio: logo del organizador, nombre en serif, fecha y lugar en mono."""
+def celda_evento(rol, logo, nombre, dato, t, grande=False):
+    """Un evento: nuestro rol en mono acento, logo del organizador, nombre en serif, fecha y lugar."""
     return (f'<div style="flex: 1; display: flex; flex-direction: column; gap: {28 if grande else 22}px; '
-            f'padding-top: 30px; border-top: 2px solid {t["accent"]};">'
+            f'padding-top: 26px; border-top: 2px solid {t["accent"]};">'
+            + meta(rol.upper(), t, 24 if grande else 20, t['accent']) +
             f'<div style="height: {120 if grande else 88}px; display: flex; align-items: center; gap: 22px;">{logo}</div>'
-            + (f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {64 if grande else 50}px; line-height: 1.02; '
+            + (f'<div style="font-family: {SERIF}; font-weight: 300; font-size: {56 if grande else 50}px; line-height: 1.02; '
                f'letter-spacing: -0.01em; color: {t["fg"]};">{nombre}</div>' if nombre else '')
             + meta(dato, t, 24 if grande else 21, t['fg']) + '</div>')
 
 def dos_eventos(t, grande=False):
     k = 1.35 if grande else 1
-    dia_d = celda_evento(LOGO_10AM(round(88 * k)), 'El Día D', '14 OCT · EAFIT', t, grande)
-    inmx = celda_evento(LOGO_INMERXIA(round(62 * k)), 'Semana de la&nbsp;IA', '9–13 NOV · FÓRUM UPB', t, grande)
+    dia_d = celda_evento('Patrocinamos', LOGO_10AM(round(88 * k)), 'El Día D', '14 OCT · EAFIT', t, grande)
+    inmx = celda_evento('Participamos', LOGO_INMERXIA(round(62 * k)), 'Semana de la&nbsp;IA', '9–13 NOV · FÓRUM UPB', t, grande)
     return f'<div style="display: flex; gap: 48px;">{dia_d}{inmx}</div>'
 
 def rel_col(children, gap=40):
@@ -524,8 +525,8 @@ def rel_col(children, gap=40):
 # 1/3 · Portada: Medellín de noche a sangre, los dos eventos con el logo de cada organizador.
 page('PatrocinioPortada', 'ink', [
     a_sangre('banco-sector-public.jpg', pos='center 30%'), VELO_FUERTE,
-    rel(row([kicker('Patrocinio / 2026', t), meta('MEDELLÍN', t, 22, t['fg'])])),
-    rel_col([headline(f'Patrocinamos dos de los grandes eventos de {em("tecnología", t)} de Medellín.', t, 88),
+    rel(row([kicker('Eventos / 2026', t), meta('MEDELLÍN', t, 22, t['fg'])])),
+    rel_col([headline(f'Este semestre estamos en dos de los grandes eventos de {em("tecnología", t)} de Medellín.', t, 80),
              dos_eventos(t),
              row([logo_inplux(40), meta('1 / 3', t, 22)])], 56),
 ])
@@ -534,7 +535,7 @@ page('PatrocinioPortada', 'ink', [
 cartel = (f'<div style="position: relative; border-radius: 14px; overflow: hidden; border: 1px solid {t["line"]};">'
           f'<img src="evento-dia-d-cartel.jpg" alt="" style="display: block; width: 100%; height: auto;"></div>')
 page('PatrocinioDiaD', 'ink', [
-    row([f'<div style="display: flex; align-items: center; gap: 24px;">{LOGO_10AM(84)}{kicker("El Día D / Patrocinio", t)}</div>',
+    row([f'<div style="display: flex; align-items: center; gap: 24px;">{LOGO_10AM(84)}{kicker("El Día D / Patrocinamos", t)}</div>',
          meta('14 OCT 2026', t, 22)]),
     headline(f'Founders, inversionistas y {em("builders", t)} en un mismo lugar.', t, 80),
     col([cartel, meta('Cartel oficial · @10ampro', t, 18)], 14),
@@ -546,7 +547,7 @@ page('PatrocinioDiaD', 'ink', [
 page('PatrocinioInmerxia', 'ink', [
     a_sangre('banco-sector-private.jpg', pos='center 35%'), VELO_FUERTE,
     rel(row([LOGO_INMERXIA(92), meta('9–13 NOV 2026', t, 22, t['fg'])])),
-    rel_col([headline(f'La semana de la inteligencia {em("artificial", t)} en Colombia.', t, 84),
+    rel_col([kicker('INMERXIA / Participamos', t).replace(t['muted'], t['accent']), headline(f'La semana de la inteligencia {em("artificial", t)} en Colombia.', t, 84),
              filas([
                  ('9 NOV', 'INMERXIA Talks', 'Planetario de Medellín'),
                  ('10 NOV', 'Talleres y masterclass', 'C4TA · Comuna 13'),
@@ -557,8 +558,8 @@ page('PatrocinioInmerxia', 'ink', [
 ])
 
 story('StPatrocinio', 'ink', fondo('banco-solution-public-service.jpg') + [
-    rel(kicker('Patrocinio / 2026', t)),
-    rel_col([headline(f'Este semestre patrocinamos dos eventos de {em("tecnología", t)}.', t, 96),
+    rel(kicker('Eventos / 2026', t)),
+    rel_col([headline(f'Este semestre estamos en dos eventos de {em("tecnología", t)}.', t, 96),
              dos_eventos(t, grande=True)], 72),
     rel(row([meta('eldiad.10am.pro · inmerxia.co', t, 22, t['fg']), logo_inplux(40)])),
 ])
@@ -642,11 +643,11 @@ artboards.append(dict(file='Avatar.dc.html', title='Avatar 1080 × 1080',
 artboards.append(dict(file='DiaDFijada.dc.html', title='Fijada en el perfil · Aliados del Día D',
                       **at(1, fila_hist + (len(HISTORIAS) + 2) // 3 + 1)))
 _fp = fila_hist + (len(HISTORIAS) + 2) // 3 + 2
-for j, (ab, titulo) in enumerate([('PatrocinioPortada', 'Patrocinio · 1/3 · Portada'),
-                                  ('PatrocinioDiaD', 'Patrocinio · 2/3 · El Día D'),
-                                  ('PatrocinioInmerxia', 'Patrocinio · 3/3 · INMERXIA')]):
+for j, (ab, titulo) in enumerate([('PatrocinioPortada', 'Eventos · 1/3 · Portada'),
+                                  ('PatrocinioDiaD', 'Eventos · 2/3 · El Día D (patrocinamos)'),
+                                  ('PatrocinioInmerxia', 'Eventos · 3/3 · INMERXIA (participamos)')]):
     artboards.append(dict(file=f'{ab}.dc.html', title=titulo, **at(j, _fp)))
-artboards.append(dict(file='StPatrocinio.dc.html', title='Historia · Patrocinio 2026',
+artboards.append(dict(file='StPatrocinio.dc.html', title='Historia · Eventos 2026',
                       **at(0, _fp + 1, h=1920)))
 
 canvas = {
