@@ -4317,3 +4317,18 @@
     grid-row: 2;
   }
 }
+
+/* Botón «copiar» junto al correo de contacto (portada v2). */
+.contactCopyButton {
+  border: 0;
+  background: transparent;
+  color: #aaa49c;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+.contactCopyButton:hover {
+  color: var(--home-ivory);
+}

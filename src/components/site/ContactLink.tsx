@@ -18,7 +18,10 @@ export type ContactSource =
   | "en-home-hero"
   | "en-home-offer"
   | "en-header-desktop"
-  | "en-header-mobile";
+  | "en-header-mobile"
+  // Páginas de sector (/sectores/[slug]): hero y cierre.
+  | "sector-hero"
+  | "sector-closing";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;

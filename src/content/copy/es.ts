@@ -50,6 +50,11 @@ export const homeCopyEs: HomeCopy = {
           { label: "Servicios públicos", href: "/capacidades#sector-publico" },
         ],
       },
+      {
+        label: "Sectores",
+        ariaLabel: "Sectores",
+        items: [{ label: "Salud", href: "/sectores/salud" }],
+      },
     ],
     contactLabel: "Contacto",
     contactAriaLabel: "Contacto",
@@ -132,6 +137,26 @@ export const homeCopyEs: HomeCopy = {
     signalAxis: "BUILD / 01",
   },
 
+  heroStats: {
+    ariaLabel: "Cifras del sitio, calculadas desde el contenido publicado",
+    products: {
+      label: "Productos en el portafolio",
+      detail: "{documented} documentados + {inDevelopment} en desarrollo",
+    },
+    profiles: {
+      label: "Perfiles con fuentes verificadas",
+      detail: "Última verificación · {date}",
+    },
+    organizations: {
+      label: "Organizaciones · relaciones reales",
+      detail: "Experiencia del equipo y alianzas",
+    },
+    press: {
+      label: "Publicaciones y apariciones",
+      detail: "Medios · escenarios · investigación · columnas",
+    },
+  },
+
   allyNotice: {
     eyebrow: "ALIADOS DEL DÍA D",
     title: "Somos aliados del Día D.",
@@ -156,6 +181,12 @@ export const homeCopyEs: HomeCopy = {
     closeLabel: "Cerrar el aviso",
     dialogLabel: "INPLUX es aliado del Día D, 14 de octubre de 2026 en Medellín",
   },
+  clientWall: {
+    eyebrow: "RELACIONES REALES",
+    title: "Con quiénes hemos trabajado.",
+    lead: "Entidades públicas, empresas y organizaciones con las que el equipo ha construido, operado o acompañado sistemas. Cada logotipo lleva la relación que lo respalda.",
+  },
+
   experienceRail: {
     ribbonAriaLabel: "Productos de INPLUX, cada uno con su fuente.",
     ribbonEyebrow: "PRODUCTOS / TRABAJO",
@@ -241,6 +272,26 @@ export const homeCopyEs: HomeCopy = {
         signals: ["DATOS / APRENDIZAJE", "OPERACIÓN / EVOLUCIÓN"],
       },
     ],
+  },
+
+  products: {
+    eyebrow: "02 / TRABAJO REAL",
+    titleLead: "Cada producto publica ",
+    titleEmphasis: "su evidencia.",
+    lead: "Qué está en producción, qué en piloto, qué en beta. Las capturas son de las páginas públicas de cada producto y los paneles usan los datos que esas páginas publican.",
+    buildLabel: "Build",
+    verifiedLabel: "Verificado {date}",
+    profileCta: "Ver perfil",
+    captureLabel: "Captura real · {name}",
+    captureVerified: "URL oficial · verificada {date}",
+    previewAriaLabel: "Panel de interfaz de {name} con datos publicados por el producto",
+    inDevelopmentLabel: "En desarrollo",
+    disclosure: "Capturas de páginas públicas, no recreaciones. Los paneles muestran datos que cada producto publica.",
+    capabilityTitles: {},
+    capabilityDescriptions: {},
+    headlines: {},
+    descriptions: {},
+    accessLabels: {},
   },
 
   solutions: {
@@ -562,6 +613,32 @@ export const homeCopyEs: HomeCopy = {
       "Automatización con control",
     ],
     privateCta: "Hablemos de un reto privado",
+  },
+
+  sectorStrip: {
+    ariaLabel: "Sectores en los que trabajamos",
+    eyebrow: "03 / DÓNDE TRABAJAMOS",
+    title: "Sectores con página propia.",
+    items: [
+      {
+        label: "Salud",
+        detail: "Software para IPS y prestadores: app de pacientes, telemonitoreo, integración con la historia clínica, mesa de ayuda.",
+        href: "/sectores/salud",
+        note: null,
+      },
+      {
+        label: "Sector público",
+        detail: "Entidades territoriales, hacienda y gestión municipal.",
+        href: "/capacidades#sector-publico",
+        note: null,
+      },
+      {
+        label: "Empresas",
+        detail: "Operación, datos y productos digitales para compañías privadas.",
+        href: "/capacidades",
+        note: null,
+      },
+    ],
   },
 
   build: {
@@ -1002,8 +1079,20 @@ export const homeCopyEs: HomeCopy = {
     },
   },
 
+  team: {
+    eyebrow: "05 / QUIÉN RESPONDE",
+    titleLead: "Dos direcciones: ",
+    titleEmphasis: "criterio y producto.",
+    lead: "Fábrica de software con sede en Medellín, Colombia. Quien decide qué se construye y quien dirige cómo se construye.",
+    profileCta: "Ver perfil",
+    linkedInLabel: "LinkedIn",
+    roles: {},
+    focuses: {},
+    bios: {},
+  },
+
   press: {
-    eyebrow: "06 / PRENSA Y CONVERSACIONES",
+    eyebrow: "04 / PRENSA Y CONVERSACIONES",
     titleLead: "El trabajo también entra en ",
     titleEmphasis: "conversación.",
     archiveLink: "Ver el archivo",
@@ -1029,17 +1118,22 @@ export const homeCopyEs: HomeCopy = {
     paperCode: "OPEN PAPER",
     paperFoot: "Leer · contrastar · citar",
     archiveIdeas: "IDEAS",
+    visualCodes: {},
+    eventEyebrows: {},
   },
 
   contact: {
-    eyebrow: "08 / EL SIGUIENTE PRODUCTO",
+    eyebrow: "06 / EL SIGUIENTE PRODUCTO",
     titleLead: "Construyamos lo que ",
     titleEmphasis: "sigue.",
     lead: "Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos.",
-    entityStatement: null,
+    entityStatement:
+      "INPLUX S.A.S. · NIT 901.784.448-8 · Fábrica de software con sede en Medellín, Colombia.",
     cta: "Empezar un proyecto",
     heroCtaAriaLabel: "Empezar un proyecto",
     email: "gerencia@inplux.co",
+    copyAction: "copiar",
+    copyDone: "copiado",
     linkedInLabel: "LinkedIn ↗",
     locations: ["Medellín, Antioquia · Colombia"],
   },

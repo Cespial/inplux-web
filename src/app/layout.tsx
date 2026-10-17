@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
-import { AllyNotice } from "@/components/site/AllyNotice.client";
+import { personId, teamMembers } from "@/content/team";
 import "./globals.css";
 
 const geist = localFont({
@@ -122,6 +122,15 @@ export default function RootLayout({
       "Automatización",
       "Inteligencia artificial aplicada",
     ],
+    /*
+     * Las personas se citan por su `@id` canónico (`/equipo/<slug>#person`),
+     * el mismo que usan /nosotros, /prensa y cada perfil. Así la organización
+     * y sus dos direcciones son un solo grafo y no entidades sueltas.
+     */
+    founder: teamMembers
+      .filter((member) => member.jobTitle.toLowerCase().includes("fundador"))
+      .map((member) => ({ "@id": personId(member.slug) })),
+    employee: teamMembers.map((member) => ({ "@id": personId(member.slug) })),
   };
 
   return (
@@ -138,12 +147,11 @@ export default function RootLayout({
       <body>
         {children}
         {/*
-          Aviso temporal de aliados del Día D. Se retira solo pasado el evento
-          —ver `ALLY_NOTICE_EXPIRES` en `src/content/dia-d.ts`— y va aquí, y no
-          en cada página, porque el anuncio acompaña la entrada al sitio, entre
-          por donde entre quien llega.
+          El aviso de aliados del Día D (`AllyNotice`) se desmontó el 17-oct-2026,
+          pasado el evento. Su componente, su hoja y `src/content/dia-d.ts`
+          siguen en el repo porque la tarjeta de prensa del Día D lee la lista
+          de aliados de ahí; la limpieza va en un cambio aparte.
         */}
-        <AllyNotice />
       </body>
     </html>
   );

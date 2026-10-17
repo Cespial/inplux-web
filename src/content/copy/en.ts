@@ -36,9 +36,9 @@ export const homeCopyEn: HomeCopy = {
     menuNote: "You don't need a defined scope to begin.",
     navigation: [
       { label: "The factory", href: "#fabrica-en-vivo" },
-      { label: "What we build", href: "#que-construimos" },
+      { label: "Real work", href: "#trabajo-real" },
       { label: "Where we work", href: "#donde-trabajamos" },
-      { label: "How we work", href: "#como-trabajamos" },
+      { label: "Who answers", href: "#equipo" },
       { label: "Press", href: "#prensa" },
     ],
     languageSwitch: { label: "Español", href: "/", hrefLang: "es" },
@@ -53,9 +53,9 @@ export const homeCopyEn: HomeCopy = {
         ariaLabel: "Explore",
         items: [
           { label: "The factory", href: "#fabrica-en-vivo" },
-          { label: "What we build", href: "#que-construimos" },
+          { label: "Real work", href: "#trabajo-real" },
           { label: "Where we work", href: "#donde-trabajamos" },
-          { label: "How we work", href: "#como-trabajamos" },
+          { label: "Who answers", href: "#equipo" },
           { label: "Press", href: "#prensa" },
         ],
       },
@@ -79,6 +79,11 @@ export const homeCopyEn: HomeCopy = {
           spanishRoute("Applied AI", "/capacidades#ia"),
           spanishRoute("Public services", "/capacidades#sector-publico"),
         ],
+      },
+      {
+        label: "Sectors",
+        ariaLabel: "Sectors",
+        items: [spanishRoute("Healthcare", "/sectores/salud")],
       },
     ],
     contactLabel: "Contact",
@@ -162,6 +167,26 @@ export const homeCopyEn: HomeCopy = {
     signalAxis: "BUILD / 01",
   },
 
+  heroStats: {
+    ariaLabel: "Site figures, computed from the published content",
+    products: {
+      label: "Products in the portfolio",
+      detail: "{documented} documented + {inDevelopment} in development",
+    },
+    profiles: {
+      label: "Profiles with verified sources",
+      detail: "Last verified · {date}",
+    },
+    organizations: {
+      label: "Organizations · real relationships",
+      detail: "Team experience and alliances",
+    },
+    press: {
+      label: "Publications and appearances",
+      detail: "Media · forums · research · columns",
+    },
+  },
+
   allyNotice: {
     eyebrow: "EL DÍA D ALLIES",
     title: "We are an ally of El Día D.",
@@ -186,6 +211,12 @@ export const homeCopyEn: HomeCopy = {
     closeLabel: "Close the notice",
     dialogLabel: "INPLUX is an ally of El Día D, 14 October 2026 in Medellín",
   },
+  clientWall: {
+    eyebrow: "REAL RELATIONSHIPS",
+    title: "Who we have worked with.",
+    lead: "Public institutions, companies and organizations the team has built, operated or supported systems for. Each logo carries the relationship behind it.",
+  },
+
   experienceRail: {
     ribbonAriaLabel: "INPLUX products, each with its source.",
     ribbonEyebrow: "PRODUCTS / WORK",
@@ -282,6 +313,91 @@ export const homeCopyEn: HomeCopy = {
         signals: ["DATA / LEARNING", "OPERATION / EVOLUTION"],
       },
     ],
+  },
+
+  products: {
+    eyebrow: "02 / REAL WORK",
+    titleLead: "Every product publishes ",
+    titleEmphasis: "its evidence.",
+    lead: "What is in production, what is in pilot, what is in beta. The screenshots come from each product's public pages and the panels use the data those pages publish.",
+    buildLabel: "Build",
+    verifiedLabel: "Verified {date}",
+    profileCta: "See profile",
+    captureLabel: "Real screenshot · {name}",
+    captureVerified: "Official URL · verified {date}",
+    previewAriaLabel: "{name} interface panel with data published by the product",
+    inDevelopmentLabel: "In development",
+    disclosure: "Screenshots of public pages, not recreations. The panels show data each product publishes.",
+    capabilityTitles: {
+      "tribai:0": "Query with context",
+      "tribai:1": "Visible sources",
+      "tribai:2": "Validity",
+      "tribai:3": "Tools",
+      "gobia:0": "Municipal reading",
+      "gobia:1": "Follow-up",
+      "gobia:2": "Operational traceability",
+      "gobia:3": "Demo",
+      "kelsen:0": "Analysis",
+      "kelsen:1": "Drafting",
+      "kelsen:2": "Monitoring",
+      "kelsen:3": "Traceability",
+      "laudos:0": "Specialised search",
+      "laudos:1": "Legal judgment",
+      "laudos:2": "Reading results",
+      "laudos:3": "Open beta",
+      "porkia:0": "Batches and growth",
+      "porkia:1": "Feed and storeroom",
+      "porkia:2": "Health plan",
+      "porkia:3": "Accounts per batch",
+    },
+    capabilityDescriptions: {
+      "tribai:0": "The answer comes with references that allow the review to continue.",
+      "tribai:1": "The product exposes where the information comes from, so reading does not end in an isolated answer.",
+      "tribai:2": "The interface makes the temporal status of tax information visible.",
+      "tribai:3": "Includes specialised utilities that accompany the tax query.",
+      "gobia:0": "Gathers information usually spread across departments and reports.",
+      "gobia:1": "Matters, owners and states from a shared view.",
+      "gobia:2": "Enough context to understand how each front is moving.",
+      "gobia:3": "A public route to see how it works.",
+      "kelsen:0": "Organises the study of legal documents and questions on one work surface.",
+      "kelsen:1": "Supports building documents while keeping the research context.",
+      "kelsen:2": "Lets you follow matters and relevant changes within legal work.",
+      "kelsen:3": "Makes the route between a claim, its document and its source visible.",
+      "laudos:0": "Explore arbitral awards and case law from a domain-oriented query.",
+      "laudos:1": "The product's structure is developed with a counterpart specialised in the subject.",
+      "laudos:2": "Organises matches and references to continue analysing the document.",
+      "laudos:3": "Access allows the product to be observed and evaluated while it keeps evolving.",
+      "porkia:0": "Records each batch of sows with their litters, the animals' weight and fattening progress.",
+      "porkia:1": "Keeps the inventory of feed sacks and their use per batch, and warns when the storeroom runs low.",
+      "porkia:2": "Schedules vaccines, deworming and inspections, and reminds you of each one on its day.",
+      "porkia:3": "Gathers sales, kilos delivered and income to read what each batch returned.",
+    },
+    headlines: {
+      tribai: "Finding tax judgment without losing the source.",
+      gobia: "Making a municipality's operation visible.",
+      kelsen: "Working with legal knowledge along a verifiable route.",
+      laudos: "Exploring arbitral knowledge with structure.",
+      porkia: "Running a pig farm without going back to the notebook.",
+    },
+    descriptions: {
+      tribai:
+        "Tribai brings tax queries and tools together in an environment built to review the basis and validity of the information.",
+      gobia:
+        "Gobia organises municipal information and follow-up to support reading what is happening in an institution. Its site publicly states that it is an INPLUX solution and presents a product demo.",
+      kelsen:
+        "Kelsen presents capabilities to research, analyse, draft and monitor legal work while keeping traceability.",
+      laudos:
+        "Laudos offers search over arbitral awards and case law. Its site attributes the technical development to INPLUX and the legal judgment to REDEK, and presents the product as an open beta.",
+      porkia:
+        "Porkia gathers batch tracking, feed, animal health and the accounts of a pig farm in a mobile app that works offline and keeps the data on the phone.",
+    },
+    accessLabels: {
+      tribai: "Open assistant",
+      gobia: "Open demo",
+      kelsen: "Open explorer",
+      laudos: "Open lab",
+      porkia: "Open demo",
+    },
   },
 
   solutions: {
@@ -603,6 +719,32 @@ export const homeCopyEn: HomeCopy = {
       "Automation with control",
     ],
     privateCta: "Let's talk about a private challenge",
+  },
+
+  sectorStrip: {
+    ariaLabel: "Sectors we work in",
+    eyebrow: "03 / WHERE WE WORK",
+    title: "Sectors with a page of their own.",
+    items: [
+      {
+        label: "Healthcare",
+        detail: "Software for healthcare providers: patient app, remote monitoring, integration with the clinical record, help desk. Published in Spanish.",
+        href: "/sectores/salud",
+        note: null,
+      },
+      {
+        label: "Public sector",
+        detail: "Territorial entities, public finance and municipal management. Published in Spanish.",
+        href: "/capacidades#sector-publico",
+        note: null,
+      },
+      {
+        label: "Companies",
+        detail: "Operations, data and digital products for private companies. Published in Spanish.",
+        href: "/capacidades",
+        note: null,
+      },
+    ],
   },
 
   build: {
@@ -1038,8 +1180,31 @@ export const homeCopyEn: HomeCopy = {
     },
   },
 
+  team: {
+    eyebrow: "05 / WHO ANSWERS",
+    titleLead: "Two directions: ",
+    titleEmphasis: "judgment and product.",
+    lead: "A software factory based in Medellín, Colombia. One decides what gets built; the other directs how it gets built.",
+    profileCta: "See profile",
+    linkedInLabel: "LinkedIn",
+    roles: {
+      "jaime-alonso-cano-pino": "CEO AND FOUNDER",
+      "cristian-espinal-maya": "CTO",
+    },
+    focuses: {
+      "jaime-alonso-cano-pino": "Strategy; tax, financial and institutional judgment.",
+      "cristian-espinal-maya": "Product, technology architecture and artificial intelligence.",
+    },
+    bios: {
+      "jaime-alonso-cano-pino":
+        "Directs the strategy and the judgment with which INPLUX turns experience from complex contexts into products that can operate and produce verifiable results.",
+      "cristian-espinal-maya":
+        "Leads the definition and construction of digital products. Coordinates how design, software, data and artificial intelligence work as a single delivery system.",
+    },
+  },
+
   press: {
-    eyebrow: "06 / PRESS AND CONVERSATIONS",
+    eyebrow: "04 / PRESS AND CONVERSATIONS",
     titleLead: "The work also enters the ",
     titleEmphasis: "conversation.",
     archiveLink: "See the archive",
@@ -1059,6 +1224,10 @@ export const homeCopyEn: HomeCopy = {
       Prensa: "Press",
       "Selección editorial": "Editorial pick",
       Panel: "Panel",
+      Hackathon: "Hackathon",
+      Patrocinio: "Sponsorship",
+      Cumbre: "Summit",
+      Ranking: "Ranking",
       Preprint: "Preprint",
       "Working paper": "Working paper",
       "Columna firmada": "Signed column",
@@ -1083,8 +1252,24 @@ export const homeCopyEn: HomeCopy = {
       "Preprint · no revisado por pares": "Preprint · not peer reviewed",
       "Nota editorial externa sobre investigación del equipo":
         "External editorial note about the team's research",
+      "Oncolife · IPSmedic · Ranking anual de Dinero por ventas de 2025":
+        "Oncolife · IPSmedic · Dinero's annual ranking by 2025 sales",
+      "Encuentro de Online Dispute Resolution · Boston":
+        "Online Dispute Resolution meeting · Boston",
+      "Medellín · Patrocinio en la categoría Software":
+        "Medellín · Sponsorship in the Software category",
+      "San José, California · Cumbre 9 y 10 de diciembre · Government Town Hall el 11":
+        "San José, California · Summit on 9 and 10 December · Government Town Hall on the 11th",
     },
     summaries: {
+      "clientes-5000-dinero-2026":
+        "The ranking gathers the companies that sold more than COP 62,164 million in 2025. Oncolife, an oncology institution in Bogotá, and IPSmedic, a healthcare provider with 23 sites in Valle del Cauca, are on the list. We work with both.",
+      "odr-2026-hackathon-amparo":
+        "At the ODR meeting at Harvard Business School we took Amparo.help to the hackathon run by the American Arbitration Association and odr.com at Suffolk University: a prototype for resolving healthcare disputes without lawyers or court costs, with the final decision in human hands.",
+      "dia-d-2026-aliado-software":
+        "We joined 10ampro's El Día D alongside Veronorte, Universidad EAFIT, Makeno, MBS & Associates, MacroWise and Celsia.",
+      "govai-coalition-summit-2026":
+        "The summit brings together governments and teams building AI for the public sector: trends, ethical practice, data management and real applications.",
       "ia-arbitraje-congreso-cca":
         "Cristian Espinal took part in panel 11 of the 14th National and International Arbitration Congress, held in Medellín.",
       "commonplace-ia-trabajo":
@@ -1093,16 +1278,28 @@ export const homeCopyEn: HomeCopy = {
         "A conversation about how Tribai started, the problem of looking for tax knowledge across scattered documents, and how the product was built.",
     },
     visualSignals: {
-      "ia-arbitraje-congreso-cca": "14TH CONGRESS / MEDELLÍN",
+      "clientes-5000-dinero-2026": "The 5,000 largest companies · Dinero 2026",
+      "odr-2026-hackathon-amparo": "Harvard Business School / Boston",
+      "dia-d-2026-aliado-software": "El Día D allies",
+      "govai-coalition-summit-2026": "San Jose Convention Center",
+      "ia-arbitraje-congreso-cca": "14th Congress / Medellín",
       "commonplace-ia-trabajo": "WEEKLY RESEARCH DIGEST",
       "tribai-cerebro-tributario": "TRIBAI / INTERVIEW",
     },
     imageAlts: {
+      "odr-2026-hackathon-amparo":
+        "Harvard Business School sign at Soldiers Field Park, Boston",
+      "ia-arbitraje-congreso-cca":
+        "Panel 11 of the 14th National and International Arbitration Congress: four panellists on stage under the screen with the panel title",
       "commonplace-ia-trabajo": "The Commonplace symbol",
       "tribai-cerebro-tributario":
         "Cover of the Tribai interview published by Al Poniente",
     },
     publishedLabels: {
+      "clientes-5000-dinero-2026": "20 SEP 2026",
+      "odr-2026-hackathon-amparo": "JUN 2026",
+      "dia-d-2026-aliado-software": "14 OCT 2026",
+      "govai-coalition-summit-2026": "09 DEC 2026",
       "ia-arbitraje-congreso-cca": "07 MAY 2026",
       "commonplace-ia-trabajo": "06 APR 2026",
       "tribai-cerebro-tributario": "24 MAR 2026",
@@ -1117,10 +1314,18 @@ export const homeCopyEn: HomeCopy = {
     paperCode: "OPEN PAPER",
     paperFoot: "Read · compare · cite",
     archiveIdeas: "IDEAS",
+    visualCodes: {
+      "clientes-5000-dinero-2026": "Clients in the ranking",
+      "dia-d-2026-aliado-software": "Software ally",
+      "govai-coalition-summit-2026": "09–11 Dec",
+    },
+    eventEyebrows: {
+      "govai-coalition-summit-2026": "Upcoming · December 2026",
+    },
   },
 
   contact: {
-    eyebrow: "08 / THE NEXT PRODUCT",
+    eyebrow: "06 / THE NEXT PRODUCT",
     titleLead: "Let's build what ",
     titleEmphasis: "comes next.",
     lead: "Tell us the problem, who lives with it and what should change. You don't need to arrive with requirements or a defined scope.",
@@ -1129,6 +1334,8 @@ export const homeCopyEn: HomeCopy = {
     cta: "Start a project",
     heroCtaAriaLabel: "Start a project",
     email: "gerencia@inplux.co",
+    copyAction: "copy",
+    copyDone: "copied",
     linkedInLabel: "LinkedIn ↗",
     locations: ["Miami, Florida · United States", "Medellín, Antioquia · Colombia"],
   },

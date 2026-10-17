@@ -3,7 +3,9 @@ import Link from "next/link";
 import { homeCopyEs } from "@/content/copy/es";
 import { formatCopy } from "@/content/copy/format";
 import type { PressCopy } from "@/content/copy/types";
+import { DIA_D_ALLIES } from "@/content/dia-d";
 import {
+  featuredPressStories,
   pressCategories,
   pressStories,
   type PressCategory,
@@ -85,6 +87,100 @@ function PressStoryVisual({
   const className = `${styles.visual} ${styles[`${variant}Visual`]}`;
   const signal = copy.visualSignals[story.slug] ?? story.visualSignal;
   const imageAlt = copy.imageAlts[story.slug] ?? story.imageAlt ?? "";
+  const code = copy.visualCodes[story.slug] ?? story.visualCode;
+  const codedSignal = (
+    <span className={`${styles.visualSignal} ${styles.visualSignalCoded}`}>
+      {code ? <b>{code}</b> : null}
+      {signal}
+    </span>
+  );
+
+  if (story.visualKind === "photo" && story.image) {
+    return (
+      <span className={`${className} ${styles.coverVisual} ${styles.photoVisual}`}>
+        <Image
+          src={story.image}
+          alt={imageAlt}
+          fill
+          sizes={
+            variant === "row"
+              ? "(min-width: 1100px) 36vw, (min-width: 760px) 44vw, 92vw"
+              : "(min-width: 1100px) 30vw, (min-width: 760px) 44vw, 92vw"
+          }
+          loading={eager ? "eager" : undefined}
+          fetchPriority={eager ? "high" : undefined}
+        />
+        <span className={styles.visualShade} aria-hidden="true" />
+        {codedSignal}
+      </span>
+    );
+  }
+
+  if (story.visualKind === "clients" && story.logos) {
+    return (
+      <span className={`${className} ${styles.clientsVisual}`}>
+        <span className={styles.dotGrid} aria-hidden="true" />
+        <span className={styles.clientPair}>
+          {story.logos.map((logo) => (
+            <span key={logo.src}>
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                width={logo.width}
+                height={logo.height}
+                sizes="(min-width: 760px) 14rem, 36vw"
+              />
+            </span>
+          ))}
+        </span>
+        {codedSignal}
+      </span>
+    );
+  }
+
+  if (story.visualKind === "allies") {
+    return (
+      <span className={`${className} ${styles.alliesVisual}`}>
+        <span className={styles.dotGrid} aria-hidden="true" />
+        <span className={styles.allyGrid}>
+          {DIA_D_ALLIES.map((ally) => (
+            <span key={ally.id}>
+              <Image
+                src={ally.src}
+                alt={ally.name}
+                width={ally.width}
+                height={ally.height}
+                sizes="8rem"
+              />
+            </span>
+          ))}
+        </span>
+        {codedSignal}
+      </span>
+    );
+  }
+
+  if (story.visualKind === "event" && story.event) {
+    const eyebrow = copy.eventEyebrows[story.slug] ?? story.event.eyebrow;
+    return (
+      <span className={`${className} ${styles.eventVisual}`}>
+        <span className={styles.dotGrid} aria-hidden="true" />
+        <span className={styles.eventPlate}>
+          <span>{eyebrow}</span>
+          <strong>
+            {story.event.name.map((line, index) => (
+              <span key={line}>
+                {index > 0 ? <br /> : null}
+                {line}
+              </span>
+            ))}
+          </strong>
+          <em>{story.event.place}</em>
+        </span>
+        {codedSignal}
+      </span>
+    );
+  }
 
   if (story.visualKind === "cover" && story.image) {
     return (
@@ -193,7 +289,10 @@ function HomeStoryList({
   return (
     <ul className={styles.homeList}>
       {stories.map((story, index) => (
-        <li className={styles.homeItem} key={story.slug}>
+        <li
+          className={`${styles.homeItem} ${story.homeFeature ? styles.homeFeature : ""}`}
+          key={story.slug}
+        >
           <article className={styles.homeCard}>
             <a
               className={styles.homeCardLink}
@@ -203,13 +302,15 @@ function HomeStoryList({
               aria-label={externalLabel(story, copy)}
             >
               <PressStoryVisual story={story} eager={index === 0} copy={copy} />
-              <StoryMeta story={story} copy={copy} />
-              <StorySourceContext story={story} copy={copy} />
-              <h3 lang={copy.storyLang ?? undefined}>{story.title}</h3>
-              <p>{copy.summaries[story.slug] ?? story.summary}</p>
-              <span className={styles.storyAction}>
-                {copy.sourceAction}
-                <span aria-hidden="true">↗</span>
+              <span className={styles.homeBody}>
+                <StoryMeta story={story} copy={copy} />
+                <StorySourceContext story={story} copy={copy} />
+                <h3 lang={copy.storyLang ?? undefined}>{story.title}</h3>
+                <p>{copy.summaries[story.slug] ?? story.summary}</p>
+                <span className={styles.storyAction}>
+                  {copy.sourceAction}
+                  <span aria-hidden="true">↗</span>
+                </span>
               </span>
             </a>
           </article>
@@ -343,7 +444,7 @@ export function FactoryPressStories({
 }: {
   copy?: PressCopy;
 }) {
-  const featuredStories = pressStories.filter((story) => story.featured).slice(0, 3);
+  const featuredStories = featuredPressStories(7);
   const archiveHrefLang = copy.storyLang ?? undefined;
 
   return (

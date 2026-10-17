@@ -418,6 +418,80 @@ export type BuildNarrativeCopy = {
   factoryRun: FactoryRunCopy;
 };
 
+/**
+ * La cinta de cifras del hero. Los números no viven aquí: se calculan desde el
+ * contenido (`work.ts`, `home.ts`, `press.ts` y el muro) y aquí solo van las
+ * etiquetas. Las plantillas usan {n}, {documented}, {inDevelopment} y {date}.
+ */
+export type HeroStatsCopy = {
+  ariaLabel: string;
+  products: { label: string; detail: string };
+  profiles: { label: string; detail: string };
+  organizations: { label: string; detail: string };
+  press: { label: string; detail: string };
+};
+
+export type ClientWallCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+};
+
+export type ProductBlocksCopy = {
+  eyebrow: string;
+  titleLead: string;
+  titleEmphasis: string;
+  lead: string;
+  /** Antetítulo de cada bloque: «Build / 01». */
+  buildLabel: string;
+  /** Plantilla con {date}. */
+  verifiedLabel: string;
+  profileCta: string;
+  /** Plantilla con {name}. */
+  captureLabel: string;
+  /** Plantilla con {date}. */
+  captureVerified: string;
+  /** Plantilla con {name}. */
+  previewAriaLabel: string;
+  inDevelopmentLabel: string;
+  disclosure: string;
+  /** Traducción de las capacidades por slug; vacío en español. */
+  capabilityTitles: Readonly<Record<string, string>>;
+  capabilityDescriptions: Readonly<Record<string, string>>;
+  headlines: Readonly<Record<string, string>>;
+  descriptions: Readonly<Record<string, string>>;
+  accessLabels: Readonly<Record<string, string>>;
+};
+
+export type TeamLeadersCopy = {
+  eyebrow: string;
+  titleLead: string;
+  titleEmphasis: string;
+  lead: string;
+  profileCta: string;
+  linkedInLabel: string;
+  /** Traducciones por slug; vacías en español porque `team.ts` ya lo está. */
+  roles: Readonly<Record<string, string>>;
+  focuses: Readonly<Record<string, string>>;
+  bios: Readonly<Record<string, string>>;
+};
+
+export type SectorStripItem = {
+  label: string;
+  detail: string;
+  /** Ruta interna, o null cuando el sector aún no tiene página. */
+  href: string | null;
+  /** Nota en mono para los sectores sin página («Próximamente»). */
+  note: string | null;
+};
+
+export type SectorStripCopy = {
+  ariaLabel: string;
+  eyebrow: string;
+  title: string;
+  items: readonly SectorStripItem[];
+};
+
 export type PressCopy = {
   eyebrow: string;
   titleLead: string;
@@ -449,6 +523,10 @@ export type PressCopy = {
   paperCode: string;
   paperFoot: string;
   archiveIdeas: string;
+  /** Código de la tarjeta por slug (PANEL 11, ODR 2026…); vacío en español. */
+  visualCodes: Readonly<Record<string, string>>;
+  /** Antetítulo de la placa de evento por slug; vacío en español. */
+  eventEyebrows: Readonly<Record<string, string>>;
 };
 
 export type HomeContactCopy = {
@@ -461,6 +539,9 @@ export type HomeContactCopy = {
   cta: string;
   heroCtaAriaLabel: string;
   email: string;
+  /** Botón que copia el correo al portapapeles, y su estado al copiar. */
+  copyAction: string;
+  copyDone: string;
   linkedInLabel: string;
   locations: readonly string[];
 };
@@ -473,13 +554,18 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
+  heroStats: HeroStatsCopy;
   allyNotice: AllyNoticeCopy;
+  clientWall: ClientWallCopy;
   experienceRail: ExperienceRailCopy;
   factoryScrolly: FactoryScrollyCopy;
+  products: ProductBlocksCopy;
   solutions: SolutionsCopy;
   apiChapter: ApiChapterCopy;
   sectors: SectorsCopy;
+  sectorStrip: SectorStripCopy;
   build: BuildNarrativeCopy;
+  team: TeamLeadersCopy;
   press: PressCopy;
   contact: HomeContactCopy;
 };

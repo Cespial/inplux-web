@@ -145,6 +145,17 @@ const pageDefinitions = {
       "contacto",
     ],
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    // La portada reparte autoridad hacia dentro: los dos perfiles de persona
+    // —donde vive la identidad de cada dirección para los buscadores— y la
+    // página del sector. Si un rediseño los quita, el build lo dice.
+    requiredLinks: [
+      "/equipo/jaime-alonso-cano-pino",
+      "/equipo/cristian-espinal-maya",
+      "/sectores/salud",
+      "/trabajo",
+      "/prensa",
+    ],
+    websiteId: `${siteUrl}/#website`,
   },
   englishHome: {
     file: ".next/server/app/en.html",
@@ -312,6 +323,33 @@ const pageDefinitions = {
       "Producto, operación, IA e integración reunidos alrededor de un cambio concreto.",
     twitterImageAlt: defaultOgImageAlt,
     contact: sharedContact,
+  },
+  sectorSalud: {
+    file: ".next/server/app/sectores/salud.html",
+    title: "Software para IPS y prestadores de salud | INPLUX",
+    description:
+      "Lo que INPLUX construye para IPS y prestadores de salud en Colombia: app de pacientes, central de telemonitoreo, integración con la historia clínica, mesa de ayuda, tableros y sistemas a la medida.",
+    canonical: `${siteUrl}/sectores/salud`,
+    ogTitle: "Software para IPS y prestadores de salud | INPLUX",
+    ogDescription:
+      "Lo que INPLUX construye para IPS y prestadores de salud en Colombia: app de pacientes, central de telemonitoreo, integración con la historia clínica, mesa de ayuda, tableros y sistemas a la medida.",
+    ogUrl: `${siteUrl}/sectores/salud`,
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
+    twitterTitle: "Software para IPS y prestadores de salud | INPLUX",
+    twitterDescription:
+      "Lo que INPLUX construye para IPS y prestadores de salud en Colombia: app de pacientes, central de telemonitoreo, integración con la historia clínica, mesa de ayuda, tableros y sistemas a la medida.",
+    twitterImageAlt: defaultOgImageAlt,
+    jsonLd: {
+      type: "WebPage",
+      name: "Software para IPS y prestadores de salud",
+      url: `${siteUrl}/sectores/salud`,
+    },
+    // Cabecera + hero + cierre: como la portada, tres disparadores, porque la
+    // página entera es una invitación a contar el caso. No nombra clientes
+    // (decisión del 17-oct-2026).
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    forbiddenText: ["INFINITY", "IPSMEDIC", "Plenus", "Sinergia", "Oncolife", "areaServed"],
   },
   about: {
     file: ".next/server/app/nosotros.html",
@@ -906,6 +944,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/deck`,
     `${siteUrl}/deck/presentacion`,
     `${siteUrl}/capacidades`,
+    `${siteUrl}/sectores/salud`,
     `${siteUrl}/nosotros`,
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,
     `${siteUrl}/equipo/cristian-espinal-maya`,
@@ -1048,6 +1087,33 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
   verifyContactSurface(name, html, definition.contact);
   verifyJsonLd(name, html, definition);
   verifyIds(name, html, definition.legacyFragments);
+  for (const link of definition.requiredLinks ?? []) {
+    expect(
+      html.includes(`href="${link}"`),
+      `${name}: debe enlazar ${link}; la autoridad interna de esa ruta depende de este enlace`,
+    );
+  }
+  for (const text of definition.forbiddenText ?? []) {
+    expect(
+      !html.includes(text),
+      `${name}: publica «${text}», que esta ruta no puede nombrar`,
+    );
+  }
+  if (definition.websiteId) {
+    const website = [...html.matchAll(/<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)]
+      .map((match) => {
+        try {
+          return JSON.parse(decodeHtml(match[1]));
+        } catch {
+          return null;
+        }
+      })
+      .find((data) => data && data["@type"] === "WebSite");
+    expect(
+      website?.["@id"] === definition.websiteId,
+      `${name}: el WebSite JSON-LD debe declarar "@id" ${definition.websiteId}; los perfiles de /equipo lo citan en isPartOf`,
+    );
+  }
   if (definition.attribution) verifyAttribution(name, html);
   if (definition.productFooter) verifyProductFooter(name, html, definition.productFooter);
   if (definition.deck) verifyDeckShape(name, html, definition.deck);

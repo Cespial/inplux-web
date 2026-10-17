@@ -1208,3 +1208,235 @@
     transition: none !important;
   }
 }
+
+/* ── Portada v2: siete destacadas, la primera a todo el ancho ─────────────── */
+
+.homeBody {
+  display: contents;
+}
+
+.homeList .homeItem,
+.homeList .homeItem:first-child {
+  grid-column: span 4;
+}
+
+.homeList .homeItem.homeFeature {
+  grid-column: 1 / -1;
+  margin-bottom: clamp(0.5rem, 1.5vw, 1.25rem);
+  border-bottom: 1px solid var(--press-line);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.homeList .homeItem:first-child .homeVisual {
+  aspect-ratio: 4 / 3;
+}
+
+.homeFeature .homeCardLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+}
+
+.homeFeature .homeBody {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.homeList .homeFeature .homeVisual {
+  aspect-ratio: 3 / 2;
+}
+
+.homeFeature .meta {
+  margin-top: 0;
+}
+
+.homeFeature .homeCard h3 {
+  max-width: 22ch;
+  margin-top: 1rem;
+  font-family: var(--font-serif), "Newsreader", Georgia, serif;
+  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.homeFeature .homeCard p {
+  max-width: 52ch;
+}
+
+/* Señal con código: el código va en teal, en bloque, encima del texto. */
+.visualSignalCoded b {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--press-teal);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+}
+
+.photoVisual img {
+  object-position: 50% 38%;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.clientsVisual,
+.alliesVisual,
+.eventVisual {
+  align-items: center;
+  justify-content: center;
+}
+
+.clientsVisual {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(0, 215, 202, 0.1), transparent 44%),
+    #121311;
+}
+
+.clientPair {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2.4rem;
+}
+
+.clientPair > span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem clamp(1rem, 2.5vw, 2rem);
+}
+
+.clientPair > span + span {
+  border-left: 1px solid rgba(249, 245, 239, 0.18);
+}
+
+.clientPair img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: clamp(3.2rem, 5vw, 4.6rem);
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+.clientPair > span:nth-child(2) img {
+  max-height: clamp(4.4rem, 7vw, 6.4rem);
+}
+
+.alliesVisual {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(245, 190, 14, 0.1), transparent 42%),
+    #121311;
+}
+
+.allyGrid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 82%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 1.1rem 1.3rem;
+  margin: 0 auto 1.8rem;
+}
+
+.allyGrid > span {
+  display: flex;
+  min-height: 2.4rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.allyGrid img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 2rem;
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.82;
+}
+
+.allyGrid > span:nth-child(4) img {
+  max-height: 2.6rem;
+}
+
+.eventVisual {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(0, 215, 202, 0.14), transparent 42%),
+    #0f1514;
+}
+
+.eventPlate {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  min-width: 62%;
+  gap: 0.55rem;
+  margin-bottom: 1.6rem;
+  border: 1px solid rgba(249, 245, 239, 0.2);
+  border-radius: 0.35rem;
+  background: rgba(12, 12, 11, 0.84);
+  box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.26);
+  padding: 1.1rem 1.25rem;
+}
+
+.eventPlate > span {
+  color: var(--press-teal);
+  font: 500 0.6rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.eventPlate strong {
+  color: #f7f2ea;
+  font-family: var(--font-serif), "Newsreader", Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.eventPlate em {
+  color: #aaa69d;
+  font: 500 0.62rem/1.3 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1100px) {
+  .homeList .homeItem,
+  .homeList .homeItem:first-child {
+    grid-column: span 6;
+  }
+
+  .homeList .homeItem.homeFeature {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 820px) {
+  .homeFeature .homeCardLink {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .homeList .homeFeature .homeVisual {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .homeList .homeItem,
+  .homeList .homeItem:first-child,
+  .homeList .homeItem.homeFeature {
+    grid-column: 1 / -1;
+  }
+}
