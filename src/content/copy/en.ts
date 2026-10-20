@@ -1001,6 +1001,7 @@ export const homeCopyEn: HomeCopy = {
       "Escenarios públicos": "Public forums",
       Investigación: "Research",
       "Ideas firmadas": "Signed ideas",
+      Proyectos: "Projects",
     },
     formats: {
       Entrevista: "Interview",
@@ -1014,6 +1015,7 @@ export const homeCopyEn: HomeCopy = {
       Preprint: "Preprint",
       "Working paper": "Working paper",
       "Columna firmada": "Signed column",
+      Lanzamiento: "Launch",
     },
     bylines: {
       "Curaduría editorial: The Commonplace":
@@ -1024,6 +1026,8 @@ export const homeCopyEn: HomeCopy = {
         "Report on research by Cristian Espinal Maya and Santiago Jiménez Londoño",
     },
     editorialStatuses: {
+      "Johannesburgo · Plataforma de SE Holdings en producción":
+        "Johannesburg · SE Holdings platform in production",
       "Publicación del equipo · no es cobertura independiente":
         "Published by the team · not independent coverage",
       "Participación en panel · programa oficial del evento":
@@ -1045,6 +1049,8 @@ export const homeCopyEn: HomeCopy = {
         "San José, California · Summit on 9 and 10 December · Government Town Hall on the 11th",
     },
     summaries: {
+      "seagricolas-sudafrica":
+        "For SE Holdings in Johannesburg we built seagricolas.com, the platform they use to hire out their farm machinery fleet, always with an operator. A catalogue of 37 units, per-hectare rates, a map of the areas where the fleet works and online requests made by month, because planting waits for the first rain.",
       "clientes-5000-dinero-2026":
         "The ranking gathers the companies that sold more than COP 62,164 million in 2025. Oncolife, an oncology institution in Bogotá, and IPSmedic, a healthcare provider with 23 sites in Valle del Cauca, are on the list. We work with both.",
       "odr-2026-hackathon-amparo":
