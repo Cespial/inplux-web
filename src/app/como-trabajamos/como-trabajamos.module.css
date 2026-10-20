@@ -44,146 +44,27 @@
 }
 
 /* ── Capas ────────────────────────────────────────────────────────────── */
-.layerGrid {
-  margin-top: 0;
-}
 
-.layer {
-  display: grid;
-  gap: 1rem;
-  align-content: start;
-  padding: 1.5rem 1.6rem 1.7rem;
-  border: 1px solid var(--line-ink);
-  border-radius: 0.9rem;
-  background: rgba(255, 255, 255, 0.38);
-  scroll-margin-top: 6rem;
-}
 
-.layerMeta {
-  display: flex;
-  justify-content: space-between;
-  color: var(--teal-ink);
-  font: 500 var(--step-9) / 1.2 var(--sans);
-  letter-spacing: var(--track-micro);
-  text-transform: uppercase;
-}
 
-.layerMeta b {
-  font-weight: 500;
-  color: var(--ink-muted);
-}
 
-.layer h3 {
-  font: 400 var(--step-4) / 1.05 var(--sans);
-  letter-spacing: var(--track-display);
-}
 
-.layer dl {
-  display: grid;
-  gap: 0.9rem;
-  margin: 0;
-}
 
-.layer dt {
-  color: var(--ink-muted);
-  font-size: var(--step-9);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 
-.layer dd {
-  margin: 0.25rem 0 0;
-  font-size: var(--step-8);
-}
 
 /* ── Evidencia ────────────────────────────────────────────────────────── */
-.evidenceGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-}
 
-.evidenceItem {
-  display: grid;
-  gap: 1.1rem;
-  align-content: start;
-  min-width: 0;
-}
 
-.browser {
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 0.8rem;
-  background: var(--ink);
-}
 
-.browserBar {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 0.9rem;
-  border-bottom: 1px solid var(--line);
-}
 
-.browserBar span {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--fg-dim);
-  opacity: 0.6;
-}
 
-.browserBar p {
-  flex: 1;
-  margin: 0;
-  color: var(--fg-muted);
-  font-size: var(--step-9);
-  text-align: center;
-}
 
-.browser img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: top left;
-}
 
-.browser figcaption {
-  padding: 0.6rem 0.9rem;
-  border-top: 1px solid var(--line);
-  color: var(--fg-dim);
-  font-size: var(--step-9);
-}
 
-.evidenceCopy {
-  display: grid;
-  gap: 0.5rem;
-}
 
-.evidenceCopy h3 {
-  font: 500 var(--step-5) / 1.1 var(--sans);
-}
 
-.evidenceCopy p:not([class]) {
-  color: var(--fg-muted);
-  font-size: var(--step-8);
-}
 
-.evidenceCopy small {
-  color: var(--fg-dim);
-  font-size: var(--step-9);
-}
 
-.evidenceCopy a {
-  width: fit-content;
-  color: var(--teal);
-  font-size: var(--step-8);
-  font-weight: 500;
-  text-decoration: none;
-}
 
 /* ── Compromisos en dos tiempos ───────────────────────────────────────── */
 .commitmentList {
@@ -260,9 +141,6 @@
 }
 
 /* ── Sectores ─────────────────────────────────────────────────────────── */
-.sectors {
-  border-top: 1px solid var(--line);
-}
 
 /* ── Responsive ───────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
@@ -272,7 +150,6 @@
 }
 
 @media (max-width: 760px) {
-  .evidenceGrid,
   .commitmentList {
     grid-template-columns: 1fr;
   }
