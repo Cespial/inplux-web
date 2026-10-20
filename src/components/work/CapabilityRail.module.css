@@ -1,0 +1,89 @@
+.rail {
+  display: grid;
+  gap: 1.2rem;
+}
+.track {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0.25rem 0 1rem;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.track:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 6px;
+  border-radius: 0.5rem;
+}
+.card {
+  display: grid;
+  flex: 0 0 min(22rem, 82vw);
+  gap: 0.9rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.2rem 1.3rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: var(--ink);
+  scroll-snap-align: start;
+}
+.chrome {
+  display: grid;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--teal);
+  font-size: 0.7rem;
+  letter-spacing: var(--track-micro);
+}
+.chrome i {
+  display: grid;
+  gap: 0.45rem;
+}
+.chrome b {
+  display: block;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(246, 242, 236, 0.12);
+}
+.chrome b:first-child {
+  background: rgba(0, 215, 202, 0.55);
+}
+.card h3 {
+  margin: 0;
+  font: 500 var(--step-5) / 1.15 var(--sans);
+  letter-spacing: var(--track-display);
+}
+.card p {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: var(--step-8);
+}
+.controls {
+  display: flex;
+  gap: 0.6rem;
+}
+.controls button {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(246, 242, 236, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ivory);
+  font: 500 1rem / 1 var(--sans);
+  cursor: pointer;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+.controls button:hover:not(:disabled) {
+  border-color: var(--ivory);
+}
+.controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

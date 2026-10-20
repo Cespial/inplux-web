@@ -38,12 +38,12 @@ const expectedRoutes = [
 ];
 
 const expectedSocialImages = [
-  "/api/og/trabajo/directorio?v=2026-08-11",
-  "/api/og/trabajo/tribai?v=2026-08-11",
-  "/api/og/trabajo/gobia?v=2026-08-11",
-  "/api/og/trabajo/kelsen?v=2026-08-11",
-  "/api/og/trabajo/laudos?v=2026-08-11",
-  "/api/og/trabajo/porkia?v=2026-08-11",
+  "/api/og/trabajo/directorio?v=2026-10-20",
+  "/api/og/trabajo/tribai?v=2026-10-20",
+  "/api/og/trabajo/gobia?v=2026-10-20",
+  "/api/og/trabajo/kelsen?v=2026-10-20",
+  "/api/og/trabajo/laudos?v=2026-10-20",
+  "/api/og/trabajo/porkia?v=2026-10-20",
 ];
 
 function readPngDimensions(buffer) {

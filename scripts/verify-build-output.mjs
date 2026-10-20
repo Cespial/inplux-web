@@ -9,7 +9,7 @@ const siteUrl = "https://inplux.co";
 const defaultOgImage = `${siteUrl}/brand/og/og-default.png`;
 const defaultOgImageAlt = "INPLUX, de un problema real a software en producción";
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
-const workSocialVersion = "2026-08-11";
+const workSocialVersion = "2026-10-20";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
 
@@ -224,28 +224,29 @@ const pageDefinitions = {
   },
   work: {
     file: ".next/server/app/trabajo.html",
-    title: "Trabajo y productos — evidencia y atribución | INPLUX",
+    title: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
     description:
-      "Los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
+      "Seis productos construidos y operados por INPLUX, cada uno con sus fuentes públicas y la fecha en que las revisamos.",
     canonical: `${siteUrl}/trabajo`,
-    ogTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
+    ogTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
     ogDescription:
       "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
     ogUrl: `${siteUrl}/trabajo`,
     ogImage: workSocialImage("directorio"),
     ogImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
-    twitterTitle: "Trabajo y productos — evidencia y atribución | INPLUX",
+    twitterTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
     twitterDescription:
       "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
     twitterImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     jsonLd: {
       type: "CollectionPage",
-      name: "Trabajo y productos — evidencia y atribución",
+      name: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia",
       url: `${siteUrl}/trabajo`,
     },
-    contact: sharedContact,
+    // La cabecera más el CTA del cierre.
+    contact: { ...sharedContact, triggers: 2 },
   },
   ...Object.fromEntries(
     workProfiles.map((profile) => [
@@ -268,7 +269,8 @@ const pageDefinitions = {
           name: `${profile.name} — perfil de producto`,
           url: `${siteUrl}/trabajo/${profile.slug}`,
         },
-        contact: sharedContact,
+        // La cabecera más el CTA del cierre.
+        contact: { ...sharedContact, triggers: 2 },
       },
     ]),
   ),

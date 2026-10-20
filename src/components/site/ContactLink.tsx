@@ -24,7 +24,9 @@ export type ContactSource =
   | "sector-closing"
   // /como-trabajamos: hero y cierre.
   | "how-we-work-hero"
-  | "how-we-work-closing";
+  | "how-we-work-closing"
+  // Productos (/trabajo y /trabajo/[slug]): el cierre.
+  | "work-closing";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;

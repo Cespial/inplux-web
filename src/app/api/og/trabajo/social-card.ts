@@ -36,6 +36,19 @@ export type WorkSocialCard = DirectorySocialCard | ProfileSocialCard;
 
 const siteUrl = "https://inplux.co";
 
+/**
+ * La versión del diseño de la tarjeta. La URL social lleva `?v=` para que las
+ * redes vuelvan a pedir la imagen cuando cambia: hasta octubre de 2026 solo se
+ * movía con la verificación de las fuentes, y un rediseño de la tarjeta se
+ * quedaba cacheado con la versión vieja. Se compara con la verificación más
+ * reciente y gana la fecha mayor.
+ */
+export const workSocialDesignVersion = "2026-10-20";
+
+function newer(a: string, b: string) {
+  return a > b ? a : b;
+}
+
 function latestVerification(profile: WorkProfile) {
   return profile.sources.reduce(
     (latest, source) =>
@@ -65,14 +78,14 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
     return {
       key,
       kind: "directory",
-      title: "Trabajo y productos",
+      title: "Productos propios",
       description:
         "Cada producto, con sus fuentes públicas y su fecha de verificación.",
       eyebrow: "DIRECTORIO / EVIDENCIA",
       status: `${workProfiles.length} PRODUCTOS DOCUMENTADOS`,
       attribution: "CADA DATO CON SU FUENTE",
       sourceCount,
-      version,
+      version: newer(version, workSocialDesignVersion),
     };
   }
 
@@ -93,7 +106,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
     status: profile.status.label,
     attribution: profile.attribution.label,
     attributionState: profile.attribution.state,
-    version: latestVerification(profile),
+    version: newer(latestVerification(profile), workSocialDesignVersion),
   };
 }
 
