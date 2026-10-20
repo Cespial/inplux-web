@@ -28,7 +28,7 @@ export const homeCopyEs: HomeCopy = {
     contactCtaMobile: "Empezar un proyecto",
     menuNote: "No necesitas tener el alcance definido.",
     navigation: siteNavigation,
-    languageSwitch: null,
+    languageSwitch: { label: "English", href: "/en", hrefLang: "en" },
   },
 
   footer: {

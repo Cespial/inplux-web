@@ -14,9 +14,9 @@ export type HeroVideoSource = {
 export const HOME_HERO_VIDEO = {
   poster: "/media/hero-poster.jpg",
   sources: [
+    { src: "/media/hero-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
     { src: "/media/hero-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.08"' },
     { src: "/media/hero-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
-    { src: "/media/hero-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
     { src: "/media/hero.mp4", type: "video/mp4" },
   ],
 } as const satisfies { poster: string; sources: readonly HeroVideoSource[] };
