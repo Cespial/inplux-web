@@ -149,15 +149,57 @@
 }
 
 .tech ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  width: 100%;
+  border-block: 1px solid var(--line-ink);
 }
 
+/* Los nombres se tratan como un muro de logos (el de PRIMERO), sin dibujar
+   logotipos de terceros: celdas de alto uniforme, el nombre en Rethink Sans
+   500 a tamaño de marca, en tinta al 60 % que se enciende al pasar. La banda
+   es clara, así que el «marfil» del muro oscuro aquí es tinta. */
 .tech li {
-  color: var(--ink-soft);
-  font: 500 1.15rem / 1 var(--sans);
+  display: grid;
+  place-items: center;
+  min-height: clamp(4.5rem, 7vw, 6rem);
+  padding-inline: 1rem;
+  color: color-mix(in srgb, var(--black) 60%, transparent);
+  font: 500 clamp(1.2rem, 1.9vw, 1.6rem) / 1 var(--sans);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  transition: color 0.3s var(--ease-out);
+}
+
+.tech li + li {
+  border-left: 1px solid var(--line-ink);
+}
+
+.tech li:hover {
+  color: var(--black);
+}
+
+@media (max-width: 760px) {
+  .tech ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tech li + li {
+    border-left: 0;
+  }
+
+  .tech li:nth-child(even) {
+    border-left: 1px solid var(--line-ink);
+  }
+
+  .tech li:nth-child(n + 3) {
+    border-top: 1px solid var(--line-ink);
+  }
+
+  .tech li:last-child {
+    grid-column: 1 / -1;
+    border-left: 0;
+  }
 }
 
 .techNote {

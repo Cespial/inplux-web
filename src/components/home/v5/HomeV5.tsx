@@ -360,7 +360,10 @@ const AUDIT_ICONS = [
  * La pila técnica se NOMBRA, no se dibuja: los logotipos de terceros sólo
  * entran por `partners.json` con su permiso registrado (lo vigila
  * `scripts/partners-gate.mjs`). Nombrar la tecnología con la que se construye
- * es uso descriptivo, y la nota lo dice.
+ * es uso descriptivo, y la nota lo dice. Revisado el 20-oct-2026: AWS y
+ * Google Cloud solo admiten texto plano a quien no es socio formal; Anthropic
+ * y Vercel piden permiso escrito y prohíben recolorear. El tratamiento de muro
+ * de logos es tipográfico (`.tech` en home-v5.module.css).
  */
 const TECH_STACK = ["Anthropic", "OpenAI", "AWS", "Google Cloud", "Vercel"] as const;
 
