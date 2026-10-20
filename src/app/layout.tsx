@@ -6,16 +6,17 @@ import "./globals.css";
 
 /*
  * Una sola familia para todo el sitio: Rethink Sans (OFL), variable de 400 a
- * 800, con su cursiva. next/font inyecta en <html> las dos variables que usan
+ * 800, sólo redonda: el sitio no usa cursiva y `font-synthesis: none` en
+ * `globals.css` impide que el navegador la invente; lo que antes iba en
+ * cursiva va en peso 600. next/font inyecta en <html> las dos variables que usan
  * las hojas —--font-body y --font-serif— y las dos cargan los mismos archivos
  * con la misma precarga, así que comparten URL y el navegador los descarga una
- * sola vez. next/font exige opciones literales: por eso la lista se repite. La
- * cursiva y la mono se enlazan a esta misma familia en `tokens/typography.css`.
+ * sola vez. next/font exige opciones literales: por eso la lista se repite. Los
+ * alias de cursiva y mono se enlazan a esta misma familia en `tokens/typography.css`.
  */
 const rethink = localFont({
   src: [
     { path: "./fonts/RethinkSans-Latin.woff2", weight: "400 800", style: "normal" },
-    { path: "./fonts/RethinkSans-Latin-Italic.woff2", weight: "400 800", style: "italic" },
   ],
   variable: "--font-body",
   display: "swap",
@@ -24,7 +25,6 @@ const rethink = localFont({
 const rethinkDisplay = localFont({
   src: [
     { path: "./fonts/RethinkSans-Latin.woff2", weight: "400 800", style: "normal" },
-    { path: "./fonts/RethinkSans-Latin-Italic.woff2", weight: "400 800", style: "italic" },
   ],
   variable: "--font-serif",
   display: "swap",

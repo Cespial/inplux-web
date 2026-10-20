@@ -55,7 +55,7 @@ const expectedSocialImages = [
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es
 // inmutable; la marca, que se repinta con el mismo nombre, no.
 const expectedCacheControl = [
-  ["/media/hero-720.mp4", "public, max-age=31536000, immutable"],
+  ["/media/hero-480.mp4", "public, max-age=31536000, immutable"],
   ["/media/hero-poster-828.avif", "public, max-age=31536000, immutable"],
   ["/sectores/sector-salud.webp", "public, max-age=31536000, immutable"],
   ["/brand/og/og-sector-salud.jpg", "public, max-age=86400, stale-while-revalidate=604800"],

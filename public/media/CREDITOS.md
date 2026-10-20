@@ -1,7 +1,8 @@
 # Créditos del video del hero
 
 Montaje propio de INPLUX (octubre de 2026): diez tomas de 2 s con corte seco, color corregido y exportado
-en AV1, HEVC y H.264. Todas las tomas vienen de Pexels, cuya licencia permite el uso comercial gratuito
+en AV1, HEVC y H.264 a 1080p para escritorio, y en H.264 a 480p (854 × 480, libx264 crf 33, 886 KB) para
+teléfonos; `HeroVideo` elige la fuente según el ancho de la pantalla. Todas las tomas vienen de Pexels, cuya licencia permite el uso comercial gratuito
 sin atribución obligatoria (https://www.pexels.com/license/). Se citan por cortesía y para rastrear su origen.
 
 | # | Toma | Pexels |
@@ -56,7 +57,7 @@ vienen de Pexels (licencia Pexels: uso comercial gratuito sin atribución obliga
 
 Montaje propio de INPLUX (octubre de 2026): seis tomas de 3 s con corte seco, color natural, 1080p a 30 fps
 a partir de originales 4K, sin audio. Exportado en AV1 (svt, crf 38), HEVC (x265, crf 27, hvc1), H.264 (crf 24)
-y 720p (crf 26) para móvil; póster del primer fotograma en JPG + AVIF/WebP a 828/1280/1920.
+y 480p (854 × 480, libx264 crf 30, 692 KB) para teléfonos; póster del primer fotograma en JPG + AVIF/WebP a 828/1280/1920.
 Todas las tomas vienen de Pexels (licencia Pexels: uso comercial gratuito sin atribución obligatoria);
 ninguna se repite con los montajes de portada, Cómo trabajamos o Nosotros.
 

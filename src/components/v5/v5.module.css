@@ -104,6 +104,7 @@
 .d1 em,
 .d2 em {
   font-style: normal;
+  font-weight: inherit;
   color: var(--teal);
 }
 

@@ -30,7 +30,18 @@
 }
 
 /* ═══════ BASE ═══════ */
-html { scroll-behavior: auto; }
+html {
+  scroll-behavior: auto;
+  /* Rethink Sans sólo viene en redonda: nada de cursiva ni negrita inventadas. */
+  font-synthesis: none;
+}
+
+/* Sin cara cursiva, el énfasis va en peso. Los titulares v5 lo pintan en teal
+   con su propio peso (`v5.module.css`). */
+em {
+  font-style: normal;
+  font-weight: 600;
+}
 
 body {
   min-width: 0;

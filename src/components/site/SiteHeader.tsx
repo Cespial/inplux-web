@@ -492,12 +492,18 @@ export function SiteHeader({
           prefetch={false}
           aria-label={copy.brandLabel}
         >
+          {/*
+            El logo es el elemento del LCP en móvil: el texto del hero entra con
+            `rise` desde opacidad 0 y Chrome no lo cuenta. `priority` lo precarga;
+            `fetchPriority="high"` evita que el SVG haga cola detrás de los chunks.
+          */}
           <Image
             src="/brand/logos/inplux-logo-horizontal-inverse.svg"
             alt="INPLUX"
             width={403}
             height={112}
             priority
+            fetchPriority="high"
           />
         </Link>
 
