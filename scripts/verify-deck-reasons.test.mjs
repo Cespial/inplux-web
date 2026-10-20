@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFile, readdir } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { bannedPrimeroPhrases, verifyPrimeroPhrases } from "./verify-public-content.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -125,4 +127,37 @@ test("ninguna frase se acerca al ancho de línea de 390 px", () => {
     masLarga.length <= 44,
     `«${masLarga}» mide ${masLarga.length} caracteres y a 390 px caben ~48: envolvería, y el tachón cruzaría entre los dos renglones`,
   );
+});
+
+/**
+ * La guardia contra los títulos de PRIMERO.
+ *
+ * Es una lista aparte de las trece reglas: no sale en la lámina y se compara
+ * sin mayúsculas ni acentos, porque la forma más fácil de colar una frase ajena
+ * es escribirla «distinta» —sin tilde, en minúscula— y que un `includes` literal
+ * la deje pasar. El fixture es un `src/content` de mentira con una sola frase
+ * escrita así, y la guardia tiene que señalarla con archivo y línea.
+ */
+test("la guardia de frases de PRIMERO dispara sobre un fixture, sin mayúsculas ni acentos", async () => {
+  const raiz = await mkdtemp(path.join(tmpdir(), "primero-guard-"));
+  try {
+    await mkdir(path.join(raiz, "src", "content"), { recursive: true });
+    await writeFile(
+      path.join(raiz, "src", "content", "fixture.ts"),
+      'export const t = "x";\nexport const title = "ia para instituciones,   lista para auditoria";\n',
+    );
+    await writeFile(path.join(raiz, "src", "content", "limpio.ts"), 'export const ok = "Lo que una entidad puede revisar.";\n');
+
+    const hallazgos = await verifyPrimeroPhrases(raiz);
+    assert.equal(hallazgos.length, 1, hallazgos.join("\n"));
+    assert.match(hallazgos[0], /fixture\.ts:2 /);
+    assert.ok(hallazgos[0].includes(bannedPrimeroPhrases[6]));
+  } finally {
+    await rm(raiz, { recursive: true, force: true });
+  }
+});
+
+test("src/content no reproduce ningún título de PRIMERO", async () => {
+  const hallazgos = await verifyPrimeroPhrases(root);
+  assert.deepEqual(hallazgos, []);
 });
