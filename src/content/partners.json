@@ -1,0 +1,4 @@
+{
+  "$comment": "Partners tecnológicos de la portada. Cada marca entra solo con su permiso registrado (fuente oficial, fecha de concesión y de verificación). Lo audita scripts/partners-gate.mjs antes de cada build.",
+  "partners": []
+}

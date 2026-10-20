@@ -1,0 +1,129 @@
+.diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  color: var(--home-ivory);
+}
+
+.dots circle {
+  fill: rgba(249, 245, 239, 0.16);
+}
+
+.hatch {
+  stroke: rgba(249, 245, 239, 0.28);
+  stroke-width: 1;
+}
+
+.face {
+  fill: #11110f;
+}
+
+.side {
+  fill-opacity: 1;
+}
+
+.sideDark {
+  fill: rgba(249, 245, 239, 0.05);
+}
+
+.outline,
+.ring,
+.link,
+.device,
+.screen,
+.ticket,
+.stand,
+.lines {
+  fill: none;
+  stroke: rgba(249, 245, 239, 0.6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.sheet path {
+  fill: rgba(249, 245, 239, 0.06);
+  stroke: rgba(249, 245, 239, 0.4);
+  stroke-width: 1;
+}
+
+.ring {
+  stroke: rgba(0, 215, 202, 0.55);
+  stroke-dasharray: 3 5;
+}
+
+.link {
+  stroke: var(--home-teal);
+  stroke-width: 1.4;
+}
+
+.arrow {
+  fill: var(--home-teal);
+}
+
+.device {
+  fill: #0c0c0b;
+}
+
+.screen {
+  fill: rgba(249, 245, 239, 0.04);
+  stroke: rgba(249, 245, 239, 0.3);
+}
+
+.ticket {
+  fill: #0c0c0b;
+}
+
+.lines {
+  stroke: rgba(249, 245, 239, 0.35);
+  stroke-linecap: round;
+}
+
+.dot {
+  fill: var(--home-teal);
+}
+
+.semRed {
+  fill: #f35c95;
+}
+
+.semAmber {
+  fill: #f5be0e;
+}
+
+.semTeal {
+  fill: var(--home-teal);
+}
+
+.plateLabel,
+.nodeLabel {
+  fill: var(--home-ivory);
+  font: 500 11px var(--home-mono);
+  letter-spacing: 0.1em;
+}
+
+.plateSub,
+.nodeSub,
+.ringLabel,
+.stamp {
+  fill: rgba(249, 245, 239, 0.55);
+  font: 500 9px var(--home-mono);
+  letter-spacing: 0.08em;
+}
+
+.ringLabel {
+  fill: rgba(0, 215, 202, 0.85);
+}
+
+@media (max-width: 640px) {
+  .nodeSub,
+  .ringLabel,
+  .stamp {
+    font-size: 11px;
+  }
+
+  .plateLabel,
+  .nodeLabel {
+    font-size: 13px;
+  }
+}

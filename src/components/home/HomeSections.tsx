@@ -5,6 +5,7 @@ import { homeCopyEs } from "@/content/copy/es";
 import type {
   ApiChapterCopy,
   BuildNarrativeCopy,
+  ClientWallCopy,
   ExperienceRailCopy,
   SectorsCopy,
 } from "@/content/copy/types";
@@ -15,6 +16,7 @@ import { FactoryRun } from "./FactoryRun.client";
 import { ProjectCreateDemo } from "./ProjectCreateDemo.client";
 import { fillSpan } from "./gridFill";
 import styles from "./home.module.css";
+import wallStyles from "./ClientWall.module.css";
 
 /**
  * El nombre y las dimensiones de cada logo son datos de la relación, no copy:
@@ -337,10 +339,25 @@ function ClientLogoCell({
   );
 }
 
-export function ExperienceRail({
+/**
+ * Cuántas organizaciones publica el muro: logotipos más entidades nombradas.
+ * Lo lee la cinta de cifras del hero, que no inventa números: los cuenta.
+ */
+export const clientWallCount = clientLogos.length + clientNames.length;
+
+/**
+ * La cinta de productos. Desde la portada v2 va DESPUÉS de «La fábrica en
+ * vivo» y abre el capítulo de trabajo real; el muro de clientes va antes,
+ * justo debajo del hero. Los dos salieron de `ExperienceRail`, que los pintaba
+ * juntos.
+ */
+export function ProofRibbon({
   copy = homeCopyEs.experienceRail,
+  productHrefPrefix = "/trabajo/",
 }: {
   copy?: ExperienceRailCopy;
+  /** `#p-` enlaza los bloques de la propia portada; `/trabajo/` los perfiles. */
+  productHrefPrefix?: "/trabajo/" | "#p-";
 }) {
   const featuredProducts = workProfiles.filter(
     (product) => product.attribution.state === "confirmed",
@@ -351,19 +368,6 @@ export function ExperienceRail({
   const ribbonStyle = {
     "--ribbon-fill-3": String(fillSpan(ribbonCells, 3)),
     "--ribbon-fill-4": String(fillSpan(ribbonCells, 4)),
-  } as CSSProperties;
-
-  /*
-   * El muro ya no se desplaza: se ven todas las relaciones a la vez, que es lo
-   * que sostiene el argumento. El rótulo va al final y es el que absorbe las
-   * columnas sobrantes, así el bloque cierra en rectángulo entre en la lista
-   * quien entre.
-   */
-  const wallCells = clientLogos.length + clientNames.length + 1;
-  const wallStyle = {
-    "--wall-fill-2": String(fillSpan(wallCells, 2)),
-    "--wall-fill-4": String(fillSpan(wallCells, 4)),
-    "--wall-fill-6": String(fillSpan(wallCells, 6)),
   } as CSSProperties;
 
   return (
@@ -386,18 +390,22 @@ export function ExperienceRail({
         {featuredProducts.map((product) => {
           const status = copy.productStatuses[product.slug] ?? product.status.label;
           const category = copy.productCategories[product.slug] ?? product.category;
-          return (
-            <Link
-              className={styles.proofProduct}
-              href={`/trabajo/${product.slug}`}
-              key={product.name}
-            >
-              <>
-                <span>{category}</span>
-                <strong>{product.name}</strong>
-                <small>{status}</small>
-                <i aria-hidden="true">→</i>
-              </>
+          const href = `${productHrefPrefix}${product.slug}`;
+          const content = (
+            <>
+              <span>{category}</span>
+              <strong>{product.name}</strong>
+              <small>{status}</small>
+              <i aria-hidden="true">→</i>
+            </>
+          );
+          return productHrefPrefix === "#p-" ? (
+            <a className={styles.proofProduct} href={href} key={product.name}>
+              {content}
+            </a>
+          ) : (
+            <Link className={styles.proofProduct} href={href} key={product.name}>
+              {content}
             </Link>
           );
         })}
@@ -407,6 +415,48 @@ export function ExperienceRail({
           <small>{workProfiles.length}{copy.directoryDetail}</small>
           <i aria-hidden="true">→</i>
         </Link>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * El muro de relaciones, solo. Desde la portada v2 abre el sitio justo
+ * después del hero, como en la estructura de referencia: primero con quién,
+ * después cómo y qué.
+ */
+export function ClientWall({
+  copy = homeCopyEs.experienceRail,
+  heading = homeCopyEs.clientWall,
+}: {
+  copy?: ExperienceRailCopy;
+  heading?: ClientWallCopy;
+}) {
+  /*
+   * El muro ya no se desplaza: se ven todas las relaciones a la vez, que es lo
+   * que sostiene el argumento. El rótulo va al final y es el que absorbe las
+   * columnas sobrantes, así el bloque cierra en rectángulo entre en la lista
+   * quien entre.
+   */
+  const wallCells = clientWallCount + 1;
+  const wallStyle = {
+    "--wall-fill-3": String(fillSpan(wallCells, 3)),
+    "--wall-fill-4": String(fillSpan(wallCells, 4)),
+    "--wall-fill-6": String(fillSpan(wallCells, 6)),
+  } as CSSProperties;
+
+  return (
+    <section
+      id="clientes"
+      className={`${styles.experienceRail} ${wallStyles.wall}`}
+      aria-labelledby="client-wall-title"
+    >
+      <div className={wallStyles.wallHead}>
+        <div>
+          <p className={styles.eyebrow}>{heading.eyebrow}</p>
+          <h2 id="client-wall-title">{heading.title}</h2>
+        </div>
+        <p>{heading.lead}</p>
       </div>
       <div
         className={styles.logoWall}
@@ -428,6 +478,23 @@ export function ExperienceRail({
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * La composición anterior: cinta y muro juntos. La conserva el deck y
+ * cualquier pantalla que todavía la importe; la portada ya no la usa.
+ */
+export function ExperienceRail({
+  copy = homeCopyEs.experienceRail,
+}: {
+  copy?: ExperienceRailCopy;
+}) {
+  return (
+    <>
+      <ProofRibbon copy={copy} />
+      <ClientWall copy={copy} />
+    </>
   );
 }
 

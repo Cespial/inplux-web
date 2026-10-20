@@ -3,7 +3,7 @@ import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { PressArchive } from "@/components/site/PressStories";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { pressStories, type PressStory } from "@/content/press";
+import { eventFormats, pressStories, type PressStory } from "@/content/press";
 import { findTeamMemberInByline, personId } from "@/content/team";
 import styles from "./prensa.module.css";
 
@@ -122,7 +122,7 @@ const pressCollectionJsonLd = {
                   name: story.outlet,
                 },
               }
-            : story.format === "Panel"
+            : eventFormats.has(story.format)
               ? {
                   "@type": "Event",
                   "@id": story.href,
@@ -133,7 +133,7 @@ const pressCollectionJsonLd = {
                     "https://schema.org/OfflineEventAttendanceMode",
                   location: {
                     "@type": "Place",
-                    name: "Medellín, Colombia",
+                    name: story.place ?? "Medellín, Colombia",
                   },
                   organizer: {
                     "@type": "Organization",

@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { auditPartners } from "./partners-gate.mjs";
 
 const root = process.cwd();
 const errors = [];
@@ -478,6 +479,19 @@ async function verifyBrandSystem() {
   }
 }
 
+async function verifyPartnerLogos() {
+  // Los partners tecnológicos entran sólo con permiso registrado: ver
+  // `scripts/partners-gate.mjs`. Comparte el plazo de frescura del portafolio.
+  const maxAgeDays = Number(process.env.CONTENT_VERIFICATION_MAX_AGE_DAYS ?? 120);
+  errors.push(
+    ...(await auditPartners({
+      root,
+      sourceFiles: await collectTextFiles("src"),
+      maxAgeDays: Number.isFinite(maxAgeDays) && maxAgeDays > 0 ? maxAgeDays : 120,
+    })),
+  );
+}
+
 async function verifyLogoPermissions() {
   const legacyLogoDirectory = "public/logos";
   if (await exists(legacyLogoDirectory)) {
@@ -614,6 +628,35 @@ async function verifyContactExperience() {
   }
 }
 
+/**
+ * El nombre que NO se declara.
+ *
+ * `team.ts` retiró «Jaime Cano» de `alternateName` el 08-sep-2026: es el
+ * string exacto del titular sobre un homónimo inhabilitado, y declararlo le
+ * dice a Google que esta persona también se llama así. El comentario del
+ * archivo lo explica; esta puerta impide que una edición distraída lo
+ * reintroduzca. Se juzga el arreglo `alternateName`, no el archivo entero,
+ * porque el comentario que lo explica sí lo nombra.
+ */
+async function verifyTeamNames() {
+  const relativePath = "src/content/team.ts";
+  const source = await readFile(path.join(root, relativePath), "utf8");
+  const arrays = [...source.matchAll(/alternateName:\s*\[([^\]]*)\]/g)].map((match) => match[1]);
+
+  if (arrays.length === 0) {
+    errors.push(`${relativePath} no declara ningún alternateName verificable`);
+    return;
+  }
+
+  for (const list of arrays) {
+    if (/["']Jaime Cano["']/.test(list)) {
+      errors.push(
+        `${relativePath} vuelve a declarar «Jaime Cano» como alternateName; se retiró a propósito el 08-sep-2026 (homónimo)`,
+      );
+    }
+  }
+}
+
 async function verifyLegacyFragments() {
   const relativePath = "src/app/page.tsx";
   const source = await readFile(path.join(root, relativePath), "utf8");
@@ -646,8 +689,10 @@ await verifySourceFreshness();
 await verifySecurityConfiguration();
 await verifyBrandSystem();
 await verifyLogoPermissions();
+await verifyPartnerLogos();
 await verifyContactExperience();
 await verifyLegacyFragments();
+await verifyTeamNames();
 
 if (errors.length > 0) {
   console.error(`\nControl editorial falló con ${errors.length} problema(s):\n`);

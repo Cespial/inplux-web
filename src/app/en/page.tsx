@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { FactoryScrolly } from "@/components/home/FactoryScrolly.client";
-import { HomeHero } from "@/components/home/HomeHero";
+import { PartnerWall } from "@/components/home/PartnerWall";
+import { ClientWall } from "@/components/home/HomeSections";
+import { CopyEmailButton } from "@/components/home/CopyEmailButton.client";
 import {
-  ApiChapter,
-  BuildNarrative,
-  ExperienceRail,
-  SectorPanel,
-} from "@/components/home/HomeSections";
-import { SolutionsShowcase } from "@/components/home/SolutionsShowcase.client";
-import { FactoryPressStories } from "@/components/site/PressStories";
+  V5Audit,
+  V5Hero,
+  V5Press,
+  V5Process,
+  V5Products,
+  V5Sectors,
+  V5Team,
+  V5Thesis,
+  v5Styles as v5,
+} from "@/components/home/v5/HomeV5";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { homeCopyEn } from "@/content/copy/en";
@@ -36,16 +40,16 @@ const languageAlternates = {
   "x-default": "https://inplux.co",
 };
 
-const socialTitle = "From a real problem to software in production.";
+const socialTitle = "AI transformation that reaches production.";
 const socialImageAlt =
   "INPLUX, from a real problem to software in production";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Custom software factory in Miami, Florida | INPLUX",
+    absolute: "AI development and implementation company in Miami, Florida | INPLUX",
   },
   description:
-    "INPLUX LLC is a Miami-based custom software factory. We design, build and evolve software for companies and public institutions. AI accelerates the work; expert people direct the critical decisions.",
+    "INPLUX LLC is a Miami-based AI development and implementation company. We develop and implement the AI transformation of companies and institutions across Latin America. Expert people direct the critical decisions.",
   alternates: {
     canonical: "https://inplux.co/en",
     languages: languageAlternates,
@@ -53,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: socialTitle,
     description:
-      "See how INPLUX turns concrete needs into digital products that can be used and improved.",
+      "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     url: "https://inplux.co/en",
     siteName: "INPLUX S.A.S.",
     locale: "en_US",
@@ -69,7 +73,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: socialTitle,
-    description: "A custom software factory for companies and public institutions.",
+    description: "We develop and implement the AI transformation of companies and institutions across Latin America.",
     images: [{ url: "/brand/og/og-default.png", alt: socialImageAlt }],
   },
 };
@@ -80,10 +84,10 @@ const jsonLd = {
     {
       "@type": "WebPage",
       "@id": "https://inplux.co/en#webpage",
-      name: "INPLUX, custom software factory in Miami",
+      name: "INPLUX, AI development and implementation in Miami",
       url: "https://inplux.co/en",
       inLanguage: "en-US",
-      isPartOf: { "@id": "https://inplux.co/#organization" },
+      isPartOf: { "@id": "https://inplux.co/#website" },
     },
     {
       "@type": "Organization",
@@ -107,6 +111,7 @@ export default function EnglishHome() {
   const heroContactCta = (
     <ContactLink
       aria-label={copy.contact.heroCtaAriaLabel}
+      className={`${v5.btn} ${v5.primary}`}
       fallbackHref="#contacto"
       source="en-home-hero"
     >
@@ -116,11 +121,11 @@ export default function EnglishHome() {
 
   const offerContactCta = (
     <ContactLink
-      className={styles.contactOffer}
+      className={`${v5.btn} ${v5.ghost}`}
       fallbackHref="#contacto"
       source="en-home-offer"
     >
-      {`${copy.contact.cta} `}<span aria-hidden="true">→</span>
+      {copy.contact.cta} <span aria-hidden="true">→</span>
     </ContactLink>
   );
 
@@ -134,7 +139,7 @@ export default function EnglishHome() {
         copy={copy.contactDialog}
         formCopy={copy.contactForm}
       >
-        <div className={styles.homeRoot} lang={copy.htmlLang}>
+        <div className={`${styles.homeRoot} ${v5.root}`} lang={copy.htmlLang}>
           <SiteHeader
             copy={copy.header}
             desktopContactSource="en-header-desktop"
@@ -143,63 +148,67 @@ export default function EnglishHome() {
           />
           <main id="main-content" tabIndex={-1}>
             <section id="inicio">
-              <HomeHero copy={copy.hero} primaryCta={heroContactCta} />
-            </section>
-            <ExperienceRail copy={copy.experienceRail} />
-
-            <FactoryScrolly copy={copy.factoryScrolly} />
-
-            <SolutionsShowcase copy={copy.solutions} />
-            <ApiChapter copy={copy.apiChapter} />
-
-            <section
-              id="donde-trabajamos"
-              className={styles.sectors}
-              aria-labelledby="sectors-title"
-            >
-              <div className={styles.sectorsHeading}>
-                <p>{copy.sectors.eyebrow}</p>
-                <h2 id="sectors-title">{copy.sectors.title}</h2>
-              </div>
-              <div className={styles.sectorSplit}>
-                <div id="publico">
-                  <SectorPanel copy={copy.sectors} kind="public" />
-                </div>
-                <div id="privado">
-                  <SectorPanel copy={copy.sectors} kind="private" />
-                </div>
-              </div>
+              <V5Hero copy={copy} primaryCta={heroContactCta} />
             </section>
 
-            <BuildNarrative copy={copy.build} />
-            <FactoryPressStories copy={copy.press} />
+            <ClientWall copy={copy.experienceRail} heading={copy.clientWall} />
 
-            <section id="contacto" className={styles.contact} aria-labelledby="contact-title">
-              <div className={styles.contactInner}>
-                <div className={styles.contactCopy}>
-                  <p>{copy.contact.eyebrow}</p>
-                  <h2 id="contact-title">
-                    {copy.contact.titleLead}<em>{copy.contact.titleEmphasis}</em>
-                  </h2>
-                  <p>{copy.contact.lead}</p>
-                  <p className={styles.contactEntity}>
-                    {copy.contact.entityStatement}
-                  </p>
-                  {offerContactCta}
-                  <div className={styles.contactDirect}>
-                    <a href="mailto:gerencia@inplux.co">gerencia@inplux.co</a>
-                    <a
-                      href="https://www.linkedin.com/company/inplux"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {copy.contact.linkedInLabel}
-                    </a>
-                    {copy.contact.locations.map((location) => (
-                      <span key={location}>{location}</span>
-                    ))}
-                  </div>
+            <V5Thesis copy={copy} lang="en" />
+
+            {/* Fragmentos históricos de «Qué hacemos» y del motor: siguen resolviendo. */}
+            <span id="servicios" className={styles.anchor} aria-hidden="true" />
+            <span id="motor" className={styles.anchor} aria-hidden="true" />
+            <V5Process copy={copy} />
+
+            <span id="trabajo-real" className={styles.anchor} aria-hidden="true" />
+            <V5Products copy={copy} />
+
+            {/* Fragmentos históricos de «Dónde trabajamos»: siguen resolviendo. */}
+            <span id="publico" className={styles.anchor} aria-hidden="true" />
+            <span id="privado" className={styles.anchor} aria-hidden="true" />
+            <span id="empresas" className={styles.anchor} aria-hidden="true" />
+            <V5Sectors copy={copy} />
+
+            <V5Audit copy={copy} />
+            <PartnerWall copy={copy.partnerWall} />
+            <V5Press copy={copy} />
+            <V5Team copy={copy} />
+
+            <section id="contacto" className={v5.close} aria-labelledby="contact-title">
+              <span className={`${v5.plus} ${v5.tl}`} aria-hidden="true">+</span>
+              <span className={`${v5.plus} ${v5.tr}`} aria-hidden="true">+</span>
+              <span className={`${v5.plus} ${v5.bl}`} aria-hidden="true">+</span>
+              <span className={`${v5.plus} ${v5.br}`} aria-hidden="true">+</span>
+              <div className={`${v5.wrap} ${v5.closeInner}`}>
+                <p className={v5.eyebrow}>{copy.v5.contactEyebrow}</p>
+                <h2 className={v5.d1} id="contact-title">
+                  {copy.contact.titleLead}<em>{copy.contact.titleEmphasis}</em>
+                </h2>
+                <p className={v5.lead}>{copy.contact.lead}</p>
+                <div className={v5.mailRow}>
+                  <a id="contact-email" className={v5.mail} href="mailto:gerencia@inplux.co">
+                    {copy.contact.email}
+                  </a>
+                  <CopyEmailButton
+                    className={`${v5.btn} ${v5.ghost}`}
+                    email={copy.contact.email}
+                    targetId="contact-email"
+                    label={copy.contact.copyAction}
+                    doneLabel={copy.contact.copyDone}
+                  />
+                  <a
+                    className={`${v5.btn} ${v5.ghost}`}
+                    href="https://www.linkedin.com/company/inplux"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {copy.contact.linkedInLabel}
+                  </a>
                 </div>
+                {offerContactCta}
+                <p className={v5.entity}>
+                  {copy.contact.entityStatement ?? copy.contact.locations.join(" · ")}
+                </p>
               </div>
             </section>
           </main>

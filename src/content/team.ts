@@ -28,6 +28,24 @@ export type TeamMember = {
   /** Perfiles externos verificados. Cada URL respondió 200 al añadirse. */
   sameAs: readonly string[];
   linkedin: string;
+  /**
+   * Retrato real, en blanco y negro, bajo `public/brand/team/`. Es una foto de
+   * la persona, no una imagen generada; la portada lo recorta en cuadrado.
+   */
+  photo: {
+    src: string;
+    width: number;
+    height: number;
+  };
+  /** Formación y títulos, tal como los declara la persona en su hoja de vida. */
+  credentials: readonly string[];
+  /** Tres temas, para la tarjeta de la portada. Subconjunto de `knowsAbout`. */
+  tags: readonly [string, string, string];
+  /** Segundo enlace público de la tarjeta, además de LinkedIn. */
+  secondaryLink: {
+    label: string;
+    href: string;
+  };
 };
 
 const SITE_URL = "https://inplux.co";
@@ -70,6 +88,17 @@ export const teamMembers = [
       "https://alponiente.com/author/jaimealonsocano/",
     ],
     linkedin: "https://www.linkedin.com/in/jaime-alonso-cano-pino-a11a6246/",
+    photo: { src: "/brand/team/jaime-alonso-cano-pino.jpg", width: 900, height: 1200 },
+    credentials: [
+      "CFO Program · International Finance, University of Miami Herbert Business School",
+      "Normas Internacionales de Contabilidad, Universidad EAFIT",
+      "Contador público · tributarista",
+    ],
+    tags: ["Hacienda territorial", "Gestión tributaria", "Dirección de producto"],
+    secondaryLink: {
+      label: "Columnas en Al Poniente",
+      href: "https://alponiente.com/author/jaimealonsocano/",
+    },
   },
   {
     slug: "cristian-espinal-maya",
@@ -103,6 +132,17 @@ export const teamMembers = [
       "https://scholar.google.com/citations?hl=es&user=o_I-xnoAAAAJ",
     ],
     linkedin: "https://www.linkedin.com/in/cespial/",
+    photo: { src: "/brand/team/cristian-espinal-maya.jpg", width: 900, height: 1200 },
+    credentials: [
+      "Doctorando en Ingeniería, Universidad Nacional de Colombia",
+      "Maestría en Economía · métodos cuantitativos, Universidad EAFIT",
+      "Economista, Universidad de Medellín",
+    ],
+    tags: ["Arquitectura de software", "IA aplicada", "Ingeniería de datos"],
+    secondaryLink: {
+      label: "Google Scholar",
+      href: "https://scholar.google.com/citations?hl=es&user=o_I-xnoAAAAJ",
+    },
   },
 ] as const satisfies readonly TeamMember[];
 

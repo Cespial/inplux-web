@@ -418,6 +418,80 @@ export type BuildNarrativeCopy = {
   factoryRun: FactoryRunCopy;
 };
 
+/**
+ * La cinta de cifras del hero. Los números no viven aquí: se calculan desde el
+ * contenido (`work.ts`, `home.ts`, `press.ts` y el muro) y aquí solo van las
+ * etiquetas. Las plantillas usan {n}, {documented}, {inDevelopment} y {date}.
+ */
+export type HeroStatsCopy = {
+  ariaLabel: string;
+  products: { label: string; detail: string };
+  profiles: { label: string; detail: string };
+  organizations: { label: string; detail: string };
+  press: { label: string; detail: string };
+};
+
+export type ClientWallCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+};
+
+export type ProductBlocksCopy = {
+  eyebrow: string;
+  titleLead: string;
+  titleEmphasis: string;
+  lead: string;
+  /** Antetítulo de cada bloque: «Build / 01». */
+  buildLabel: string;
+  /** Plantilla con {date}. */
+  verifiedLabel: string;
+  profileCta: string;
+  /** Plantilla con {name}. */
+  captureLabel: string;
+  /** Plantilla con {date}. */
+  captureVerified: string;
+  /** Plantilla con {name}. */
+  previewAriaLabel: string;
+  inDevelopmentLabel: string;
+  disclosure: string;
+  /** Traducción de las capacidades por slug; vacío en español. */
+  capabilityTitles: Readonly<Record<string, string>>;
+  capabilityDescriptions: Readonly<Record<string, string>>;
+  headlines: Readonly<Record<string, string>>;
+  descriptions: Readonly<Record<string, string>>;
+  accessLabels: Readonly<Record<string, string>>;
+};
+
+export type TeamLeadersCopy = {
+  eyebrow: string;
+  titleLead: string;
+  titleEmphasis: string;
+  lead: string;
+  profileCta: string;
+  linkedInLabel: string;
+  /** Traducciones por slug; vacías en español porque `team.ts` ya lo está. */
+  roles: Readonly<Record<string, string>>;
+  focuses: Readonly<Record<string, string>>;
+  bios: Readonly<Record<string, string>>;
+};
+
+export type SectorStripItem = {
+  label: string;
+  detail: string;
+  /** Ruta interna, o null cuando el sector aún no tiene página. */
+  href: string | null;
+  /** Nota en mono para los sectores sin página («Próximamente»). */
+  note: string | null;
+};
+
+export type SectorStripCopy = {
+  ariaLabel: string;
+  eyebrow: string;
+  title: string;
+  items: readonly SectorStripItem[];
+};
+
 export type PressCopy = {
   eyebrow: string;
   titleLead: string;
@@ -449,6 +523,10 @@ export type PressCopy = {
   paperCode: string;
   paperFoot: string;
   archiveIdeas: string;
+  /** Código de la tarjeta por slug (PANEL 11, ODR 2026…); vacío en español. */
+  visualCodes: Readonly<Record<string, string>>;
+  /** Antetítulo de la placa de evento por slug; vacío en español. */
+  eventEyebrows: Readonly<Record<string, string>>;
 };
 
 export type HomeContactCopy = {
@@ -461,8 +539,95 @@ export type HomeContactCopy = {
   cta: string;
   heroCtaAriaLabel: string;
   email: string;
+  /** Botón que copia el correo al portapapeles, y su estado al copiar. */
+  copyAction: string;
+  copyDone: string;
   linkedInLabel: string;
   locations: readonly string[];
+};
+
+export type ThesisCopy = {
+  eyebrow: string;
+  /** La tesis en una frase; `emphasis` cierra en cursiva serif. */
+  lead: string;
+  emphasis: string;
+};
+
+export type HowWeWorkStep = {
+  number: string;
+  title: string;
+  detail: string;
+};
+
+export type HowWeWorkCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  steps: readonly HowWeWorkStep[];
+  cta: string;
+};
+
+export type PartnerWallCopy = {
+  eyebrow: string;
+  title: string;
+  note: string;
+};
+
+/**
+ * Las secciones propias de la portada v5 (octubre de 2026). Lo que la portada
+ * ya tenía —hero, muro, equipo, prensa, contacto— sigue leyendo sus bloques;
+ * aquí sólo vive lo que no tenía dónde vivir, más los antetítulos sin
+ * numeración de las secciones que se reutilizan.
+ */
+export type HomeV5Copy = {
+  heroSecondaryCta: string;
+  proof: {
+    title: string;
+    /** La cifra de Laudos sale de `work.ts`; aquí sólo su lectura. */
+    laudosUnit: string;
+    laudosDetail: string;
+    sourceLabel: string;
+    portfolioSourceLabel: string;
+    wallSourceLabel: string;
+  };
+  process: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    deliverableLabel: string;
+    phases: readonly { title: string; detail: string; deliverable: string }[];
+  };
+  products: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    tribaiLead: string;
+    tribaiTag: string;
+    tribaiCta: string;
+    openCta: string;
+    moreLabel: string;
+    allCta: string;
+    inDevelopment: string;
+    terminalAriaLabel: string;
+    terminalCall: string;
+    terminalAnswer: string;
+  };
+  sectors: {
+    eyebrow: string;
+    title: string;
+    items: readonly { title: string; detail: string; tag: string; href: string }[];
+  };
+  audit: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    items: readonly { title: string; detail: string }[];
+    techEyebrow: string;
+    techNote: string;
+  };
+  press: { eyebrow: string; title: string; readCta: string; archiveCta: string };
+  team: { eyebrow: string; title: string; lead: string };
+  contactEyebrow: string;
 };
 
 export type HomeCopy = {
@@ -473,13 +638,22 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
+  thesis: ThesisCopy;
+  howWeWork: HowWeWorkCopy;
+  partnerWall: PartnerWallCopy;
+  heroStats: HeroStatsCopy;
   allyNotice: AllyNoticeCopy;
+  clientWall: ClientWallCopy;
   experienceRail: ExperienceRailCopy;
   factoryScrolly: FactoryScrollyCopy;
+  products: ProductBlocksCopy;
   solutions: SolutionsCopy;
   apiChapter: ApiChapterCopy;
   sectors: SectorsCopy;
+  sectorStrip: SectorStripCopy;
   build: BuildNarrativeCopy;
+  team: TeamLeadersCopy;
   press: PressCopy;
   contact: HomeContactCopy;
+  v5: HomeV5Copy;
 };

@@ -28,7 +28,7 @@ export const homeCopyEs: HomeCopy = {
 
   footer: {
     heading: "Pie de página",
-    tagline: "Fábrica de software a la medida para empresas y entidades.",
+    tagline: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     groups: [
       {
         label: "Explora",
@@ -49,6 +49,11 @@ export const homeCopyEs: HomeCopy = {
           { label: "IA aplicada", href: "/capacidades#ia" },
           { label: "Servicios públicos", href: "/capacidades#sector-publico" },
         ],
+      },
+      {
+        label: "Sectores",
+        ariaLabel: "Sectores",
+        items: [{ label: "Salud", href: "/sectores/salud" }],
       },
     ],
     contactLabel: "Contacto",
@@ -109,10 +114,10 @@ export const homeCopyEs: HomeCopy = {
   },
 
   hero: {
-    eyebrow: "FÁBRICA DE SOFTWARE A LA MEDIDA",
-    titleLines: ["De un problema real", "a software en producción."],
+    eyebrow: "DESARROLLO E IMPLEMENTACIÓN DE IA",
+    titleLines: ["Transformación con IA", "que llega a producción."],
     leadSentences: [
-      "INPLUX diseña, construye y evoluciona productos digitales para empresas y entidades.",
+      "Productos propios y equipos de implementación para empresas e instituciones de Latinoamérica.",
       "La IA acelera el trabajo. Personas expertas dirigen y validan las decisiones críticas.",
     ],
     primaryCta: "Empezar un proyecto",
@@ -130,6 +135,62 @@ export const homeCopyEs: HomeCopy = {
       { number: "03", title: "EN PRODUCCIÓN", detail: "MEDIR + EVOLUCIONAR" },
     ],
     signalAxis: "BUILD / 01",
+  },
+
+  thesis: {
+    eyebrow: "TESIS",
+    lead: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones",
+    emphasis: "en Latinoamérica.",
+  },
+
+  howWeWork: {
+    eyebrow: "CÓMO TRABAJAMOS",
+    title: "Del diagnóstico a producción, con el mismo equipo.",
+    lead: "Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente.",
+    steps: [
+      {
+        number: "01",
+        title: "Integramos",
+        detail: "Conectamos los sistemas, registros, hojas de cálculo y APIs que ya existen.",
+      },
+      {
+        number: "02",
+        title: "Construimos",
+        detail: "Diseñamos y desarrollamos el producto sobre nuestra base de software y de modelos.",
+      },
+      {
+        number: "03",
+        title: "Implementamos",
+        detail: "Lo ponemos en operación con las personas que lo usan y lo seguimos mejorando.",
+      },
+    ],
+    cta: "Empezar un proyecto",
+  },
+
+  partnerWall: {
+    eyebrow: "PARTNERS TECNOLÓGICOS",
+    title: "Construimos sobre la infraestructura y los modelos que marcan el estándar.",
+    note: "Marcas publicadas con permiso registrado.",
+  },
+
+  heroStats: {
+    ariaLabel: "Cifras del sitio, calculadas desde el contenido publicado",
+    products: {
+      label: "Productos en el portafolio",
+      detail: "{documented} documentados + {inDevelopment} en desarrollo",
+    },
+    profiles: {
+      label: "Perfiles con fuentes verificadas",
+      detail: "Última verificación · {date}",
+    },
+    organizations: {
+      label: "Organizaciones · relaciones reales",
+      detail: "Experiencia del equipo y alianzas",
+    },
+    press: {
+      label: "Publicaciones y apariciones",
+      detail: "Medios · escenarios · investigación · columnas",
+    },
   },
 
   allyNotice: {
@@ -156,6 +217,12 @@ export const homeCopyEs: HomeCopy = {
     closeLabel: "Cerrar el aviso",
     dialogLabel: "INPLUX es aliado del Día D, 14 de octubre de 2026 en Medellín",
   },
+  clientWall: {
+    eyebrow: "RELACIONES REALES",
+    title: "Con quiénes hemos trabajado.",
+    lead: "Entidades públicas, empresas y organizaciones con las que el equipo ha construido, operado o acompañado sistemas. Cada logotipo lleva la relación que lo respalda.",
+  },
+
   experienceRail: {
     ribbonAriaLabel: "Productos de INPLUX, cada uno con su fuente.",
     ribbonEyebrow: "PRODUCTOS / TRABAJO",
@@ -241,6 +308,26 @@ export const homeCopyEs: HomeCopy = {
         signals: ["DATOS / APRENDIZAJE", "OPERACIÓN / EVOLUCIÓN"],
       },
     ],
+  },
+
+  products: {
+    eyebrow: "02 / TRABAJO REAL",
+    titleLead: "Cada producto publica ",
+    titleEmphasis: "su evidencia.",
+    lead: "Qué está en producción, qué en piloto, qué en beta. Las capturas son de las páginas públicas de cada producto y los paneles usan los datos que esas páginas publican.",
+    buildLabel: "Build",
+    verifiedLabel: "Verificado {date}",
+    profileCta: "Ver perfil",
+    captureLabel: "Captura real · {name}",
+    captureVerified: "URL oficial · verificada {date}",
+    previewAriaLabel: "Panel de interfaz de {name} con datos publicados por el producto",
+    inDevelopmentLabel: "En desarrollo",
+    disclosure: "Capturas de páginas públicas, no recreaciones. Los paneles muestran datos que cada producto publica.",
+    capabilityTitles: {},
+    capabilityDescriptions: {},
+    headlines: {},
+    descriptions: {},
+    accessLabels: {},
   },
 
   solutions: {
@@ -562,6 +649,32 @@ export const homeCopyEs: HomeCopy = {
       "Automatización con control",
     ],
     privateCta: "Hablemos de un reto privado",
+  },
+
+  sectorStrip: {
+    ariaLabel: "Sectores en los que trabajamos",
+    eyebrow: "03 / DÓNDE TRABAJAMOS",
+    title: "Sectores con página propia.",
+    items: [
+      {
+        label: "Salud",
+        detail: "Software para IPS y prestadores: app de pacientes, telemonitoreo, integración con la historia clínica, mesa de ayuda.",
+        href: "/sectores/salud",
+        note: null,
+      },
+      {
+        label: "Sector público",
+        detail: "Entidades territoriales, hacienda y gestión municipal.",
+        href: "/capacidades#sector-publico",
+        note: null,
+      },
+      {
+        label: "Empresas",
+        detail: "Operación, datos y productos digitales para compañías privadas.",
+        href: "/capacidades",
+        note: null,
+      },
+    ],
   },
 
   build: {
@@ -1002,8 +1115,20 @@ export const homeCopyEs: HomeCopy = {
     },
   },
 
+  team: {
+    eyebrow: "05 / QUIÉN RESPONDE",
+    titleLead: "Dos direcciones: ",
+    titleEmphasis: "criterio y producto.",
+    lead: "Fábrica de software con sede en Medellín, Colombia. Quien decide qué se construye y quien dirige cómo se construye.",
+    profileCta: "Ver perfil",
+    linkedInLabel: "LinkedIn",
+    roles: {},
+    focuses: {},
+    bios: {},
+  },
+
   press: {
-    eyebrow: "06 / PRENSA Y CONVERSACIONES",
+    eyebrow: "04 / PRENSA Y CONVERSACIONES",
     titleLead: "El trabajo también entra en ",
     titleEmphasis: "conversación.",
     archiveLink: "Ver el archivo",
@@ -1029,18 +1154,148 @@ export const homeCopyEs: HomeCopy = {
     paperCode: "OPEN PAPER",
     paperFoot: "Leer · contrastar · citar",
     archiveIdeas: "IDEAS",
+    visualCodes: {},
+    eventEyebrows: {},
   },
 
   contact: {
-    eyebrow: "08 / EL SIGUIENTE PRODUCTO",
+    eyebrow: "06 / EL SIGUIENTE PRODUCTO",
     titleLead: "Construyamos lo que ",
     titleEmphasis: "sigue.",
     lead: "Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos.",
-    entityStatement: null,
+    entityStatement:
+      "INPLUX S.A.S. · NIT 901.784.448-8 · Fábrica de software con sede en Medellín, Colombia.",
     cta: "Empezar un proyecto",
     heroCtaAriaLabel: "Empezar un proyecto",
     email: "gerencia@inplux.co",
+    copyAction: "copiar",
+    copyDone: "copiado",
     linkedInLabel: "LinkedIn ↗",
     locations: ["Medellín, Antioquia · Colombia"],
+  },
+
+  v5: {
+    heroSecondaryCta: "Ver con quiénes",
+    proof: {
+      title: "En producción, con la cifra y su fuente.",
+      laudosUnit: "documentos en el corpus de Laudos",
+      laudosDetail:
+        "{laudos} laudos arbitrales y {consejo} decisiones del Consejo de Estado, {range}, para buscar y analizar.",
+      sourceLabel: "Fuente: perfil público del producto",
+      portfolioSourceLabel: "Fuente: directorio de productos",
+      wallSourceLabel: "Fuente: muro de relaciones",
+    },
+    process: {
+      eyebrow: "Del diagnóstico a producción",
+      title: "Trabajamos contigo desde el primer flujo hasta que opera.",
+      lead: "Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente. Cada fase termina con algo que se puede usar y revisar.",
+      deliverableLabel: "Entregable",
+      phases: [
+        {
+          title: "Diagnóstico",
+          detail: "Mapeamos el flujo, los datos y quién decide.",
+          deliverable: "Mapa del flujo y caso priorizado",
+        },
+        {
+          title: "Piloto",
+          detail: "Construimos sobre datos reales con un grupo de usuarios.",
+          deliverable: "Versión en uso y línea base medida",
+        },
+        {
+          title: "Producción",
+          detail: "Integramos con los sistemas del cliente, con control de acceso y registro.",
+          deliverable: "Sistema en operación",
+        },
+        {
+          title: "Operación",
+          detail: "Medimos, corregimos y ampliamos con el equipo del cliente.",
+          deliverable: "Tablero de resultados y siguiente paso",
+        },
+      ],
+    },
+    products: {
+      eyebrow: "Productos propios",
+      title: "Seis productos construidos y operados por INPLUX.",
+      lead: "Cada uno nació de un problema de un cliente y hoy funciona por su cuenta. Las capturas son de sus páginas públicas.",
+      tribaiLead:
+        "Nuestro servidor MCP le da a Claude y a ChatGPT el Estatuto Tributario vigente, la doctrina de la DIAN y la jurisprudencia del Consejo de Estado, con la fuente oficial de cada respuesta.",
+      tribaiTag: "Tribai MCP · ejemplo ilustrativo",
+      tribaiCta: "Ver Tribai",
+      openCta: "Ver producto",
+      moreLabel: "También construimos",
+      allCta: "Ver todos los productos",
+      inDevelopment: "En desarrollo",
+      terminalAriaLabel: "Ejemplo de consulta al servidor MCP de Tribai",
+      terminalCall: "Claude llama la herramienta de Tribai",
+      terminalAnswer: "Respuesta, con la fuente oficial",
+    },
+    sectors: {
+      eyebrow: "Dónde trabajamos",
+      title: "Construido para la realidad de cada sector.",
+      items: [
+        {
+          title: "Sector público",
+          detail: "Alcaldías, entidades territoriales y hacienda municipal: información fiscal, contratación y seguimiento.",
+          tag: "Gobia · Tribai",
+          href: "/capacidades#sector-publico",
+        },
+        {
+          title: "Salud",
+          detail: "IPS y prestadores: app de pacientes, telemonitoreo, integración con la historia clínica.",
+          tag: "Página del sector",
+          href: "/sectores/salud",
+        },
+        {
+          title: "Legal y tributario",
+          detail: "Firmas, contadores y áreas jurídicas: consulta con fuente, vigencia y jurisprudencia.",
+          tag: "Tribai · Kelsen · Laudos",
+          href: "/trabajo/tribai",
+        },
+        {
+          title: "Empresas",
+          detail: "Operación, datos y productos digitales para compañías privadas.",
+          tag: "Proyectos a la medida",
+          href: "/capacidades",
+        },
+      ],
+    },
+    audit: {
+      eyebrow: "Gobierno de la IA",
+      title: "IA para instituciones, lista para auditoría.",
+      lead: "Lo que una entidad pública o una empresa regulada necesita revisar antes de poner un sistema en producción.",
+      items: [
+        {
+          title: "Fuente en cada respuesta",
+          detail: "Cada resultado guarda el documento, el artículo o el registro que lo sustenta.",
+        },
+        {
+          title: "Llamadas trazables",
+          detail: "Queda registro de qué modelo respondió, con qué contexto y cuándo.",
+        },
+        {
+          title: "Acceso gobernado",
+          detail: "Roles, autenticación de la organización y registro de actividad por usuario.",
+        },
+        {
+          title: "Datos personales",
+          detail: "Tratamiento conforme a la Ley 1581 de 2012 y a la política de cada cliente.",
+        },
+      ],
+      techEyebrow: "Tecnología con la que construimos",
+      techNote:
+        "Marcas de sus dueños, citadas para describir nuestra pila técnica; no implican alianza comercial.",
+    },
+    press: {
+      eyebrow: "Prensa y conversaciones",
+      title: "El trabajo también entra en la conversación.",
+      readCta: "Leer",
+      archiveCta: "Ver el archivo de prensa",
+    },
+    team: {
+      eyebrow: "Quién responde",
+      title: "Dos direcciones: criterio y producto.",
+      lead: "Quien decide qué se construye y quien dirige cómo se construye.",
+    },
+    contactEyebrow: "El siguiente producto",
   },
 };

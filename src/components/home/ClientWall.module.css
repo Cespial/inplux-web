@@ -1,0 +1,40 @@
+/*
+ * Cabecera del muro de relaciones. El muro en sí (celdas, logotipos en
+ * silueta, nota al pasar el ratón) sigue en `home.module.css`: aquí solo vive
+ * el titular que lo presenta cuando va justo debajo del hero.
+ */
+.wall {
+  border-bottom: 1px solid var(--home-line);
+}
+
+.wallHead {
+  display: flex;
+  width: calc(100% - (var(--home-gutter) * 2));
+  max-width: 1320px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-inline: auto;
+  padding: 3rem 0 1.5rem;
+}
+
+.wallHead h2 {
+  max-width: 22rem;
+  margin-top: 0.8rem;
+  font: 300 clamp(1.8rem, 2.6vw, 2.4rem) / 1 var(--home-display);
+  letter-spacing: -0.04em;
+}
+
+.wallHead > p {
+  max-width: 36rem;
+  color: var(--home-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 767px) {
+  .wallHead {
+    padding-top: 2.4rem;
+  }
+}

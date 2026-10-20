@@ -12,6 +12,10 @@ export type PressStory = {
     | "Prensa"
     | "Selección editorial"
     | "Panel"
+    | "Hackathon"
+    | "Patrocinio"
+    | "Cumbre"
+    | "Ranking"
     | "Preprint"
     | "Working paper"
     | "Columna firmada";
@@ -24,13 +28,54 @@ export type PressStory = {
   editorialStatus?: string;
   summary: string;
   href: string;
-  visualKind: "cover" | "stat" | "mark" | "panel" | "paper" | "archive";
+  /**
+   * Cómo se dibuja la tarjeta. `cover` enmarca una portada publicada; `photo`
+   * una fotografía real del escenario, que la hoja pasa a blanco y negro;
+   * `clients` un par de logotipos de clientes; `allies` la retícula de aliados
+   * del Día D; `event` la placa de un evento por venir.
+   */
+  visualKind:
+    | "cover"
+    | "photo"
+    | "stat"
+    | "mark"
+    | "panel"
+    | "paper"
+    | "archive"
+    | "clients"
+    | "allies"
+    | "event";
   visualSignal: string;
   visualCode?: string;
   image?: string;
   imageAlt?: string;
   stat?: string;
+  /** Logotipos de la tarjeta `clients`, con su tamaño real en píxeles. */
+  logos?: readonly {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  }[];
+  /** Placa de la tarjeta `event`: antetítulo, nombre por líneas y lugar. */
+  event?: {
+    eyebrow: string;
+    name: readonly string[];
+    place: string;
+  };
+  /**
+   * Lugar del escenario, para el `Event` de JSON-LD de /prensa. Solo lo
+   * declaran las piezas que son eventos (panel, hackathon, cumbre, patrocinio).
+   */
+  place?: string;
   featured: boolean;
+  /**
+   * Orden entre las destacadas de la portada (menor primero). Sin él, las
+   * destacadas van por fecha. La primera puede ocupar toda la fila con
+   * `homeFeature`.
+   */
+  homeRank?: number;
+  homeFeature?: boolean;
 };
 
 /**
@@ -39,6 +84,101 @@ export type PressStory = {
  * para no presentarlas como cobertura periodística de INPLUX.
  */
 export const pressStories = [
+  {
+    /*
+     * El ranking es de Dinero (Semana). Que las dos compañías sean clientes lo
+     * declaramos nosotros, no la fuente; por eso el estado editorial lo dice y
+     * el enlace lleva al especial, no a una nota sobre INPLUX. Cristian
+     * confirmó la relación con ambas el 17-oct-2026.
+     */
+    slug: "clientes-5000-dinero-2026",
+    category: "Medios",
+    format: "Ranking",
+    outlet: "Semana · Dinero",
+    editorialStatus: "Oncolife · IPSmedic · Ranking anual de Dinero por ventas de 2025",
+    publishedAt: "2026-09-20",
+    publishedLabel: "20 SEP 2026",
+    title: "Dos de nuestros clientes están entre las 5.000 empresas más grandes de Colombia",
+    summary:
+      "El ranking reúne a las compañías que vendieron más de $62.164 millones en 2025. Oncolife, institución oncológica de Bogotá, e IPSmedic, IPS con 23 sedes en el Valle del Cauca, hacen parte de la lista. Con las dos trabajamos.",
+    href:
+      "https://www.semana.com/especiales-editoriales/articulo/las-5000-empresas-mas-grandes-de-colombia-el-salto-de-las-companias-tecnologicas/202631/",
+    visualKind: "clients",
+    visualSignal: "Las 5.000 empresas más grandes · Dinero 2026",
+    visualCode: "Clientes en el ranking",
+    logos: [
+      { src: "/brand/press/oncolife.png", alt: "Oncolife", width: 250, height: 155 },
+      { src: "/brand/press/ipsmedic.png", alt: "IPSmedic", width: 572, height: 476 },
+    ],
+    featured: true,
+    homeRank: 1,
+    homeFeature: true,
+  },
+  {
+    slug: "odr-2026-hackathon-amparo",
+    category: "Escenarios públicos",
+    format: "Hackathon",
+    outlet: "AAA · odr.com · Suffolk University",
+    byline: "Cristian Espinal",
+    editorialStatus: "Encuentro de Online Dispute Resolution · Boston",
+    publishedAt: "2026-06-13",
+    publishedLabel: "JUN 2026",
+    title: "Amparo.help ganó un lugar en el hackathon de ODR 2026",
+    summary:
+      "En el encuentro de ODR en Harvard Business School llevamos Amparo.help al hackathon de la American Arbitration Association y odr.com, en Suffolk University: un prototipo para resolver disputas de salud sin abogados ni costos de juzgado, con la decisión final en manos humanas.",
+    href: "https://amparo.help",
+    visualKind: "photo",
+    visualSignal: "Harvard Business School / Boston",
+    visualCode: "ODR 2026",
+    image: "/brand/press/harvard-hbs.jpg",
+    imageAlt: "Letrero de Harvard Business School en Soldiers Field Park, Boston",
+    place: "Boston, Estados Unidos",
+    featured: true,
+    homeRank: 3,
+  },
+  {
+    slug: "dia-d-2026-aliado-software",
+    category: "Escenarios públicos",
+    format: "Patrocinio",
+    outlet: "10ampro · Universidad EAFIT",
+    editorialStatus: "Medellín · Patrocinio en la categoría Software",
+    publishedAt: "2026-10-14",
+    publishedLabel: "14 OCT 2026",
+    title: "INPLUX, aliado de software de El Día D",
+    summary:
+      "Acompañamos El Día D de 10ampro junto a Veronorte, Universidad EAFIT, Makeno, MBS & Associates, MacroWise y Celsia.",
+    href: "https://eldiad.10am.pro/",
+    visualKind: "allies",
+    visualSignal: "Aliados del Día D",
+    visualCode: "Aliado de software",
+    place: "Medellín, Colombia",
+    featured: true,
+    homeRank: 4,
+  },
+  {
+    slug: "govai-coalition-summit-2026",
+    category: "Escenarios públicos",
+    format: "Cumbre",
+    outlet: "GovAI Coalition · Government Technology",
+    editorialStatus: "San José, California · Cumbre 9 y 10 de diciembre · Government Town Hall el 11",
+    publishedAt: "2026-12-09",
+    publishedLabel: "09 DIC 2026",
+    title: "Vamos al GovAI Coalition Summit, en Silicon Valley",
+    summary:
+      "La cumbre reúne a gobiernos y equipos que construyen IA para el sector público: tendencias, prácticas éticas, gestión de datos y aplicaciones reales.",
+    href: "https://events.govtech.com/GovAI-Coalition-Summit",
+    visualKind: "event",
+    visualSignal: "San Jose Convention Center",
+    visualCode: "09–11 dic",
+    event: {
+      eyebrow: "Próximo · Diciembre 2026",
+      name: ["GovAI", "Coalition", "Summit"],
+      place: "San José, CA · Silicon Valley",
+    },
+    place: "San José, California, Estados Unidos",
+    featured: true,
+    homeRank: 5,
+  },
   {
     slug: "temporada-renta-herramientas",
     category: "Ideas firmadas",
@@ -164,10 +304,15 @@ export const pressStories = [
       "Cristian Espinal participó en el panel 11 del XIV Congreso Nacional e Internacional de Arbitraje, celebrado en Medellín.",
     href:
       "https://es.linkedin.com/posts/comit%C3%A9-colombiano-de-arbitraje_programa-xiv-congreso-nacional-e-internacional-activity-7447352459167051776-_YO7",
-    visualKind: "panel",
-    visualSignal: "XIV CONGRESO / MEDELLÍN",
-    visualCode: "PANEL 11",
+    visualKind: "photo",
+    visualSignal: "XIV Congreso / Medellín",
+    visualCode: "Panel 11",
+    image: "/brand/press/panel-11.jpg",
+    imageAlt:
+      "Panel 11 del XIV Congreso Nacional e Internacional de Arbitraje: cuatro panelistas en el escenario bajo la pantalla con el título del panel",
+    place: "Medellín, Colombia",
     featured: true,
+    homeRank: 2,
   },
   {
     slug: "sistema-tributario-mas-normas",
@@ -225,6 +370,7 @@ export const pressStories = [
     image: "/brand/press/the-commonplace.svg",
     imageAlt: "Símbolo de The Commonplace",
     featured: true,
+    homeRank: 6,
   },
   {
     slug: "hablando-cerebros-tributarios",
@@ -339,6 +485,7 @@ export const pressStories = [
     image: "/brand/press/tribai-al-poniente.png",
     imageAlt: "Portada de la entrevista sobre Tribai publicada por Al Poniente",
     featured: true,
+    homeRank: 7,
   },
   {
     slug: "autonomia-horaria-colombia",
@@ -380,16 +527,42 @@ export const pressStories = [
   },
 ] satisfies readonly PressStory[];
 
+/**
+ * Las destacadas de la portada, en su orden editorial.
+ *
+ * `homeRank` manda; sin él se ordena por fecha. La portada muestra hasta
+ * siete: la primera, si lleva `homeFeature`, ocupa la fila entera.
+ */
+export function featuredPressStories(limit = 7): PressStory[] {
+  return pressStories
+    .filter((story) => story.featured)
+    .sort((a, b) => {
+      const rankA = a.homeRank ?? Number.POSITIVE_INFINITY;
+      const rankB = b.homeRank ?? Number.POSITIVE_INFINITY;
+      if (rankA !== rankB) return rankA - rankB;
+      return b.publishedAt.localeCompare(a.publishedAt);
+    })
+    .slice(0, limit);
+}
+
+/** Los formatos que son un hecho en un lugar y una fecha, no una publicación. */
+export const eventFormats: ReadonlySet<PressStory["format"]> = new Set([
+  "Panel",
+  "Hackathon",
+  "Patrocinio",
+  "Cumbre",
+]);
+
 export const pressCategories = [
   {
     id: "medios",
     label: "Medios",
-    description: "Notas, una entrevista identificada por su autoría y una selección editorial externa.",
+    description: "Notas, una entrevista identificada por su autoría, una selección editorial externa y un ranking.",
   },
   {
     id: "escenarios-publicos",
     label: "Escenarios públicos",
-    description: "Paneles y conversaciones donde el equipo comparte práctica y criterio.",
+    description: "Paneles, encuentros y eventos donde el equipo comparte práctica y criterio.",
   },
   {
     id: "investigacion",
