@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { preload } from "react-dom";
 import ui from "./v5.module.css";
 
 export type HeroVideoSource = {
@@ -30,7 +31,20 @@ export const HOME_HERO_VIDEO = {
  * fuentes es el de peso: el 720p con su `media` va antes que las de 1080p para
  * que un teléfono no baje el archivo grande. Los créditos de cada toma están
  * en `public/media/CREDITOS.md`.
+ *
+ * El póster no va en el atributo `poster`, que admite una sola URL: va en un
+ * `<picture>` detrás del video, en AVIF y WebP a tres anchos, con el JPEG de
+ * 1920 como respaldo. Es el elemento más grande del primer pintado, así que
+ * se precarga y pide prioridad alta. `poster` es la ruta del JPEG; las demás
+ * variantes salen de ella por nombre (`scripts/hero-posters.mjs`).
  */
+const POSTER_WIDTHS = [828, 1280, 1920] as const;
+
+function posterSrcSet(poster: string, format: "avif" | "webp") {
+  const base = poster.replace(/\.jpg$/, "");
+  return POSTER_WIDTHS.map((width) => `${base}-${width}.${format} ${width}w`).join(", ");
+}
+
 export function HeroVideo({
   poster = HOME_HERO_VIDEO.poster,
   sources = HOME_HERO_VIDEO.sources,
@@ -39,6 +53,8 @@ export function HeroVideo({
   sources?: readonly HeroVideoSource[];
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const avif = posterSrcSet(poster, "avif");
+  preload(poster, { as: "image", type: "image/avif", imageSrcSet: avif, imageSizes: "100vw", fetchPriority: "high" });
 
   useEffect(() => {
     const video = ref.current;
@@ -49,7 +65,7 @@ export function HeroVideo({
         video.pause();
       } else {
         video.play().catch(() => {
-          // Sin permiso de reproducción automática: queda el póster.
+          // Sin permiso de reproducción automática: queda el póster detrás.
         });
       }
     };
@@ -60,7 +76,12 @@ export function HeroVideo({
 
   return (
     <div className={ui.mediaBg} aria-hidden="true">
-      <video ref={ref} muted loop playsInline preload="metadata" poster={poster}>
+      <picture>
+        <source type="image/avif" srcSet={avif} sizes="100vw" />
+        <source type="image/webp" srcSet={posterSrcSet(poster, "webp")} sizes="100vw" />
+        <img src={poster} alt="" width={1920} height={1080} fetchPriority="high" decoding="async" />
+      </picture>
+      <video ref={ref} muted loop playsInline preload="metadata">
         {sources.map((source) => (
           <source key={source.src} src={source.src} type={source.type} media={source.media} />
         ))}
