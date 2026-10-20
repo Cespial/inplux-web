@@ -5,7 +5,6 @@ import { formatCopy } from "@/content/copy/format";
 import type { PressCopy } from "@/content/copy/types";
 import { DIA_D_ALLIES } from "@/content/dia-d";
 import {
-  featuredPressStories,
   pressCategories,
   pressStories,
   type PressCategory,
@@ -279,47 +278,6 @@ function PressStoryVisual({
   );
 }
 
-function HomeStoryList({
-  stories,
-  copy = esPress,
-}: {
-  stories: readonly PressStory[];
-  copy?: PressCopy;
-}) {
-  return (
-    <ul className={styles.homeList}>
-      {stories.map((story, index) => (
-        <li
-          className={`${styles.homeItem} ${story.homeFeature ? styles.homeFeature : ""}`}
-          key={story.slug}
-        >
-          <article className={styles.homeCard}>
-            <a
-              className={styles.homeCardLink}
-              href={story.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={externalLabel(story, copy)}
-            >
-              <PressStoryVisual story={story} eager={index === 0} copy={copy} />
-              <span className={styles.homeBody}>
-                <StoryMeta story={story} copy={copy} />
-                <StorySourceContext story={story} copy={copy} />
-                <h3 lang={copy.storyLang ?? undefined}>{story.title}</h3>
-                <p>{copy.summaries[story.slug] ?? story.summary}</p>
-                <span className={styles.storyAction}>
-                  {copy.sourceAction}
-                  <span aria-hidden="true">↗</span>
-                </span>
-              </span>
-            </a>
-          </article>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 function EditorialRows({ stories }: { stories: readonly PressStory[] }) {
   return (
     <ol className={styles.editorialRows}>
@@ -437,53 +395,6 @@ function CategoryContents({
   }
 
   return <EditorialRows stories={stories} />;
-}
-
-export function FactoryPressStories({
-  copy = esPress,
-}: {
-  copy?: PressCopy;
-}) {
-  const featuredStories = featuredPressStories(7);
-  const archiveHrefLang = copy.storyLang ?? undefined;
-
-  return (
-    <section
-      id="prensa"
-      className={styles.homeSection}
-      data-header-theme="dark"
-      aria-labelledby="factory-press-title"
-    >
-      <div className={styles.homeHeading}>
-        <div>
-          <p>{copy.eyebrow}</p>
-          <h2 id="factory-press-title">
-            {copy.titleLead}<em>{copy.titleEmphasis}</em>
-          </h2>
-          {copy.storyNote ? (
-            <p className={styles.homeHeadingNote}>{copy.storyNote}</p>
-          ) : null}
-        </div>
-        <Link
-          className={styles.archiveLink}
-          href="/prensa"
-          hrefLang={archiveHrefLang}
-        >
-          {`${copy.archiveLink} `}<span aria-hidden="true">→</span>
-        </Link>
-      </div>
-
-      <HomeStoryList stories={featuredStories} copy={copy} />
-
-      <Link
-        className={styles.archiveLinkBottom}
-        href="/prensa"
-        hrefLang={archiveHrefLang}
-      >
-        {`${copy.archiveLink} `}<span aria-hidden="true">→</span>
-      </Link>
-    </section>
-  );
 }
 
 export function PressArchive() {
