@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { V5Page } from "@/components/v5/V5Page";
+import { Button, v5 as ui } from "@/components/v5/primitives";
 import styles from "./system-states.module.css";
 
 export const metadata: Metadata = {
@@ -16,37 +15,26 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <ContactDialogProvider>
-      <div className={styles.stateRoot}>
-        <SiteHeader inverseOnTop />
-        <main id="main-content" className={styles.notFound} tabIndex={-1}>
-          <div className={styles.stateGrid} aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className={styles.stateMeta}>
-            <span>SYS / 404</span>
-            <span>RUTA NO ENCONTRADA</span>
-          </div>
-          <div className={styles.stateCopy}>
-            <p>La fábrica sigue activa.</p>
-            <h1>
-              Esta ruta no llegó a <em>producción.</em>
+      <V5Page>
+        <main id="main-content" className={styles.state} tabIndex={-1}>
+          <div className={`${ui.wrap} ${styles.stateInner}`}>
+            <p className={ui.eyebrow}>Error 404</p>
+            <h1 className={ui.d2}>
+              Esta página no existe <em>o cambió de lugar.</em>
             </h1>
-            <p>
-              Puede que el enlace haya cambiado. Desde el inicio puedes volver al
-              recorrido principal o explorar el trabajo de INPLUX.
+            <p className={ui.lead}>
+              Puede que el enlace sea viejo. Desde el inicio llegas a los productos, los sectores y
+              el equipo.
             </p>
-            <div className={styles.stateActions}>
-              <Link href="/">Volver al inicio <span aria-hidden="true">→</span></Link>
-              <Link href="/trabajo">Explorar trabajo real</Link>
+            <div className={ui.actions}>
+              <Button href="/" variant="primary">
+                Volver al inicio
+              </Button>
+              <Button href="/trabajo">Ver productos</Button>
             </div>
           </div>
-          <p className={styles.stateFoot}>CONTEXTO → CRITERIO → PRODUCTO</p>
         </main>
-        <SiteFooter />
-      </div>
+      </V5Page>
     </ContactDialogProvider>
   );
 }
