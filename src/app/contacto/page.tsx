@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactForm } from "@/components/site/ContactForm";
+import { NextPage } from "@/components/v5/NextPage";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, v5 as ui } from "@/components/v5/primitives";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./contacto.module.css";
 
 /*
@@ -29,10 +32,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-contacto.jpg",
         width: 1200,
         height: 630,
-        alt: "INPLUX, de un problema real a software en producción",
+        alt: "INPLUX · Contacto. Empecemos por el problema.",
       },
     ],
   },
@@ -43,12 +46,14 @@ export const metadata: Metadata = {
       "Comparte el reto. No necesitas llegar con requisitos ni alcance definidos.",
     images: [
       {
-        url: "/brand/og/og-default.png",
-        alt: "INPLUX, de un problema real a software en producción",
+        url: "/brand/og/og-contacto.jpg",
+        alt: "INPLUX · Contacto. Empecemos por el problema.",
       },
     ],
   },
 };
+
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Contacto" }];
 
 const contactJsonLd = {
   "@context": "https://schema.org",
@@ -67,6 +72,10 @@ export default function ContactoPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, "https://inplux.co/contacto")) }}
+      />
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
@@ -77,7 +86,7 @@ export default function ContactoPage() {
                 title={<span id="contact-title">Empecemos por el problema.</span>}
                 lead="¿Qué proceso quieres mejorar y en qué sistema vive?"
                 leadMuted="Con eso dimensionamos lo que sigue. No necesitas requisitos ni alcance definidos."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Contacto" }]}
+                crumbs={crumbs}
               />
             </section>
 
@@ -99,12 +108,16 @@ export default function ContactoPage() {
                     </li>
                     <li>Medellín, Colombia</li>
                   </ul>
+                  <p className={styles.security}>
+                    <Link href="/seguridad">Cómo cuidamos los datos que nos compartes</Link>
+                  </p>
                 </div>
                 <div className={styles.panel}>
                   <ContactForm context="section" />
                 </div>
               </div>
             </Band>
+            <NextPage href="/como-trabajamos" label="Cómo trabajamos" />
           </main>
         </V5Page>
       </ContactDialogProvider>

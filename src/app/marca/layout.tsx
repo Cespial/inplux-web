@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-marca.jpg",
         width: 1200,
         height: 630,
-        alt: "INPLUX, fábrica de software a la medida",
+        alt: "INPLUX · Sistema de marca. Logo, color y tipografía.",
       },
     ],
   },
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: "/brand/og/og-default.png",
-        alt: "INPLUX, fábrica de software a la medida",
+        url: "/brand/og/og-marca.jpg",
+        alt: "INPLUX · Sistema de marca. Logo, color y tipografía.",
       },
     ],
   },

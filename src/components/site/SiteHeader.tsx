@@ -215,6 +215,8 @@ function MobileEntry({
   );
 }
 
+const translatedRoutes = new Set(["/", "/en"]);
+
 export function SiteHeader({
   copy = homeCopyEs.header,
   desktopContactSource = "header-desktop",
@@ -227,6 +229,10 @@ export function SiteHeader({
   mobileContactSource?: ContactSource;
 }) {
   const pathname = usePathname();
+  // El cambio de idioma solo une las dos portadas: el resto del sitio se publica
+  // en español, y un «English» en /prensa llevaba a una portada que no traduce
+  // esa página.
+  const languageSwitch = translatedRoutes.has(pathname) ? copy.languageSwitch : null;
   const [open, setOpen] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuClosing, setMenuClosing] = useState(false);
@@ -518,14 +524,14 @@ export function SiteHeader({
               </Link>
             ),
           )}
-          {copy.languageSwitch ? (
+          {languageSwitch ? (
             <Link
               className={styles.languageSwitch}
-              href={copy.languageSwitch.href}
-              hrefLang={copy.languageSwitch.hrefLang}
+              href={languageSwitch.href}
+              hrefLang={languageSwitch.hrefLang}
               prefetch={false}
             >
-              {copy.languageSwitch.label}
+              {languageSwitch.label}
             </Link>
           ) : null}
         </nav>
@@ -604,16 +610,16 @@ export function SiteHeader({
                 onNavigate={(event) => closeMenu(event.detail !== 0)}
               />
             ))}
-            {copy.languageSwitch ? (
+            {languageSwitch ? (
               <Link
                 className={styles.mobileLink}
-                href={copy.languageSwitch.href}
-                hrefLang={copy.languageSwitch.hrefLang}
+                href={languageSwitch.href}
+                hrefLang={languageSwitch.hrefLang}
                 prefetch={false}
                 onClick={(event) => closeMenu(event.detail !== 0)}
               >
-                <span aria-hidden="true">{copy.languageSwitch.hrefLang?.toUpperCase()}</span>
-                {copy.languageSwitch.label}
+                <span aria-hidden="true">{languageSwitch.hrefLang?.toUpperCase()}</span>
+                {languageSwitch.label}
               </Link>
             ) : null}
             <ContactLink

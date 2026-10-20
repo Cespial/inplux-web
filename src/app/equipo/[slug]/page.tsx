@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
+import { NextPage } from "@/components/v5/NextPage";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, Button, SectionHead } from "@/components/v5/primitives";
@@ -11,6 +12,7 @@ import {
   profileUrl,
   teamMembers,
 } from "@/content/team";
+import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./perfil.module.css";
 
 type TeamProfilePageProps = {
@@ -70,7 +72,7 @@ export async function generateMetadata({
       type: "profile",
       images: [
         {
-          url: "/brand/og/og-nosotros.png",
+          url: `/brand/og/og-equipo-${member.slug}.jpg`,
           width: 1200,
           height: 630,
           alt: `${member.name}, ${member.jobTitle} de INPLUX`,
@@ -83,7 +85,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: "/brand/og/og-nosotros.png",
+          url: `/brand/og/og-equipo-${member.slug}.jpg`,
           alt: `${member.name}, ${member.jobTitle} de INPLUX`,
         },
       ],
@@ -100,8 +102,15 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
   }
 
   const publications = publicationsFor(member.slug);
+  const other = teamMembers.find((candidate) => candidate.slug !== member.slug);
   const url = profileUrl(member.slug);
   const id = personId(member.slug);
+
+  const crumbs: Crumb[] = [
+    { label: "Inicio", href: "/" },
+    { label: "Equipo", href: "/equipo" },
+    { label: member.name },
+  ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -143,30 +152,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
           ? { subjectOf: publications.map((story) => ({ "@id": story.href })) }
           : {}),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Inicio",
-            item: "https://inplux.co/",
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Nosotros",
-            item: "https://inplux.co/nosotros",
-          },
-          {
-            "@type": "ListItem",
-            position: 3,
-            name: member.name,
-            item: url,
-          },
-        ],
-      },
+      breadcrumbJsonLd(crumbs, url),
     ],
   };
 
@@ -185,11 +171,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
                 eyebrow={`${member.code} · ${member.role}`}
                 title={<span id="profile-title">{member.name}</span>}
                 lead={member.focus}
-                crumbs={[
-                  { label: "Inicio", href: "/" },
-                  { label: "Equipo", href: "/equipo" },
-                  { label: member.name },
-                ]}
+                crumbs={crumbs}
                 actions={
                   <>
                     <Button href={member.linkedin} variant="primary" external>
@@ -270,6 +252,9 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
                   ))}
                 </ol>
               </Band>
+            ) : null}
+            {other ? (
+              <NextPage href={`/equipo/${other.slug}`} label={other.name} note={other.focus} />
             ) : null}
           </main>
         </V5Page>

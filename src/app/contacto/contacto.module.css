@@ -51,6 +51,20 @@
   border-color: var(--teal);
 }
 
+/* Clase doble: el reset `.root :is(p, …)` de V5Page pesa 0,1,1. */
+.security.security {
+  margin-top: 1.4rem;
+  color: var(--fg-muted);
+  font-size: var(--step-8);
+}
+
+.security a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.2em;
+}
+
 .panel {
   min-width: 0;
 }

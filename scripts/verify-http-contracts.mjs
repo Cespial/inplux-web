@@ -24,6 +24,7 @@ const expectedRoutes = [
   ["/nosotros", 200],
   ["/prensa", 200],
   ["/contacto", 200],
+  ["/seguridad", 200],
   ["/sectores/sector-inexistente", 404],
   ["/trabajo/tribai", 200],
   ["/trabajo/gobia", 200],
