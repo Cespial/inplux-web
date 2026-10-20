@@ -8,7 +8,13 @@ import styles from "./ProductMockups.module.css";
  * lo dicen en su línea de cierre y nunca inventan un dato que el perfil no
  * tenga. Las cifras salen de `profile.interface`, que es el mismo espejo que
  * pinta `WorkPreview` en el perfil del producto.
+ *
+ * Con `animate`, la ventana entra con sus datos —la cifra sube, la barra se
+ * llena, las filas aparecen una tras otra—. Solo se usa en el hero de cada
+ * ficha, que está a la vista al cargar; en `/trabajo` la ventana queda quieta.
  */
+
+type MockupProps = { profile: WorkProfile; animate?: boolean };
 
 function Window({
   name,
@@ -17,7 +23,9 @@ function Window({
   children,
   footer,
   label,
+  animate,
 }: {
+  animate?: boolean;
   name: string;
   status: string;
   theme: WorkProfile["interface"]["theme"];
@@ -26,7 +34,13 @@ function Window({
   label: string;
 }) {
   return (
-    <figure className={styles.mock} data-theme={theme} role="img" aria-label={label}>
+    <figure
+      className={styles.mock}
+      data-theme={theme}
+      data-animate={animate || undefined}
+      role="img"
+      aria-label={label}
+    >
       <div className={styles.bar}>
         <i aria-hidden="true">
           <span />
@@ -47,9 +61,10 @@ function item(profile: WorkProfile, index: number) {
 }
 
 /** Tribai: una llamada al servidor MCP y su respuesta con fuente. Ejemplo ilustrativo. */
-export function TribaiMockup({ profile }: { profile: WorkProfile }) {
+export function TribaiMockup({ profile, animate }: MockupProps) {
   return (
     <Window
+      animate={animate}
       name="tribai-mcp"
       status="200 OK"
       theme={profile.interface.theme}
@@ -93,12 +108,13 @@ export function TribaiMockup({ profile }: { profile: WorkProfile }) {
 }
 
 /** Gobia: el tablero de un municipio con las cifras de su demo pública. */
-export function GobiaMockup({ profile }: { profile: WorkProfile }) {
+export function GobiaMockup({ profile, animate }: MockupProps) {
   const recaudo = item(profile, 0);
   const fut = item(profile, 1);
   const estatuto = item(profile, 2);
   return (
     <Window
+      animate={animate}
       name="gobia.co · demo"
       status={profile.status.label}
       theme={profile.interface.theme}
@@ -134,9 +150,10 @@ export function GobiaMockup({ profile }: { profile: WorkProfile }) {
 }
 
 /** Kelsen: un explorador con resultados y la ruta hasta la fuente. */
-export function KelsenMockup({ profile }: { profile: WorkProfile }) {
+export function KelsenMockup({ profile, animate }: MockupProps) {
   return (
     <Window
+      animate={animate}
       name="kelsen.io · explorador"
       status={profile.status.label}
       theme={profile.interface.theme}
@@ -163,10 +180,11 @@ export function KelsenMockup({ profile }: { profile: WorkProfile }) {
 }
 
 /** Laudos: el corpus con sus dos fondos y la cobertura, como los publica el laboratorio. */
-export function LaudosMockup({ profile }: { profile: WorkProfile }) {
+export function LaudosMockup({ profile, animate }: MockupProps) {
   const verified = verificationDateFor(profile.sources, "https://laudos.co/?view=predecir");
   return (
     <Window
+      animate={animate}
       name="laudos.co · predecir"
       status={profile.status.label}
       theme={profile.interface.theme}
@@ -197,9 +215,10 @@ export function LaudosMockup({ profile }: { profile: WorkProfile }) {
 }
 
 /** Porkia: la ficha de una finca, con los frentes que la app lleva. */
-export function PorkiaMockup({ profile }: { profile: WorkProfile }) {
+export function PorkiaMockup({ profile, animate }: MockupProps) {
   return (
     <Window
+      animate={animate}
       name="porkia.co · demo"
       status={profile.status.label}
       theme={profile.interface.theme}
@@ -231,4 +250,4 @@ export const productMockups = {
   kelsen: KelsenMockup,
   laudos: LaudosMockup,
   porkia: PorkiaMockup,
-} as const satisfies Record<WorkProfile["slug"], (props: { profile: WorkProfile }) => React.ReactNode>;
+} as const satisfies Record<WorkProfile["slug"], (props: MockupProps) => React.ReactNode>;

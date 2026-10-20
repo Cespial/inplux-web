@@ -1,0 +1,31 @@
+/*
+ * El hero con una figura al lado (las fichas de producto): el texto a la
+ * izquierda con su padding y su entrada de siempre, la figura a la derecha
+ * apoyada en el mismo borde inferior. En pantallas estrechas la figura baja
+ * debajo del texto.
+ */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  align-items: end;
+  column-gap: clamp(2rem, 5vw, 5rem);
+}
+
+.aside {
+  min-width: 0;
+  padding-block: 8rem clamp(3.5rem, 7vw, 5.5rem);
+}
+
+@media (max-width: 960px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .split > :first-child {
+    padding-bottom: 2.5rem;
+  }
+
+  .aside {
+    padding-top: 0;
+  }
+}
