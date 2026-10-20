@@ -1412,7 +1412,7 @@ export const homeCopyEn: HomeCopy = {
     },
     products: {
       eyebrow: "Our own products",
-      title: "Six products built and run by INPLUX.",
+      title: "Five products built and run by INPLUX.",
       lead: "Each one started with a client's problem and now runs on its own. Screenshots come from their public pages.",
       tribaiLead:
         "Our MCP server gives Claude and ChatGPT Colombia's current Tax Code, DIAN doctrine and Council of State case law, with the official source behind every answer.",

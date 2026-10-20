@@ -102,7 +102,7 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
           <main id="main-content" tabIndex={-1}>
             <PageHero
               id="inicio"
-              crumbs={[{ label: "Productos", href: "/trabajo" }, { label: profile.name }]}
+              crumbs={[{ label: "Inicio", href: "/" }, { label: "Productos", href: "/trabajo" }, { label: profile.name }]}
               eyebrow={`${profile.number} · ${profile.category}`}
               title={profile.headline}
               lead={profile.description}
