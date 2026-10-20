@@ -1,36 +1,69 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { preload } from "react-dom";
 import ui from "./v5.module.css";
 
 export type HeroVideoSource = {
   src: string;
   type: string;
-  /** Consulta de medios que limita la fuente (p. ej. la de 720p a pantallas estrechas). */
+  /**
+   * Consulta de medios que limita la fuente. Una fuente con `media` sólo se
+   * ofrece cuando la consulta coincide; si alguna coincide, se ofrecen sólo
+   * ésas y se descartan las que no llevan `media` (las de escritorio).
+   */
   media?: string;
 };
+
+/** Pantallas estrechas: teléfonos y tabletas pequeñas en vertical. */
+export const MOBILE_MEDIA = "(max-width: 760px)";
 
 /** El montaje de la portada: diez tomas de dos segundos con corte seco. */
 export const HOME_HERO_VIDEO = {
   poster: "/media/hero-poster.jpg",
   sources: [
-    { src: "/media/hero-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
+    { src: "/media/hero-480.mp4", type: "video/mp4", media: MOBILE_MEDIA },
     { src: "/media/hero-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.08"' },
     { src: "/media/hero-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
     { src: "/media/hero.mp4", type: "video/mp4" },
   ],
 } as const satisfies { poster: string; sources: readonly HeroVideoSource[] };
 
+type NetworkInformation = { saveData?: boolean; effectiveType?: string };
+
+/**
+ * Con «ahorro de datos» activo o una conexión lenta (2G, 3G) el video no se
+ * monta y la banda se queda en el póster. `navigator.connection` sólo existe
+ * en Chromium; donde no está, se asume que la conexión permite el video.
+ */
+function connectionAllowsVideo() {
+  const { connection } = navigator as Navigator & { connection?: NetworkInformation };
+  if (!connection) return true;
+  if (connection.saveData === true) return false;
+  const type = connection.effectiveType;
+  return type !== "slow-2g" && type !== "2g" && type !== "3g";
+}
+
+/** Las fuentes que aplican a esta pantalla (ver `HeroVideoSource.media`). */
+function pickSources(sources: readonly HeroVideoSource[]) {
+  const bound = sources.filter((source) => source.media && window.matchMedia(source.media).matches);
+  return bound.length > 0 ? bound : sources.filter((source) => !source.media);
+}
+
 /**
  * Video de fondo de un hero. Sin props pinta el montaje de la portada; otra
  * página pasa su póster y sus fuentes.
  *
+ * El HTML del servidor no lleva `<video>`: sólo el póster. Al montar, el
+ * componente mira la conexión y la pantalla y entonces monta el video con las
+ * fuentes que tocan —la de 480p en un teléfono, las de 1080p por códec en
+ * escritorio— o no lo monta si la persona pidió ahorrar datos o la red es
+ * lenta. Así un teléfono nunca pide el archivo grande ni, con ahorro de datos,
+ * ningún archivo. Sin JavaScript queda el póster.
+ *
  * El video no lleva `autoPlay`: arranca al montar sólo si la persona no pidió
- * reducir el movimiento, y si lo pidió se queda en el póster. El orden de las
- * fuentes es el de peso: el 720p con su `media` va antes que las de 1080p para
- * que un teléfono no baje el archivo grande. Los créditos de cada toma están
- * en `public/media/CREDITOS.md`.
+ * reducir el movimiento, y si lo pidió se queda en el póster. Los créditos de
+ * cada toma están en `public/media/CREDITOS.md`.
  *
  * El póster no va en el atributo `poster`, que admite una sola URL: va en un
  * `<picture>` detrás del video, en AVIF y WebP a tres anchos, con el JPEG de
@@ -59,10 +92,19 @@ export function HeroVideo({
   lazy?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [active, setActive] = useState<readonly HeroVideoSource[] | null>(null);
   const avif = posterSrcSet(poster, "avif");
   if (!lazy) {
     preload(poster, { as: "image", type: "image/avif", imageSrcSet: avif, imageSizes: "100vw", fetchPriority: "high" });
   }
+
+  const sourceKey = sources.map((source) => source.src).join("|");
+  useEffect(() => {
+    if (!connectionAllowsVideo()) return;
+    setActive(pickSources(sources));
+    // `sources` llega del servidor: se compara por sus rutas y no por identidad.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceKey]);
 
   useEffect(() => {
     const video = ref.current;
@@ -95,7 +137,7 @@ export function HeroVideo({
       observer?.disconnect();
       reduce.removeEventListener("change", sync);
     };
-  }, [lazy]);
+  }, [lazy, active]);
 
   return (
     <div className={ui.mediaBg} aria-hidden="true">
@@ -112,11 +154,13 @@ export function HeroVideo({
           decoding="async"
         />
       </picture>
-      <video ref={ref} muted loop playsInline preload={lazy ? "none" : "metadata"}>
-        {sources.map((source) => (
-          <source key={source.src} src={source.src} type={source.type} media={source.media} />
-        ))}
-      </video>
+      {active ? (
+        <video ref={ref} muted loop playsInline preload={lazy ? "none" : "metadata"}>
+          {active.map((source) => (
+            <source key={source.src} src={source.src} type={source.type} />
+          ))}
+        </video>
+      ) : null}
     </div>
   );
 }

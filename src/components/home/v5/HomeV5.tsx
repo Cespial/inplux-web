@@ -19,6 +19,7 @@ import {
   v5 as ui,
 } from "@/components/v5/primitives";
 import { StatRow, type Stat } from "@/components/v5/StatRow";
+import { MOBILE_MEDIA } from "@/components/v5/HeroVideo.client";
 import { VideoBand } from "@/components/v5/VideoBand";
 import { clientWallCount } from "@/content/clients";
 import type { HomeCopy } from "@/content/copy/types";
@@ -80,7 +81,7 @@ export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: React
 const LATAM_VIDEO = {
   poster: "/media/latam-poster.jpg",
   sources: [
-    { src: "/media/latam-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
+    { src: "/media/latam-480.mp4", type: "video/mp4", media: MOBILE_MEDIA },
     { src: "/media/latam-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.08"' },
     { src: "/media/latam-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
     { src: "/media/latam.mp4", type: "video/mp4" },
