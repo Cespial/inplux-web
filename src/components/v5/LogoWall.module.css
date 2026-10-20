@@ -96,8 +96,9 @@
   text-transform: uppercase;
 }
 
+/* Tinta plena: a este cuerpo, el tono apagado no alcanza el contraste mínimo. */
 .logoName small {
-  color: var(--fg-muted);
+  color: var(--ivory);
   font: 500 0.58rem/1.2 var(--sans);
   letter-spacing: 0.085em;
   text-transform: uppercase;
