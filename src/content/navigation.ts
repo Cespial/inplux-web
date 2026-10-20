@@ -41,8 +41,7 @@ export const companyNavigation = [
   },
   {
     label: "Equipo",
-    // TODO PR E: /equipo
-    href: "/nosotros",
+    href: "/equipo",
     description: "Quién dirige y quién responde por cada producto.",
   },
   {

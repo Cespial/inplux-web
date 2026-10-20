@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/deck/presentacion",
     ...sectorProfiles.map((sector) => `/sectores/${sector.slug}`),
     "/nosotros",
+    "/equipo",
     ...teamMembers.map((member) => `/equipo/${member.slug}`),
     "/prensa",
     "/contacto",

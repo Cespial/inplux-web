@@ -25,6 +25,8 @@ export type ContactSource =
   // /como-trabajamos: hero y cierre.
   | "how-we-work-hero"
   | "how-we-work-closing"
+  // Página de equipo (/equipo): cierre.
+  | "team-closing"
   // Productos (/trabajo y /trabajo/[slug]): el cierre.
   | "work-closing";
 

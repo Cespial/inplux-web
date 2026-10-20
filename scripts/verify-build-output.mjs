@@ -442,6 +442,30 @@ const pageDefinitions = {
     productFooter: "Productos documentados",
     attribution: true,
   },
+  team: {
+    file: ".next/server/app/equipo.html",
+    title: "Equipo — quién dirige y quién responde | INPLUX",
+    description:
+      "Las personas que dirigen INPLUX y responden por cada producto: criterio tributario e institucional, producto e ingeniería, desde Medellín.",
+    canonical: `${siteUrl}/equipo`,
+    ogTitle: "Equipo | INPLUX",
+    ogDescription:
+      "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
+    ogUrl: `${siteUrl}/equipo`,
+    ogImage: "https://inplux.co/brand/og/og-nosotros.png",
+    ogImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    twitterTitle: "Equipo | INPLUX",
+    twitterDescription:
+      "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
+    twitterImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    jsonLd: {
+      type: "CollectionPage",
+      name: "Equipo de INPLUX",
+      url: `${siteUrl}/equipo`,
+    },
+    // Cabecera y cierre.
+    contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
+  },
   press: {
     file: ".next/server/app/prensa.html",
     title: "Prensa y conversaciones | INPLUX",
@@ -1014,6 +1038,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/sectores/legal-tributario`,
     `${siteUrl}/sectores/empresas`,
     `${siteUrl}/nosotros`,
+    `${siteUrl}/equipo`,
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,
     `${siteUrl}/equipo/cristian-espinal-maya`,
     `${siteUrl}/prensa`,

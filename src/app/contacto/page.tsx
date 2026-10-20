@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactForm } from "@/components/site/ContactForm";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageHero } from "@/components/v5/PageHero";
+import { V5Page } from "@/components/v5/V5Page";
+import { Band, v5 as ui } from "@/components/v5/primitives";
 import styles from "./contacto.module.css";
+
+/*
+ * `/contacto` (octubre de 2026): como la página de contacto de primero.com,
+ * unas pocas líneas, el correo y un formulario corto. El formulario prepara un
+ * borrador en el correo de la persona; esta página no envía ni guarda nada.
+ */
 
 export const metadata: Metadata = {
   title: "Contacto — empecemos por el problema",
@@ -44,24 +50,6 @@ export const metadata: Metadata = {
   },
 };
 
-const prompts = [
-  {
-    number: "01",
-    title: "¿Qué ocurre hoy?",
-    copy: "La situación, el flujo o la experiencia que está produciendo fricción.",
-  },
-  {
-    number: "02",
-    title: "¿Quién lo vive?",
-    copy: "Las personas, equipos o usuarios involucrados en ese contexto.",
-  },
-  {
-    number: "03",
-    title: "¿Qué debería cambiar?",
-    copy: "El resultado que permitiría reconocer que el proyecto está ayudando.",
-  },
-] as const;
-
 const contactJsonLd = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
@@ -80,157 +68,45 @@ export default function ContactoPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
       />
       <ContactDialogProvider>
-        <div className={styles.contactRoot}>
-          <SiteHeader inverseOnTop />
+        <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
-            <section
-              className={styles.hero}
-              data-header-theme="dark"
-              aria-labelledby="contact-title"
-            >
-              <div className={styles.heroCopy}>
-                <p className={styles.eyebrow}>
-                  <span>00</span> Iniciar un proyecto
-                </p>
-                <h1 id="contact-title">
-                  Empecemos por el <em>problema.</em>
-                </h1>
-                <p>
-                  No necesitas llegar con requisitos, una tecnología escogida o el
-                  alcance resuelto. Cuéntanos qué ocurre y qué debería cambiar.
-                </p>
-                <a href="#escribir">
-                  Contar el reto <span aria-hidden="true">↓</span>
-                </a>
-              </div>
-
-              <div className={styles.heroBrief} aria-hidden="true">
-                <div className={styles.briefHeader}>
-                  <span>CREATE PROJECT</span>
-                  <span>INPLUX FACTORY / BRIEF</span>
-                </div>
-                <div className={styles.briefBody}>
-                  <div className={styles.briefStatus}>
-                    <span>PRIMERA SEÑAL</span>
-                    <strong>UN PROBLEMA REAL</strong>
-                  </div>
-                  <ol>
-                    <li><span>01</span><i /> QUÉ OCURRE</li>
-                    <li><span>02</span><i /> QUIÉN LO VIVE</li>
-                    <li><span>03</span><i /> QUÉ DEBERÍA CAMBIAR</li>
-                  </ol>
-                  <div className={styles.briefResult}>
-                    <span>SIGUIENTE PASO</span>
-                    <strong>COMPRENDER ANTES DE PROPONER</strong>
-                  </div>
-                </div>
-                <div className={styles.briefFooter}>
-                  <span><i /> NO REQUIERE DOCUMENTO PREVIO</span>
-                  <span>CTX / 00</span>
-                </div>
-              </div>
+            <section id="inicio" aria-labelledby="contact-title">
+              <PageHero
+                className={styles.hero}
+                eyebrow="Contacto"
+                title={<span id="contact-title">Empecemos por el problema.</span>}
+                lead="¿Qué proceso quieres mejorar y en qué sistema vive?"
+                leadMuted="Con eso dimensionamos lo que sigue. No necesitas requisitos ni alcance definidos."
+                crumbs={[{ label: "Inicio", href: "/" }, { label: "Contacto" }]}
+              />
             </section>
 
-            <section className={styles.prepare} aria-labelledby="prepare-title">
-              <p className={styles.eyebrow}>
-                <span>01</span> Antes de escribir
-              </p>
-              <div>
-                <h2 id="prepare-title">
-                  Tres preguntas son suficientes para{" "}
-                  <em>comenzar.</em>
-                </h2>
-                <p>
-                  Si todavía no sabes qué software necesitas, está bien. Esa
-                  definición es parte del trabajo.
-                </p>
-              </div>
-              <ol>
-                {prompts.map((prompt) => (
-                  <li key={prompt.number}>
-                    <span>{prompt.number}</span>
-                    <div>
-                      <h3>{prompt.title}</h3>
-                      <p>{prompt.copy}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </section>
-
-            <section
-              id="escribir"
-              className={styles.formSection}
-              data-header-theme="dark"
-              aria-labelledby="form-title"
-            >
-              <div className={styles.formCopy}>
-                <p className={styles.eyebrow}>
-                  <span>02</span> Compartir el reto
-                </p>
-                <h2 id="form-title">
-                  ¿Qué necesitas <em>cambiar?</em>
-                </h2>
-                <p>
-                  El formulario prepara un borrador en tu aplicación de correo.
-                  Esta página no enviará ni almacenará la información.
-                </p>
-
-                <div className={styles.directChannels}>
-                  <p>También puedes escribir directamente</p>
-                  <a href="mailto:gerencia@inplux.co">
-                    gerencia@inplux.co <span aria-hidden="true">↗</span>
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/company/inplux"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    LinkedIn <span aria-hidden="true">↗</span>
-                  </a>
-                  <span>Medellín, Colombia</span>
+            <Band id="escribir" labelledBy="form-title" className={styles.contact}>
+              <div className={styles.grid}>
+                <div className={styles.direct}>
+                  <p className={ui.eyebrow}>Escríbenos</p>
+                  <h2 className={ui.d2} id="form-title">
+                    Una persona del equipo <em>responde.</em>
+                  </h2>
+                  <ul className={styles.channels} aria-label="Canales directos">
+                    <li>
+                      <a href="mailto:gerencia@inplux.co">gerencia@inplux.co</a>
+                    </li>
+                    <li>
+                      <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noreferrer">
+                        LinkedIn <span aria-hidden="true">↗</span>
+                      </a>
+                    </li>
+                    <li>Medellín, Colombia</li>
+                  </ul>
+                </div>
+                <div className={styles.panel}>
+                  <ContactForm context="section" />
                 </div>
               </div>
-              <div className={styles.formPanel}>
-                <div className={styles.formPanelHeader}>
-                  <span>PROJECT BRIEF / 01</span>
-                  <span>CANAL / CORREO</span>
-                </div>
-                <ContactForm context="section" />
-              </div>
-            </section>
-
-            <section className={styles.after} aria-labelledby="after-title">
-              <p className={styles.eyebrow}>
-                <span>03</span> Qué sigue
-              </p>
-              <div>
-                <h2 id="after-title">
-                  Primero entendemos. Después proponemos una{" "}
-                  <em>dirección.</em>
-                </h2>
-              </div>
-              <ol>
-                <li>
-                  <span>01</span>
-                  <p>Revisamos el contexto que compartiste y las preguntas que deja abiertas.</p>
-                </li>
-                <li>
-                  <span>02</span>
-                  <p>Conversamos para comprender personas, reglas, riesgos y resultado esperado.</p>
-                </li>
-                <li>
-                  <span>03</span>
-                  <p>Si existe un encaje, proponemos cómo definir la primera versión útil.</p>
-                </li>
-              </ol>
-              <Link href="/como-trabajamos">
-                Conocer cómo trabajamos <span aria-hidden="true">↗</span>
-              </Link>
-            </section>
+            </Band>
           </main>
-          <SiteFooter />
-        </div>
+        </V5Page>
       </ContactDialogProvider>
     </>
   );
