@@ -75,6 +75,11 @@ export type SectorProfile = {
   audience: string;
   /** Imagen a sangre del hero (3:2) y su texto alternativo. */
   hero: { image: string; alt: string };
+  /**
+   * Foto vertical (3:4) de la tarjeta del sector en la portada. Es decorativa:
+   * la tarjeta ya nombra el sector, así que no lleva texto alternativo.
+   */
+  card: { image: string };
   /** El reclamo de la página (H2) y el párrafo que lo sostiene. */
   claim: string;
   intro: string;
@@ -112,6 +117,7 @@ export const sectorProfiles = [
       image: "/sectores/sector-salud.webp",
       alt: "Una clínica consulta una tableta junto al monitor de un paciente, con la luz de un ventanal.",
     },
+    card: { image: "/sectores/card-salud.webp" },
     claim: "Software alrededor de la historia clínica que la IPS ya tiene.",
     intro:
       "Construimos lo que falta alrededor de los sistemas que ya operan: la relación con el paciente, el seguimiento entre consultas y el soporte diario, con el equipo clínico decidiendo en cada alerta.",
@@ -209,6 +215,7 @@ export const sectorProfiles = [
       image: "/sectores/sector-publico.webp",
       alt: "Una funcionaria revisa un formulario impreso en una ventanilla, con un ciudadano de espaldas y una bandera de Colombia al fondo.",
     },
+    card: { image: "/sectores/card-publico.webp" },
     claim: "La operación pública, visible y con cada decisión respaldada.",
     intro:
       "Trabajamos sobre los sistemas que la entidad ya opera —presupuesto, recaudo, contratación, archivo— y dejamos cada cifra con su fuente y cada revisión con su registro. Lo que se automatiza queda trazado; lo que se decide, lo decide el funcionario.",
@@ -260,6 +267,7 @@ export const sectorProfiles = [
       image: "/sectores/sector-legal-tributario.webp",
       alt: "Unas manos anotan con un bolígrafo un estatuto impreso sobre un escritorio de madera, con expedientes y códigos al fondo.",
     },
+    card: { image: "/sectores/card-legal-tributario.webp" },
     claim: "Criterio con fuente, en el flujo de trabajo del abogado y del contador.",
     intro:
       "Conectamos el Estatuto Tributario, la doctrina y la jurisprudencia vigentes con las herramientas que tu equipo ya usa. Cada respuesta llega con el artículo, la fecha y el enlace oficial; la decisión sigue siendo de quien firma.",
@@ -291,6 +299,7 @@ export const sectorProfiles = [
       image: "/sectores/sector-empresas.webp",
       alt: "Un supervisor camina por el piso de una planta con una tableta, entre máquinas y líneas amarillas de seguridad.",
     },
+    card: { image: "/sectores/card-empresas.webp" },
     claim: "Productos y herramientas internas que la operación adopta.",
     intro:
       "Entramos por un proceso concreto y construimos sobre los sistemas que ya operas: el ERP, la hoja de cálculo que manda, el chat del equipo. Lo que se automatiza queda registrado y lo crítico pasa por una persona antes de ejecutarse.",
