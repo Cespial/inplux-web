@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { CriterionFlow } from "@/components/about/CriterionFlow.client";
-import { HistoryScrolly } from "@/components/about/HistoryScrolly.client";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageHero } from "@/components/v5/PageHero";
+import { V5Page } from "@/components/v5/V5Page";
+import {
+  Band,
+  Button,
+  CloseBand,
+  MailRow,
+  SectionHead,
+  buttonClass,
+  v5 as ui,
+} from "@/components/v5/primitives";
 import { personId, profileUrl, teamMembers } from "@/content/team";
 import styles from "./nosotros.module.css";
+
+/*
+ * `/nosotros` (octubre de 2026): corta a propósito, como la página de compañía
+ * de primero.com. Video, de dónde venimos, tres razones para confiar, qué
+ * estamos construyendo y el cierre. Quién dirige vive en `/equipo`; cómo
+ * trabajamos, en `/como-trabajamos`.
+ *
+ * El párrafo de origen acredita a REDEK: `verify-build-output` lo exige porque
+ * es la única prosa del sitio que resume la autoría de todos los productos.
+ */
 
 export const metadata: Metadata = {
   title: "Nosotros — el criterio detrás de la fábrica",
@@ -47,34 +63,26 @@ export const metadata: Metadata = {
   },
 };
 
-const principles = [
+const reasons = [
   {
-    number: "01",
-    title: "Entender antes de construir.",
+    label: "Operadores con criterio",
+    title: "Venimos de la operación, no de la demo.",
     copy:
-      "El contexto, las personas y las reglas del problema guían cada decisión de producto y tecnología.",
+      "Tributación, hacienda pública, economía e ingeniería. Sabemos qué pasa cuando una respuesta no se puede verificar.",
   },
   {
-    number: "02",
-    title: "Hacer visible la evidencia.",
+    label: "Independientes",
+    title: "Sin proveedor ni modelo por defecto.",
     copy:
-      "Diferenciamos lo que está en producción, en piloto, en beta o todavía en desarrollo.",
+      "Elegimos la nube, el modelo y la infraestructura por el problema, y lo dejamos documentado para que puedas cambiarlo.",
   },
   {
-    number: "03",
-    title: "Mantener dirección humana.",
+    label: "Ingeniería local",
+    title: "Dentro de tu equipo, no al otro lado de un ticket.",
     copy:
-      "La IA participa en tareas especializadas; el equipo conserva el criterio, la validación y la responsabilidad.",
-  },
-  {
-    number: "04",
-    title: "Diseñar para evolucionar.",
-    copy:
-      "Una primera versión útil inicia un producto que puede mejorar con evidencia de su operación.",
+      "Nuestros ingenieros trabajan en tus sistemas y con tus personas, desde el diagnóstico hasta que el sistema opera.",
   },
 ] as const;
-
-const leaders = teamMembers;
 
 const aboutPageJsonLd = {
   "@context": "https://schema.org",
@@ -113,7 +121,7 @@ const aboutSupportingJsonLd = {
     // Referencia por `@id` canónico, no una definición nueva: la persona se
     // define una sola vez en /equipo/[slug]. Repetir aquí un `@id` distinto
     // crearía una entidad paralela con el mismo nombre.
-    ...leaders.map((leader) => ({
+    ...teamMembers.map((leader) => ({
       "@type": "Person",
       "@id": personId(leader.slug),
       name: leader.name,
@@ -140,193 +148,130 @@ export default function Nosotros() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSupportingJsonLd) }}
       />
       <ContactDialogProvider>
-        <div className={styles.aboutRoot}>
-          <SiteHeader inverseOnTop />
+        <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
-            <section
-              className={styles.hero}
-              aria-labelledby="about-title"
-              data-header-theme="dark"
-            >
-              <div className={styles.heroCopy}>
-                <div className={styles.heroCopyInner}>
-                  <p className={styles.eyebrow}>
-                    <span>00</span> Nosotros
-                  </p>
-                  <h1 id="about-title">
-                    El criterio detrás de la <em>fábrica.</em>
-                  </h1>
-                  <p className={styles.heroLead}>
-                    No empezamos por la tecnología. Empezamos por comprender qué ocurre,
-                    quién lo vive y qué debería cambiar.
-                  </p>
-                  <p className={styles.heroBody}>
-                    INPLUX reúne experiencia institucional, pensamiento de producto e
-                    ingeniería para convertir problemas reales en software que pueda usarse,
-                    medirse y evolucionar.
-                  </p>
-                  <div className={styles.heroFacts} aria-label="Datos de INPLUX">
-                    <span>MEDELLÍN / COLOMBIA</span>
-                    <span>DESDE 2023</span>
-                    <span>DIRECCIÓN HUMANA</span>
-                  </div>
-                </div>
-                <a className={styles.heroScroll} href="#trayectoria">
-                  Ver de dónde viene el criterio <span aria-hidden="true">↓</span>
-                </a>
-              </div>
-              <CriterionFlow />
+            <section id="inicio" aria-labelledby="about-title">
+              <PageHero
+                className={styles.hero}
+                eyebrow="Nosotros"
+                title={<span id="about-title">Construimos con criterio, desde Medellín.</span>}
+                lead="INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica."
+                leadMuted="Productos propios en producción y equipos que los implementan dentro de la operación del cliente."
+                crumbs={[{ label: "Inicio", href: "/" }, { label: "Nosotros" }]}
+                media={{
+                  kind: "video",
+                  poster: "/media/nosotros-poster.jpg",
+                  sources: [
+                    { src: "/media/nosotros-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
+                    { src: "/media/nosotros-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.08"' },
+                    { src: "/media/nosotros-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
+                    { src: "/media/nosotros.mp4", type: "video/mp4" },
+                  ],
+                }}
+                actions={
+                  <>
+                    <Button href="/equipo" variant="primary">
+                      Conocer al equipo
+                    </Button>
+                    <Button href="#origen">
+                      De dónde venimos <span aria-hidden="true">↓</span>
+                    </Button>
+                  </>
+                }
+              />
             </section>
 
-            <section
-              id="trayectoria"
-              className={styles.trajectory}
-              aria-labelledby="trajectory-title"
-            >
-              <div className={styles.sectionHeading}>
-                <p className={styles.eyebrow}>
-                  <span>01</span> Trayectoria
-                </p>
-                <h2 id="trajectory-title">
-                  El criterio no apareció de la <em>nada.</em>
-                </h2>
+            <Band id="origen" labelledBy="origin-title" className={styles.origin}>
+              <SectionHead
+                id="origin-title"
+                eyebrow="De dónde venimos"
+                title={
+                  <>
+                    Dos oficios en la misma <em>mesa.</em>
+                  </>
+                }
+              />
+              <div className={styles.originBody}>
                 <p>
-                  Esta es la historia verificable detrás de la fábrica: la trayectoria del
-                  equipo, la formalización de INPLUX y la forma actual de construir.
+                  INPLUX nació en Medellín en 2023 de dos oficios que rara vez se sientan juntos: la
+                  gestión tributaria e institucional y la ingeniería de software. Los productos que
+                  este sitio documenta son desarrollos de INPLUX en dominios que no se parecen entre
+                  sí. Cuando la responsabilidad se reparte, el perfil lo dice: en Laudos, INPLUX
+                  realiza el desarrollo técnico y REDEK aporta el criterio legal.
                 </p>
-              </div>
-              <HistoryScrolly />
-            </section>
-
-            <section
-              className={styles.operatingSystem}
-              aria-labelledby="system-title"
-              data-header-theme="dark"
-            >
-              <div className={styles.sectionHeadingDark}>
-                <p className={styles.eyebrow}>
-                  <span>02</span> Una sola fábrica
-                </p>
-                <h2 id="system-title">
-                  Tres formas de pensar. Un solo <em>sistema.</em>
-                </h2>
-                <p>
-                  No entregamos una estrategia por un lado y código por otro. Contexto,
-                  producto e ingeniería comparten la misma dirección.
-                </p>
-              </div>
-
-              <div className={styles.systemMap} aria-label="Sistema de trabajo de INPLUX">
-                <div className={styles.systemMapHeader}>
-                  <span>INPLUX FACTORY / OPERATING MODEL</span>
-                  <span>RESPONSABILIDAD ACTIVA</span>
-                </div>
-                <div className={styles.systemNodes}>
-                  <article>
-                    <span>01</span>
-                    <h3>Contexto</h3>
-                    <p>Personas, reglas, operación y fricciones.</p>
-                  </article>
-                  <article>
-                    <span>02</span>
-                    <h3>Producto</h3>
-                    <p>Prioridades, experiencia, alcance y validación.</p>
-                  </article>
-                  <article>
-                    <span>03</span>
-                    <h3>Ingeniería</h3>
-                    <p>Arquitectura, software, datos y calidad.</p>
-                  </article>
-                </div>
-                <div className={styles.humanDirection}>
-                  <span>DIRECCIÓN HUMANA</span>
-                  <p>
-                    La inteligencia artificial amplifica capacidades. Las decisiones
-                    críticas siguen teniendo responsables identificables.
+                <blockquote className={styles.quote}>
+                  <p className={ui.d2}>
+                    Desde Medellín, <em>para Latinoamérica.</em>
                   </p>
-                </div>
+                </blockquote>
               </div>
+            </Band>
 
-              <div className={styles.principlesGrid}>
-                {principles.map((principle) => (
-                  <article key={principle.number}>
-                    <span>{principle.number}</span>
-                    <h3>{principle.title}</h3>
-                    <p>{principle.copy}</p>
-                  </article>
+            <Band id="razones" tone="light" labelledBy="reasons-title" className={styles.reasons}>
+              <SectionHead
+                id="reasons-title"
+                eyebrow="Por qué confiar"
+                title={
+                  <>
+                    Tres cosas que no <em>delegamos.</em>
+                  </>
+                }
+              />
+              <ul className={styles.reasonList} aria-label="Tres razones">
+                {reasons.map((reason) => (
+                  <li key={reason.label}>
+                    <span className={styles.reasonLabel}>{reason.label}</span>
+                    <h3>{reason.title}</h3>
+                    <p>{reason.copy}</p>
+                  </li>
                 ))}
-              </div>
-            </section>
+              </ul>
+            </Band>
 
-            <section
-              className={styles.leadership}
-              aria-labelledby="leadership-title"
-            >
-              <div className={styles.leadershipHeading}>
-                <p className={styles.eyebrow}>
-                  <span>03</span> Dirección humana
-                </p>
-                <h2 id="leadership-title">
-                  Personas que pueden explicar —y asumir— cada <em>decisión.</em>
-                </h2>
-                <p>
-                  No usamos retratos generados ni escondemos la responsabilidad detrás de
-                  “la IA”. Estas son las personas que dirigen la fábrica.
-                </p>
-              </div>
+            <Band id="construimos" labelledBy="building-title" className={styles.building}>
+              <SectionHead
+                id="building-title"
+                eyebrow="Qué estamos construyendo"
+                title={
+                  <>
+                    Sistemas que una institución pueda <em>auditar.</em>
+                  </>
+                }
+                lead={
+                  <>
+                    Productos que conectan los sistemas de registro de una entidad con modelos de
+                    lenguaje, y dejan cada respuesta con su fuente, cada acción con su registro y
+                    cada decisión en manos de quien ya la tenía. Primero en tributación, salud y
+                    gestión pública; después, en cualquier sector donde la norma y el dato se cruzan.
+                  </>
+                }
+              />
+            </Band>
 
-              <div className={styles.leaderGrid}>
-                {leaders.map((leader) => (
-                  <article key={leader.code}>
-                    <div className={styles.leaderMeta}>
-                      <span>{leader.code}</span>
-                      <span>{leader.role}</span>
-                    </div>
-                    <h3>{leader.name}</h3>
-                    <p className={styles.leaderFocus}>{leader.focus}</p>
-                    <p className={styles.leaderBio}>{leader.bio}</p>
-                    <Link href={`/equipo/${leader.slug}`}>
-                      Ver trayectoria y publicaciones
-                    </Link>
-                    <a href={leader.linkedin} target="_blank" rel="noreferrer">
-                      Ver perfil en LinkedIn <span aria-hidden="true">↗</span>
-                    </a>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section
-              className={styles.closing}
-              aria-labelledby="closing-title"
-              data-header-theme="dark"
-            >
-              <div className={styles.closingMeta}>
-                <span>04 / EL SIGUIENTE PROBLEMA</span>
-                <span>CONVERSACIÓN → CRITERIO → PRODUCTO</span>
-              </div>
-              <div className={styles.closingBody}>
-                <h2 id="closing-title">
+            <CloseBand
+              id="contacto"
+              titleId="closing-title"
+              eyebrow="El siguiente paso"
+              title={
+                <>
                   Construyamos lo que <em>sigue.</em>
-                </h2>
-                <div>
-                  <p>
-                    Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas
-                    llegar con requisitos ni con el alcance definido.
-                  </p>
-                  <ContactLink
-                    className={styles.closingButton}
-                    fallbackHref="/contacto"
-                    source="about-closing"
-                  >
-                    Empezar una conversación <span aria-hidden="true">→</span>
-                  </ContactLink>
-                </div>
-              </div>
-            </section>
+                </>
+              }
+              lead="Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas llegar con requisitos ni alcance definido."
+            >
+              <MailRow>
+                <ContactLink
+                  className={buttonClass("primary")}
+                  fallbackHref="/contacto"
+                  source="about-closing"
+                >
+                  Empezar una conversación
+                </ContactLink>
+                <Button href="mailto:gerencia@inplux.co">gerencia@inplux.co</Button>
+              </MailRow>
+            </CloseBand>
           </main>
-          <SiteFooter />
-        </div>
+        </V5Page>
       </ContactDialogProvider>
     </>
   );
