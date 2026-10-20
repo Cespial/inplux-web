@@ -152,6 +152,9 @@ const pageDefinitions = {
       "/equipo/jaime-alonso-cano-pino",
       "/equipo/cristian-espinal-maya",
       "/sectores/salud",
+      "/sectores/publico",
+      "/sectores/legal-tributario",
+      "/sectores/empresas",
       "/trabajo",
       "/prensa",
     ],
@@ -350,6 +353,84 @@ const pageDefinitions = {
     // (decisión del 17-oct-2026).
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
     forbiddenText: ["INFINITY", "IPSMEDIC", "Plenus", "Sinergia", "Oncolife", "areaServed"],
+  },
+  sectorPublico: {
+    file: ".next/server/app/sectores/publico.html",
+    title: "IA para alcaldías y entidades públicas | INPLUX",
+    description:
+      "Lo que INPLUX construye para alcaldías, entidades territoriales y hacienda pública: información fiscal con fuente, revisión de contratación y seguimiento de la gestión, con el equipo aprobando cada paso.",
+    canonical: `${siteUrl}/sectores/publico`,
+    ogTitle: "IA para alcaldías y entidades públicas | INPLUX",
+    ogDescription:
+      "Lo que INPLUX construye para alcaldías, entidades territoriales y hacienda pública: información fiscal con fuente, revisión de contratación y seguimiento de la gestión, con el equipo aprobando cada paso.",
+    ogUrl: `${siteUrl}/sectores/publico`,
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
+    twitterTitle: "IA para alcaldías y entidades públicas | INPLUX",
+    twitterDescription:
+      "Lo que INPLUX construye para alcaldías, entidades territoriales y hacienda pública: información fiscal con fuente, revisión de contratación y seguimiento de la gestión, con el equipo aprobando cada paso.",
+    twitterImageAlt: defaultOgImageAlt,
+    jsonLd: {
+      type: "WebPage",
+      name: "IA para alcaldías y entidades públicas",
+      url: `${siteUrl}/sectores/publico`,
+    },
+    // Cabecera + hero + cierre, como salud. Sin nombres de clientes del sector
+    // (decisión del 17-oct-2026) ni cobertura geográfica.
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    forbiddenText: ["CORANTIOQUIA", "Caucasia", "Cisneros", "Caracolí", "San Roque", "Buriticá", "Yalí", "Santo Domingo", "El Bagre", "Vegachí", "Giraldo", "Desarrollo Urbano", "INVIAS", "areaServed"],
+  },
+  sectorLegal: {
+    file: ".next/server/app/sectores/legal-tributario.html",
+    title: "IA para firmas, contadores y áreas jurídicas | INPLUX",
+    description:
+      "Lo que INPLUX construye para firmas de abogados, contadores y áreas jurídicas: consulta tributaria con fuente oficial, vigencia de normas, jurisprudencia y laudos comparables.",
+    canonical: `${siteUrl}/sectores/legal-tributario`,
+    ogTitle: "IA para firmas, contadores y áreas jurídicas | INPLUX",
+    ogDescription:
+      "Lo que INPLUX construye para firmas de abogados, contadores y áreas jurídicas: consulta tributaria con fuente oficial, vigencia de normas, jurisprudencia y laudos comparables.",
+    ogUrl: `${siteUrl}/sectores/legal-tributario`,
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
+    twitterTitle: "IA para firmas, contadores y áreas jurídicas | INPLUX",
+    twitterDescription:
+      "Lo que INPLUX construye para firmas de abogados, contadores y áreas jurídicas: consulta tributaria con fuente oficial, vigencia de normas, jurisprudencia y laudos comparables.",
+    twitterImageAlt: defaultOgImageAlt,
+    jsonLd: {
+      type: "WebPage",
+      name: "IA para firmas, contadores y áreas jurídicas",
+      url: `${siteUrl}/sectores/legal-tributario`,
+    },
+    // Cabecera + hero + cierre, como salud. Sin nombres de clientes del sector
+    // (decisión del 17-oct-2026) ni cobertura geográfica.
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    forbiddenText: ["Rentan", "Sistemas Aries", "ASECONTIC", "areaServed"],
+  },
+  sectorEmpresas: {
+    file: ".next/server/app/sectores/empresas.html",
+    title: "IA para la operación de empresas | INPLUX",
+    description:
+      "Lo que INPLUX construye para compañías privadas: productos digitales, herramientas internas y datos conciliados sobre los sistemas que ya operan, con las decisiones críticas en manos del equipo.",
+    canonical: `${siteUrl}/sectores/empresas`,
+    ogTitle: "IA para la operación de empresas | INPLUX",
+    ogDescription:
+      "Lo que INPLUX construye para compañías privadas: productos digitales, herramientas internas y datos conciliados sobre los sistemas que ya operan, con las decisiones críticas en manos del equipo.",
+    ogUrl: `${siteUrl}/sectores/empresas`,
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
+    twitterTitle: "IA para la operación de empresas | INPLUX",
+    twitterDescription:
+      "Lo que INPLUX construye para compañías privadas: productos digitales, herramientas internas y datos conciliados sobre los sistemas que ya operan, con las decisiones críticas en manos del equipo.",
+    twitterImageAlt: defaultOgImageAlt,
+    jsonLd: {
+      type: "WebPage",
+      name: "IA para la operación de empresas",
+      url: `${siteUrl}/sectores/empresas`,
+    },
+    // Cabecera + hero + cierre, como salud. Sin nombres de clientes del sector
+    // (decisión del 17-oct-2026) ni cobertura geográfica.
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    forbiddenText: ["Creame", "Rentan", "Sistemas Aries", "EDEREM", "INCA Ingenieros", "Florandina", "Multivital", "areaServed"],
   },
   about: {
     file: ".next/server/app/nosotros.html",
@@ -945,6 +1026,9 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/deck/presentacion`,
     `${siteUrl}/capacidades`,
     `${siteUrl}/sectores/salud`,
+    `${siteUrl}/sectores/publico`,
+    `${siteUrl}/sectores/legal-tributario`,
+    `${siteUrl}/sectores/empresas`,
     `${siteUrl}/nosotros`,
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,
     `${siteUrl}/equipo/cristian-espinal-maya`,

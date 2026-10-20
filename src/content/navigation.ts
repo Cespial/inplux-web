@@ -13,8 +13,7 @@ import type { NavigationEntry, NavigationItem } from "@/content/copy/types";
 export const sectorNavigation = [
   {
     label: "Sector público",
-    // TODO PR C: /sectores/publico
-    href: "/capacidades#sector-publico",
+    href: "/sectores/publico",
     description: "Alcaldías, entidades territoriales y hacienda municipal.",
   },
   {
@@ -24,14 +23,12 @@ export const sectorNavigation = [
   },
   {
     label: "Legal y tributario",
-    // TODO PR C: /sectores/legal-tributario
-    href: "/trabajo/tribai",
+    href: "/sectores/legal-tributario",
     description: "Firmas, contadores y áreas jurídicas con fuente y vigencia.",
   },
   {
     label: "Empresas",
-    // TODO PR C: /sectores/empresas
-    href: "/capacidades",
+    href: "/sectores/empresas",
     description: "Operación, datos y productos digitales para compañías privadas.",
   },
 ] as const satisfies readonly NavigationItem[];
