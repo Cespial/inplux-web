@@ -1,0 +1,53 @@
+/* Banda de video a mitad de página (VideoBand). */
+
+.band {
+  position: relative;
+  padding-bottom: var(--band);
+  border-bottom: 1px solid var(--line);
+  background: var(--black);
+}
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(28rem, 44vw, 38rem);
+  overflow: hidden;
+  --fallback:
+    radial-gradient(70% 90% at 10% 100%, rgba(0, 215, 202, 0.2), transparent 60%),
+    var(--black);
+  --scrim:
+    linear-gradient(270deg, rgba(12, 12, 11, 0.84), rgba(12, 12, 11, 0.38) 55%, rgba(12, 12, 11, 0.08)),
+    linear-gradient(180deg, rgba(12, 12, 11, 0.45), transparent 30%, transparent 70%, var(--black));
+}
+
+.copy {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: end;
+  padding-block: 5rem clamp(2.5rem, 5vw, 4rem);
+  text-align: right;
+}
+
+.copy h2 {
+  max-width: 16ch;
+}
+
+.copy p:last-child {
+  max-width: 34rem;
+  color: #e1dbd2;
+}
+
+@media (max-width: 760px) {
+  .stage {
+    --scrim:
+      linear-gradient(0deg, rgba(12, 12, 11, 0.92), rgba(12, 12, 11, 0.4) 60%, rgba(12, 12, 11, 0.2)),
+      linear-gradient(180deg, rgba(12, 12, 11, 0.4), transparent 30%);
+  }
+
+  .copy {
+    justify-items: start;
+    text-align: left;
+  }
+}
