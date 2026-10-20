@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { partners } from "@/content/partners";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { PageHero } from "@/components/v5/PageHero";
@@ -357,15 +358,11 @@ const AUDIT_ICONS = [
 ];
 
 /**
- * La pila técnica se NOMBRA, no se dibuja: los logotipos de terceros sólo
- * entran por `partners.json` con su permiso registrado (lo vigila
- * `scripts/partners-gate.mjs`). Nombrar la tecnología con la que se construye
- * es uso descriptivo, y la nota lo dice. Revisado el 20-oct-2026: AWS y
- * Google Cloud solo admiten texto plano a quien no es socio formal; Anthropic
- * y Vercel piden permiso escrito y prohíben recolorear. El tratamiento de muro
- * de logos es tipográfico (`.tech` en home-v5.module.css).
+ * La pila técnica con sus logotipos. Entran sólo desde `partners.json`, donde
+ * cada marca registra el origen del archivo y su permiso (lo vigila
+ * `scripts/partners-gate.mjs`). Los archivos van tal cual: sin redibujar ni
+ * recolorear; el énfasis al pasar el cursor es la opacidad de la celda.
  */
-const TECH_STACK = ["Anthropic", "OpenAI", "AWS", "Google Cloud", "Vercel"] as const;
 
 export function V5Audit({ copy }: { copy: HomeCopy }) {
   const audit = copy.v5.audit;
@@ -384,8 +381,17 @@ export function V5Audit({ copy }: { copy: HomeCopy }) {
       <div className={styles.tech} id="tecnologia">
         <p className={ui.eyebrow}>{audit.techEyebrow}</p>
         <ul>
-          {TECH_STACK.map((name) => (
-            <li key={name}>{name}</li>
+          {partners.map((partner) => (
+            <li key={partner.id} data-logo={partner.id}>
+              <Image
+                src={partner.file}
+                alt={partner.name}
+                width={partner.width}
+                height={partner.height}
+                unoptimized
+                style={{ height: "var(--tech-logo-h)", width: "auto" }}
+              />
+            </li>
           ))}
         </ul>
         <p className={`${ui.small} ${styles.techNote}`}>{audit.techNote}</p>

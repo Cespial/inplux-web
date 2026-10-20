@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { PartnerWall } from "@/components/home/PartnerWall";
 import { CopyEmailButton } from "@/components/home/CopyEmailButton.client";
 import {
   V5Audit,
@@ -117,7 +116,6 @@ export default function Home() {
             <V5Sectors copy={copy} />
 
             <V5Audit copy={copy} />
-            <PartnerWall copy={copy.partnerWall} />
             <V5Press copy={copy} />
             <V5Team copy={copy} />
 

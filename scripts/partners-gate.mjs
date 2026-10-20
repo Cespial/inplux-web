@@ -28,7 +28,15 @@ export const PARTNER_APPROVED_FILES = new Set([
   "scripts/partners-gate.mjs",
 ]);
 
-const PERMISSION_KINDS = new Set(["brand-guidelines", "program-badge", "written-consent"]);
+const PERMISSION_KINDS = new Set([
+  "brand-guidelines",
+  "program-badge",
+  "written-consent",
+  // La dirección de INPLUX declara por escrito que el uso está autorizado y
+  // queda pendiente archivar el soporte: se registra quién lo declara y cuándo,
+  // sin inventar una URL de consentimiento que no existe.
+  "declared-by-owner",
+]);
 const RELATIONS = new Set(["modelos", "infraestructura", "plataforma"]);
 
 function isValidIsoDate(value) {
@@ -86,8 +94,18 @@ export async function auditPartners({
     if (!PERMISSION_KINDS.has(permission.kind)) {
       errors.push(`${PARTNER_REGISTRY}: ${partner.id} tiene un tipo de permiso desconocido: ${permission.kind}`);
     }
-    if (typeof permission.source !== "string" || !/^https:\/\/\S+$/.test(permission.source)) {
+    if (permission.kind === "declared-by-owner") {
+      if (typeof permission.declaredBy !== "string" || !/^\S+@inplux\.co$/.test(permission.declaredBy)) {
+        errors.push(`${PARTNER_REGISTRY}: ${partner.id} necesita el correo @inplux.co de quien declara el permiso`);
+      }
+      if (typeof permission.note !== "string" || permission.note.trim().length < 20) {
+        errors.push(`${PARTNER_REGISTRY}: ${partner.id} necesita una nota que explique la declaración`);
+      }
+    } else if (typeof permission.source !== "string" || !/^https:\/\/\S+$/.test(permission.source)) {
       errors.push(`${PARTNER_REGISTRY}: ${partner.id} necesita la fuente HTTPS del permiso`);
+    }
+    if (typeof partner.origin !== "string" || !/^https:\/\/\S+$/.test(partner.origin)) {
+      errors.push(`${PARTNER_REGISTRY}: ${partner.id} necesita la URL de origen del archivo (origin)`);
     }
     for (const field of ["grantedAt", "verifiedAt"]) {
       if (!isValidIsoDate(permission[field])) {
