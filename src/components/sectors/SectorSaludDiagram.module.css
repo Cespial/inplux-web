@@ -3,7 +3,7 @@
   width: 100%;
   height: auto;
   max-width: 100%;
-  color: var(--home-ivory);
+  color: var(--ivory);
 }
 
 .dots circle {
@@ -53,12 +53,12 @@
 }
 
 .link {
-  stroke: var(--home-teal);
+  stroke: var(--teal);
   stroke-width: 1.4;
 }
 
 .arrow {
-  fill: var(--home-teal);
+  fill: var(--teal);
 }
 
 .device {
@@ -80,7 +80,7 @@
 }
 
 .dot {
-  fill: var(--home-teal);
+  fill: var(--teal);
 }
 
 .semRed {
@@ -92,13 +92,13 @@
 }
 
 .semTeal {
-  fill: var(--home-teal);
+  fill: var(--teal);
 }
 
 .plateLabel,
 .nodeLabel {
-  fill: var(--home-ivory);
-  font: 500 11px var(--home-mono);
+  fill: var(--ivory);
+  font: 500 11px var(--sans);
   letter-spacing: 0.1em;
 }
 
@@ -107,7 +107,7 @@
 .ringLabel,
 .stamp {
   fill: rgba(249, 245, 239, 0.55);
-  font: 500 9px var(--home-mono);
+  font: 500 9px var(--sans);
   letter-spacing: 0.08em;
 }
 

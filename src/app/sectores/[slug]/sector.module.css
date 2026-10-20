@@ -1,43 +1,43 @@
 /*
- * Página de sector. Hereda los tokens de `.homeRoot` (tinta, marfil, teal,
- * tipografías) y alterna bandas: hero y marco normativo sobre tinta,
- * principios y capacidades sobre marfil.
+ * Página de sector (pendiente de rediseño en el PR C). Usa los tokens v5
+ * globales y alterna bandas: hero y marco normativo sobre tinta, principios y
+ * capacidades sobre marfil.
  */
 .root {
   min-height: 100dvh;
 }
 
 .inner {
-  width: calc(100% - (var(--home-gutter) * 2));
+  width: calc(100% - (var(--gutter) * 2));
   max-width: 1320px;
   margin-inline: auto;
 }
 
 .eyebrow,
 .eyebrowDark {
-  font: 500 0.68rem/1.25 var(--home-mono);
+  font: 500 0.68rem/1.25 var(--sans);
   letter-spacing: 0.095em;
   text-transform: uppercase;
 }
 
 .eyebrow {
-  color: var(--home-teal);
+  color: var(--teal);
 }
 
 .eyebrowDark {
-  color: var(--home-teal-dark);
+  color: var(--teal-ink);
 }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 .hero {
-  background: var(--home-black);
-  color: var(--home-ivory);
+  background: var(--black);
+  color: var(--ivory);
   padding: clamp(6rem, 10vw, 8.5rem) 0 clamp(3rem, 6vw, 5rem);
 }
 
 .heroInner {
   display: grid;
-  width: calc(100% - (var(--home-gutter) * 2));
+  width: calc(100% - (var(--gutter) * 2));
   max-width: 1320px;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   align-items: center;
@@ -51,7 +51,7 @@
   gap: 0.6rem;
   margin-bottom: 1.6rem;
   color: #857f78;
-  font: 500 0.62rem/1 var(--home-mono);
+  font: 500 0.62rem/1 var(--sans);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -62,12 +62,12 @@
 }
 
 .crumbs a:hover {
-  color: var(--home-ivory);
+  color: var(--ivory);
 }
 
 .hero h1 {
   margin-top: 0.95rem;
-  font: 300 clamp(2.6rem, 5vw, 5rem) / 0.94 var(--home-display);
+  font: 300 clamp(2.6rem, 5vw, 5rem) / 0.94 var(--sans);
   letter-spacing: -0.05em;
 }
 
@@ -100,7 +100,7 @@
 
 .heroVisual {
   min-width: 0;
-  border: 1px solid var(--home-line);
+  border: 1px solid var(--line);
   background:
     radial-gradient(circle at 50% 46%, rgba(0, 215, 202, 0.08), transparent 46%),
     #0d0d0c;
@@ -119,12 +119,12 @@
 .sectionHead h2 {
   max-width: 16ch;
   margin-top: 0.8rem;
-  font: 300 clamp(2.2rem, 4vw, 4rem) / 0.98 var(--home-display);
+  font: 300 clamp(2.2rem, 4vw, 4rem) / 0.98 var(--sans);
   letter-spacing: -0.048em;
 }
 
 .sectionHead h2 em {
-  font-family: var(--home-display-italic);
+  font-family: var(--sans);
   font-weight: 300;
 }
 
@@ -137,8 +137,8 @@
 
 /* ── Principios ───────────────────────────────────────────────────────── */
 .principles {
-  background: var(--home-ivory);
-  color: var(--home-black);
+  background: var(--ivory);
+  color: var(--black);
 }
 
 .principles .sectionHead > p {
@@ -150,8 +150,8 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0 0 clamp(3rem, 6vw, 5rem);
   padding: 0;
-  border-top: 1px solid var(--home-line-dark);
-  border-left: 1px solid var(--home-line-dark);
+  border-top: 1px solid var(--line-ink);
+  border-left: 1px solid var(--line-ink);
   list-style: none;
 }
 
@@ -160,19 +160,19 @@
   min-height: 15rem;
   align-content: start;
   gap: 0.9rem;
-  border-right: 1px solid var(--home-line-dark);
-  border-bottom: 1px solid var(--home-line-dark);
+  border-right: 1px solid var(--line-ink);
+  border-bottom: 1px solid var(--line-ink);
   padding: 1.5rem;
 }
 
 .principleGrid span {
-  color: var(--home-teal-dark);
-  font: 500 0.62rem/1 var(--home-mono);
+  color: var(--teal-ink);
+  font: 500 0.62rem/1 var(--sans);
   letter-spacing: 0.1em;
 }
 
 .principleGrid h3 {
-  font: 300 1.5rem/1.05 var(--home-display);
+  font: 300 1.5rem/1.05 var(--sans);
   letter-spacing: -0.03em;
 }
 
@@ -184,9 +184,9 @@
 
 /* ── Capacidades ──────────────────────────────────────────────────────── */
 .capabilities {
-  background: var(--home-ivory);
-  color: var(--home-black);
-  border-top: 1px solid var(--home-line-dark);
+  background: var(--ivory);
+  color: var(--black);
+  border-top: 1px solid var(--line-ink);
   scroll-margin-top: 4rem;
 }
 
@@ -201,7 +201,7 @@
 .capabilityList {
   margin: 0 0 clamp(3rem, 6vw, 5rem);
   padding: 0;
-  border-top: 1px solid var(--home-line-dark);
+  border-top: 1px solid var(--line-ink);
   list-style: none;
 }
 
@@ -209,7 +209,7 @@
   display: grid;
   grid-template-columns: 11rem minmax(0, 1.2fr) minmax(0, 0.9fr);
   gap: clamp(1.25rem, 3vw, 3rem);
-  border-bottom: 1px solid var(--home-line-dark);
+  border-bottom: 1px solid var(--line-ink);
   padding: clamp(1.6rem, 3vw, 2.4rem) 0;
 }
 
@@ -217,7 +217,7 @@
   display: grid;
   align-content: start;
   gap: 0.8rem;
-  font: 550 0.6rem/1.3 var(--home-mono);
+  font: 550 0.6rem/1.3 var(--sans);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -231,7 +231,7 @@
   width: max-content;
   align-items: center;
   gap: 0.5rem;
-  color: var(--home-black);
+  color: var(--black);
   font-weight: 550;
 }
 
@@ -244,7 +244,7 @@
 }
 
 .capability[data-status="En operación"] .capabilityMeta b::before {
-  background: var(--home-teal-dark);
+  background: var(--teal-ink);
   box-shadow: 0 0 0.8rem rgba(13, 125, 116, 0.5);
 }
 
@@ -258,7 +258,7 @@
 
 .capabilityBody h3 {
   max-width: 18ch;
-  font: 300 clamp(1.6rem, 2.4vw, 2.3rem) / 1.02 var(--home-display);
+  font: 300 clamp(1.6rem, 2.4vw, 2.3rem) / 1.02 var(--sans);
   letter-spacing: -0.04em;
 }
 
@@ -275,8 +275,8 @@
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
-  color: var(--home-teal-dark);
-  font: 550 0.64rem/1 var(--home-mono);
+  color: var(--teal-ink);
+  font: 550 0.64rem/1 var(--sans);
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
@@ -305,15 +305,15 @@
   left: 0;
   width: 0.5rem;
   height: 1px;
-  background: var(--home-teal-dark);
+  background: var(--teal-ink);
   content: "";
 }
 
 /* ── Marco normativo ──────────────────────────────────────────────────── */
 .framework {
-  background: var(--home-black);
-  color: var(--home-ivory);
-  border-top: 1px solid var(--home-line);
+  background: var(--black);
+  color: var(--ivory);
+  border-top: 1px solid var(--line);
 }
 
 .framework .sectionHead > p {
@@ -325,8 +325,8 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0 0 clamp(3rem, 6vw, 5rem);
   padding: 0;
-  border-top: 1px solid var(--home-line);
-  border-left: 1px solid var(--home-line);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
   list-style: none;
 }
 
@@ -336,8 +336,8 @@
   min-height: 11rem;
   align-content: start;
   gap: 0.8rem;
-  border-right: 1px solid var(--home-line);
-  border-bottom: 1px solid var(--home-line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   padding: 1.5rem 3rem 1.5rem 1.5rem;
   color: inherit;
   text-decoration: none;
@@ -345,11 +345,11 @@
 }
 
 .frameworkList a:hover {
-  background: var(--home-ink);
+  background: var(--ink);
 }
 
 .frameworkList strong {
-  font: 300 1.45rem/1.05 var(--home-display);
+  font: 300 1.45rem/1.05 var(--sans);
   letter-spacing: -0.03em;
 }
 
@@ -363,15 +363,15 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  color: var(--home-teal);
+  color: var(--teal);
   font-style: normal;
 }
 
 /* ── Cierre ───────────────────────────────────────────────────────────── */
 .closing {
-  background: var(--home-black);
-  color: var(--home-ivory);
-  border-top: 1px solid var(--home-line);
+  background: var(--black);
+  color: var(--ivory);
+  border-top: 1px solid var(--line);
   padding: clamp(4rem, 8vw, 7rem) 0;
   text-align: center;
 }
@@ -384,7 +384,7 @@
 
 .closing h2 {
   max-width: 24ch;
-  font: 300 clamp(2rem, 3.6vw, 3.2rem) / 1.05 var(--home-display);
+  font: 300 clamp(2rem, 3.6vw, 3.2rem) / 1.05 var(--sans);
   letter-spacing: -0.045em;
 }
 
@@ -403,10 +403,10 @@
 .verified {
   max-width: 44rem;
   margin-top: 1rem;
-  border-top: 1px solid var(--home-line);
+  border-top: 1px solid var(--line);
   padding-top: 1.4rem;
   color: #8e8981 !important;
-  font: 500 0.62rem/1.6 var(--home-mono) !important;
+  font: 500 0.62rem/1.6 var(--sans) !important;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }

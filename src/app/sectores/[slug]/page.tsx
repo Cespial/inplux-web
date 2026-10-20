@@ -4,11 +4,10 @@ import { notFound } from "next/navigation";
 import { SectorSaludDiagram } from "@/components/sectors/SectorSaludDiagram";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
 import { getSectorProfile, sectorProfiles, type SectorSlug } from "@/content/sectores";
 import { formatShortDate } from "@/content/work-format";
-import homeStyles from "@/components/home/home.module.css";
+import { buttonClass } from "@/components/v5/primitives";
+import { V5Page } from "@/components/v5/V5Page";
 import styles from "./sector.module.css";
 
 type SectorPageProps = {
@@ -138,8 +137,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ContactDialogProvider>
-        <div className={`${homeStyles.homeRoot} ${styles.root}`}>
-          <SiteHeader inverseOnTop />
+        <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
             <section className={styles.hero} aria-labelledby="sector-title" data-header-theme="dark">
               <div className={styles.heroInner}>
@@ -160,13 +158,13 @@ export default async function SectorPage({ params }: SectorPageProps) {
                   <p className={styles.audience}>{sector.audience}</p>
                   <div className={styles.actions}>
                     <ContactLink
-                      className={homeStyles.pillButton}
+                      className={buttonClass("primary")}
                       fallbackHref="/contacto"
                       source="sector-hero"
                     >
                       Contar el caso
                     </ContactLink>
-                    <a className={homeStyles.ghostButton} href="#capacidades">
+                    <a className={buttonClass("ghost")} href="#capacidades">
                       Ver las capacidades <span aria-hidden="true">↓</span>
                     </a>
                   </div>
@@ -277,13 +275,13 @@ export default async function SectorPage({ params }: SectorPageProps) {
                 <p>{sector.closing.lead}</p>
                 <div className={styles.actions}>
                   <ContactLink
-                    className={homeStyles.pillButton}
+                    className={buttonClass("primary")}
                     fallbackHref="/contacto"
                     source="sector-closing"
                   >
                     Empezar un proyecto
                   </ContactLink>
-                  <a className={homeStyles.ghostButton} href="mailto:gerencia@inplux.co">
+                  <a className={buttonClass("ghost")} href="mailto:gerencia@inplux.co">
                     gerencia@inplux.co
                   </a>
                 </div>
@@ -294,8 +292,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
               </div>
             </section>
           </main>
-          <SiteFooter />
-        </div>
+        </V5Page>
       </ContactDialogProvider>
     </>
   );
