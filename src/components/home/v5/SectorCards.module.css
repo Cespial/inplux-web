@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 .card {
