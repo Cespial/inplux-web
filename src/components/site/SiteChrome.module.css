@@ -49,9 +49,9 @@
   border-radius: 999px;
   padding: 0 0.45rem 0 1.1rem;
   transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease;
+    background-color 280ms var(--ease-out),
+    border-color 280ms var(--ease-out),
+    box-shadow 280ms var(--ease-out);
 }
 
 .inner::before {
@@ -60,11 +60,12 @@
   z-index: -1;
   border-radius: inherit;
   background: rgba(12, 12, 11, 0.72);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  /* El prefijo va primero: el minificador funde las dos y conserva la última. */
+  -webkit-backdrop-filter: blur(22px) saturate(118%);
+  backdrop-filter: blur(22px) saturate(118%);
   content: "";
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 280ms var(--ease-out);
 }
 
 .header.scrolled .inner,
@@ -166,8 +167,9 @@
   background: rgba(19, 19, 17, 0.96);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.45);
   padding: 0.55rem;
-  backdrop-filter: blur(18px);
+  /* El prefijo va primero: el minificador funde las dos y conserva la última. */
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   opacity: 0;
   visibility: hidden;
   transform: translate(-50%, 0.4rem);
@@ -340,7 +342,7 @@
 
 .footer nav > p {
   margin: 0 0 0.35rem;
-  color: #aaa49c;
+  color: var(--fg-quiet);
   font: 500 var(--step-9) / 1.2 var(--sans);
   letter-spacing: var(--track-micro);
   text-transform: uppercase;
@@ -372,7 +374,7 @@
 /* Aviso de idioma de los destinos que solo existen en español. */
 .footer nav > small {
   max-width: 22ch;
-  color: #8b857d;
+  color: var(--fg-faint);
   font-size: 0.6875rem;
   line-height: 1.4;
 }
@@ -384,7 +386,7 @@
   gap: 1rem;
   border-top: 1px solid var(--line);
   padding-top: 1.45rem;
-  color: #aaa49c;
+  color: var(--fg-quiet);
   font: 500 var(--step-9) / 1.4 var(--sans);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -584,7 +586,7 @@
   .mobileNav .mobileLink > span {
     align-self: start;
     margin-top: 1.05rem;
-    color: #aaa49c;
+    color: var(--fg-quiet);
     font: 500 0.625rem / 1 var(--sans);
     letter-spacing: 0.04em;
   }
@@ -619,7 +621,7 @@
     display: inline-flex;
     min-height: 2.6rem;
     align-items: center;
-    color: #cbc5bc;
+    color: var(--fg-soft);
     font: 400 var(--step-6) / 1.2 var(--sans);
     text-decoration: none;
   }
@@ -648,7 +650,7 @@
 
   .menuNote {
     margin: 0.85rem 0 0;
-    color: #b9b3aa;
+    color: var(--fg-quiet);
     font: 400 0.8rem / 1.5 var(--sans);
   }
 
