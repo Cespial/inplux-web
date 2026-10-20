@@ -22,6 +22,8 @@ export type ContactSource =
   // Páginas de sector (/sectores/[slug]): hero y cierre.
   | "sector-hero"
   | "sector-closing"
+  // Página de equipo (/equipo): cierre.
+  | "team-closing"
   // Productos (/trabajo y /trabajo/[slug]): el cierre.
   | "work-closing";
 

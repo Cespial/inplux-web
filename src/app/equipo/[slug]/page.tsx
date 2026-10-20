@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageHero } from "@/components/v5/PageHero";
+import { V5Page } from "@/components/v5/V5Page";
+import { Band, Button, SectionHead } from "@/components/v5/primitives";
 import { pressStories } from "@/content/press";
 import {
   getTeamMember,
@@ -177,103 +177,102 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ContactDialogProvider>
-        <div className={styles.profileRoot}>
-          <SiteHeader inverseOnTop />
+        <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
-            <section
-              className={styles.hero}
-              aria-labelledby="profile-title"
-              data-header-theme="dark"
-            >
-              <div className={styles.shell}>
-                <p className={styles.eyebrow}>
-                  <span>{member.code}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{member.role}</span>
-                </p>
-                <h1 className={styles.title} id="profile-title">
-                  {member.name}
-                </h1>
-                <p className={styles.focus}>{member.focus}</p>
-              </div>
+            <section id="inicio" aria-labelledby="profile-title">
+              <PageHero
+                className={styles.hero}
+                eyebrow={`${member.code} · ${member.role}`}
+                title={<span id="profile-title">{member.name}</span>}
+                lead={member.focus}
+                crumbs={[
+                  { label: "Inicio", href: "/" },
+                  { label: "Equipo", href: "/equipo" },
+                  { label: member.name },
+                ]}
+                actions={
+                  <>
+                    <Button href={member.linkedin} variant="primary" external>
+                      LinkedIn
+                    </Button>
+                    <Button href={member.secondaryLink.href} external>
+                      {member.secondaryLink.label} <span aria-hidden="true">↗</span>
+                    </Button>
+                  </>
+                }
+              />
             </section>
 
-            <section className={styles.body} aria-labelledby="profile-bio">
-              <div className={styles.shell}>
-                <h2 className={styles.sectionTitle} id="profile-bio">
-                  Trayectoria
-                </h2>
+            <Band id="trayectoria" labelledBy="profile-bio">
+              <SectionHead
+                id="profile-bio"
+                eyebrow="Trayectoria"
+                title={
+                  <>
+                    Lo que hace y <em>desde dónde.</em>
+                  </>
+                }
+              />
+              <div className={styles.bio}>
                 <div className={styles.prose}>
                   {member.profileBio.map((paragraph) => (
                     <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                   ))}
                 </div>
-
-                <h2 className={styles.sectionTitle}>Áreas de trabajo</h2>
-                <ul className={styles.tags}>
-                  {member.knowsAbout.map((topic) => (
-                    <li key={topic}>{topic}</li>
-                  ))}
-                </ul>
-
-                <h2 className={styles.sectionTitle}>Perfiles</h2>
-                <ul className={styles.links}>
-                  {member.sameAs.map((href) => (
-                    <li key={href}>
-                      <a href={href} rel="me noopener" target="_blank">
-                        {new URL(href).hostname.replace(/^www\./, "")}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <aside className={styles.aside} aria-label="Áreas y perfiles">
+                  <div>
+                    <h3>Áreas de trabajo</h3>
+                    <ul className={styles.tags}>
+                      {member.knowsAbout.map((topic) => (
+                        <li key={topic}>{topic}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3>Perfiles</h3>
+                    <ul className={styles.profiles}>
+                      {member.sameAs.map((href) => (
+                        <li key={href}>
+                          <a href={href} rel="me noopener" target="_blank">
+                            {new URL(href).hostname.replace(/^www\./, "")}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </aside>
               </div>
-            </section>
+            </Band>
 
             {publications.length > 0 ? (
-              <section
-                className={styles.publications}
-                aria-labelledby="profile-publications"
-              >
-                <div className={styles.shell}>
-                  <h2 className={styles.sectionTitle} id="profile-publications">
-                    Publicaciones y participaciones
-                  </h2>
-                  <p className={styles.note}>
-                    Enlaces a la fuente original. El archivo completo está en{" "}
-                    <Link href="/prensa">Prensa</Link>.
-                  </p>
-                  <ol className={styles.publicationList}>
-                    {publications.map((story) => (
-                      <li key={story.slug}>
-                        <a href={story.href} rel="noopener" target="_blank">
-                          {story.title}
-                        </a>
-                        <p className={styles.publicationMeta}>
-                          <span>{story.outlet}</span>
-                          <span aria-hidden="true">·</span>
-                          <span>{story.format}</span>
-                          <span aria-hidden="true">·</span>
-                          <time dateTime={story.publishedAt}>
-                            {story.publishedLabel}
-                          </time>
-                        </p>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </section>
+              <Band id="publicaciones" tone="light" labelledBy="profile-publications">
+                <SectionHead
+                  id="profile-publications"
+                  eyebrow="Publicaciones y participaciones"
+                  title={
+                    <>
+                      Con la fuente <em>a la vista.</em>
+                    </>
+                  }
+                  link={{ href: "/prensa", label: "Ver el archivo de prensa" }}
+                />
+                <ol className={styles.publications}>
+                  {publications.map((story) => (
+                    <li key={story.slug}>
+                      <a href={story.href} rel="noopener" target="_blank">
+                        {story.title}
+                      </a>
+                      <p>
+                        {story.outlet} · {story.format} ·{" "}
+                        <time dateTime={story.publishedAt}>{story.publishedLabel}</time>
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </Band>
             ) : null}
-
-            <section className={styles.back} aria-label="Continuar navegando">
-              <div className={styles.shell}>
-                <Link className={styles.backLink} href="/nosotros">
-                  Volver a Nosotros
-                </Link>
-              </div>
-            </section>
           </main>
-          <SiteFooter />
-        </div>
+        </V5Page>
       </ContactDialogProvider>
     </>
   );
