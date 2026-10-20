@@ -27,14 +27,18 @@
 .logos li {
   min-width: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   gap: 0.7rem;
 }
 
 .stage {
   display: grid;
   place-items: center;
+  min-width: 0;
   aspect-ratio: 16 / 9;
   padding: 2rem;
+  overflow: hidden;
   border-radius: 0.9rem;
   background: var(--ivory);
 }
