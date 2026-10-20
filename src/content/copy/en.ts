@@ -1133,7 +1133,7 @@ export const homeCopyEn: HomeCopy = {
     },
     process: {
       eyebrow: "From diagnosis to production",
-      title: "We work with you from the first workflow until it runs.",
+      title: "From the first workflow to the day it runs on its own.",
       deliverableLabel: "Deliverable",
       phases: [
         {
@@ -1181,7 +1181,7 @@ export const homeCopyEn: HomeCopy = {
     },
     sectors: {
       eyebrow: "Where we work",
-      title: "Built for the reality of each sector.",
+      title: "Every sector has its rules. The system follows them.",
       items: [
         {
           title: "Public sector",
@@ -1207,7 +1207,7 @@ export const homeCopyEn: HomeCopy = {
     },
     audit: {
       eyebrow: "AI governance",
-      title: "AI for institutions, ready for audit.",
+      title: "What an institution can review, line by line.",
       items: [
         {
           title: "A source for every answer",
