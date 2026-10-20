@@ -20,19 +20,32 @@ export function SiteFooter({ copy = homeCopyEs.footer }: { copy?: FooterCopy }) 
             <p>{copy.tagline}</p>
           </div>
           {copy.groups.map((group) => (
-            <nav aria-label={group.ariaLabel} key={group.ariaLabel}>
-              <p>{group.label}</p>
-              {group.items.map((item) => (
+            <div className={styles.footerGroup} key={group.ariaLabel}>
+              <nav aria-label={group.ariaLabel}>
+                <p>{group.label}</p>
+                {group.items.map((item) => (
+                  <Link
+                    href={item.href}
+                    hrefLang={item.hrefLang}
+                    key={`${item.href}-${item.label}`}
+                    prefetch={false}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+              {/* Fuera del <nav>: el pie de productos exige biyección con work.ts. */}
+              {group.more ? (
                 <Link
-                  href={item.href}
-                  hrefLang={item.hrefLang}
-                  key={item.href}
+                  className={styles.footerMore}
+                  href={group.more.href}
+                  hrefLang={group.more.hrefLang}
                   prefetch={false}
                 >
-                  {item.label}
+                  {group.more.label} <span aria-hidden="true">→</span>
                 </Link>
-              ))}
-            </nav>
+              ) : null}
+            </div>
           ))}
           <nav aria-label={copy.contactAriaLabel}>
             <p>{copy.contactLabel}</p>
