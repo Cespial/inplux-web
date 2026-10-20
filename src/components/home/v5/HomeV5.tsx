@@ -1,6 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { PageHero } from "@/components/v5/PageHero";
+import {
+  Band,
+  Button,
+  Card,
+  CardGrid,
+  Chip,
+  FeatureSplit,
+  Placeholder,
+  RowsList,
+  SectionHead,
+  Shot,
+  Timeline,
+  cx,
+  statusTone,
+  v5 as ui,
+} from "@/components/v5/primitives";
+import { StatRow, type Stat } from "@/components/v5/StatRow";
+import { clientWallCount } from "@/content/clients";
 import { formatCopy } from "@/content/copy/format";
 import type { HomeCopy } from "@/content/copy/types";
 import { portfolio } from "@/content/home";
@@ -8,15 +27,13 @@ import { featuredPressStories, type PressStory } from "@/content/press";
 import { teamMembers } from "@/content/team";
 import { workProfiles, type WorkProfile } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
-import { clientWallCount } from "../HomeSections";
-import { HeroVideo } from "./HeroVideo.client";
-import styles from "./v5.module.css";
+import styles from "./home-v5.module.css";
 
 /*
- * La portada v5 (octubre de 2026), sección por sección. Cada componente lee su
- * texto de `copy.v5` —o del bloque que la portada ya tenía— y sus datos de
- * `src/content`: aquí no se escribe ninguna cifra, ningún estado ni ninguna
- * fecha. Las únicas cifras de la página son las que el sitio ya publica.
+ * La portada v5 (octubre de 2026), sección por sección, compuesta con las
+ * primitivas de `components/v5`. Cada sección lee su texto de `copy.v5` —o del
+ * bloque que la portada ya tenía— y sus datos de `src/content`: aquí no se
+ * escribe ninguna cifra, ningún estado ni ninguna fecha.
  */
 
 type Lang = "es" | "en";
@@ -33,34 +50,26 @@ function profile(slug: WorkProfile["slug"]) {
   return found;
 }
 
-function statusTone(status: string) {
-  return /piloto|beta|pilot/i.test(status) ? styles.pilot : "";
-}
-
 /* ---------------------------------------------------------------- hero */
 
 export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: ReactNode }) {
   const hero = copy.hero;
   return (
-    <div className={styles.hero} data-header-theme="dark">
-      <HeroVideo />
-      <div className={`${styles.wrap} ${styles.heroInner}`}>
-        <p className={styles.eyebrow}>{hero.eyebrow}</p>
-        <h1 className={styles.d1}>
-          <span>{hero.titleLines[0]}</span>
-          <span>{hero.titleLines[1]}</span>
-        </h1>
-        <p className={styles.lead}>
-          {hero.leadSentences[0]} <span className={styles.muted}>{hero.leadSentences[1]}</span>
-        </p>
-        <div className={styles.actions}>
+    <PageHero
+      eyebrow={hero.eyebrow}
+      titleLines={hero.titleLines}
+      lead={hero.leadSentences[0]}
+      leadMuted={hero.leadSentences[1]}
+      media={{ kind: "video" }}
+      actions={
+        <>
           {primaryCta}
-          <a className={`${styles.btn} ${styles.ghost}`} href="#clientes">
+          <Button href="#clientes" variant="ghost">
             {copy.v5.heroSecondaryCta} <span aria-hidden="true">↓</span>
-          </a>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      }
+    />
   );
 }
 
@@ -70,14 +79,7 @@ export function V5Thesis({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
   const laudos = profile("laudos");
   const [awards, council, coverage] = laudos.interface.items;
   const stats = copy.heroStats;
-  const proof: {
-    who: string | null;
-    value: string;
-    unit: string;
-    detail: string;
-    href: string;
-    source: string;
-  }[] = [
+  const proof: Stat[] = [
     {
       who: laudos.name,
       value: localNumber(laudos.interface.primaryMetric, lang),
@@ -87,59 +89,33 @@ export function V5Thesis({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
         consejo: localNumber(council?.value ?? "", lang),
         range: coverage?.value ?? "",
       }),
-      href: "/trabajo/laudos",
-      source: copy.v5.proof.sourceLabel,
+      source: { href: "/trabajo/laudos", label: copy.v5.proof.sourceLabel },
     },
     {
-      who: null,
       value: String(portfolio.length),
       unit: stats.products.label,
       detail: formatCopy(stats.products.detail, {
         documented: String(workProfiles.length),
         inDevelopment: String(portfolio.filter((item) => item.stage === "En desarrollo").length),
       }),
-      href: "/trabajo",
-      source: copy.v5.proof.portfolioSourceLabel,
+      source: { href: "/trabajo", label: copy.v5.proof.portfolioSourceLabel },
     },
     {
-      who: null,
       value: String(clientWallCount),
       unit: stats.organizations.label,
       detail: stats.organizations.detail,
-      href: "#clientes",
-      source: copy.v5.proof.wallSourceLabel,
+      source: { href: "#clientes", label: copy.v5.proof.wallSourceLabel },
     },
   ];
 
   return (
-    <section className={`${styles.band} ${styles.thesis}`} id="tesis" aria-labelledby="v5-thesis-title">
-      <div className={styles.wrap}>
-        <p className={styles.eyebrow}>{copy.thesis.eyebrow}</p>
-        <h2 className={`${styles.d1} ${styles.thesisTitle}`} id="v5-thesis-title">
-          {copy.thesis.lead} <em>{copy.thesis.emphasis}</em>
-        </h2>
-        <div className={styles.proof} id="casos">
-          <p className={styles.proofTitle}>{copy.v5.proof.title}</p>
-          <ul className={styles.cases} aria-label={stats.ariaLabel}>
-            {proof.map((item) => (
-              <li className={styles.case} key={item.href}>
-                {item.who ? <p className={styles.who}>{item.who}</p> : null}
-                <strong>{item.value}</strong>
-                <p className={styles.unit}>{item.unit}</p>
-                <p>{item.detail}</p>
-                <p className={styles.src}>
-                  {item.href.startsWith("#") ? (
-                    <a href={item.href}>{item.source}</a>
-                  ) : (
-                    <Link href={item.href}>{item.source}</Link>
-                  )}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+    <Band id="tesis" className={styles.thesis} labelledBy="v5-thesis-title">
+      <p className={ui.eyebrow}>{copy.thesis.eyebrow}</p>
+      <h2 className={`${ui.d1} ${styles.thesisTitle}`} id="v5-thesis-title">
+        {copy.thesis.lead} <em>{copy.thesis.emphasis}</em>
+      </h2>
+      <StatRow id="casos" title={copy.v5.proof.title} ariaLabel={stats.ariaLabel} items={proof} />
+    </Band>
   );
 }
 
@@ -148,40 +124,16 @@ export function V5Thesis({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
 export function V5Process({ copy }: { copy: HomeCopy }) {
   const process = copy.v5.process;
   return (
-    <section className={`${styles.band} ${styles.process}`} id="como-trabajamos" aria-labelledby="v5-process-title">
-      <Plus />
-      <div className={styles.wrap}>
-        <div className={styles.headC}>
-          <p className={styles.eyebrow}>{process.eyebrow}</p>
-          <h2 className={styles.d2} id="v5-process-title">{process.title}</h2>
-          <p className={styles.lead}>{process.lead}</p>
-        </div>
-        <ol className={styles.timeline}>
-          {process.phases.map((phase, index) => (
-            <li key={phase.title}>
-              <b>{`0${index + 1}`}</b>
-              <h3>{phase.title}</h3>
-              <p>{phase.detail}</p>
-              <p className={styles.deliverable}>
-                <span>{process.deliverableLabel}</span>
-                {phase.deliverable}
-              </p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
-
-function Plus() {
-  return (
-    <>
-      <span className={`${styles.plus} ${styles.tl}`} aria-hidden="true">+</span>
-      <span className={`${styles.plus} ${styles.tr}`} aria-hidden="true">+</span>
-      <span className={`${styles.plus} ${styles.bl}`} aria-hidden="true">+</span>
-      <span className={`${styles.plus} ${styles.br}`} aria-hidden="true">+</span>
-    </>
+    <Band id="como-trabajamos" className={styles.process} plus labelledBy="v5-process-title">
+      <SectionHead
+        id="v5-process-title"
+        align="center"
+        eyebrow={process.eyebrow}
+        title={process.title}
+        lead={process.lead}
+      />
+      <Timeline phases={process.phases} deliverableLabel={process.deliverableLabel} />
+    </Band>
   );
 }
 
@@ -256,41 +208,58 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
   const inDevelopment = portfolio.filter((item) => item.stage === "En desarrollo");
 
   return (
-    <section className={styles.band} id="productos" aria-labelledby="v5-products-title">
-      <div className={styles.wrap}>
-        <div className={styles.head}>
-          <div>
-            <p className={styles.eyebrow}>{text.eyebrow}</p>
-            <h2 className={styles.d2} id="v5-products-title">{text.title}</h2>
-          </div>
-          <p className={styles.lead}>{text.lead}</p>
-        </div>
+    <Band id="productos" labelledBy="v5-products-title">
+      <SectionHead id="v5-products-title" eyebrow={text.eyebrow} title={text.title} lead={text.lead} />
 
-        <article className={styles.feat} id="p-tribai">
-          <div className={styles.featText}>
-            <p className={styles.kicker}>
-              {category(tribai)}{" "}
-              <span className={styles.chip}>
-                <i />
-                {status(tribai)}
-              </span>
-            </p>
-            <h3 className={`${styles.d2} ${styles.featTitle}`}>{tribai.name}</h3>
-            <p className={styles.lead}>
-              {headline(tribai)} {text.tribaiLead}
-            </p>
-            <div className={styles.featActions}>
-              <Link className={`${styles.btn} ${styles.primary}`} href="/trabajo/tribai">
-                {text.tribaiCta}
-              </Link>
-              <span className={styles.chip}>{text.tribaiTag}</span>
-            </div>
-          </div>
-          <TribaiTerminal copy={text} />
-        </article>
+      <FeatureSplit
+        id="p-tribai"
+        kicker={
+          <>
+            {category(tribai)}{" "}
+            <Chip dot>{status(tribai)}</Chip>
+          </>
+        }
+        title={tribai.name}
+        lead={
+          <>
+            {headline(tribai)} {text.tribaiLead}
+          </>
+        }
+        actions={
+          <>
+            <Button href="/trabajo/tribai" variant="primary">
+              {text.tribaiCta}
+            </Button>
+            <Chip>{text.tribaiTag}</Chip>
+          </>
+        }
+        media={<TribaiTerminal copy={text} />}
+      />
 
-        <article className={`${styles.feat} ${styles.rev}`} id="p-gobia">
-          <figure className={styles.shot}>
+      <FeatureSplit
+        id="p-gobia"
+        reverse
+        kicker={
+          <>
+            {category(gobia)}{" "}
+            <Chip dot tone={statusTone(status(gobia))}>
+              {status(gobia)}
+            </Chip>
+          </>
+        }
+        title={gobia.name}
+        lead={
+          <>
+            {headline(gobia)} {description(gobia)}
+          </>
+        }
+        actions={
+          <Button href="/trabajo/gobia" variant="ghost">
+            {text.openCta} <span aria-hidden="true">→</span>
+          </Button>
+        }
+        media={
+          <Shot>
             <Image
               src={workCaptures.gobia.src}
               alt={workCaptures.gobia.alt}
@@ -298,31 +267,18 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
               height={CAPTURA_ALTO}
               sizes="(max-width: 760px) 92vw, 52vw"
             />
-          </figure>
-          <div className={styles.featText}>
-            <p className={styles.kicker}>
-              {category(gobia)}{" "}
-              <span className={`${styles.chip} ${statusTone(status(gobia))}`}>
-                <i />
-                {status(gobia)}
-              </span>
-            </p>
-            <h3 className={`${styles.d2} ${styles.featTitle}`}>{gobia.name}</h3>
-            <p className={styles.lead}>
-              {headline(gobia)} {description(gobia)}
-            </p>
-            <div className={styles.featActions}>
-              <Link className={`${styles.btn} ${styles.ghost}`} href="/trabajo/gobia">
-                {text.openCta} <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
-        </article>
+          </Shot>
+        }
+      />
 
-        <p className={`${styles.eyebrow} ${styles.moreTitle}`}>{text.moreLabel}</p>
-        <div className={styles.minis}>
-          {minis.map((item) => (
-            <Link className={styles.mini} href={`/trabajo/${item.slug}`} key={item.slug} id={`p-${item.slug}`}>
+      <p className={`${ui.eyebrow} ${styles.moreTitle}`}>{text.moreLabel}</p>
+      <CardGrid>
+        {minis.map((item) => (
+          <Card
+            key={item.slug}
+            id={`p-${item.slug}`}
+            href={`/trabajo/${item.slug}`}
+            media={
               <Image
                 src={workCaptures[item.slug].src}
                 alt=""
@@ -330,35 +286,37 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
                 height={CAPTURA_ALTO}
                 sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 22vw"
               />
-              <div>
-                <p className={styles.meta}>
-                  {category(item)} · <span className={statusTone(status(item))}>{status(item)}</span>
-                </p>
-                <h4>{item.name}</h4>
-                <p>{headline(item)}</p>
-              </div>
-            </Link>
-          ))}
-          {inDevelopment.map((item) => (
-            <div className={`${styles.mini} ${styles.dev}`} key={item.name}>
-              <span className={styles.ph}>{text.inDevelopment}</span>
-              <div>
-                <p className={styles.meta}>
-                  {item.category} · {text.inDevelopment}
-                </p>
-                <h4>{item.name}</h4>
-                <p>{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className={styles.allLink}>
-          <Link href="/trabajo">
-            {text.allCta} <span aria-hidden="true">→</span>
-          </Link>
-        </p>
-      </div>
-    </section>
+            }
+            meta={
+              <>
+                {category(item)} ·{" "}
+                <span className={cx(statusTone(status(item)) === "pilot" && ui.pilot)}>{status(item)}</span>
+              </>
+            }
+            title={item.name}
+            text={headline(item)}
+          />
+        ))}
+        {inDevelopment.map((item) => (
+          <Card
+            key={item.name}
+            media={<Placeholder>{text.inDevelopment}</Placeholder>}
+            meta={
+              <>
+                {item.category} · {text.inDevelopment}
+              </>
+            }
+            title={item.name}
+            text={item.description}
+          />
+        ))}
+      </CardGrid>
+      <p className={styles.allLink}>
+        <Link href="/trabajo">
+          {text.allCta} <span aria-hidden="true">→</span>
+        </Link>
+      </p>
+    </Band>
   );
 }
 
@@ -367,27 +325,13 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
 export function V5Sectors({ copy }: { copy: HomeCopy }) {
   const sectors = copy.v5.sectors;
   return (
-    <section className={`${styles.band} ${styles.sectors}`} id="sectores" aria-labelledby="v5-sectors-title">
-      <div className={styles.wrap}>
-        <p className={styles.eyebrow}>{sectors.eyebrow}</p>
-        <h2 className={`${styles.d2} ${styles.sectorsTitle}`} id="v5-sectors-title">
-          {sectors.title}
-        </h2>
-        <ul className={styles.rows}>
-          {sectors.items.map((item, index) => (
-            <li key={item.title}>
-              <Link href={item.href}>
-                <span className={styles.n}>{`0${index + 1}`}</span>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-                <small>{item.tag}</small>
-                <i aria-hidden="true">→</i>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+    <Band id="sectores" className={styles.sectors} labelledBy="v5-sectors-title">
+      <p className={ui.eyebrow}>{sectors.eyebrow}</p>
+      <h2 className={`${ui.d2} ${styles.sectorsTitle}`} id="v5-sectors-title">
+        {sectors.title}
+      </h2>
+      <RowsList items={sectors.items} />
+    </Band>
   );
 }
 
@@ -425,33 +369,27 @@ const TECH_STACK = ["Anthropic", "OpenAI", "AWS", "Google Cloud", "Vercel"] as c
 export function V5Audit({ copy }: { copy: HomeCopy }) {
   const audit = copy.v5.audit;
   return (
-    <section className={`${styles.band} ${styles.light}`} id="auditoria" aria-labelledby="v5-audit-title">
-      <div className={styles.wrap}>
-        <div className={styles.headC}>
-          <p className={styles.eyebrow}>{audit.eyebrow}</p>
-          <h2 className={styles.d2} id="v5-audit-title">{audit.title}</h2>
-          <p className={styles.lead}>{audit.lead}</p>
-        </div>
-        <ul className={styles.audit}>
-          {audit.items.map((item, index) => (
-            <li key={item.title}>
-              {AUDIT_ICONS[index]}
-              <h3>{item.title}</h3>
-              <p>{item.detail}</p>
-            </li>
+    <Band id="auditoria" tone="light" labelledBy="v5-audit-title">
+      <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} lead={audit.lead} />
+      <ul className={styles.audit}>
+        {audit.items.map((item, index) => (
+          <li key={item.title}>
+            {AUDIT_ICONS[index]}
+            <h3>{item.title}</h3>
+            <p>{item.detail}</p>
+          </li>
+        ))}
+      </ul>
+      <div className={styles.tech} id="tecnologia">
+        <p className={ui.eyebrow}>{audit.techEyebrow}</p>
+        <ul>
+          {TECH_STACK.map((name) => (
+            <li key={name}>{name}</li>
           ))}
         </ul>
-        <div className={styles.tech} id="tecnologia">
-          <p className={styles.eyebrow}>{audit.techEyebrow}</p>
-          <ul>
-            {TECH_STACK.map((name) => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
-          <p className={styles.small}>{audit.techNote}</p>
-        </div>
+        <p className={`${ui.small} ${styles.techNote}`}>{audit.techNote}</p>
       </div>
-    </section>
+    </Band>
   );
 }
 
@@ -477,7 +415,7 @@ function PressFigure({ story, copy }: { story: PressStory; copy: HomeCopy }) {
   }
   return (
     <figure>
-      <span className={styles.ph}>{copy.press.visualSignals[story.slug] ?? story.visualSignal}</span>
+      <span className={ui.ph}>{copy.press.visualSignals[story.slug] ?? story.visualSignal}</span>
     </figure>
   );
 }
@@ -494,51 +432,44 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
   const titleLang = press.storyLang ?? undefined;
 
   return (
-    <section className={`${styles.band} ${styles.light}`} id="prensa" aria-labelledby="v5-press-title">
-      <div className={styles.wrap}>
-        <div className={styles.head}>
-          <div>
-            <p className={styles.eyebrow}>{text.eyebrow}</p>
-            <h2 className={styles.d2} id="v5-press-title">{text.title}</h2>
-          </div>
-          <p className={styles.headLink}>
-            <Link href="/prensa">
-              {text.archiveCta} <span aria-hidden="true">→</span>
-            </Link>
-          </p>
-        </div>
-        <div className={styles.pressGrid}>
-          {top.map((story, index) => (
-            <article className={styles.story} key={story.slug}>
-              <PressFigure story={story} copy={copy} />
-              <div>
-                <div className={styles.storyMeta}>
-                  <span>{story.outlet}</span>
-                  <span>
-                    {format(story)} · {date(story)}
-                  </span>
-                </div>
-                <h3 lang={titleLang}>{story.title}</h3>
-                {index === 0 ? (
-                  <p className={styles.summary}>{press.summaries[story.slug] ?? story.summary}</p>
-                ) : null}
-                <a className={styles.more} href={story.href} target="_blank" rel="noreferrer">
-                  {text.readCta} <span aria-hidden="true">↗</span>
-                </a>
+    <Band id="prensa" tone="light" labelledBy="v5-press-title">
+      <SectionHead
+        id="v5-press-title"
+        eyebrow={text.eyebrow}
+        title={text.title}
+        link={{ href: "/prensa", label: text.archiveCta }}
+      />
+      <div className={styles.pressGrid}>
+        {top.map((story, index) => (
+          <article className={styles.story} key={story.slug}>
+            <PressFigure story={story} copy={copy} />
+            <div>
+              <div className={styles.storyMeta}>
+                <span>{story.outlet}</span>
+                <span>
+                  {format(story)} · {date(story)}
+                </span>
               </div>
-            </article>
-          ))}
-        </div>
-        <div className={styles.storyList}>
-          {rest.map((story) => (
-            <a href={story.href} target="_blank" rel="noreferrer" key={story.slug}>
-              <span>{story.outlet}</span>
-              <strong lang={titleLang}>{story.title}</strong>
-            </a>
-          ))}
-        </div>
+              <h3 lang={titleLang}>{story.title}</h3>
+              {index === 0 ? (
+                <p className={styles.summary}>{press.summaries[story.slug] ?? story.summary}</p>
+              ) : null}
+              <a className={styles.more} href={story.href} target="_blank" rel="noreferrer">
+                {text.readCta} <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
-    </section>
+      <div className={styles.storyList}>
+        {rest.map((story) => (
+          <a href={story.href} target="_blank" rel="noreferrer" key={story.slug}>
+            <span>{story.outlet}</span>
+            <strong lang={titleLang}>{story.title}</strong>
+          </a>
+        ))}
+      </div>
+    </Band>
   );
 }
 
@@ -548,12 +479,12 @@ export function V5Team({ copy }: { copy: HomeCopy }) {
   const text = copy.v5.team;
   const team = copy.team;
   return (
-    <section className={`${styles.band} ${styles.light}`} id="equipo" aria-labelledby="v5-team-title">
-      <div className={`${styles.wrap} ${styles.teamGrid}`}>
+    <section className={`${ui.band} ${ui.light}`} id="equipo" aria-labelledby="v5-team-title">
+      <div className={`${ui.wrap} ${styles.teamGrid}`}>
         <div className={styles.teamHead}>
-          <p className={styles.eyebrow}>{text.eyebrow}</p>
-          <h2 className={styles.d2} id="v5-team-title">{text.title}</h2>
-          <p className={styles.lead}>{text.lead}</p>
+          <p className={ui.eyebrow}>{text.eyebrow}</p>
+          <h2 className={ui.d2} id="v5-team-title">{text.title}</h2>
+          <p className={ui.lead}>{text.lead}</p>
         </div>
         {teamMembers.map((member) => (
           <article className={styles.person} key={member.slug}>
@@ -590,5 +521,3 @@ export function V5Team({ copy }: { copy: HomeCopy }) {
     </section>
   );
 }
-
-export { styles as v5Styles };

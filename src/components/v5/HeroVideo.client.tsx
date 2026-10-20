@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import styles from "./v5.module.css";
+import ui from "./v5.module.css";
 
 /**
  * El montaje del hero: diez tomas de dos segundos con corte seco.
@@ -34,7 +34,7 @@ export function HeroVideo() {
   }, []);
 
   return (
-    <div className={styles.mediaBg} aria-hidden="true">
+    <div className={ui.mediaBg} aria-hidden="true">
       <video
         ref={ref}
         muted

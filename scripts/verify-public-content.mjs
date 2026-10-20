@@ -121,8 +121,7 @@ const approvedLogoMentions = [
   "Think IT",
 ];
 const approvedLogoFiles = new Set([
-  "src/components/site/SoftwareFactoryExperience.tsx",
-  "src/components/home/HomeSections.tsx",
+  "src/content/clients.ts",
 ]);
 
 const forbiddenPublicAssets = [
