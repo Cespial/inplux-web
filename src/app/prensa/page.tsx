@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
+import { NextPage } from "@/components/v5/NextPage";
 import { Band, SectionHead, v5 as ui } from "@/components/v5/primitives";
 import {
   eventFormats,
@@ -10,6 +11,7 @@ import {
   type PressStory,
 } from "@/content/press";
 import { findTeamMemberInByline, personId } from "@/content/team";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./prensa.module.css";
 
 /*
@@ -32,10 +34,17 @@ const heroStory = sortedPressStories.find(
   (story) => story.visualKind === "photo" && story.image,
 );
 
-const groupedStories = pressCategories.map((category) => ({
-  ...category,
-  stories: sortedPressStories.filter((story) => story.category === category.label),
-}));
+/** Las seis más recientes van a la vista; el resto del archivo, plegado. */
+const LATEST_COUNT = 6;
+const latestStories = sortedPressStories.slice(0, LATEST_COUNT);
+const archivedStories = sortedPressStories.slice(LATEST_COUNT);
+
+const groupedStories = pressCategories
+  .map((category) => ({
+    ...category,
+    stories: archivedStories.filter((story) => story.category === category.label),
+  }))
+  .filter((category) => category.stories.length > 0);
 
 export const metadata: Metadata = {
   title: "Prensa y conversaciones",
@@ -53,7 +62,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-prensa.jpg",
         width: 1200,
         height: 630,
         alt: "INPLUX, prensa y conversaciones",
@@ -67,7 +76,7 @@ export const metadata: Metadata = {
       "Cobertura, escenarios públicos, investigaciones y columnas del equipo, organizados por categoría y enlazados a su fuente original.",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-prensa.jpg",
         alt: "INPLUX, prensa y conversaciones",
       },
     ],
@@ -91,6 +100,8 @@ function authorNode(byline: string) {
     ? { "@type": "Person", "@id": personId(member.slug), name: member.name }
     : { "@type": "Person", name: byline };
 }
+
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Prensa" }];
 
 const pressCollectionJsonLd = {
   "@context": "https://schema.org",
@@ -211,6 +222,10 @@ export default function Prensa() {
           __html: JSON.stringify(pressCollectionJsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, canonicalUrl)) }}
+      />
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
@@ -220,8 +235,8 @@ export default function Prensa() {
                 eyebrow="Prensa y conversaciones"
                 title={<span id="press-title">Lo que se ha publicado sobre nuestro trabajo.</span>}
                 lead="Cobertura, escenarios públicos, investigación abierta y columnas firmadas."
-                leadMuted="Cada pieza con su fecha, su medio y el enlace a la fuente original. No llamamos prensa a todo: las columnas propias y los trabajos sin revisión por pares van identificados."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Prensa" }]}
+                leadMuted="Cada pieza con su fecha, su medio y el enlace a la fuente. Las columnas propias y los trabajos sin revisión por pares van identificados."
+                crumbs={crumbs}
                 media={
                   heroStory?.image
                     ? {
@@ -247,36 +262,50 @@ export default function Prensa() {
                   </>
                 }
               />
-              <nav className={styles.filters} aria-label="Secciones del archivo">
-                {groupedStories.map((category) => (
-                  <a key={category.id} href={`#${category.id}`}>
-                    {category.label}
-                    <span>{String(category.stories.length).padStart(2, "0")}</span>
-                  </a>
+              <ul className={styles.cards}>
+                {latestStories.map((story) => (
+                  <StoryCard key={story.slug} story={story} />
                 ))}
-              </nav>
-              {groupedStories.map((category) => (
-                <section
-                  key={category.id}
-                  id={category.id}
-                  className={styles.group}
-                  aria-labelledby={`${category.id}-title`}
-                >
-                  <header className={styles.groupHead}>
-                    <h3 id={`${category.id}-title`}>{category.label}</h3>
-                    <p className={ui.small}>{category.description}</p>
-                  </header>
-                  <ul className={styles.cards}>
-                    {category.stories.map((story) => (
-                      <StoryCard key={story.slug} story={story} />
+              </ul>
+              {archivedStories.length > 0 ? (
+                <details className={styles.more}>
+                  <summary>
+                    Ver todo el archivo
+                    <span>{String(archivedStories.length).padStart(2, "0")} piezas más</span>
+                  </summary>
+                  <nav className={styles.filters} aria-label="Secciones del archivo">
+                    {groupedStories.map((category) => (
+                      <a key={category.id} href={`#${category.id}`}>
+                        {category.label}
+                        <span>{String(category.stories.length).padStart(2, "0")}</span>
+                      </a>
                     ))}
-                  </ul>
-                </section>
-              ))}
+                  </nav>
+                  {groupedStories.map((category) => (
+                    <section
+                      key={category.id}
+                      id={category.id}
+                      className={styles.group}
+                      aria-labelledby={`${category.id}-title`}
+                    >
+                      <header className={styles.groupHead}>
+                        <h3 id={`${category.id}-title`}>{category.label}</h3>
+                        <p className={ui.small}>{category.description}</p>
+                      </header>
+                      <ul className={styles.cards}>
+                        {category.stories.map((story) => (
+                          <StoryCard key={story.slug} story={story} />
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </details>
+              ) : null}
               <p className={styles.pressRoom}>
                 Solicitudes de prensa: <a href="mailto:gerencia@inplux.co?subject=Solicitud%20de%20prensa%20-%20INPLUX">gerencia@inplux.co</a>
               </p>
             </Band>
+            <NextPage href="/nosotros" label="Nosotros" />
           </main>
         </V5Page>
       </ContactDialogProvider>

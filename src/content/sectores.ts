@@ -120,7 +120,7 @@ export const sectorProfiles = [
     card: { image: "/sectores/card-salud.webp" },
     claim: "Software alrededor de la historia clínica que la IPS ya tiene.",
     intro:
-      "Construimos lo que falta alrededor de los sistemas que ya operan: la relación con el paciente, el seguimiento entre consultas y el soporte diario, con el equipo clínico decidiendo en cada alerta.",
+      "Construimos lo que falta alrededor de los sistemas que ya operan, con el equipo clínico decidiendo en cada alerta.",
     promises: [
       { label: "Pacientes", lineA: "Cada paciente,", lineB: "acompañado." },
       { label: "Telemonitoreo", lineA: "Cada alerta,", lineB: "atendida." },
@@ -157,13 +157,13 @@ export const sectorProfiles = [
       {
         code: "S–05",
         title: "Tableros y sistemas a la medida",
-        description: "Salas de control, facturación y RIPS, y módulos asistenciales cuando el mercado no encaja.",
+        description: "Salas de control, facturación, RIPS y módulos asistenciales.",
         status: "Oferta",
       },
       {
         code: "S–06",
         title: "Amparo.help",
-        description: "Un prototipo para resolver disputas entre pacientes y aseguradores, con la decisión en manos humanas.",
+        description: "Prototipo para resolver disputas con aseguradores, con la decisión en manos humanas.",
         status: "Prototipo",
         href: "https://amparo.help",
         hrefLabel: "Abrir Amparo.help",

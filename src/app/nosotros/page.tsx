@@ -14,6 +14,7 @@ import {
   v5 as ui,
 } from "@/components/v5/primitives";
 import { personId, profileUrl, teamMembers } from "@/content/team";
+import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./nosotros.module.css";
 
 /*
@@ -98,27 +99,12 @@ const aboutPageJsonLd = {
   },
 };
 
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Nosotros" }];
+
 const aboutSupportingJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://inplux.co/nosotros#breadcrumb",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Inicio",
-          item: "https://inplux.co/",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Nosotros",
-          item: "https://inplux.co/nosotros",
-        },
-      ],
-    },
+    breadcrumbJsonLd(crumbs, "https://inplux.co/nosotros"),
     // Referencia por `@id` canónico, no una definición nueva: la persona se
     // define una sola vez en /equipo/[slug]. Repetir aquí un `@id` distinto
     // crearía una entidad paralela con el mismo nombre.
@@ -158,7 +144,7 @@ export default function Nosotros() {
                 title={<span id="about-title">Construimos con criterio, desde Medellín.</span>}
                 lead="INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica."
                 leadMuted="Productos propios en producción y equipos que los implementan dentro de la operación del cliente."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Nosotros" }]}
+                crumbs={crumbs}
                 media={{
                   kind: "video",
                   poster: "/media/nosotros-poster.jpg",

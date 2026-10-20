@@ -14,6 +14,7 @@ import {
   buttonClass,
 } from "@/components/v5/primitives";
 import { personId, profileUrl, teamMembers } from "@/content/team";
+import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./equipo.module.css";
 
 /*
@@ -72,6 +73,12 @@ const schools = [
   "University of Miami Herbert Business School",
 ] as const;
 
+const crumbs: Crumb[] = [
+  { label: "Inicio", href: "/" },
+  { label: "Nosotros", href: "/nosotros" },
+  { label: "Equipo" },
+];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -85,14 +92,7 @@ const jsonLd = {
       isPartOf: { "@id": `${SITE_URL}/#website` },
       about: { "@id": `${SITE_URL}/#organization` },
     },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${PAGE_URL}#breadcrumb`,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
-        { "@type": "ListItem", position: 2, name: "Equipo", item: PAGE_URL },
-      ],
-    },
+    breadcrumbJsonLd(crumbs, PAGE_URL),
     // Referencias por `@id` canónico: cada persona se define en /equipo/[slug].
     ...teamMembers.map((member) => ({
       "@type": "Person",
@@ -122,7 +122,7 @@ export default function EquipoPage() {
                 title={<span id="team-title">Personas que pueden explicar, y asumir, cada decisión.</span>}
                 lead="No usamos retratos generados ni escondemos la responsabilidad detrás de la IA."
                 leadMuted="Quien decide qué se construye y quien dirige cómo se construye."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Nosotros", href: "/nosotros" }, { label: "Equipo" }]}
+                crumbs={crumbs}
               />
             </section>
 
