@@ -21,6 +21,7 @@ import { getSectorProfile, sectorProfiles, type SectorSlug } from "@/content/sec
 import { getWorkProfile, workDirectory } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
 import { formatShortDate } from "@/content/work-format";
+import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./sector.module.css";
 
 /**
@@ -122,6 +123,8 @@ export default async function SectorPage({ params }: SectorPageProps) {
         description: `${promise.lineA} ${promise.lineB}`,
       }));
 
+  const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Sectores" }, { label: sector.name }];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -157,13 +160,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           })),
         },
       },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
-          { "@type": "ListItem", position: 2, name: `Sector ${sector.name}`, item: url },
-        ],
-      },
+      breadcrumbJsonLd(crumbs, url),
     ],
   };
 
@@ -183,7 +180,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
                 title={<span id="sector-title">{sector.name}</span>}
                 lead={sector.lead}
                 leadMuted={sector.audience}
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Sectores" }, { label: sector.name }]}
+                crumbs={crumbs}
                 media={{
                   kind: "image",
                   src: sector.hero.image,

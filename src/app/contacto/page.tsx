@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/site/ContactForm";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, v5 as ui } from "@/components/v5/primitives";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./contacto.module.css";
 
 /*
@@ -50,6 +51,8 @@ export const metadata: Metadata = {
   },
 };
 
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Contacto" }];
+
 const contactJsonLd = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
@@ -67,6 +70,10 @@ export default function ContactoPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, "https://inplux.co/contacto")) }}
+      />
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
@@ -77,7 +84,7 @@ export default function ContactoPage() {
                 title={<span id="contact-title">Empecemos por el problema.</span>}
                 lead="¿Qué proceso quieres mejorar y en qué sistema vive?"
                 leadMuted="Con eso dimensionamos lo que sigue. No necesitas requisitos ni alcance definidos."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Contacto" }]}
+                crumbs={crumbs}
               />
             </section>
 

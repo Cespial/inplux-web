@@ -11,6 +11,7 @@ import { productMockups } from "@/components/work/ProductMockups";
 import { getWorkProfile, workProfiles } from "@/content/work";
 import { formatShortDate } from "@/content/work-format";
 import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./profile.module.css";
 
 type ProfilePageProps = {
@@ -72,6 +73,12 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
   const nextProfile = workProfiles[(currentIndex + 1) % workProfiles.length];
   const Mockup = productMockups[profile.slug];
 
+  const crumbs: Crumb[] = [
+    { label: "Inicio", href: "/" },
+    { label: "Productos", href: "/trabajo" },
+    { label: profile.name },
+  ];
+
   const profileJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -99,12 +106,16 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, `https://inplux.co/trabajo/${profile.slug}`)) }}
+      />
       <ContactDialogProvider>
         <V5Page>
           <main id="main-content" tabIndex={-1}>
             <PageHero
               id="inicio"
-              crumbs={[{ label: "Inicio", href: "/" }, { label: "Productos", href: "/trabajo" }, { label: profile.name }]}
+              crumbs={crumbs}
               eyebrow={`${profile.number} · ${profile.category}`}
               title={profile.headline}
               lead={profile.description}

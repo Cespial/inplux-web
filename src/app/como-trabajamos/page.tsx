@@ -15,6 +15,7 @@ import {
   v5 as ui,
 } from "@/components/v5/primitives";
 import { homeCopyEs } from "@/content/copy/es";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./como-trabajamos.module.css";
 
 /**
@@ -100,6 +101,8 @@ const commitments = [
   },
 ] as const;
 
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Cómo trabajamos" }];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -119,6 +122,10 @@ export default function ComoTrabajamosPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, PAGE_URL)) }}
+      />
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
@@ -129,7 +136,7 @@ export default function ComoTrabajamosPage() {
                 title={<span id="how-title">Trabajamos contigo desde el diagnóstico hasta que opera.</span>}
                 lead="Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente."
                 leadMuted="Cada fase termina con algo que se puede usar y revisar, y la decisión sigue siendo de quien ya la tenía."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Cómo trabajamos" }]}
+                crumbs={crumbs}
                 media={{
                   kind: "video",
                   poster: "/media/como-poster.jpg",

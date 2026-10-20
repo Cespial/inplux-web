@@ -10,6 +10,7 @@ import {
   type PressStory,
 } from "@/content/press";
 import { findTeamMemberInByline, personId } from "@/content/team";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./prensa.module.css";
 
 /*
@@ -91,6 +92,8 @@ function authorNode(byline: string) {
     ? { "@type": "Person", "@id": personId(member.slug), name: member.name }
     : { "@type": "Person", name: byline };
 }
+
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Prensa" }];
 
 const pressCollectionJsonLd = {
   "@context": "https://schema.org",
@@ -211,6 +214,10 @@ export default function Prensa() {
           __html: JSON.stringify(pressCollectionJsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, canonicalUrl)) }}
+      />
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
@@ -221,7 +228,7 @@ export default function Prensa() {
                 title={<span id="press-title">Lo que se ha publicado sobre nuestro trabajo.</span>}
                 lead="Cobertura, escenarios públicos, investigación abierta y columnas firmadas."
                 leadMuted="Cada pieza con su fecha, su medio y el enlace a la fuente original. No llamamos prensa a todo: las columnas propias y los trabajos sin revisión por pares van identificados."
-                crumbs={[{ label: "Inicio", href: "/" }, { label: "Prensa" }]}
+                crumbs={crumbs}
                 media={
                   heroStory?.image
                     ? {

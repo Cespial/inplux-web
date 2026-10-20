@@ -11,6 +11,7 @@ import {
   profileUrl,
   teamMembers,
 } from "@/content/team";
+import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./perfil.module.css";
 
 type TeamProfilePageProps = {
@@ -103,6 +104,12 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
   const url = profileUrl(member.slug);
   const id = personId(member.slug);
 
+  const crumbs: Crumb[] = [
+    { label: "Inicio", href: "/" },
+    { label: "Equipo", href: "/equipo" },
+    { label: member.name },
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -143,30 +150,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
           ? { subjectOf: publications.map((story) => ({ "@id": story.href })) }
           : {}),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Inicio",
-            item: "https://inplux.co/",
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Nosotros",
-            item: "https://inplux.co/nosotros",
-          },
-          {
-            "@type": "ListItem",
-            position: 3,
-            name: member.name,
-            item: url,
-          },
-        ],
-      },
+      breadcrumbJsonLd(crumbs, url),
     ],
   };
 
@@ -185,11 +169,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
                 eyebrow={`${member.code} · ${member.role}`}
                 title={<span id="profile-title">{member.name}</span>}
                 lead={member.focus}
-                crumbs={[
-                  { label: "Inicio", href: "/" },
-                  { label: "Equipo", href: "/equipo" },
-                  { label: member.name },
-                ]}
+                crumbs={crumbs}
                 actions={
                   <>
                     <Button href={member.linkedin} variant="primary" external>

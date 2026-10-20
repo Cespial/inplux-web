@@ -21,6 +21,7 @@ import { productMockups } from "@/components/work/ProductMockups";
 import { portfolio } from "@/content/home";
 import { workProfiles, type WorkSlug } from "@/content/work";
 import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
+import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./trabajo.module.css";
 
 const pageTitle = "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia";
@@ -73,6 +74,8 @@ export const metadata: Metadata = {
   },
 };
 
+const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Productos" }];
+
 const workJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -97,13 +100,17 @@ export default function TrabajoPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(workJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdDocument(crumbs, "https://inplux.co/trabajo")) }}
+      />
       <ContactDialogProvider>
         <V5Page>
           <main id="main-content" tabIndex={-1}>
             <PageHero
               id="inicio"
               eyebrow="Productos propios"
-              crumbs={[{ label: "Inicio", href: "/" }, { label: "Productos" }]}
+              crumbs={crumbs}
               title="Cinco productos construidos y operados por INPLUX."
               lead="Cada uno nació de un problema de un cliente y hoy funciona por su cuenta."
               leadMuted="Lo que ves abajo sale de sus páginas públicas, con la fecha en que lo revisamos."
