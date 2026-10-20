@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { FactoryScrolly } from "@/components/home/FactoryScrolly.client";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HeroStats } from "@/components/home/HeroStats";
+import { HowWeWork } from "@/components/home/HowWeWork";
+import { PartnerWall } from "@/components/home/PartnerWall";
+import { Thesis } from "@/components/home/Thesis";
 import { ClientWall, ProofRibbon } from "@/components/home/HomeSections";
 import { ProductBlocks } from "@/components/home/ProductBlocks";
 import { SectorStrip } from "@/components/home/SectorStrip";
@@ -35,16 +37,16 @@ const languageAlternates = {
   "x-default": "https://inplux.co",
 };
 
-const socialTitle = "From a real problem to software in production.";
+const socialTitle = "AI transformation that reaches production.";
 const socialImageAlt =
   "INPLUX, from a real problem to software in production";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Custom software factory in Miami, Florida | INPLUX",
+    absolute: "AI development and implementation company in Miami, Florida | INPLUX",
   },
   description:
-    "INPLUX LLC is a Miami-based custom software factory. We design, build and evolve software for companies and public institutions. AI accelerates the work; expert people direct the critical decisions.",
+    "INPLUX LLC is a Miami-based AI development and implementation company. We develop and implement the AI transformation of companies and institutions across Latin America. Expert people direct the critical decisions.",
   alternates: {
     canonical: "https://inplux.co/en",
     languages: languageAlternates,
@@ -52,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: socialTitle,
     description:
-      "See how INPLUX turns concrete needs into digital products that can be used and improved.",
+      "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     url: "https://inplux.co/en",
     siteName: "INPLUX S.A.S.",
     locale: "en_US",
@@ -68,7 +70,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: socialTitle,
-    description: "A custom software factory for companies and public institutions.",
+    description: "We develop and implement the AI transformation of companies and institutions across Latin America.",
     images: [{ url: "/brand/og/og-default.png", alt: socialImageAlt }],
   },
 };
@@ -79,7 +81,7 @@ const jsonLd = {
     {
       "@type": "WebPage",
       "@id": "https://inplux.co/en#webpage",
-      name: "INPLUX, custom software factory in Miami",
+      name: "INPLUX, AI development and implementation in Miami",
       url: "https://inplux.co/en",
       inLanguage: "en-US",
       isPartOf: { "@id": "https://inplux.co/#website" },
@@ -143,12 +145,15 @@ export default function EnglishHome() {
           <main id="main-content" tabIndex={-1}>
             <section id="inicio">
               <HomeHero copy={copy.hero} primaryCta={heroContactCta} />
-              <HeroStats copy={copy.heroStats} />
             </section>
 
             <ClientWall copy={copy.experienceRail} heading={copy.clientWall} />
 
-            <FactoryScrolly copy={copy.factoryScrolly} />
+            <Thesis copy={copy.thesis}>
+              <HeroStats copy={copy.heroStats} />
+            </Thesis>
+
+            <HowWeWork copy={copy.howWeWork} />
 
             <ProofRibbon copy={copy.experienceRail} productHrefPrefix="#p-" />
             <ProductBlocks copy={copy.products} railCopy={copy.experienceRail} />
@@ -157,6 +162,7 @@ export default function EnglishHome() {
             <span id="privado" className={styles.anchor} aria-hidden="true" />
             <span id="empresas" className={styles.anchor} aria-hidden="true" />
             <SectorStrip copy={copy.sectorStrip} />
+            <PartnerWall copy={copy.partnerWall} />
             <FactoryPressStories copy={copy.press} />
             <TeamLeaders copy={copy.team} />
 

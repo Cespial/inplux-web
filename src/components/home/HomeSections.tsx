@@ -440,7 +440,7 @@ export function ClientWall({
    */
   const wallCells = clientWallCount + 1;
   const wallStyle = {
-    "--wall-fill-2": String(fillSpan(wallCells, 2)),
+    "--wall-fill-3": String(fillSpan(wallCells, 3)),
     "--wall-fill-4": String(fillSpan(wallCells, 4)),
     "--wall-fill-6": String(fillSpan(wallCells, 6)),
   } as CSSProperties;

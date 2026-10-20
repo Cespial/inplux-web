@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { auditPartners } from "./partners-gate.mjs";
 
 const root = process.cwd();
 const errors = [];
@@ -478,6 +479,19 @@ async function verifyBrandSystem() {
   }
 }
 
+async function verifyPartnerLogos() {
+  // Los partners tecnológicos entran sólo con permiso registrado: ver
+  // `scripts/partners-gate.mjs`. Comparte el plazo de frescura del portafolio.
+  const maxAgeDays = Number(process.env.CONTENT_VERIFICATION_MAX_AGE_DAYS ?? 120);
+  errors.push(
+    ...(await auditPartners({
+      root,
+      sourceFiles: await collectTextFiles("src"),
+      maxAgeDays: Number.isFinite(maxAgeDays) && maxAgeDays > 0 ? maxAgeDays : 120,
+    })),
+  );
+}
+
 async function verifyLogoPermissions() {
   const legacyLogoDirectory = "public/logos";
   if (await exists(legacyLogoDirectory)) {
@@ -675,6 +689,7 @@ await verifySourceFreshness();
 await verifySecurityConfiguration();
 await verifyBrandSystem();
 await verifyLogoPermissions();
+await verifyPartnerLogos();
 await verifyContactExperience();
 await verifyLegacyFragments();
 await verifyTeamNames();

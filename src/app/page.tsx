@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { FactoryScrolly } from "@/components/home/FactoryScrolly.client";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HeroStats } from "@/components/home/HeroStats";
+import { HowWeWork } from "@/components/home/HowWeWork";
+import { PartnerWall } from "@/components/home/PartnerWall";
+import { Thesis } from "@/components/home/Thesis";
 import { ClientWall, ProofRibbon } from "@/components/home/HomeSections";
 import { ProductBlocks } from "@/components/home/ProductBlocks";
 import { SectorStrip } from "@/components/home/SectorStrip";
@@ -16,9 +18,9 @@ import { homeCopyEs } from "@/content/copy/es";
 import styles from "@/components/home/home.module.css";
 
 export const metadata: Metadata = {
-  title: "INPLUX | Fábrica de software a la medida",
+  title: "INPLUX | Transformación con IA que llega a producción",
   description:
-    "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades. La IA acelera el trabajo; personas expertas dirigen las decisiones críticas.",
+    "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica. Productos propios en producción y equipos que los implementan.",
   alternates: {
     canonical: "https://inplux.co",
     languages: {
@@ -48,9 +50,9 @@ const websiteJsonLd = {
 const copy = homeCopyEs;
 
 /**
- * Portada v2 (octubre de 2026): el lenguaje visual del sitio con el orden de
- * una página de fábrica de software —con quién, cómo, qué, dónde, quién
- * responde— y nada en ella que no salga de un archivo de contenido.
+ * Portada v2.1 (octubre de 2026): hero → con quién (muro) → tesis con cifras
+ * → cómo trabajamos → qué (productos) → dónde → prensa → quién responde, y
+ * nada en ella que no salga de un archivo de contenido.
  *
  * Los identificadores de fragmento se conservan aunque la sección cambie de
  * forma: circulan en enlaces publicados y `verify-build-output` los exige.
@@ -88,14 +90,17 @@ export default function Home() {
           <main id="main-content" tabIndex={-1}>
             <section id="inicio">
               <HomeHero primaryCta={heroContactCta} />
-              <HeroStats />
             </section>
 
             <ClientWall />
 
+            <Thesis>
+              <HeroStats />
+            </Thesis>
+
             <span id="servicios" className={styles.anchor} aria-hidden="true" />
             <span id="motor" className={styles.anchor} aria-hidden="true" />
-            <FactoryScrolly />
+            <HowWeWork />
 
             <ProofRibbon productHrefPrefix="#p-" />
             <ProductBlocks />
@@ -105,6 +110,7 @@ export default function Home() {
             <span id="privado" className={styles.anchor} aria-hidden="true" />
             <span id="empresas" className={styles.anchor} aria-hidden="true" />
             <SectorStrip />
+            <PartnerWall />
             <FactoryPressStories />
             <TeamLeaders />
 

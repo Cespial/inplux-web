@@ -9,7 +9,7 @@ Sitio corporativo de [inplux.co](https://inplux.co). Presenta a INPLUX como una 
 - `/marca`: guía interna de identidad y descarga de activos propios.
 - `robots.txt`, `sitemap.xml`, manifiesto web, metadatos y tarjetas sociales por ruta.
 
-El sitio evita cifras, resultados, relaciones comerciales y estados de producto que no tengan evidencia vigente. Los logos de terceros no se publican hasta registrar relación, proyecto, periodo, permiso y archivo maestro.
+El sitio evita cifras, resultados, relaciones comerciales y estados de producto que no tengan evidencia vigente. Los logos de terceros no se publican hasta registrar relación, proyecto, periodo, permiso y archivo maestro. Los partners tecnológicos se declaran en `src/content/partners.json` con su permiso (fuente oficial, `grantedAt`, `verifiedAt`) y su archivo en `public/brand/partners/`; `scripts/partners-gate.mjs` bloquea el build si falta algo.
 
 ## Stack
 
