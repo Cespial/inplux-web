@@ -46,13 +46,13 @@ export const homeCopyEn: HomeCopy = {
 
   footer: {
     heading: "Footer",
-    tagline: "A custom software factory for companies and public institutions.",
+    tagline: "We develop and implement the AI transformation of companies and institutions across Latin America.",
     groups: [
       {
         label: "Explore",
         ariaLabel: "Explore",
         items: [
-          { label: "The factory", href: "#fabrica-en-vivo" },
+          { label: "How we work", href: "#como-trabajamos" },
           { label: "Real work", href: "#trabajo-real" },
           { label: "Where we work", href: "#donde-trabajamos" },
           { label: "Who answers", href: "#equipo" },
@@ -144,10 +144,10 @@ export const homeCopyEn: HomeCopy = {
   },
 
   hero: {
-    eyebrow: "CUSTOM SOFTWARE FACTORY · MIAMI, FLORIDA",
-    titleLines: ["From a real problem", "to software in production."],
+    eyebrow: "AI DEVELOPMENT AND IMPLEMENTATION · MIAMI, FLORIDA",
+    titleLines: ["AI transformation", "that reaches production."],
     leadSentences: [
-      "INPLUX designs, builds and evolves digital products for companies and public institutions.",
+      "Our own products and implementation teams for companies and institutions across Latin America.",
       "AI accelerates the work. Expert people direct and validate the critical decisions.",
     ],
     primaryCta: "Start a project",
@@ -165,6 +165,42 @@ export const homeCopyEn: HomeCopy = {
       { number: "03", title: "IN PRODUCTION", detail: "MEASURE + EVOLVE" },
     ],
     signalAxis: "BUILD / 01",
+  },
+
+  thesis: {
+    eyebrow: "THESIS",
+    lead: "We develop and implement the AI transformation of companies and institutions",
+    emphasis: "across Latin America.",
+  },
+
+  howWeWork: {
+    eyebrow: "HOW WE WORK",
+    title: "From diagnosis to production, with the same team.",
+    lead: "Our engineers work inside the client's systems and teams.",
+    steps: [
+      {
+        number: "01",
+        title: "We integrate",
+        detail: "We connect the systems, records, spreadsheets and APIs that already exist.",
+      },
+      {
+        number: "02",
+        title: "We build",
+        detail: "We design and develop the product on our own software and model base.",
+      },
+      {
+        number: "03",
+        title: "We implement",
+        detail: "We put it into operation with the people who use it and keep improving it.",
+      },
+    ],
+    cta: "Start a project",
+  },
+
+  partnerWall: {
+    eyebrow: "TECHNOLOGY PARTNERS",
+    title: "We build on the infrastructure and models that set the standard.",
+    note: "Brands published with registered permission.",
   },
 
   heroStats: {

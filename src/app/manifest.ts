@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "INPLUX — Fábrica de software a la medida",
+    name: "INPLUX — Transformación con IA que llega a producción",
     short_name: "INPLUX",
     description:
-      "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades.",
+      "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     id: "/",
     scope: "/",
     start_url: "/",

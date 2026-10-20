@@ -28,7 +28,7 @@ export const homeCopyEs: HomeCopy = {
 
   footer: {
     heading: "Pie de página",
-    tagline: "Fábrica de software a la medida para empresas y entidades.",
+    tagline: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     groups: [
       {
         label: "Explora",
@@ -114,10 +114,10 @@ export const homeCopyEs: HomeCopy = {
   },
 
   hero: {
-    eyebrow: "FÁBRICA DE SOFTWARE A LA MEDIDA",
-    titleLines: ["De un problema real", "a software en producción."],
+    eyebrow: "DESARROLLO E IMPLEMENTACIÓN DE IA",
+    titleLines: ["Transformación con IA", "que llega a producción."],
     leadSentences: [
-      "INPLUX diseña, construye y evoluciona productos digitales para empresas y entidades.",
+      "Productos propios y equipos de implementación para empresas e instituciones de Latinoamérica.",
       "La IA acelera el trabajo. Personas expertas dirigen y validan las decisiones críticas.",
     ],
     primaryCta: "Empezar un proyecto",
@@ -135,6 +135,42 @@ export const homeCopyEs: HomeCopy = {
       { number: "03", title: "EN PRODUCCIÓN", detail: "MEDIR + EVOLUCIONAR" },
     ],
     signalAxis: "BUILD / 01",
+  },
+
+  thesis: {
+    eyebrow: "TESIS",
+    lead: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones",
+    emphasis: "en Latinoamérica.",
+  },
+
+  howWeWork: {
+    eyebrow: "CÓMO TRABAJAMOS",
+    title: "Del diagnóstico a producción, con el mismo equipo.",
+    lead: "Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente.",
+    steps: [
+      {
+        number: "01",
+        title: "Integramos",
+        detail: "Conectamos los sistemas, registros, hojas de cálculo y APIs que ya existen.",
+      },
+      {
+        number: "02",
+        title: "Construimos",
+        detail: "Diseñamos y desarrollamos el producto sobre nuestra base de software y de modelos.",
+      },
+      {
+        number: "03",
+        title: "Implementamos",
+        detail: "Lo ponemos en operación con las personas que lo usan y lo seguimos mejorando.",
+      },
+    ],
+    cta: "Empezar un proyecto",
+  },
+
+  partnerWall: {
+    eyebrow: "PARTNERS TECNOLÓGICOS",
+    title: "Construimos sobre la infraestructura y los modelos que marcan el estándar.",
+    note: "Marcas publicadas con permiso registrado.",
   },
 
   heroStats: {

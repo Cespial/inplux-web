@@ -48,12 +48,14 @@ export const metadata: Metadata = {
   // <meta name="google-site-verification" content="…">.
   verification: { google: "NtbZyIVhM4El76G13EPJ3euuE-5ISxt7OA9JGbUAy5Q" },
   title: {
-    default: "INPLUX | Fábrica de software a la medida",
+    default: "INPLUX | Transformación con IA que llega a producción",
     template: "%s | INPLUX",
   },
   description:
-    "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades, con inteligencia artificial aplicada y dirección humana.",
+    "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica. Productos propios en producción y equipos que los implementan.",
   keywords: [
+    "transformación con IA",
+    "desarrollo e implementación de IA",
     "fábrica de software",
     "software a la medida",
     "desarrollo de software Colombia",
@@ -64,9 +66,9 @@ export const metadata: Metadata = {
     "INPLUX",
   ],
   openGraph: {
-    title: "De un problema real a software en producción.",
+    title: "Transformación con IA que llega a producción.",
     description:
-      "Conoce cómo INPLUX convierte necesidades concretas en productos digitales que se pueden usar y mejorar.",
+      "Conoce los productos que INPLUX desarrolla e implementa con empresas e instituciones de Latinoamérica.",
     url: "https://inplux.co",
     siteName: "INPLUX S.A.S.",
     locale: "es_CO",
@@ -82,8 +84,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "De un problema real a software en producción.",
-    description: "Fábrica de software a la medida para empresas y entidades.",
+    title: "Transformación con IA que llega a producción.",
+    description: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     images: [
       {
         url: "/brand/og/og-default.png",
@@ -106,7 +108,7 @@ export default function RootLayout({
     url: "https://inplux.co",
     logo: "https://inplux.co/brand/logos/inplux-logo-horizontal.svg",
     description:
-      "Fábrica de software a la medida para empresas y entidades, con inteligencia artificial aplicada y dirección humana.",
+      "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     foundingDate: "2023",
     email: "gerencia@inplux.co",
     address: {

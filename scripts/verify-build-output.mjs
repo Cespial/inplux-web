@@ -116,18 +116,18 @@ const deckLegaltechSlideCount =
 const pageDefinitions = {
   home: {
     file: ".next/server/app/index.html",
-    title: "INPLUX | Fábrica de software a la medida",
+    title: "INPLUX | Transformación con IA que llega a producción",
     description:
-      "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades. La IA acelera el trabajo; personas expertas dirigen las decisiones críticas.",
+      "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica. Productos propios en producción y equipos que los implementan.",
     canonical: "https://inplux.co",
-    ogTitle: "De un problema real a software en producción.",
+    ogTitle: "Transformación con IA que llega a producción.",
     ogDescription:
-      "Conoce cómo INPLUX convierte necesidades concretas en productos digitales que se pueden usar y mejorar.",
+      "Conoce los productos que INPLUX desarrolla e implementa con empresas e instituciones de Latinoamérica.",
     ogUrl: "https://inplux.co",
     ogImage: "https://inplux.co/brand/og/og-default.png",
     ogImageAlt: "INPLUX, de un problema real a software en producción",
-    twitterTitle: "De un problema real a software en producción.",
-    twitterDescription: "Fábrica de software a la medida para empresas y entidades.",
+    twitterTitle: "Transformación con IA que llega a producción.",
+    twitterDescription: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     twitterImageAlt: defaultOgImageAlt,
     jsonLd: { type: "WebSite", name: "INPLUX", url: siteUrl },
     languageAlternates: {
@@ -159,25 +159,25 @@ const pageDefinitions = {
   },
   englishHome: {
     file: ".next/server/app/en.html",
-    title: "Custom software factory in Miami, Florida | INPLUX",
+    title: "AI development and implementation company in Miami, Florida | INPLUX",
     description:
-      "INPLUX LLC is a Miami-based custom software factory. We design, build and evolve software for companies and public institutions. AI accelerates the work; expert people direct the critical decisions.",
+      "INPLUX LLC is a Miami-based AI development and implementation company. We develop and implement the AI transformation of companies and institutions across Latin America. Expert people direct the critical decisions.",
     canonical: `${siteUrl}/en`,
     contentLang: "en-US",
     ogLocale: "en_US",
-    ogTitle: "From a real problem to software in production.",
+    ogTitle: "AI transformation that reaches production.",
     ogDescription:
-      "See how INPLUX turns concrete needs into digital products that can be used and improved.",
+      "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     ogUrl: `${siteUrl}/en`,
     ogImage: defaultOgImage,
     ogImageAlt: "INPLUX, from a real problem to software in production",
-    twitterTitle: "From a real problem to software in production.",
+    twitterTitle: "AI transformation that reaches production.",
     twitterDescription:
-      "A custom software factory for companies and public institutions.",
+      "We develop and implement the AI transformation of companies and institutions across Latin America.",
     twitterImageAlt: "INPLUX, from a real problem to software in production",
     jsonLd: {
       type: "WebPage",
-      name: "INPLUX, custom software factory in Miami",
+      name: "INPLUX, AI development and implementation in Miami",
       url: `${siteUrl}/en`,
     },
     usEntity: {
@@ -988,11 +988,11 @@ async function verifyGeneratedRoutes() {
     expectEqual(manifest.scope, "/", "manifest scope");
     expectEqual(manifest.start_url, "/", "manifest start_url");
     expectEqual(manifest.lang, "es-CO", "manifest lang");
-    expectEqual(manifest.name, "INPLUX — Fábrica de software a la medida", "manifest name");
+    expectEqual(manifest.name, "INPLUX — Transformación con IA que llega a producción", "manifest name");
     expectEqual(manifest.short_name, "INPLUX", "manifest short_name");
     expectEqual(
       manifest.description,
-      "Diseñamos, construimos y evolucionamos software a la medida para empresas y entidades.",
+      "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
       "manifest description",
     );
     expectEqual(manifest.display, "standalone", "manifest display");

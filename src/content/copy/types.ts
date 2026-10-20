@@ -546,6 +546,33 @@ export type HomeContactCopy = {
   locations: readonly string[];
 };
 
+export type ThesisCopy = {
+  eyebrow: string;
+  /** La tesis en una frase; `emphasis` cierra en cursiva serif. */
+  lead: string;
+  emphasis: string;
+};
+
+export type HowWeWorkStep = {
+  number: string;
+  title: string;
+  detail: string;
+};
+
+export type HowWeWorkCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  steps: readonly HowWeWorkStep[];
+  cta: string;
+};
+
+export type PartnerWallCopy = {
+  eyebrow: string;
+  title: string;
+  note: string;
+};
+
 export type HomeCopy = {
   locale: string;
   htmlLang: string;
@@ -554,6 +581,9 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
+  thesis: ThesisCopy;
+  howWeWork: HowWeWorkCopy;
+  partnerWall: PartnerWallCopy;
   heroStats: HeroStatsCopy;
   allyNotice: AllyNoticeCopy;
   clientWall: ClientWallCopy;
