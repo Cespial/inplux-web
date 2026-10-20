@@ -103,9 +103,12 @@
     var(--black);
 }
 
-.sectorsTitle {
-  max-width: 18ch;
-  margin: 1rem 0 2.5rem;
+/* Con la especificidad de la banda: los márgenes del título y de la lista
+   se perdían frente a los estilos de `.d2` y del reset de listas, y las
+   tarjetas quedaban pegadas al título. */
+.sectors .sectorsTitle {
+  max-width: 22ch;
+  margin: 1rem 0 clamp(2rem, 4vw, 3rem);
 }
 
 /* ------------------------------------------------- auditoría y tecnología */
