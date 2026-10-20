@@ -15,10 +15,14 @@ import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./prensa.module.css";
 
 /*
- * `/prensa` (octubre de 2026): como la página de noticias de primero.com, una
- * foto real de un escenario y las piezas en tarjetas con el medio, el titular
- * y la fecha, enlazadas a su fuente. La prosa propia se reduce al hero; el
- * archivo es el contenido.
+ * `/prensa` (octubre de 2026): una foto real de un escenario y las piezas en
+ * tarjetas con el medio, el titular y la fecha, enlazadas a su fuente. La
+ * prosa propia se reduce al hero; el archivo es el contenido.
+ *
+ * Las seis piezas más recientes van en `<main>`. El resto del archivo se
+ * renderiza fuera de `<main>`, oculto por CSS hasta que el enlace «Ver todo el
+ * archivo» lo convierte en destino (`:target`): funciona sin JavaScript y no
+ * forma parte del texto principal de la página hasta que alguien lo pide.
  */
 
 const canonicalUrl = "https://inplux.co/prensa";
@@ -268,38 +272,12 @@ export default function Prensa() {
                 ))}
               </ul>
               {archivedStories.length > 0 ? (
-                <details className={styles.more}>
-                  <summary>
+                <p className={styles.moreLink}>
+                  <a href="#archivo-completo">
                     Ver todo el archivo
                     <span>{String(archivedStories.length).padStart(2, "0")} piezas más</span>
-                  </summary>
-                  <nav className={styles.filters} aria-label="Secciones del archivo">
-                    {groupedStories.map((category) => (
-                      <a key={category.id} href={`#${category.id}`}>
-                        {category.label}
-                        <span>{String(category.stories.length).padStart(2, "0")}</span>
-                      </a>
-                    ))}
-                  </nav>
-                  {groupedStories.map((category) => (
-                    <section
-                      key={category.id}
-                      id={category.id}
-                      className={styles.group}
-                      aria-labelledby={`${category.id}-title`}
-                    >
-                      <header className={styles.groupHead}>
-                        <h3 id={`${category.id}-title`}>{category.label}</h3>
-                        <p className={ui.small}>{category.description}</p>
-                      </header>
-                      <ul className={styles.cards}>
-                        {category.stories.map((story) => (
-                          <StoryCard key={story.slug} story={story} />
-                        ))}
-                      </ul>
-                    </section>
-                  ))}
-                </details>
+                  </a>
+                </p>
               ) : null}
               <p className={styles.pressRoom}>
                 Solicitudes de prensa: <a href="mailto:gerencia@inplux.co?subject=Solicitud%20de%20prensa%20-%20INPLUX">gerencia@inplux.co</a>
@@ -307,6 +285,50 @@ export default function Prensa() {
             </Band>
             <NextPage href="/nosotros" label="Nosotros" />
           </main>
+          {archivedStories.length > 0 ? (
+            <Band id="archivo-completo" labelledBy="archivo-completo-title" className={styles.full}>
+              <SectionHead
+                id="archivo-completo-title"
+                eyebrow={`Archivo completo · ${String(archivedStories.length).padStart(2, "0")} piezas más`}
+                title={
+                  <>
+                    El resto del <em>archivo.</em>
+                  </>
+                }
+              />
+              <nav className={styles.filters} aria-label="Secciones del archivo">
+                {groupedStories.map((category) => (
+                  <a key={category.id} href={`#${category.id}`}>
+                    {category.label}
+                    <span>{String(category.stories.length).padStart(2, "0")}</span>
+                  </a>
+                ))}
+              </nav>
+              {groupedStories.map((category) => (
+                <section
+                  key={category.id}
+                  id={category.id}
+                  className={styles.group}
+                  aria-labelledby={`${category.id}-title`}
+                >
+                  <header className={styles.groupHead}>
+                    <h3 id={`${category.id}-title`}>{category.label}</h3>
+                    <p className={ui.small}>{category.description}</p>
+                  </header>
+                  <ul className={styles.cards}>
+                    {category.stories.map((story) => (
+                      <StoryCard key={story.slug} story={story} />
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              <p className={styles.moreLink}>
+                <a href="#archivo">
+                  Volver a las piezas recientes <span aria-hidden="true">↑</span>
+                </a>
+              </p>
+            </Band>
+          ) : null}
         </V5Page>
       </ContactDialogProvider>
     </>

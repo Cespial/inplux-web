@@ -935,7 +935,7 @@ export const homeCopyEs: HomeCopy = {
     },
     process: {
       eyebrow: "Del diagnóstico a producción",
-      title: "Trabajamos contigo desde el primer flujo hasta que opera.",
+      title: "Del primer flujo al día en que opera solo.",
       deliverableLabel: "Entregable",
       phases: [
         {
@@ -983,7 +983,7 @@ export const homeCopyEs: HomeCopy = {
     },
     sectors: {
       eyebrow: "Dónde trabajamos",
-      title: "Construido para la realidad de cada sector.",
+      title: "Cada sector tiene sus reglas. El sistema las respeta.",
       items: [
         {
           title: "Sector público",
@@ -1009,7 +1009,7 @@ export const homeCopyEs: HomeCopy = {
     },
     audit: {
       eyebrow: "Gobierno de la IA",
-      title: "IA para instituciones, lista para auditoría.",
+      title: "Lo que una entidad puede revisar, línea por línea.",
       items: [
         {
           title: "Fuente en cada respuesta",

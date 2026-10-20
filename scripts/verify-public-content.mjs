@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { auditPartners } from "./partners-gate.mjs";
 
 const root = process.cwd();
@@ -112,6 +113,66 @@ const bannedPublicLanguage = [
   },
 ];
 
+/**
+ * Títulos de PRIMERO (primero.com) que el sitio no puede reproducir.
+ *
+ * Esta lista es independiente de `bannedPublicLanguage`: no sale en la lámina
+ * 6 del deck y `leerReglas()` no la lee. Se compara sin distinguir mayúsculas
+ * ni acentos, y solo sobre `src/content`, que es donde vive el copy.
+ */
+export const bannedPrimeroPhrases = [
+  "IA soberana para la institución moderna",
+  "Conecta sistemas. Construye contexto. Despliega flujos de IA",
+  "Trabajamos contigo desde el diagnóstico hasta la producción",
+  "Construido para la realidad de las operaciones institucionales",
+  "En producción. Medido contra lo que habría pasado sin",
+  "Talento de las instituciones que marcan el estándar",
+  "IA para instituciones, lista para auditoría",
+  "AI for institutions, ready for audit",
+  "Sovereign AI for the modern institution",
+  "Built for the reality of institutional operations",
+  "We work with you from diagnosis to production",
+];
+
+/** Minúsculas, sin diacríticos y con los espacios en blanco plegados a uno. */
+export function normalizeForPhraseMatch(text) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/gu, "")
+    .toLowerCase()
+    .replace(/\s+/gu, " ");
+}
+
+/**
+ * Devuelve un mensaje por cada frase de PRIMERO encontrada en `src/content`
+ * bajo `baseRoot`. No empuja a `errors` para que la prueba pueda ejecutarla
+ * contra un fixture.
+ */
+export async function verifyPrimeroPhrases(baseRoot = root) {
+  const found = [];
+  const directory = path.join(baseRoot, "src", "content");
+  const files = await collectTextFiles(directory, baseRoot);
+  const needles = bannedPrimeroPhrases.map((phrase) => ({
+    phrase,
+    normalized: normalizeForPhraseMatch(phrase),
+  }));
+
+  for (const file of files) {
+    const source = await readFile(path.join(baseRoot, file), "utf8");
+    const lines = source.split("\n");
+    for (let index = 0; index < lines.length; index += 1) {
+      const normalizedLine = normalizeForPhraseMatch(lines[index]);
+      for (const { phrase, normalized } of needles) {
+        if (normalizedLine.includes(normalized)) {
+          found.push(`${file}:${index + 1} reproduce un título de PRIMERO: “${phrase}”`);
+        }
+      }
+    }
+  }
+
+  return found;
+}
+
 const approvedLogoAltAttributes = [
   'alt="Parque Arví Corporación"',
   'alt="Think IT"',
@@ -161,15 +222,15 @@ async function exists(relativePath) {
   }
 }
 
-async function collectTextFiles(relativeDirectory) {
-  const directory = path.join(root, relativeDirectory);
+async function collectTextFiles(relativeDirectory, baseRoot = root) {
+  const directory = path.resolve(baseRoot, relativeDirectory);
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
 
   for (const entry of entries) {
-    const relativePath = path.join(relativeDirectory, entry.name);
+    const relativePath = path.relative(baseRoot, path.join(directory, entry.name));
     if (entry.isDirectory()) {
-      files.push(...(await collectTextFiles(relativePath)));
+      files.push(...(await collectTextFiles(relativePath, baseRoot)));
     } else if (textExtensions.has(path.extname(entry.name))) {
       files.push(relativePath);
     }
@@ -680,26 +741,38 @@ async function verifyLegacyFragments() {
   }
 }
 
-await verifyPublicLanguage();
-verifyBannedExamples();
-await verifySocialCards();
-await verifyPortfolio();
-await verifySourceFreshness();
-await verifySecurityConfiguration();
-await verifyBrandSystem();
-await verifyLogoPermissions();
-await verifyPartnerLogos();
-await verifyContactExperience();
-await verifyLegacyFragments();
-await verifyTeamNames();
+/**
+ * Solo se ejecuta como script (`node scripts/verify-public-content.mjs`). Al
+ * importarlo desde una prueba no corre nada: la prueba llama a la función que
+ * necesita contra su propio fixture.
+ */
+const isMain =
+  process.argv[1] !== undefined &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-if (errors.length > 0) {
-  console.error(`\nControl editorial falló con ${errors.length} problema(s):\n`);
-  for (const error of errors.sort()) console.error(`- ${error}`);
-  console.error("");
-  process.exitCode = 1;
-} else {
-  console.log(
-    "Control editorial aprobado: copy, ejemplos, portafolio, contacto, migración, logos, OG y seguridad.",
-  );
+if (isMain) {
+  await verifyPublicLanguage();
+  verifyBannedExamples();
+  errors.push(...(await verifyPrimeroPhrases()));
+  await verifySocialCards();
+  await verifyPortfolio();
+  await verifySourceFreshness();
+  await verifySecurityConfiguration();
+  await verifyBrandSystem();
+  await verifyLogoPermissions();
+  await verifyPartnerLogos();
+  await verifyContactExperience();
+  await verifyLegacyFragments();
+  await verifyTeamNames();
+
+  if (errors.length > 0) {
+    console.error(`\nControl editorial falló con ${errors.length} problema(s):\n`);
+    for (const error of errors.sort()) console.error(`- ${error}`);
+    console.error("");
+    process.exitCode = 1;
+  } else {
+    console.log(
+      "Control editorial aprobado: copy, ejemplos, frases ajenas, portafolio, contacto, migración, logos, OG y seguridad.",
+    );
+  }
 }
