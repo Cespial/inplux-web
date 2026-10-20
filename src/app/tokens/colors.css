@@ -2,9 +2,13 @@
    INPLUX · Color — Editorial White System v3
    Warm white surfaces · ink text · teal as ACCENT only (never dominant).
    Never pure black (#000) · never cold/bluish backgrounds.
+
+   Desde la portada v5 (oct-2026) esta paleta ya no es la del sitio: vive bajo
+   `.editorialLight`, la clase que llevan las raíces que aún la usan (el deck).
+   Los tokens globales del sitio están en `tokens/v5.css`.
    =========================================================================== */
 
-:root {
+.editorialLight {
   /* --- Brand primaries --- */
   --white: #ffffff;        /* primary surface */
   --off-white: #f8f8f7;    /* alternate sections */
@@ -70,4 +74,4 @@
   --selection-bg: rgba(13, 125, 116, 0.12);
 }
 
-::selection { background: var(--selection-bg); color: var(--gray-950); }
+.editorialLight ::selection { background: var(--selection-bg); color: var(--gray-950); }

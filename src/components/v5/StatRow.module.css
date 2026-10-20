@@ -1,0 +1,81 @@
+/* Cifras con fuente (StatRow): sale de la tesis de la portada v5. */
+
+.proof {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+}
+
+.proofTitle {
+  margin-bottom: 1.4rem;
+  color: #d6d0c7;
+  font-size: var(--step-5);
+}
+
+.cases {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+}
+
+.case {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1.8rem 1.6rem 1.8rem 0;
+}
+
+.case + .case {
+  padding-left: 1.6rem;
+  border-left: 1px solid var(--line);
+}
+
+.case strong {
+  font: 400 var(--step-1) / 1 var(--sans);
+  letter-spacing: var(--track-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.case p {
+  color: var(--fg-muted);
+}
+
+.case .unit {
+  color: #e1dbd2;
+  font-size: var(--step-6);
+}
+
+.case .who {
+  color: var(--teal);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+}
+
+.src {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+}
+
+.src a {
+  color: var(--fg-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.2em;
+}
+
+.src a:hover {
+  color: var(--ivory);
+}
+
+@media (max-width: 760px) {
+  .cases {
+    grid-template-columns: 1fr;
+  }
+
+  .case,
+  .case + .case {
+    padding-left: 0;
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}

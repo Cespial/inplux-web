@@ -1,0 +1,72 @@
+/* ===========================================================================
+   INPLUX · Sistema v5 (octubre de 2026)
+   Los tokens de la portada v5, ahora globales: color, escala tipográfica,
+   espaciado y ritmo. Los mismos nombres que usaba `.root` en
+   `components/home/v5/v5.module.css`; ninguna hoja tiene que cambiar de
+   nombre para subir de página a sitio.
+
+   Dos nombres chocan con el sistema editorial claro de `colors.css`
+   (`--ink`, `--teal`). Ese sistema vive ahora bajo `.editorialLight`, la
+   clase que llevan las raíces que aún no se han migrado (el deck); todo lo
+   demás hereda estos valores desde `:root`.
+   =========================================================================== */
+
+:root {
+  /* --- Color --- */
+  --black: #0c0c0b;
+  --ink: #131311;
+  --ivory: #f6f2ec;
+  --paper: #efe9e0;
+  --paper-2: #e6dfd4;
+  --fg-muted: #a39d94;
+  --fg-dim: #77726b;
+  --ink-muted: #5d5851;
+  --line: rgba(246, 242, 236, 0.13);
+  --line-ink: rgba(12, 12, 11, 0.13);
+  --teal: #00d7ca;
+  --teal-ink: #007a72;
+  --ember: #ff7a3d;
+  --mint: #85eda5;
+
+  /* --- Tipografía: una familia (Rethink Sans vía next/font) --- */
+  --sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --step-1: clamp(2.6rem, 5.4vw, 5.4rem);
+  --step-2: clamp(2.1rem, 3.77vw, 3.75rem);
+  --step-3: clamp(1.7rem, 2.84vw, 2.8rem);
+  --step-4: clamp(1.35rem, 2.12vw, 2.1rem);
+  --step-5: clamp(1.2rem, 1.65vw, 1.65rem);
+  --step-6: clamp(1.02rem, 1.26vw, 1.25rem);
+  --step-7: clamp(1rem, 1.06vw, 1.06rem);
+  --step-8: 0.94rem;
+  --step-9: 0.72rem;
+  --track-display: -0.02em;
+  --track-micro: 0.15em;
+  --track-ui: 0.035em;
+
+  /* --- Espacio --- */
+  --gutter: max(clamp(1rem, 4vw, 3rem), env(safe-area-inset-left, 0px));
+  --max: 84rem;
+  --band: clamp(4.5rem, 9vw, 8.5rem);
+
+  /* --- Cabecera: duración de los desplegables (la lee SiteHeader) --- */
+  --dropdown-open-dur: 200ms;
+  --dropdown-close-dur: 150ms;
+}
+
+/*
+ * La paleta editorial clara, para las raíces que todavía la necesitan. Vuelve
+ * a declarar sólo lo que choca con v5; el resto de `colors.css` ya llega por
+ * esta misma clase.
+ */
+.editorialLight {
+  --ink: #1a1918;
+  --teal: #0d7d74;
+  color-scheme: light;
+  background: var(--surface-page);
+  color: var(--text-strong);
+}
+
+.editorialLight h1 em,
+.editorialLight h2 em {
+  font-style: italic;
+}

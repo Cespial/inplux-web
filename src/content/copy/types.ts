@@ -18,7 +18,22 @@ export type NavigationItem = {
   href: string;
   /** Marca el idioma del destino cuando difiere del idioma de la página. */
   hrefLang?: string;
+  /** Una línea bajo la etiqueta en los desplegables de la cabecera. */
+  description?: string;
 };
+
+/** Un grupo desplegable de la cabecera: etiqueta, enlaces y, si lo hay, el enlace que lo cierra. */
+export type NavigationGroup = {
+  label: string;
+  items: readonly NavigationItem[];
+  more?: NavigationItem;
+};
+
+export type NavigationEntry = NavigationItem | NavigationGroup;
+
+export function isNavigationGroup(entry: NavigationEntry): entry is NavigationGroup {
+  return "items" in entry;
+}
 
 export type HeaderCopy = {
   skipToContent: string;
@@ -31,7 +46,7 @@ export type HeaderCopy = {
   contactCta: string;
   contactCtaMobile: string;
   menuNote: string;
-  navigation: readonly NavigationItem[];
+  navigation: readonly NavigationEntry[];
   /** Enlace al mismo contenido en el otro idioma. */
   languageSwitch: NavigationItem | null;
 };
@@ -40,6 +55,12 @@ export type FooterNavGroup = {
   label: string;
   ariaLabel: string;
   items: readonly NavigationItem[];
+  /**
+   * Un enlace que acompaña al grupo pero no pertenece a su `<nav>`: el pie de
+   * productos exige biyección con `work.ts`, y «Todos los productos» no es un
+   * producto.
+   */
+  more?: NavigationItem;
 };
 
 export type FooterCopy = {
@@ -116,7 +137,7 @@ export type HeroCopy = {
 /**
  * O están los cinco, o no está ninguno.
  *
- * El español los deja vacíos a propósito: `HomeSections` cae al valor de
+ * El español los deja vacíos a propósito: `HomeV5` cae al valor de
  * `work.ts`, que ya está en español, y duplicarlo aquí crearía dos textos
  * para el mismo dato sin nada que los compare. El inglés los necesita
  * completos, porque su respaldo publicaría español dentro de /en.

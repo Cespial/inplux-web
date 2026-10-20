@@ -1,14 +1,15 @@
 .wall {
-  border-top: 1px solid var(--home-line);
-  background: var(--home-black);
-  color: var(--home-ivory);
+  --wall-gutter: clamp(1.5rem, 6.35vw, 6rem);
+  border-top: 1px solid var(--line);
+  background: var(--black);
+  color: var(--ivory);
   padding-bottom: clamp(3rem, 6vw, 5rem);
   scroll-margin-top: 4rem;
 }
 
 .head {
   display: flex;
-  width: calc(100% - (var(--home-gutter) * 2));
+  width: calc(100% - (var(--wall-gutter) * 2));
   max-width: 1320px;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -21,13 +22,13 @@
 .head h2 {
   max-width: 26rem;
   margin-top: 0.8rem;
-  font: 300 clamp(1.8rem, 2.6vw, 2.4rem) / 1 var(--home-display);
+  font: 300 clamp(1.8rem, 2.6vw, 2.4rem) / 1 var(--sans);
   letter-spacing: -0.04em;
 }
 
 .head > p {
   max-width: 36rem;
-  color: var(--home-muted);
+  color: var(--fg-muted);
   font-size: 0.9rem;
   line-height: 1.55;
 }
@@ -35,12 +36,12 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: calc(100% - (var(--home-gutter) * 1.16));
+  width: calc(100% - (var(--wall-gutter) * 1.16));
   max-width: 1400px;
   margin: 0 auto;
   padding: 0;
-  border-left: 1px solid var(--home-line);
-  border-top: 1px solid var(--home-line);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
   list-style: none;
 }
 
@@ -51,8 +52,8 @@
   height: 7.75rem;
   place-items: center;
   overflow: hidden;
-  border-right: 1px solid var(--home-line);
-  border-bottom: 1px solid var(--home-line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   padding-inline: 1.25rem;
 }
 
@@ -61,7 +62,7 @@
   top: 0.55rem;
   left: 0.65rem;
   color: #aaa49c;
-  font: 500 0.625rem/1 var(--home-mono);
+  font: 500 0.625rem/1 var(--sans);
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }

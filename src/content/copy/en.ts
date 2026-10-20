@@ -49,17 +49,6 @@ export const homeCopyEn: HomeCopy = {
     tagline: "We develop and implement the AI transformation of companies and institutions across Latin America.",
     groups: [
       {
-        label: "Explore",
-        ariaLabel: "Explore",
-        items: [
-          { label: "How we work", href: "#como-trabajamos" },
-          { label: "Products", href: "#productos" },
-          { label: "Sectors", href: "#sectores" },
-          { label: "Who answers", href: "#equipo" },
-          { label: "Press", href: "#prensa" },
-        ],
-      },
-      {
         label: "Products",
         ariaLabel: "Documented products",
         items: [
@@ -69,21 +58,30 @@ export const homeCopyEn: HomeCopy = {
           spanishRoute("Laudos", "/trabajo/laudos"),
           spanishRoute("Porkia", "/trabajo/porkia"),
         ],
-      },
-      {
-        label: "Capabilities",
-        ariaLabel: "Capabilities",
-        items: [
-          spanishRoute("Digital product", "/capacidades#producto"),
-          spanishRoute("Modernization", "/capacidades#modernizacion"),
-          spanishRoute("Applied AI", "/capacidades#ia"),
-          spanishRoute("Public services", "/capacidades#sector-publico"),
-        ],
+        more: spanishRoute("All products", "/trabajo"),
       },
       {
         label: "Sectors",
         ariaLabel: "Sectors",
-        items: [spanishRoute("Healthcare", "/sectores/salud")],
+        items: [
+          // TODO PR C: /sectores/publico, /sectores/legal-tributario, /sectores/empresas
+          spanishRoute("Public sector", "/capacidades#sector-publico"),
+          spanishRoute("Healthcare", "/sectores/salud"),
+          spanishRoute("Legal and tax", "/trabajo/tribai"),
+          spanishRoute("Companies", "/capacidades"),
+        ],
+      },
+      {
+        label: "Company",
+        ariaLabel: "Company",
+        items: [
+          spanishRoute("About", "/nosotros"),
+          // TODO PR E: /equipo
+          spanishRoute("Team", "/nosotros"),
+          // TODO PR D: /como-trabajamos
+          spanishRoute("How we work", "/fabrica"),
+          spanishRoute("Press", "/prensa"),
+        ],
       },
     ],
     contactLabel: "Contact",

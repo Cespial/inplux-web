@@ -37,18 +37,22 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
  * listas de conteos coincidan.
  */
 
+/*
+ * Desde la capa compartida v5 (oct-2026) el muro vive en `components/v5` y
+ * sus relaciones en `content/clients.ts`; el ribbon de productos se retiró
+ * con la portada v5, así que la única retícula vigilada es el muro.
+ */
 const css = readFileSync(
-  path.join(root, "src/components/home/home.module.css"),
+  path.join(root, "src/components/v5/LogoWall.module.css"),
   "utf8",
 );
 const tsx = readFileSync(
-  path.join(root, "src/components/home/HomeSections.tsx"),
+  path.join(root, "src/components/v5/LogoWall.tsx"),
   "utf8",
 );
 
-/** Las dos retículas de la sección, con el selector que declara sus columnas. */
+/** La retícula del muro, con el selector que declara sus columnas. */
 const RETICULAS = [
-  { nombre: "ribbon", selector: "proofRibbon", variable: "ribbon-fill" },
   { nombre: "muro de logos", selector: "logoWall", variable: "wall-fill" },
 ];
 
@@ -117,17 +121,12 @@ function loadRibbon() {
       `
       import { readFileSync } from "node:fs";
       import { fillSpan } from "./src/components/home/gridFill.ts";
-      import { workProfiles } from "./src/content/work.ts";
-
-      const confirmados = workProfiles.filter((p) => p.attribution.state === "confirmed");
-      // La intro y el enlace al directorio son las dos celdas fijas del ribbon.
-      const celdasReales = confirmados.length + 2;
 
       // El muro: una celda por relación —con logotipo o nombrada— más el
       // rótulo que cierra el renglón. Se cuenta partiendo la fuente, no con una
       // expresión regular: este código viaja dentro de una plantilla de JS y
       // ahí las barras invertidas se cuecen antes de llegar a esbuild.
-      const fuente = readFileSync("src/components/home/HomeSections.tsx", "utf8");
+      const fuente = readFileSync("src/content/clients.ts", "utf8");
       const conLogo = fuente.split('src: "/brand/clients/').length - 1;
       const nombradas = fuente.split("place: ").length - 1;
       const celdasMuro = conLogo + nombradas + 1;
@@ -143,7 +142,7 @@ function loadRibbon() {
         }
       }
 
-      process.stdout.write(JSON.stringify({ celdasReales, celdasMuro, tramos }));
+      process.stdout.write(JSON.stringify({ celdasMuro, tramos }));
     `,
     ],
     { cwd: root, encoding: "utf8" },
@@ -179,24 +178,6 @@ test("el tramo de relleno cierra el último renglón para cualquier conteo de ta
         `${donde}: la retícula cierra con ${unidades} unidades, que no es múltiplo de ${columnas} —el último renglón quedaría corto`,
       );
     });
-  }
-});
-
-test("el conteo real de tarjetas cierra la retícula en los conteos de columna vigentes", () => {
-  const { celdasReales, tramos } = loadRibbon();
-
-  assert.ok(
-    celdasReales >= 3,
-    `el ribbon quedó con ${celdasReales} celdas: revisar work.ts`,
-  );
-
-  for (const columnas of columnasDeclaradas("proofRibbon").filter((n) => tramos[n])) {
-    const span = tramos[columnas][celdasReales - 1];
-    assert.equal(
-      (celdasReales - 1 + span) % columnas,
-      0,
-      `con ${celdasReales} tarjetas y ${columnas} columnas el último renglón del ribbon no cierra`,
-    );
   }
 });
 

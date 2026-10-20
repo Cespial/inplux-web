@@ -1,0 +1,62 @@
+.shell {
+  padding-block: 8rem var(--band);
+}
+
+.head {
+  display: grid;
+  gap: 1.1rem;
+  max-width: 52rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.updated {
+  color: var(--fg-dim);
+  font-size: var(--step-8);
+}
+
+.updated span {
+  color: var(--fg-muted);
+  font-size: 0.66rem;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+}
+
+.body {
+  display: grid;
+  gap: 1.2rem;
+  max-width: 44rem;
+  color: #cbc5bc;
+}
+
+.body h2 {
+  margin-top: 1.6rem;
+  color: var(--ivory);
+  font: 400 var(--step-4) / 1.05 var(--sans);
+  letter-spacing: var(--track-display);
+}
+
+.body h3 {
+  margin-top: 0.8rem;
+  color: var(--ivory);
+  font: 500 var(--step-5) / 1.1 var(--sans);
+}
+
+.body :is(ul, ol) {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.2rem;
+  list-style: revert;
+}
+
+.body a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.2em;
+}
+
+.body code {
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--mint);
+}

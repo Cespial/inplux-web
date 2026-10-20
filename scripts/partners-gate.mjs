@@ -6,7 +6,7 @@ import path from "node:path";
  *
  * El README dice que no se publica ningún logo de terceros sin un permiso
  * registrado. Para los clientes ese registro es la nota de cada relación en
- * `HomeSections.tsx`; para los partners es `src/content/partners.json`, y esta
+ * `src/content/clients.ts`; para los partners es `src/content/partners.json`, y esta
  * función es la que lo hace cumplir antes de cada build:
  *
  *   1. todo archivo en `public/brand/partners/` está declarado en el registro;

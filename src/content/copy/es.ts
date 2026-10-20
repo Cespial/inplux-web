@@ -1,4 +1,9 @@
-import { productNavigation, publicNavigation } from "@/content/navigation";
+import {
+  companyNavigation,
+  productNavigation,
+  sectorNavigation,
+  siteNavigation,
+} from "@/content/navigation";
 import type { HomeCopy } from "./types";
 
 /**
@@ -22,7 +27,7 @@ export const homeCopyEs: HomeCopy = {
     contactCta: "Empezar un proyecto",
     contactCtaMobile: "Empezar un proyecto",
     menuNote: "No necesitas tener el alcance definido.",
-    navigation: publicNavigation.map(([label, href]) => ({ label, href })),
+    navigation: siteNavigation,
     languageSwitch: null,
   },
 
@@ -31,29 +36,20 @@ export const homeCopyEs: HomeCopy = {
     tagline: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     groups: [
       {
-        label: "Explora",
-        ariaLabel: "Explorar",
-        items: publicNavigation.map(([label, href]) => ({ label, href })),
-      },
-      {
         label: "Productos",
         ariaLabel: "Productos documentados",
         items: productNavigation.map(([label, href]) => ({ label, href })),
-      },
-      {
-        label: "Capacidades",
-        ariaLabel: "Capacidades",
-        items: [
-          { label: "Producto digital", href: "/capacidades#producto" },
-          { label: "Modernización", href: "/capacidades#modernizacion" },
-          { label: "IA aplicada", href: "/capacidades#ia" },
-          { label: "Servicios públicos", href: "/capacidades#sector-publico" },
-        ],
+        more: { label: "Todos los productos", href: "/trabajo" },
       },
       {
         label: "Sectores",
         ariaLabel: "Sectores",
-        items: [{ label: "Salud", href: "/sectores/salud" }],
+        items: sectorNavigation.map(({ label, href }) => ({ label, href })),
+      },
+      {
+        label: "Empresa",
+        ariaLabel: "Empresa",
+        items: companyNavigation.map(({ label, href }) => ({ label, href })),
       },
     ],
     contactLabel: "Contacto",

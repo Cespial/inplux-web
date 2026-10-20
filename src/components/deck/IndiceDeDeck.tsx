@@ -21,7 +21,7 @@ export function IndiceDeDeck({
   hrefPresentacion: string;
 }) {
   return (
-    <main id="main-content" tabIndex={-1}>
+    <main id="main-content" className="editorialLight" tabIndex={-1}>
       <h1>De un problema real a software en producción</h1>
       <Link href={hrefPresentacion}>Ver la presentación</Link>
       <ol>

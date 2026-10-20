@@ -2,7 +2,7 @@ import Image from "next/image";
 import { homeCopyEs } from "@/content/copy/es";
 import type { PartnerWallCopy } from "@/content/copy/types";
 import { partners } from "@/content/partners";
-import homeStyles from "./home.module.css";
+import ui from "@/components/v5/v5.module.css";
 import styles from "./PartnerWall.module.css";
 
 /**
@@ -20,7 +20,7 @@ export function PartnerWall({ copy = homeCopyEs.partnerWall }: { copy?: PartnerW
     <section id="partners" className={styles.wall} aria-labelledby="partner-wall-title">
       <div className={styles.head}>
         <div>
-          <p className={`${homeStyles.eyebrow} ${homeStyles.eyebrowArrow}`}>{copy.eyebrow}</p>
+          <p className={ui.eyebrow}>{copy.eyebrow}</p>
           <h2 id="partner-wall-title">{copy.title}</h2>
         </div>
         <p>{copy.note}</p>
