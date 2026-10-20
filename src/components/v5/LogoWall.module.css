@@ -203,13 +203,15 @@
   backdrop-filter: blur(12px);
 }
 
-.logoProof strong {
+.logoProof::before {
+  content: attr(data-name);
   color: var(--ivory);
   font: 500 0.55rem/1.15 var(--sans);
   letter-spacing: 0.035em;
 }
 
-.logoProof span {
+.logoProof::after {
+  content: attr(data-note);
   color: var(--fg-muted);
   font: 500 0.47rem/1.2 var(--sans);
 }

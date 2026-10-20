@@ -60,10 +60,9 @@ function ClientLogoCell({
         height={client.height}
         sizes={`${client.renderWidth}px`}
       />
-      <span className={styles.logoProof} aria-hidden="true">
-        <strong>{client.name}</strong>
-        <span>{note}</span>
-      </span>
+      {/* La ficha del hover va en atributos y la pinta el CSS: el lector de
+          pantalla ya tiene el nombre y la nota en el `aria-label` del grupo. */}
+      <span className={styles.logoProof} aria-hidden="true" data-name={client.name} data-note={note} />
     </div>
   );
 }
