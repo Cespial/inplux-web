@@ -11,6 +11,10 @@ const pollIntervalMs = 250;
 const expectedRoutes = [
   ["/", 200],
   ["/en", 200],
+  ["/como-trabajamos", 200],
+  // Las rutas que se fundieron en /como-trabajamos redirigen de forma permanente.
+  ["/fabrica", 308],
+  ["/capacidades", 308],
   ["/sectores/salud", 200],
   ["/sectores/publico", 200],
   ["/sectores/legal-tributario", 200],

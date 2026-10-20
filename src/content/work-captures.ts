@@ -4,8 +4,8 @@ import type { WorkSlug } from "./work";
  * Las capturas de página real, en un solo sitio.
  *
  * Hasta ahora cada pantalla que enmarcaba una captura escribía otra vez la ruta
- * del PNG, la fecha en que se tomó y su texto alternativo: `/trabajo` en
- * `ProjectShowcase.client.tsx` y `/capacidades` en su `page.tsx`, con dos
+ * del PNG, la fecha en que se tomó y su texto alternativo: `/trabajo` y
+ * `/capacidades` en sus `page.tsx` (hoy `/trabajo` y `/como-trabajamos`), con dos
  * redacciones distintas del mismo `alt` y dos copias de la misma fecha, las dos
  * con un comentario que decía «copiada del acta». Una tercera pantalla —la
  * lámina de producto del deck— habría hecho tres copias de cada dato y ninguna

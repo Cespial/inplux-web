@@ -77,8 +77,7 @@ export const homeCopyEn: HomeCopy = {
           spanishRoute("About", "/nosotros"),
           // TODO PR E: /equipo
           spanishRoute("Team", "/nosotros"),
-          // TODO PR D: /como-trabajamos
-          spanishRoute("How we work", "/fabrica"),
+          spanishRoute("How we work", "/como-trabajamos"),
           spanishRoute("Press", "/prensa"),
         ],
       },
@@ -768,13 +767,13 @@ export const homeCopyEn: HomeCopy = {
       {
         label: "Public sector",
         detail: "Territorial entities, public finance and municipal management. Published in Spanish.",
-        href: "/capacidades#sector-publico",
+        href: "/sectores/publico",
         note: null,
       },
       {
         label: "Companies",
         detail: "Operations, data and digital products for private companies. Published in Spanish.",
-        href: "/capacidades",
+        href: "/sectores/empresas",
         note: null,
       },
     ],
