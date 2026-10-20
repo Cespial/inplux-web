@@ -64,11 +64,10 @@ export const homeCopyEn: HomeCopy = {
         label: "Sectors",
         ariaLabel: "Sectors",
         items: [
-          // TODO PR C: /sectores/publico, /sectores/legal-tributario, /sectores/empresas
-          spanishRoute("Public sector", "/capacidades#sector-publico"),
+          spanishRoute("Public sector", "/sectores/publico"),
           spanishRoute("Healthcare", "/sectores/salud"),
-          spanishRoute("Legal and tax", "/trabajo/tribai"),
-          spanishRoute("Companies", "/capacidades"),
+          spanishRoute("Legal and tax", "/sectores/legal-tributario"),
+          spanishRoute("Companies", "/sectores/empresas"),
         ],
       },
       {
@@ -1437,7 +1436,7 @@ export const homeCopyEn: HomeCopy = {
           title: "Public sector",
           detail: "Municipalities, local governments and municipal finance: fiscal data, procurement and follow-up.",
           tag: "Gobia · Tribai",
-          href: "/capacidades#sector-publico",
+          href: "/sectores/publico",
         },
         {
           title: "Healthcare",
@@ -1449,13 +1448,13 @@ export const homeCopyEn: HomeCopy = {
           title: "Legal and tax",
           detail: "Firms, accountants and legal teams: sourced answers, validity and case law.",
           tag: "Tribai · Kelsen · Laudos",
-          href: "/trabajo/tribai",
+          href: "/sectores/legal-tributario",
         },
         {
           title: "Companies",
           detail: "Operations, data and digital products for private companies.",
-          tag: "Custom projects",
-          href: "/capacidades",
+          tag: "Porkia · custom projects",
+          href: "/sectores/empresas",
         },
       ],
     },
