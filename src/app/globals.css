@@ -1,40 +1,16 @@
 @import "tailwindcss" source(none);
 
-/* Design System tokens (INPLUX Factory System 2026).
-   Color, tipografía y aliases semánticos usados por el runtime.
-   Las familias --font-body/--font-serif de next/font (en <html>) shadowean
-   las literales de typography.css para todo el contenido → fuentes self-hosted. */
+/* Tokens del sitio.
+   `v5.css` es el sistema vigente (portada v5, oct-2026) y vive en :root.
+   `colors.css` es la paleta editorial clara anterior, ahora bajo
+   `.editorialLight` para las raíces que todavía la usan (el deck).
+   `typography.css` conserva los alias de familia: todos resuelven a Rethink
+   Sans, que next/font inyecta en <html> como --font-body/--font-serif. */
 @import "./tokens/colors.css";
 @import "./tokens/typography.css";
+@import "./tokens/v5.css";
 
-/* ═══════════════════════════════════════════════
-   INPLUX — Factory System 2026
-   Newsreader Display + Geist + Geist Mono
-   ═══════════════════════════════════════════════ */
 :root {
-  --white: #ffffff;
-  --off-white: #f8f8f7;
-  --warm-50: #f3f1ee;
-  --gray-100: #e8e6e3;
-  --gray-200: #d1cfcc;
-  --gray-300: #a8a5a0;
-  --gray-400: #76716a; /* AA: ~4.8:1 sobre blanco (antes #8a8784 = 3.6:1, fallaba 4.5:1) */
-  --gray-500: #6e6b68;
-  --gray-600: #545250;
-  --gray-700: #3d3b39;
-  --gray-800: #282726;
-  --gray-900: #1a1918;
-  --gray-950: #0d0c0c;
-
-  --ink: #1a1918;
-  --teal: #0d7d74;
-  --teal-soft: #e8f5f3;
-  --teal-accent: #0fb3a1;
-  --teal-electric: var(--teal-bright);
-
-  --border: #e5e3e0;
-  --border-light: #f0eeeb;
-
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.05);
@@ -53,54 +29,21 @@
   --ease-in: cubic-bezier(0.4, 0.14, 1, 1);        /* salidas */
 }
 
-@theme inline {
-  --color-white: var(--white);
-  --color-off-white: var(--off-white);
-  --color-warm-50: var(--warm-50);
-  --color-gray-100: var(--gray-100);
-  --color-gray-200: var(--gray-200);
-  --color-gray-300: var(--gray-300);
-  --color-gray-400: var(--gray-400);
-  --color-gray-500: var(--gray-500);
-  --color-gray-600: var(--gray-600);
-  --color-gray-700: var(--gray-700);
-  --color-gray-800: var(--gray-800);
-  --color-gray-900: var(--gray-900);
-  --color-gray-950: var(--gray-950);
-  --color-ink: var(--ink);
-  --color-teal: var(--teal);
-  --color-teal-soft: var(--teal-soft);
-  --color-teal-accent: var(--teal-accent);
-  --color-teal-electric: var(--teal-electric);
-  --color-teal-on-soft: var(--teal-on-soft);
-  --color-border: var(--border);
-  --color-border-light: var(--border-light);
-}
-
 /* ═══════ BASE ═══════ */
 html { scroll-behavior: auto; }
 
 body {
-  background: var(--white);
-  color: var(--gray-900);
-  font-family: var(--font-body), "Geist", "Helvetica Neue", Arial, sans-serif;
+  min-width: 0;
+  background: var(--black);
+  color: var(--ivory);
+  font: 400 var(--step-7) / 1.55 var(--sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Newsreader normal e italic viven en familias next/font separadas para que solo
-   la romana se precargue. Los énfasis editoriales conservan la cursiva dibujada
-   (no sintetizada); las excepciones cromáticas pueden seguir usando inherit +
-   font-style: normal con mayor especificidad. */
-h1 em,
-h2 em {
-  font-family: var(--font-serif-italic), var(--font-serif), "Newsreader", "Iowan Old Style", Georgia, serif;
-  font-style: italic;
-}
-
 ::selection {
-  background: rgba(13, 125, 116, 0.12);
-  color: var(--gray-950);
+  background: rgba(0, 215, 202, 0.22);
+  color: var(--ivory);
 }
 
 /* ═══════ ACCESSIBILITY ═══════ */
@@ -129,25 +72,22 @@ h2 em {
   --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-body {
-  background: var(--off-white);
-}
-
+/* Los destinos de la cabecera y los fragmentos históricos de la portada. */
 #inicio,
-#confianza,
-#que-construimos,
-#proyectos,
+#clientes,
+#tesis,
 #como-trabajamos,
-#para-quien,
+#productos,
+#sectores,
+#auditoria,
+#prensa,
+#equipo,
 #nosotros,
-#preguntas,
-#contacto {
-  scroll-margin-top: 5rem;
-}
-
+#contacto,
 #main-content,
 #servicios,
 #motor,
+#trabajo-real,
 #publico,
 #privado,
 #empresas {
@@ -177,7 +117,7 @@ body {
 }
 
 .site-eyebrow > span {
-  color: var(--gray-400);
+  color: var(--fg-muted);
 }
 
 .site-button {
@@ -186,10 +126,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border: 1px solid var(--ink);
-  border-radius: 0.5rem;
-  background: var(--ink);
-  color: var(--white);
+  border: 1px solid var(--ivory);
+  border-radius: 999px;
+  background: var(--ivory);
+  color: var(--black);
   padding: 0.75rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 700;
@@ -210,29 +150,29 @@ body {
 
 .site-button-light {
   width: 100%;
-  border-color: var(--white);
-  background: var(--white);
-  color: var(--ink);
+  border-color: var(--ivory);
+  background: var(--ivory);
+  color: var(--black);
 }
 
 .site-button:focus-visible,
 .site-contact-dialog-close:focus-visible,
 .site-contact-form :is(input, select, textarea, button):focus-visible {
-  outline: 3px solid rgba(13, 125, 116, 0.28);
+  outline: 3px solid rgba(0, 215, 202, 0.4);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .site-button:hover {
-    background: var(--gray-800);
+    background: var(--teal);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }
 
   .site-button-light:hover {
-    border-color: var(--teal-electric);
-    background: var(--teal-electric);
-    box-shadow: 0 10px 30px rgba(21, 220, 196, 0.18);
+    border-color: var(--teal);
+    background: var(--teal);
+    box-shadow: 0 10px 30px rgba(0, 215, 202, 0.18);
   }
 }
 
@@ -279,11 +219,11 @@ body {
   border-radius: 1.1rem;
   outline: 0;
   background:
-    radial-gradient(circle at 14% 6%, rgba(21, 220, 196, 0.11), transparent 31%),
+    radial-gradient(circle at 14% 6%, rgba(0, 215, 202, 0.11), transparent 31%),
     var(--ink);
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.42);
-  color: var(--white);
-  font-family: var(--font-home-body), "Geist", "Helvetica Neue", Arial, sans-serif;
+  color: var(--ivory);
+  font-family: var(--sans);
   padding: 0;
   color-scheme: dark;
 }
@@ -331,18 +271,18 @@ body {
 }
 
 .site-contact-dialog-copy .site-eyebrow {
-  color: var(--teal-electric);
+  color: var(--teal);
 }
 
 .site-contact-dialog-copy h2 {
   max-width: 9ch;
   margin: 1.2rem 0 0;
-  color: var(--white);
-  font-family: var(--font-home-display), "Newsreader", "Iowan Old Style", Georgia, serif;
+  color: var(--ivory);
+  font-family: var(--sans);
   font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 400;
-  letter-spacing: -0.038em;
-  line-height: 0.95;
+  letter-spacing: var(--track-display);
+  line-height: 0.98;
 }
 
 .site-contact-dialog-copy h2:focus {
@@ -362,7 +302,7 @@ body {
   min-height: 2.75rem;
   align-items: center;
   margin-top: 1.8rem;
-  color: var(--teal-electric);
+  color: var(--teal);
   font-size: 0.78rem;
   font-weight: 700;
   text-decoration: none;
@@ -390,7 +330,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 0.55rem;
   background: rgba(13, 12, 12, 0.7);
-  color: var(--white);
+  color: var(--ivory);
   cursor: pointer;
   transition: border-color 160ms ease, background-color 160ms ease;
 }
@@ -419,7 +359,7 @@ body {
 
 .site-contact-note {
   margin: 1.25rem 0 0;
-  color: var(--teal-electric);
+  color: var(--teal);
   font-size: 0.76rem;
   font-weight: 700;
 }
@@ -465,7 +405,7 @@ body {
   border-radius: 0.5rem;
   outline: 0;
   background: rgba(0, 0, 0, 0.2);
-  color: var(--white);
+  color: var(--ivory);
   padding: 0.75rem 0.85rem;
   font: inherit;
   font-size: 0.82rem;
@@ -486,9 +426,9 @@ body {
 }
 
 .site-contact-form :is(input, select, textarea):focus {
-  border-color: var(--teal-electric);
+  border-color: var(--teal);
   background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 0 3px rgba(21, 220, 196, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 215, 202, 0.12);
 }
 
 .site-form-note {

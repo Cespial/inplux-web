@@ -129,7 +129,7 @@ export function PresentationDeck({
 
   return (
     <div
-      className={`${styles.riel} ${chrome.conChrome}`}
+      className={`editorialLight ${styles.riel} ${chrome.conChrome}`}
       style={ALTOS}
       data-direccion={nav.direccion === 1 ? "adelante" : "atras"}
       onTouchStart={(e) => {
