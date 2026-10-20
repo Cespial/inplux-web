@@ -2,7 +2,8 @@ export type PressCategory =
   | "Medios"
   | "Escenarios públicos"
   | "Investigación"
-  | "Ideas firmadas";
+  | "Ideas firmadas"
+  | "Proyectos";
 
 export type PressStory = {
   slug: string;
@@ -18,7 +19,8 @@ export type PressStory = {
     | "Ranking"
     | "Preprint"
     | "Working paper"
-    | "Columna firmada";
+    | "Columna firmada"
+    | "Lanzamiento";
   outlet: string;
   publishedAt: `${number}-${number}-${number}`;
   publishedLabel: string;
@@ -84,6 +86,30 @@ export type PressStory = {
  * para no presentarlas como cobertura periodística de INPLUX.
  */
 export const pressStories = [
+  {
+    /*
+     * Lanzamiento propio, no cobertura: el enlace lleva al producto en vivo.
+     * SE Holdings autorizó nombre y logo (Cristian, 20-oct-2026).
+     */
+    slug: "seagricolas-sudafrica",
+    category: "Proyectos",
+    format: "Lanzamiento",
+    outlet: "INPLUX",
+    editorialStatus: "Johannesburgo · Plataforma de SE Holdings en producción",
+    publishedAt: "2026-10-20",
+    publishedLabel: "20 OCT 2026",
+    title: "Software de INPLUX en producción en Sudáfrica",
+    summary:
+      "Para SE Holdings, en Johannesburgo, construimos seagricolas.com: la plataforma con la que rentan su flota de maquinaria agrícola, siempre con operador. Catálogo de 37 unidades, tarifas por hectárea, mapa de las zonas donde trabaja la flota y solicitudes en línea que se piden por mes, porque la siembra espera la primera lluvia.",
+    href: "https://seagricolas.com",
+    visualKind: "clients",
+    visualSignal: "seagricolas.com · Johannesburgo",
+    visualCode: "Cliente en Sudáfrica",
+    logos: [
+      { src: "/brand/press/se-holdings.png", alt: "SE Holdings", width: 900, height: 234 },
+    ],
+    featured: false,
+  },
   {
     /*
      * El ranking es de Dinero (Semana). Que las dos compañías sean clientes lo
@@ -573,6 +599,11 @@ export const pressCategories = [
     id: "ideas-firmadas",
     label: "Ideas firmadas",
     description: "Columnas del equipo publicadas por un medio externo, separadas de la cobertura editorial.",
+  },
+  {
+    id: "proyectos",
+    label: "Proyectos",
+    description: "Lanzamientos de software que construimos y que ya está en producción, enlazados al producto en vivo.",
   },
 ] as const satisfies readonly {
   id: string;
