@@ -1,14 +1,40 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SectorSaludDiagram } from "@/components/sectors/SectorSaludDiagram";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { getSectorProfile, sectorProfiles, type SectorSlug } from "@/content/sectores";
-import { formatShortDate } from "@/content/work-format";
-import { buttonClass } from "@/components/v5/primitives";
+import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
+import {
+  Band,
+  Button,
+  Card,
+  CardGrid,
+  SectionHead,
+  buttonClass,
+  cx,
+  statusTone,
+  v5 as ui,
+} from "@/components/v5/primitives";
+import { getSectorProfile, sectorProfiles, type SectorSlug } from "@/content/sectores";
+import { getWorkProfile, workDirectory } from "@/content/work";
+import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
+import { formatShortDate } from "@/content/work-format";
 import styles from "./sector.module.css";
+
+/**
+ * Páginas de sector: `/sectores/[slug]`, una plantilla para las cuatro.
+ *
+ * El orden sigue el de una página de industria de octubre de 2026: imagen a
+ * sangre con el nombre del sector y un lead «IA para X, Y y Z.»; un reclamo con
+ * tres promesas de dos tiempos; los productos propios que aplican; la norma
+ * donde la hay; y una sola invitación al final. Salud conserva, además, sus
+ * principios y sus piezas con estado, porque ya estaban escritos y revisados.
+ *
+ * Tres disparadores de contacto por página —cabecera, hero y cierre—: es lo
+ * que `verify-build-output` cuenta para cada sector.
+ */
 
 type SectorPageProps = {
   params: Promise<{ slug: string }>;
@@ -64,8 +90,16 @@ export async function generateMetadata({ params }: SectorPageProps): Promise<Met
   };
 }
 
-const diagrams: Record<SectorSlug, () => React.JSX.Element> = {
+/* Un diagrama es opcional: hoy solo salud tiene uno dibujado en código. */
+const diagrams: Partial<Record<SectorSlug, () => React.JSX.Element>> = {
   salud: SectorSaludDiagram,
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  "En operación": "Corre con un cliente",
+  "En construcción": "Trabajo contratado, aún sin usuarios",
+  Prototipo: "Existe y se puede abrir",
+  Oferta: "Diseñado y cotizado",
 };
 
 export default async function SectorPage({ params }: SectorPageProps) {
@@ -75,13 +109,28 @@ export default async function SectorPage({ params }: SectorPageProps) {
 
   const url = `${SITE_URL}/sectores/${sector.slug}`;
   const Diagram = diagrams[sector.slug];
+  const status = Object.fromEntries(workDirectory.map((entry) => [entry.name, entry.status]));
+  const products = sector.products
+    .map((productSlug) => getWorkProfile(productSlug))
+    .filter((profile): profile is NonNullable<typeof profile> => Boolean(profile));
 
   /*
    * `Service` y no `Product`: la página describe lo que hacemos para un tipo
-   * de organización, no un producto con precio. El proveedor es la misma
-   * organización del layout y la página cuelga del sitio por su `@id`. No se
-   * declara cobertura geográfica: es una afirmación que el sitio no publica.
+   * de organización. El proveedor es la organización del layout y la página
+   * cuelga del sitio por su `@id`. Sin cobertura geográfica: es una afirmación
+   * que el sitio no publica. El catálogo son las piezas documentadas, o las
+   * promesas cuando el sector no tiene piezas con estado.
    */
+  const offers = sector.capabilities
+    ? sector.capabilities.map((capability) => ({
+        name: capability.title,
+        description: capability.description,
+      }))
+    : sector.promises.map((promise) => ({
+        name: promise.label,
+        description: `${promise.lineA} ${promise.lineB}`,
+      }));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -94,29 +143,26 @@ export default async function SectorPage({ params }: SectorPageProps) {
         inLanguage: "es-CO",
         dateModified: sector.verifiedAt,
         isPartOf: { "@id": `${SITE_URL}/#website` },
+        primaryImageOfPage: `${SITE_URL}${sector.hero.image}`,
         about: { "@id": `${url}#service` },
       },
       {
         "@type": "Service",
         "@id": `${url}#service`,
         name: sector.title,
-        serviceType: "Desarrollo de software a la medida para prestadores de salud",
-        description: sector.lead,
+        serviceType: sector.serviceType,
+        description: sector.intro,
         provider: { "@id": `${SITE_URL}/#organization` },
         audience: {
           "@type": "Audience",
-          audienceType: "IPS, clínicas, hospitales y redes de prestadores de salud",
+          audienceType: sector.audienceType,
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: `Capacidades · ${sector.name}`,
-          itemListElement: sector.capabilities.map((capability) => ({
+          itemListElement: offers.map((offer) => ({
             "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: capability.title,
-              description: capability.description,
-            },
+            itemOffered: { "@type": "Service", ...offer },
           })),
         },
       },
@@ -139,24 +185,24 @@ export default async function SectorPage({ params }: SectorPageProps) {
       <ContactDialogProvider>
         <V5Page className={styles.root}>
           <main id="main-content" tabIndex={-1}>
-            <section className={styles.hero} aria-labelledby="sector-title" data-header-theme="dark">
-              <div className={styles.heroInner}>
-                <div className={styles.heroCopy}>
-                  <nav className={styles.crumbs} aria-label="Ruta">
-                    <Link href="/">Inicio</Link>
-                    <span aria-hidden="true">/</span>
-                    <span>Sectores</span>
-                    <span aria-hidden="true">/</span>
-                    <span aria-current="page">{sector.name}</span>
-                  </nav>
-                  <p className={styles.eyebrow}>{sector.eyebrow}</p>
-                  <h1 id="sector-title">
-                    <span>{sector.headline[0]}</span>
-                    <span>{sector.headline[1]}</span>
-                  </h1>
-                  <p className={styles.lead}>{sector.lead}</p>
-                  <p className={styles.audience}>{sector.audience}</p>
-                  <div className={styles.actions}>
+            <section id="inicio" aria-labelledby="sector-title">
+              <PageHero
+                className={styles.hero}
+                eyebrow={sector.eyebrow}
+                title={<span id="sector-title">{sector.name}</span>}
+                lead={sector.lead}
+                leadMuted={sector.audience}
+                crumbs={[{ label: "Inicio", href: "/" }, { label: "Sectores" }, { label: sector.name }]}
+                media={{
+                  kind: "image",
+                  src: sector.hero.image,
+                  alt: sector.hero.alt,
+                  width: 2400,
+                  height: 1600,
+                  priority: true,
+                }}
+                actions={
+                  <>
                     <ContactLink
                       className={buttonClass("primary")}
                       fallbackHref="/contacto"
@@ -164,28 +210,35 @@ export default async function SectorPage({ params }: SectorPageProps) {
                     >
                       Contar el caso
                     </ContactLink>
-                    <a className={buttonClass("ghost")} href="#capacidades">
-                      Ver las capacidades <span aria-hidden="true">↓</span>
-                    </a>
-                  </div>
-                </div>
-                <div className={styles.heroVisual}>
-                  <Diagram />
-                </div>
-              </div>
+                    <Button href="#promesas">
+                      Ver qué cambia <span aria-hidden="true">↓</span>
+                    </Button>
+                  </>
+                }
+              />
             </section>
 
-            <section className={styles.principles} aria-labelledby="principles-title">
-              <div className={styles.inner}>
-                <div className={styles.sectionHead}>
-                  <div>
-                    <p className={styles.eyebrowDark}>01 / CÓMO LO DISEÑAMOS</p>
-                    <h2 id="principles-title">
-                      Cuatro reglas antes de la <em>primera pantalla.</em>
-                    </h2>
-                  </div>
-                </div>
-                <ol className={styles.principleGrid}>
+            <Band id="promesas" tone="light" labelledBy="claim-title" className={styles.claim}>
+              <SectionHead
+                id="claim-title"
+                eyebrow={`Qué cambia en ${sector.name.toLowerCase()}`}
+                title={sector.claim}
+                lead={sector.intro}
+              />
+              <ol className={styles.promises} aria-label="Tres promesas">
+                {sector.promises.map((promise, index) => (
+                  <li key={promise.label} style={{ "--i": index } as React.CSSProperties}>
+                    <span className={styles.promiseLabel}>{promise.label}</span>
+                    <p className={styles.promiseLines} aria-hidden="true">
+                      <span>{promise.lineA}</span>
+                      <span>{promise.lineB}</span>
+                    </p>
+                    <h3 className={styles.visuallyHidden}>{`${promise.lineA} ${promise.lineB}`}</h3>
+                  </li>
+                ))}
+              </ol>
+              {sector.principles ? (
+                <ol className={styles.principles} aria-label="Principios de diseño">
                   {sector.principles.map((principle, index) => (
                     <li key={principle.title}>
                       <span>{String(index + 1).padStart(2, "0")}</span>
@@ -194,66 +247,112 @@ export default async function SectorPage({ params }: SectorPageProps) {
                     </li>
                   ))}
                 </ol>
-              </div>
-            </section>
+              ) : null}
+            </Band>
 
-            <section id="capacidades" className={styles.capabilities} aria-labelledby="capabilities-title">
-              <div className={styles.inner}>
-                <div className={styles.sectionHead}>
-                  <div>
-                    <p className={styles.eyebrowDark}>02 / QUÉ CONSTRUIMOS</p>
-                    <h2 id="capabilities-title">
-                      Siete piezas. Cada una dice <em>en qué estado está.</em>
-                    </h2>
+            {Diagram || sector.capabilities ? (
+              <Band id="capacidades" labelledBy="capabilities-title" className={styles.pieces}>
+                <SectionHead
+                  id="capabilities-title"
+                  eyebrow="Qué construimos"
+                  title={
+                    <>
+                      Cada pieza dice <em>en qué estado está.</em>
+                    </>
+                  }
+                  lead="En operación corre con un cliente. En construcción es trabajo contratado que aún no opera con usuarios reales. Prototipo existe y se puede abrir. Oferta es lo que diseñamos y cotizamos."
+                />
+                {Diagram ? (
+                  <div className={styles.diagram}>
+                    <Diagram />
                   </div>
-                  <p>
-                    En construcción es trabajo contratado que aún no opera con usuarios
-                    reales. En operación corre con un cliente. Prototipo existe y se puede
-                    abrir. Oferta es lo que diseñamos y cotizamos.
-                  </p>
-                </div>
-                <ol className={styles.capabilityList}>
-                  {sector.capabilities.map((capability) => (
-                    <li className={styles.capability} key={capability.code} data-status={capability.status}>
-                      <div className={styles.capabilityMeta}>
-                        <span>{capability.code}</span>
-                        <b>{capability.status}</b>
-                      </div>
-                      <div className={styles.capabilityBody}>
+                ) : null}
+                {sector.capabilities ? (
+                  <ol className={styles.capabilities}>
+                    {sector.capabilities.map((capability) => (
+                      <li key={capability.code} data-status={capability.status}>
+                        <p className={styles.capabilityMeta}>
+                          <span>{capability.code}</span>
+                          <b title={STATUS_LABELS[capability.status]}>{capability.status}</b>
+                        </p>
                         <h3>{capability.title}</h3>
                         <p>{capability.description}</p>
+                        <ul>
+                          {capability.items.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
                         {capability.href ? (
                           <a href={capability.href} target="_blank" rel="noreferrer">
                             {capability.hrefLabel ?? capability.href} <span aria-hidden="true">↗</span>
                           </a>
                         ) : null}
-                      </div>
-                      <ul className={styles.capabilityItems}>
-                        {capability.items.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </section>
+                      </li>
+                    ))}
+                  </ol>
+                ) : null}
+              </Band>
+            ) : null}
 
-            <section className={styles.framework} aria-labelledby="framework-title" data-header-theme="dark">
-              <div className={styles.inner}>
-                <div className={styles.sectionHead}>
-                  <div>
-                    <p className={styles.eyebrow}>03 / LO QUE INCORPORAMOS EN EL DISEÑO</p>
-                    <h2 id="framework-title">
+            {products.length > 0 ? (
+              <Band id="productos" labelledBy="products-title" className={styles.products}>
+                <SectionHead
+                  id="products-title"
+                  eyebrow="Productos que aplican"
+                  title={
+                    <>
+                      Construidos por INPLUX, <em>en producción.</em>
+                    </>
+                  }
+                  link={{ href: "/trabajo", label: "Ver todos los productos" }}
+                />
+                <CardGrid className={styles.productGrid}>
+                  {products.map((product) => (
+                    <Card
+                      key={product.slug}
+                      id={`p-${product.slug}`}
+                      href={`/trabajo/${product.slug}`}
+                      media={
+                        <Image
+                          src={workCaptures[product.slug].src}
+                          alt=""
+                          width={CAPTURA_ANCHO}
+                          height={CAPTURA_ALTO}
+                          sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 30vw"
+                        />
+                      }
+                      meta={
+                        <>
+                          {product.category} ·{" "}
+                          <span
+                            className={cx(
+                              statusTone(status[product.name] ?? product.status.label) === "pilot" && ui.pilot,
+                            )}
+                          >
+                            {status[product.name] ?? product.status.label}
+                          </span>
+                        </>
+                      }
+                      title={product.name}
+                      text={product.headline}
+                    />
+                  ))}
+                </CardGrid>
+              </Band>
+            ) : null}
+
+            {sector.framework ? (
+              <Band id="norma" labelledBy="framework-title" className={styles.framework}>
+                <SectionHead
+                  id="framework-title"
+                  eyebrow="Lo que incorporamos en el diseño"
+                  title={
+                    <>
                       La norma entra en el diseño, <em>no al final.</em>
-                    </h2>
-                  </div>
-                  <p>
-                    Cada pieza se diseña con la regulación que le aplica a la vista. Estas son
-                    las que más pesan en el trabajo con prestadores; el enlace lleva a la fuente
-                    oficial.
-                  </p>
-                </div>
+                    </>
+                  }
+                  lead="Cada pieza se diseña con la regulación que le aplica a la vista. El enlace lleva a la fuente oficial."
+                />
                 <ul className={styles.frameworkList}>
                   {sector.framework.map((item) => (
                     <li key={item.label}>
@@ -265,15 +364,17 @@ export default async function SectorPage({ params }: SectorPageProps) {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </section>
+              </Band>
+            ) : null}
 
-            <section id="contacto" className={styles.closing} aria-labelledby="closing-title" data-header-theme="dark">
-              <div className={styles.inner}>
-                <p className={styles.eyebrow}>04 / EL SIGUIENTE PASO</p>
-                <h2 id="closing-title">{sector.closing.title}</h2>
-                <p>{sector.closing.lead}</p>
-                <div className={styles.actions}>
+            <section id="contacto" className={styles.cta} aria-labelledby="cta-title">
+              <div className={`${ui.wrap} ${styles.ctaInner}`}>
+                <p className={ui.eyebrow}>El siguiente paso</p>
+                <h2 className={ui.d2} id="cta-title">
+                  ¿Quieres ver por dónde entra la IA en tu operación?
+                </h2>
+                <p className={ui.lead}>{sector.closing.lead}</p>
+                <div className={ui.actions}>
                   <ContactLink
                     className={buttonClass("primary")}
                     fallbackHref="/contacto"
@@ -281,11 +382,9 @@ export default async function SectorPage({ params }: SectorPageProps) {
                   >
                     Empezar un proyecto
                   </ContactLink>
-                  <a className={buttonClass("ghost")} href="mailto:gerencia@inplux.co">
-                    gerencia@inplux.co
-                  </a>
+                  <Button href="mailto:gerencia@inplux.co">gerencia@inplux.co</Button>
                 </div>
-                <p className={styles.verified}>
+                <p className={ui.small}>
                   Contenido revisado el {formatShortDate(sector.verifiedAt)} · Sin nombres de
                   clientes hasta contar con su autorización escrita.
                 </p>
