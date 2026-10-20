@@ -107,6 +107,7 @@ export const homeCopyEn: HomeCopy = {
     dialogLabel: "Contact form in dialog",
     sectionLabel: "Contact form on the page",
     nameLabel: "Name",
+    emailLabel: "Email",
     organizationLabel: "Company or institution",
     organizationOptional: "optional",
     needLabel: "What kind of need do you have?",
@@ -120,10 +121,21 @@ export const homeCopyEn: HomeCopy = {
     challengeLabel: "What problem do you need to solve?",
     challengePlaceholder:
       "Tell us the problem, who lives with it and what should change.",
-    note: "We'll prepare a draft in your email application. This page does not send or store the data.",
-    submit: "Open a draft in my email",
+    note: "We use this information only to reply to you.",
+    privacyLink: "How we look after data",
+    submit: "Send message",
+    sending: "Sending…",
+    sent: "We received your message. Someone from the team will reply to your email.",
+    errorInvalid:
+      "Check the details: one is missing or has a format we don't recognize.",
+    errorRateLimited:
+      "Several messages arrived in a row from your connection. Wait a few minutes and try again.",
+    errorSend: "We couldn't send the message.",
+    retry: "Try again",
+    errorMailLead: "You can also write to",
     preparedNote:
       "The draft is ready. If your email application did not open, you can copy the message and send it through whichever channel you prefer.",
+    preparedOpen: "Open the draft again",
     copyAction: "Copy the prepared message",
     copySuccess: "Message copied. You can paste it wherever you prefer.",
     copyFailure:

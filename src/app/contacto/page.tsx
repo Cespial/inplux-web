@@ -7,13 +7,34 @@ import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, v5 as ui } from "@/components/v5/primitives";
 import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
+import { NO_JS_TARGET } from "@/lib/contact/fields.mjs";
 import styles from "./contacto.module.css";
 
 /*
  * `/contacto` (octubre de 2026): como la página de contacto de primero.com,
- * unas pocas líneas, el correo y un formulario corto. El formulario prepara un
- * borrador en el correo de la persona; esta página no envía ni guarda nada.
+ * unas pocas líneas, el correo y un formulario corto. El formulario envía a
+ * `/api/contacto` (Resend); sin clave configurada cae al borrador por correo.
+ *
+ * La página sigue siendo estática. El envío sin JS vuelve aquí con un 303 a
+ * `/contacto?…#<ancla>` y el aviso correspondiente se muestra con `:target`:
+ * no hace falta leer la query en el servidor ni ejecutar JS.
  */
+
+const noJsNotices = [
+  { id: NO_JS_TARGET.sent, text: "Recibimos tu mensaje. Una persona del equipo te responde a tu correo." },
+  {
+    id: NO_JS_TARGET.invalid,
+    text: "No pudimos enviar el mensaje: falta un dato o tiene un formato que no reconocemos. Vuelve a intentarlo.",
+  },
+  {
+    id: NO_JS_TARGET.limited,
+    text: "Llegaron varios mensajes seguidos desde tu conexión. Espera unos minutos y vuelve a intentarlo.",
+  },
+  {
+    id: NO_JS_TARGET.unavailable,
+    text: "No pudimos enviar el mensaje desde aquí. Escríbenos directo a gerencia@inplux.co.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Contacto — empecemos por el problema",
@@ -113,6 +134,11 @@ export default function ContactoPage() {
                   </p>
                 </div>
                 <div className={styles.panel}>
+                  {noJsNotices.map((notice) => (
+                    <p key={notice.id} id={notice.id} className={styles.notice} tabIndex={-1}>
+                      {notice.text}
+                    </p>
+                  ))}
                   <ContactForm context="section" />
                 </div>
               </div>

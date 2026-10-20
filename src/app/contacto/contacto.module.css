@@ -69,6 +69,23 @@
   min-width: 0;
 }
 
+/* Avisos del envío sin JS: solo se ven cuando la URL apunta a su ancla. */
+.notice.notice {
+  display: none;
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--teal);
+  border-radius: 0.75rem;
+  color: var(--ivory);
+  font-size: var(--step-8);
+  outline: 0;
+}
+
+.notice.notice:target {
+  display: block;
+  scroll-margin-top: 7rem;
+}
+
 @media (max-width: 760px) {
   .grid {
     grid-template-columns: 1fr;
