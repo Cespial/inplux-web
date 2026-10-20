@@ -28,7 +28,7 @@ export function StatRow({
   return (
     <div className={styles.proof} id={id}>
       {title ? <p className={styles.proofTitle}>{title}</p> : null}
-      <ul className={styles.cases} aria-label={ariaLabel}>
+      <ul className={styles.cases} aria-label={ariaLabel} data-reveal-children="">
         {items.map((item) => (
           <li className={styles.case} key={item.source.href + item.unit}>
             {item.who ? <p className={styles.who}>{item.who}</p> : null}

@@ -10,6 +10,11 @@ import ui from "./v5.module.css";
  * Los identificadores (`id`) siempre llegan de fuera: `verify-build-output`
  * exige que sean únicos por página y los `aria-labelledby` los necesitan
  * estables.
+ *
+ * La entrada al hacer scroll también va aquí, en atributos que lee
+ * `Reveal.client.tsx`: `data-reveal` (un bloque), `data-reveal-children` (los
+ * hijos escalonados) y `data-reveal-band` (cada hijo directo de una banda por
+ * su cuenta, salvo los que ya traen su propio `data-reveal*`).
  */
 
 export { ui as v5 };
@@ -56,7 +61,7 @@ export function SectionHead({
 }) {
   if (align === "center") {
     return (
-      <div className={ui.headC}>
+      <div className={ui.headC} data-reveal="">
         <p className={ui.eyebrow}>{eyebrow}</p>
         <h2 className={cx(ui.d2, titleClassName)} id={id}>{title}</h2>
         {lead ? <p className={ui.lead}>{lead}</p> : null}
@@ -64,7 +69,7 @@ export function SectionHead({
     );
   }
   return (
-    <div className={ui.head}>
+    <div className={ui.head} data-reveal="">
       <div>
         <p className={ui.eyebrow}>{eyebrow}</p>
         <h2 className={cx(ui.d2, titleClassName)} id={id}>{title}</h2>
@@ -125,7 +130,9 @@ export function Band({
       aria-labelledby={labelledBy}
     >
       {plus ? <Plus /> : null}
-      <div className={ui.wrap}>{children}</div>
+      <div className={ui.wrap} data-reveal-band="">
+        {children}
+      </div>
     </Tag>
   );
 }
@@ -214,7 +221,7 @@ export function RowsList({
   className?: string;
 }) {
   return (
-    <ul className={cx(ui.rows, className)}>
+    <ul className={cx(ui.rows, className)} data-reveal-children="quiet">
       {items.map((item, index) => (
         <li key={item.href + item.title}>
           <Link href={item.href}>
@@ -266,7 +273,7 @@ export function FeatureSplit({
     </div>
   );
   return (
-    <article className={cx(ui.feat, reverse && ui.rev)} id={id}>
+    <article className={cx(ui.feat, reverse && ui.rev)} id={id} data-reveal-children="media">
       {reverse ? media : text}
       {reverse ? text : media}
     </article>
@@ -287,7 +294,7 @@ export function Timeline({
   deliverableLabel: string;
 }) {
   return (
-    <ol className={ui.timeline}>
+    <ol className={ui.timeline} data-reveal-children="">
       {phases.map((phase, index) => (
         <li key={phase.title}>
           <b>{`0${index + 1}`}</b>
@@ -305,7 +312,11 @@ export function Timeline({
 
 /** Retícula de tarjetas compactas (hasta cuatro por fila). */
 export function CardGrid({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cx(ui.minis, className)}>{children}</div>;
+  return (
+    <div className={cx(ui.minis, className)} data-reveal-children="">
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -331,7 +342,7 @@ export function Card({
 }) {
   const body = (
     <>
-      {media}
+      <span className={ui.miniMedia}>{media}</span>
       <div>
         <p className={ui.meta}>{meta}</p>
         <h4>{title}</h4>
@@ -382,7 +393,7 @@ export function CloseBand({
   return (
     <section id={id} className={ui.close} aria-labelledby={titleId}>
       <Plus />
-      <div className={`${ui.wrap} ${ui.closeInner}`}>
+      <div className={`${ui.wrap} ${ui.closeInner}`} data-reveal-children="quiet">
         <p className={ui.eyebrow}>{eyebrow}</p>
         <h2 className={ui.d1} id={titleId}>{title}</h2>
         <p className={ui.lead}>{lead}</p>
