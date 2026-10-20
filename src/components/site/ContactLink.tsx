@@ -21,7 +21,9 @@ export type ContactSource =
   | "en-header-mobile"
   // Páginas de sector (/sectores/[slug]): hero y cierre.
   | "sector-hero"
-  | "sector-closing";
+  | "sector-closing"
+  // Productos (/trabajo y /trabajo/[slug]): el cierre.
+  | "work-closing";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;

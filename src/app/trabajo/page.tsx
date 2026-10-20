@@ -1,80 +1,87 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { ProjectShowcase } from "@/components/work/ProjectShowcase.client";
-import { workDirectory, workProfiles, type WorkSlug } from "@/content/work";
+import { ContactLink } from "@/components/site/ContactLink";
+import {
+  Band,
+  Button,
+  Card,
+  CardGrid,
+  Chip,
+  CloseBand,
+  FeatureSplit,
+  MailRow,
+  Placeholder,
+  buttonClass,
+  statusTone,
+  v5,
+} from "@/components/v5/primitives";
+import { PageHero } from "@/components/v5/PageHero";
+import { V5Page } from "@/components/v5/V5Page";
+import { productMockups } from "@/components/work/ProductMockups";
+import { portfolio } from "@/content/home";
+import { workProfiles, type WorkSlug } from "@/content/work";
 import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
 import styles from "./trabajo.module.css";
 
+const pageTitle = "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia";
+const pageDescription =
+  "Seis productos construidos y operados por INPLUX, cada uno con sus fuentes públicas y la fecha en que las revisamos.";
 const workSocialImage = getWorkSocialImageUrl("directorio");
 const workSocialDescription =
   "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.";
 const workSocialImageAlt =
   "INPLUX, directorio de trabajo y productos con fuentes verificadas";
-// Porkia cierra la lista: es el perfil más nuevo y su captura es la más
-// reciente. Entra al final para no desplazar a Gobia, que abre la vitrina y es
-// la única imagen con `priority`.
-const showcaseOrder = [
-  "gobia",
-  "laudos",
-  "tribai",
-  "kelsen",
-  "porkia",
-] as const satisfies readonly WorkSlug[];
-const showcaseProfiles = showcaseOrder.flatMap((slug) => {
+
+// El orden editorial: Tribai abre porque es el producto público más usado y
+// cierra Porkia, el perfil más nuevo. No es el orden de `work.ts`.
+const order = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const satisfies readonly WorkSlug[];
+const products = order.flatMap((slug) => {
   const profile = workProfiles.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
 });
-const upcomingWork = workDirectory.find((item) => !item.hasProfile);
+const inDevelopment = portfolio.filter((item) => item.stage === "En desarrollo");
+
+/** La línea de cierre de cada bloque: lo que el producto deja en manos de quien lo usa. */
+const closingLine: Record<WorkSlug, string> = {
+  tribai: "El criterio sigue siendo del contador. Tribai le pone la fuente al lado.",
+  gobia: "La decisión sigue siendo del municipio. Gobia la deja medible.",
+  kelsen: "La tesis sigue siendo del abogado. Kelsen conserva la ruta.",
+  laudos: "La lectura sigue siendo del árbitro. Laudos ordena el corpus.",
+  porkia: "La finca la lleva quien la trabaja. Porkia reemplaza el cuaderno.",
+};
 
 export const metadata: Metadata = {
-  title: "Trabajo y productos — evidencia y atribución",
-  description:
-    "Los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
+  title: pageTitle,
+  description: pageDescription,
   alternates: {
     canonical: "https://inplux.co/trabajo",
   },
   openGraph: {
-    title: "Trabajo y productos — evidencia y atribución | INPLUX",
+    title: `${pageTitle} | INPLUX`,
     description: workSocialDescription,
     url: "https://inplux.co/trabajo",
     siteName: "INPLUX S.A.S.",
     locale: "es_CO",
     type: "website",
-    images: [
-      {
-        url: workSocialImage,
-        width: 1200,
-        height: 630,
-        alt: workSocialImageAlt,
-      },
-    ],
+    images: [{ url: workSocialImage, width: 1200, height: 630, alt: workSocialImageAlt }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trabajo y productos — evidencia y atribución | INPLUX",
+    title: `${pageTitle} | INPLUX`,
     description: workSocialDescription,
-    images: [
-      {
-        url: workSocialImage,
-        alt: workSocialImageAlt,
-      },
-    ],
+    images: [{ url: workSocialImage, alt: workSocialImageAlt }],
   },
 };
 
 const workJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Trabajo y productos — evidencia y atribución",
+  name: pageTitle,
   url: "https://inplux.co/trabajo",
-  description:
-    "Directorio de los productos de INPLUX, cada uno con sus fuentes públicas y su fecha de verificación.",
+  description: pageDescription,
   mainEntity: {
     "@type": "ItemList",
-    itemListElement: showcaseProfiles.map((profile, index) => ({
+    itemListElement: products.map((profile, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: profile.name,
@@ -84,14 +91,6 @@ const workJsonLd = {
 };
 
 export default function TrabajoPage() {
-  const sourceCount = workProfiles.reduce(
-    (total, profile) => total + profile.sources.length,
-    0,
-  );
-  const lastVerified = workProfiles
-    .flatMap((profile) => profile.sources.map((source) => source.verifiedAt))
-    .reduce((latest, date) => (date > latest ? date : latest), "0000-00-00");
-
   return (
     <>
       <script
@@ -99,113 +98,118 @@ export default function TrabajoPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(workJsonLd) }}
       />
       <ContactDialogProvider>
-        <div className={styles.workRoot}>
-          <SiteHeader inverseOnTop />
+        <V5Page>
           <main id="main-content" tabIndex={-1}>
-            <section
-              className={styles.hero}
-              aria-labelledby="work-title"
-              data-header-theme="dark"
-            >
-              <div className={styles.heroGrid}>
-                <div className={styles.heroCopy}>
-                  <p className={styles.eyebrow}>
-                    <span>00</span> Trabajo y productos
-                  </p>
-                  <h1 id="work-title">
-                    Cada producto, <em>con su fuente.</em>
-                  </h1>
-                  <p className={styles.heroLead}>
-                    Publicamos lo que cada producto muestra en su sitio oficial, con la
-                    fecha en que lo revisamos. Nada de lo que aparece aquí depende de
-                    que nos creas.
-                  </p>
-                </div>
-                <div className={styles.heroLedger} aria-label="Resumen del directorio">
-                  <p>REGISTRO / 2026.08</p>
-                  <div>
-                    <strong>{workProfiles.length}</strong>
-                    <span>productos documentados</span>
-                  </div>
-                  <div>
-                    <strong>{sourceCount}</strong>
-                    <span>fuentes públicas citadas</span>
-                  </div>
-                  <div>
-                    <strong>{lastVerified}</strong>
-                    <span>última verificación</span>
-                  </div>
-                  <small>
-                    Cada perfil conserva sus fuentes y la fecha en que se revisaron.
-                  </small>
-                </div>
-              </div>
-              <a className={styles.heroJump} href="#pantallas">
-                Ver pantallas <span aria-hidden="true">↓</span>
-              </a>
-            </section>
+            <PageHero
+              id="inicio"
+              eyebrow="Productos propios"
+              title="Seis productos construidos y operados por INPLUX."
+              lead="Cada uno nació de un problema de un cliente y hoy funciona por su cuenta."
+              leadMuted="Lo que ves abajo sale de sus páginas públicas, con la fecha en que lo revisamos."
+              actions={
+                <>
+                  <Button href="#p-tribai" variant="primary">
+                    Ver los productos
+                  </Button>
+                  <Button href="#contacto" variant="ghost">
+                    Empezar un proyecto <span aria-hidden="true">↓</span>
+                  </Button>
+                </>
+              }
+            />
 
-            <ProjectShowcase profiles={showcaseProfiles} />
+            <Band id="productos" labelledBy="products-statement" className={styles.statement}>
+              <p className={styles.statementText} id="products-statement">
+                Cada producto, con su <em>fuente</em> y su estado a la vista.
+              </p>
 
-            <section className={styles.evidenceBand} aria-labelledby="evidence-title">
-              <div className={styles.evidenceCopy}>
-                <p className={styles.eyebrow}>
-                  <span>02</span> Evidencia y alcance
-                </p>
-                <h2 id="evidence-title">
-                  Cada pantalla dice <em>de dónde salió.</em>
-                </h2>
-                <p>
-                  Son capturas estáticas de páginas públicas oficiales; la experiencia
-                  interactiva se abre en el sitio fuente. Cada perfil conserva sus
-                  fuentes y su fecha de revisión.
-                </p>
-              </div>
+              {products.map((profile, index) => {
+                const Mockup = productMockups[profile.slug];
+                return (
+                  <FeatureSplit
+                    key={profile.slug}
+                    id={`p-${profile.slug}`}
+                    reverse={index % 2 === 1}
+                    kicker={
+                      <>
+                        {profile.category}{" "}
+                        <Chip dot tone={statusTone(profile.status.label)}>
+                          {profile.status.label}
+                        </Chip>
+                      </>
+                    }
+                    title={profile.name}
+                    lead={profile.headline}
+                    extra={
+                      <>
+                        <ul className={styles.bullets}>
+                          {profile.capabilities.slice(0, 3).map((capability) => (
+                            <li key={capability.title}>
+                              <strong>{capability.title}.</strong> {capability.description}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className={styles.closingLine}>{closingLine[profile.slug]}</p>
+                      </>
+                    }
+                    actions={
+                      <>
+                        <Button href={`/trabajo/${profile.slug}`} variant="ghost">
+                          Ver {profile.name} <span aria-hidden="true">→</span>
+                        </Button>
+                        {profile.slug === "tribai" ? <Chip>Tribai MCP · ejemplo ilustrativo</Chip> : null}
+                      </>
+                    }
+                    media={<Mockup profile={profile} />}
+                  />
+                );
+              })}
 
-              {upcomingWork ? (
-                <article className={styles.upcomingCard}>
-                  <p>PRÓXIMO / EN DESARROLLO</p>
-                  <div>
-                    {/*
-                      El número sigue al último perfil publicado en vez de estar
-                      escrito a mano: cuando entra un producto nuevo a
-                      `work.ts`, la ficha de lo que viene se corre sola.
-                    */}
-                    <span>
-                      {String(workProfiles.length + 1).padStart(2, "0")}
-                    </span>
-                    <h3>{upcomingWork.name}</h3>
-                  </div>
-                  <dl>
-                    <div>
-                      <dt>Área</dt>
-                      <dd>{upcomingWork.category}</dd>
-                    </div>
-                    <div>
-                      <dt>Estado</dt>
-                      <dd>{upcomingWork.status}</dd>
-                    </div>
-                  </dl>
-                  <small>
-                    {upcomingWork.attribution}, todavía sin fuente pública que
-                    abrir. Sumaremos su pantalla cuando la tenga.
-                  </small>
-                </article>
+              {inDevelopment.length > 0 ? (
+                <>
+                  <p className={`${v5.eyebrow} ${styles.moreTitle}`}>En desarrollo</p>
+                  <CardGrid className={styles.devGrid}>
+                    {inDevelopment.map((item) => (
+                      <Card
+                        key={item.name}
+                        id={`p-${item.name.toLowerCase()}`}
+                        media={<Placeholder>En desarrollo</Placeholder>}
+                        meta={`${item.category} · ${item.stage}`}
+                        title={item.name}
+                        text={item.description}
+                      />
+                    ))}
+                  </CardGrid>
+                </>
               ) : null}
-            </section>
+            </Band>
 
-            <section className={styles.closing} aria-labelledby="closing-title">
-              <p>INPLUX / FÁBRICA DE SOFTWARE</p>
-              <h2 id="closing-title">
-                ¿Qué producto debería tener <em>forma</em> ahora?
-              </h2>
-              <Link href="/contacto">
-                Empezar un proyecto <span aria-hidden="true">↗</span>
-              </Link>
-            </section>
+            <CloseBand
+              id="contacto"
+              titleId="closing-title"
+              eyebrow="El siguiente producto"
+              title={
+                <>
+                  Construyamos lo que <em>sigue.</em>
+                </>
+              }
+              lead="Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos."
+            >
+              <MailRow>
+                <ContactLink
+                  className={buttonClass("primary")}
+                  fallbackHref="/contacto"
+                  source="work-closing"
+                >
+                  Empezar un proyecto
+                </ContactLink>
+                <Button href="/nosotros" variant="ghost">
+                  Quiénes somos <span aria-hidden="true">→</span>
+                </Button>
+              </MailRow>
+            </CloseBand>
           </main>
-          <SiteFooter />
-        </div>
+        </V5Page>
       </ContactDialogProvider>
     </>
   );
