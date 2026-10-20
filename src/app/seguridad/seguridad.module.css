@@ -1,0 +1,35 @@
+/*
+ * /seguridad en el cascarón v5. LegalShell pone la columna y los títulos; aquí
+ * solo van el índice de anclas y el margen de cada sección.
+ */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.toc.toc a {
+  /* Clase doble: `.body a` de LegalShell pinta los enlaces en teal y subrayados. */
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ivory);
+  font-size: var(--step-8);
+  text-decoration: none;
+}
+
+.toc.toc a:hover,
+.toc.toc a:focus-visible {
+  border-color: var(--teal);
+}
+
+.section {
+  display: grid;
+  gap: 0.6rem;
+  scroll-margin-top: 6rem;
+}
+
+.section h2 {
+  scroll-margin-top: 6rem;
+}

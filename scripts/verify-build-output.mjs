@@ -9,6 +9,30 @@ const siteUrl = "https://inplux.co";
 const defaultOgImage = `${siteUrl}/brand/og/og-default.png`;
 const defaultOgImageAlt = "INPLUX, de un problema real a software en producción";
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
+
+/*
+ * Los dos perfiles de /equipo, copiados de `src/content/team.ts` (este script
+ * no importa TypeScript). `og:type` es `profile` y cada uno enlaza al otro en
+ * su bloque «Siguiente».
+ */
+const teamProfiles = [
+  {
+    slug: "jaime-alonso-cano-pino",
+    other: "cristian-espinal-maya",
+    name: "Jaime Alonso Cano Pino",
+    jobTitle: "CEO y fundador",
+    description:
+      "CEO y fundador de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
+  },
+  {
+    slug: "cristian-espinal-maya",
+    other: "jaime-alonso-cano-pino",
+    name: "Cristian Espinal Maya",
+    jobTitle: "CTO",
+    description:
+      "CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
+  },
+];
 const workSocialVersion = "2026-10-20";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
@@ -476,7 +500,7 @@ const pageDefinitions = {
     ogDescription:
       "Cobertura, escenarios públicos, investigaciones y columnas del equipo, organizados por categoría y enlazados a su fuente original.",
     ogUrl: "https://inplux.co/prensa",
-    ogImage: "https://inplux.co/brand/og/og-default.png",
+    ogImage: `${siteUrl}/brand/og/og-prensa.jpg`,
     ogImageAlt: "INPLUX, prensa y conversaciones",
     twitterTitle: "Prensa y conversaciones | INPLUX",
     twitterDescription:
@@ -499,19 +523,73 @@ const pageDefinitions = {
     ogDescription:
       "Comparte el reto. INPLUX te ayuda a convertirlo en una primera decisión de producto.",
     ogUrl: `${siteUrl}/contacto`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-contacto.jpg`,
+    ogImageAlt: "INPLUX · Contacto. Empecemos por el problema.",
     twitterTitle: "Empecemos por el problema | INPLUX",
     twitterDescription:
       "Comparte el reto. No necesitas llegar con requisitos ni alcance definidos.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Contacto. Empecemos por el problema.",
     jsonLd: {
       type: "ContactPage",
       name: "Contacto INPLUX",
       url: `${siteUrl}/contacto`,
     },
     contact: { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 1 },
+    requiredLinks: ["/seguridad", "/como-trabajamos"],
   },
+  security: {
+    file: ".next/server/app/seguridad.html",
+    title: "Seguridad y datos | INPLUX",
+    description:
+      "Cómo cuida INPLUX los datos de cada cliente: cifrado, acceso por rol, datos separados, modelos que no entrenan con ellos y el marco legal que aplica.",
+    canonical: `${siteUrl}/seguridad`,
+    ogTitle: "Seguridad y datos | INPLUX",
+    ogDescription:
+      "Cifrado, acceso por rol, datos separados por cliente y modelos que no entrenan con ellos. Sin sellos ni promesas que no podamos sostener.",
+    ogUrl: `${siteUrl}/seguridad`,
+    ogImage: `${siteUrl}/brand/og/og-seguridad.jpg`,
+    ogImageAlt: "INPLUX · Seguridad. Cómo cuidamos los datos de cada cliente.",
+    twitterTitle: "Seguridad y datos | INPLUX",
+    twitterDescription:
+      "Cifrado, acceso por rol, datos separados por cliente y modelos que no entrenan con ellos. Sin sellos ni promesas que no podamos sostener.",
+    twitterImageAlt: "INPLUX · Seguridad. Cómo cuidamos los datos de cada cliente.",
+    jsonLd: {
+      type: "WebPage",
+      name: "Seguridad y datos",
+      url: `${siteUrl}/seguridad`,
+    },
+    contact: sharedContact,
+    // Las afirmaciones de esta página son las aprobadas por la dirección. Un
+    // sello o una cifra de disponibilidad no entra sin pasar por ella.
+    forbiddenText: ["SOC 2", "ISO 27001", "grado militar", "bancario", "certificad"],
+  },
+  ...Object.fromEntries(
+    teamProfiles.map((member) => [
+      `team-${member.slug}`,
+      {
+        file: `.next/server/app/equipo/${member.slug}.html`,
+        title: `${member.name} — ${member.jobTitle} | INPLUX`,
+        description: member.description,
+        canonical: `${siteUrl}/equipo/${member.slug}`,
+        ogTitle: `${member.name} — ${member.jobTitle} | INPLUX`,
+        ogDescription: member.description,
+        ogUrl: `${siteUrl}/equipo/${member.slug}`,
+        ogType: "profile",
+        ogImage: `${siteUrl}/brand/og/og-equipo-${member.slug}.jpg`,
+        ogImageAlt: `${member.name}, ${member.jobTitle} de INPLUX`,
+        twitterTitle: `${member.name} — ${member.jobTitle} | INPLUX`,
+        twitterDescription: member.description,
+        twitterImageAlt: `${member.name}, ${member.jobTitle} de INPLUX`,
+        jsonLd: {
+          type: "ProfilePage",
+          name: `${member.name} — ${member.jobTitle} de INPLUX`,
+          url: `${siteUrl}/equipo/${member.slug}`,
+        },
+        contact: sharedContact,
+        requiredLinks: [`/equipo/${member.other}`],
+      },
+    ]),
+  ),
   brand: {
     file: ".next/server/app/marca.html",
     title: "Sistema de marca — INPLUX",
@@ -523,12 +601,12 @@ const pageDefinitions = {
     ogDescription:
       "Guía interna de identidad de INPLUX: logo, color, tipografía, componentes y activos oficiales.",
     ogUrl: `${siteUrl}/marca`,
-    ogImage: defaultOgImage,
-    ogImageAlt: "INPLUX, fábrica de software a la medida",
+    ogImage: `${siteUrl}/brand/og/og-marca.jpg`,
+    ogImageAlt: "INPLUX · Sistema de marca. Logo, color y tipografía.",
     twitterTitle: "Sistema de marca — INPLUX",
     twitterDescription:
       "Guía interna de identidad de INPLUX: logo, color, tipografía, componentes y activos oficiales.",
-    twitterImageAlt: "INPLUX, fábrica de software a la medida",
+    twitterImageAlt: "INPLUX · Sistema de marca. Logo, color y tipografía.",
     contact: sharedContact,
   },
   notFound: {
@@ -624,7 +702,7 @@ function verifySocialMetadata(name, html, definition) {
     definition.ogLocale ?? "es_CO",
     `${name} og:locale`,
   );
-  expectEqual(metaContent(html, "property", "og:type"), "website", `${name} og:type`);
+  expectEqual(metaContent(html, "property", "og:type"), definition.ogType ?? "website", `${name} og:type`);
   expectEqual(metaContent(html, "property", "og:image"), definition.ogImage, `${name} og:image`);
   expectEqual(metaContent(html, "property", "og:image:width"), "1200", `${name} og:image:width`);
   expectEqual(metaContent(html, "property", "og:image:height"), "630", `${name} og:image:height`);
@@ -1043,6 +1121,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/equipo/cristian-espinal-maya`,
     `${siteUrl}/prensa`,
     `${siteUrl}/contacto`,
+    `${siteUrl}/seguridad`,
   ];
 
   try {

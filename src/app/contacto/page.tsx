@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactForm } from "@/components/site/ContactForm";
+import { NextPage } from "@/components/v5/NextPage";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, v5 as ui } from "@/components/v5/primitives";
@@ -30,10 +32,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-contacto.jpg",
         width: 1200,
         height: 630,
-        alt: "INPLUX, de un problema real a software en producción",
+        alt: "INPLUX · Contacto. Empecemos por el problema.",
       },
     ],
   },
@@ -44,8 +46,8 @@ export const metadata: Metadata = {
       "Comparte el reto. No necesitas llegar con requisitos ni alcance definidos.",
     images: [
       {
-        url: "/brand/og/og-default.png",
-        alt: "INPLUX, de un problema real a software en producción",
+        url: "/brand/og/og-contacto.jpg",
+        alt: "INPLUX · Contacto. Empecemos por el problema.",
       },
     ],
   },
@@ -106,12 +108,16 @@ export default function ContactoPage() {
                     </li>
                     <li>Medellín, Colombia</li>
                   </ul>
+                  <p className={styles.security}>
+                    <Link href="/seguridad">Cómo cuidamos los datos que nos compartes</Link>
+                  </p>
                 </div>
                 <div className={styles.panel}>
                   <ContactForm context="section" />
                 </div>
               </div>
             </Band>
+            <NextPage href="/como-trabajamos" label="Cómo trabajamos" />
           </main>
         </V5Page>
       </ContactDialogProvider>

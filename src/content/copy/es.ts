@@ -49,7 +49,11 @@ export const homeCopyEs: HomeCopy = {
       {
         label: "Empresa",
         ariaLabel: "Empresa",
-        items: companyNavigation.map(({ label, href }) => ({ label, href })),
+        // Seguridad va en el pie y no en el menú: es una página de consulta.
+        items: [
+          ...companyNavigation.map(({ label, href }) => ({ label, href })),
+          { label: "Seguridad", href: "/seguridad" },
+        ],
       },
     ],
     contactLabel: "Contacto",
@@ -57,9 +61,9 @@ export const homeCopyEs: HomeCopy = {
     contactCta: "Empezar un proyecto",
     email: "gerencia@inplux.co",
     linkedInLabel: "LinkedIn",
-    locations: ["Medellín, Colombia"],
+    locations: ["INPLUX LLC · Miami, Florida", "Ingeniería: INPLUX S.A.S. · Medellín, Colombia"],
     languageNote: null,
-    copyright: "INPLUX S.A.S.",
+    copyright: "INPLUX LLC · INPLUX S.A.S.",
     closingLine: "Software con criterio y dirección humana.",
   },
 

@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...teamMembers.map((member) => `/equipo/${member.slug}`),
     "/prensa",
     "/contacto",
+    "/seguridad",
   ];
 
   return routes.map((route) => ({
