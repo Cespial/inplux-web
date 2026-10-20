@@ -21,8 +21,20 @@
   --fg-muted: #a39d94;
   --fg-dim: #77726b;
   --ink-muted: #5d5851;
+  --ink-soft: #3d3a35;
+  /* Grises de texto sobre negro, del más claro al más tenue. */
+  --fg-bright: #d9d3ca;
+  --fg-soft: #cbc5bc;
+  --fg-quiet: #aaa49c;
+  --fg-faint: #8b857d;
+  --fg-ghost: #6f6a64;
+  /* Superficies de interfaz dibujada (mockups) y marcadores rayados. */
+  --chrome-dot: #3a3936;
+  --hatch-a: #151513;
+  --hatch-b: #1b1b18;
   --line: rgba(246, 242, 236, 0.13);
   --line-ink: rgba(12, 12, 11, 0.13);
+  --line-strong: rgba(246, 242, 236, 0.28);
   --teal: #00d7ca;
   --teal-ink: #007a72;
   --ember: #ff7a3d;
@@ -47,6 +59,9 @@
   --gutter: max(clamp(1rem, 4vw, 3rem), env(safe-area-inset-left, 0px));
   --max: 84rem;
   --band: clamp(4.5rem, 9vw, 8.5rem);
+
+  /* --- Movimiento --- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* --- Cabecera: duración de los desplegables (la lee SiteHeader) --- */
   --dropdown-open-dur: 200ms;

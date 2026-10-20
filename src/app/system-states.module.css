@@ -9,8 +9,8 @@
   padding-block: 8rem var(--band, 6rem);
   background:
     radial-gradient(55% 45% at 85% 20%, rgba(0, 215, 202, 0.12), transparent 70%),
-    var(--black, #0c0c0b);
-  color: var(--ivory, #f6f2ec);
+    var(--black);
+  color: var(--ivory);
 }
 
 .state:focus {
@@ -34,7 +34,7 @@
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: var(--black, #0c0c0b);
+  background: var(--black);
 }
 
 .loading i {
@@ -44,7 +44,7 @@
   display: block;
   height: 2px;
   width: 40%;
-  background: var(--teal, #00d7ca);
+  background: var(--teal);
   animation: sweep 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
