@@ -3,6 +3,7 @@ import type { ContactSource } from "@/components/site/ContactLink";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import type { FooterCopy, HeaderCopy } from "@/content/copy/types";
+import { Reveal } from "./Reveal.client";
 import ui from "./v5.module.css";
 
 /**
@@ -11,6 +12,8 @@ import ui from "./v5.module.css";
  * `<main id="main-content" tabIndex={-1}>` y, si lo usa, el
  * `<ContactDialogProvider>`: `verify-public-content` busca esos literales en
  * el fuente de cada `page.tsx`, así que no pueden vivir aquí.
+ *
+ * `Reveal` monta aquí la entrada al hacer scroll de toda la página.
  */
 export function V5Page({
   children,
@@ -39,6 +42,7 @@ export function V5Page({
       />
       {children}
       <SiteFooter copy={footerCopy} />
+      <Reveal />
     </div>
   );
 }

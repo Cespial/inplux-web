@@ -109,7 +109,7 @@
 
 .lead {
   max-width: 38rem;
-  color: #cbc5bc;
+  color: var(--fg-soft);
   font-size: var(--step-6);
   line-height: 1.5;
   text-wrap: pretty;
@@ -166,7 +166,7 @@
 }
 
 .btn.ghost {
-  border-color: rgba(246, 242, 236, 0.28);
+  border-color: var(--line-strong);
   color: var(--ivory);
 }
 
@@ -387,6 +387,69 @@
   }
 }
 
+/* ------------------------------------------------- entrada al hacer scroll
+   Lo marca `Reveal.client.tsx`. Sólo se oculta bajo `html[data-motion]` (lo
+   pone el script en línea del layout) y sin «reducir movimiento»: sin JS o con
+   el sistema pidiendo calma, todo se ve desde el primer pintado. Se anima
+   opacidad, desplazamiento y desenfoque; nunca el alto, así que el layout no
+   se mueve. `data-reveal` es un bloque; `data-reveal-children` escalona sus
+   hijos de 70 en 70 ms; `data-reveal-band` (el `.wrap` de cada `Band`) hace
+   entrar cada hijo directo cuando asoma, salvo los que ya se animan solos.
+   Variantes: `quiet` (texto largo) y `media` (figuras).
+
+   Es una animación con `backwards` y sin `to`: sostiene el estado oculto
+   durante el retraso y, al terminar, deja de aplicar. Así no pisa las
+   transiciones ni el `transform` de hover de las tarjetas. */
+@media (prefers-reduced-motion: no-preference) {
+  :global(html[data-motion]) .root :is([data-reveal], [data-reveal-children] > *, [data-reveal-band] > *) {
+    --reveal-y: 1.75rem;
+    --reveal-blur: 6px;
+    --reveal-scale: 1;
+  }
+
+  :global(html[data-motion]) .root [data-reveal="quiet"],
+  :global(html[data-motion]) .root [data-reveal-children="quiet"] > * {
+    --reveal-y: 1.1rem;
+    --reveal-blur: 3px;
+  }
+
+  :global(html[data-motion]) .root [data-reveal="media"],
+  :global(html[data-motion]) .root [data-reveal-children="media"] > * {
+    --reveal-y: 2.25rem;
+    --reveal-blur: 5px;
+    --reveal-scale: 0.985;
+  }
+
+  :global(html[data-motion]) .root [data-reveal]:not([data-revealed]),
+  :global(html[data-motion]) .root [data-reveal-children]:not([data-revealed]) > *,
+  :global(html[data-motion]) .root [data-reveal-band] > :not([data-reveal], [data-reveal-children], [data-revealed]) {
+    opacity: 0;
+    transform: translateY(var(--reveal-y)) scale(var(--reveal-scale));
+    filter: blur(var(--reveal-blur));
+  }
+
+  :global(html[data-motion]) .root [data-reveal][data-revealed],
+  :global(html[data-motion]) .root [data-reveal-children][data-revealed] > *,
+  :global(html[data-motion]) .root [data-reveal-band] > [data-revealed]:not([data-reveal], [data-reveal-children]) {
+    animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms) backwards;
+  }
+
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(2) { --reveal-delay: 70ms; }
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(3) { --reveal-delay: 140ms; }
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(4) { --reveal-delay: 210ms; }
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(5) { --reveal-delay: 280ms; }
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(6) { --reveal-delay: 350ms; }
+  :global(html[data-motion]) .root [data-reveal-children] > :nth-child(n + 7) { --reveal-delay: 420ms; }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-y)) scale(var(--reveal-scale));
+    filter: blur(var(--reveal-blur));
+  }
+}
+
 /* ------------------------------------------------------- línea de tiempo */
 
 .timeline {
@@ -440,7 +503,7 @@
 }
 
 .timeline p {
-  color: #c6c0b7;
+  color: var(--fg-soft);
 }
 
 .timeline .deliverable {
@@ -539,15 +602,23 @@
   text-decoration: none;
 }
 
+/* El marco recorta la imagen para que el zoom del hover no se salga. */
+.miniMedia {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  transition: border-color 0.36s var(--ease-out);
+}
+
 .mini img,
 .mini .ph {
+  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top left;
-  border: 1px solid var(--line);
-  border-radius: 0.6rem;
 }
 
 .ph {
@@ -555,7 +626,7 @@
   place-items: center;
   color: var(--fg-dim);
   font-size: 0.8rem;
-  background: repeating-linear-gradient(135deg, #151513 0 10px, #1b1b18 10px 20px);
+  background: repeating-linear-gradient(135deg, var(--hatch-a) 0 10px, var(--hatch-b) 10px 20px);
 }
 
 .meta {
@@ -580,8 +651,38 @@
   font-size: var(--step-8);
 }
 
-a.mini:hover h4 {
+a.mini:is(:hover, :focus-visible) h4 {
   color: var(--teal);
+}
+
+a.mini:is(:hover, :focus-visible) .miniMedia {
+  border-color: var(--line-strong);
+}
+
+/* Como las tarjetas de PRIMERO: la que se señala sube y acerca su imagen, las
+   vecinas se apagan un poco. Teclado y ratón reciben lo mismo. */
+@media (prefers-reduced-motion: no-preference) {
+  a.mini {
+    transition:
+      transform 0.36s var(--ease-out),
+      opacity 0.36s var(--ease-out);
+  }
+
+  .mini img {
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  a.mini:is(:hover, :focus-visible) {
+    transform: translateY(-4px);
+  }
+
+  a.mini:is(:hover, :focus-visible) img {
+    transform: scale(1.05);
+  }
+}
+
+.minis:has(a.mini:is(:hover, :focus-visible)) > .mini:not(:hover, :focus-visible) {
+  opacity: 0.88;
 }
 
 /* ---------------------------------------------------------------- filas */
@@ -636,6 +737,18 @@ a.mini:hover h4 {
   font-size: 1.3rem;
   font-style: normal;
   text-align: right;
+}
+
+/* La flecha de un enlace se adelanta un poco al señalarlo. */
+.rows i,
+.headLink a span {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.rows a:is(:hover, :focus-visible) i,
+.headLink a:is(:hover, :focus-visible) span {
+  transform: translateX(0.2em);
 }
 
 /* ------------------------------------------------------------------ cierre */
