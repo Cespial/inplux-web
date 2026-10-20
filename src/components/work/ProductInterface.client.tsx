@@ -137,37 +137,47 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
           hidden={mode !== "evidence"}
           inert={mode !== "evidence"}
         >
-          <div className={styles.evidenceWindow}>
-            <div className={styles.evidenceHeader}>
-              <span>REGISTRO DE EVIDENCIA</span>
-              {/*
+          {/*
+            El panel existe siempre —el `aria-controls` de su pestaña apunta a
+            él—, pero su contenido sólo se monta cuando está activo: repite la
+            atribución y las fuentes que la ficha ya muestra en los hechos y en
+            la tabla de evidencia, y no tiene por qué duplicarlas en el HTML.
+          */}
+          {mode === "evidence" ? (
+            <div className={styles.evidenceWindow}>
+              <div className={styles.evidenceHeader}>
+                <span>REGISTRO DE EVIDENCIA</span>
+                {/*
                 El registro cuenta las fuentes que lista debajo, no dictamina
                 sobre la atribución: la autoría la declara INPLUX y ninguna de
                 estas filas la demuestra por sí sola.
               */}
-              <b>
-                {profile.sources.length}{" "}
-                {profile.sources.length === 1 ? "FUENTE" : "FUENTES"}
-              </b>
+                <b>
+                  {profile.sources.length}{" "}
+                  {profile.sources.length === 1 ? "FUENTE" : "FUENTES"}
+                </b>
+              </div>
+              <div className={styles.evidenceStatement}>
+                <p>Atribución</p>
+                <strong>{profile.attribution.label}</strong>
+                <span>{profile.attribution.statement}</span>
+              </div>
+              <ol>
+                {profile.sources.map((source, index) => (
+                  <li key={source.url}>
+                    <span>0{index + 1}</span>
+                    <div>
+                      <strong>{source.label}</strong>
+                      <p>{source.supports}</p>
+                    </div>
+                    <time dateTime={source.verifiedAt}>
+                      {source.verifiedAt}
+                    </time>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <div className={styles.evidenceStatement}>
-              <p>Atribución</p>
-              <strong>{profile.attribution.label}</strong>
-              <span>{profile.attribution.statement}</span>
-            </div>
-            <ol>
-              {profile.sources.map((source, index) => (
-                <li key={source.url}>
-                  <span>0{index + 1}</span>
-                  <div>
-                    <strong>{source.label}</strong>
-                    <p>{source.supports}</p>
-                  </div>
-                  <time dateTime={source.verifiedAt}>{source.verifiedAt}</time>
-                </li>
-              ))}
-            </ol>
-          </div>
+          ) : null}
         </div>
       </div>
 

@@ -433,11 +433,6 @@ export const workProfiles = [
         description:
           "Programa vacunas, vermifugaciones e inspecciones, y recuerda cada una el día que corresponde.",
       },
-      {
-        title: "Cuentas por lote",
-        description:
-          "Reúne ventas, kilos entregados e ingreso para leer qué dejó cada lote.",
-      },
     ],
     interface: {
       theme: "livestock",
