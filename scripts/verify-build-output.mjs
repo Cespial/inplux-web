@@ -198,28 +198,29 @@ const pageDefinitions = {
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
     productFooter: "Documented products",
   },
-  factory: {
-    file: ".next/server/app/fabrica.html",
-    title: "La fábrica — cómo convertimos un problema en software | INPLUX",
+  howWeWork: {
+    file: ".next/server/app/como-trabajamos.html",
+    title: "Cómo trabajamos — del diagnóstico a la operación | INPLUX",
     description:
-      "Conoce el sistema de INPLUX para entender el contexto, definir el producto, construir una primera versión útil y evolucionarla con evidencia.",
-    canonical: `${siteUrl}/fabrica`,
-    ogTitle: "La fábrica de INPLUX",
+      "Cómo INPLUX lleva un proceso a producción: diagnóstico, piloto, producción y operación, con un entregable en cada fase y el criterio de tu equipo en cada decisión.",
+    canonical: `${siteUrl}/como-trabajamos`,
+    ogTitle: "Cómo trabajamos | INPLUX",
     ogDescription:
-      "Contexto, criterio, construcción y evolución: un sistema para convertir problemas reales en software útil.",
-    ogUrl: `${siteUrl}/fabrica`,
+      "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
+    ogUrl: `${siteUrl}/como-trabajamos`,
     ogImage: defaultOgImage,
     ogImageAlt: defaultOgImageAlt,
-    twitterTitle: "La fábrica de INPLUX",
+    twitterTitle: "Cómo trabajamos | INPLUX",
     twitterDescription:
-      "El sistema con el que convertimos problemas reales en software útil.",
+      "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
     twitterImageAlt: defaultOgImageAlt,
     jsonLd: {
       type: "WebPage",
-      name: "La fábrica de INPLUX",
-      url: `${siteUrl}/fabrica`,
+      name: "Cómo trabajamos",
+      url: `${siteUrl}/como-trabajamos`,
     },
-    contact: sharedContact,
+    // Cabecera, hero y cierre.
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
   },
   work: {
     file: ".next/server/app/trabajo.html",
@@ -310,24 +311,6 @@ const pageDefinitions = {
     noindex: true,
     contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
     deck: { slides: deckLegaltechSlideCount, profiles: legaltechProfiles },
-  },
-  capabilities: {
-    file: ".next/server/app/capacidades.html",
-    title: "Capacidades — sistemas compuestos para problemas reales | INPLUX",
-    description:
-      "Explora cómo INPLUX combina producto, operación, inteligencia artificial e integración para convertir un problema real en software en producción.",
-    canonical: `${siteUrl}/capacidades`,
-    ogTitle: "Capacidades de INPLUX",
-    ogDescription:
-      "No partimos de un catálogo. Componemos el sistema que cada problema necesita.",
-    ogUrl: `${siteUrl}/capacidades`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
-    twitterTitle: "Capacidades de INPLUX",
-    twitterDescription:
-      "Producto, operación, IA e integración reunidos alrededor de un cambio concreto.",
-    twitterImageAlt: defaultOgImageAlt,
-    contact: sharedContact,
   },
   sectorSalud: {
     file: ".next/server/app/sectores/salud.html",
@@ -1017,7 +1000,7 @@ async function verifyGeneratedRoutes() {
   const expectedSitemapUrls = [
     siteUrl,
     `${siteUrl}/en`,
-    `${siteUrl}/fabrica`,
+    `${siteUrl}/como-trabajamos`,
     `${siteUrl}/trabajo`,
     `${siteUrl}/trabajo/tribai`,
     `${siteUrl}/trabajo/gobia`,
@@ -1026,7 +1009,6 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/porkia`,
     `${siteUrl}/deck`,
     `${siteUrl}/deck/presentacion`,
-    `${siteUrl}/capacidades`,
     `${siteUrl}/sectores/salud`,
     `${siteUrl}/sectores/publico`,
     `${siteUrl}/sectores/legal-tributario`,

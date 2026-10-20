@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { HeroVideo } from "./HeroVideo.client";
+import { HeroVideo, type HeroVideoSource } from "./HeroVideo.client";
 import ui from "./v5.module.css";
 
 /**
@@ -12,7 +12,7 @@ import ui from "./v5.module.css";
  * `title` acepta un nodo libre para los heros de una sola frase.
  */
 export type HeroMedia =
-  | { kind: "video" }
+  | { kind: "video"; poster?: string; sources?: readonly HeroVideoSource[] }
   | { kind: "image"; src: string; alt: string; width: number; height: number; priority?: boolean }
   | { kind: "none" };
 
@@ -41,7 +41,7 @@ export function PageHero({
 }) {
   return (
     <div className={`${ui.hero}${className ? ` ${className}` : ""}`} id={id} data-header-theme="dark">
-      {media.kind === "video" ? <HeroVideo /> : null}
+      {media.kind === "video" ? <HeroVideo poster={media.poster} sources={media.sources} /> : null}
       {media.kind === "image" ? (
         <div className={ui.mediaBg} aria-hidden="true">
           <Image

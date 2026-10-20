@@ -224,8 +224,8 @@ export default function ContactoPage() {
                   <p>Si existe un encaje, proponemos cómo definir la primera versión útil.</p>
                 </li>
               </ol>
-              <Link href="/fabrica">
-                Conocer el sistema de la fábrica <span aria-hidden="true">↗</span>
+              <Link href="/como-trabajamos">
+                Conocer cómo trabajamos <span aria-hidden="true">↗</span>
               </Link>
             </section>
           </main>

@@ -1,0 +1,134 @@
+/*
+ * /como-trabajamos (octubre de 2026). Solo lo que las primitivas v5 no cubren:
+ * el hero con video, la banda de una frase y los compromisos en dos tiempos.
+ */
+.root {
+  min-height: 100dvh;
+}
+
+/* ── Hero con video ───────────────────────────────────────────────────── */
+.hero {
+  min-height: min(92svh, 50rem);
+  --scrim:
+    linear-gradient(90deg, rgba(12, 12, 11, 0.86), rgba(12, 12, 11, 0.46) 55%, rgba(12, 12, 11, 0.14)),
+    linear-gradient(180deg, rgba(12, 12, 11, 0.4), transparent 30%, rgba(12, 12, 11, 0.74));
+}
+
+.hero h1 {
+  max-width: 16ch;
+}
+
+/* ── Banda de una frase ───────────────────────────────────────────────── */
+.statement {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.statement .statementText {
+  max-width: 24ch;
+  margin: 0;
+}
+
+.statement .statementText em {
+  color: var(--teal);
+  font-style: normal;
+}
+
+/* ── Fases ────────────────────────────────────────────────────────────── */
+.phases {
+  background:
+    radial-gradient(60% 50% at 50% 100%, rgba(0, 215, 202, 0.12), transparent 70%),
+    var(--black);
+}
+
+/* ── Compromisos en dos tiempos ───────────────────────────────────────── */
+.commitmentList {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.commitmentList li {
+  display: grid;
+  gap: 1.2rem;
+  align-content: start;
+  padding: 1.5rem 1.6rem 1.7rem;
+  border: 1px solid var(--line-ink);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.commitmentLabel {
+  color: var(--teal-ink);
+  font: 500 var(--step-9) / 1.2 var(--sans);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+}
+
+.commitmentLines {
+  font: 400 var(--step-4) / 1.05 var(--sans);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+.commitmentLines span {
+  display: block;
+}
+
+.commitmentLines span:last-child {
+  color: var(--ink-muted);
+}
+
+.commitmentCopy {
+  color: var(--ink-muted);
+  font-size: var(--step-8);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .commitmentList li {
+    animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.08s * var(--i, 0));
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.8rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .commitmentList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .commitmentList {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+}
