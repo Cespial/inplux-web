@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
 import { PageHero } from "@/components/v5/PageHero";
@@ -192,18 +193,29 @@ export default function Nosotros() {
                 }
               />
               <div className={styles.originBody}>
-                <p>
-                  INPLUX nació en Medellín en 2023 de dos oficios que rara vez se sientan juntos: la
-                  gestión tributaria e institucional y la ingeniería de software. Los productos que
-                  este sitio documenta son desarrollos de INPLUX en dominios que no se parecen entre
-                  sí. Cuando la responsabilidad se reparte, el perfil lo dice: en Laudos, INPLUX
-                  realiza el desarrollo técnico y REDEK aporta el criterio legal.
-                </p>
-                <blockquote className={styles.quote}>
-                  <p className={ui.d2}>
-                    Desde Medellín, <em>para Latinoamérica.</em>
+                <div className={styles.originText}>
+                  <p>
+                    INPLUX nació en Medellín en 2023 de dos oficios que rara vez se sientan juntos: la
+                    gestión tributaria e institucional y la ingeniería de software. Los productos que
+                    este sitio documenta son desarrollos de INPLUX en dominios que no se parecen entre
+                    sí. Cuando la responsabilidad se reparte, el perfil lo dice: en Laudos, INPLUX
+                    realiza el desarrollo técnico y REDEK aporta el criterio legal.
                   </p>
-                </blockquote>
+                  <blockquote className={styles.quote}>
+                    <p className={ui.d2}>
+                      Desde Medellín, <em>para Latinoamérica.</em>
+                    </p>
+                  </blockquote>
+                </div>
+                <figure className={styles.originFigure} data-reveal="media">
+                  <Image
+                    src="/brand/about/mesa-de-criterio.webp"
+                    alt=""
+                    width={960}
+                    height={1200}
+                    sizes="(max-width: 760px) 92vw, 34vw"
+                  />
+                </figure>
               </div>
             </Band>
 
