@@ -51,6 +51,15 @@ const expectedSocialImages = [
   "/api/og/trabajo/porkia?v=2026-10-20",
 ];
 
+// Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es
+// inmutable; la marca, que se repinta con el mismo nombre, no.
+const expectedCacheControl = [
+  ["/media/hero-720.mp4", "public, max-age=31536000, immutable"],
+  ["/media/hero-poster-828.avif", "public, max-age=31536000, immutable"],
+  ["/sectores/sector-salud.webp", "public, max-age=31536000, immutable"],
+  ["/brand/og/og-sector-salud.jpg", "public, max-age=86400, stale-while-revalidate=604800"],
+];
+
 function readPngDimensions(buffer) {
   const signature = buffer.subarray(0, 8).toString("hex");
   if (signature !== "89504e470d0a1a0a" || buffer.length < 24) return null;
@@ -154,6 +163,14 @@ try {
     }
   }
 
+  for (const [route, expectedHeader] of expectedCacheControl) {
+    const response = await fetch(`${baseUrl}${route}`, { method: "HEAD", redirect: "manual" });
+    const header = response.headers.get("cache-control");
+    if (response.status !== 200 || header !== expectedHeader) {
+      failures.push(`${route}: esperaba 200 con «${expectedHeader}», recibió ${response.status} con «${header}»`);
+    }
+  }
+
   for (const route of expectedSocialImages) {
     const response = await fetch(`${baseUrl}${route}`, { redirect: "manual" });
     if (response.status !== 200) {
@@ -192,7 +209,7 @@ try {
   }
 
   console.log(
-    `HTTP contracts verified: ${expectedRoutes.length} routes and ${expectedSocialImages.length} social PNGs, including 404 boundaries.`,
+    `HTTP contracts verified: ${expectedRoutes.length} routes, ${expectedSocialImages.length} social PNGs and ${expectedCacheControl.length} cache headers, including 404 boundaries.`,
   );
 } finally {
   await stopServer(server);

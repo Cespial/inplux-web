@@ -51,3 +51,14 @@ vienen de Pexels (licencia Pexels: uso comercial gratuito sin atribución obliga
 | 7 | Torres de oficinas de noche | https://www.pexels.com/video/17499154/ |
 | 8 | Bogotá en hora azul | https://www.pexels.com/video/40369464/ |
 | 9 | Medellín al atardecer, segundo tramo | https://www.pexels.com/video/40130401/ |
+
+# Caché y nombres de archivo
+
+`/media` y `/sectores` se sirven con `Cache-Control: public, max-age=31536000, immutable`
+(`next.config.ts`): el navegador y la CDN guardan cada archivo un año sin volver a preguntar. Por eso
+**ningún archivo de estas carpetas se reemplaza con el mismo nombre**. Si cambia un montaje, un póster o
+una foto de sector, el archivo nuevo lleva otro nombre (`hero-av1.v2.mp4`, `sector-salud.v2.webp`) y se
+actualiza la referencia en el código; el viejo se borra en el mismo cambio.
+
+Los pósteres (`*-poster-<ancho>.avif|webp`) salen de `*-poster.jpg` con `node scripts/hero-posters.mjs`;
+si cambia el JPEG, se versionan los tres nombres a la vez.

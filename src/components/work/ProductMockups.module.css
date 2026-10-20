@@ -267,3 +267,57 @@
 .farm .metric strong {
   font-size: var(--step-3);
 }
+
+/* Entrada de los datos en el hero de una ficha (`data-animate`): la cifra sube,
+   la barra se llena y las filas aparecen una tras otra, a 0,55 / 0,65 / 0,75 s.
+   Sin movimiento pedido, la ventana se pinta completa desde el principio. */
+@media (prefers-reduced-motion: no-preference) {
+  .mock[data-animate] .metric strong,
+  .mock[data-animate] .query {
+    animation: mockLift 0.8s 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .mock[data-animate] .meter b {
+    transform-origin: left center;
+    animation: mockFill 1.2s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .mock[data-animate] :is(.rows > div, .results li, .filters li, .hl) {
+    animation: mockLift 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: 0.55s;
+  }
+
+  .mock[data-animate] :is(.rows > div, .results li, .filters li, .hl):nth-of-type(2) {
+    animation-delay: 0.65s;
+  }
+
+  .mock[data-animate] :is(.rows > div, .results li, .filters li, .hl):nth-of-type(3) {
+    animation-delay: 0.75s;
+  }
+
+  .mock[data-animate] :is(.rows > div, .results li, .filters li, .hl):nth-of-type(n + 4) {
+    animation-delay: 0.85s;
+  }
+}
+
+@keyframes mockLift {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mockFill {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}

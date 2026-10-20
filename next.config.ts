@@ -64,6 +64,20 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Videos, pósteres y fotos de sector: caché inmutable de un año. Un
+      // archivo de estas carpetas no se reemplaza con el mismo nombre; si
+      // cambia, se versiona el nombre (`public/media/CREDITOS.md`).
+      ...["/media/:path*", "/sectores/:path*"].map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      })),
+      // Marca: logos descargables, favicon y tarjetas sociales que
+      // `scripts/og-cards.mjs` vuelve a pintar con el mismo nombre. Un día de
+      // caché y una semana sirviendo la copia vieja mientras se revalida.
+      {
+        source: "/brand/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
     ];
   },
 };

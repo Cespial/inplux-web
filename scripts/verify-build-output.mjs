@@ -226,7 +226,7 @@ const pageDefinitions = {
     file: ".next/server/app/trabajo.html",
     title: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
     description:
-      "Seis productos construidos y operados por INPLUX, cada uno con sus fuentes públicas y la fecha en que las revisamos.",
+      "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con sus fuentes públicas y la fecha en que las revisamos.",
     canonical: `${siteUrl}/trabajo`,
     ogTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
     ogDescription:
