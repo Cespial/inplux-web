@@ -1,17 +1,17 @@
 /* ===========================================================================
    INPLUX · Typography
-   Display: Newsreader Display (300, normal + italic) — headings ONLY.
-   Body/UI:  Geist (100–900).
-   Mono/UI:  Geist Mono (100–900).
+   Una sola familia: Rethink Sans (400–800, normal + italic) para titulares,
+   texto, interfaz, etiquetas y datos. Sin serif ni mono aparte.
    Labels:   uppercase, letter-spacing 0.08em, weight 500–600.
    =========================================================================== */
 
 :root {
-  /* --font-serif, --font-serif-italic, --font-body y --font-mono-face los inyecta
-     next/font en <html> para enlazar estos tokens con los WOFF2 locales y evitar
-     que la cascada los sustituya. La cursiva no se precarga: el navegador la pide
-     únicamente cuando una página contiene énfasis editorial real. */
-  --font-mono: var(--font-mono-face), "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* next/font inyecta --font-body y --font-serif en <html>, las dos con Rethink
+     Sans (ver `app/layout.tsx`). Los nombres de la cursiva y la mono se conservan
+     porque los usan decenas de hojas, pero resuelven a la misma familia. */
+  --font-serif-italic: var(--font-body);
+  --font-mono-face: var(--font-body);
+  --font-mono: var(--font-mono-face), ui-sans-serif, system-ui, sans-serif;
 
   /* aliases */
   --font-display: var(--font-serif);

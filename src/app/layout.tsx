@@ -4,36 +4,30 @@ import type { ReactNode } from "react";
 import { personId, teamMembers } from "@/content/team";
 import "./globals.css";
 
-const geist = localFont({
-  src: "./fonts/Geist-Latin.woff2",
+/*
+ * Una sola familia para todo el sitio: Rethink Sans (OFL), variable de 400 a
+ * 800, con su cursiva. next/font inyecta en <html> las dos variables que usan
+ * las hojas —--font-body y --font-serif— y las dos cargan los mismos archivos
+ * con la misma precarga, así que comparten URL y el navegador los descarga una
+ * sola vez. next/font exige opciones literales: por eso la lista se repite. La
+ * cursiva y la mono se enlazan a esta misma familia en `tokens/typography.css`.
+ */
+const rethink = localFont({
+  src: [
+    { path: "./fonts/RethinkSans-Latin.woff2", weight: "400 800", style: "normal" },
+    { path: "./fonts/RethinkSans-Latin-Italic.woff2", weight: "400 800", style: "italic" },
+  ],
   variable: "--font-body",
-  weight: "100 900",
   display: "swap",
 });
 
-const newsreader = localFont({
-  src: "./fonts/Newsreader-Display-300-Latin.woff2",
+const rethinkDisplay = localFont({
+  src: [
+    { path: "./fonts/RethinkSans-Latin.woff2", weight: "400 800", style: "normal" },
+    { path: "./fonts/RethinkSans-Latin-Italic.woff2", weight: "400 800", style: "italic" },
+  ],
   variable: "--font-serif",
-  weight: "300",
-  style: "normal",
   display: "swap",
-});
-
-const newsreaderItalic = localFont({
-  src: "./fonts/Newsreader-Display-300-Italic-Latin.woff2",
-  variable: "--font-serif-italic",
-  weight: "300",
-  style: "italic",
-  display: "swap",
-  preload: false,
-});
-
-const geistMono = localFont({
-  src: "./fonts/GeistMono-Latin.woff2",
-  variable: "--font-mono-face",
-  weight: "100 900",
-  display: "swap",
-  preload: false,
 });
 
 export const viewport: Viewport = {
@@ -138,7 +132,7 @@ export default function RootLayout({
   return (
     <html
       lang="es-CO"
-      className={`${geist.variable} ${newsreader.variable} ${newsreaderItalic.variable} ${geistMono.variable}`}
+      className={`${rethink.variable} ${rethinkDisplay.variable}`}
     >
       <head>
         <script

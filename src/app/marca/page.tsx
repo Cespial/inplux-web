@@ -94,9 +94,9 @@ const logoAssets = [
 ] as const;
 
 const typeScale = [
-  ["DISPLAY / 01", "Newsreader Display", "Titulares editoriales", "De contexto a producto."],
-  ["BODY / 02", "Geist", "Texto, navegación y UI", "Software útil, explicado con claridad."],
-  ["MONO / 03", "Geist Mono", "Datos, estados y señales", "INPLUX FACTORY / SYSTEM ACTIVE"],
+  ["DISPLAY / 01", "Rethink Sans 400", "Titulares", "De contexto a producto."],
+  ["BODY / 02", "Rethink Sans 400–500", "Texto, navegación y UI", "Software útil, explicado con claridad."],
+  ["LABEL / 03", "Rethink Sans 500", "Etiquetas, datos y estados", "INPLUX FACTORY / SYSTEM ACTIVE"],
 ] as const;
 
 function DownloadLink({
@@ -321,11 +321,11 @@ export default function MarcaPage() {
                 <span>04</span> Tipografía
               </p>
               <h2 id="type-title">
-                Tres voces, una misma <em>jerarquía.</em>
+                Una familia, una misma <em>jerarquía.</em>
               </h2>
               <p>
-                Newsreader aporta carácter editorial. Geist mantiene legibilidad.
-                Geist Mono hace visibles los estados del sistema.
+                Rethink Sans lleva titulares, texto y etiquetas. La jerarquía sale
+                del tamaño, el peso y el espaciado, no de cambiar de letra.
               </p>
             </div>
             <div className={styles.typeSpecimens}>
