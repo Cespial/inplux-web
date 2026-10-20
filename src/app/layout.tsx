@@ -89,6 +89,17 @@ export const metadata: Metadata = {
   },
 };
 
+/*
+ * Antes del primer pintado, marca `<html data-motion>` para que las bandas
+ * puedan esperar ocultas su entrada al hacer scroll (`components/v5/Reveal`).
+ * Si `Reveal` no monta en 2,6 s (un chunk que no llegó), quita la marca y todo
+ * queda visible. Sin JavaScript la marca nunca existe y no se oculta nada.
+ */
+const motionScript =
+  'document.documentElement.setAttribute("data-motion","");' +
+  'setTimeout(function(){var d=document.documentElement;' +
+  'if(!d.hasAttribute("data-motion-ready"))d.removeAttribute("data-motion")},2600);';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -133,8 +144,11 @@ export default function RootLayout({
     <html
       lang="es-CO"
       className={`${rethink.variable} ${rethinkDisplay.variable}`}
+      // `motionScript` añade `data-motion` antes de hidratar.
+      suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: motionScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
