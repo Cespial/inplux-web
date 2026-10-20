@@ -52,6 +52,23 @@ vienen de Pexels (licencia Pexels: uso comercial gratuito sin atribución obliga
 | 8 | Bogotá en hora azul | https://www.pexels.com/video/40369464/ |
 | 9 | Medellín al atardecer, segundo tramo | https://www.pexels.com/video/40130401/ |
 
+# Créditos del video «Desde Medellín, para Latinoamérica» (banda de la portada)
+
+Montaje propio de INPLUX (octubre de 2026): seis tomas de 3 s con corte seco, color natural, 1080p a 30 fps
+a partir de originales 4K, sin audio. Exportado en AV1 (svt, crf 38), HEVC (x265, crf 27, hvc1), H.264 (crf 24)
+y 720p (crf 26) para móvil; póster del primer fotograma en JPG + AVIF/WebP a 828/1280/1920.
+Todas las tomas vienen de Pexels (licencia Pexels: uso comercial gratuito sin atribución obligatoria);
+ninguna se repite con los montajes de portada, Cómo trabajamos o Nosotros.
+
+| # | Toma | Pexels |
+|---|------|--------|
+| 1 | Andes con nubes bajas y parcelas | https://www.pexels.com/video/15747549/ |
+| 2 | Glorieta residencial desde el aire | https://www.pexels.com/video/35180004/ |
+| 3 | Operaria en planta textil | https://www.pexels.com/video/31369405/ |
+| 4 | Puerto de contenedores de noche | https://www.pexels.com/video/35907908/ |
+| 5 | Torres de telecomunicaciones al atardecer | https://www.pexels.com/video/39640319/ |
+| 6 | Bogotá en el crepúsculo | https://www.pexels.com/video/40369496/ |
+
 # Caché y nombres de archivo
 
 `/media` y `/sectores` se sirven con `Cache-Control: public, max-age=31536000, immutable`
