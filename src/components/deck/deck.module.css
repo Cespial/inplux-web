@@ -446,14 +446,15 @@
   display: block;
 }
 
-/* La cursiva es una FAMILIA aparte —Newsreader Display 300 Italic, dibujada—,
-   no una inclinación sintética de la romana. `font-style: italic` se declara
-   igualmente para que un navegador sin la cara cargada no pinte la segunda
-   línea idéntica a la primera. */
+/* La segunda línea de la portada se distingue por peso, no por cursiva: el
+   sitio carga Rethink Sans sólo en redonda y `font-synthesis: none` impide la
+   inclinación inventada (el alias `--font-serif-italic` resuelve a la misma
+   familia). */
 .tituloPortadaCursiva {
   display: block;
   font-family: var(--font-serif-italic), var(--font-serif);
-  font-style: italic;
+  font-style: normal;
+  font-weight: 600;
 }
 
 /* La malla vive pegada a la caja de la lámina, entre las dos barras. Sorda al

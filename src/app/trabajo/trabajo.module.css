@@ -41,7 +41,7 @@
   margin: 0.4rem 0 0;
   color: var(--fg-dim);
   font-size: var(--step-8);
-  font-style: italic;
+  font-weight: 600;
 }
 .moreTitle {
   margin-top: clamp(2rem, 4vw, 3rem);

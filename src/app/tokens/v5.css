@@ -83,5 +83,6 @@
 
 .editorialLight h1 em,
 .editorialLight h2 em {
-  font-style: italic;
+  font-style: normal;
+  font-weight: 600;
 }
