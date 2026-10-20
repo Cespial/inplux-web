@@ -208,12 +208,12 @@ const pageDefinitions = {
     ogDescription:
       "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
     ogUrl: `${siteUrl}/como-trabajamos`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-como-trabajamos.jpg`,
+    ogImageAlt: "INPLUX · Cómo trabajamos. Del diagnóstico a la operación.",
     twitterTitle: "Cómo trabajamos | INPLUX",
     twitterDescription:
       "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Cómo trabajamos. Del diagnóstico a la operación.",
     jsonLd: {
       type: "WebPage",
       name: "Cómo trabajamos",
@@ -322,12 +322,12 @@ const pageDefinitions = {
     ogDescription:
       "Lo que INPLUX construye para IPS y prestadores de salud en Colombia: app de pacientes, central de telemonitoreo, integración con la historia clínica, mesa de ayuda, tableros y sistemas a la medida.",
     ogUrl: `${siteUrl}/sectores/salud`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-sector-salud.jpg`,
+    ogImageAlt: "INPLUX · Salud. IA para pacientes, telemonitoreo e historia clínica.",
     twitterTitle: "Software para IPS y prestadores de salud | INPLUX",
     twitterDescription:
       "Lo que INPLUX construye para IPS y prestadores de salud en Colombia: app de pacientes, central de telemonitoreo, integración con la historia clínica, mesa de ayuda, tableros y sistemas a la medida.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Salud. IA para pacientes, telemonitoreo e historia clínica.",
     jsonLd: {
       type: "WebPage",
       name: "Software para IPS y prestadores de salud",
@@ -349,12 +349,12 @@ const pageDefinitions = {
     ogDescription:
       "Lo que INPLUX construye para alcaldías, entidades territoriales y hacienda pública: información fiscal con fuente, revisión de contratación y seguimiento de la gestión, con el equipo aprobando cada paso.",
     ogUrl: `${siteUrl}/sectores/publico`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-sector-publico.jpg`,
+    ogImageAlt: "INPLUX · Sector público. IA para hacienda municipal, contratación y seguimiento de la gestión.",
     twitterTitle: "IA para alcaldías y entidades públicas | INPLUX",
     twitterDescription:
       "Lo que INPLUX construye para alcaldías, entidades territoriales y hacienda pública: información fiscal con fuente, revisión de contratación y seguimiento de la gestión, con el equipo aprobando cada paso.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Sector público. IA para hacienda municipal, contratación y seguimiento de la gestión.",
     jsonLd: {
       type: "WebPage",
       name: "IA para alcaldías y entidades públicas",
@@ -375,12 +375,12 @@ const pageDefinitions = {
     ogDescription:
       "Lo que INPLUX construye para firmas de abogados, contadores y áreas jurídicas: consulta tributaria con fuente oficial, vigencia de normas, jurisprudencia y laudos comparables.",
     ogUrl: `${siteUrl}/sectores/legal-tributario`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-sector-legal-tributario.jpg`,
+    ogImageAlt: "INPLUX · Legal y tributario. IA para consulta normativa, vigencia y jurisprudencia.",
     twitterTitle: "IA para firmas, contadores y áreas jurídicas | INPLUX",
     twitterDescription:
       "Lo que INPLUX construye para firmas de abogados, contadores y áreas jurídicas: consulta tributaria con fuente oficial, vigencia de normas, jurisprudencia y laudos comparables.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Legal y tributario. IA para consulta normativa, vigencia y jurisprudencia.",
     jsonLd: {
       type: "WebPage",
       name: "IA para firmas, contadores y áreas jurídicas",
@@ -401,12 +401,12 @@ const pageDefinitions = {
     ogDescription:
       "Lo que INPLUX construye para compañías privadas: productos digitales, herramientas internas y datos conciliados sobre los sistemas que ya operan, con las decisiones críticas en manos del equipo.",
     ogUrl: `${siteUrl}/sectores/empresas`,
-    ogImage: defaultOgImage,
-    ogImageAlt: defaultOgImageAlt,
+    ogImage: `${siteUrl}/brand/og/og-sector-empresas.jpg`,
+    ogImageAlt: "INPLUX · Empresas. IA para operación, datos y productos digitales.",
     twitterTitle: "IA para la operación de empresas | INPLUX",
     twitterDescription:
       "Lo que INPLUX construye para compañías privadas: productos digitales, herramientas internas y datos conciliados sobre los sistemas que ya operan, con las decisiones críticas en manos del equipo.",
-    twitterImageAlt: defaultOgImageAlt,
+    twitterImageAlt: "INPLUX · Empresas. IA para operación, datos y productos digitales.",
     jsonLd: {
       type: "WebPage",
       name: "IA para la operación de empresas",
