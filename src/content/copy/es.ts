@@ -133,11 +133,6 @@ export const homeCopyEs: HomeCopy = {
     signalAxis: "BUILD / 01",
   },
 
-  thesis: {
-    eyebrow: "TESIS",
-    lead: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones",
-    emphasis: "en Latinoamérica.",
-  },
 
   howWeWork: {
     eyebrow: "CÓMO TRABAJAMOS",
@@ -1173,10 +1168,7 @@ export const homeCopyEs: HomeCopy = {
   v5: {
     heroSecondaryCta: "Ver con quiénes",
     proof: {
-      title: "En producción, con la cifra y su fuente.",
       laudosUnit: "documentos en el corpus de Laudos",
-      laudosDetail:
-        "{laudos} laudos arbitrales y {consejo} decisiones del Consejo de Estado, {range}, para buscar y analizar.",
       sourceLabel: "Fuente: perfil público del producto",
       portfolioSourceLabel: "Fuente: directorio de productos",
       wallSourceLabel: "Fuente: muro de relaciones",
@@ -1184,7 +1176,6 @@ export const homeCopyEs: HomeCopy = {
     process: {
       eyebrow: "Del diagnóstico a producción",
       title: "Trabajamos contigo desde el primer flujo hasta que opera.",
-      lead: "Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente. Cada fase termina con algo que se puede usar y revisar.",
       deliverableLabel: "Entregable",
       phases: [
         {
@@ -1212,7 +1203,7 @@ export const homeCopyEs: HomeCopy = {
     products: {
       eyebrow: "Productos propios",
       title: "Cinco productos construidos y operados por INPLUX.",
-      lead: "Cada uno nació de un problema de un cliente y hoy funciona por su cuenta. Las capturas son de sus páginas públicas.",
+      lead: "Cada uno nació del problema de un cliente. Las capturas son de sus páginas públicas.",
       tribaiLead:
         "Nuestro servidor MCP le da a Claude y a ChatGPT el Estatuto Tributario vigente, la doctrina de la DIAN y la jurisprudencia del Consejo de Estado, con la fuente oficial de cada respuesta.",
       tribaiTag: "Tribai MCP · ejemplo ilustrativo",
@@ -1225,6 +1216,11 @@ export const homeCopyEs: HomeCopy = {
       terminalCall: "Claude llama la herramienta de Tribai",
       terminalAnswer: "Respuesta, con la fuente oficial",
     },
+    latam: {
+      eyebrow: "Dónde estamos",
+      title: "Desde Medellín, para Latinoamérica.",
+      lead: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones de la región. La ingeniería se hace en Medellín; el trabajo, dentro de los sistemas y los equipos de cada cliente.",
+    },
     sectors: {
       eyebrow: "Dónde trabajamos",
       title: "Construido para la realidad de cada sector.",
@@ -1232,25 +1228,21 @@ export const homeCopyEs: HomeCopy = {
         {
           title: "Sector público",
           detail: "Alcaldías, entidades territoriales y hacienda municipal: información fiscal, contratación y seguimiento.",
-          tag: "Gobia · Tribai",
           href: "/sectores/publico",
         },
         {
           title: "Salud",
           detail: "IPS y prestadores: app de pacientes, telemonitoreo, integración con la historia clínica.",
-          tag: "Página del sector",
           href: "/sectores/salud",
         },
         {
           title: "Legal y tributario",
           detail: "Firmas, contadores y áreas jurídicas: consulta con fuente, vigencia y jurisprudencia.",
-          tag: "Tribai · Kelsen · Laudos",
           href: "/sectores/legal-tributario",
         },
         {
           title: "Empresas",
           detail: "Operación, datos y productos digitales para compañías privadas.",
-          tag: "Porkia · proyectos a la medida",
           href: "/sectores/empresas",
         },
       ],
@@ -1258,7 +1250,6 @@ export const homeCopyEs: HomeCopy = {
     audit: {
       eyebrow: "Gobierno de la IA",
       title: "IA para instituciones, lista para auditoría.",
-      lead: "Lo que una entidad pública o una empresa regulada necesita revisar antes de poner un sistema en producción.",
       items: [
         {
           title: "Fuente en cada respuesta",
@@ -1271,10 +1262,6 @@ export const homeCopyEs: HomeCopy = {
         {
           title: "Acceso gobernado",
           detail: "Roles, autenticación de la organización y registro de actividad por usuario.",
-        },
-        {
-          title: "Datos personales",
-          detail: "Tratamiento conforme a la Ley 1581 de 2012 y a la política de cada cliente.",
         },
       ],
       techEyebrow: "Tecnología con la que construimos",
@@ -1290,7 +1277,6 @@ export const homeCopyEs: HomeCopy = {
     team: {
       eyebrow: "Quién responde",
       title: "Dos direcciones: criterio y producto.",
-      lead: "Quien decide qué se construye y quien dirige cómo se construye.",
     },
     contactEyebrow: "El siguiente producto",
   },

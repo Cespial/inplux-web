@@ -10,7 +10,6 @@ import {
   Chip,
   FeatureSplit,
   Placeholder,
-  RowsList,
   SectionHead,
   Shot,
   Timeline,
@@ -19,8 +18,8 @@ import {
   v5 as ui,
 } from "@/components/v5/primitives";
 import { StatRow, type Stat } from "@/components/v5/StatRow";
+import { VideoBand } from "@/components/v5/VideoBand";
 import { clientWallCount } from "@/content/clients";
-import { formatCopy } from "@/content/copy/format";
 import type { HomeCopy } from "@/content/copy/types";
 import { portfolio } from "@/content/home";
 import { featuredPressStories, type PressStory } from "@/content/press";
@@ -28,6 +27,7 @@ import { teamMembers } from "@/content/team";
 import { workProfiles, type WorkProfile } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
 import styles from "./home-v5.module.css";
+import { SectorCards } from "./SectorCards";
 
 /*
  * La portada v5 (octubre de 2026), sección por sección, compuesta con las
@@ -73,49 +73,53 @@ export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: React
   );
 }
 
-/* ------------------------------------------------------- tesis y cifras */
+/* ------------------------------------- Latinoamérica: video y cifras */
 
-export function V5Thesis({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
+/** El montaje «Desde Medellín, para Latinoamérica»: seis tomas de tres segundos. */
+const LATAM_VIDEO = {
+  poster: "/media/latam-poster.jpg",
+  sources: [
+    { src: "/media/latam-720.mp4", type: "video/mp4", media: "(max-width: 760px)" },
+    { src: "/media/latam-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.08"' },
+    { src: "/media/latam-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
+    { src: "/media/latam.mp4", type: "video/mp4" },
+  ],
+} as const;
+
+export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
   const laudos = profile("laudos");
-  const [awards, council, coverage] = laudos.interface.items;
   const stats = copy.heroStats;
   const proof: Stat[] = [
     {
       who: laudos.name,
       value: localNumber(laudos.interface.primaryMetric, lang),
       unit: copy.v5.proof.laudosUnit,
-      detail: formatCopy(copy.v5.proof.laudosDetail, {
-        laudos: localNumber(awards?.value ?? "", lang),
-        consejo: localNumber(council?.value ?? "", lang),
-        range: coverage?.value ?? "",
-      }),
       source: { href: "/trabajo/laudos", label: copy.v5.proof.sourceLabel },
     },
     {
       value: String(portfolio.length),
       unit: stats.products.label,
-      detail: formatCopy(stats.products.detail, {
-        documented: String(workProfiles.length),
-        inDevelopment: String(portfolio.filter((item) => item.stage === "En desarrollo").length),
-      }),
       source: { href: "/trabajo", label: copy.v5.proof.portfolioSourceLabel },
     },
     {
       value: String(clientWallCount),
       unit: stats.organizations.label,
-      detail: stats.organizations.detail,
       source: { href: "#clientes", label: copy.v5.proof.wallSourceLabel },
     },
   ];
 
+  const latam = copy.v5.latam;
   return (
-    <Band id="tesis" className={styles.thesis} labelledBy="v5-thesis-title">
-      <p className={ui.eyebrow}>{copy.thesis.eyebrow}</p>
-      <h2 className={`${ui.d1} ${styles.thesisTitle}`} id="v5-thesis-title">
-        {copy.thesis.lead} <em>{copy.thesis.emphasis}</em>
-      </h2>
-      <StatRow id="casos" title={copy.v5.proof.title} ariaLabel={stats.ariaLabel} items={proof} />
-    </Band>
+    <VideoBand
+      id="latinoamerica"
+      eyebrow={latam.eyebrow}
+      title={latam.title}
+      lead={latam.lead}
+      poster={LATAM_VIDEO.poster}
+      sources={LATAM_VIDEO.sources}
+    >
+      <StatRow id="casos" ariaLabel={stats.ariaLabel} items={proof} />
+    </VideoBand>
   );
 }
 
@@ -130,9 +134,12 @@ export function V5Process({ copy }: { copy: HomeCopy }) {
         align="center"
         eyebrow={process.eyebrow}
         title={process.title}
-        lead={process.lead}
       />
-      <Timeline phases={process.phases} deliverableLabel={process.deliverableLabel} />
+      {/* En la portada, cada fase con su entregable; el detalle está en /como-trabajamos. */}
+      <Timeline
+        phases={process.phases.map(({ title, deliverable }) => ({ title, deliverable }))}
+        deliverableLabel={process.deliverableLabel}
+      />
     </Band>
   );
 }
@@ -198,7 +205,6 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
   const text = copy.v5.products;
   const rail = copy.experienceRail;
   const headline = (item: WorkProfile) => copy.products.headlines[item.slug] ?? item.headline;
-  const description = (item: WorkProfile) => copy.products.descriptions[item.slug] ?? item.description;
   const category = (item: WorkProfile) => rail.productCategories[item.slug] ?? item.category;
   const status = (item: WorkProfile) => rail.productStatuses[item.slug] ?? item.status.label;
 
@@ -248,11 +254,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
           </>
         }
         title={gobia.name}
-        lead={
-          <>
-            {headline(gobia)} {description(gobia)}
-          </>
-        }
+        lead={headline(gobia)}
         actions={
           <Button href="/trabajo/gobia" variant="ghost">
             {text.openCta} <span aria-hidden="true">→</span>
@@ -330,7 +332,7 @@ export function V5Sectors({ copy }: { copy: HomeCopy }) {
       <h2 className={`${ui.d2} ${styles.sectorsTitle}`} id="v5-sectors-title">
         {sectors.title}
       </h2>
-      <RowsList items={sectors.items} />
+      <SectorCards items={sectors.items} />
     </Band>
   );
 }
@@ -352,10 +354,6 @@ const AUDIT_ICONS = [
     <rect x="5" y="10" width="14" height="10" rx="2" />
     <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2" />
   </svg>,
-  <svg key="datos" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-    <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />
-    <path d="M9 12l2 2 4-4" />
-  </svg>,
 ];
 
 /**
@@ -370,7 +368,7 @@ export function V5Audit({ copy }: { copy: HomeCopy }) {
   const audit = copy.v5.audit;
   return (
     <Band id="auditoria" tone="light" labelledBy="v5-audit-title">
-      <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} lead={audit.lead} />
+      <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} />
       <ul className={styles.audit}>
         {audit.items.map((item, index) => (
           <li key={item.title}>
@@ -426,7 +424,6 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
   const featured = featuredPressStories();
   const visual = featured.filter((story) => story.image || story.visualKind === "clients");
   const top = [...visual, ...featured.filter((story) => !visual.includes(story))].slice(0, 3);
-  const rest = featured.filter((story) => !top.includes(story)).slice(0, 4);
   const format = (story: PressStory) => press.formats[story.format] ?? story.format;
   const date = (story: PressStory) => press.publishedLabels[story.slug] ?? story.publishedLabel;
   const titleLang = press.storyLang ?? undefined;
@@ -440,7 +437,7 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
         link={{ href: "/prensa", label: text.archiveCta }}
       />
       <div className={styles.pressGrid}>
-        {top.map((story, index) => (
+        {top.map((story) => (
           <article className={styles.story} key={story.slug}>
             <PressFigure story={story} copy={copy} />
             <div>
@@ -451,22 +448,11 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
                 </span>
               </div>
               <h3 lang={titleLang}>{story.title}</h3>
-              {index === 0 ? (
-                <p className={styles.summary}>{press.summaries[story.slug] ?? story.summary}</p>
-              ) : null}
               <a className={styles.more} href={story.href} target="_blank" rel="noreferrer">
                 {text.readCta} <span aria-hidden="true">↗</span>
               </a>
             </div>
           </article>
-        ))}
-      </div>
-      <div className={styles.storyList}>
-        {rest.map((story) => (
-          <a href={story.href} target="_blank" rel="noreferrer" key={story.slug}>
-            <span>{story.outlet}</span>
-            <strong lang={titleLang}>{story.title}</strong>
-          </a>
         ))}
       </div>
     </Band>
@@ -484,7 +470,6 @@ export function V5Team({ copy }: { copy: HomeCopy }) {
         <div className={styles.teamHead}>
           <p className={ui.eyebrow}>{text.eyebrow}</p>
           <h2 className={ui.d2} id="v5-team-title">{text.title}</h2>
-          <p className={ui.lead}>{text.lead}</p>
         </div>
         {teamMembers.map((member) => (
           <article className={styles.person} key={member.slug}>
@@ -502,11 +487,6 @@ export function V5Team({ copy }: { copy: HomeCopy }) {
               </span>
             </Link>
             <p>{team.bios[member.slug] ?? member.bio}</p>
-            <ul>
-              {member.credentials.slice(0, 3).map((credential) => (
-                <li key={credential}>{credential}</li>
-              ))}
-            </ul>
             <p className={styles.links}>
               <Link href={`/equipo/${member.slug}`}>
                 {team.profileCta} <span aria-hidden="true">→</span>

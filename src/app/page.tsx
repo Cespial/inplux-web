@@ -6,12 +6,12 @@ import { CopyEmailButton } from "@/components/home/CopyEmailButton.client";
 import {
   V5Audit,
   V5Hero,
+  V5Latam,
   V5Press,
   V5Process,
   V5Products,
   V5Sectors,
   V5Team,
-  V5Thesis,
 } from "@/components/home/v5/HomeV5";
 import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
@@ -52,8 +52,9 @@ const copy = homeCopyEs;
 
 /**
  * Portada v5 (20 de octubre de 2026): hero en video → con quién (muro) →
- * tesis con cifras publicadas → del diagnóstico a producción → productos →
- * sectores → auditoría y tecnología → prensa → quién responde → contacto. Las
+ * del diagnóstico a producción → productos → banda de video «Desde Medellín,
+ * para Latinoamérica» con las cifras publicadas → tarjetas de sector →
+ * auditoría y tecnología → prensa → quién responde → contacto. Las
  * secciones viven en `components/home/v5` y nada en ellas sale de otro lugar
  * que no sea un archivo de contenido.
  *
@@ -97,8 +98,6 @@ export default function Home() {
 
             <LogoWall copy={copy.experienceRail} heading={copy.clientWall} />
 
-            <V5Thesis copy={copy} lang="es" />
-
             {/* Fragmentos históricos de «Qué hacemos» y del motor: siguen resolviendo. */}
             <Anchor id="servicios" />
             <Anchor id="motor" />
@@ -106,6 +105,10 @@ export default function Home() {
 
             <Anchor id="trabajo-real" />
             <V5Products copy={copy} />
+
+            {/* La tesis vive ahora en la banda de video: su fragmento sigue resolviendo. */}
+            <Anchor id="tesis" />
+            <V5Latam copy={copy} lang="es" />
 
             {/* Fragmentos históricos de «Dónde trabajamos»: siguen resolviendo. */}
             <Anchor id="publico" />

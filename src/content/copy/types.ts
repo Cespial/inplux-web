@@ -567,13 +567,6 @@ export type HomeContactCopy = {
   locations: readonly string[];
 };
 
-export type ThesisCopy = {
-  eyebrow: string;
-  /** La tesis en una frase; `emphasis` cierra en cursiva serif. */
-  lead: string;
-  emphasis: string;
-};
-
 export type HowWeWorkStep = {
   number: string;
   title: string;
@@ -603,10 +596,8 @@ export type PartnerWallCopy = {
 export type HomeV5Copy = {
   heroSecondaryCta: string;
   proof: {
-    title: string;
-    /** La cifra de Laudos sale de `work.ts`; aquí sólo su lectura. */
+    /** La cifra de Laudos sale de `work.ts`; aquí sólo su unidad. */
     laudosUnit: string;
-    laudosDetail: string;
     sourceLabel: string;
     portfolioSourceLabel: string;
     wallSourceLabel: string;
@@ -614,7 +605,6 @@ export type HomeV5Copy = {
   process: {
     eyebrow: string;
     title: string;
-    lead: string;
     deliverableLabel: string;
     phases: readonly { title: string; detail: string; deliverable: string }[];
   };
@@ -633,21 +623,26 @@ export type HomeV5Copy = {
     terminalCall: string;
     terminalAnswer: string;
   };
+  /** La banda de video «Desde Medellín, para Latinoamérica», con las cifras con fuente debajo. */
+  latam: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+  };
   sectors: {
     eyebrow: string;
     title: string;
-    items: readonly { title: string; detail: string; tag: string; href: string }[];
+    items: readonly { title: string; detail: string; href: string }[];
   };
   audit: {
     eyebrow: string;
     title: string;
-    lead: string;
     items: readonly { title: string; detail: string }[];
     techEyebrow: string;
     techNote: string;
   };
   press: { eyebrow: string; title: string; readCta: string; archiveCta: string };
-  team: { eyebrow: string; title: string; lead: string };
+  team: { eyebrow: string; title: string };
   contactEyebrow: string;
 };
 
@@ -659,7 +654,6 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
-  thesis: ThesisCopy;
   howWeWork: HowWeWorkCopy;
   partnerWall: PartnerWallCopy;
   heroStats: HeroStatsCopy;
