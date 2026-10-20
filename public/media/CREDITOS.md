@@ -17,6 +17,23 @@ sin atribución obligatoria (https://www.pexels.com/license/). Se citan por cort
 | 9 | Cultivo en surcos | https://www.pexels.com/video/12493599/ |
 | 10 | Refinería de noche | https://www.pexels.com/video/10386895/ |
 
+# Créditos del video de «Cómo trabajamos»
+
+Montaje propio de INPLUX (octubre de 2026): ocho tomas de 3 s de territorio colombiano con corte seco,
+exportado en AV1, HEVC y H.264. Todas las tomas vienen de Pexels (licencia comercial gratuita sin
+atribución obligatoria); se citan por cortesía y para rastrear su origen.
+
+| # | Toma | Pexels |
+|---|------|--------|
+| 1 | Bogotá con los cerros orientales | https://www.pexels.com/video/10371805/ |
+| 2 | El Carmen de Viboral, Antioquia | https://www.pexels.com/video/38242722/ |
+| 3 | Avenida vista desde arriba | https://www.pexels.com/video/30103923/ |
+| 4 | Iglesia de cúpula roja en un pueblo colombiano | https://www.pexels.com/video/37195944/ |
+| 5 | Valle del Cocora, Quindío | https://www.pexels.com/video/16263003/ |
+| 6 | TransMilenio desde arriba | https://www.pexels.com/video/40369226/ |
+| 7 | Plaza de Bolívar y Catedral Primada | https://www.pexels.com/video/37151628/ |
+| 8 | Bogotá al anochecer | https://www.pexels.com/video/40369464/ |
+
 # Créditos del video de «Nosotros»
 
 Montaje propio de INPLUX (octubre de 2026): nueve tomas de 2 s con corte seco, color natural,

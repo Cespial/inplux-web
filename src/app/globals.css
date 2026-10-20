@@ -99,7 +99,12 @@ body {
 #trabajo-real,
 #publico,
 #privado,
-#empresas {
+#empresas,
+#fases,
+#capas,
+#evidencia,
+#compromisos,
+#sector-publico {
   scroll-margin-top: 5rem;
 }
 

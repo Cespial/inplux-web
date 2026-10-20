@@ -24,6 +24,15 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 84, 88],
   },
+  async redirects() {
+    // /fabrica y /capacidades se fundieron en /como-trabajamos (octubre de
+    // 2026). `permanent: true` responde 308; las anclas viejas (#producto,
+    // #ia, #sector-publico…) existen en la página nueva.
+    return [
+      { source: "/fabrica", destination: "/como-trabajamos", permanent: true },
+      { source: "/capacidades", destination: "/como-trabajamos", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

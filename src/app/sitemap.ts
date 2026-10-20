@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
     "/en",
-    "/fabrica",
+    "/como-trabajamos",
     "/trabajo",
     "/trabajo/tribai",
     "/trabajo/gobia",
@@ -20,7 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/trabajo/porkia",
     "/deck",
     "/deck/presentacion",
-    "/capacidades",
     ...sectorProfiles.map((sector) => `/sectores/${sector.slug}`),
     "/nosotros",
     "/equipo",

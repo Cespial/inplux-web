@@ -50,7 +50,7 @@ export function formatShortDate(isoDate: string) {
  * Fecha en que se revisó por última vez la fuente que publica esa `url`.
  *
  * Las pantallas que enmarcan una URL oficial —la vitrina de `/trabajo`, la
- * evidencia de `/capacidades`— la leen de aquí en vez de escribirla a mano: si
+ * evidencia de `/como-trabajamos`— la leen de aquí en vez de escribirla a mano: si
  * una fuente se vuelve a verificar, el pie de esa pantalla se mueve con ella y
  * no queda una fecha vieja contradiciendo al perfil.
  *
@@ -59,7 +59,7 @@ export function formatShortDate(isoDate: string) {
  * esa fecha *sobre esa URL*, así que un `sourceUrl` con un carácter de más
  * publicaba una fecha prestada sin que nadie se enterara. La comprobación vive
  * aquí y no en cada pantalla porque un contrato que cada llamador tiene que
- * acordarse de aplicar no es un contrato: `/capacidades` lo aplicaba y la
+ * acordarse de aplicar no es un contrato: la antigua `/capacidades` lo aplicaba y la
  * vitrina de `/trabajo` no.
  */
 export function verificationDateFor(

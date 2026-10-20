@@ -3,23 +3,14 @@
 import { useEffect, useRef } from "react";
 import ui from "./v5.module.css";
 
-/**
- * El montaje de fondo de un hero: tomas de dos segundos con corte seco.
- *
- * El video no lleva `autoPlay`: arranca al montar sólo si la persona no pidió
- * reducir el movimiento, y si lo pidió se queda en el póster. El orden de las
- * fuentes es el de peso: AV1, HEVC para Safari, y H.264 de 720p en pantallas
- * estrechas antes del de 1080p. Los créditos de cada toma están en
- * `public/media/CREDITOS.md`.
- *
- * Sin props pinta el montaje de la portada; cada página puede traer el suyo.
- */
 export type HeroVideoSource = {
   src: string;
   type: string;
+  /** Consulta de medios que limita la fuente (p. ej. la de 720p a pantallas estrechas). */
   media?: string;
 };
 
+/** El montaje de la portada: diez tomas de dos segundos con corte seco. */
 export const HOME_HERO_VIDEO = {
   poster: "/media/hero-poster.jpg",
   sources: [
@@ -30,6 +21,16 @@ export const HOME_HERO_VIDEO = {
   ],
 } as const satisfies { poster: string; sources: readonly HeroVideoSource[] };
 
+/**
+ * Video de fondo de un hero. Sin props pinta el montaje de la portada; otra
+ * página pasa su póster y sus fuentes.
+ *
+ * El video no lleva `autoPlay`: arranca al montar sólo si la persona no pidió
+ * reducir el movimiento, y si lo pidió se queda en el póster. El orden de las
+ * fuentes es el de peso: el 720p con su `media` va antes que las de 1080p para
+ * que un teléfono no baje el archivo grande. Los créditos de cada toma están
+ * en `public/media/CREDITOS.md`.
+ */
 export function HeroVideo({
   poster = HOME_HERO_VIDEO.poster,
   sources = HOME_HERO_VIDEO.sources,

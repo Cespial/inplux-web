@@ -46,8 +46,7 @@ export const companyNavigation = [
   },
   {
     label: "Cómo trabajamos",
-    // TODO PR D: /como-trabajamos
-    href: "/fabrica",
+    href: "/como-trabajamos",
     description: "Del diagnóstico a la operación, con entregables en cada fase.",
   },
   {
