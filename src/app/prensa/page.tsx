@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
-import { PressArchive } from "@/components/site/PressStories";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { eventFormats, pressStories, type PressStory } from "@/content/press";
+import { PageHero } from "@/components/v5/PageHero";
+import { V5Page } from "@/components/v5/V5Page";
+import { Band, SectionHead, v5 as ui } from "@/components/v5/primitives";
+import {
+  eventFormats,
+  pressCategories,
+  pressStories,
+  type PressStory,
+} from "@/content/press";
 import { findTeamMemberInByline, personId } from "@/content/team";
 import styles from "./prensa.module.css";
+
+/*
+ * `/prensa` (octubre de 2026): como la página de noticias de primero.com, una
+ * foto real de un escenario y las piezas en tarjetas con el medio, el titular
+ * y la fecha, enlazadas a su fuente. La prosa propia se reduce al hero; el
+ * archivo es el contenido.
+ */
 
 const canonicalUrl = "https://inplux.co/prensa";
 const pageDescription =
@@ -14,17 +26,16 @@ const pageDescription =
 const sortedPressStories: PressStory[] = [...pressStories].sort((a, b) =>
   b.publishedAt.localeCompare(a.publishedAt),
 );
-const sourceCount = new Set(pressStories.map((story) => story.outlet)).size;
-const mediaCount = pressStories.filter((story) => story.category === "Medios").length;
-const publicStageCount = pressStories.filter(
-  (story) => story.category === "Escenarios públicos",
-).length;
-const researchCount = pressStories.filter(
-  (story) => story.category === "Investigación",
-).length;
-const signedIdeasCount = pressStories.filter(
-  (story) => story.category === "Ideas firmadas",
-).length;
+
+/** La foto del hero: la pieza más reciente con fotografía real de un escenario. */
+const heroStory = sortedPressStories.find(
+  (story) => story.visualKind === "photo" && story.image,
+);
+
+const groupedStories = pressCategories.map((category) => ({
+  ...category,
+  stories: sortedPressStories.filter((story) => story.category === category.label),
+}));
 
 export const metadata: Metadata = {
   title: "Prensa y conversaciones",
@@ -98,7 +109,7 @@ const pressCollectionJsonLd = {
     {
       "@type": "ItemList",
       "@id": `${canonicalUrl}#archivo`,
-      url: `${canonicalUrl}#press-archive-title`,
+      url: `${canonicalUrl}#archivo`,
       numberOfItems: sortedPressStories.length,
       itemListElement: sortedPressStories.map((story, index) => ({
         "@type": "ListItem",
@@ -164,85 +175,111 @@ const pressCollectionJsonLd = {
   ],
 };
 
+function StoryCard({ story }: { story: PressStory }) {
+  return (
+    <li className={styles.card}>
+      <a
+        href={story.href}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`${story.title} — ${story.outlet}`}
+      >
+        <span className={styles.outlet}>{story.outlet}</span>
+        <strong className={styles.title}>{story.title}</strong>
+        {story.editorialStatus ? (
+          <span className={styles.status}>{story.editorialStatus}</span>
+        ) : null}
+        <span className={styles.cardMeta}>
+          <span>{story.format}</span>
+          {story.byline ? <span>{story.byline}</span> : null}
+          <time dateTime={story.publishedAt}>{story.publishedLabel}</time>
+        </span>
+        <span className={styles.arrow} aria-hidden="true">
+          ↗
+        </span>
+      </a>
+    </li>
+  );
+}
+
 export default function Prensa() {
   return (
-    <ContactDialogProvider>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(pressCollectionJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <SiteHeader inverseOnTop />
-      <main id="main-content" tabIndex={-1}>
-        <section
-          className={styles.hero}
-          data-header-theme="dark"
-          aria-labelledby="press-title"
-        >
-          <div className={styles.heroGrid} aria-hidden="true" />
-          <span className={styles.heroWord} aria-hidden="true">
-            CIRCULACIÓN
-          </span>
-          <div className={styles.heroInner}>
-            <div className={styles.heroCopy}>
-              <p>
-                <span aria-hidden="true" />
-                Prensa y conversaciones
-              </p>
-              <h1 id="press-title">
-                Ideas que siguen trabajando después de la <em>conversación.</em>
-              </h1>
-              <p className={styles.intro}>
-                Cobertura, escenarios públicos, investigación abierta y columnas
-                firmadas. Cada publicación ocupa su categoría; ninguna aparece sin
-                fecha, título y enlace original consultable.
-              </p>
-            </div>
+      <ContactDialogProvider>
+        <V5Page className={styles.root}>
+          <main id="main-content" tabIndex={-1}>
+            <section id="inicio" aria-labelledby="press-title">
+              <PageHero
+                className={styles.hero}
+                eyebrow="Prensa y conversaciones"
+                title={<span id="press-title">Lo que se ha publicado sobre nuestro trabajo.</span>}
+                lead="Cobertura, escenarios públicos, investigación abierta y columnas firmadas."
+                leadMuted="Cada pieza con su fecha, su medio y el enlace a la fuente original. No llamamos prensa a todo: las columnas propias y los trabajos sin revisión por pares van identificados."
+                crumbs={[{ label: "Inicio", href: "/" }, { label: "Prensa" }]}
+                media={
+                  heroStory?.image
+                    ? {
+                        kind: "image",
+                        src: heroStory.image,
+                        alt: heroStory.imageAlt ?? heroStory.title,
+                        width: 1050,
+                        height: 1400,
+                        priority: true,
+                      }
+                    : { kind: "none" }
+                }
+              />
+            </section>
 
-            <aside className={styles.latest} aria-label="Composición editorial del archivo">
-              <div className={styles.latestTop}>
-                <span>Archivo por categoría</span>
-                <span>URL + fecha revisadas</span>
-              </div>
-              <dl className={styles.latestMetrics}>
-                <div>
-                  <dt>En medios</dt>
-                  <dd>{String(mediaCount).padStart(2, "0")}</dd>
-                </div>
-                <div>
-                  <dt>Escenario</dt>
-                  <dd>{String(publicStageCount).padStart(2, "0")}</dd>
-                </div>
-                <div>
-                  <dt>Investigación</dt>
-                  <dd>{String(researchCount).padStart(2, "0")}</dd>
-                </div>
-                <div>
-                  <dt>Ideas firmadas</dt>
-                  <dd>{String(signedIdeasCount).padStart(2, "0")}</dd>
-                </div>
-              </dl>
-              <div className={styles.latestNote}>
-                <p>Criterio editorial</p>
-                <strong>No llamamos prensa a todo.</strong>
-                <span>
-                  Las columnas propias y los trabajos sin revisión por pares están
-                  identificados antes de abrir su fuente.
-                </span>
-              </div>
-            </aside>
-          </div>
-          <div className={styles.heroFoot}>
-            <span>INPLUX / ARCHIVO ABIERTO</span>
-            <span>{sourceCount} repositorios o publicaciones · {pressStories.length} enlaces</span>
-            <a href="#press-archive-title">Explorar el archivo ↓</a>
-          </div>
-        </section>
-
-        <PressArchive />
-      </main>
-      <SiteFooter />
-    </ContactDialogProvider>
+            <Band id="archivo" labelledBy="archive-title" className={styles.archive}>
+              <SectionHead
+                id="archive-title"
+                eyebrow={`Archivo con fuente · ${String(pressStories.length).padStart(2, "0")}`}
+                title={
+                  <>
+                    Cada pieza, con su <em>fuente.</em>
+                  </>
+                }
+              />
+              <nav className={styles.filters} aria-label="Secciones del archivo">
+                {groupedStories.map((category) => (
+                  <a key={category.id} href={`#${category.id}`}>
+                    {category.label}
+                    <span>{String(category.stories.length).padStart(2, "0")}</span>
+                  </a>
+                ))}
+              </nav>
+              {groupedStories.map((category) => (
+                <section
+                  key={category.id}
+                  id={category.id}
+                  className={styles.group}
+                  aria-labelledby={`${category.id}-title`}
+                >
+                  <header className={styles.groupHead}>
+                    <h3 id={`${category.id}-title`}>{category.label}</h3>
+                    <p className={ui.small}>{category.description}</p>
+                  </header>
+                  <ul className={styles.cards}>
+                    {category.stories.map((story) => (
+                      <StoryCard key={story.slug} story={story} />
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              <p className={styles.pressRoom}>
+                Solicitudes de prensa: <a href="mailto:gerencia@inplux.co?subject=Solicitud%20de%20prensa%20-%20INPLUX">gerencia@inplux.co</a>
+              </p>
+            </Band>
+          </main>
+        </V5Page>
+      </ContactDialogProvider>
+    </>
   );
 }
