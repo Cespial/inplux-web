@@ -23,6 +23,21 @@ BANDERA_ZA = ('<svg viewBox="0 0 800 534" width="{w}" height="{h}" style="border
               '<path d="M0,0H80L373.5,222.5H800V311.5H373.5L80,534H0Z" fill="#007749"/>'
               '<path d="M0,60V474L310,267Z" fill="#FFB81C"/><path d="M0,89V445L267,267Z" fill="#000"/></svg>')
 
+# Cinta con la bandera de Sudáfrica bajo la palabra: la punta de la Y (triángulo negro con borde
+# dorado) va a escala real a la izquierda y las franjas del lado derecho de la bandera siguen
+# hasta el final. Así se lee como la bandera, no como franjas sueltas.
+PUNTA_ZA = ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 534'>"
+    "<rect width='400' height='534' fill='%23001489'/><rect width='400' height='267' fill='%23E03C31'/>"
+    "<path d='M0,0H133.5L400,178V356L133.5,534H0Z' fill='%23fff'/>"
+    "<path d='M0,0H80L373.5,222.5H400V311.5H373.5L80,534H0Z' fill='%23007749'/>"
+    "<path d='M0,60V474L310,267Z' fill='%23FFB81C'/><path d='M0,89V445L267,267Z' fill='%23000'/></svg>\")")
+FRANJAS_ZA = ("linear-gradient(180deg,#E03C31 0 33.33%,#fff 33.33% 41.67%,#007749 41.67% 58.33%,"
+              "#fff 58.33% 66.67%,#001489 66.67%)")
+ZA_CSS = (".za{position:relative;display:inline-block}"
+          ".za::after{content:'';position:absolute;left:.03em;right:.02em;bottom:-.13em;height:.25em;border-radius:.02em;"
+          "background:" + PUNTA_ZA + " left/auto 100% no-repeat," + FRANJAS_ZA + "}")
+ZA_HTML = '<span class="za">Sudáfrica</span>'
+
 RAMAS = ["Flota con operador", "Tarifas por hectárea", "Mapa de zonas", "Solicitudes en línea"]
 
 GRANO = ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>"
@@ -45,10 +60,7 @@ body{{font-family:"Rethink Sans",sans-serif;color:{IVORY};-webkit-font-smoothing
 .capa{{position:absolute;inset:0;display:flex;flex-direction:column}}
 .titular{{font-weight:500;letter-spacing:-.025em;line-height:1.02}}
 .titular .gris{{color:{MUTED}}}
-/* Franjas de la bandera de Sudáfrica dentro de las letras: rojo, filete blanco, verde, filete blanco, azul.
-   El azul (#001489) se aclara un poco porque sobre el negro no se lee. */
-.za{{background:linear-gradient(180deg,#E03C31 0 47%,#f6f2ec 47% 51%,#007749 51% 64%,#f6f2ec 64% 68%,#2f5fd0 68% 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent}}
+{ZA_CSS}
 .micro{{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:{MUTED};font-weight:500}}
 .wordmark{{height:24px;display:block}}
 .pill{{display:inline-flex;align-items:center;gap:14px;border-radius:999px;white-space:nowrap}}
@@ -101,7 +113,7 @@ def portada():
     velo = (f"linear-gradient(180deg,{BLACK} 0%,rgba(12,12,11,.9) 34%,rgba(12,12,11,.45) 70%,rgba(12,12,11,.6) 100%)")
     return head(1080, 1350) + fondo("69b6cfce_1.jpg", velo) + f"""
 <div class="capa" style="padding:150px 84px 0">
-  <h1 class="titular" style="font-size:88px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en <span class="za">Sudáfrica</span>.</h1>
+  <h1 class="titular" style="font-size:88px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en {ZA_HTML}.</h1>
   <div style="margin-top:84px">{diagrama(860)}</div>
 </div>{marcas_borde(84, arriba="→ Proyecto")}</div></body></html>"""
 
@@ -164,7 +176,7 @@ def historia():
     velo = (f"linear-gradient(180deg,{BLACK} 0%,rgba(12,12,11,.9) 38%,rgba(12,12,11,.4) 72%,rgba(12,12,11,.7) 100%)")
     return head(1080, 1920) + fondo("6becba7e_2.jpg", velo) + f"""
 <div class="capa" style="padding:300px 84px 0">
-  <h1 class="titular" style="font-size:100px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en <span class="za">Sudáfrica</span>.</h1>
+  <h1 class="titular" style="font-size:100px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en {ZA_HTML}.</h1>
   <div style="margin-top:110px">{diagrama(860)}</div>
 </div>
 <img class="wordmark" src="assets/wordmark-white.svg" style="position:absolute;top:200px;left:84px;height:28px">
