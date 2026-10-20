@@ -37,6 +37,7 @@ const valid = {
   width: 200,
   height: 48,
   relation: "modelos",
+  origin: "https://example.com/logo.svg",
   permission: {
     kind: "brand-guidelines",
     source: "https://example.com/brand",
@@ -93,4 +94,33 @@ test("nombrar /brand/partners/ fuera de los archivos autorizados falla", async (
   const errors = await auditPartners({ root, sourceFiles, now: NOW });
   assert.equal(errors.length, 1);
   assert.match(errors[0], /Otro\.tsx nombra \/brand\/partners\//);
+});
+
+test("un permiso declarado por la dirección exige correo @inplux.co y nota", async () => {
+  const declarado = {
+    ...valid,
+    permission: {
+      kind: "declared-by-owner",
+      declaredBy: "direccion@inplux.co",
+      note: "Autorización declarada por la dirección; soporte pendiente de archivar.",
+      grantedAt: "2026-10-01",
+      verifiedAt: "2026-10-18",
+    },
+  };
+  const ok = fixture({ partners: [declarado], assets: ["ejemplo.svg"] });
+  assert.deepEqual(await auditPartners({ root: ok.root, sourceFiles: ok.sourceFiles, now: NOW }), []);
+
+  const sinNota = { ...declarado, permission: { ...declarado.permission, declaredBy: "alguien@gmail.com", note: "" } };
+  const mal = fixture({ partners: [sinNota], assets: ["ejemplo.svg"] });
+  const errors = await auditPartners({ root: mal.root, sourceFiles: mal.sourceFiles, now: NOW });
+  assert.ok(errors.some((e) => /@inplux\.co/.test(e)), errors.join("\n"));
+  assert.ok(errors.some((e) => /nota/.test(e)), errors.join("\n"));
+});
+
+test("un partner sin URL de origen del archivo falla", async () => {
+  const sinOrigen = { ...valid };
+  delete sinOrigen.origin;
+  const { root, sourceFiles } = fixture({ partners: [sinOrigen], assets: ["ejemplo.svg"] });
+  const errors = await auditPartners({ root, sourceFiles, now: NOW });
+  assert.ok(errors.some((e) => /origen/.test(e)), errors.join("\n"));
 });

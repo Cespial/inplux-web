@@ -10,7 +10,7 @@ export type Stat = {
   who?: string | null;
   value: string;
   unit: string;
-  detail: string;
+  detail?: string;
   source: { label: string; href: string };
 };
 
@@ -34,7 +34,7 @@ export function StatRow({
             {item.who ? <p className={styles.who}>{item.who}</p> : null}
             <strong>{item.value}</strong>
             <p className={styles.unit}>{item.unit}</p>
-            <p>{item.detail}</p>
+            {item.detail ? <p>{item.detail}</p> : null}
             <p className={styles.src}>
               {item.source.href.startsWith("#") ? (
                 <a href={item.source.href}>{item.source.label}</a>

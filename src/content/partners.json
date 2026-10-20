@@ -1,4 +1,85 @@
 {
-  "$comment": "Partners tecnológicos de la portada. Cada marca entra solo con su permiso registrado (fuente oficial, fecha de concesión y de verificación). Lo audita scripts/partners-gate.mjs antes de cada build.",
-  "partners": []
+  "$comment": "Marcas de la pila técnica de la portada. Cada logo entra sin redibujar ni recolorear, con su origen y su permiso registrados. Lo audita scripts/partners-gate.mjs antes de cada build.",
+  "partners": [
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "file": "/brand/partners/anthropic.svg",
+      "width": 570,
+      "height": 64,
+      "relation": "modelos",
+      "origin": "https://www.anthropic.com/",
+      "permission": {
+        "kind": "declared-by-owner",
+        "declaredBy": "cristian@inplux.co",
+        "note": "Autorización de uso declarada por la dirección de INPLUX (Cristian Espinal) en conversación del 20-oct-2026; soporte documental pendiente de archivar.",
+        "grantedAt": "2026-10-20",
+        "verifiedAt": "2026-10-20"
+      }
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "file": "/brand/partners/openai.svg",
+      "width": 86,
+      "height": 24,
+      "relation": "modelos",
+      "origin": "https://www.npmjs.com/package/@lobehub/icons-static-svg/v/1.95.1",
+      "permission": {
+        "kind": "declared-by-owner",
+        "declaredBy": "cristian@inplux.co",
+        "note": "Autorización de uso declarada por la dirección de INPLUX (Cristian Espinal) en conversación del 20-oct-2026; soporte documental pendiente de archivar.",
+        "grantedAt": "2026-10-20",
+        "verifiedAt": "2026-10-20"
+      }
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "file": "/brand/partners/aws.svg",
+      "width": 109,
+      "height": 64,
+      "relation": "infraestructura",
+      "origin": "https://aws.amazon.com/",
+      "permission": {
+        "kind": "declared-by-owner",
+        "declaredBy": "cristian@inplux.co",
+        "note": "Autorización de uso declarada por la dirección de INPLUX (Cristian Espinal) en conversación del 20-oct-2026; soporte documental pendiente de archivar.",
+        "grantedAt": "2026-10-20",
+        "verifiedAt": "2026-10-20"
+      }
+    },
+    {
+      "id": "google-cloud",
+      "name": "Google Cloud",
+      "file": "/brand/partners/google-cloud.svg",
+      "width": 123,
+      "height": 20,
+      "relation": "infraestructura",
+      "origin": "https://cloud.google.com/",
+      "permission": {
+        "kind": "declared-by-owner",
+        "declaredBy": "cristian@inplux.co",
+        "note": "Autorización de uso declarada por la dirección de INPLUX (Cristian Espinal) en conversación del 20-oct-2026; soporte documental pendiente de archivar.",
+        "grantedAt": "2026-10-20",
+        "verifiedAt": "2026-10-20"
+      }
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel",
+      "file": "/brand/partners/vercel.svg",
+      "width": 261,
+      "height": 52,
+      "relation": "plataforma",
+      "origin": "https://vercel.com/geist/brands",
+      "permission": {
+        "kind": "declared-by-owner",
+        "declaredBy": "cristian@inplux.co",
+        "note": "Autorización de uso declarada por la dirección de INPLUX (Cristian Espinal) en conversación del 20-oct-2026; soporte documental pendiente de archivar.",
+        "grantedAt": "2026-10-20",
+        "verifiedAt": "2026-10-20"
+      }
+    }
+  ]
 }

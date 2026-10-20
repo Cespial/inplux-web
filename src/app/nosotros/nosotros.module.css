@@ -21,7 +21,28 @@
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
-.originBody > p {
+.originText {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+/* Bodegón de la mesa de trabajo (Midjourney, sin personas): decorativo. */
+.originFigure {
+  justify-self: end;
+  width: min(100%, 26rem);
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+}
+
+.originFigure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.originText > p {
   max-width: 60ch;
   color: var(--fg-muted);
   font-size: var(--step-6);

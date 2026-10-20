@@ -37,6 +37,10 @@ export const HOME_HERO_VIDEO = {
  * 1920 como respaldo. Es el elemento más grande del primer pintado, así que
  * se precarga y pide prioridad alta. `poster` es la ruta del JPEG; las demás
  * variantes salen de ella por nombre (`scripts/hero-posters.mjs`).
+ *
+ * Con `lazy` (una banda a mitad de página) nada de eso: el póster carga
+ * perezoso, el video no pide ni sus metadatos (`preload="none"`) hasta que la
+ * banda queda a 300 px del viewport, y se pausa cuando sale.
  */
 const POSTER_WIDTHS = [828, 1280, 1920] as const;
 
@@ -48,40 +52,67 @@ function posterSrcSet(poster: string, format: "avif" | "webp") {
 export function HeroVideo({
   poster = HOME_HERO_VIDEO.poster,
   sources = HOME_HERO_VIDEO.sources,
+  lazy = false,
 }: {
   poster?: string;
   sources?: readonly HeroVideoSource[];
+  lazy?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const avif = posterSrcSet(poster, "avif");
-  preload(poster, { as: "image", type: "image/avif", imageSrcSet: avif, imageSizes: "100vw", fetchPriority: "high" });
+  if (!lazy) {
+    preload(poster, { as: "image", type: "image/avif", imageSrcSet: avif, imageSizes: "100vw", fetchPriority: "high" });
+  }
 
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let near = !lazy;
     const sync = () => {
-      if (reduce.matches) {
+      if (reduce.matches || !near) {
         video.pause();
       } else {
+        if (video.preload === "none") video.preload = "metadata";
         video.play().catch(() => {
           // Sin permiso de reproducción automática: queda el póster detrás.
         });
       }
     };
+    const observer = lazy
+      ? new IntersectionObserver(
+          ([entry]) => {
+            near = entry.isIntersecting;
+            sync();
+          },
+          { rootMargin: "300px 0px" },
+        )
+      : null;
+    observer?.observe(video);
     sync();
     reduce.addEventListener("change", sync);
-    return () => reduce.removeEventListener("change", sync);
-  }, []);
+    return () => {
+      observer?.disconnect();
+      reduce.removeEventListener("change", sync);
+    };
+  }, [lazy]);
 
   return (
     <div className={ui.mediaBg} aria-hidden="true">
       <picture>
         <source type="image/avif" srcSet={avif} sizes="100vw" />
         <source type="image/webp" srcSet={posterSrcSet(poster, "webp")} sizes="100vw" />
-        <img src={poster} alt="" width={1920} height={1080} fetchPriority="high" decoding="async" />
+        <img
+          src={poster}
+          alt=""
+          width={1920}
+          height={1080}
+          fetchPriority={lazy ? "low" : "high"}
+          loading={lazy ? "lazy" : undefined}
+          decoding="async"
+        />
       </picture>
-      <video ref={ref} muted loop playsInline preload="metadata">
+      <video ref={ref} muted loop playsInline preload={lazy ? "none" : "metadata"}>
         {sources.map((source) => (
           <source key={source.src} src={source.src} type={source.type} media={source.media} />
         ))}

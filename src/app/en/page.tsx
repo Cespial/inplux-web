@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
-import { PartnerWall } from "@/components/home/PartnerWall";
 import { CopyEmailButton } from "@/components/home/CopyEmailButton.client";
 import {
   V5Audit,
   V5Hero,
+  V5Latam,
   V5Press,
   V5Process,
   V5Products,
   V5Sectors,
   V5Team,
-  V5Thesis,
 } from "@/components/home/v5/HomeV5";
 import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
@@ -151,8 +150,6 @@ export default function EnglishHome() {
 
             <LogoWall copy={copy.experienceRail} heading={copy.clientWall} />
 
-            <V5Thesis copy={copy} lang="en" />
-
             {/* Fragmentos históricos de «Qué hacemos» y del motor: siguen resolviendo. */}
             <Anchor id="servicios" />
             <Anchor id="motor" />
@@ -161,6 +158,10 @@ export default function EnglishHome() {
             <Anchor id="trabajo-real" />
             <V5Products copy={copy} />
 
+            {/* La tesis vive ahora en la banda de video: su fragmento sigue resolviendo. */}
+            <Anchor id="tesis" />
+            <V5Latam copy={copy} lang="en" />
+
             {/* Fragmentos históricos de «Dónde trabajamos»: siguen resolviendo. */}
             <Anchor id="publico" />
             <Anchor id="privado" />
@@ -168,7 +169,6 @@ export default function EnglishHome() {
             <V5Sectors copy={copy} />
 
             <V5Audit copy={copy} />
-            <PartnerWall copy={copy.partnerWall} />
             <V5Press copy={copy} />
             <V5Team copy={copy} />
 

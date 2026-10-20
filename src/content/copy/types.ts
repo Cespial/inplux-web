@@ -212,99 +212,6 @@ export type FactoryScrollyCopy = {
   steps: readonly FactoryStep[];
 };
 
-export type SolutionCopy = {
-  number: string;
-  title: string;
-  copy: string;
-  status: string;
-  outcome: string;
-  modules: readonly string[];
-  image: string;
-  imagePosition: string;
-  project: {
-    id: string;
-    name: string;
-    owner: string;
-    ownerInitials: string;
-    state: string;
-    environment: string;
-    updated: string;
-  };
-  ui: {
-    kind: "release" | "operation" | "knowledge" | "service";
-    eyebrow: string;
-    value: string;
-    description: string;
-    metrics: readonly (readonly [string, string])[];
-    progress: number;
-    progressLabel: string;
-    activity: readonly (readonly [string, string])[];
-    artifact: {
-      /** release */
-      stages?: readonly string[];
-      cohortLabel?: string;
-      cohortValue?: string;
-      /** operation */
-      queues?: readonly (readonly [string, string])[];
-      /** knowledge */
-      statement?: string;
-      chips?: readonly string[];
-      chipVerdict?: string;
-      /** service */
-      steps?: readonly (readonly [string, string, string])[];
-    };
-  };
-  api: {
-    method: string;
-    endpoint: string;
-    action: string;
-    httpStatus: string;
-    latency: string;
-  };
-};
-
-export type SolutionsCopy = {
-  eyebrow: string;
-  titleLead: string;
-  titleEmphasis: string;
-  tabsAriaLabel: string;
-  disclosure: string;
-  projectPrefix: string;
-  factoryLabel: string;
-  toggleTitle: string;
-  requestPaneLabel: string;
-  responsePaneLabel: string;
-  copyAction: string;
-  copyDone: string;
-  copyFailed: string;
-  /** Plantillas con {project}. */
-  copyRequestLabel: string;
-  copyResponseLabel: string;
-  responseNotRun: string;
-  responseRunning: string;
-  responseIdleHint: string;
-  responseRunningHint: string;
-  runRequest: string;
-  runAgain: string;
-  running: string;
-  sandboxReady: string;
-  validatingContract: string;
-  responseReady: string;
-  workbenchLabel: string;
-  projectFieldLabel: string;
-  ownerFieldLabel: string;
-  stateFieldLabel: string;
-  projectIdFieldLabel: string;
-  environmentFieldLabel: string;
-  updatedFieldLabel: string;
-  appNavigation: readonly [string, string, string];
-  /** Plantilla con {owner}. */
-  ownerAriaLabel: string;
-  recentActivityLabel: string;
-  outcomeLabel: string;
-  items: readonly SolutionCopy[];
-};
-
 export type ApiChapterCopy = {
   eyebrow: string;
   titleLead: string;
@@ -567,13 +474,6 @@ export type HomeContactCopy = {
   locations: readonly string[];
 };
 
-export type ThesisCopy = {
-  eyebrow: string;
-  /** La tesis en una frase; `emphasis` cierra en cursiva serif. */
-  lead: string;
-  emphasis: string;
-};
-
 export type HowWeWorkStep = {
   number: string;
   title: string;
@@ -603,10 +503,8 @@ export type PartnerWallCopy = {
 export type HomeV5Copy = {
   heroSecondaryCta: string;
   proof: {
-    title: string;
-    /** La cifra de Laudos sale de `work.ts`; aquí sólo su lectura. */
+    /** La cifra de Laudos sale de `work.ts`; aquí sólo su unidad. */
     laudosUnit: string;
-    laudosDetail: string;
     sourceLabel: string;
     portfolioSourceLabel: string;
     wallSourceLabel: string;
@@ -614,7 +512,6 @@ export type HomeV5Copy = {
   process: {
     eyebrow: string;
     title: string;
-    lead: string;
     deliverableLabel: string;
     phases: readonly { title: string; detail: string; deliverable: string }[];
   };
@@ -633,21 +530,26 @@ export type HomeV5Copy = {
     terminalCall: string;
     terminalAnswer: string;
   };
+  /** La banda de video «Desde Medellín, para Latinoamérica», con las cifras con fuente debajo. */
+  latam: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+  };
   sectors: {
     eyebrow: string;
     title: string;
-    items: readonly { title: string; detail: string; tag: string; href: string }[];
+    items: readonly { title: string; detail: string; href: string }[];
   };
   audit: {
     eyebrow: string;
     title: string;
-    lead: string;
     items: readonly { title: string; detail: string }[];
     techEyebrow: string;
     techNote: string;
   };
   press: { eyebrow: string; title: string; readCta: string; archiveCta: string };
-  team: { eyebrow: string; title: string; lead: string };
+  team: { eyebrow: string; title: string };
   contactEyebrow: string;
 };
 
@@ -659,7 +561,6 @@ export type HomeCopy = {
   contactDialog: ContactDialogCopy;
   contactForm: ContactFormCopy;
   hero: HeroCopy;
-  thesis: ThesisCopy;
   howWeWork: HowWeWorkCopy;
   partnerWall: PartnerWallCopy;
   heroStats: HeroStatsCopy;
@@ -668,7 +569,6 @@ export type HomeCopy = {
   experienceRail: ExperienceRailCopy;
   factoryScrolly: FactoryScrollyCopy;
   products: ProductBlocksCopy;
-  solutions: SolutionsCopy;
   apiChapter: ApiChapterCopy;
   sectors: SectorsCopy;
   sectorStrip: SectorStripCopy;

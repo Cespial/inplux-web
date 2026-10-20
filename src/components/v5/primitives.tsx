@@ -290,7 +290,7 @@ export function Timeline({
   phases,
   deliverableLabel,
 }: {
-  phases: readonly { title: string; detail: string; deliverable: string }[];
+  phases: readonly { title: string; detail?: string; deliverable: string }[];
   deliverableLabel: string;
 }) {
   return (
@@ -299,7 +299,7 @@ export function Timeline({
         <li key={phase.title}>
           <b>{`0${index + 1}`}</b>
           <h3>{phase.title}</h3>
-          <p>{phase.detail}</p>
+          {phase.detail ? <p>{phase.detail}</p> : null}
           <p className={ui.deliverable}>
             <span>{deliverableLabel}</span>
             {phase.deliverable}

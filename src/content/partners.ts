@@ -9,13 +9,22 @@ import registry from "./partners.json";
  */
 export type PartnerRelation = "modelos" | "infraestructura" | "plataforma";
 
-export type PartnerPermission = {
-  kind: "brand-guidelines" | "program-badge" | "written-consent";
-  /** Guía de marca, programa de partners o acta del consentimiento. */
-  source: `https://${string}`;
-  grantedAt: string;
-  verifiedAt: string;
-};
+export type PartnerPermission =
+  | {
+      kind: "brand-guidelines" | "program-badge" | "written-consent";
+      /** Guía de marca, programa de partners o acta del consentimiento. */
+      source: `https://${string}`;
+      grantedAt: string;
+      verifiedAt: string;
+    }
+  | {
+      /** La dirección declara el permiso; el soporte queda por archivar. */
+      kind: "declared-by-owner";
+      declaredBy: `${string}@inplux.co`;
+      note: string;
+      grantedAt: string;
+      verifiedAt: string;
+    };
 
 export type Partner = {
   id: string;
@@ -24,6 +33,8 @@ export type Partner = {
   width: number;
   height: number;
   relation: PartnerRelation;
+  /** De dónde salió el archivo, tal cual, sin redibujar ni recolorear. */
+  origin: `https://${string}`;
   permission: PartnerPermission;
 };
 
