@@ -138,39 +138,30 @@
   color: var(--teal);
 }
 
-/* ------------------------------------------------------- archivo plegado */
+/* ------------------------------------------------------- archivo completo */
 
-.more {
+.moreLink {
   margin-top: clamp(2rem, 4vw, 3rem);
   border-top: 1px solid var(--line);
 }
 
-.more summary {
+.moreLink a {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   padding-block: 1.3rem;
   color: var(--ivory);
-  font: 400 var(--step-5) / 1.2 var(--sans);
-  cursor: pointer;
-  list-style: none;
+  font-size: var(--step-7);
+  text-decoration: none;
 }
 
-.more summary::-webkit-details-marker {
-  display: none;
-}
-
-.more summary::after {
+.moreLink a::after {
   content: "+";
   color: var(--teal);
 }
 
-.more[open] summary::after {
-  content: "−";
-}
-
-.more summary span {
+.moreLink a span {
   margin-left: auto;
   color: var(--fg-muted);
   font-size: var(--step-9);
@@ -178,13 +169,30 @@
   text-transform: uppercase;
 }
 
-.more summary:hover,
-.more summary:focus-visible {
+.moreLink a:hover,
+.moreLink a:focus-visible {
   color: var(--teal);
 }
 
-.more .filters {
-  margin-top: 0;
+/*
+ * El resto del archivo vive fuera de `<main>` y sólo se muestra cuando es el
+ * destino de la URL (`#archivo-completo`). Sin JavaScript: el enlace lo abre
+ * y «Volver» lo cierra al cambiar el fragmento.
+ */
+.root .full {
+  display: none;
+}
+
+.root .full:target {
+  display: block;
+}
+
+.full .filters {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.full .moreLink a::after {
+  content: none;
 }
 
 .pressRoom {

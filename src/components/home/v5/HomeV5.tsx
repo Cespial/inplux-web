@@ -30,6 +30,7 @@ import { workProfiles, type WorkProfile } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
 import styles from "./home-v5.module.css";
 import { SectorCards } from "./SectorCards";
+import { TribaiTerminal } from "./TribaiTerminal.client";
 
 /*
  * La portada v5 (octubre de 2026), sección por sección, compuesta con las
@@ -147,61 +148,6 @@ export function V5Process({ copy }: { copy: HomeCopy }) {
 }
 
 /* -------------------------------------------------------------- productos */
-
-function TribaiTerminal({ copy }: { copy: HomeCopy["v5"]["products"] }) {
-  return (
-    <div className={styles.term} role="img" aria-label={copy.terminalAriaLabel}>
-      <div className={styles.termBar}>
-        <i>
-          <span />
-          <span />
-          <span />
-        </i>
-        <p>tribai-mcp</p>
-        <span>200 OK</span>
-      </div>
-      <pre>
-        <span className={`${styles.ln} ${styles.c}`}># {copy.terminalCall}</span>
-        <span className={styles.ln}>
-          <span className={styles.k}>tools/call</span> <span className={styles.u}>vigencia_articulo</span>
-        </span>
-        <span className={styles.ln}>
-          {"{ "}
-          <span className={styles.s}>&quot;articulo&quot;</span>: <span className={styles.s}>&quot;240&quot;</span>,{" "}
-          <span className={styles.s}>&quot;norma&quot;</span>: <span className={styles.s}>&quot;Estatuto Tributario&quot;</span>
-          {" }"}
-        </span>
-        <span className={styles.ln}> </span>
-        <span className={`${styles.ln} ${styles.c}`}># {copy.terminalAnswer}</span>
-        <span className={styles.ln}>{"{"}</span>
-        <span className={styles.ln}>
-          {"  "}
-          <span className={styles.s}>&quot;titulo&quot;</span>:{" "}
-          <span className={styles.s}>&quot;Tarifa general para personas jurídicas&quot;</span>,
-        </span>
-        <span className={`${styles.ln} ${styles.hl}`}>
-          {"  "}
-          <span className={styles.s}>&quot;tarifa&quot;</span>: <span className={styles.n}>0.35</span>,
-        </span>
-        <span className={`${styles.ln} ${styles.hl}`}>
-          {"  "}
-          <span className={styles.s}>&quot;modificado_por&quot;</span>:{" "}
-          <span className={styles.s}>&quot;Ley 2277 de 2022, art. 10&quot;</span>,
-        </span>
-        <span className={styles.ln}>
-          {"  "}
-          <span className={styles.s}>&quot;vigente&quot;</span>: <span className={styles.n}>true</span>,
-        </span>
-        <span className={styles.ln}>
-          {"  "}
-          <span className={styles.s}>&quot;fuente&quot;</span>:{" "}
-          <span className={styles.u}>&quot;secretariasenado.gov.co/…/estatuto_tributario&quot;</span>
-        </span>
-        <span className={styles.ln}>{"}"}</span>
-      </pre>
-    </div>
-  );
-}
 
 export function V5Products({ copy }: { copy: HomeCopy }) {
   const text = copy.v5.products;
@@ -433,7 +379,8 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
   const press = copy.press;
   const featured = featuredPressStories();
   const visual = featured.filter((story) => story.image || story.visualKind === "clients");
-  const top = [...visual, ...featured.filter((story) => !visual.includes(story))].slice(0, 3);
+  // Una sola pieza en la portada: la primera con imagen o logos. El archivo completo vive en /prensa.
+  const top = [...visual, ...featured.filter((story) => !visual.includes(story))].slice(0, 1);
   const format = (story: PressStory) => press.formats[story.format] ?? story.format;
   const date = (story: PressStory) => press.publishedLabels[story.slug] ?? story.publishedLabel;
   const titleLang = press.storyLang ?? undefined;

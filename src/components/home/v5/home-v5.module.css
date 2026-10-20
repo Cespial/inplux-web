@@ -53,6 +53,8 @@
 
 .term pre {
   margin: 0;
+  /* Trece líneas: el alto queda reservado antes de que el cliente las monte. */
+  min-height: calc(13 * 1.75em + 2.6rem);
   padding: 1.3rem 1.5rem;
   overflow-x: auto;
   color: var(--fg-bright);
@@ -101,9 +103,12 @@
     var(--black);
 }
 
-.sectorsTitle {
-  max-width: 18ch;
-  margin: 1rem 0 2.5rem;
+/* Con la especificidad de la banda: los márgenes del título y de la lista
+   se perdían frente a los estilos de `.d2` y del reset de listas, y las
+   tarjetas quedaban pegadas al título. */
+.sectors .sectorsTitle {
+  max-width: 22ch;
+  margin: 1rem 0 clamp(2rem, 4vw, 3rem);
 }
 
 /* ------------------------------------------------- auditoría y tecnología */
@@ -216,16 +221,18 @@
 
 /* ------------------------------------------------------------------ prensa */
 
+/* Una pieza: figura a la izquierda, texto a la derecha. */
 .pressGrid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .story {
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
   padding-top: 1rem;
   border-top: 1px solid var(--line-ink);
 }
@@ -430,6 +437,7 @@
 @media (max-width: 760px) {
   .audit,
   .pressGrid,
+  .story,
   .teamGrid {
     grid-template-columns: 1fr;
   }

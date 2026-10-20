@@ -93,10 +93,10 @@ export function SectionHead({
 export function Plus() {
   return (
     <>
-      <span className={`${ui.plus} ${ui.tl}`} aria-hidden="true">+</span>
-      <span className={`${ui.plus} ${ui.tr}`} aria-hidden="true">+</span>
-      <span className={`${ui.plus} ${ui.bl}`} aria-hidden="true">+</span>
-      <span className={`${ui.plus} ${ui.br}`} aria-hidden="true">+</span>
+      <span className={`${ui.plus} ${ui.tl}`} aria-hidden="true" />
+      <span className={`${ui.plus} ${ui.tr}`} aria-hidden="true" />
+      <span className={`${ui.plus} ${ui.bl}`} aria-hidden="true" />
+      <span className={`${ui.plus} ${ui.br}`} aria-hidden="true" />
     </>
   );
 }

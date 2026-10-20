@@ -199,12 +199,17 @@
   background: var(--ember);
 }
 
+/* El signo va en CSS: es decoración y no debe contar como texto de la página. */
 .plus {
   position: absolute;
   z-index: 3;
   color: rgba(246, 242, 236, 0.42);
   font: 300 1rem / 1 var(--sans);
   pointer-events: none;
+}
+
+.plus::before {
+  content: "+";
 }
 
 .tl { top: 1.1rem; left: 1.1rem; }

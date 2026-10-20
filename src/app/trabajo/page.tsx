@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
 import {
@@ -8,7 +9,6 @@ import {
   CardGrid,
   Chip,
   CloseBand,
-  FeatureSplit,
   MailRow,
   Placeholder,
   buttonClass,
@@ -17,7 +17,6 @@ import {
 } from "@/components/v5/primitives";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
-import { productMockups } from "@/components/work/ProductMockups";
 import { portfolio } from "@/content/home";
 import { workProfiles, type WorkSlug } from "@/content/work";
 import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
@@ -41,15 +40,6 @@ const products = order.flatMap((slug) => {
   return profile ? [profile] : [];
 });
 const inDevelopment = portfolio.filter((item) => item.stage === "En desarrollo");
-
-/** La línea de cierre de cada bloque: lo que el producto deja en manos de quien lo usa. */
-const closingLine: Record<WorkSlug, string> = {
-  tribai: "El criterio sigue siendo del contador. Tribai le pone la fuente al lado.",
-  gobia: "La decisión sigue siendo del municipio. Gobia la deja medible.",
-  kelsen: "La tesis sigue siendo del abogado. Kelsen conserva la ruta.",
-  laudos: "La lectura sigue siendo del árbitro. Laudos ordena el corpus.",
-  porkia: "La finca la lleva quien la trabaja. Porkia reemplaza el cuaderno.",
-};
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -131,47 +121,29 @@ export default function TrabajoPage() {
                 Cada producto, con su <em>fuente</em> y su estado a la vista.
               </p>
 
-              {products.map((profile, index) => {
-                const Mockup = productMockups[profile.slug];
-                return (
-                  <FeatureSplit
-                    key={profile.slug}
-                    id={`p-${profile.slug}`}
-                    reverse={index % 2 === 1}
-                    kicker={
-                      <>
+              {/* Un índice: nombre, una línea y el enlace. El detalle vive en cada ficha. */}
+              <ol className={styles.index}>
+                {products.map((profile) => (
+                  <li key={profile.slug} id={`p-${profile.slug}`} className={styles.row}>
+                    <span className={styles.rowNumber} aria-hidden="true">{profile.number}</span>
+                    <div className={styles.rowBody}>
+                      <p className={v5.kicker}>
                         {profile.category}{" "}
                         <Chip dot tone={statusTone(profile.status.label)}>
                           {profile.status.label}
                         </Chip>
-                      </>
-                    }
-                    title={profile.name}
-                    lead={profile.headline}
-                    extra={
-                      <>
-                        <ul className={styles.bullets}>
-                          {profile.capabilities.slice(0, 3).map((capability) => (
-                            <li key={capability.title}>
-                              <strong>{capability.title}.</strong> {capability.description}
-                            </li>
-                          ))}
-                        </ul>
-                        <p className={styles.closingLine}>{closingLine[profile.slug]}</p>
-                      </>
-                    }
-                    actions={
-                      <>
-                        <Button href={`/trabajo/${profile.slug}`} variant="ghost">
-                          Ver {profile.name} <span aria-hidden="true">→</span>
-                        </Button>
-                        {profile.slug === "tribai" ? <Chip>Tribai MCP · ejemplo ilustrativo</Chip> : null}
-                      </>
-                    }
-                    media={<Mockup profile={profile} />}
-                  />
-                );
-              })}
+                      </p>
+                      <h3 className={styles.rowTitle}>
+                        <Link href={`/trabajo/${profile.slug}`}>{profile.name}</Link>
+                      </h3>
+                      <p className={styles.rowLine}>{profile.shortDescription}</p>
+                    </div>
+                    <Link href={`/trabajo/${profile.slug}`} className={styles.rowLink}>
+                      Ver {profile.name} <span aria-hidden="true">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
 
               {inDevelopment.length > 0 ? (
                 <>
