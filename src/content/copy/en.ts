@@ -75,8 +75,7 @@ export const homeCopyEn: HomeCopy = {
         ariaLabel: "Company",
         items: [
           spanishRoute("About", "/nosotros"),
-          // TODO PR E: /equipo
-          spanishRoute("Team", "/nosotros"),
+          spanishRoute("Team", "/equipo"),
           // TODO PR D: /como-trabajamos
           spanishRoute("How we work", "/fabrica"),
           spanishRoute("Press", "/prensa"),

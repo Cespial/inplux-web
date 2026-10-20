@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/capacidades",
     ...sectorProfiles.map((sector) => `/sectores/${sector.slug}`),
     "/nosotros",
+    "/equipo",
     ...teamMembers.map((member) => `/equipo/${member.slug}`),
     "/prensa",
     "/contacto",
