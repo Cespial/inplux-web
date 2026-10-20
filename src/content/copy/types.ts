@@ -212,99 +212,6 @@ export type FactoryScrollyCopy = {
   steps: readonly FactoryStep[];
 };
 
-export type SolutionCopy = {
-  number: string;
-  title: string;
-  copy: string;
-  status: string;
-  outcome: string;
-  modules: readonly string[];
-  image: string;
-  imagePosition: string;
-  project: {
-    id: string;
-    name: string;
-    owner: string;
-    ownerInitials: string;
-    state: string;
-    environment: string;
-    updated: string;
-  };
-  ui: {
-    kind: "release" | "operation" | "knowledge" | "service";
-    eyebrow: string;
-    value: string;
-    description: string;
-    metrics: readonly (readonly [string, string])[];
-    progress: number;
-    progressLabel: string;
-    activity: readonly (readonly [string, string])[];
-    artifact: {
-      /** release */
-      stages?: readonly string[];
-      cohortLabel?: string;
-      cohortValue?: string;
-      /** operation */
-      queues?: readonly (readonly [string, string])[];
-      /** knowledge */
-      statement?: string;
-      chips?: readonly string[];
-      chipVerdict?: string;
-      /** service */
-      steps?: readonly (readonly [string, string, string])[];
-    };
-  };
-  api: {
-    method: string;
-    endpoint: string;
-    action: string;
-    httpStatus: string;
-    latency: string;
-  };
-};
-
-export type SolutionsCopy = {
-  eyebrow: string;
-  titleLead: string;
-  titleEmphasis: string;
-  tabsAriaLabel: string;
-  disclosure: string;
-  projectPrefix: string;
-  factoryLabel: string;
-  toggleTitle: string;
-  requestPaneLabel: string;
-  responsePaneLabel: string;
-  copyAction: string;
-  copyDone: string;
-  copyFailed: string;
-  /** Plantillas con {project}. */
-  copyRequestLabel: string;
-  copyResponseLabel: string;
-  responseNotRun: string;
-  responseRunning: string;
-  responseIdleHint: string;
-  responseRunningHint: string;
-  runRequest: string;
-  runAgain: string;
-  running: string;
-  sandboxReady: string;
-  validatingContract: string;
-  responseReady: string;
-  workbenchLabel: string;
-  projectFieldLabel: string;
-  ownerFieldLabel: string;
-  stateFieldLabel: string;
-  projectIdFieldLabel: string;
-  environmentFieldLabel: string;
-  updatedFieldLabel: string;
-  appNavigation: readonly [string, string, string];
-  /** Plantilla con {owner}. */
-  ownerAriaLabel: string;
-  recentActivityLabel: string;
-  outcomeLabel: string;
-  items: readonly SolutionCopy[];
-};
-
 export type ApiChapterCopy = {
   eyebrow: string;
   titleLead: string;
@@ -662,7 +569,6 @@ export type HomeCopy = {
   experienceRail: ExperienceRailCopy;
   factoryScrolly: FactoryScrollyCopy;
   products: ProductBlocksCopy;
-  solutions: SolutionsCopy;
   apiChapter: ApiChapterCopy;
   sectors: SectorsCopy;
   sectorStrip: SectorStripCopy;
