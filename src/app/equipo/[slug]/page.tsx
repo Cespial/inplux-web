@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
+import { NextPage } from "@/components/v5/NextPage";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, Button, SectionHead } from "@/components/v5/primitives";
@@ -71,7 +72,7 @@ export async function generateMetadata({
       type: "profile",
       images: [
         {
-          url: "/brand/og/og-nosotros.png",
+          url: `/brand/og/og-equipo-${member.slug}.jpg`,
           width: 1200,
           height: 630,
           alt: `${member.name}, ${member.jobTitle} de INPLUX`,
@@ -84,7 +85,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: "/brand/og/og-nosotros.png",
+          url: `/brand/og/og-equipo-${member.slug}.jpg`,
           alt: `${member.name}, ${member.jobTitle} de INPLUX`,
         },
       ],
@@ -101,6 +102,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
   }
 
   const publications = publicationsFor(member.slug);
+  const other = teamMembers.find((candidate) => candidate.slug !== member.slug);
   const url = profileUrl(member.slug);
   const id = personId(member.slug);
 
@@ -250,6 +252,9 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
                   ))}
                 </ol>
               </Band>
+            ) : null}
+            {other ? (
+              <NextPage href={`/equipo/${other.slug}`} label={other.name} note={other.focus} />
             ) : null}
           </main>
         </V5Page>

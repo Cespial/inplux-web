@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CopyableColor } from "@/components/brand/CopyableColor";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { LegalShell } from "@/components/v5/LegalShell";
+import { NextPage } from "@/components/v5/NextPage";
 import { V5Page } from "@/components/v5/V5Page";
 import styles from "./marca.module.css";
 
@@ -139,6 +140,7 @@ export default function MarcaPage() {
               </p>
             </section>
           </LegalShell>
+          <NextPage href="/" label="Inicio" />
         </main>
       </V5Page>
     </ContactDialogProvider>
