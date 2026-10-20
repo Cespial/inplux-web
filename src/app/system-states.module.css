@@ -27,45 +27,6 @@
   max-width: 18ch;
 }
 
-/* La cabecera vive en cada página, así que mientras carga no hay nada más:
-   fondo negro y una línea teal que recorre el borde superior. */
-.loading {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  overflow: hidden;
-  background: var(--black);
-}
-
-.loading i {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  height: 2px;
-  width: 40%;
-  background: var(--teal);
-  animation: sweep 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-@keyframes sweep {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(250%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loading i {
-    width: 100%;
-    animation: none;
-    opacity: 0.6;
-  }
-}
-
 .visuallyHidden {
   position: absolute;
   width: 1px;
