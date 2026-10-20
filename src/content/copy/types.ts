@@ -573,6 +573,63 @@ export type PartnerWallCopy = {
   note: string;
 };
 
+/**
+ * Las secciones propias de la portada v5 (octubre de 2026). Lo que la portada
+ * ya tenía —hero, muro, equipo, prensa, contacto— sigue leyendo sus bloques;
+ * aquí sólo vive lo que no tenía dónde vivir, más los antetítulos sin
+ * numeración de las secciones que se reutilizan.
+ */
+export type HomeV5Copy = {
+  heroSecondaryCta: string;
+  proof: {
+    title: string;
+    /** La cifra de Laudos sale de `work.ts`; aquí sólo su lectura. */
+    laudosUnit: string;
+    laudosDetail: string;
+    sourceLabel: string;
+    portfolioSourceLabel: string;
+    wallSourceLabel: string;
+  };
+  process: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    deliverableLabel: string;
+    phases: readonly { title: string; detail: string; deliverable: string }[];
+  };
+  products: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    tribaiLead: string;
+    tribaiTag: string;
+    tribaiCta: string;
+    openCta: string;
+    moreLabel: string;
+    allCta: string;
+    inDevelopment: string;
+    terminalAriaLabel: string;
+    terminalCall: string;
+    terminalAnswer: string;
+  };
+  sectors: {
+    eyebrow: string;
+    title: string;
+    items: readonly { title: string; detail: string; tag: string; href: string }[];
+  };
+  audit: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    items: readonly { title: string; detail: string }[];
+    techEyebrow: string;
+    techNote: string;
+  };
+  press: { eyebrow: string; title: string; readCta: string; archiveCta: string };
+  team: { eyebrow: string; title: string; lead: string };
+  contactEyebrow: string;
+};
+
 export type HomeCopy = {
   locale: string;
   htmlLang: string;
@@ -598,4 +655,5 @@ export type HomeCopy = {
   team: TeamLeadersCopy;
   press: PressCopy;
   contact: HomeContactCopy;
+  v5: HomeV5Copy;
 };

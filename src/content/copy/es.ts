@@ -1173,4 +1173,129 @@ export const homeCopyEs: HomeCopy = {
     linkedInLabel: "LinkedIn ↗",
     locations: ["Medellín, Antioquia · Colombia"],
   },
+
+  v5: {
+    heroSecondaryCta: "Ver con quiénes",
+    proof: {
+      title: "En producción, con la cifra y su fuente.",
+      laudosUnit: "documentos en el corpus de Laudos",
+      laudosDetail:
+        "{laudos} laudos arbitrales y {consejo} decisiones del Consejo de Estado, {range}, para buscar y analizar.",
+      sourceLabel: "Fuente: perfil público del producto",
+      portfolioSourceLabel: "Fuente: directorio de productos",
+      wallSourceLabel: "Fuente: muro de relaciones",
+    },
+    process: {
+      eyebrow: "Del diagnóstico a producción",
+      title: "Trabajamos contigo desde el primer flujo hasta que opera.",
+      lead: "Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente. Cada fase termina con algo que se puede usar y revisar.",
+      deliverableLabel: "Entregable",
+      phases: [
+        {
+          title: "Diagnóstico",
+          detail: "Mapeamos el flujo, los datos y quién decide.",
+          deliverable: "Mapa del flujo y caso priorizado",
+        },
+        {
+          title: "Piloto",
+          detail: "Construimos sobre datos reales con un grupo de usuarios.",
+          deliverable: "Versión en uso y línea base medida",
+        },
+        {
+          title: "Producción",
+          detail: "Integramos con los sistemas del cliente, con control de acceso y registro.",
+          deliverable: "Sistema en operación",
+        },
+        {
+          title: "Operación",
+          detail: "Medimos, corregimos y ampliamos con el equipo del cliente.",
+          deliverable: "Tablero de resultados y siguiente paso",
+        },
+      ],
+    },
+    products: {
+      eyebrow: "Productos propios",
+      title: "Seis productos construidos y operados por INPLUX.",
+      lead: "Cada uno nació de un problema de un cliente y hoy funciona por su cuenta. Las capturas son de sus páginas públicas.",
+      tribaiLead:
+        "Nuestro servidor MCP le da a Claude y a ChatGPT el Estatuto Tributario vigente, la doctrina de la DIAN y la jurisprudencia del Consejo de Estado, con la fuente oficial de cada respuesta.",
+      tribaiTag: "Tribai MCP · ejemplo ilustrativo",
+      tribaiCta: "Ver Tribai",
+      openCta: "Ver producto",
+      moreLabel: "También construimos",
+      allCta: "Ver todos los productos",
+      inDevelopment: "En desarrollo",
+      terminalAriaLabel: "Ejemplo de consulta al servidor MCP de Tribai",
+      terminalCall: "Claude llama la herramienta de Tribai",
+      terminalAnswer: "Respuesta, con la fuente oficial",
+    },
+    sectors: {
+      eyebrow: "Dónde trabajamos",
+      title: "Construido para la realidad de cada sector.",
+      items: [
+        {
+          title: "Sector público",
+          detail: "Alcaldías, entidades territoriales y hacienda municipal: información fiscal, contratación y seguimiento.",
+          tag: "Gobia · Tribai",
+          href: "/capacidades#sector-publico",
+        },
+        {
+          title: "Salud",
+          detail: "IPS y prestadores: app de pacientes, telemonitoreo, integración con la historia clínica.",
+          tag: "Página del sector",
+          href: "/sectores/salud",
+        },
+        {
+          title: "Legal y tributario",
+          detail: "Firmas, contadores y áreas jurídicas: consulta con fuente, vigencia y jurisprudencia.",
+          tag: "Tribai · Kelsen · Laudos",
+          href: "/trabajo/tribai",
+        },
+        {
+          title: "Empresas",
+          detail: "Operación, datos y productos digitales para compañías privadas.",
+          tag: "Proyectos a la medida",
+          href: "/capacidades",
+        },
+      ],
+    },
+    audit: {
+      eyebrow: "Gobierno de la IA",
+      title: "IA para instituciones, lista para auditoría.",
+      lead: "Lo que una entidad pública o una empresa regulada necesita revisar antes de poner un sistema en producción.",
+      items: [
+        {
+          title: "Fuente en cada respuesta",
+          detail: "Cada resultado guarda el documento, el artículo o el registro que lo sustenta.",
+        },
+        {
+          title: "Llamadas trazables",
+          detail: "Queda registro de qué modelo respondió, con qué contexto y cuándo.",
+        },
+        {
+          title: "Acceso gobernado",
+          detail: "Roles, autenticación de la organización y registro de actividad por usuario.",
+        },
+        {
+          title: "Datos personales",
+          detail: "Tratamiento conforme a la Ley 1581 de 2012 y a la política de cada cliente.",
+        },
+      ],
+      techEyebrow: "Tecnología con la que construimos",
+      techNote:
+        "Marcas de sus dueños, citadas para describir nuestra pila técnica; no implican alianza comercial.",
+    },
+    press: {
+      eyebrow: "Prensa y conversaciones",
+      title: "El trabajo también entra en la conversación.",
+      readCta: "Leer",
+      archiveCta: "Ver el archivo de prensa",
+    },
+    team: {
+      eyebrow: "Quién responde",
+      title: "Dos direcciones: criterio y producto.",
+      lead: "Quien decide qué se construye y quien dirige cómo se construye.",
+    },
+    contactEyebrow: "El siguiente producto",
+  },
 };

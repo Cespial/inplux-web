@@ -35,10 +35,10 @@ export const homeCopyEn: HomeCopy = {
     contactCtaMobile: "Start a project",
     menuNote: "You don't need a defined scope to begin.",
     navigation: [
-      { label: "The factory", href: "#fabrica-en-vivo" },
-      { label: "Real work", href: "#trabajo-real" },
-      { label: "Where we work", href: "#donde-trabajamos" },
-      { label: "Who answers", href: "#equipo" },
+      { label: "How we work", href: "#como-trabajamos" },
+      { label: "Products", href: "#productos" },
+      { label: "Sectors", href: "#sectores" },
+      { label: "About", href: "#equipo" },
       { label: "Press", href: "#prensa" },
     ],
     languageSwitch: { label: "Español", href: "/", hrefLang: "es" },
@@ -53,8 +53,8 @@ export const homeCopyEn: HomeCopy = {
         ariaLabel: "Explore",
         items: [
           { label: "How we work", href: "#como-trabajamos" },
-          { label: "Real work", href: "#trabajo-real" },
-          { label: "Where we work", href: "#donde-trabajamos" },
+          { label: "Products", href: "#productos" },
+          { label: "Sectors", href: "#sectores" },
           { label: "Who answers", href: "#equipo" },
           { label: "Press", href: "#prensa" },
         ],
@@ -1374,5 +1374,130 @@ export const homeCopyEn: HomeCopy = {
     copyDone: "copied",
     linkedInLabel: "LinkedIn ↗",
     locations: ["Miami, Florida · United States", "Medellín, Antioquia · Colombia"],
+  },
+
+  v5: {
+    heroSecondaryCta: "See who with",
+    proof: {
+      title: "In production, with the figure and its source.",
+      laudosUnit: "documents in the Laudos corpus",
+      laudosDetail:
+        "{laudos} arbitration awards and {consejo} Council of State decisions, {range}, for search and analysis.",
+      sourceLabel: "Source: the product's public profile",
+      portfolioSourceLabel: "Source: product directory",
+      wallSourceLabel: "Source: relationship wall",
+    },
+    process: {
+      eyebrow: "From diagnosis to production",
+      title: "We work with you from the first workflow until it runs.",
+      lead: "Our engineers work inside the client's systems and teams. Every phase ends with something that can be used and reviewed.",
+      deliverableLabel: "Deliverable",
+      phases: [
+        {
+          title: "Diagnosis",
+          detail: "We map the workflow, the data and who decides.",
+          deliverable: "Workflow map and prioritized case",
+        },
+        {
+          title: "Pilot",
+          detail: "We build on real data with a group of users.",
+          deliverable: "Version in use and measured baseline",
+        },
+        {
+          title: "Production",
+          detail: "We integrate with the client's systems, with access control and logging.",
+          deliverable: "System in operation",
+        },
+        {
+          title: "Operation",
+          detail: "We measure, fix and expand with the client's team.",
+          deliverable: "Results dashboard and next step",
+        },
+      ],
+    },
+    products: {
+      eyebrow: "Our own products",
+      title: "Six products built and run by INPLUX.",
+      lead: "Each one started with a client's problem and now runs on its own. Screenshots come from their public pages.",
+      tribaiLead:
+        "Our MCP server gives Claude and ChatGPT Colombia's current Tax Code, DIAN doctrine and Council of State case law, with the official source behind every answer.",
+      tribaiTag: "Tribai MCP · illustrative example",
+      tribaiCta: "See Tribai",
+      openCta: "See product",
+      moreLabel: "We also build",
+      allCta: "See all products",
+      inDevelopment: "In development",
+      terminalAriaLabel: "Example call to the Tribai MCP server",
+      terminalCall: "Claude calls the Tribai tool",
+      terminalAnswer: "Response, with the official source",
+    },
+    sectors: {
+      eyebrow: "Where we work",
+      title: "Built for the reality of each sector.",
+      items: [
+        {
+          title: "Public sector",
+          detail: "Municipalities, local governments and municipal finance: fiscal data, procurement and follow-up.",
+          tag: "Gobia · Tribai",
+          href: "/capacidades#sector-publico",
+        },
+        {
+          title: "Healthcare",
+          detail: "Healthcare providers: patient app, remote monitoring, clinical record integration.",
+          tag: "Sector page (Spanish)",
+          href: "/sectores/salud",
+        },
+        {
+          title: "Legal and tax",
+          detail: "Firms, accountants and legal teams: sourced answers, validity and case law.",
+          tag: "Tribai · Kelsen · Laudos",
+          href: "/trabajo/tribai",
+        },
+        {
+          title: "Companies",
+          detail: "Operations, data and digital products for private companies.",
+          tag: "Custom projects",
+          href: "/capacidades",
+        },
+      ],
+    },
+    audit: {
+      eyebrow: "AI governance",
+      title: "AI for institutions, ready for audit.",
+      lead: "What a public entity or a regulated company needs to review before putting a system into production.",
+      items: [
+        {
+          title: "A source for every answer",
+          detail: "Every result keeps the document, article or record that supports it.",
+        },
+        {
+          title: "Traceable model calls",
+          detail: "We log which model answered, with what context and when.",
+        },
+        {
+          title: "Governed access",
+          detail: "Roles, organizational sign-in and per-user activity logs.",
+        },
+        {
+          title: "Personal data",
+          detail: "Handled under Colombia's Law 1581 of 2012 and each client's policy.",
+        },
+      ],
+      techEyebrow: "Technology we build with",
+      techNote:
+        "Trademarks of their owners, named to describe our technical stack; no commercial partnership implied.",
+    },
+    press: {
+      eyebrow: "Press and conversations",
+      title: "The work also enters the conversation.",
+      readCta: "Read",
+      archiveCta: "See the press archive",
+    },
+    team: {
+      eyebrow: "Who answers",
+      title: "Two directions: judgment and product.",
+      lead: "One decides what gets built; the other directs how it gets built.",
+    },
+    contactEyebrow: "The next product",
   },
 };
