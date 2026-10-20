@@ -25,7 +25,7 @@ import styles from "./trabajo.module.css";
 
 const pageTitle = "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia";
 const pageDescription =
-  "Seis productos construidos y operados por INPLUX, cada uno con sus fuentes públicas y la fecha en que las revisamos.";
+  "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con sus fuentes públicas y la fecha en que las revisamos.";
 const workSocialImage = getWorkSocialImageUrl("directorio");
 const workSocialDescription =
   "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.";
@@ -103,7 +103,8 @@ export default function TrabajoPage() {
             <PageHero
               id="inicio"
               eyebrow="Productos propios"
-              title="Seis productos construidos y operados por INPLUX."
+              crumbs={[{ label: "Inicio", href: "/" }, { label: "Productos" }]}
+              title="Cinco productos construidos y operados por INPLUX."
               lead="Cada uno nació de un problema de un cliente y hoy funciona por su cuenta."
               leadMuted="Lo que ves abajo sale de sus páginas públicas, con la fecha en que lo revisamos."
               actions={

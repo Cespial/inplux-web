@@ -7,6 +7,7 @@ import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { CapabilityRail } from "@/components/work/CapabilityRail.client";
 import { ProductInterface } from "@/components/work/ProductInterface.client";
+import { productMockups } from "@/components/work/ProductMockups";
 import { getWorkProfile, workProfiles } from "@/content/work";
 import { formatShortDate } from "@/content/work-format";
 import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
@@ -69,6 +70,7 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
 
   const currentIndex = workProfiles.findIndex((item) => item.slug === profile.slug);
   const nextProfile = workProfiles[(currentIndex + 1) % workProfiles.length];
+  const Mockup = productMockups[profile.slug];
 
   const profileJsonLd = {
     "@context": "https://schema.org",
@@ -102,10 +104,11 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
           <main id="main-content" tabIndex={-1}>
             <PageHero
               id="inicio"
-              crumbs={[{ label: "Productos", href: "/trabajo" }, { label: profile.name }]}
+              crumbs={[{ label: "Inicio", href: "/" }, { label: "Productos", href: "/trabajo" }, { label: profile.name }]}
               eyebrow={`${profile.number} · ${profile.category}`}
               title={profile.headline}
               lead={profile.description}
+              aside={<Mockup profile={profile} animate />}
               actions={
                 <>
                   <Button href={profile.access.href} variant="primary" external>

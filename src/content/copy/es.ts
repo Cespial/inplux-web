@@ -1211,7 +1211,7 @@ export const homeCopyEs: HomeCopy = {
     },
     products: {
       eyebrow: "Productos propios",
-      title: "Seis productos construidos y operados por INPLUX.",
+      title: "Cinco productos construidos y operados por INPLUX.",
       lead: "Cada uno nació de un problema de un cliente y hoy funciona por su cuenta. Las capturas son de sus páginas públicas.",
       tribaiLead:
         "Nuestro servidor MCP le da a Claude y a ChatGPT el Estatuto Tributario vigente, la doctrina de la DIAN y la jurisprudencia del Consejo de Estado, con la fuente oficial de cada respuesta.",
