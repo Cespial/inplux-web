@@ -1,24 +1,3 @@
-export const services = [
-  {
-    number: "01",
-    title: "Lanzar un producto digital",
-    copy:
-      "Convertimos una oportunidad o una idea en una primera versión útil, preparada para aprender, crecer y evolucionar.",
-  },
-  {
-    number: "02",
-    title: "Mejorar una operación",
-    copy:
-      "Construimos herramientas que conectan personas, procesos, reglas y datos alrededor de la forma real de trabajar.",
-  },
-  {
-    number: "03",
-    title: "Automatizar trabajo y conocimiento",
-    copy:
-      "Convertimos tareas repetitivas y conocimiento disperso en flujos trazables, con revisión humana donde importa.",
-  },
-] as const;
-
 export const method = [
   {
     number: "01",

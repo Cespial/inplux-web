@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
@@ -132,7 +131,6 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                 <div>
                   <dt>Acceso</dt>
                   <dd>{profile.access.label}</dd>
-                  <p>{profile.access.detail}</p>
                 </div>
                 <div data-attribution={profile.attribution.state}>
                   <dt>Atribución</dt>
@@ -146,14 +144,10 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
             </Band>
 
             <Band labelledBy="capabilities-title" className={styles.capabilities}>
-              <p className={styles.statementText}>
-                Capacidad, estado y atribución son cosas <em>distintas.</em> Aquí van separadas.
-              </p>
               <SectionHead
                 id="capabilities-title"
                 eyebrow="Qué hace"
                 title={`Una lectura de ${profile.name}.`}
-                lead="Capacidades descritas desde la información pública del producto. No son promesas comerciales."
               />
               <CapabilityRail
                 items={profile.capabilities}
@@ -185,7 +179,7 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                 id="evidence-title"
                 eyebrow="Registro de evidencia"
                 title="Qué sostiene este perfil."
-                lead="Las fuentes públicas del perfil, lo que respalda cada una y la fecha en que la revisamos. La autoría la declara INPLUX; cuando además está publicada en la fuente, la columna lo dice."
+                lead="Cada fuente pública, lo que respalda y cuándo la revisamos."
               />
               <div className={styles.tableWrap}>
                 <table className={styles.evidence} aria-labelledby="evidence-title">
@@ -215,30 +209,9 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                 </table>
               </div>
               <p className={styles.note}>
-                La interfaz de arriba es una demostración editorial construida para explicar el tipo
-                de experiencia. No es una captura, no reproduce datos reales y no cuenta como
-                evidencia del producto.
+                La interfaz de arriba es una demostración editorial: no es una captura ni cuenta como
+                evidencia.
               </p>
-            </Band>
-
-            <Band labelledBy="access-title" className={styles.access}>
-              <SectionHead
-                id="access-title"
-                eyebrow="Acceso"
-                title={`Conocer ${profile.name} en su propia fuente.`}
-                lead={profile.access.detail}
-              />
-              <div className={styles.accessRow}>
-                <Button href={profile.access.href} variant="primary" external>
-                  {profile.access.label}
-                </Button>
-                <Link className={styles.next} href={`/trabajo/${nextProfile.slug}`}>
-                  <span>Siguiente producto · {nextProfile.number}</span>
-                  <strong>
-                    {nextProfile.name} <i aria-hidden="true">→</i>
-                  </strong>
-                </Link>
-              </div>
             </Band>
 
             <CloseBand
@@ -260,8 +233,8 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
                 >
                   Empezar un proyecto
                 </ContactLink>
-                <Button href="/trabajo" variant="ghost">
-                  Todos los productos <span aria-hidden="true">→</span>
+                <Button href={`/trabajo/${nextProfile.slug}`} variant="ghost">
+                  Siguiente: {nextProfile.name} <span aria-hidden="true">→</span>
                 </Button>
               </MailRow>
             </CloseBand>

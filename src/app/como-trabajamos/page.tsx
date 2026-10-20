@@ -49,10 +49,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/og/og-default.png",
+        url: "/brand/og/og-como-trabajamos.jpg",
         width: 1200,
         height: 630,
-        alt: "INPLUX, de un problema real a software en producción",
+        alt: "INPLUX · Cómo trabajamos. Del diagnóstico a la operación.",
       },
     ],
   },
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
       "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
     images: [
       {
-        url: "/brand/og/og-default.png",
-        alt: "INPLUX, de un problema real a software en producción",
+        url: "/brand/og/og-como-trabajamos.jpg",
+        alt: "INPLUX · Cómo trabajamos. Del diagnóstico a la operación.",
       },
     ],
   },

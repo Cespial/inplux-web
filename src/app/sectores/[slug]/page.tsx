@@ -30,7 +30,7 @@ import styles from "./sector.module.css";
  * sangre con el nombre del sector y un lead «IA para X, Y y Z.»; un reclamo con
  * tres promesas de dos tiempos; los productos propios que aplican; la norma
  * donde la hay; y una sola invitación al final. Salud conserva, además, sus
- * principios y sus piezas con estado, porque ya estaban escritos y revisados.
+ * piezas con estado, en una línea cada una.
  *
  * Tres disparadores de contacto por página —cabecera, hero y cierre—: es lo
  * que `verify-build-output` cuenta para cada sector.
@@ -55,6 +55,9 @@ export async function generateMetadata({ params }: SectorPageProps): Promise<Met
 
   const url = `${SITE_URL}/sectores/${sector.slug}`;
   const socialTitle = `${sector.title} | INPLUX`;
+  /* La tarjeta se pinta con `scripts/og-cards.mjs` sobre la foto del hero. */
+  const socialImage = `/brand/og/og-sector-${sector.slug}.jpg`;
+  const socialImageAlt = `INPLUX · ${sector.name}. ${sector.lead}`;
 
   return {
     title: sector.title,
@@ -67,25 +70,13 @@ export async function generateMetadata({ params }: SectorPageProps): Promise<Met
       siteName: "INPLUX S.A.S.",
       locale: "es_CO",
       type: "website",
-      images: [
-        {
-          url: "/brand/og/og-default.png",
-          width: 1200,
-          height: 630,
-          alt: "INPLUX, de un problema real a software en producción",
-        },
-      ],
+      images: [{ url: socialImage, width: 1200, height: 630, alt: socialImageAlt }],
     },
     twitter: {
       card: "summary_large_image",
       title: socialTitle,
       description: sector.description,
-      images: [
-        {
-          url: "/brand/og/og-default.png",
-          alt: "INPLUX, de un problema real a software en producción",
-        },
-      ],
+      images: [{ url: socialImage, alt: socialImageAlt }],
     },
   };
 }
@@ -237,17 +228,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
                   </li>
                 ))}
               </ol>
-              {sector.principles ? (
-                <ol className={styles.principles} aria-label="Principios de diseño">
-                  {sector.principles.map((principle, index) => (
-                    <li key={principle.title}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <h3>{principle.title}</h3>
-                      <p>{principle.detail}</p>
-                    </li>
-                  ))}
-                </ol>
-              ) : null}
             </Band>
 
             {Diagram || sector.capabilities ? (
@@ -260,7 +240,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
                       Cada pieza dice <em>en qué estado está.</em>
                     </>
                   }
-                  lead="En operación corre con un cliente. En construcción es trabajo contratado que aún no opera con usuarios reales. Prototipo existe y se puede abrir. Oferta es lo que diseñamos y cotizamos."
+                  lead="En operación corre con un cliente; en construcción aún no tiene usuarios reales."
                 />
                 {Diagram ? (
                   <div className={styles.diagram}>
@@ -277,11 +257,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
                         </p>
                         <h3>{capability.title}</h3>
                         <p>{capability.description}</p>
-                        <ul>
-                          {capability.items.map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
                         {capability.href ? (
                           <a href={capability.href} target="_blank" rel="noreferrer">
                             {capability.hrefLabel ?? capability.href} <span aria-hidden="true">↗</span>

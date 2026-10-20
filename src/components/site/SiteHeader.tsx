@@ -612,7 +612,7 @@ export function SiteHeader({
                 prefetch={false}
                 onClick={(event) => closeMenu(event.detail !== 0)}
               >
-                <span aria-hidden="true">ES</span>
+                <span aria-hidden="true">{copy.languageSwitch.hrefLang?.toUpperCase()}</span>
                 {copy.languageSwitch.label}
               </Link>
             ) : null}

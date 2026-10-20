@@ -17,8 +17,8 @@
  *
  * Desde octubre de 2026 las cuatro páginas comparten una plantilla: hero con
  * imagen, un reclamo, tres promesas de dos tiempos, los productos que aplican
- * y, donde la hay, la norma. Salud conserva además sus principios y sus piezas
- * con estado, que ya estaban escritos y revisados.
+ * y, donde la hay, la norma. Salud conserva además sus piezas con estado, en
+ * una línea cada una: una página de sector se lee en un minuto.
  */
 
 import type { WorkSlug } from "./work";
@@ -35,8 +35,6 @@ export type SectorCapability = {
   code: string;
   title: string;
   description: string;
-  /** Qué incluye, en frases cortas. */
-  items: readonly string[];
   status: SectorCapabilityStatus;
   /** Enlace público, solo cuando existe algo que abrir. */
   href?: string;
@@ -87,8 +85,6 @@ export type SectorProfile = {
   /** `serviceType` y `audienceType` del JSON-LD, sin cobertura geográfica. */
   serviceType: string;
   audienceType: string;
-  /** Principios de diseño, solo donde ya estaban escritos. */
-  principles?: readonly { title: string; detail: string }[];
   /** Piezas con estado honesto, solo donde ya estaban documentadas. */
   capabilities?: readonly SectorCapability[];
   /** Marco normativo, solo en los sectores regulados. */
@@ -111,14 +107,14 @@ export const sectorProfiles = [
     eyebrow: "Sector",
     lead: "IA para pacientes, telemonitoreo e historia clínica.",
     audience:
-      "Para IPS, clínicas, hospitales y redes de prestadores en Colombia, con equipos clínicos y administrativos que necesitan herramientas que se adapten a su operación y no al revés.",
+      "Para IPS, clínicas, hospitales y redes de prestadores en Colombia.",
     hero: {
       image: "/sectores/sector-salud.webp",
       alt: "Una clínica consulta una tableta junto al monitor de un paciente, con la luz de un ventanal.",
     },
     claim: "Software alrededor de la historia clínica que la IPS ya tiene.",
     intro:
-      "Las IPS no necesitan empezar de cero. Construimos lo que falta alrededor de los sistemas que ya operan: la relación con el paciente, el seguimiento entre consultas, la integración con la historia clínica existente y el soporte a quienes usan el sistema todos los días, con el equipo clínico decidiendo en cada alerta.",
+      "Construimos lo que falta alrededor de los sistemas que ya operan: la relación con el paciente, el seguimiento entre consultas y el soporte diario, con el equipo clínico decidiendo en cada alerta.",
     promises: [
       { label: "Pacientes", lineA: "Cada paciente,", lineB: "acompañado." },
       { label: "Telemonitoreo", lineA: "Cada alerta,", lineB: "atendida." },
@@ -127,117 +123,41 @@ export const sectorProfiles = [
     products: [],
     serviceType: "Desarrollo de software a la medida para prestadores de salud",
     audienceType: "IPS, clínicas, hospitales y redes de prestadores de salud",
-    principles: [
-      {
-        title: "La app suma, no condiciona",
-        detail:
-          "Ningún servicio depende de que el paciente use el celular. Los canales que ya existen siguen abiertos; el software agrega una vía más.",
-      },
-      {
-        title: "La historia clínica sigue siendo la fuente",
-        detail:
-          "Lo que construimos lee y agenda sobre la historia clínica que la IPS ya tiene. Escribir en ella se diseña aparte, con autorización expresa y registro de quién consulta qué.",
-      },
-      {
-        title: "Intervenir antes de la urgencia",
-        detail:
-          "El registro entre consultas se convierte en alertas para el equipo de la central, con un guion de atención y un cierre con desenlace.",
-      },
-      {
-        title: "Acceso sin contraseñas que perder",
-        detail:
-          "El paciente escribe su documento y recibe un código por mensaje de texto. Nada que recordar ni que restablecer.",
-      },
-    ],
     capabilities: [
       {
         code: "S–01",
         title: "App de pacientes",
-        description:
-          "La aplicación institucional de la IPS: acceso a los servicios, gestión del riesgo en salud y bienestar del usuario desde el celular.",
-        items: [
-          "Citas, resultados y autorizaciones",
-          "PQR-F con trazabilidad",
-          "Planes de cuidado y contenido educativo",
-          "Cuidadores con acceso delegado",
-          "Android, iOS y web desde una sola base de código",
-        ],
+        description: "Citas, resultados, autorizaciones y PQR-F desde el celular, con acceso para cuidadores.",
         status: "En construcción",
       },
       {
         code: "S–02",
         title: "Central de telemonitoreo",
-        description:
-          "Un tablero para la enfermería y la medicina de la central: la cola de alertas priorizada por semáforo, la ficha del paciente, el guion de atención y el cierre con desenlace.",
-        items: [
-          "Reglas por programa: riesgo cardiovascular, diabetes, EPOC y gestantes",
-          "Registro del paciente entre consultas",
-          "Priorización por semáforo y guion de atención",
-          "Cierre con desenlace y bitácora",
-        ],
+        description: "Alertas por semáforo, ficha del paciente, guion de atención y cierre con desenlace.",
         status: "En construcción",
       },
       {
         code: "S–03",
         title: "Integración con la historia clínica",
-        description:
-          "Una capa de servicios entre la app y el sistema de historia clínica que la IPS ya opera, para que agenda, lista de espera, PQRS y laboratorio hablen entre sí.",
-        items: [
-          "Agendar, consultar y cancelar citas",
-          "Lista de espera y PQRS",
-          "Resultados de laboratorio",
-          "Verificación automática por horas y bitácora inmutable",
-        ],
+        description: "Agenda, lista de espera, PQRS y laboratorio sobre el sistema que la IPS ya opera.",
         status: "En construcción",
       },
       {
         code: "S–04",
         title: "Mesa de ayuda y soporte",
-        description:
-          "Un portal de atención para quienes usan el sistema: tickets, seguimiento y respuesta por correo, sin contraseñas ni instalaciones.",
-        items: [
-          "Acceso sin contraseña por enlace",
-          "Carga masiva de tickets desde Excel o CSV",
-          "Correo en hilo y registro inmutable",
-          "Acuerdos de respuesta visibles",
-        ],
+        description: "Tickets sin contraseña, correo en hilo y acuerdos de respuesta visibles.",
         status: "En operación",
       },
       {
         code: "S–05",
-        title: "Tableros y analítica",
-        description:
-          "Salas de control sobre los datos que la organización ya produce: registros, vencimientos y novedades en una sola vista.",
-        items: [
-          "Consolidación de fuentes dispersas",
-          "Bandeja de novedades y vencimientos",
-          "Indicadores por sede, programa o servicio",
-        ],
+        title: "Tableros y sistemas a la medida",
+        description: "Salas de control, facturación y RIPS, y módulos asistenciales cuando el mercado no encaja.",
         status: "Oferta",
       },
       {
         code: "S–06",
-        title: "Sistemas administrativos y asistenciales a la medida",
-        description:
-          "Cuando el software del mercado no encaja con la operación: módulos administrativos, asistenciales y de facturación diseñados sobre los procesos reales de la institución, con la interoperabilidad que la norma exige.",
-        items: [
-          "Módulo asistencial y agenda",
-          "Facturación y RIPS",
-          "Resumen digital de atención para la historia clínica electrónica interoperable",
-          "Archivo clínico a demanda",
-        ],
-        status: "Oferta",
-      },
-      {
-        code: "S–07",
-        title: "Amparo.help · resolución de disputas en salud",
-        description:
-          "Un prototipo para resolver disputas entre pacientes y aseguradores sin abogados ni costos de juzgado, con la decisión final en manos humanas. Lo llevamos al hackathon de ODR 2026 en Boston.",
-        items: [
-          "Triaje del caso y arreglo directo con la aseguradora",
-          "Borrador de tutela cuando no hay arreglo",
-          "Tablero para el juez",
-        ],
+        title: "Amparo.help",
+        description: "Un prototipo para resolver disputas entre pacientes y aseguradores, con la decisión en manos humanas.",
         status: "Prototipo",
         href: "https://amparo.help",
         hrefLabel: "Abrir Amparo.help",
@@ -247,33 +167,33 @@ export const sectorProfiles = [
       {
         label: "Resolución 866 de 2021",
         detail:
-          "Define el conjunto de datos mínimos y el mecanismo de interoperabilidad de la historia clínica electrónica.",
+          "Datos mínimos e interoperabilidad de la historia clínica electrónica.",
         href: "https://www.minsalud.gov.co/Normatividad_Nuevo/Resoluci%C3%B3n%20No.%20866%20de%202021.pdf",
       },
       {
         label: "Resolución 2275 de 2023",
         detail:
-          "Fija el reporte de RIPS como soporte de la factura electrónica de venta en salud.",
+          "RIPS como soporte de la factura electrónica en salud.",
         href: "https://www.minsalud.gov.co/Normatividad_Nuevo/Resoluci%C3%B3n%20No.%202275%20de%202023.pdf",
       },
       {
         label: "Resolución 3100 de 2019",
         detail:
-          "Condiciones de habilitación de los prestadores: la operación que el software tiene que respetar.",
+          "Condiciones de habilitación de los prestadores.",
         href: "https://www.minsalud.gov.co/Normatividad_Nuevo/Resoluci%C3%B3n%20No.%203100%20de%202019.pdf",
       },
       {
         label: "Ley 1581 de 2012",
         detail:
-          "Protección de datos personales. Los datos de salud son sensibles: autorización expresa, cifrado y registro de acceso.",
+          "Datos sensibles: autorización expresa, cifrado y registro de acceso.",
         href: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981",
       },
     ],
     closing: {
       title: "Cuéntanos qué sistema ya tienen y qué falta alrededor.",
-      lead: "Empezamos por la operación real: qué sistema de historia clínica usan, cuántas sedes, qué programas y qué duele hoy. Con eso dimensionamos lo que sigue.",
+      lead: "Empezamos por la operación real: qué historia clínica usan, cuántas sedes y qué duele hoy.",
     },
-    verifiedAt: "2026-10-17",
+    verifiedAt: "2026-10-20",
   },
   {
     slug: "publico",

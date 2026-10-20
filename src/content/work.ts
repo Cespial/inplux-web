@@ -402,7 +402,7 @@ export const workProfiles = [
       // vez de repetirlo como si siguiera vigente.
       label: "Beta cerrada",
       detail:
-        "El sitio inscribe a porcicultores de Antioquia en una beta cerrada. Sus fichas de tienda seguían anunciando junio de 2026 en la fecha de verificación.",
+        "El sitio inscribe a porcicultores de Antioquia en una beta cerrada.",
     },
     access: {
       label: "Abrir demostración",
