@@ -239,6 +239,7 @@ export function FeatureSplit({
   kicker,
   title,
   lead,
+  extra,
   actions,
   media,
   reverse = false,
@@ -248,6 +249,8 @@ export function FeatureSplit({
   kicker: ReactNode;
   title: ReactNode;
   lead: ReactNode;
+  /** Bloques después del lead (una lista, una nota): van fuera del `<p>` para que el HTML sea válido. */
+  extra?: ReactNode;
   actions?: ReactNode;
   media: ReactNode;
   reverse?: boolean;
@@ -258,6 +261,7 @@ export function FeatureSplit({
       <p className={ui.kicker}>{kicker}</p>
       <h3 className={cx(ui.d2, ui.featTitle, titleClassName)}>{title}</h3>
       <p className={ui.lead}>{lead}</p>
+      {extra}
       {actions ? <div className={ui.featActions}>{actions}</div> : null}
     </div>
   );
