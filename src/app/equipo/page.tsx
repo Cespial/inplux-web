@@ -71,6 +71,7 @@ const schools = [
   "Universidad del Rosario",
   "Fundación Universitaria Luis Amigó",
   "CESDE",
+  "Institución Universitaria CEIPA",
 ] as const;
 
 const crumbs: Crumb[] = [

@@ -263,6 +263,13 @@ export const teamCrew = [
     name: "Alejandro López Durango",
     givenName: "Alejandro",
     familyName: "López Durango",
+    jobTitle: "Financiero de proyectos",
+    focus:
+      "Lleva las finanzas de proyectos con recursos públicos: ejecución presupuestal, conciliaciones, legalización de recursos e informes ante supervisores y fiduciarias.",
+    credentials: [
+      "Especialización en Gerencia de Proyectos (en curso), CEIPA",
+      "Administración Financiera, CEIPA",
+    ],
     photo: { src: "/brand/team/alejandro-lopez-durango.jpg", width: 900, height: 1200 },
   },
   {
