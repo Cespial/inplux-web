@@ -199,6 +199,7 @@ const pageDefinitions = {
     description:
       "INPLUX LLC is a Miami-based AI development and implementation company. We develop and implement the AI transformation of companies and institutions across Latin America. Expert people direct the critical decisions.",
     canonical: `${siteUrl}/en`,
+    htmlLang: "en",
     contentLang: "en-US",
     ogLocale: "en_US",
     ogTitle: "AI transformation that reaches production.",
@@ -230,7 +231,7 @@ const pageDefinitions = {
       "x-default": siteUrl,
     },
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
-    productFooter: "Documented products",
+    productFooter: { label: "Documented products", prefix: "/en/work" },
   },
   howWeWork: {
     file: ".next/server/app/como-trabajamos.html",
@@ -473,7 +474,7 @@ const pageDefinitions = {
       url: `${siteUrl}/nosotros`,
     },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
-    productFooter: "Productos documentados",
+    productFooter: { label: "Productos documentados", prefix: "/trabajo" },
     attribution: true,
   },
   team: {
@@ -629,6 +630,271 @@ const pageDefinitions = {
     contact: sharedContact,
   },
 };
+
+/*
+ * ── El sitio en inglés (PR M, 20-oct-2026) ─────────────────────────────────
+ *
+ * Doce rutas bajo `/en` con par en español (catorce archivos: cinco fichas de
+ * producto y cuatro sectores). Espejo de `src/content/i18n.ts`, como
+ * `workProfiles` lo es de `work.ts`: una ruta nueva con par obliga a darla de
+ * alta aquí. Cada par publica el MISMO bloque hreflang —recíproco por
+ * construcción— con `x-default` al español, y el `<html lang>` de la inglesa
+ * es `en`.
+ */
+const sectorPairs = [
+  // [slug español, slug inglés, archivo, nombre, título, descripción, lead]
+  [
+    "salud",
+    "health",
+    "Health",
+    "Software for clinics and healthcare providers",
+    "What INPLUX builds for healthcare providers in Colombia: a patient app, a remote monitoring center, clinical record integration, a help desk, dashboards and custom systems.",
+    "AI for patients, remote monitoring and clinical records.",
+    ["INFINITY", "IPSMEDIC", "Plenus", "Sinergia", "Oncolife", "areaServed"],
+  ],
+  [
+    "publico",
+    "public-sector",
+    "Public sector",
+    "AI for municipalities and public entities",
+    "What INPLUX builds for municipalities, local governments and public finance: sourced fiscal information, procurement review and performance tracking, with the team approving every step.",
+    "AI for municipal finance, procurement and performance tracking.",
+    ["CORANTIOQUIA", "Caucasia", "Cisneros", "Caracolí", "San Roque", "Buriticá", "Yalí", "Santo Domingo", "El Bagre", "Vegachí", "Giraldo", "INVIAS", "areaServed", "nationwide"],
+  ],
+  [
+    "legal-tributario",
+    "legal-tax",
+    "Legal and tax",
+    "AI for law firms, accountants and legal teams",
+    "What INPLUX builds for law firms, accountants and legal teams: tax research with the official source, legal validity, case law and comparable arbitral awards.",
+    "AI for legal research, validity and case law.",
+    ["Rentan", "Sistemas Aries", "ASECONTIC", "areaServed"],
+  ],
+  [
+    "empresas",
+    "business",
+    "Business",
+    "AI for business operations",
+    "What INPLUX builds for private companies: digital products, internal tools and reconciled data on top of the systems they already run, with critical decisions in the team's hands.",
+    "AI for operations, data and digital products.",
+    ["Creame", "Rentan", "Sistemas Aries", "EDEREM", "INCA Ingenieros", "Florandina", "Multivital", "areaServed"],
+  ],
+];
+
+const workProfilesEn = {
+  tribai: {
+    shortDescription: "Tax research with sources, validity and tools in plain view.",
+    status: "Public product",
+    attribution: "Developed by INPLUX",
+  },
+  gobia: {
+    shortDescription: "Municipal information and follow-up in a single environment.",
+    status: "Active pilot",
+    attribution: "INPLUX solution",
+  },
+  kelsen: {
+    shortDescription: "Legal analysis, drafting and monitoring with traceability.",
+    status: "Public explorer",
+    attribution: "Developed by INPLUX",
+  },
+  laudos: {
+    shortDescription: "Search across arbitral awards and arbitration case law, with legal judgment.",
+    status: "Open beta",
+    attribution: "Technical development by INPLUX",
+  },
+  porkia: {
+    shortDescription: "Batches, feed, herd health and the accounts of a pig farm in one app.",
+    status: "Closed beta",
+    attribution: "Developed by INPLUX",
+  },
+};
+
+/** Ruta española → ruta inglesa, en el orden del sitemap inglés. */
+const languagePairs = [
+  ["/como-trabajamos", "/en/how-we-work"],
+  ["/trabajo", "/en/work"],
+  ...workProfiles.map((profile) => [`/trabajo/${profile.slug}`, `/en/work/${profile.slug}`]),
+  ...sectorPairs.map(([es, en]) => [`/sectores/${es}`, `/en/sectors/${en}`]),
+  ["/nosotros", "/en/about"],
+  ["/seguridad", "/en/security"],
+  ["/contacto", "/en/contact"],
+];
+
+const alternatesFor = (esPath) => ({
+  "es-CO": `${siteUrl}${esPath}`,
+  "en-US": `${siteUrl}${languagePairs.find(([es]) => es === esPath)[1]}`,
+  "x-default": `${siteUrl}${esPath}`,
+});
+
+// El par español de cada ruta inglesa publica el mismo bloque.
+for (const definition of Object.values(pageDefinitions)) {
+  const esPath = definition.canonical?.startsWith(siteUrl)
+    ? definition.canonical.slice(siteUrl.length)
+    : null;
+  if (esPath && languagePairs.some(([es]) => es === esPath)) {
+    definition.languageAlternates = alternatesFor(esPath);
+    definition.languageSwitch = {
+      href: languagePairs.find(([es]) => es === esPath)[1],
+      hrefLang: "en",
+    };
+  }
+}
+
+const englishBase = (esPath, enPath) => ({
+  file: `.next/server/app${enPath}.html`,
+  canonical: `${siteUrl}${enPath}`,
+  ogUrl: `${siteUrl}${enPath}`,
+  htmlLang: "en",
+  ogLocale: "en_US",
+  inLanguage: "en",
+  languageAlternates: alternatesFor(esPath),
+  // Un /en/* sin pie inglés publicaría el español por debajo del contenido.
+  productFooter: { label: "Documented products", prefix: "/en/work" },
+  // El selector de idioma lleva al par español, y ningún otro enlace lleva a
+  // la ruta española de una página que tiene par.
+  languageSwitch: { href: esPath, hrefLang: "es" },
+  forbiddenLinks: languagePairs.map(([es]) => es).filter((es) => es !== esPath),
+});
+
+const social = (title, description, image, alt, twitterDescription = description) => ({
+  ogTitle: title,
+  ogDescription: description,
+  ogImage: image.startsWith("http") ? image : `${siteUrl}${image}`,
+  ogImageAlt: alt,
+  twitterTitle: title,
+  twitterDescription,
+  twitterImageAlt: alt,
+});
+
+const enWorkTitle = "Our own products — Tribai, Gobia, Kelsen, Laudos and Porkia";
+const workSocialImageEn = (key) =>
+  `${siteUrl}/api/og/trabajo/${key}?lang=en&v=${workSocialVersion}`;
+
+Object.assign(pageDefinitions, {
+  enHowWeWork: {
+    ...englishBase("/como-trabajamos", "/en/how-we-work"),
+    title: "How we work — from diagnosis to operation | INPLUX",
+    description:
+      "How INPLUX takes a process to production: diagnosis, pilot, production and operation, with a deliverable in every phase and your team's judgment in every decision.",
+    ...social(
+      "How we work | INPLUX",
+      "Diagnosis, pilot, production and operation: four phases with a deliverable, on the systems you already run.",
+      "/brand/og/og-en-how-we-work.jpg",
+      "INPLUX · How we work. From diagnosis to operation.",
+    ),
+    jsonLd: { type: "WebPage", name: "How we work", url: `${siteUrl}/en/how-we-work` },
+    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+  },
+  enWork: {
+    ...englishBase("/trabajo", "/en/work"),
+    title: `${enWorkTitle} | INPLUX`,
+    description:
+      "Five products built and run by INPLUX, and one in development, each with its public sources and the date we reviewed them.",
+    ...social(
+      `${enWorkTitle} | INPLUX`,
+      "Every documented product, with its public sources and verification date.",
+      workSocialImageEn("directorio"),
+      "INPLUX, product directory with verified sources",
+    ),
+    jsonLd: { type: "CollectionPage", name: enWorkTitle, url: `${siteUrl}/en/work` },
+    contact: { ...sharedContact, triggers: 2 },
+  },
+  ...Object.fromEntries(
+    workProfiles.map((profile) => {
+      const en = workProfilesEn[profile.slug];
+      const description = `${en.shortDescription} Status: ${en.status}. Attribution: ${en.attribution}.`;
+      const title = `${profile.name} — product profile | INPLUX`;
+      return [
+        `en-work-${profile.slug}`,
+        {
+          ...englishBase(`/trabajo/${profile.slug}`, `/en/work/${profile.slug}`),
+          title,
+          description,
+          ...social(
+            title,
+            description,
+            workSocialImageEn(profile.slug),
+            `${profile.name}: ${en.status}. ${en.attribution}.`,
+          ),
+          jsonLd: {
+            type: "WebPage",
+            name: `${profile.name} — product profile`,
+            url: `${siteUrl}/en/work/${profile.slug}`,
+          },
+          contact: { ...sharedContact, triggers: 2 },
+        },
+      ];
+    }),
+  ),
+  ...Object.fromEntries(
+    sectorPairs.map(([es, en, name, title, description, lead, forbiddenText]) => [
+      `en-sector-${en}`,
+      {
+        ...englishBase(`/sectores/${es}`, `/en/sectors/${en}`),
+        title: `${title} | INPLUX`,
+        description,
+        ...social(
+          `${title} | INPLUX`,
+          description,
+          `/brand/og/og-en-sector-${en}.jpg`,
+          `INPLUX · ${name}. ${lead}`,
+        ),
+        jsonLd: { type: "WebPage", name: title, url: `${siteUrl}/en/sectors/${en}` },
+        // Cabecera + hero + cierre, como en español. Sin nombres de clientes.
+        contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+        forbiddenText,
+      },
+    ]),
+  ),
+  enAbout: {
+    ...englishBase("/nosotros", "/en/about"),
+    title: "About — we build with judgment, from Medellín | INPLUX",
+    description:
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
+    ...social(
+      "We build with judgment, from Medellín | INPLUX",
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
+      "/brand/og/og-en-about.jpg",
+      "Buildings among trees with the mountains of Medellín in the background",
+    ),
+    jsonLd: { type: "AboutPage", name: "We build with judgment, from Medellín", url: `${siteUrl}/en/about` },
+    contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
+    attribution: true,
+  },
+  enSecurity: {
+    ...englishBase("/seguridad", "/en/security"),
+    title: "Security and data | INPLUX",
+    description:
+      "How INPLUX looks after each client's data: encryption, role-based access, separated data, models that don't train on it and the legal framework that applies.",
+    ...social(
+      "Security and data | INPLUX",
+      "Encryption, role-based access, data separated by client and models that don't train on it. No seals or promises we can't keep.",
+      "/brand/og/og-en-security.jpg",
+      "INPLUX · Security. How we look after each client's data.",
+    ),
+    jsonLd: { type: "WebPage", name: "Security and data", url: `${siteUrl}/en/security` },
+    contact: sharedContact,
+    // Las mismas afirmaciones aprobadas que /seguridad: sin sellos ni grados.
+    forbiddenText: ["SOC 2", "ISO 27001", "certif", "Certif", "bank-grade", "military-grade"],
+    requiredText: ["Ley 1581 de 2012", "Resolución 866 de 2021"],
+  },
+  enContact: {
+    ...englishBase("/contacto", "/en/contact"),
+    title: "Contact — let's start with the problem | INPLUX",
+    description:
+      "Tell us what should change in your product, operation or service. You don't need to arrive with requirements or a defined scope.",
+    ...social(
+      "Let's start with the problem | INPLUX",
+      "Share the challenge. INPLUX helps you turn it into a first product decision.",
+      "/brand/og/og-en-contact.jpg",
+      "INPLUX · Contact. Let's start with the problem.",
+      "Share the challenge. You don't need requirements or a defined scope.",
+    ),
+    jsonLd: { type: "ContactPage", name: "Contact INPLUX", url: `${siteUrl}/en/contact` },
+    contact: { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 1 },
+    requiredLinks: ["/en/security", "/en/how-we-work"],
+  },
+});
 
 function decodeHtml(value) {
   return String(value ?? "")
@@ -833,6 +1099,13 @@ function verifyJsonLd(name, html, definition) {
         definition.jsonLd.url,
         `${name} ${definition.jsonLd.type} url`,
       );
+      if (definition.inLanguage) {
+        expectEqual(
+          routeEntity.inLanguage,
+          definition.inLanguage,
+          `${name} ${definition.jsonLd.type} inLanguage`,
+        );
+      }
       if (definition.jsonLd.type === "WebSite") {
         expectEqual(
           routeEntity.alternateName,
@@ -1077,7 +1350,7 @@ function verifyDeckShape(name, html, { slides, profiles }) {
  * enlace sobra. Es ruidoso a propósito —Porkia se dio de alta como quinto
  * producto y nunca llegó a ninguno de los dos pies, en silencio—.
  */
-function verifyProductFooter(name, html, ariaLabel) {
+function verifyProductFooter(name, html, { label: ariaLabel, prefix }) {
   const links = readNavigationLinks(html, ariaLabel);
   if (links === null) {
     errors.push(
@@ -1087,7 +1360,7 @@ function verifyProductFooter(name, html, ariaLabel) {
   }
 
   const documented = workProfiles.map((profile) => ({
-    href: `/trabajo/${profile.slug}`,
+    href: `${prefix}/${profile.slug}`,
     label: profile.name,
   }));
   const surface = `${name}: el pie de productos (aria-label="${ariaLabel}")`;
@@ -1146,6 +1419,8 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/prensa/seagricolas-sudafrica`,
     `${siteUrl}/contacto`,
     `${siteUrl}/seguridad`,
+    // El sitio en inglés, al final y en el orden de `sitemap.ts`.
+    ...languagePairs.map(([, en]) => `${siteUrl}${en}`),
   ];
 
   try {
@@ -1239,7 +1514,12 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
     continue;
   }
 
-  expect(/<html\b[^>]*\blang="es-CO"/i.test(html), `${name}: <html> debe declarar lang="es-CO"`);
+  // El layout raíz resuelve `lang` por ruta (`HtmlRoot`): `en` bajo `/en`.
+  const expectedLang = definition.htmlLang ?? "es-CO";
+  expect(
+    new RegExp(`<html\\b[^>]*\\blang="${expectedLang}"`, "i").test(html),
+    `${name}: <html> debe declarar lang="${expectedLang}"`,
+  );
   expectEqual(titleContent(html), definition.title, `${name} title`);
   expectEqual(metaContent(html, "name", "description"), definition.description, `${name} description`);
   expectEqual(linkHref(html, "canonical") ?? null, definition.canonical, `${name} canonical`);
@@ -1288,6 +1568,32 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
       html.includes(`href="${link}"`),
       `${name}: debe enlazar ${link}; la autoridad interna de esa ruta depende de este enlace`,
     );
+  }
+  if (!definition.languageSwitch && !definition.canonical?.match(/^https:\/\/inplux\.co(\/en)?$/)) {
+    // Sin par no hay selector: el equipo, la prensa, la marca y los decks.
+    expect(!html.includes("languageSwitch"), `${name}: no tiene par y muestra el selector de idioma`);
+  }
+  if (definition.languageSwitch) {
+    const switches = [...html.matchAll(/<a[^>]*class="[^"]*languageSwitch[^"]*"[^>]*>/g)].map(
+      ([tag]) => tag,
+    );
+    expectEqual(switches.length, 1, `${name} selectores de idioma`);
+    const { href, hrefLang } = definition.languageSwitch;
+    expect(
+      switches[0]?.includes(`href="${href}"`) && switches[0]?.includes(`hrefLang="${hrefLang}"`),
+      `${name}: el selector de idioma debe llevar a ${href} con hreflang ${hrefLang}`,
+    );
+    const pairLinks = html.split(`href="${href}"`).length - 1;
+    expectEqual(pairLinks, 1, `${name} enlaces a ${href} fuera del selector`);
+  }
+  for (const link of definition.forbiddenLinks ?? []) {
+    expect(
+      !html.includes(`href="${link}"`),
+      `${name}: enlaza ${link}, la versión española de una página que tiene par en inglés`,
+    );
+  }
+  for (const text of definition.requiredText ?? []) {
+    expect(html.includes(text), `${name}: debe citar «${text}»`);
   }
   for (const text of definition.forbiddenText ?? []) {
     expect(

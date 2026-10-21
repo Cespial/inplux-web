@@ -68,7 +68,7 @@ export const teamMembers = [
     bio:
       "Dirige la estrategia y el criterio con el que INPLUX convierte experiencia de contextos complejos en productos que puedan operar y producir resultados verificables.",
     profileBio: [
-      "Jaime Alonso Cano Pino es CEO y fundador de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Dirige la estrategia de la compañía y el criterio con el que se decide qué construir: qué problema merece un producto, qué evidencia debe producir y bajo qué responsabilidad opera.",
+      "Jaime Alonso Cano Pino es CEO y fundador de INPLUX S.A.S., empresa con sede en Medellín, Colombia, que desarrolla e implementa transformación con IA. Dirige la estrategia de la compañía y el criterio con el que se decide qué construir: qué problema merece un producto, qué evidencia debe producir y bajo qué responsabilidad opera.",
       "Su trabajo se concentra en contextos donde la norma y el dato se cruzan —gestión tributaria, financiera e institucional—, y en trasladar ese criterio a productos digitales que puedan usarse y mejorarse con evidencia de su operación.",
       "Escribe con regularidad en Al Poniente sobre el sistema tributario colombiano, el trabajo de la profesión contable y los límites de la inteligencia artificial aplicada a materias reguladas. Sus columnas insisten en una misma tesis: una respuesta que no se puede verificar no sirve, por rápida que sea.",
     ],
@@ -113,7 +113,7 @@ export const teamMembers = [
     bio:
       "Lidera la definición y construcción de productos digitales. Coordina cómo diseño, software, datos e inteligencia artificial trabajan como un solo sistema de entrega.",
     profileBio: [
-      "Cristian Espinal Maya es CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Lidera la definición y la construcción de los productos digitales de la compañía, y coordina cómo diseño, ingeniería, datos e inteligencia artificial operan como un solo sistema de entrega.",
+      "Cristian Espinal Maya es CTO de INPLUX S.A.S., empresa con sede en Medellín, Colombia, que desarrolla e implementa transformación con IA. Lidera la definición y la construcción de los productos digitales de la compañía, y coordina cómo diseño, ingeniería, datos e inteligencia artificial operan como un solo sistema de entrega.",
       "Es economista e investigador. Publica trabajo revisable en arXiv y SSRN sobre el efecto de la inteligencia artificial en el trabajo y el capital humano, y sobre métodos para medir lo que estos sistemas hacen y lo que no.",
       "Esa doble posición —construir los sistemas y estudiar sus efectos— define su criterio técnico: la inteligencia artificial acelera tareas concretas y verificables, mientras la dirección de las decisiones críticas permanece en manos de personas expertas.",
     ],

@@ -42,6 +42,26 @@ const expectedRoutes = [
   ["/deck/legaltech/presentacion", 200],
   ["/trabajo/slug-inexistente", 404],
   ["/ruta-inexistente", 404],
+  // El sitio en inglés (PR M): doce rutas con par en español.
+  ["/en/how-we-work", 200],
+  ["/en/work", 200],
+  ["/en/work/tribai", 200],
+  ["/en/work/gobia", 200],
+  ["/en/work/kelsen", 200],
+  ["/en/work/laudos", 200],
+  ["/en/work/porkia", 200],
+  ["/en/sectors/public-sector", 200],
+  ["/en/sectors/health", 200],
+  ["/en/sectors/legal-tax", 200],
+  ["/en/sectors/business", 200],
+  ["/en/about", 200],
+  ["/en/security", 200],
+  ["/en/contact", 200],
+  ["/en/work/slug-inexistente", 404],
+  // Los slugs españoles no existen bajo /en.
+  ["/en/sectors/salud", 404],
+  // Lo que sigue solo en español no tiene ruta inglesa.
+  ["/en/team", 404],
 ];
 
 const expectedSocialImages = [
@@ -51,6 +71,12 @@ const expectedSocialImages = [
   "/api/og/trabajo/kelsen?v=2026-10-20.2",
   "/api/og/trabajo/laudos?v=2026-10-20.2",
   "/api/og/trabajo/porkia?v=2026-10-20.2",
+  "/api/og/trabajo/directorio?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/gobia?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/kelsen?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/laudos?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/porkia?lang=en&v=2026-10-20.2",
 ];
 
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es
@@ -162,7 +188,26 @@ try {
     const response = await fetch(`${baseUrl}${route}`, { redirect: "manual" });
     if (response.status !== expectedStatus) {
       failures.push(`${route}: esperaba ${expectedStatus}, recibió ${response.status}`);
+      continue;
     }
+    // El idioma del documento sale del servidor, no de la hidratación.
+    if (expectedStatus === 200 && !route.startsWith("/deck")) {
+      const html = await response.text();
+      const lang = route === "/en" || route.startsWith("/en/") ? "en" : "es-CO";
+      if (!html.includes(`<html lang="${lang}"`)) {
+        failures.push(`${route}: esperaba <html lang="${lang}">`);
+      }
+    }
+  }
+
+  // La tarjeta inglesa de un producto no es la española con otro nombre.
+  const [spanishCard, englishCard] = await Promise.all(
+    ["/api/og/trabajo/tribai?v=2026-10-20.2", "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2"].map(
+      async (route) => Buffer.from(await (await fetch(`${baseUrl}${route}`)).arrayBuffer()),
+    ),
+  );
+  if (spanishCard.equals(englishCard)) {
+    failures.push("/api/og/trabajo/tribai?lang=en: pinta la misma tarjeta que la española");
   }
 
   for (const [route, expectedHeader] of expectedCacheControl) {

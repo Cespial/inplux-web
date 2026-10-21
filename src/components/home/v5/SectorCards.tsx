@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { sectorSlugEn } from "@/content/i18n";
 import { sectorProfiles } from "@/content/sectores";
 import styles from "./SectorCards.module.css";
 
@@ -18,7 +19,11 @@ export function SectorCards({
   return (
     <ul className={styles.cards} data-reveal-children="media">
       {items.map((item) => {
-        const sector = sectorProfiles.find((profile) => item.href === `/sectores/${profile.slug}`);
+        const sector = sectorProfiles.find(
+          (profile) =>
+            item.href === `/sectores/${profile.slug}` ||
+            item.href === `/en/sectors/${sectorSlugEn[profile.slug]}`,
+        );
         if (!sector) throw new Error(`Falta el sector de ${item.href} en sectores.ts`);
         return (
           <li key={item.href}>

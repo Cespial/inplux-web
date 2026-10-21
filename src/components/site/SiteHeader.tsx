@@ -7,6 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ContactLink } from "@/components/site/ContactLink";
 import type { ContactSource } from "@/components/site/ContactLink";
 import { homeCopyEs } from "@/content/copy/es";
+import { pairedPath } from "@/content/i18n";
 import {
   isNavigationGroup,
   type HeaderCopy,
@@ -215,8 +216,6 @@ function MobileEntry({
   );
 }
 
-const translatedRoutes = new Set(["/", "/en"]);
-
 export function SiteHeader({
   copy = homeCopyEs.header,
   desktopContactSource = "header-desktop",
@@ -229,10 +228,16 @@ export function SiteHeader({
   mobileContactSource?: ContactSource;
 }) {
   const pathname = usePathname();
-  // El cambio de idioma solo une las dos portadas: el resto del sitio se publica
-  // en español, y un «English» en /prensa llevaba a una portada que no traduce
-  // esa página.
-  const languageSwitch = translatedRoutes.has(pathname) ? copy.languageSwitch : null;
+  // El cambio de idioma aparece solo en una página con par y lleva a su
+  // equivalente (`content/i18n.ts`). En /equipo, /prensa o /marca, que se
+  // publican solo en español, no aparece: un «English» ahí llevaría a una
+  // página que no traduce esa.
+  const pair = pairedPath(pathname);
+  const languageSwitch =
+    pair && copy.languageSwitch
+      ? { label: copy.languageSwitch.label, href: pair.href, hrefLang: pair.lang }
+      : null;
+  const contactHref = copy.contactHref ?? headerContactHref;
   const [open, setOpen] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuClosing, setMenuClosing] = useState(false);
@@ -488,7 +493,7 @@ export function SiteHeader({
       <div className={styles.inner} data-site-header-inner>
         <Link
           className={styles.brand}
-          href="/"
+          href={copy.homeHref ?? "/"}
           prefetch={false}
           aria-label={copy.brandLabel}
         >
@@ -544,7 +549,7 @@ export function SiteHeader({
 
         <ContactLink
           className={styles.cta}
-          fallbackHref={headerContactHref}
+          fallbackHref={contactHref}
           source={desktopContactSource}
         >
           {copy.contactCta}
@@ -630,7 +635,7 @@ export function SiteHeader({
             ) : null}
             <ContactLink
               className={styles.mobileContact}
-              fallbackHref={headerContactHref}
+              fallbackHref={contactHref}
               source={mobileContactSource}
               beforeOpen={closeMenuBeforeContact}
               returnFocusRef={menuButtonRef}

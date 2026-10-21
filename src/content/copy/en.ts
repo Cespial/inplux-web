@@ -1,3 +1,9 @@
+import {
+  companyNavigationEn,
+  productNavigationEn,
+  sectorNavigationEn,
+  siteNavigationEn,
+} from "@/content/navigation.en";
 import type { HomeCopy } from "./types";
 
 /**
@@ -9,19 +15,15 @@ import type { HomeCopy } from "./types";
  * de Miami que presta los servicios en el exterior, con el equipo de ingeniería
  * de INPLUX S.A.S. en Medellín.
  *
- * Los enlaces a rutas que solo existen en español van marcados con `hrefLang`
- * para no prometer una traducción que no publicamos.
+ * El menú y el pie apuntan a las páginas inglesas (`navigation.en.ts`). Los
+ * enlaces a rutas que solo existen en español van marcados con `hrefLang` para
+ * no prometer una traducción que no publicamos.
  */
-
-const spanishRoute = (label: string, href: string) => ({
-  label,
-  href,
-  hrefLang: "es",
-});
 
 export const homeCopyEn: HomeCopy = {
   locale: "en_US",
   htmlLang: "en-US",
+  workPath: "/en/work",
 
   header: {
     skipToContent: "Skip to content",
@@ -34,14 +36,10 @@ export const homeCopyEn: HomeCopy = {
     contactCta: "Start a project",
     contactCtaMobile: "Start a project",
     menuNote: "You don't need a defined scope to begin.",
-    navigation: [
-      { label: "How we work", href: "#como-trabajamos" },
-      { label: "Products", href: "#productos" },
-      { label: "Sectors", href: "#sectores" },
-      { label: "About", href: "#equipo" },
-      { label: "Press", href: "#prensa" },
-    ],
+    navigation: siteNavigationEn,
     languageSwitch: { label: "Español", href: "/", hrefLang: "es" },
+    homeHref: "/en",
+    contactHref: "/en/contact",
   },
 
   footer: {
@@ -51,44 +49,36 @@ export const homeCopyEn: HomeCopy = {
       {
         label: "Products",
         ariaLabel: "Documented products",
-        items: [
-          spanishRoute("Tribai", "/trabajo/tribai"),
-          spanishRoute("Gobia", "/trabajo/gobia"),
-          spanishRoute("Kelsen", "/trabajo/kelsen"),
-          spanishRoute("Laudos", "/trabajo/laudos"),
-          spanishRoute("Porkia", "/trabajo/porkia"),
-        ],
-        more: spanishRoute("All products", "/trabajo"),
+        items: productNavigationEn.map(([label, href]) => ({ label, href })),
+        more: { label: "All products", href: "/en/work" },
       },
       {
         label: "Sectors",
         ariaLabel: "Sectors",
-        items: [
-          spanishRoute("Public sector", "/sectores/publico"),
-          spanishRoute("Healthcare", "/sectores/salud"),
-          spanishRoute("Legal and tax", "/sectores/legal-tributario"),
-          spanishRoute("Companies", "/sectores/empresas"),
-        ],
+        items: sectorNavigationEn.map(({ label, href }) => ({ label, href })),
       },
       {
         label: "Company",
         ariaLabel: "Company",
+        // Security goes in the footer, not the menu: it is a reference page.
         items: [
-          spanishRoute("About", "/nosotros"),
-          spanishRoute("Team", "/equipo"),
-          spanishRoute("How we work", "/como-trabajamos"),
-          spanishRoute("Press", "/prensa"),
-          spanishRoute("Security", "/seguridad"),
+          ...companyNavigationEn.map((item) => ({
+            label: item.label,
+            href: item.href,
+            hrefLang: "hrefLang" in item ? item.hrefLang : undefined,
+          })),
+          { label: "Security", href: "/en/security" },
         ],
       },
     ],
     contactLabel: "Contact",
     contactAriaLabel: "Contact",
     contactCta: "Start a project",
+    contactHref: "/en/contact",
     email: "gerencia@inplux.co",
     linkedInLabel: "LinkedIn",
     locations: ["INPLUX LLC · Miami, Florida", "Engineering by INPLUX S.A.S. · Medellín, Colombia"],
-    languageNote: "Product and company pages are published in Spanish.",
+    languageNote: "Team and press pages are published in Spanish.",
     copyright: "INPLUX LLC · INPLUX S.A.S.",
     closingLine: "Software with judgment and human direction.",
   },
@@ -123,6 +113,7 @@ export const homeCopyEn: HomeCopy = {
       "Tell us the problem, who lives with it and what should change.",
     note: "We use this information only to reply to you.",
     privacyLink: "How we look after data",
+    privacyHref: "/en/security",
     submit: "Send message",
     sending: "Sending…",
     sent: "We received your message. Someone from the team will reply to your email.",
@@ -523,20 +514,20 @@ export const homeCopyEn: HomeCopy = {
     items: [
       {
         label: "Healthcare",
-        detail: "Software for healthcare providers: patient app, remote monitoring, integration with the clinical record, help desk. Published in Spanish.",
-        href: "/sectores/salud",
+        detail: "Software for healthcare providers: patient app, remote monitoring, integration with the clinical record, help desk.",
+        href: "/en/sectors/health",
         note: null,
       },
       {
         label: "Public sector",
-        detail: "Territorial entities, public finance and municipal management. Published in Spanish.",
-        href: "/sectores/publico",
+        detail: "Territorial entities, public finance and municipal management.",
+        href: "/en/sectors/public-sector",
         note: null,
       },
       {
         label: "Companies",
-        detail: "Operations, data and digital products for private companies. Published in Spanish.",
-        href: "/sectores/empresas",
+        detail: "Operations, data and digital products for private companies.",
+        href: "/en/sectors/business",
         note: null,
       },
     ],
@@ -1204,22 +1195,22 @@ export const homeCopyEn: HomeCopy = {
         {
           title: "Public sector",
           detail: "Municipalities, local governments and municipal finance: fiscal data, procurement and follow-up.",
-          href: "/sectores/publico",
+          href: "/en/sectors/public-sector",
         },
         {
           title: "Healthcare",
           detail: "Healthcare providers: patient app, remote monitoring, clinical record integration.",
-          href: "/sectores/salud",
+          href: "/en/sectors/health",
         },
         {
           title: "Legal and tax",
           detail: "Firms, accountants and legal teams: sourced answers, validity and case law.",
-          href: "/sectores/legal-tributario",
+          href: "/en/sectors/legal-tax",
         },
         {
           title: "Companies",
           detail: "Operations, data and digital products for private companies.",
-          href: "/sectores/empresas",
+          href: "/en/sectors/business",
         },
       ],
     },

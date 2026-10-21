@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import type { Lang } from "@/content/i18n";
+import { productComponentsUi } from "@/content/page-ui";
 import styles from "./CapabilityRail.module.css";
 
 /*
@@ -12,10 +14,16 @@ import styles from "./CapabilityRail.module.css";
 export function CapabilityRail({
   items,
   ariaLabel,
+  lang = "es",
 }: {
   items: readonly { title: string; description: string }[];
   ariaLabel: string;
+  lang?: Lang;
 }) {
+  const labels = {
+    previous: productComponentsUi[lang].railPrevious,
+    next: productComponentsUi[lang].railNext,
+  };
   const track = useRef<HTMLUListElement | null>(null);
   const [edges, setEdges] = useState({ start: true, end: false });
 
@@ -79,10 +87,10 @@ export function CapabilityRail({
         ))}
       </ul>
       <div className={styles.controls}>
-        <button type="button" onClick={() => step(-1)} disabled={edges.start} aria-label="Capacidad anterior">
+        <button type="button" onClick={() => step(-1)} disabled={edges.start} aria-label={labels.previous}>
           ←
         </button>
-        <button type="button" onClick={() => step(1)} disabled={edges.end} aria-label="Capacidad siguiente">
+        <button type="button" onClick={() => step(1)} disabled={edges.end} aria-label={labels.next}>
           →
         </button>
       </div>

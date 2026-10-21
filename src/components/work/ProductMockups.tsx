@@ -1,5 +1,7 @@
+import type { Lang } from "@/content/i18n";
+import { mockupUi } from "@/content/page-ui";
 import type { WorkProfile } from "@/content/work";
-import { verificationDateFor } from "@/content/work-format";
+import { formatLongDateEn, verificationDateFor, verifiedAtFor } from "@/content/work-format";
 import styles from "./ProductMockups.module.css";
 
 /*
@@ -14,7 +16,7 @@ import styles from "./ProductMockups.module.css";
  * ficha, que está a la vista al cargar; en `/trabajo` la ventana queda quieta.
  */
 
-type MockupProps = { profile: WorkProfile; animate?: boolean };
+type MockupProps = { profile: WorkProfile; animate?: boolean; lang?: Lang };
 
 function Window({
   name,
@@ -61,18 +63,19 @@ function item(profile: WorkProfile, index: number) {
 }
 
 /** Tribai: una llamada al servidor MCP y su respuesta con fuente. Ejemplo ilustrativo. */
-export function TribaiMockup({ profile, animate }: MockupProps) {
+export function TribaiMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].tribai;
   return (
     <Window
       animate={animate}
       name="tribai-mcp"
       status="200 OK"
       theme={profile.interface.theme}
-      label="Ejemplo ilustrativo de una consulta al servidor MCP de Tribai"
-      footer="Ejemplo ilustrativo. La respuesta real trae la fuente oficial de cada dato."
+      label={ui.label}
+      footer={ui.footer}
     >
       <pre className={styles.code}>
-        <span className={styles.c}># Claude llama la herramienta de Tribai</span>
+        <span className={styles.c}>{ui.call}</span>
         {"\n"}
         <span className={styles.k}>tools/call</span> <span className={styles.u}>vigencia_articulo</span>
         {"\n"}
@@ -81,7 +84,7 @@ export function TribaiMockup({ profile, animate }: MockupProps) {
         <span className={styles.s}>&quot;norma&quot;</span>: <span className={styles.s}>&quot;Estatuto Tributario&quot;</span>
         {" }"}
         {"\n\n"}
-        <span className={styles.c}># Respuesta, con la fuente oficial</span>
+        <span className={styles.c}>{ui.answer}</span>
         {"\n"}
         {"{"}
         {"\n  "}
@@ -108,7 +111,8 @@ export function TribaiMockup({ profile, animate }: MockupProps) {
 }
 
 /** Gobia: el tablero de un municipio con las cifras de su demo pública. */
-export function GobiaMockup({ profile, animate }: MockupProps) {
+export function GobiaMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].gobia;
   const recaudo = item(profile, 0);
   const fut = item(profile, 1);
   const estatuto = item(profile, 2);
@@ -118,8 +122,8 @@ export function GobiaMockup({ profile, animate }: MockupProps) {
       name="gobia.co · demo"
       status={profile.status.label}
       theme={profile.interface.theme}
-      label="Figura del tablero municipal de Gobia con las cifras de su demo pública"
-      footer="Cifras de la demo pública. El seguimiento lo hace el equipo del municipio; Gobia lo deja a la vista."
+      label={ui.label}
+      footer={ui.footer}
     >
       <div className={styles.board}>
         <div className={styles.metric}>
@@ -150,27 +154,28 @@ export function GobiaMockup({ profile, animate }: MockupProps) {
 }
 
 /** Kelsen: un explorador con resultados y la ruta hasta la fuente. */
-export function KelsenMockup({ profile, animate }: MockupProps) {
+export function KelsenMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].kelsen;
   return (
     <Window
       animate={animate}
-      name="kelsen.io · explorador"
+      name={ui.window}
       status={profile.status.label}
       theme={profile.interface.theme}
-      label="Figura del explorador de Kelsen con resultados y su ruta de fuente"
-      footer="Figura de lectura. Cada resultado del explorador conserva la ruta hasta su documento."
+      label={ui.label}
+      footer={ui.footer}
     >
       <div className={styles.search}>
         <div className={styles.query}>
           <span aria-hidden="true">⌕</span>
-          <p>Biblioteca legal · vigencia = modificado</p>
+          <p>{ui.query}</p>
         </div>
         <ol className={styles.results}>
           {profile.interface.items.map((row) => (
             <li key={row.label} data-accent={row.state === "accent" || undefined}>
               <strong>{row.label}</strong>
               <p>{row.value}</p>
-              <small>Norma › artículo › fuente oficial</small>
+              <small>{ui.path}</small>
             </li>
           ))}
         </ol>
@@ -180,16 +185,21 @@ export function KelsenMockup({ profile, animate }: MockupProps) {
 }
 
 /** Laudos: el corpus con sus dos fondos y la cobertura, como los publica el laboratorio. */
-export function LaudosMockup({ profile, animate }: MockupProps) {
-  const verified = verificationDateFor(profile.sources, "https://laudos.co/?view=predecir");
+export function LaudosMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].laudos;
+  const labUrl = "https://laudos.co/?view=predecir";
+  const verified =
+    lang === "en"
+      ? formatLongDateEn(verifiedAtFor(profile.sources, labUrl))
+      : verificationDateFor(profile.sources, labUrl);
   return (
     <Window
       animate={animate}
-      name="laudos.co · predecir"
+      name={ui.window}
       status={profile.status.label}
       theme={profile.interface.theme}
-      label="Figura del laboratorio de Laudos con el tamaño del corpus y sus filtros"
-      footer={`Cifras del laboratorio público, revisadas el ${verified.toLowerCase()}.`}
+      label={ui.label}
+      footer={ui.footer(verified)}
     >
       <div className={styles.corpus}>
         <div className={styles.metric}>
@@ -205,9 +215,9 @@ export function LaudosMockup({ profile, animate }: MockupProps) {
           ))}
         </ul>
         <div className={styles.tabs} aria-hidden="true">
-          <span data-active>Predecir</span>
-          <span>Buscar</span>
-          <span>Explorar</span>
+          <span data-active>{ui.tabs[0]}</span>
+          <span>{ui.tabs[1]}</span>
+          <span>{ui.tabs[2]}</span>
         </div>
       </div>
     </Window>
@@ -215,15 +225,16 @@ export function LaudosMockup({ profile, animate }: MockupProps) {
 }
 
 /** Porkia: la ficha de una finca, con los frentes que la app lleva. */
-export function PorkiaMockup({ profile, animate }: MockupProps) {
+export function PorkiaMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].porkia;
   return (
     <Window
       animate={animate}
       name="porkia.co · demo"
       status={profile.status.label}
       theme={profile.interface.theme}
-      label="Figura de la ficha de finca de Porkia con sus frentes de seguimiento"
-      footer="Datos de ejemplo de la demostración pública. La finca real lleva los suyos."
+      label={ui.label}
+      footer={ui.footer}
     >
       <div className={styles.farm}>
         <div className={styles.metric}>

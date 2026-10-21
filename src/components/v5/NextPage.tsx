@@ -7,11 +7,24 @@ import styles from "./NextPage.module.css";
  * dónde seguir leyendo. Un enlace, no un botón, para que no cuente como
  * disparador de contacto.
  */
-export function NextPage({ href, label, note }: { href: string; label: string; note?: string }) {
+export function NextPage({
+  href,
+  label,
+  note,
+  eyebrow = "Siguiente",
+  ariaLabel = "Siguiente página",
+}: {
+  href: string;
+  label: string;
+  note?: string;
+  /** Las dos etiquetas fijas, en el idioma de la página. */
+  eyebrow?: string;
+  ariaLabel?: string;
+}) {
   return (
-    <nav className={styles.next} aria-label="Siguiente página">
+    <nav className={styles.next} aria-label={ariaLabel}>
       <div className={`${ui.wrap} ${styles.inner}`} data-reveal="quiet">
-        <p className={ui.eyebrow}>Siguiente</p>
+        <p className={ui.eyebrow}>{eyebrow}</p>
         <Link href={href} className={styles.link}>
           <span>{label}</span>
           <span aria-hidden="true">→</span>

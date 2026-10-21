@@ -385,7 +385,7 @@ export function ContactForm({
 
       <p className="site-form-note">
         {`${copy.note} `}
-        <Link href="/seguridad">{copy.privacyLink}</Link>
+        <Link href={copy.privacyHref}>{copy.privacyLink}</Link>
       </p>
 
       <div

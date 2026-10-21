@@ -35,6 +35,18 @@ export const nosotrosSocialImage = {
   alt: "Edificios entre árboles con las montañas de Medellín al fondo",
 };
 
+/** El par inglés de `/nosotros`: misma foto, mismo texto alternativo traducido. */
+export const aboutSocialImageEn = {
+  ...card,
+  url: "/brand/og/og-en-about.jpg",
+  alt: "Buildings among trees with the mountains of Medellín in the background",
+};
+
+/** Una tarjeta JPEG de `scripts/og-cards.mjs` con su texto alternativo. */
+export function jpegSocialImage(url: string, alt: string) {
+  return { ...card, url, alt };
+}
+
 /** La versión de X lleva la misma imagen; X no lee ni el tamaño ni el tipo. */
 export function twitterImage(image: { url: string; alt: string }) {
   return { url: image.url, alt: image.alt };

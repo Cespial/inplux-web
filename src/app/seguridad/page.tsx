@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/content/i18n";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { LegalShell } from "@/components/v5/LegalShell";
 import { NextPage } from "@/components/v5/NextPage";
@@ -23,7 +24,7 @@ const socialImageAlt = "INPLUX · Seguridad. Cómo cuidamos los datos de cada cl
 export const metadata: Metadata = {
   title: "Seguridad y datos",
   description,
-  alternates: { canonical: PAGE_URL },
+  alternates: { canonical: PAGE_URL, languages: languageAlternates("/seguridad") },
   openGraph: {
     title: socialTitle,
     description: socialDescription,

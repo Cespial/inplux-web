@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/content/i18n";
 import Image from "next/image";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
     "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
   alternates: {
     canonical: "https://inplux.co/nosotros",
+    languages: languageAlternates("/nosotros"),
   },
   openGraph: {
     title: "Construimos con criterio, desde Medellín | INPLUX",
@@ -71,7 +73,7 @@ const reasons = [
     label: "Ingeniería local",
     title: "Dentro de tu equipo, no al otro lado de un ticket.",
     copy:
-      "Nuestros ingenieros trabajan en tus sistemas y con tus personas, desde el diagnóstico hasta que el sistema opera.",
+      "Nuestros ingenieros trabajan en tus sistemas y con tus personas, hasta que el sistema opera solo.",
   },
 ] as const;
 

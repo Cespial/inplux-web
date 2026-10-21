@@ -114,6 +114,46 @@ const bannedPublicLanguage = [
 ];
 
 /**
+ * Los equivalentes en inglés de `bannedPublicLanguage` (PR M, 20-oct-2026).
+ *
+ * Lista aparte para no tocar la lámina 6 del deck, que enseña las frases
+ * españolas. Recorre lo mismo que la española —`src/` y `public/`— porque el
+ * copy inglés vive en `src/content/*.en.ts`, `copy/en.ts` y `page-ui.ts`.
+ */
+export const bannedPublicLanguageEn = [
+  {
+    motivo: "promesa genérica de velocidad (inglés)",
+    patron: /\bin\s+(?:days|weeks)\b/giu,
+    ejemplo: "your platform, in weeks",
+  },
+  {
+    motivo: "afirmación autónoma no aprobada (inglés)",
+    patron: /\bAI\s+agents?\b|self-improving|improve\s+themselves/giu,
+    ejemplo: "AI agents that improve themselves",
+  },
+  {
+    motivo: "cobertura geográfica no aprobada (inglés)",
+    patron: /\bnationwide\b|national\s+(?:reach|coverage)/giu,
+    ejemplo: "nationwide coverage",
+  },
+  {
+    motivo: "prueba social anterior (inglés)",
+    patron: /\btrusted\s+by\b|companies\s+that\s+trust\s+us/giu,
+    ejemplo: "trusted by leading companies",
+  },
+  {
+    motivo: "impacto no demostrado (inglés)",
+    patron: /\bmeasurable\s+(?:results?|impact|outcomes?)/giu,
+    ejemplo: "measurable results from day one",
+  },
+  {
+    motivo: "sello o grado de seguridad no aprobado (inglés)",
+    patron: /\b(?:bank|military)-grade\b/giu,
+    ejemplo: "bank-grade security",
+  },
+];
+
+/**
  * Títulos de PRIMERO (primero.com) que el sitio no puede reproducir.
  *
  * Esta lista es independiente de `bannedPublicLanguage`: no sale en la lámina
@@ -132,6 +172,9 @@ export const bannedPrimeroPhrases = [
   "Sovereign AI for the modern institution",
   "Built for the reality of institutional operations",
   "We work with you from diagnosis to production",
+  // 20-oct-2026: el arranque de la frase basta para parecerse a PRIMERO.
+  "Trabajamos contigo desde el diagnóstico",
+  "We work with you from diagnosis",
 ];
 
 /** Minúsculas, sin diacríticos y con los espacios en blanco plegados a uno. */
@@ -265,7 +308,7 @@ async function verifyPublicLanguage() {
             ),
           )
         : source;
-    for (const { motivo, patron } of bannedPublicLanguage) {
+    for (const { motivo, patron } of [...bannedPublicLanguage, ...bannedPublicLanguageEn]) {
       patron.lastIndex = 0;
       for (const match of sourceForLanguageCheck.matchAll(patron)) {
         errors.push(
@@ -291,7 +334,7 @@ async function verifyPublicLanguage() {
 function verifyBannedExamples() {
   const vistos = new Map();
 
-  for (const { motivo, patron, ejemplo } of bannedPublicLanguage) {
+  for (const { motivo, patron, ejemplo } of [...bannedPublicLanguage, ...bannedPublicLanguageEn]) {
     if (ejemplo === null) continue;
 
     patron.lastIndex = 0;
@@ -661,7 +704,8 @@ async function verifyContactExperience() {
     [
       source.about.split('fallbackHref="/contacto"').length - 1 === 1 &&
         source.header.includes('const headerContactHref = "/contacto"') &&
-        source.header.split("fallbackHref={headerContactHref}").length - 1 === 2,
+        source.header.includes("const contactHref = copy.contactHref ?? headerContactHref") &&
+        source.header.split("fallbackHref={contactHref}").length - 1 === 2,
       "Header y Nosotros deben conservar la ruta estable /contacto como fallback",
     ],
     [

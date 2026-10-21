@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/content/i18n";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
 import { PageHero } from "@/components/v5/PageHero";
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   title: "Cómo trabajamos — del diagnóstico a la operación",
   description:
     "Cómo INPLUX lleva un proceso a producción: diagnóstico, piloto, producción y operación, con un entregable en cada fase y el criterio de tu equipo en cada decisión.",
-  alternates: { canonical: PAGE_URL },
+  alternates: { canonical: PAGE_URL, languages: languageAlternates("/como-trabajamos") },
   openGraph: {
     title: "Cómo trabajamos | INPLUX",
     description:
@@ -134,7 +135,7 @@ export default function ComoTrabajamosPage() {
               <PageHero
                 className={styles.hero}
                 eyebrow="Cómo trabajamos"
-                title={<span id="how-title">Trabajamos contigo desde el diagnóstico hasta que opera.</span>}
+                title={<span id="how-title">Nos quedamos hasta que el sistema opera solo.</span>}
                 lead="Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente."
                 leadMuted="Cada fase termina con algo que se puede usar y revisar, y la decisión sigue siendo de quien ya la tenía."
                 crumbs={crumbs}

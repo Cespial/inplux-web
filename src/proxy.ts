@@ -3,7 +3,7 @@ import { TOKEN_COOKIE, TOKEN_WINDOW } from "@/lib/contact/fields.mjs";
 import { issueToken, resolveSecret } from "@/lib/contact/token.mjs";
 
 /*
- * Solo `/contacto`. La página es estática, así que una marca de tiempo escrita
+ * Solo `/contacto` y su par inglés, `/en/contact`. La página es estática, así que una marca de tiempo escrita
  * en su HTML sería la del build. Para que el formulario funcione SIN JS, el
  * proxy deja en cada visita una cookie con la marca firmada, limitada al
  * endpoint (`Path=/api/contacto`, HttpOnly, SameSite=Strict). Con JS el
@@ -26,5 +26,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/contacto",
+  matcher: ["/contacto", "/en/contact"],
 };

@@ -7,8 +7,10 @@
  * Con el sitio servido en local (`npm run build && npx next start -p 3100`):
  *
  *   node scripts/og-mockups.mjs http://127.0.0.1:3100
+ *   node scripts/og-mockups.mjs http://127.0.0.1:3100 en
  *
- * Deja `public/brand/og/mockups/<slug>.png` a 560 px de ancho y fondo
+ * Deja `public/brand/og/mockups/<slug>.png` (o `<slug>-en.png`, desde
+ * `/en/work/<slug>`, con el segundo argumento `en`) a 560 px de ancho y fondo
  * transparente (las esquinas redondas de la ventana se ven sobre la tarjeta).
  * Si cambia el mockup o las cifras de un producto, se vuelve a correr y se sube
  * `workSocialDesignVersion` en `src/app/api/og/trabajo/social-card.ts`.
@@ -21,6 +23,7 @@ import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const baseUrl = process.argv[2] ?? "http://127.0.0.1:3100";
+const lang = process.argv[3] === "en" ? "en" : "es";
 const slugs = ["tribai", "gobia", "kelsen", "laudos", "porkia"];
 const width = 560;
 const maxBytes = 120_000;
@@ -36,7 +39,9 @@ const page = await browser.newPage({
 });
 
 for (const slug of slugs) {
-  await page.goto(`${baseUrl}/trabajo/${slug}`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}${lang === "en" ? "/en/work" : "/trabajo"}/${slug}`, {
+    waitUntil: "networkidle",
+  });
   // Todo lo que rodea la ventana, transparente: solo queda la figura.
   await page.addStyleTag({
     content:
@@ -47,13 +52,13 @@ for (const slug of slugs) {
   await page.waitForTimeout(1500);
   const shot = await figure.screenshot({ omitBackground: true, animations: "disabled" });
 
-  const file = path.join(outDir, `${slug}.png`);
+  const file = path.join(outDir, lang === "en" ? `${slug}-en.png` : `${slug}.png`);
   await sharp(shot)
     .resize({ width })
     .png({ palette: true, quality: 90, compressionLevel: 9, effort: 10 })
     .toFile(file);
   const { size } = await stat(file);
-  console.log(`${size > maxBytes ? "✗" : "✓"} ${slug}.png ${(size / 1024).toFixed(1)} KB`);
+  console.log(`${size > maxBytes ? "✗" : "✓"} ${path.basename(file)} ${(size / 1024).toFixed(1)} KB`);
   if (size > maxBytes) process.exitCode = 1;
 }
 

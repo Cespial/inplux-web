@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
+import { HtmlRoot } from "@/components/site/HtmlRoot.client";
 import { personId, teamMembers } from "@/content/team";
 import { homeOpenGraph, homeSocialImage, twitterImage } from "@/lib/social-cards";
 import "./globals.css";
@@ -51,7 +52,6 @@ export const metadata: Metadata = {
   keywords: [
     "transformación con IA",
     "desarrollo e implementación de IA",
-    "fábrica de software",
     "software a la medida",
     "desarrollo de software Colombia",
     "automatización",
@@ -122,12 +122,8 @@ export default function RootLayout({
   };
 
   return (
-    <html
-      lang="es-CO"
-      className={`${rethink.variable} ${rethinkDisplay.variable}`}
-      // `motionScript` añade `data-motion` antes de hidratar.
-      suppressHydrationWarning
-    >
+    // `lang` sale de la ruta: `es-CO` en el sitio español, `en` bajo `/en`.
+    <HtmlRoot className={`${rethink.variable} ${rethinkDisplay.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionScript }} />
         <script
@@ -144,6 +140,6 @@ export default function RootLayout({
           de aliados de ahí; la limpieza va en un cambio aparte.
         */}
       </body>
-    </html>
+    </HtmlRoot>
   );
 }

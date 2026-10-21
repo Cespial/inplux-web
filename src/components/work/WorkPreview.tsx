@@ -1,18 +1,21 @@
+import type { Lang } from "@/content/i18n";
+import { productComponentsUi } from "@/content/page-ui";
 import type { WorkProfile } from "@/content/work";
 import styles from "./workVisuals.module.css";
 
 type WorkPreviewProps = {
   profile: WorkProfile;
   compact?: boolean;
+  lang?: Lang;
 };
 
-export function WorkPreview({ profile, compact = false }: WorkPreviewProps) {
+export function WorkPreview({ profile, compact = false, lang = "es" }: WorkPreviewProps) {
   return (
     <div
       className={`${styles.preview} ${compact ? styles.compact : ""}`}
       data-theme={profile.interface.theme}
       role="group"
-      aria-label={`Demostración editorial de interfaz de ${profile.name}`}
+      aria-label={productComponentsUi[lang].previewLabel(profile.name)}
     >
       <div className={styles.previewGrid} aria-hidden="true" />
       <div className={styles.previewChrome}>

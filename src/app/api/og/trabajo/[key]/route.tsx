@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 import {
   getWorkSocialCard,
   isWorkSocialKey,
+  socialCardLang,
 } from "../social-card";
 
 /*
@@ -32,8 +33,10 @@ const mockupWidth = 470;
  * en `public/brand/og/mockups/<slug>.png`. Se devuelve como data URI con su
  * alto a la escala de la tarjeta; el tamaño sale de la cabecera del PNG.
  */
-async function readMockup(slug: string) {
-  const buffer = await readFile(path.join(root, "public/brand/og/mockups", `${slug}.png`));
+async function readMockup(slug: string, lang: "es" | "en") {
+  // El mockup inglés sale de /en/work/[slug]: `<slug>-en.png`.
+  const file = lang === "en" ? `${slug}-en.png` : `${slug}.png`;
+  const buffer = await readFile(path.join(root, "public/brand/og/mockups", file));
   const width = buffer.readUInt32BE(16);
   const height = buffer.readUInt32BE(20);
   return {
@@ -63,12 +66,14 @@ export async function GET(
     return new Response("Tarjeta social no disponible", { status: 404 });
   }
 
-  const card = getWorkSocialCard(key);
-  const requestedVersion = new URL(request.url).searchParams.get("v");
+  const searchParams = new URL(request.url).searchParams;
+  const lang = socialCardLang(searchParams.get("lang"));
+  const card = getWorkSocialCard(key, lang);
+  const requestedVersion = searchParams.get("v");
   const [regular, medium, mockup] = await Promise.all([
     fontRegular,
     fontMedium,
-    card.kind === "profile" ? readMockup(card.key) : null,
+    card.kind === "profile" ? readMockup(card.key, lang) : null,
   ]);
   const accent =
     card.kind === "profile" && card.attributionState === "unconfirmed" ? "#b8aaa0" : teal;
@@ -191,7 +196,9 @@ export async function GET(
               }}
             >
               <span style={{ display: "flex", marginRight: 10 }}>→</span>
-              {card.kind === "profile" ? `${card.category.toUpperCase()} · PRODUCTO PROPIO` : "PRODUCTOS PROPIOS"}
+              {card.kind === "profile"
+                ? `${card.category.toUpperCase()} · ${card.labels.ownProduct}`
+                : card.labels.ownProducts}
             </div>
             <div
               style={{
@@ -272,7 +279,7 @@ export async function GET(
                   marginTop: 12,
                 }}
               >
-                FUENTES PÚBLICAS
+                {card.labels.publicSources}
               </span>
             </div>
           ) : mockup ? (
@@ -302,7 +309,7 @@ export async function GET(
           }}
         >
           <div style={{ color: accent, display: "flex" }}>{card.attribution.toUpperCase()}</div>
-          <div style={{ display: "flex" }}>INPLUX.CO/TRABAJO · VERIFICADO {card.verifiedAt}</div>
+          <div style={{ display: "flex" }}>{card.labels.footer(card.verifiedAt)}</div>
         </div>
       </div>
     ),
