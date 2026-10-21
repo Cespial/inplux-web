@@ -35,16 +35,18 @@ export const HOME_HERO_VIDEO = {
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
 
 /**
- * Con «ahorro de datos» activo o una conexión lenta (2G, 3G) el video no se
- * monta y la banda se queda en el póster. `navigator.connection` sólo existe
- * en Chromium; donde no está, se asume que la conexión permite el video.
+ * Con «ahorro de datos» activo o una conexión 2G el video no se monta y la
+ * banda se queda en el póster. «3g» no cuenta: Chrome lo deduce de la latencia
+ * (desde 270 ms) y una buena conexión en Colombia rozaba ese umbral, así que el
+ * video desaparecía según el momento. `navigator.connection` sólo existe en
+ * Chromium; donde no está, se asume que la conexión permite el video.
  */
 function connectionAllowsVideo() {
   const { connection } = navigator as Navigator & { connection?: NetworkInformation };
   if (!connection) return true;
   if (connection.saveData === true) return false;
   const type = connection.effectiveType;
-  return type !== "slow-2g" && type !== "2g" && type !== "3g";
+  return type !== "slow-2g" && type !== "2g";
 }
 
 /** Las fuentes que aplican a esta pantalla (ver `HeroVideoSource.media`). */
