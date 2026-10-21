@@ -214,13 +214,18 @@ export type TeamCrewMember = {
 /*
  * El equipo que construye y opera los sistemas (PR P, 20-oct-2026).
  *
- * Autorización: Cristian Espinal Maya declaró el 20-oct-2026 que Daniel
- * Alejandro López Naranjo, Cristian David Ajavi Aguilar y Alejandro López
- * Durango autorizaron que el sitio publique su foto y su nombre.
+ * Autorización: Cristian Espinal Maya (cristian@inplux.co) declaró el
+ * 20-oct-2026 que Alejandro Estrada Gómez, Daniel Alejandro López Naranjo,
+ * Cristian David Ajavi Aguilar y Alejandro López Durango autorizaron que el
+ * sitio publique su foto y su nombre.
  *
- * Fuente única: el texto de LinkedIn de cada persona que pegó Cristian. No se
- * nombran empleadores anteriores. Sin `linkedin` porque las URL públicas no se
- * pudieron confirmar; se añaden cuando Cristian las pase.
+ * Fuente única: el texto de LinkedIn de cada persona que pegó Cristian; el
+ * cargo de Alejandro Estrada y la maestría en curso de Cristian David los dio
+ * Cristian directamente. No se nombran empleadores ni cifras de logros. Sin
+ * `linkedin` porque las URL públicas no se pudieron confirmar; se añaden
+ * cuando Cristian las pase.
+ *
+ * Orden: coordinación primero, después ingeniería.
  *
  * Alejandro López Durango entra cuando lleguen sus datos: no se inventa cargo,
  * formación ni enlaces.
@@ -229,6 +234,20 @@ export type TeamCrewMember = {
  * `founder` siguen siendo solo la dirección.
  */
 export const teamCrew = [
+  {
+    slug: "alejandro-estrada-gomez",
+    name: "Alejandro Estrada Gómez",
+    givenName: "Alejandro",
+    familyName: "Estrada Gómez",
+    jobTitle: "Coordinador de proyectos",
+    focus:
+      "Planeación y seguimiento de proyectos, control de costos y análisis financiero con Power BI.",
+    credentials: [
+      "Contador público, Universidad de Medellín",
+      "Mercadólogo, Universidad de Medellín",
+    ],
+    photo: { src: "/brand/team/alejandro-estrada-gomez.jpg", width: 900, height: 1200 },
+  },
   {
     slug: "daniel-alejandro-lopez-naranjo",
     name: "Daniel Alejandro López Naranjo",
@@ -248,6 +267,7 @@ export const teamCrew = [
     jobTitle: "Automation Engineer",
     focus: "Automatización con Python y modelos de lenguaje en procesos financieros.",
     credentials: [
+      "Maestría en Ingeniería (en curso), Universidad EAFIT",
       "Negocios Internacionales, Fundación Universitaria Luis Amigó",
       "Diplomado en Mercado de Capitales, Universidad del Rosario",
     ],
