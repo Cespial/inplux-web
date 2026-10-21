@@ -81,6 +81,7 @@ export const homeCopyEs: HomeCopy = {
     dialogLabel: "Formulario de contacto en diálogo",
     sectionLabel: "Formulario de contacto de la página",
     nameLabel: "Nombre",
+    emailLabel: "Correo",
     organizationLabel: "Empresa o entidad",
     organizationOptional: "opcional",
     needLabel: "¿Qué tipo de necesidad tienes?",
@@ -94,10 +95,21 @@ export const homeCopyEs: HomeCopy = {
     challengeLabel: "¿Qué problema necesitas resolver?",
     challengePlaceholder:
       "Cuéntanos el problema, quién lo vive y qué debería cambiar.",
-    note: "Prepararemos un borrador en tu aplicación de correo. Esta página no enviará ni almacenará los datos.",
-    submit: "Abrir borrador en mi correo",
+    note: "Usamos estos datos solo para responderte.",
+    privacyLink: "Cómo cuidamos los datos",
+    submit: "Enviar mensaje",
+    sending: "Enviando…",
+    sent: "Recibimos tu mensaje. Una persona del equipo te responde a tu correo.",
+    errorInvalid:
+      "Revisa los datos: falta alguno o tiene un formato que no reconocemos.",
+    errorRateLimited:
+      "Llegaron varios mensajes seguidos desde tu conexión. Espera unos minutos y vuelve a intentarlo.",
+    errorSend: "No pudimos enviar el mensaje.",
+    retry: "Reintentar",
+    errorMailLead: "También puedes escribirnos a",
     preparedNote:
       "El borrador quedó preparado. Si tu aplicación de correo no se abrió, puedes copiar el mensaje y enviarlo desde el canal que prefieras.",
+    preparedOpen: "Abrir el borrador otra vez",
     copyAction: "Copiar mensaje preparado",
     copySuccess: "Mensaje copiado. Puedes pegarlo en el canal que prefieras.",
     copyFailure:

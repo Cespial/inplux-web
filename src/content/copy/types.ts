@@ -92,6 +92,7 @@ export type ContactFormCopy = {
   dialogLabel: string;
   sectionLabel: string;
   nameLabel: string;
+  emailLabel: string;
   organizationLabel: string;
   organizationOptional: string;
   needLabel: string;
@@ -99,9 +100,22 @@ export type ContactFormCopy = {
   needDefault: string;
   challengeLabel: string;
   challengePlaceholder: string;
+  /** Línea bajo el botón: para qué usamos los datos. */
   note: string;
+  /** Enlace a la página que explica cómo se cuidan los datos. */
+  privacyLink: string;
   submit: string;
+  sending: string;
+  sent: string;
+  errorInvalid: string;
+  errorRateLimited: string;
+  errorSend: string;
+  retry: string;
+  /** Antecede al correo directo en los mensajes de error. */
+  errorMailLead: string;
+  /** Sin envío directo configurado: se prepara un borrador por mailto. */
   preparedNote: string;
+  preparedOpen: string;
   copyAction: string;
   copySuccess: string;
   copyFailure: string;

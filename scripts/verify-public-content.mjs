@@ -574,6 +574,7 @@ async function verifyContactExperience() {
     dialog: "src/components/site/ContactDialog.tsx",
     link: "src/components/site/ContactLink.tsx",
     form: "src/components/site/ContactForm.tsx",
+    fields: "src/lib/contact/fields.mjs",
   };
   const entries = await Promise.all(
     Object.entries(files).map(async ([key, file]) => [
@@ -677,9 +678,22 @@ async function verifyContactExperience() {
     ],
     [
       !/(?:fetch\s*\(|localStorage|window\.open\s*\()/.test(
-        `${source.dialog}\n${source.link}\n${source.form}`,
-      ),
-      "Contacto no debe transmitir, persistir ni abrir ventanas fuera del mailto explícito",
+        `${source.dialog}\n${source.link}`,
+      ) && !/(?:localStorage|sessionStorage|document\.cookie|window\.open\s*\()/.test(source.form),
+      "Contacto no debe persistir datos en el navegador ni abrir ventanas fuera del mailto explícito",
+    ],
+    [
+      // El formulario solo habla con su propio endpoint (PR O, octubre de
+      // 2026): cada `fetch(` del componente usa una de las dos constantes, y
+      // las constantes apuntan a rutas propias.
+      [...source.form.matchAll(/fetch\s*\(\s*([^,)\s]+)/g)].every((match) =>
+        ["CONTACT_ENDPOINT", "CONTACT_TOKEN_ENDPOINT"].includes(match[1]),
+      ) &&
+        source.fields.includes('CONTACT_ENDPOINT = "/api/contacto"') &&
+        source.fields.includes('CONTACT_TOKEN_ENDPOINT = "/api/contacto/token"') &&
+        source.form.includes("action={CONTACT_ENDPOINT}") &&
+        source.form.includes('method="post"'),
+      "ContactForm solo puede enviar a /api/contacto y debe conservar el <form method=\"post\"> que funciona sin JS",
     ],
   ];
 

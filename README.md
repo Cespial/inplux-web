@@ -69,6 +69,20 @@ scripts/                  # Controles de calidad del repositorio
 
 La rama `main` alimenta producción. Antes de integrarla se requiere aprobar el contenido, ejecutar `npm run check` y revisar visualmente las rutas públicas en móvil y escritorio.
 
+### Formulario de contacto (variables de entorno)
+
+El formulario de `/contacto` y del diálogo de contacto envía a `POST /api/contacto`, que manda el correo con la API de [Resend](https://resend.com). Las variables se configuran en Vercel (Project → Settings → Environment Variables); ninguna va en el repositorio.
+
+| Variable | Obligatoria | Uso |
+| --- | --- | --- |
+| `RESEND_API_KEY` | Sí, para enviar | Clave de Resend con permiso solo de envío. Secreta, solo servidor. Sin ella el endpoint responde `503 not_configured` y el formulario abre el borrador por `mailto:` como antes. |
+| `CONTACT_TO` | No | Destinatario. Por defecto `cristian@inplux.co`. |
+| `CONTACT_FROM` | No | Remitente. Por defecto `INPLUX <formulario@inplux.co>`; exige el dominio `inplux.co` verificado en Resend. |
+| `CONTACT_FORM_SECRET` | No | Firma la marca de tiempo antibots. Si falta, se deriva de `RESEND_API_KEY`. |
+| `RESEND_API_URL` | No | Solo para pruebas locales (un servidor que registra el cuerpo). Por defecto la API real; no se define en Vercel. |
+
+Antibots, sin servicios externos: campo trampa, marca de tiempo firmada con nonce de un solo uso (mínimo 3 s, máximo 2 h) y límite por IP (5 cada 10 min, 20 por día). El límite y el registro de nonces gastados viven en memoria **por instancia**; para un límite global hace falta una regla de Vercel Firewall sobre `POST /api/contacto`. La lógica pura está en `src/lib/contact/` y la prueba `npm run test:contact`.
+
 ## Licencia
 
 MIT

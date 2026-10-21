@@ -205,12 +205,44 @@ try {
     );
   }
 
+  // Formulario de contacto (PR O). Un POST no se rastrea; lo que se fija aquí
+  // es lo que no depende de tener la clave de Resend: GET no existe, el
+  // endpoint no entra al sitemap, un Content-Type ajeno se rechaza y la
+  // trampa responde ok sin enviar (va antes de cualquier otra comprobación).
+  const contactGet = await fetch(`${baseUrl}/api/contacto`, { redirect: "manual" });
+  if (contactGet.status !== 405) {
+    failures.push(`GET /api/contacto: esperaba 405, recibió ${contactGet.status}`);
+  }
+  const sitemap = await (await fetch(`${baseUrl}/sitemap.xml`)).text();
+  if (sitemap.includes("/api/")) {
+    failures.push("sitemap.xml no debe listar rutas /api/ (encontró /api/contacto u otra)");
+  }
+  const contactText = await fetch(`${baseUrl}/api/contacto`, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: "hola",
+  });
+  if (contactText.status !== 415) {
+    failures.push(`POST /api/contacto text/plain: esperaba 415, recibió ${contactText.status}`);
+  }
+  const contactTrap = await fetch(`${baseUrl}/api/contacto`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-forwarded-for": "192.0.2.250" },
+    body: JSON.stringify({ hp_ref_x7: "http://spam.example" }),
+  });
+  const trapBody = await contactTrap.json().catch(() => null);
+  if (contactTrap.status !== 200 || trapBody?.ok !== true) {
+    failures.push(
+      `POST /api/contacto con trampa: esperaba 200 {ok:true}, recibió ${contactTrap.status} ${JSON.stringify(trapBody)}`,
+    );
+  }
+
   if (failures.length > 0) {
     throw new Error(`Contratos HTTP inválidos:\n- ${failures.join("\n- ")}`);
   }
 
   console.log(
-    `HTTP contracts verified: ${expectedRoutes.length} routes, ${expectedSocialImages.length} social PNGs and ${expectedCacheControl.length} cache headers, including 404 boundaries.`,
+    `HTTP contracts verified: ${expectedRoutes.length} routes, ${expectedSocialImages.length} social PNGs, ${expectedCacheControl.length} cache headers and the contact endpoint, including 404 boundaries.`,
   );
 } finally {
   await stopServer(server);
