@@ -31,9 +31,9 @@ for nombre in sys.argv[1:] or PIEZAS:
                     "/System/Library/ColorSync/Profiles/sRGB Profile.icc", str(png), "--out", str(jpg)], capture_output=True)
     print("ok", nombre, f"{w}x{h}")
 
-# Copia en tamaño nativo de LinkedIn (1128×191) además del maestro 2×.
+# Copia en la medida oficial de LinkedIn (1512×256) además del maestro 2×.
 for nombre in sys.argv[1:] or PIEZAS:
-    subprocess.run(["sips", "-z", "191", "1128", "--matchTo", "/System/Library/ColorSync/Profiles/sRGB Profile.icc",
+    subprocess.run(["sips", "-z", "256", "1512", "--matchTo", "/System/Library/ColorSync/Profiles/sRGB Profile.icc",
                     "-s", "format", "jpeg", "-s", "formatOptions", "92",
-                    str(PNG / f"{nombre}.png"), "--out", str(JPG / f"{nombre}_1128.jpg")], capture_output=True)
-    print("ok", nombre, "1128x191")
+                    str(PNG / f"{nombre}.png"), "--out", str(JPG / f"{nombre}_1512.jpg")], capture_output=True)
+    print("ok", nombre, "1512x256")
