@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/content/i18n";
 import Image from "next/image";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactLink } from "@/components/site/ContactLink";
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
     "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
   alternates: {
     canonical: "https://inplux.co/nosotros",
+    languages: languageAlternates("/nosotros"),
   },
   openGraph: {
     title: "El criterio detrás de la fábrica | INPLUX",

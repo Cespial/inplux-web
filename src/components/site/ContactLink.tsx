@@ -28,7 +28,14 @@ export type ContactSource =
   // Página de equipo (/equipo): cierre.
   | "team-closing"
   // Productos (/trabajo y /trabajo/[slug]): el cierre.
-  | "work-closing";
+  | "work-closing"
+  // Las páginas inglesas bajo /en: los mismos disparadores, con su prefijo.
+  | "en-about-closing"
+  | "en-how-we-work-hero"
+  | "en-how-we-work-closing"
+  | "en-sector-hero"
+  | "en-sector-closing"
+  | "en-work-closing";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;

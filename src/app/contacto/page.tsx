@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/content/i18n";
 import Link from "next/link";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { ContactForm } from "@/components/site/ContactForm";
@@ -42,6 +43,7 @@ export const metadata: Metadata = {
     "Cuéntanos qué debería cambiar en tu producto, operación o servicio. No necesitas llegar con requisitos ni alcance definidos.",
   alternates: {
     canonical: "https://inplux.co/contacto",
+    languages: languageAlternates("/contacto"),
   },
   openGraph: {
     title: "Empecemos por el problema | INPLUX",
