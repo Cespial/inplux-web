@@ -119,8 +119,10 @@
   margin-top: clamp(1.5rem, 3vw, 2.5rem);
 }
 
+/* Retratos con camisa blanca: el degradado sube más para que el cargo se lea. */
 .crewPerson .caption {
-  padding: 2.5rem 1rem 0.95rem;
+  padding: 3.5rem 1rem 0.95rem;
+  background: linear-gradient(180deg, transparent, rgba(12, 12, 11, 0.9) 60%);
 }
 
 .crewPerson .caption strong {
