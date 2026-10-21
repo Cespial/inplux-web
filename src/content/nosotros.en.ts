@@ -5,14 +5,13 @@
  */
 export const aboutEn = {
   meta: {
-    title: "About — the judgment behind the factory",
+    title: "About — we build with judgment, from Medellín",
     description:
-      "Meet the track record, principles and people who turn context, product and engineering into useful software.",
-    socialTitle: "The judgment behind the factory | INPLUX",
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
+    socialTitle: "We build with judgment, from Medellín | INPLUX",
     socialDescription:
-      "The track record, principles and people behind INPLUX's software factory.",
-    imageAlt: "INPLUX, the judgment behind the factory",
-    jsonLdName: "The judgment behind the factory",
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
+    jsonLdName: "We build with judgment, from Medellín",
   },
   crumb: "About",
   hero: {

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
@@ -6,8 +6,16 @@ const root = process.cwd();
 const errors = [];
 
 const siteUrl = "https://inplux.co";
-const defaultOgImage = `${siteUrl}/brand/og/og-default.png`;
-const defaultOgImageAlt = "INPLUX, de un problema real a software en producción";
+// Las tarjetas de la portada (PR N, 20-oct-2026): JPEG con foto, pintadas por
+// `scripts/og-cards.mjs`, con nombres nuevos para no heredar la caché de la v3.
+const defaultOgImage = `${siteUrl}/brand/og/og-home.jpg`;
+const defaultOgImageAlt =
+  "Equipo trabajando frente a pantallas en una oficina con vista a las montañas de Medellín";
+const englishOgImage = `${siteUrl}/brand/og/og-home-en.jpg`;
+const englishOgImageAlt =
+  "A team working at their screens in an office overlooking the mountains of Medellín";
+const aboutOgImage = `${siteUrl}/brand/og/og-nosotros.jpg`;
+const aboutOgImageAlt = "Edificios entre árboles con las montañas de Medellín al fondo";
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
 
 /*
@@ -22,7 +30,7 @@ const teamProfiles = [
     name: "Jaime Alonso Cano Pino",
     jobTitle: "CEO y fundador",
     description:
-      "CEO y fundador de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
+      "CEO y fundador de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
   },
   {
     slug: "cristian-espinal-maya",
@@ -30,10 +38,10 @@ const teamProfiles = [
     name: "Cristian Espinal Maya",
     jobTitle: "CTO",
     description:
-      "CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
+      "CTO de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
   },
 ];
-const workSocialVersion = "2026-10-20";
+const workSocialVersion = "2026-10-20.2";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
 
@@ -148,8 +156,9 @@ const pageDefinitions = {
     ogDescription:
       "Conoce los productos que INPLUX desarrolla e implementa con empresas e instituciones de Latinoamérica.",
     ogUrl: "https://inplux.co",
-    ogImage: "https://inplux.co/brand/og/og-default.png",
-    ogImageAlt: "INPLUX, de un problema real a software en producción",
+    ogLocaleAlternate: "en_US",
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
     twitterTitle: "Transformación con IA que llega a producción.",
     twitterDescription: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     twitterImageAlt: defaultOgImageAlt,
@@ -197,12 +206,13 @@ const pageDefinitions = {
     ogDescription:
       "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     ogUrl: `${siteUrl}/en`,
-    ogImage: defaultOgImage,
-    ogImageAlt: "INPLUX, from a real problem to software in production",
+    ogLocaleAlternate: "es_CO",
+    ogImage: englishOgImage,
+    ogImageAlt: englishOgImageAlt,
     twitterTitle: "AI transformation that reaches production.",
     twitterDescription:
       "We develop and implement the AI transformation of companies and institutions across Latin America.",
-    twitterImageAlt: "INPLUX, from a real problem to software in production",
+    twitterImageAlt: englishOgImageAlt,
     jsonLd: {
       type: "WebPage",
       name: "INPLUX, AI development and implementation in Miami",
@@ -444,23 +454,23 @@ const pageDefinitions = {
   },
   about: {
     file: ".next/server/app/nosotros.html",
-    title: "Nosotros — el criterio detrás de la fábrica | INPLUX",
+    title: "Nosotros — construimos con criterio, desde Medellín | INPLUX",
     description:
-      "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     canonical: "https://inplux.co/nosotros",
-    ogTitle: "El criterio detrás de la fábrica | INPLUX",
+    ogTitle: "Construimos con criterio, desde Medellín | INPLUX",
     ogDescription:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     ogUrl: "https://inplux.co/nosotros",
-    ogImage: "https://inplux.co/brand/og/og-nosotros.png",
-    ogImageAlt: "INPLUX, el criterio detrás de la fábrica",
-    twitterTitle: "El criterio detrás de la fábrica | INPLUX",
+    ogImage: aboutOgImage,
+    ogImageAlt: aboutOgImageAlt,
+    twitterTitle: "Construimos con criterio, desde Medellín | INPLUX",
     twitterDescription:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
-    twitterImageAlt: "INPLUX, el criterio detrás de la fábrica",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
+    twitterImageAlt: aboutOgImageAlt,
     jsonLd: {
       type: "AboutPage",
-      name: "El criterio detrás de la fábrica",
+      name: "Construimos con criterio, desde Medellín",
       url: `${siteUrl}/nosotros`,
     },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
@@ -477,12 +487,12 @@ const pageDefinitions = {
     ogDescription:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
     ogUrl: `${siteUrl}/equipo`,
-    ogImage: "https://inplux.co/brand/og/og-nosotros.png",
-    ogImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    ogImage: aboutOgImage,
+    ogImageAlt: aboutOgImageAlt,
     twitterTitle: "Equipo | INPLUX",
     twitterDescription:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
-    twitterImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    twitterImageAlt: aboutOgImageAlt,
     jsonLd: {
       type: "CollectionPage",
       name: "Equipo de INPLUX",
@@ -838,16 +848,16 @@ Object.assign(pageDefinitions, {
   ),
   enAbout: {
     ...englishBase("/nosotros", "/en/about"),
-    title: "About — the judgment behind the factory | INPLUX",
+    title: "About — we build with judgment, from Medellín | INPLUX",
     description:
-      "Meet the track record, principles and people who turn context, product and engineering into useful software.",
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
     ...social(
-      "The judgment behind the factory | INPLUX",
-      "The track record, principles and people behind INPLUX's software factory.",
+      "We build with judgment, from Medellín | INPLUX",
+      "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
       "/brand/og/og-en-about.jpg",
-      "INPLUX, the judgment behind the factory",
+      "Buildings among trees with the mountains of Medellín in the background",
     ),
-    jsonLd: { type: "AboutPage", name: "The judgment behind the factory", url: `${siteUrl}/en/about` },
+    jsonLd: { type: "AboutPage", name: "We build with judgment, from Medellín", url: `${siteUrl}/en/about` },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
     attribution: true,
   },
@@ -962,16 +972,29 @@ function verifySocialMetadata(name, html, definition) {
     `${name} og:description`,
   );
   expectEqual(metaContent(html, "property", "og:url"), definition.ogUrl, `${name} og:url`);
-  expectEqual(metaContent(html, "property", "og:site_name"), "INPLUX S.A.S.", `${name} og:site_name`);
+  // La marca, no la razón social: es lo que la red escribe sobre la tarjeta.
+  expectEqual(metaContent(html, "property", "og:site_name"), "INPLUX", `${name} og:site_name`);
   expectEqual(
     metaContent(html, "property", "og:locale"),
     definition.ogLocale ?? "es_CO",
     `${name} og:locale`,
   );
+  // Solo las dos portadas declaran su par en el otro idioma.
+  expectEqual(
+    metaContent(html, "property", "og:locale:alternate") ?? null,
+    definition.ogLocaleAlternate ?? null,
+    `${name} og:locale:alternate`,
+  );
   expectEqual(metaContent(html, "property", "og:type"), definition.ogType ?? "website", `${name} og:type`);
   expectEqual(metaContent(html, "property", "og:image"), definition.ogImage, `${name} og:image`);
   expectEqual(metaContent(html, "property", "og:image:width"), "1200", `${name} og:image:width`);
   expectEqual(metaContent(html, "property", "og:image:height"), "630", `${name} og:image:height`);
+  // Las fichas de /trabajo las pinta satori en PNG; todo lo demás es JPEG de og-cards.
+  expectEqual(
+    metaContent(html, "property", "og:image:type"),
+    definition.ogImage.includes("/api/og/trabajo/") ? "image/png" : "image/jpeg",
+    `${name} og:image:type`,
+  );
   expectEqual(
     metaContent(html, "property", "og:image:alt"),
     definition.ogImageAlt,
@@ -1598,6 +1621,104 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
   if (definition.deck) verifyDeckShape(name, html, definition.deck);
 }
 
+/**
+ * Guardia de las tarjetas para compartir (PR N, 20-oct-2026), sobre TODAS las
+ * páginas construidas y no solo las de `pageDefinitions`: el deck, /marca o
+ * una ruta nueva heredan la tarjeta del layout y nadie las da de alta aquí.
+ *
+ * Falla si una página sirve en `og:image` o `twitter:image`:
+ * - algo que no sea un JPEG de `scripts/og-cards.mjs` (`/brand/og/og-*.jpg`)
+ *   ni la ruta de satori de las fichas (`/api/og/trabajo/<clave>`): así no
+ *   vuelve la tarjeta PNG de la v3;
+ * - una tarjeta que ya no existe en `public/` (o una ficha sin su captura);
+ * - un JPEG de más de 300 KB, que WhatsApp descarta o tarda en pintar.
+ */
+const maxSocialCardBytes = 300_000;
+
+async function collectBuiltPages(directory, prefix = "") {
+  const entries = await readdir(path.join(root, directory, prefix), { withFileTypes: true });
+  const pages = [];
+  for (const entry of entries) {
+    const relative = path.join(prefix, entry.name);
+    if (entry.isDirectory()) {
+      pages.push(...(await collectBuiltPages(directory, relative)));
+    } else if (entry.name.endsWith(".html") && !entry.name.startsWith("_")) {
+      pages.push(relative);
+    }
+  }
+  return pages;
+}
+
+async function fileSize(relativePath) {
+  try {
+    return (await stat(path.join(root, relativePath))).size;
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+async function verifySharedImages() {
+  const pages = await collectBuiltPages(".next/server/app");
+  const workKeys = new Set(["directorio", ...workProfiles.map((profile) => profile.slug)]);
+
+  for (const page of pages) {
+    const html = await readFile(path.join(root, ".next/server/app", page), "utf8");
+    const images = [
+      ["og:image", metaContent(html, "property", "og:image")],
+      ["twitter:image", metaContent(html, "name", "twitter:image")],
+    ];
+
+    for (const [tag, url] of images) {
+      if (!url) {
+        errors.push(`${page}: no declara ${tag}; heredaría la vista previa que arme cada red`);
+        continue;
+      }
+      const pathname = url.startsWith(siteUrl) ? new URL(url).pathname : url;
+      const card = pathname.match(/^\/brand\/og\/(og-[a-z0-9-]+\.jpg)$/);
+      const work = pathname.match(/^\/api\/og\/trabajo\/([a-z0-9-]+)$/);
+
+      if (card) {
+        const size = await fileSize(`public/brand/og/${card[1]}`);
+        if (size === null) {
+          errors.push(`${page}: ${tag} apunta a ${pathname}, que no existe en public/`);
+        } else if (size > maxSocialCardBytes) {
+          errors.push(
+            `${page}: ${tag} ${pathname} pesa ${Math.round(size / 1024)} KB; el límite es ${maxSocialCardBytes / 1000} KB`,
+          );
+        }
+      } else if (work) {
+        if (!workKeys.has(work[1])) {
+          errors.push(`${page}: ${tag} pide la ficha ${work[1]}, que no existe`);
+        } else if (
+          work[1] !== "directorio" &&
+          (await fileSize(`public/brand/og/mockups/${work[1]}.png`)) === null
+        ) {
+          errors.push(
+            `${page}: ${tag} pide la ficha ${work[1]} y falta su captura public/brand/og/mockups/${work[1]}.png`,
+          );
+        }
+      } else {
+        errors.push(
+          `${page}: ${tag} sirve ${url}; solo valen los JPEG de og-cards (/brand/og/og-*.jpg) y /api/og/trabajo`,
+        );
+      }
+    }
+  }
+
+  // Ningún JPEG de tarjeta en public/ pasa del límite, lo use hoy una página o no.
+  for (const entry of await readdir(path.join(root, "public/brand/og"))) {
+    if (!/^og-.*\.jpg$/.test(entry)) continue;
+    const size = await fileSize(`public/brand/og/${entry}`);
+    if (size > maxSocialCardBytes) {
+      errors.push(
+        `public/brand/og/${entry} pesa ${Math.round(size / 1024)} KB; el límite es ${maxSocialCardBytes / 1000} KB`,
+      );
+    }
+  }
+}
+
+await verifySharedImages();
 await verifyGeneratedRoutes();
 
 // ── Verificación de Search Console ──────────────────────────────────────────
@@ -1625,6 +1746,6 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    "Salida final aprobada: metadata, social cards, estructura, contacto, JSON-LD, atribución, pie de productos, sitemap y manifest.",
+    "Salida final aprobada: metadata, social cards (y sus imágenes), estructura, contacto, JSON-LD, atribución, pie de productos, sitemap y manifest.",
   );
 }

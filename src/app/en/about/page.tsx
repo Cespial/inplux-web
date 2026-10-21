@@ -20,6 +20,7 @@ import { enSite } from "@/content/site.en";
 import { personId, profileUrl, teamMembers } from "@/content/team";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import { englishPageMetadata } from "@/lib/metadata.en";
+import { aboutSocialImageEn } from "@/lib/social-cards";
 
 /*
  * `/en/about`: el par inglés de `/nosotros`. Mismas secciones, mismo crédito a
@@ -36,8 +37,7 @@ export const metadata: Metadata = englishPageMetadata({
   description: copy.meta.description,
   socialTitle: copy.meta.socialTitle,
   socialDescription: copy.meta.socialDescription,
-  image: "/brand/og/og-en-about.jpg",
-  imageAlt: copy.meta.imageAlt,
+  image: aboutSocialImageEn,
 });
 
 const crumbs: Crumb[] = [enSite.homeCrumb, { label: copy.crumb }];

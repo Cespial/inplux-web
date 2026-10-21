@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { HtmlRoot } from "@/components/site/HtmlRoot.client";
 import { personId, teamMembers } from "@/content/team";
+import { homeOpenGraph, homeSocialImage, twitterImage } from "@/lib/social-cards";
 import "./globals.css";
 
 /*
@@ -60,33 +61,13 @@ export const metadata: Metadata = {
     "Medellín",
     "INPLUX",
   ],
-  openGraph: {
-    title: "Transformación con IA que llega a producción.",
-    description:
-      "Conoce los productos que INPLUX desarrolla e implementa con empresas e instituciones de Latinoamérica.",
-    url: "https://inplux.co",
-    siteName: "INPLUX S.A.S.",
-    locale: "es_CO",
-    type: "website",
-    images: [
-      {
-        url: "/brand/og/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: "INPLUX, de un problema real a software en producción",
-      },
-    ],
-  },
+  // Respaldo de toda ruta sin Open Graph propio (el deck, por ejemplo).
+  openGraph: homeOpenGraph,
   twitter: {
     card: "summary_large_image",
     title: "Transformación con IA que llega a producción.",
     description: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
-    images: [
-      {
-        url: "/brand/og/og-default.png",
-        alt: "INPLUX, de un problema real a software en producción",
-      },
-    ],
+    images: [twitterImage(homeSocialImage)],
   },
 };
 

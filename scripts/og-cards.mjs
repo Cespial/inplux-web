@@ -1,7 +1,10 @@
 /**
- * Tarjetas sociales (1200 × 630) de las páginas con imagen propia: los cuatro
- * sectores, `/como-trabajamos`, `/prensa`, `/contacto`, `/seguridad`, `/marca`,
- * cada perfil de `/equipo` y los pares ingleses (`og-en-*`, al inicio). Se pintan una vez con Chromium —la foto o el
+ * Tarjetas sociales (1200 × 630) de las páginas con imagen propia: la portada
+ * (en español y en inglés) y `/nosotros` (y su par `/en/about`), con la
+ * plantilla «foto» —foto a sangre, velo de izquierda a derecha, la marca arriba
+ * y el H1 de la página—; los cuatro sectores, `/como-trabajamos`, `/prensa`,
+ * `/contacto`, `/seguridad`, `/marca`, cada perfil de `/equipo` y los pares
+ * ingleses (`og-en-*`). Se pintan una vez con Chromium —la foto o el
  * póster del hero a sangre (o el retrato a la derecha, en los perfiles; o solo
  * el fondo de marca, donde la página no tiene foto), Rethink Sans y la marca—
  * y se guardan como JPEG en `public/brand/og/`. No hay ruta dinámica: la tarjeta cambia cuando cambia la
@@ -19,7 +22,13 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const types = { ".ttf": "font/ttf", ".webp": "image/webp", ".jpg": "image/jpeg" };
+const types = {
+  ".ttf": "font/ttf",
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+};
 
 /* Todo va en línea como data URI: una página de `setContent` vive en
    about:blank y Chromium no le deja leer `file://`. */
@@ -78,10 +87,10 @@ const cards = [
   },
   {
     file: "og-en-about.jpg",
+    layout: "foto",
     image: "public/media/nosotros-poster-1920.webp",
-    eyebrow: "ABOUT",
-    title: "The judgment behind the factory",
-    lead: "Track record, principles and people. Engineering in Medellín.",
+    title: "We build with judgment, from Medellín.",
+    lead: "INPLUX develops and implements AI transformation for companies and institutions in Latin America.",
     focus: "center",
   },
   {
@@ -98,6 +107,33 @@ const cards = [
     eyebrow: "SECURITY",
     title: "How we look after data",
     lead: "Encryption, role-based access and data separated by client.",
+  },
+  /* Plantilla «foto» (20-oct-2026, PR N): la que ve quien pega inplux.co en
+     WhatsApp, LinkedIn o X. Nombres nuevos a propósito: las redes guardan la
+     tarjeta por URL y con el nombre viejo seguirían sirviendo la v3. */
+  {
+    file: "og-home.jpg",
+    layout: "foto",
+    image: "public/brand/og/fuentes/equipo-medellin.webp",
+    title: "Transformación con IA que llega a producción.",
+    lead: "Productos propios y equipos que los implementan, desde Medellín para Latinoamérica.",
+    focus: "center",
+  },
+  {
+    file: "og-home-en.jpg",
+    layout: "foto",
+    image: "public/brand/og/fuentes/equipo-medellin.webp",
+    title: "AI transformation that reaches production.",
+    lead: "Our own products and the teams that implement them, from Medellín for Latin America.",
+    focus: "center",
+  },
+  {
+    file: "og-nosotros.jpg",
+    layout: "foto",
+    image: "public/media/nosotros-poster-1920.webp",
+    title: "Construimos con criterio, desde Medellín.",
+    lead: "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
+    focus: "center",
   },
   {
     file: "og-sector-publico.jpg",
@@ -220,12 +256,39 @@ ${image ? `<img src="${image}" alt="">` : ""}
 <div class="foot">INPLUX.CO</div>
 </div></body></html>`;
 
+/* La plantilla «foto», fiel al mockup aprobado por Cristian el 20-oct-2026:
+   velo de 0,88 a 0,62 (42 %) a 0,08 (75 %) más un velo inferior, márgenes de
+   64 px a los lados, título de 66 px a 13ch y `inplux.co` al pie. La marca es
+   la misma de las otras tarjetas (punto turquesa + «INPLUX», 26 px, a 54 px
+   del borde superior), para que todas las tarjetas del sitio firmen igual. */
+const photoHtml = (card, image) => `<!doctype html>
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Rethink Sans"; font-weight: 400; src: url("${fonts.regular}"); }
+@font-face { font-family: "Rethink Sans"; font-weight: 500; src: url("${fonts.medium}"); }
+* { margin: 0; box-sizing: border-box; }
+body { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0c0c0b; color: #f6f2ec; font-family: "Rethink Sans", sans-serif; }
+.photo { position: absolute; inset: 0; background: url("${image}") ${card.focus} / cover no-repeat; }
+.veil { position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(12,12,11,0.88) 0%, rgba(12,12,11,0.62) 42%, rgba(12,12,11,0.08) 75%),
+              linear-gradient(0deg, rgba(12,12,11,0.55), transparent 45%); }
+.content { position: absolute; inset: 54px 64px 52px; display: flex; flex-direction: column; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 14px; font-size: 26px; font-weight: 500; letter-spacing: -0.02em; }
+.brand i { width: 12px; height: 12px; border-radius: 99px; background: #00d7ca; }
+h1 { max-width: 13ch; font-size: 66px; font-weight: 400; line-height: 1.02; letter-spacing: -0.02em; }
+p { max-width: 30ch; margin-top: 22px; color: rgba(246,242,236,0.82); font-size: 23px; line-height: 1.35; }
+small { color: rgba(246,242,236,0.7); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+</style></head><body>
+<div class="photo"></div><div class="veil"></div>
+<div class="content"><div class="brand"><i></i>INPLUX</div><div><h1>${card.title}</h1><p>${card.lead}</p></div><small>inplux.co</small></div>
+</body></html>`;
+
 const outDir = path.join(root, "public/brand/og");
 await mkdir(outDir, { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const card of cards) {
-  await page.setContent(html(card, card.image ? await asset(card.image) : null), { waitUntil: "load" });
+  const image = card.image ? await asset(card.image) : null;
+  await page.setContent(card.layout === "foto" ? photoHtml(card, image) : html(card, image), { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: path.join(outDir, card.file), type: "jpeg", quality: 86 });
   console.log(`✓ ${card.file}`);

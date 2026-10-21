@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Sistema de marca — INPLUX",
     description,
     url: "https://inplux.co/marca",
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
     images: [
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
         url: "/brand/og/og-marca.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "INPLUX · Sistema de marca. Logo, color y tipografía.",
       },
     ],

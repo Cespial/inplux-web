@@ -65,18 +65,18 @@ const expectedRoutes = [
 ];
 
 const expectedSocialImages = [
-  "/api/og/trabajo/directorio?v=2026-10-20",
-  "/api/og/trabajo/tribai?v=2026-10-20",
-  "/api/og/trabajo/gobia?v=2026-10-20",
-  "/api/og/trabajo/kelsen?v=2026-10-20",
-  "/api/og/trabajo/laudos?v=2026-10-20",
-  "/api/og/trabajo/porkia?v=2026-10-20",
-  "/api/og/trabajo/directorio?lang=en&v=2026-10-20",
-  "/api/og/trabajo/tribai?lang=en&v=2026-10-20",
-  "/api/og/trabajo/gobia?lang=en&v=2026-10-20",
-  "/api/og/trabajo/kelsen?lang=en&v=2026-10-20",
-  "/api/og/trabajo/laudos?lang=en&v=2026-10-20",
-  "/api/og/trabajo/porkia?lang=en&v=2026-10-20",
+  "/api/og/trabajo/directorio?v=2026-10-20.2",
+  "/api/og/trabajo/tribai?v=2026-10-20.2",
+  "/api/og/trabajo/gobia?v=2026-10-20.2",
+  "/api/og/trabajo/kelsen?v=2026-10-20.2",
+  "/api/og/trabajo/laudos?v=2026-10-20.2",
+  "/api/og/trabajo/porkia?v=2026-10-20.2",
+  "/api/og/trabajo/directorio?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/gobia?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/kelsen?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/laudos?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/porkia?lang=en&v=2026-10-20.2",
 ];
 
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es
@@ -202,7 +202,7 @@ try {
 
   // La tarjeta inglesa de un producto no es la española con otro nombre.
   const [spanishCard, englishCard] = await Promise.all(
-    ["/api/og/trabajo/tribai?v=2026-10-20", "/api/og/trabajo/tribai?lang=en&v=2026-10-20"].map(
+    ["/api/og/trabajo/tribai?v=2026-10-20.2", "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2"].map(
       async (route) => Buffer.from(await (await fetch(`${baseUrl}${route}`)).arrayBuffer()),
     ),
   );

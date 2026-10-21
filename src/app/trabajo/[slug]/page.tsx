@@ -49,10 +49,10 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
       title: socialTitle,
       description: socialDescription,
       url: `https://inplux.co/trabajo/${profile.slug}`,
-      siteName: "INPLUX S.A.S.",
+      siteName: "INPLUX",
       locale: "es_CO",
       type: "website",
-      images: [{ url: socialImage, width: 1200, height: 630, alt: socialImageAlt }],
+      images: [{ url: socialImage, width: 1200, height: 630, type: "image/png", alt: socialImageAlt }],
     },
     twitter: {
       card: "summary_large_image",

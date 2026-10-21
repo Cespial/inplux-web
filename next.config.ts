@@ -24,6 +24,15 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 84, 88],
   },
+  // La tarjeta social de cada ficha (`/api/og/trabajo/[key]`) lee del disco las
+  // fuentes de satori y la captura del mockup: sin esto no viajan con la función.
+  outputFileTracingIncludes: {
+    "/api/og/trabajo/[key]": [
+      "./src/app/fonts/RethinkSans-Regular.ttf",
+      "./src/app/fonts/RethinkSans-Medium.ttf",
+      "./public/brand/og/mockups/*.png",
+    ],
+  },
   async redirects() {
     // /fabrica y /capacidades se fundieron en /como-trabajamos (octubre de
     // 2026). `permanent: true` responde 308; las anclas viejas (#producto,

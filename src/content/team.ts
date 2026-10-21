@@ -73,7 +73,7 @@ export const teamMembers = [
       "Escribe con regularidad en Al Poniente sobre el sistema tributario colombiano, el trabajo de la profesión contable y los límites de la inteligencia artificial aplicada a materias reguladas. Sus columnas insisten en una misma tesis: una respuesta que no se puede verificar no sirve, por rápida que sea.",
     ],
     disambiguatingDescription:
-      "CEO y fundador de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
+      "CEO y fundador de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
     knowsAbout: [
       "Gestión tributaria",
       "Hacienda pública territorial",
@@ -118,7 +118,7 @@ export const teamMembers = [
       "Esa doble posición —construir los sistemas y estudiar sus efectos— define su criterio técnico: la inteligencia artificial acelera tareas concretas y verificables, mientras la dirección de las decisiones críticas permanece en manos de personas expertas.",
     ],
     disambiguatingDescription:
-      "CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
+      "CTO de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
     knowsAbout: [
       "Arquitectura de software",
       "Inteligencia artificial aplicada",

@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description:
       "Diagnóstico, piloto, producción y operación: cuatro fases con entregable, sobre los sistemas que ya operas.",
     url: PAGE_URL,
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
     images: [
@@ -54,6 +54,7 @@ export const metadata: Metadata = {
         url: "/brand/og/og-como-trabajamos.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "INPLUX · Cómo trabajamos. Del diagnóstico a la operación.",
       },
     ],

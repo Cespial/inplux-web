@@ -18,6 +18,9 @@ type DirectorySocialCard = {
   status: string;
   attribution: string;
   sourceCount: number;
+  /** La verificación de fuentes más reciente, la fecha que se imprime. */
+  verifiedAt: string;
+  /** La versión de la URL (`?v=`): la verificación o el diseño, la mayor. */
   version: string;
 };
 
@@ -31,6 +34,7 @@ type ProfileSocialCard = {
   status: string;
   attribution: string;
   attributionState: WorkProfile["attribution"]["state"];
+  verifiedAt: string;
   version: string;
 };
 
@@ -44,7 +48,7 @@ type SocialCardLabels = {
   ownProduct: string;
   ownProducts: string;
   publicSources: string;
-  footer: (version: string) => string;
+  footer: (verifiedAt: string) => string;
 };
 
 const cardLabels: Record<Lang, SocialCardLabels> = {
@@ -52,13 +56,13 @@ const cardLabels: Record<Lang, SocialCardLabels> = {
     ownProduct: "PRODUCTO PROPIO",
     ownProducts: "PRODUCTOS PROPIOS",
     publicSources: "FUENTES PÚBLICAS",
-    footer: (version) => `INPLUX.CO/TRABAJO · VERIFICADO ${version}`,
+    footer: (verifiedAt) => `INPLUX.CO/TRABAJO · VERIFICADO ${verifiedAt}`,
   },
   en: {
     ownProduct: "OUR OWN PRODUCT",
     ownProducts: "OUR OWN PRODUCTS",
     publicSources: "PUBLIC SOURCES",
-    footer: (version) => `INPLUX.CO/EN/WORK · VERIFIED ${version}`,
+    footer: (verifiedAt) => `INPLUX.CO/EN/WORK · VERIFIED ${verifiedAt}`,
   },
 };
 
@@ -76,7 +80,10 @@ const siteUrl = "https://inplux.co";
  * quedaba cacheado con la versión vieja. Se compara con la verificación más
  * reciente y gana la fecha mayor.
  */
-export const workSocialDesignVersion = "2026-10-20";
+// «.2»: la segunda tarjeta del 20-oct-2026 (PR N), con la captura del
+// mockup. La comparación es de texto: «2026-10-20.2» gana a «2026-10-20» y
+// pierde contra cualquier verificación posterior.
+export const workSocialDesignVersion = "2026-10-20.2";
 
 function newer(a: string, b: string) {
   return a > b ? a : b;
@@ -132,6 +139,7 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
       kind: "directory",
       ...directory,
       sourceCount,
+      verifiedAt: version,
       version: newer(version, workSocialDesignVersion),
       lang,
       labels,
@@ -155,6 +163,7 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
     status: profile.status.label,
     attribution: profile.attribution.label,
     attributionState: profile.attribution.state,
+    verifiedAt: latestVerification(profile),
     version: newer(latestVerification(profile), workSocialDesignVersion),
     lang,
     labels,
