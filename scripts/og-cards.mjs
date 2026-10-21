@@ -1,5 +1,7 @@
 /**
- * Tarjetas sociales (1200 × 630) de las páginas con imagen propia: los cuatro
+ * Tarjetas sociales (1200 × 630) de las páginas con imagen propia: la portada
+ * (en español y en inglés) y `/nosotros`, con la plantilla «foto» —foto a
+ * sangre, velo de izquierda a derecha, logo arriba y el H1 de la página—; los cuatro
  * sectores, `/como-trabajamos`, `/prensa`, `/contacto`, `/seguridad`, `/marca`
  * y cada perfil de `/equipo`. Se pintan una vez con Chromium —la foto o el
  * póster del hero a sangre (o el retrato a la derecha, en los perfiles; o solo
@@ -19,7 +21,13 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const types = { ".ttf": "font/ttf", ".webp": "image/webp", ".jpg": "image/jpeg" };
+const types = {
+  ".ttf": "font/ttf",
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+};
 
 /* Todo va en línea como data URI: una página de `setContent` vive en
    about:blank y Chromium no le deja leer `file://`. */
@@ -33,7 +41,36 @@ const fonts = {
   medium: await asset("src/app/fonts/RethinkSans-Medium.ttf"),
 };
 
+const logo = await asset("public/brand/logos/inplux-logo-horizontal-mono-white.svg");
+
 const cards = [
+  /* Plantilla «foto» (20-oct-2026, PR N): la que ve quien pega inplux.co en
+     WhatsApp, LinkedIn o X. Nombres nuevos a propósito: las redes guardan la
+     tarjeta por URL y con el nombre viejo seguirían sirviendo la v3. */
+  {
+    file: "og-home.jpg",
+    layout: "foto",
+    image: "public/brand/og/fuentes/equipo-medellin.webp",
+    title: "Transformación con IA que llega a producción.",
+    lead: "Productos propios y equipos que los implementan, desde Medellín para Latinoamérica.",
+    focus: "center",
+  },
+  {
+    file: "og-home-en.jpg",
+    layout: "foto",
+    image: "public/brand/og/fuentes/equipo-medellin.webp",
+    title: "AI transformation that reaches production.",
+    lead: "Our own products and the teams that implement them, from Medellín for Latin America.",
+    focus: "center",
+  },
+  {
+    file: "og-nosotros.jpg",
+    layout: "foto",
+    image: "public/media/nosotros-poster-1920.webp",
+    title: "Construimos con criterio, desde Medellín.",
+    lead: "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
+    focus: "center",
+  },
   {
     file: "og-sector-publico.jpg",
     image: "public/sectores/sector-publico.webp",
@@ -155,12 +192,36 @@ ${image ? `<img src="${image}" alt="">` : ""}
 <div class="foot">INPLUX.CO</div>
 </div></body></html>`;
 
+/* La plantilla «foto», fiel al mockup aprobado por Cristian el 20-oct-2026:
+   velo de 0,88 a 0,62 (42 %) a 0,08 (75 %) más un velo inferior, márgenes de
+   64 px, logo de 34 px, título de 66 px a 13ch y `inplux.co` al pie. */
+const photoHtml = (card, image) => `<!doctype html>
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Rethink Sans"; font-weight: 400; src: url("${fonts.regular}"); }
+@font-face { font-family: "Rethink Sans"; font-weight: 500; src: url("${fonts.medium}"); }
+* { margin: 0; box-sizing: border-box; }
+body { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0c0c0b; color: #f6f2ec; font-family: "Rethink Sans", sans-serif; }
+.photo { position: absolute; inset: 0; background: url("${image}") ${card.focus} / cover no-repeat; }
+.veil { position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(12,12,11,0.88) 0%, rgba(12,12,11,0.62) 42%, rgba(12,12,11,0.08) 75%),
+              linear-gradient(0deg, rgba(12,12,11,0.55), transparent 45%); }
+.content { position: absolute; inset: 64px; display: flex; flex-direction: column; justify-content: space-between; }
+.content img { height: 34px; width: auto; align-self: flex-start; }
+h1 { max-width: 13ch; font-size: 66px; font-weight: 400; line-height: 1.02; letter-spacing: -0.02em; }
+p { max-width: 30ch; margin-top: 22px; color: rgba(246,242,236,0.82); font-size: 23px; line-height: 1.35; }
+small { color: rgba(246,242,236,0.7); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+</style></head><body>
+<div class="photo"></div><div class="veil"></div>
+<div class="content"><img src="${logo}" alt=""><div><h1>${card.title}</h1><p>${card.lead}</p></div><small>inplux.co</small></div>
+</body></html>`;
+
 const outDir = path.join(root, "public/brand/og");
 await mkdir(outDir, { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const card of cards) {
-  await page.setContent(html(card, card.image ? await asset(card.image) : null), { waitUntil: "load" });
+  const image = card.image ? await asset(card.image) : null;
+  await page.setContent(card.layout === "foto" ? photoHtml(card, image) : html(card, image), { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: path.join(outDir, card.file), type: "jpeg", quality: 86 });
   console.log(`✓ ${card.file}`);
