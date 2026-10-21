@@ -73,6 +73,19 @@ const teamCrewProfiles = [
 const maxCrewPhotoBytes = 150_000;
 const maxTeamPageWords = 450;
 
+/*
+ * La portada clara (PR S, 21-oct-2026): nueve H2, cinco fichas de producto
+ * (una por perfil de work.ts), las cifras con fuente dentro de la evidencia y
+ * no en la banda de tesis, y un tope de palabras en <main> que sólo baja.
+ * Medido con `word-count.mjs`, que cuenta también las capas ocultas.
+ */
+const homeShape = [
+  { name: "home", file: ".next/server/app/index.html", workPath: "/trabajo" },
+  { name: "englishHome", file: ".next/server/app/en.html", workPath: "/en/work" },
+];
+const homeH2Count = 9;
+const maxHomeWords = 780;
+
 const workSocialVersion = "2026-10-20.2";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
@@ -1763,6 +1776,39 @@ async function verifyTeamCrew() {
   );
 }
 
+async function verifyHomeShape() {
+  for (const { name, file, workPath } of homeShape) {
+    const html = await readFile(path.join(root, file), "utf8");
+    const open = html.search(/<main\b/);
+    const main = html.slice(open, html.indexOf("</main>", open));
+
+    expectEqual(count(main, "<h2"), homeH2Count, `${name}: H2 en <main>`);
+
+    expectEqual(count(main, 'id="p-'), workProfiles.length, `${name}: fichas de producto`);
+    for (const { slug } of workProfiles) {
+      expect(main.includes(`id="p-${slug}"`), `${name}: falta la ficha #p-${slug}`);
+      expect(
+        main.includes(`href="${workPath}/${slug}"`),
+        `${name}: la ficha de ${slug} debe enlazar ${workPath}/${slug}`,
+      );
+    }
+
+    const at = (id) => main.indexOf(`id="${id}"`);
+    const stats = at("casos");
+    expect(
+      stats > at("auditoria") && stats < at("prensa"),
+      `${name}: las cifras con fuente (#casos) van dentro de la evidencia (#auditoria)`,
+    );
+    expect(
+      !(stats > at("latinoamerica") && stats < at("sectores")),
+      `${name}: la banda de tesis (#latinoamerica) va sin cifras`,
+    );
+
+    const words = countWords(html);
+    expect(words <= maxHomeWords, `${name}: <main> tiene ${words} palabras; el tope es ${maxHomeWords}`);
+  }
+}
+
 async function verifySharedImages() {
   const pages = await collectBuiltPages(".next/server/app");
   const workKeys = new Set(["directorio", ...workProfiles.map((profile) => profile.slug)]);
@@ -1826,6 +1872,7 @@ async function verifySharedImages() {
 await verifySharedImages();
 await verifyGeneratedRoutes();
 await verifyTeamCrew();
+await verifyHomeShape();
 
 // ── Verificación de Search Console ──────────────────────────────────────────
 // Google avisa al verificar por etiqueta: si la meta desaparece de la home, la
