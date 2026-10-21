@@ -47,7 +47,7 @@ export const DECK_SOURCES = [
 
 export const DECK_COPY = {
   portada: {
-    eyebrow: "INPLUX / FÁBRICA DE SOFTWARE",
+    eyebrow: "INPLUX / DESARROLLO E IMPLEMENTACIÓN DE IA",
     titulo: ["De un problema real", "a software en producción."],
     bajada:
       "La IA acelera el trabajo. Personas expertas dirigen y validan las decisiones críticas.",
@@ -108,7 +108,7 @@ export const DECK_COPY = {
     },
   },
   evidencia: {
-    pregunta: "¿Por qué habría de creerle a una fábrica de software?",
+    pregunta: "¿Por qué habría de creerle a INPLUX?",
     respuesta: "Trece cosas que este sitio no puede decir.",
     cuerpo: "No es una guía de estilo. Es una prueba automática.",
     remate: "Si alguien las escribe, el sitio no compila.",
