@@ -52,6 +52,8 @@ export function ContactForm({
   copy = homeCopyEs.contactForm,
 }: ContactFormProps) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  /** Tras un error el botón dice «Reintentar» hasta que se edita un campo. */
+  const [retryLabel, setRetryLabel] = useState(false);
   const [preparedMessage, setPreparedMessage] = useState<string | null>(null);
   const [mailtoHref, setMailtoHref] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
@@ -160,6 +162,7 @@ export function ContactForm({
     }
 
     setStatus({ kind: "sending" });
+    setRetryLabel(false);
     focusStatusRef.current = true;
 
     try {
@@ -209,6 +212,7 @@ export function ContactForm({
         prepareMailto(form);
         return;
       }
+      setRetryLabel(true);
       setStatus({
         kind: "error",
         message:
@@ -219,6 +223,7 @@ export function ContactForm({
               : copy.errorSend,
       });
     } catch {
+      setRetryLabel(true);
       setStatus({ kind: "error", message: copy.errorSend });
     }
   };
@@ -279,6 +284,12 @@ export function ContactForm({
       method="post"
       action={CONTACT_ENDPOINT}
       onSubmit={onSubmit}
+      onInput={() => {
+        if (retryLabel) setRetryLabel(false);
+      }}
+      onChange={() => {
+        if (retryLabel) setRetryLabel(false);
+      }}
       onFocus={() => {
         // Primer foco: se pide la marca de tiempo mientras la persona escribe.
         ensureToken().catch(() => undefined);
@@ -363,7 +374,13 @@ export function ContactForm({
         type="submit"
         disabled={sending}
       >
-        {sending ? copy.sending : <>{`${copy.submit} `}<span aria-hidden="true">↗</span></>}
+        {sending ? (
+          copy.sending
+        ) : retryLabel ? (
+          copy.retry
+        ) : (
+          <>{`${copy.submit} `}<span aria-hidden="true">↗</span></>
+        )}
       </button>
 
       <p className="site-form-note">
@@ -397,12 +414,6 @@ export function ContactForm({
           <p className="site-contact-note">{copy.preparedNote}</p>
         ) : null}
       </div>
-
-      {status.kind === "error" ? (
-        <button className="site-button site-button-light" type="submit">
-          {copy.retry}
-        </button>
-      ) : null}
 
       {status.kind === "prepared" && preparedMessage ? (
         <>
