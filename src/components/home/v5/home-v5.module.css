@@ -221,18 +221,16 @@
 
 /* ------------------------------------------------------------------ prensa */
 
-/* Una pieza: figura a la izquierda, texto a la derecha. */
 .pressGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 1.4fr 1fr 1fr;
   gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .story {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: clamp(1.25rem, 3vw, 2.5rem);
-  align-items: center;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line-ink);
 }
@@ -263,6 +261,20 @@
   background-size: 3px 3px;
   mix-blend-mode: multiply;
   pointer-events: none;
+}
+
+/* La portada de una nota propia se ve tal cual: lleva color y texto. */
+.story .coverFigure,
+.story:first-child .coverFigure {
+  aspect-ratio: 16 / 9;
+}
+
+.story .coverFigure img {
+  filter: none;
+}
+
+.story .coverFigure::after {
+  display: none;
 }
 
 .story .markFigure img {
@@ -326,6 +338,12 @@
   letter-spacing: var(--track-display);
 }
 
+.summary {
+  margin-top: 0.6rem;
+  color: var(--ink-muted);
+  font-size: var(--step-8);
+}
+
 .more {
   display: inline-block;
   margin-top: 0.6rem;
@@ -333,6 +351,39 @@
   font-size: var(--step-8);
   font-weight: 500;
   text-decoration: none;
+}
+
+.storyList {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line-ink);
+}
+
+.storyList a {
+  display: grid;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.storyList span {
+  color: var(--ink-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.storyList strong {
+  font-size: var(--step-8);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.storyList a:hover strong {
+  color: var(--teal-ink);
 }
 
 /* ------------------------------------------------------------------ equipo */
@@ -437,7 +488,7 @@
 @media (max-width: 760px) {
   .audit,
   .pressGrid,
-  .story,
+  .storyList,
   .teamGrid {
     grid-template-columns: 1fr;
   }

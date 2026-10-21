@@ -5,7 +5,7 @@ import { NextPage } from "@/components/v5/NextPage";
 import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { Band, Button, SectionHead } from "@/components/v5/primitives";
-import { pressStories } from "@/content/press";
+import { isOwnStory, ownStoryUrl, pressStories } from "@/content/press";
 import {
   getTeamMember,
   personId,
@@ -149,7 +149,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
           },
         },
         ...(publications.length > 0
-          ? { subjectOf: publications.map((story) => ({ "@id": story.href })) }
+          ? { subjectOf: publications.map((story) => ({ "@id": ownStoryUrl(story) })) }
           : {}),
       },
       breadcrumbJsonLd(crumbs, url),
@@ -241,7 +241,7 @@ export default async function TeamProfile({ params }: TeamProfilePageProps) {
                 <ol className={styles.publications}>
                   {publications.map((story) => (
                     <li key={story.slug}>
-                      <a href={story.href} rel="noopener" target="_blank">
+                      <a href={story.href} {...(isOwnStory(story) ? {} : { rel: "noopener", target: "_blank" })}>
                         {story.title}
                       </a>
                       <p>

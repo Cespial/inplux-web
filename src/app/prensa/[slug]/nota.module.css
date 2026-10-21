@@ -1,0 +1,127 @@
+/*
+ * /prensa/[slug] sobre las primitivas v5: hero de texto, la portada de la nota
+ * a todo el ancho del contenedor, y debajo la prosa con la ficha del proyecto.
+ */
+
+.root {
+  background: var(--black);
+}
+
+.root .hero {
+  min-height: min(44svh, 26rem);
+}
+
+.root .hero h1 {
+  max-width: 18ch;
+}
+
+/* ------------------------------------------------------------------ portada */
+
+.cover {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------- nota */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.prose {
+  display: grid;
+  gap: 1.2rem;
+  max-width: 62ch;
+  color: var(--fg-muted);
+  font-size: var(--step-6);
+  line-height: 1.65;
+}
+
+.prose p:first-child {
+  color: var(--ivory);
+}
+
+.aside {
+  display: grid;
+  gap: 1.75rem;
+  align-content: start;
+  padding-top: 0.25rem;
+}
+
+.client {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.logo {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--ivory);
+}
+
+.logo img {
+  display: block;
+  width: auto;
+  height: 2.6rem;
+}
+
+.client p {
+  color: var(--fg-dim);
+  font-size: var(--step-8);
+}
+
+.facts {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--fg-dim);
+  font-size: var(--step-9);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  color: var(--ivory);
+  font-size: var(--step-8);
+}
+
+.product {
+  width: fit-content;
+  color: var(--teal);
+  font-size: var(--step-7);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.product:hover {
+  color: var(--ivory);
+}
+
+@media (max-width: 760px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+}
