@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { pressStories } from "@/content/press";
 import { sectorProfiles } from "@/content/sectores";
+import { sectorProfilesEn } from "@/content/sectores.en";
 import { teamMembers } from "@/content/team";
+import { workProfilesEn } from "@/content/work.en";
 
 /*
  * Sin `lastmod`, `changefreq` ni `priority` a propósito: `verify-build-output`
@@ -29,6 +31,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...pressStories.filter((story) => story.article).map((story) => story.href),
     "/contacto",
     "/seguridad",
+    // El sitio en inglés va al final para no mover las posiciones españolas.
+    "/en/how-we-work",
+    "/en/work",
+    ...workProfilesEn.map((profile) => `/en/work/${profile.slug}`),
+    ...sectorProfilesEn.map((sector) => `/en/sectors/${sector.enSlug}`),
+    "/en/about",
+    "/en/security",
+    "/en/contact",
   ];
 
   return routes.map((route) => ({
