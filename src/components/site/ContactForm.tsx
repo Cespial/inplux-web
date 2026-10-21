@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { homeCopyEs } from "@/content/copy/es";
+import { contactFormCopyEs } from "@/content/copy/es-chrome";
 import { formatCopy } from "@/content/copy/format";
 import type { ContactFormCopy } from "@/content/copy/types";
 import {
@@ -49,7 +49,7 @@ const wait = (milliseconds: number) =>
 
 export function ContactForm({
   context = "section",
-  copy = homeCopyEs.contactForm,
+  copy = contactFormCopyEs,
 }: ContactFormProps) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   /** Tras un error el botón dice «Reintentar» hasta que se edita un campo. */

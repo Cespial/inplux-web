@@ -18,6 +18,9 @@ export type HeroVideoSource = {
 /** Pantallas estrechas: teléfonos y tabletas pequeñas en vertical. */
 export const MOBILE_MEDIA = "(max-width: 760px)";
 
+/** El complemento de `MOBILE_MEDIA`: donde el póster del hero es el LCP. */
+const DESKTOP_MEDIA = "(min-width: 761px)";
+
 /** El montaje de la portada: diez tomas de dos segundos con corte seco. */
 export const HOME_HERO_VIDEO = {
   poster: "/media/hero-poster.jpg",
@@ -67,9 +70,16 @@ function pickSources(sources: readonly HeroVideoSource[]) {
  *
  * El póster no va en el atributo `poster`, que admite una sola URL: va en un
  * `<picture>` detrás del video, en AVIF y WebP a tres anchos, con el JPEG de
- * 1920 como respaldo. Es el elemento más grande del primer pintado, así que
- * se precarga y pide prioridad alta. `poster` es la ruta del JPEG; las demás
- * variantes salen de ella por nombre (`scripts/hero-posters.mjs`).
+ * 1920 como respaldo. `poster` es la ruta del JPEG; las demás variantes salen
+ * de ella por nombre (`scripts/hero-posters.mjs`).
+ *
+ * La prioridad depende de la pantalla. En escritorio el hero mide menos que la
+ * ventana y el póster es el elemento del LCP: se precarga con prioridad alta
+ * (la precarga lleva `media`, así que sólo existe ahí). En un teléfono el hero
+ * ocupa la ventana entera y Chrome no cuenta como LCP una imagen de ese tamaño
+ * —lo es el logo del encabezado—; con prioridad alta el póster sólo le quitaba
+ * ancho de banda al logo, a la fuente y al JavaScript, así que ahí se pide con
+ * prioridad baja. Se ve igual: cambia el orden de la red, no el pintado.
  *
  * Con `lazy` (una banda a mitad de página) nada de eso: el póster carga
  * perezoso, el video no pide ni sus metadatos (`preload="none"`) hasta que la
@@ -95,7 +105,14 @@ export function HeroVideo({
   const [active, setActive] = useState<readonly HeroVideoSource[] | null>(null);
   const avif = posterSrcSet(poster, "avif");
   if (!lazy) {
-    preload(poster, { as: "image", type: "image/avif", imageSrcSet: avif, imageSizes: "100vw", fetchPriority: "high" });
+    preload(poster, {
+      as: "image",
+      type: "image/avif",
+      imageSrcSet: avif,
+      imageSizes: "100vw",
+      fetchPriority: "high",
+      media: DESKTOP_MEDIA,
+    });
   }
 
   const sourceKey = sources.map((source) => source.src).join("|");
@@ -149,7 +166,8 @@ export function HeroVideo({
           alt=""
           width={1920}
           height={1080}
-          fetchPriority={lazy ? "low" : "high"}
+          // Baja también arriba del pliegue: en escritorio manda la precarga.
+          fetchPriority="low"
           loading={lazy ? "lazy" : undefined}
           decoding="async"
         />

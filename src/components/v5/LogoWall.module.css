@@ -183,6 +183,22 @@
     opacity 200ms ease;
 }
 
+/*
+ * Los logotipos no se piden antes de hidratar. El muro empieza justo debajo
+ * del pliegue y sus 27 imágenes perezosas caen dentro del margen con el que
+ * el navegador adelanta la carga: se pedían en el mismo instante del primer
+ * pintado y competían por las conexiones con los chunks de JavaScript, y el
+ * LCP (el logo del encabezado) se medía después de todo eso. Con la imagen en
+ * `display: none` el navegador no la pide; `Reveal` marca
+ * `html[data-motion-ready]` al montar y entonces entran. Sin JavaScript
+ * `data-motion` nunca existe y nada se oculta; si `Reveal` no monta, el script
+ * del layout retira `data-motion` a los 2,6 s. La celda tiene alto fijo y el
+ * logo va centrado en ella: ocultarlo no mueve nada.
+ */
+:global(html[data-motion]:not([data-motion-ready])) .logoCell img {
+  display: none;
+}
+
 .logoProof {
   position: absolute;
   inset: 0.35rem;
