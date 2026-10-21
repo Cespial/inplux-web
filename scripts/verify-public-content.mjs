@@ -186,6 +186,12 @@ const approvedLogoFiles = new Set([
 ]);
 
 const forbiddenPublicAssets = [
+  // La tarjeta v3 («fábrica de software a la medida», serif itálica), retirada
+  // en el PR N (20-oct-2026). Las redes la guardan por URL: no puede volver.
+  "public/brand/og/og-default.png",
+  "public/brand/og/og-default.svg",
+  "public/brand/og/og-nosotros.png",
+  "public/brand/og/og-nosotros.svg",
   "public/brand/og/og-sector-publico.png",
   "public/brand/og/og-sector-publico.svg",
   "public/brand/og/og-tribai.png",

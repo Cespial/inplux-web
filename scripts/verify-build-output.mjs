@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
@@ -1315,6 +1315,104 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
   if (definition.deck) verifyDeckShape(name, html, definition.deck);
 }
 
+/**
+ * Guardia de las tarjetas para compartir (PR N, 20-oct-2026), sobre TODAS las
+ * páginas construidas y no solo las de `pageDefinitions`: el deck, /marca o
+ * una ruta nueva heredan la tarjeta del layout y nadie las da de alta aquí.
+ *
+ * Falla si una página sirve en `og:image` o `twitter:image`:
+ * - algo que no sea un JPEG de `scripts/og-cards.mjs` (`/brand/og/og-*.jpg`)
+ *   ni la ruta de satori de las fichas (`/api/og/trabajo/<clave>`): así no
+ *   vuelve la tarjeta PNG de la v3;
+ * - una tarjeta que ya no existe en `public/` (o una ficha sin su captura);
+ * - un JPEG de más de 300 KB, que WhatsApp descarta o tarda en pintar.
+ */
+const maxSocialCardBytes = 300_000;
+
+async function collectBuiltPages(directory, prefix = "") {
+  const entries = await readdir(path.join(root, directory, prefix), { withFileTypes: true });
+  const pages = [];
+  for (const entry of entries) {
+    const relative = path.join(prefix, entry.name);
+    if (entry.isDirectory()) {
+      pages.push(...(await collectBuiltPages(directory, relative)));
+    } else if (entry.name.endsWith(".html") && !entry.name.startsWith("_")) {
+      pages.push(relative);
+    }
+  }
+  return pages;
+}
+
+async function fileSize(relativePath) {
+  try {
+    return (await stat(path.join(root, relativePath))).size;
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+async function verifySharedImages() {
+  const pages = await collectBuiltPages(".next/server/app");
+  const workKeys = new Set(["directorio", ...workProfiles.map((profile) => profile.slug)]);
+
+  for (const page of pages) {
+    const html = await readFile(path.join(root, ".next/server/app", page), "utf8");
+    const images = [
+      ["og:image", metaContent(html, "property", "og:image")],
+      ["twitter:image", metaContent(html, "name", "twitter:image")],
+    ];
+
+    for (const [tag, url] of images) {
+      if (!url) {
+        errors.push(`${page}: no declara ${tag}; heredaría la vista previa que arme cada red`);
+        continue;
+      }
+      const pathname = url.startsWith(siteUrl) ? new URL(url).pathname : url;
+      const card = pathname.match(/^\/brand\/og\/(og-[a-z0-9-]+\.jpg)$/);
+      const work = pathname.match(/^\/api\/og\/trabajo\/([a-z0-9-]+)$/);
+
+      if (card) {
+        const size = await fileSize(`public/brand/og/${card[1]}`);
+        if (size === null) {
+          errors.push(`${page}: ${tag} apunta a ${pathname}, que no existe en public/`);
+        } else if (size > maxSocialCardBytes) {
+          errors.push(
+            `${page}: ${tag} ${pathname} pesa ${Math.round(size / 1024)} KB; el límite es ${maxSocialCardBytes / 1000} KB`,
+          );
+        }
+      } else if (work) {
+        if (!workKeys.has(work[1])) {
+          errors.push(`${page}: ${tag} pide la ficha ${work[1]}, que no existe`);
+        } else if (
+          work[1] !== "directorio" &&
+          (await fileSize(`public/brand/og/mockups/${work[1]}.png`)) === null
+        ) {
+          errors.push(
+            `${page}: ${tag} pide la ficha ${work[1]} y falta su captura public/brand/og/mockups/${work[1]}.png`,
+          );
+        }
+      } else {
+        errors.push(
+          `${page}: ${tag} sirve ${url}; solo valen los JPEG de og-cards (/brand/og/og-*.jpg) y /api/og/trabajo`,
+        );
+      }
+    }
+  }
+
+  // Ningún JPEG de tarjeta en public/ pasa del límite, lo use hoy una página o no.
+  for (const entry of await readdir(path.join(root, "public/brand/og"))) {
+    if (!/^og-.*\.jpg$/.test(entry)) continue;
+    const size = await fileSize(`public/brand/og/${entry}`);
+    if (size > maxSocialCardBytes) {
+      errors.push(
+        `public/brand/og/${entry} pesa ${Math.round(size / 1024)} KB; el límite es ${maxSocialCardBytes / 1000} KB`,
+      );
+    }
+  }
+}
+
+await verifySharedImages();
 await verifyGeneratedRoutes();
 
 // ── Verificación de Search Console ──────────────────────────────────────────
@@ -1342,6 +1440,6 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    "Salida final aprobada: metadata, social cards, estructura, contacto, JSON-LD, atribución, pie de productos, sitemap y manifest.",
+    "Salida final aprobada: metadata, social cards (y sus imágenes), estructura, contacto, JSON-LD, atribución, pie de productos, sitemap y manifest.",
   );
 }
