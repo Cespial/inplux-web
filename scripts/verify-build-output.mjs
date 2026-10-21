@@ -1793,16 +1793,7 @@ async function verifyHomeShape() {
       );
     }
 
-    const at = (id) => main.indexOf(`id="${id}"`);
-    const stats = at("casos");
-    expect(
-      stats > at("auditoria") && stats < at("prensa"),
-      `${name}: las cifras con fuente (#casos) van dentro de la evidencia (#auditoria)`,
-    );
-    expect(
-      !(stats > at("latinoamerica") && stats < at("sectores")),
-      `${name}: la banda de tesis (#latinoamerica) va sin cifras`,
-    );
+    expect(!main.includes('id="casos"'), `${name}: la portada va sin la fila de cifras (#casos)`);
 
     const words = countWords(html);
     expect(words <= maxHomeWords, `${name}: <main> tiene ${words} palabras; el tope es ${maxHomeWords}`);
