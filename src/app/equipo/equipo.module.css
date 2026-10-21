@@ -1,6 +1,7 @@
 /*
  * /equipo sobre las primitivas v5: las tarjetas de dirección (mismo dibujo que
- * la sección de equipo de la portada) y la fila de instituciones.
+ * la sección de equipo de la portada), las del equipo (el mismo dibujo, en
+ * tres columnas y más pequeño) y la fila de instituciones.
  */
 
 .root {
@@ -104,6 +105,32 @@
   text-decoration: none;
 }
 
+/* ------------------------------------------------------------------ equipo */
+
+/* Continúa la banda clara de dirección: sin el colchón superior completo. */
+.root .crewBand {
+  padding-top: clamp(1rem, 3vw, 2.5rem);
+}
+
+.crew {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.crewPerson .caption {
+  padding: 2.5rem 1rem 0.95rem;
+}
+
+.crewPerson .caption strong {
+  font-size: var(--step-5);
+}
+
+.crewPerson > p {
+  font-size: var(--step-8);
+}
+
 /* --------------------------------------------------------------- formación */
 
 .schoolList {
@@ -123,7 +150,8 @@
 }
 
 @media (max-width: 760px) {
-  .people {
+  .people,
+  .crew {
     grid-template-columns: 1fr;
   }
 
