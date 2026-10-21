@@ -1,7 +1,7 @@
 /**
  * Tarjetas sociales (1200 × 630) de las páginas con imagen propia: los cuatro
- * sectores, `/como-trabajamos`, `/prensa`, `/contacto`, `/seguridad`, `/marca`
- * y cada perfil de `/equipo`. Se pintan una vez con Chromium —la foto o el
+ * sectores, `/como-trabajamos`, `/prensa`, `/contacto`, `/seguridad`, `/marca`,
+ * cada perfil de `/equipo` y los pares ingleses (`og-en-*`, al inicio). Se pintan una vez con Chromium —la foto o el
  * póster del hero a sangre (o el retrato a la derecha, en los perfiles; o solo
  * el fondo de marca, donde la página no tiene foto), Rethink Sans y la marca—
  * y se guardan como JPEG en `public/brand/og/`. No hay ruta dinámica: la tarjeta cambia cuando cambia la
@@ -34,6 +34,71 @@ const fonts = {
 };
 
 const cards = [
+  // El sitio en inglés (PR M). Mismo texto que el título y el lead de cada
+  // página en `src/content/*.en.ts`; los nombres de producto no se traducen.
+  {
+    file: "og-en-sector-public-sector.jpg",
+    image: "public/sectores/sector-publico.webp",
+    eyebrow: "SECTOR",
+    title: "Public sector",
+    lead: "AI for municipal finance, procurement and performance tracking.",
+    focus: "60% center",
+  },
+  {
+    file: "og-en-sector-health.jpg",
+    image: "public/sectores/sector-salud.webp",
+    eyebrow: "SECTOR",
+    title: "Health",
+    lead: "AI for patients, remote monitoring and clinical records.",
+    focus: "60% center",
+  },
+  {
+    file: "og-en-sector-legal-tax.jpg",
+    image: "public/sectores/sector-legal-tributario.webp",
+    eyebrow: "SECTOR",
+    title: "Legal and tax",
+    lead: "AI for legal research, validity and case law.",
+    focus: "60% center",
+  },
+  {
+    file: "og-en-sector-business.jpg",
+    image: "public/sectores/sector-empresas.webp",
+    eyebrow: "SECTOR",
+    title: "Business",
+    lead: "AI for operations, data and digital products.",
+    focus: "60% center",
+  },
+  {
+    file: "og-en-how-we-work.jpg",
+    image: "public/media/como-poster.jpg",
+    eyebrow: "HOW WE WORK",
+    title: "From diagnosis to operation",
+    lead: "Four phases with a deliverable, on the systems you already run.",
+    focus: "center",
+  },
+  {
+    file: "og-en-about.jpg",
+    image: "public/media/nosotros-poster-1920.webp",
+    eyebrow: "ABOUT",
+    title: "The judgment behind the factory",
+    lead: "Track record, principles and people. Engineering in Medellín.",
+    focus: "center",
+  },
+  {
+    file: "og-en-contact.jpg",
+    image: "public/media/nosotros-poster-1920.webp",
+    eyebrow: "CONTACT",
+    title: "Let's start with the problem",
+    lead: "You don't need to arrive with requirements or a defined scope.",
+    focus: "center",
+  },
+  {
+    file: "og-en-security.jpg",
+    image: null,
+    eyebrow: "SECURITY",
+    title: "How we look after data",
+    lead: "Encryption, role-based access and data separated by client.",
+  },
   {
     file: "og-sector-publico.jpg",
     image: "public/sectores/sector-publico.webp",
