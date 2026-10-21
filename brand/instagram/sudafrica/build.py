@@ -45,6 +45,10 @@ body{{font-family:"Rethink Sans",sans-serif;color:{IVORY};-webkit-font-smoothing
 .capa{{position:absolute;inset:0;display:flex;flex-direction:column}}
 .titular{{font-weight:500;letter-spacing:-.025em;line-height:1.02}}
 .titular .gris{{color:{MUTED}}}
+/* Franjas de la bandera de Sudáfrica dentro de las letras: rojo, filete blanco, verde, filete blanco, azul.
+   El azul (#001489) se aclara un poco porque sobre el negro no se lee. */
+.za{{background:linear-gradient(180deg,#E03C31 0 47%,#f6f2ec 47% 51%,#007749 51% 64%,#f6f2ec 64% 68%,#2f5fd0 68% 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}}
 .micro{{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:{MUTED};font-weight:500}}
 .wordmark{{height:24px;display:block}}
 .pill{{display:inline-flex;align-items:center;gap:14px;border-radius:999px;white-space:nowrap}}
@@ -97,7 +101,7 @@ def portada():
     velo = (f"linear-gradient(180deg,{BLACK} 0%,rgba(12,12,11,.9) 34%,rgba(12,12,11,.45) 70%,rgba(12,12,11,.6) 100%)")
     return head(1080, 1350) + fondo("69b6cfce_1.jpg", velo) + f"""
 <div class="capa" style="padding:150px 84px 0">
-  <h1 class="titular" style="font-size:88px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en Sudáfrica.</h1>
+  <h1 class="titular" style="font-size:88px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en <span class="za">Sudáfrica</span>.</h1>
   <div style="margin-top:84px">{diagrama(860)}</div>
 </div>{marcas_borde(84, arriba="→ Proyecto")}</div></body></html>"""
 

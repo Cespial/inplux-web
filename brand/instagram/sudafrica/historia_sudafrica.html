@@ -11,6 +11,10 @@ body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:
 .capa{position:absolute;inset:0;display:flex;flex-direction:column}
 .titular{font-weight:500;letter-spacing:-.025em;line-height:1.02}
 .titular .gris{color:#a39d94}
+/* Franjas de la bandera de Sudáfrica dentro de las letras: rojo, filete blanco, verde, filete blanco, azul.
+   El azul (#001489) se aclara un poco porque sobre el negro no se lee. */
+.za{background:linear-gradient(180deg,#E03C31 0 47%,#f6f2ec 47% 51%,#007749 51% 64%,#f6f2ec 64% 68%,#2f5fd0 68% 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
 .micro{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
 .wordmark{height:24px;display:block}
 .pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;white-space:nowrap}
