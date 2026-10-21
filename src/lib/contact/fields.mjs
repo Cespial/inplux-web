@@ -40,7 +40,7 @@ export const LIMITS = Object.freeze({
 /** Ventana válida de la marca de tiempo, en milisegundos. */
 export const TOKEN_WINDOW = Object.freeze({
   minAgeMs: 3_000,
-  maxAgeMs: 24 * 60 * 60 * 1000,
+  maxAgeMs: 2 * 60 * 60 * 1000,
 });
 
 /** Cookie que pone `src/proxy.ts` en `/contacto` para el envío sin JS. */

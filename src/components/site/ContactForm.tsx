@@ -25,8 +25,8 @@ import {
  */
 
 const contactEmail = "gerencia@inplux.co";
-/** Una marca más vieja que esto se renueva antes de enviar. */
-const tokenRefreshMs = 6 * 60 * 60 * 1000;
+/** Una marca más vieja que esto se renueva antes de enviar (vence a las 2 h). */
+const tokenRefreshMs = 60 * 60 * 1000;
 /** Margen sobre el mínimo del servidor para que una persona nunca caiga en él. */
 const minWaitMs = TOKEN_WINDOW.minAgeMs + 300;
 
@@ -195,6 +195,9 @@ export function ContactForm({
       const result = (await response.json().catch(() => null)) as
         | { ok?: boolean; error?: string }
         | null;
+      // Cada marca vale para un envío: salvo un 400 (datos por corregir), el
+      // servidor ya la gastó y el próximo intento pide una nueva.
+      if (response.status !== 400) tokenRef.current = null;
 
       if (response.ok && result?.ok) {
         form.reset();

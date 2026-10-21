@@ -1,6 +1,7 @@
 import { FIELD, LIMITS, NO_JS_TARGET, TOKEN_COOKIE } from "@/lib/contact/fields.mjs";
 import { processSubmission } from "@/lib/contact/process.mjs";
 import { clientIp, createRateLimiter } from "@/lib/contact/rate-limit.mjs";
+import { createNonceStore } from "@/lib/contact/token.mjs";
 
 /*
  * POST /api/contacto: recibe el formulario y lo envía por Resend.
@@ -15,8 +16,10 @@ import { clientIp, createRateLimiter } from "@/lib/contact/rate-limit.mjs";
 
 export const dynamic = "force-dynamic";
 
-// Por instancia: ver el comentario en `src/lib/contact/rate-limit.mjs`.
+// Por instancia: ver los comentarios en `src/lib/contact/rate-limit.mjs` y
+// `createNonceStore` en `src/lib/contact/token.mjs`.
 const limiter = createRateLimiter();
+const nonces = createNonceStore();
 
 const JSON_TYPE = "application/json";
 const FORM_TYPES = ["application/x-www-form-urlencoded", "multipart/form-data"];
@@ -134,6 +137,7 @@ export async function POST(request: Request) {
     ip: clientIp(request.headers),
     env: process.env,
     limiter,
+    nonces,
     fetchImpl: fetch,
   });
 

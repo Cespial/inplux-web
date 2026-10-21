@@ -8,8 +8,10 @@ import { sanitizePage, validateContact } from "./validate.mjs";
  * petición y traduce el resultado. Así las pruebas ejercitan cada camino sin
  * levantar Next ni llamar a Resend.
  *
- * Orden: trampa → límite por IP → secreto → marca de tiempo → validación →
- * clave de Resend → envío. Los rechazos antibot responden `{ ok: true }` sin
+ * Orden: trampa → límite por IP → secreto → marca de tiempo → nonce ya
+ * gastado → validación → (se gasta el nonce) → clave de Resend → envío. El
+ * nonce se gasta solo si los datos validan: un 400 deja corregir y reenviar
+ * con la misma marca. Los rechazos antibot responden `{ ok: true }` sin
  * enviar: al bot no se le dice qué lo delató.
  */
 
@@ -30,6 +32,7 @@ const fail = (status, error) => ({ status, body: { ok: false, error }, outcome: 
  *   ip: string,
  *   env: Record<string, string | undefined>,
  *   limiter: { hit(key: string, now?: number): boolean },
+ *   nonces: { has(nonce: string, now?: number): boolean, add(nonce: string, now?: number): void },
  *   fetchImpl: FetchLike,
  *   now?: number,
  *   log?: (message: string) => void,
@@ -42,6 +45,7 @@ export async function processSubmission({
   ip,
   env,
   limiter,
+  nonces,
   fetchImpl,
   now = Date.now(),
   log = (message) => console.warn(message),
@@ -67,6 +71,10 @@ export async function processSubmission({
     log(`[contacto] descartado: marca de tiempo (${check.reason})`);
     return silent(`token_${check.reason}`);
   }
+  if (nonces.has(check.nonce, now)) {
+    log("[contacto] descartado: marca de tiempo ya usada");
+    return silent("token_reused");
+  }
 
   const validation = validateContact({
     name: fields[FIELD.name],
@@ -76,6 +84,7 @@ export async function processSubmission({
     message: fields[FIELD.message],
   });
   if (!validation.ok) return fail(400, validation.error);
+  nonces.add(check.nonce, now);
 
   const config = resolveMailConfig(env);
   if (!config.apiKey) return fail(503, "not_configured");

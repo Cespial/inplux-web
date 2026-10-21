@@ -4,7 +4,7 @@ import { buildEmail, escapeHtml, formatBogota, resolveMailConfig } from "../src/
 import { FIELD, LIMITS, TOKEN_WINDOW } from "../src/lib/contact/fields.mjs";
 import { processSubmission } from "../src/lib/contact/process.mjs";
 import { clientIp, createRateLimiter } from "../src/lib/contact/rate-limit.mjs";
-import { issueToken, resolveSecret, verifyToken } from "../src/lib/contact/token.mjs";
+import { createNonceStore, issueToken, resolveSecret, verifyToken } from "../src/lib/contact/token.mjs";
 import { countUrls, sanitizePage, validateContact } from "../src/lib/contact/validate.mjs";
 
 /**
@@ -26,7 +26,7 @@ const valid = {
   [FIELD.page]: "/contacto",
 };
 
-function harness({ env = ENV, fields = {}, ip = "203.0.113.7", now = NOW, limiter, status = 200 } = {}) {
+function harness({ env = ENV, fields = {}, ip = "203.0.113.7", now = NOW, limiter, nonces, status = 200 } = {}) {
   const calls = [];
   const logs = [];
   const fetchImpl = async (url, init) => {
@@ -39,6 +39,7 @@ function harness({ env = ENV, fields = {}, ip = "203.0.113.7", now = NOW, limite
       ip,
       env,
       limiter: limiter ?? createRateLimiter(),
+      nonces: nonces ?? createNonceStore(),
       fetchImpl,
       now,
       log: (message) => logs.push(message),
@@ -88,12 +89,63 @@ test("menos de 3 s desde la marca: silencio, sin enviar", async () => {
   assert.equal(calls.length, 0);
 });
 
-test("marca de más de 24 h: silencio", async () => {
+test("marca de más de 2 h: silencio", async () => {
   const { run, calls } = harness({
     fields: { [FIELD.token]: issueToken(SECRET, NOW - TOKEN_WINDOW.maxAgeMs - 1) },
   });
   assert.equal((await run()).outcome, "token_expired");
   assert.equal(calls.length, 0);
+});
+
+test("la ventana de la marca es de 2 h", () => {
+  assert.equal(TOKEN_WINDOW.maxAgeMs, 2 * 60 * 60 * 1000);
+  const token = issueToken(SECRET, NOW);
+  assert.equal(verifyToken(SECRET, token, NOW + 2 * 60 * 60 * 1000 - 1).ok, true);
+  assert.deepEqual(verifyToken(SECRET, token, NOW + 2 * 60 * 60 * 1000 + 1), {
+    ok: false,
+    reason: "expired",
+  });
+});
+
+test("token reutilizado: el segundo envío con la misma marca se descarta en silencio", async () => {
+  const nonces = createNonceStore();
+  const token = issueToken(SECRET, NOW - 10_000);
+  const first = harness({ nonces, fields: { [FIELD.token]: token } });
+  assert.equal((await first.run()).outcome, "sent");
+  const second = harness({ nonces, ip: "198.51.100.77", fields: { [FIELD.token]: token } });
+  const result = await second.run();
+  assert.deepEqual(result.body, { ok: true });
+  assert.equal(result.outcome, "token_reused");
+  assert.equal(second.calls.length, 0);
+  assert.equal(second.logs.length, 1);
+  assert.doesNotMatch(second.logs[0], /ana@example\.com|Ana/);
+});
+
+test("un 400 no gasta la marca: la persona corrige y reenvía", async () => {
+  const nonces = createNonceStore();
+  const token = issueToken(SECRET, NOW - 10_000);
+  const bad = harness({ nonces, fields: { [FIELD.token]: token, [FIELD.email]: "sin-arroba" } });
+  assert.equal((await bad.run()).status, 400);
+  const fixed = harness({ nonces, fields: { [FIELD.token]: token } });
+  assert.equal((await fixed.run()).outcome, "sent");
+});
+
+test("nonce alterado: firma inválida", () => {
+  const token = issueToken(SECRET, NOW - 10_000, "AAAAAAAAAAAAAAAAAAAAAA");
+  const [issuedAt, , signature] = token.split(".");
+  const altered = `${issuedAt}.BBBBBBBBBBBBBBBBBBBBBB.${signature}`;
+  assert.deepEqual(verifyToken(SECRET, altered, NOW), { ok: false, reason: "signature" });
+  assert.equal(verifyToken(SECRET, token, NOW).ok, true);
+  const nonces = [issueToken(SECRET), issueToken(SECRET)].map((value) => value.split(".")[1]);
+  assert.notEqual(nonces[0], nonces[1], "cada marca trae su propio nonce");
+});
+
+test("el registro de nonces caduca con la ventana", () => {
+  const store = createNonceStore();
+  store.add("n1", NOW);
+  assert.equal(store.has("n1", NOW + 1_000), true);
+  assert.equal(store.has("n1", NOW + TOKEN_WINDOW.maxAgeMs + 61_000), false);
+  assert.equal(store.size(), 0);
 });
 
 test("firma inválida o ausente: silencio", async () => {
@@ -117,6 +169,7 @@ test("sin JS: la marca llega por cookie si el cuerpo no la trae", async () => {
     ip: "203.0.113.9",
     env: ENV,
     limiter: createRateLimiter(),
+    nonces: createNonceStore(),
     fetchImpl: async (url, init) => {
       calls.push(init);
       return { ok: true, status: 200 };

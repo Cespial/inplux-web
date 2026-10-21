@@ -81,7 +81,7 @@ El formulario de `/contacto` y del diálogo de contacto envía a `POST /api/cont
 | `CONTACT_FORM_SECRET` | No | Firma la marca de tiempo antibots. Si falta, se deriva de `RESEND_API_KEY`. |
 | `RESEND_API_URL` | No | Solo para pruebas locales (un servidor que registra el cuerpo). Por defecto la API real; no se define en Vercel. |
 
-Antibots, sin servicios externos: campo trampa, marca de tiempo firmada (mínimo 3 s, máximo 24 h) y límite por IP (5 cada 10 min, 20 por día). El límite vive en memoria **por instancia**; para un límite global hace falta una regla de Vercel Firewall sobre `POST /api/contacto`. La lógica pura está en `src/lib/contact/` y la prueba `npm run test:contact`.
+Antibots, sin servicios externos: campo trampa, marca de tiempo firmada con nonce de un solo uso (mínimo 3 s, máximo 2 h) y límite por IP (5 cada 10 min, 20 por día). El límite y el registro de nonces gastados viven en memoria **por instancia**; para un límite global hace falta una regla de Vercel Firewall sobre `POST /api/contacto`. La lógica pura está en `src/lib/contact/` y la prueba `npm run test:contact`.
 
 ## Licencia
 
