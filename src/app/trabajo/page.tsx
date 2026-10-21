@@ -1,36 +1,21 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
+import { WorkIndexView } from "@/components/pages/WorkIndexView";
 import { ContactDialogProvider } from "@/components/site/ContactDialog";
-import { ContactLink } from "@/components/site/ContactLink";
-import {
-  Band,
-  Button,
-  Card,
-  CardGrid,
-  Chip,
-  CloseBand,
-  MailRow,
-  Placeholder,
-  buttonClass,
-  statusTone,
-  v5,
-} from "@/components/v5/primitives";
-import { PageHero } from "@/components/v5/PageHero";
 import { V5Page } from "@/components/v5/V5Page";
 import { portfolio } from "@/content/home";
+import { languageAlternates } from "@/content/i18n";
+import { workIndexUi } from "@/content/page-ui";
 import { workProfiles, type WorkSlug } from "@/content/work";
-import { getWorkSocialImageUrl } from "@/app/api/og/trabajo/social-card";
 import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
-import styles from "./trabajo.module.css";
 
-const pageTitle = "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia";
-const pageDescription =
-  "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con sus fuentes públicas y la fecha en que las revisamos.";
+const ui = workIndexUi.es;
+
+const pageTitle = ui.pageTitle;
+const pageDescription = ui.pageDescription;
 const workSocialImage = getWorkSocialImageUrl("directorio");
-const workSocialDescription =
-  "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.";
-const workSocialImageAlt =
-  "INPLUX, directorio de trabajo y productos con fuentes verificadas";
+const workSocialDescription = ui.socialDescription;
+const workSocialImageAlt = ui.socialImageAlt;
 
 // El orden editorial: Tribai abre porque es el producto público más usado y
 // cierra Porkia, el perfil más nuevo. No es el orden de `work.ts`.
@@ -39,13 +24,21 @@ const products = order.flatMap((slug) => {
   const profile = workProfiles.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
 });
-const inDevelopment = portfolio.filter((item) => item.stage === "En desarrollo");
+const inDevelopment = portfolio
+  .filter((item) => item.stage === "En desarrollo")
+  .map((item) => ({
+    name: item.name,
+    category: item.category,
+    stage: item.stage ?? "",
+    description: item.description,
+  }));
 
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
   alternates: {
     canonical: "https://inplux.co/trabajo",
+    languages: languageAlternates("/trabajo"),
   },
   openGraph: {
     title: `${pageTitle} | INPLUX`,
@@ -64,7 +57,7 @@ export const metadata: Metadata = {
   },
 };
 
-const crumbs: Crumb[] = [{ label: "Inicio", href: "/" }, { label: "Productos" }];
+const crumbs: Crumb[] = [{ label: ui.home, href: "/" }, { label: ui.crumb }];
 
 const workJsonLd = {
   "@context": "https://schema.org",
@@ -97,97 +90,16 @@ export default function TrabajoPage() {
       <ContactDialogProvider>
         <V5Page>
           <main id="main-content" tabIndex={-1}>
-            <PageHero
-              id="inicio"
-              eyebrow="Productos propios"
+            <WorkIndexView
+              lang="es"
+              profiles={products}
+              inDevelopment={inDevelopment}
               crumbs={crumbs}
-              title="Cinco productos construidos y operados por INPLUX."
-              lead="Cada uno nació de un problema de un cliente y hoy funciona por su cuenta."
-              leadMuted="Lo que ves abajo sale de sus páginas públicas, con la fecha en que lo revisamos."
-              actions={
-                <>
-                  <Button href="#p-tribai" variant="primary">
-                    Ver los productos
-                  </Button>
-                  <Button href="#contacto" variant="ghost">
-                    Empezar un proyecto <span aria-hidden="true">↓</span>
-                  </Button>
-                </>
-              }
+              basePath="/trabajo"
+              contactHref="/contacto"
+              contactSource="work-closing"
+              aboutHref="/nosotros"
             />
-
-            <Band id="productos" labelledBy="products-statement" className={styles.statement}>
-              <p className={styles.statementText} id="products-statement">
-                Cada producto, con su <em>fuente</em> y su estado a la vista.
-              </p>
-
-              {/* Un índice: nombre, una línea y el enlace. El detalle vive en cada ficha. */}
-              <ol className={styles.index}>
-                {products.map((profile) => (
-                  <li key={profile.slug} id={`p-${profile.slug}`} className={styles.row}>
-                    <span className={styles.rowNumber} aria-hidden="true">{profile.number}</span>
-                    <div className={styles.rowBody}>
-                      <p className={v5.kicker}>
-                        {profile.category}{" "}
-                        <Chip dot tone={statusTone(profile.status.label)}>
-                          {profile.status.label}
-                        </Chip>
-                      </p>
-                      <h3 className={styles.rowTitle}>
-                        <Link href={`/trabajo/${profile.slug}`}>{profile.name}</Link>
-                      </h3>
-                      <p className={styles.rowLine}>{profile.shortDescription}</p>
-                    </div>
-                    <Link href={`/trabajo/${profile.slug}`} className={styles.rowLink}>
-                      Ver {profile.name} <span aria-hidden="true">→</span>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-
-              {inDevelopment.length > 0 ? (
-                <>
-                  <p className={`${v5.eyebrow} ${styles.moreTitle}`}>En desarrollo</p>
-                  <CardGrid className={styles.devGrid}>
-                    {inDevelopment.map((item) => (
-                      <Card
-                        key={item.name}
-                        id={`p-${item.name.toLowerCase()}`}
-                        media={<Placeholder>En desarrollo</Placeholder>}
-                        meta={`${item.category} · ${item.stage}`}
-                        title={item.name}
-                        text={item.description}
-                      />
-                    ))}
-                  </CardGrid>
-                </>
-              ) : null}
-            </Band>
-
-            <CloseBand
-              id="contacto"
-              titleId="closing-title"
-              eyebrow="El siguiente producto"
-              title={
-                <>
-                  Construyamos lo que <em>sigue.</em>
-                </>
-              }
-              lead="Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos."
-            >
-              <MailRow>
-                <ContactLink
-                  className={buttonClass("primary")}
-                  fallbackHref="/contacto"
-                  source="work-closing"
-                >
-                  Empezar un proyecto
-                </ContactLink>
-                <Button href="/nosotros" variant="ghost">
-                  Quiénes somos <span aria-hidden="true">→</span>
-                </Button>
-              </MailRow>
-            </CloseBand>
           </main>
         </V5Page>
       </ContactDialogProvider>

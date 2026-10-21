@@ -13,7 +13,7 @@ export const enSite = {
   footer: homeCopyEn.footer,
   contactDialog: homeCopyEn.contactDialog,
   contactForm: homeCopyEn.contactForm,
-  entityStatement: homeCopyEn.contact.entityStatement,
+  entityStatement: homeCopyEn.contact.entityStatement ?? undefined,
   locations: homeCopyEn.footer.locations,
   contactCta: homeCopyEn.contact.cta,
   crumbsLabel: "Breadcrumb",

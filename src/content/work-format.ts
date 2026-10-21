@@ -40,10 +40,48 @@ const monthLabels = [
  * la fecha un día. Si la cadena no tiene la forma esperada devuelve el original,
  * que sigue siendo una fecha legible.
  */
-export function formatShortDate(isoDate: string) {
+export function formatShortDate(isoDate: string, lang: "es" | "en" = "es") {
   const [year, month, day] = isoDate.split("-");
-  const monthLabel = monthLabels[Number(month) - 1];
+  const monthLabel = (lang === "en" ? monthLabelsEn : monthLabels)[Number(month) - 1];
   return year && monthLabel && day ? `${day} ${monthLabel} ${year}` : isoDate;
+}
+
+/** Los meses del mismo registro compacto, en inglés: `11 AUG 2026`. */
+const monthLabelsEn = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+] as const;
+
+const monthNamesEn = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+/** `2026-08-11` → `August 11, 2026`, para la prosa inglesa. Misma regla: nunca un `Date`. */
+export function formatLongDateEn(isoDate: string) {
+  const [year, month, day] = isoDate.split("-");
+  const monthName = monthNamesEn[Number(month) - 1];
+  return year && monthName && day ? `${monthName} ${Number(day)}, ${year}` : isoDate;
 }
 
 /**
@@ -66,6 +104,14 @@ export function verificationDateFor(
   sources: readonly WorkSource[],
   url: string,
 ) {
+  return formatShortDate(verifiedAtFor(sources, url));
+}
+
+/** La fecha ISO de esa misma verificación, para quien la formatea en otro idioma. */
+export function verifiedAtFor(
+  sources: readonly WorkSource[],
+  url: string,
+) {
   const matched = sources.find((source) => source.url === url);
 
   if (!matched) {
@@ -75,5 +121,5 @@ export function verificationDateFor(
     );
   }
 
-  return formatShortDate(matched.verifiedAt);
+  return matched.verifiedAt;
 }

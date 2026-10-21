@@ -1,12 +1,15 @@
 "use client";
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
+import type { Lang } from "@/content/i18n";
+import { productComponentsUi } from "@/content/page-ui";
 import type { WorkProfile } from "@/content/work";
 import { WorkPreview } from "./WorkPreview";
 import styles from "./workVisuals.module.css";
 
 type ProductInterfaceProps = {
   profile: WorkProfile;
+  lang?: Lang;
 };
 
 type InterfaceMode = "interface" | "evidence";
@@ -16,7 +19,8 @@ const interfaceModes = [
   "evidence",
 ] as const satisfies readonly InterfaceMode[];
 
-export function ProductInterface({ profile }: ProductInterfaceProps) {
+export function ProductInterface({ profile, lang = "es" }: ProductInterfaceProps) {
+  const ui = productComponentsUi[lang];
   const [mode, setMode] = useState<InterfaceMode>("interface");
   const tabsetId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -78,7 +82,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
         <div
           className={styles.modeSwitch}
           role="tablist"
-          aria-label={`Vista demostrativa de ${profile.name}`}
+          aria-label={ui.demoTabsLabel(profile.name)}
           aria-orientation="horizontal"
         >
           <button
@@ -94,7 +98,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
             onClick={() => setMode("interface")}
             onKeyDown={(event) => handleTabKeyDown(event, "interface")}
           >
-            Interfaz
+            {ui.interfaceTab}
           </button>
           <button
             ref={(element) => {
@@ -109,7 +113,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
             onClick={() => setMode("evidence")}
             onKeyDown={(event) => handleTabKeyDown(event, "evidence")}
           >
-            Evidencia
+            {ui.evidenceTab}
           </button>
         </div>
       </div>
@@ -125,7 +129,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
           hidden={mode !== "interface"}
           inert={mode !== "interface"}
         >
-          <WorkPreview profile={profile} />
+          <WorkPreview profile={profile} lang={lang} />
         </div>
         <div
           id={evidencePanelId}
@@ -146,7 +150,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
           {mode === "evidence" ? (
             <div className={styles.evidenceWindow}>
               <div className={styles.evidenceHeader}>
-                <span>REGISTRO DE EVIDENCIA</span>
+                <span>{ui.evidenceHeader}</span>
                 {/*
                 El registro cuenta las fuentes que lista debajo, no dictamina
                 sobre la atribución: la autoría la declara INPLUX y ninguna de
@@ -154,11 +158,11 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
               */}
                 <b>
                   {profile.sources.length}{" "}
-                  {profile.sources.length === 1 ? "FUENTE" : "FUENTES"}
+                  {profile.sources.length === 1 ? ui.sourceOne : ui.sourceMany}
                 </b>
               </div>
               <div className={styles.evidenceStatement}>
-                <p>Atribución</p>
+                <p>{ui.attribution}</p>
                 <strong>{profile.attribution.label}</strong>
                 <span>{profile.attribution.statement}</span>
               </div>
@@ -183,8 +187,7 @@ export function ProductInterface({ profile }: ProductInterfaceProps) {
 
       <p className={styles.disclosure}>
         <span aria-hidden="true">●</span>
-        Demostración editorial construida en HTML/CSS. No es una captura del
-        producto.
+        {ui.disclosure}
       </p>
     </div>
   );

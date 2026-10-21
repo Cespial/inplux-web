@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import {
   getWorkSocialCard,
   isWorkSocialKey,
+  socialCardLang,
 } from "../social-card";
 
 export const runtime = "edge";
@@ -38,8 +39,9 @@ export async function GET(
     return new Response("Tarjeta social no disponible", { status: 404 });
   }
 
-  const card = getWorkSocialCard(key);
-  const requestedVersion = new URL(request.url).searchParams.get("v");
+  const searchParams = new URL(request.url).searchParams;
+  const card = getWorkSocialCard(key, socialCardLang(searchParams.get("lang")));
+  const requestedVersion = searchParams.get("v");
   const [regular, medium] = await Promise.all([fontRegular, fontMedium]);
   const accent =
     card.kind === "profile" && card.attributionState === "unconfirmed" ? "#b8aaa0" : teal;
@@ -161,7 +163,9 @@ export async function GET(
               }}
             >
               <span style={{ display: "flex", marginRight: 10 }}>→</span>
-              {card.kind === "profile" ? `${card.category.toUpperCase()} · PRODUCTO PROPIO` : "PRODUCTOS PROPIOS"}
+              {card.kind === "profile"
+                ? `${card.category.toUpperCase()} · ${card.labels.ownProduct}`
+                : card.labels.ownProducts}
             </div>
             <div
               style={{
@@ -213,7 +217,7 @@ export async function GET(
                   marginTop: 12,
                 }}
               >
-                FUENTES PÚBLICAS
+                {card.labels.publicSources}
               </span>
             </div>
           ) : (
@@ -262,7 +266,7 @@ export async function GET(
           }}
         >
           <div style={{ color: accent, display: "flex" }}>{card.attribution.toUpperCase()}</div>
-          <div style={{ display: "flex" }}>INPLUX.CO/TRABAJO · VERIFICADO {card.version}</div>
+          <div style={{ display: "flex" }}>{card.labels.footer(card.version)}</div>
         </div>
       </div>
     ),
