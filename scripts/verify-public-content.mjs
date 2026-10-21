@@ -199,17 +199,15 @@ const forbiddenPublicAssets = [
   "public/inplux-logo.png",
 ];
 
+/*
+ * Las tarjetas que se ven al pegar la portada, /en o /nosotros en WhatsApp,
+ * LinkedIn o X (PR N, 20-oct-2026). JPEG pintados por `scripts/og-cards.mjs`
+ * con la foto a sangre; la fuente editable es el script, no un SVG.
+ */
 const requiredSocialCards = [
-  {
-    png: "public/brand/og/og-default.png",
-    svg: "public/brand/og/og-default.svg",
-    reference: "/brand/og/og-default.png",
-  },
-  {
-    png: "public/brand/og/og-nosotros.png",
-    svg: "public/brand/og/og-nosotros.svg",
-    reference: "/brand/og/og-nosotros.png",
-  },
+  { file: "public/brand/og/og-home.jpg", reference: "/brand/og/og-home.jpg" },
+  { file: "public/brand/og/og-home-en.jpg", reference: "/brand/og/og-home-en.jpg" },
+  { file: "public/brand/og/og-nosotros.jpg", reference: "/brand/og/og-nosotros.jpg" },
 ];
 
 async function exists(relativePath) {
@@ -307,22 +305,37 @@ function verifyBannedExamples() {
   }
 }
 
-async function readPngDimensions(relativePath) {
+/** Ancho y alto de un JPEG, leídos del primer marcador SOF. */
+async function readJpegDimensions(relativePath) {
   const buffer = await readFile(path.join(root, relativePath));
-  const signature = buffer.subarray(0, 8).toString("hex");
-  if (signature !== "89504e470d0a1a0a" || buffer.length < 24) {
-    throw new Error(`${relativePath} no es un PNG válido`);
+  if (buffer.length < 4 || buffer[0] !== 0xff || buffer[1] !== 0xd8) {
+    throw new Error(`${relativePath} no es un JPEG válido`);
   }
 
-  return {
-    width: buffer.readUInt32BE(16),
-    height: buffer.readUInt32BE(20),
-    bytes: buffer.length,
-  };
+  let offset = 2;
+  while (offset + 9 < buffer.length) {
+    if (buffer[offset] !== 0xff) {
+      offset += 1;
+      continue;
+    }
+    const marker = buffer[offset + 1];
+    const isStartOfFrame =
+      marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+    if (isStartOfFrame) {
+      return {
+        width: buffer.readUInt16BE(offset + 7),
+        height: buffer.readUInt16BE(offset + 5),
+        bytes: buffer.length,
+      };
+    }
+    offset += 2 + buffer.readUInt16BE(offset + 2);
+  }
+  throw new Error(`${relativePath} no declara su tamaño (sin marcador SOF)`);
 }
 
 async function verifySocialCards() {
   const metadataFiles = [
+    "src/lib/social-cards.ts",
     "src/app/layout.tsx",
     "src/app/nosotros/page.tsx",
     "src/app/prensa/page.tsx",
@@ -340,26 +353,23 @@ async function verifySocialCards() {
   }
 
   for (const card of requiredSocialCards) {
-    if (!(await exists(card.png))) {
-      errors.push(`${card.png} es obligatorio`);
+    if (!(await exists(card.file))) {
+      errors.push(`${card.file} es obligatorio`);
       continue;
-    }
-    if (!(await exists(card.svg))) {
-      errors.push(`${card.svg} es obligatorio como fuente editable`);
     }
     if (!metadata.includes(card.reference)) {
       errors.push(`${card.reference} no está referenciada en los metadatos`);
     }
 
     try {
-      const dimensions = await readPngDimensions(card.png);
+      const dimensions = await readJpegDimensions(card.file);
       if (dimensions.width !== 1200 || dimensions.height !== 630) {
         errors.push(
-          `${card.png} mide ${dimensions.width}×${dimensions.height}; debe medir 1200×630`,
+          `${card.file} mide ${dimensions.width}×${dimensions.height}; debe medir 1200×630`,
         );
       }
-      if (dimensions.bytes > 300_000) {
-        errors.push(`${card.png} supera el límite editorial de 300 KB`);
+      if (dimensions.bytes > 250_000) {
+        errors.push(`${card.file} supera el límite editorial de 250 KB`);
       }
     } catch (error) {
       errors.push(error.message);

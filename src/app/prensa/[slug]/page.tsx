@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: NotePageProps): Promise<Metad
     url: `/brand/og/og-prensa-${story.slug}.jpg`,
     width: 1200,
     height: 630,
+    type: "image/jpeg",
     alt: story.title,
   };
 
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: NotePageProps): Promise<Metad
       title: `${story.title} | INPLUX`,
       description: story.article.dek,
       url,
-      siteName: "INPLUX S.A.S.",
+      siteName: "INPLUX",
       locale: "es_CO",
       type: "article",
       publishedTime: story.publishedAt,

@@ -16,6 +16,7 @@ import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
 import { V5Page } from "@/components/v5/V5Page";
 import { homeCopyEs } from "@/content/copy/es";
+import { homeOpenGraph } from "@/lib/social-cards";
 
 export const metadata: Metadata = {
   title: "INPLUX | Transformación con IA que llega a producción",
@@ -29,6 +30,8 @@ export const metadata: Metadata = {
       "x-default": "https://inplux.co",
     },
   },
+  // La tarjeta es la del layout; la portada añade su versión en inglés.
+  openGraph: { ...homeOpenGraph, alternateLocale: ["en_US"] },
 };
 
 /*

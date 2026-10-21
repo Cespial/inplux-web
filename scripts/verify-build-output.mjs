@@ -6,8 +6,16 @@ const root = process.cwd();
 const errors = [];
 
 const siteUrl = "https://inplux.co";
-const defaultOgImage = `${siteUrl}/brand/og/og-default.png`;
-const defaultOgImageAlt = "INPLUX, de un problema real a software en producción";
+// Las tarjetas de la portada (PR N, 20-oct-2026): JPEG con foto, pintadas por
+// `scripts/og-cards.mjs`, con nombres nuevos para no heredar la caché de la v3.
+const defaultOgImage = `${siteUrl}/brand/og/og-home.jpg`;
+const defaultOgImageAlt =
+  "Equipo trabajando frente a pantallas en una oficina con vista a las montañas de Medellín";
+const englishOgImage = `${siteUrl}/brand/og/og-home-en.jpg`;
+const englishOgImageAlt =
+  "A team working at their screens in an office overlooking the mountains of Medellín";
+const aboutOgImage = `${siteUrl}/brand/og/og-nosotros.jpg`;
+const aboutOgImageAlt = "Edificios entre árboles con las montañas de Medellín al fondo";
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
 
 /*
@@ -148,8 +156,9 @@ const pageDefinitions = {
     ogDescription:
       "Conoce los productos que INPLUX desarrolla e implementa con empresas e instituciones de Latinoamérica.",
     ogUrl: "https://inplux.co",
-    ogImage: "https://inplux.co/brand/og/og-default.png",
-    ogImageAlt: "INPLUX, de un problema real a software en producción",
+    ogLocaleAlternate: "en_US",
+    ogImage: defaultOgImage,
+    ogImageAlt: defaultOgImageAlt,
     twitterTitle: "Transformación con IA que llega a producción.",
     twitterDescription: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones en Latinoamérica.",
     twitterImageAlt: defaultOgImageAlt,
@@ -196,12 +205,13 @@ const pageDefinitions = {
     ogDescription:
       "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     ogUrl: `${siteUrl}/en`,
-    ogImage: defaultOgImage,
-    ogImageAlt: "INPLUX, from a real problem to software in production",
+    ogLocaleAlternate: "es_CO",
+    ogImage: englishOgImage,
+    ogImageAlt: englishOgImageAlt,
     twitterTitle: "AI transformation that reaches production.",
     twitterDescription:
       "We develop and implement the AI transformation of companies and institutions across Latin America.",
-    twitterImageAlt: "INPLUX, from a real problem to software in production",
+    twitterImageAlt: englishOgImageAlt,
     jsonLd: {
       type: "WebPage",
       name: "INPLUX, AI development and implementation in Miami",
@@ -443,23 +453,23 @@ const pageDefinitions = {
   },
   about: {
     file: ".next/server/app/nosotros.html",
-    title: "Nosotros — el criterio detrás de la fábrica | INPLUX",
+    title: "Nosotros — construimos con criterio, desde Medellín | INPLUX",
     description:
       "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
     canonical: "https://inplux.co/nosotros",
-    ogTitle: "El criterio detrás de la fábrica | INPLUX",
+    ogTitle: "Construimos con criterio, desde Medellín | INPLUX",
     ogDescription:
       "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
     ogUrl: "https://inplux.co/nosotros",
-    ogImage: "https://inplux.co/brand/og/og-nosotros.png",
-    ogImageAlt: "INPLUX, el criterio detrás de la fábrica",
-    twitterTitle: "El criterio detrás de la fábrica | INPLUX",
+    ogImage: aboutOgImage,
+    ogImageAlt: aboutOgImageAlt,
+    twitterTitle: "Construimos con criterio, desde Medellín | INPLUX",
     twitterDescription:
       "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
-    twitterImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    twitterImageAlt: aboutOgImageAlt,
     jsonLd: {
       type: "AboutPage",
-      name: "El criterio detrás de la fábrica",
+      name: "Construimos con criterio, desde Medellín",
       url: `${siteUrl}/nosotros`,
     },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
@@ -476,12 +486,12 @@ const pageDefinitions = {
     ogDescription:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
     ogUrl: `${siteUrl}/equipo`,
-    ogImage: "https://inplux.co/brand/og/og-nosotros.png",
-    ogImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    ogImage: aboutOgImage,
+    ogImageAlt: aboutOgImageAlt,
     twitterTitle: "Equipo | INPLUX",
     twitterDescription:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
-    twitterImageAlt: "INPLUX, el criterio detrás de la fábrica",
+    twitterImageAlt: aboutOgImageAlt,
     jsonLd: {
       type: "CollectionPage",
       name: "Equipo de INPLUX",
@@ -696,16 +706,29 @@ function verifySocialMetadata(name, html, definition) {
     `${name} og:description`,
   );
   expectEqual(metaContent(html, "property", "og:url"), definition.ogUrl, `${name} og:url`);
-  expectEqual(metaContent(html, "property", "og:site_name"), "INPLUX S.A.S.", `${name} og:site_name`);
+  // La marca, no la razón social: es lo que la red escribe sobre la tarjeta.
+  expectEqual(metaContent(html, "property", "og:site_name"), "INPLUX", `${name} og:site_name`);
   expectEqual(
     metaContent(html, "property", "og:locale"),
     definition.ogLocale ?? "es_CO",
     `${name} og:locale`,
   );
+  // Solo las dos portadas declaran su par en el otro idioma.
+  expectEqual(
+    metaContent(html, "property", "og:locale:alternate") ?? null,
+    definition.ogLocaleAlternate ?? null,
+    `${name} og:locale:alternate`,
+  );
   expectEqual(metaContent(html, "property", "og:type"), definition.ogType ?? "website", `${name} og:type`);
   expectEqual(metaContent(html, "property", "og:image"), definition.ogImage, `${name} og:image`);
   expectEqual(metaContent(html, "property", "og:image:width"), "1200", `${name} og:image:width`);
   expectEqual(metaContent(html, "property", "og:image:height"), "630", `${name} og:image:height`);
+  // Las fichas de /trabajo las pinta satori en PNG; todo lo demás es JPEG de og-cards.
+  expectEqual(
+    metaContent(html, "property", "og:image:type"),
+    definition.ogImage.includes("/api/og/trabajo/") ? "image/png" : "image/jpeg",
+    `${name} og:image:type`,
+  );
   expectEqual(
     metaContent(html, "property", "og:image:alt"),
     definition.ogImageAlt,

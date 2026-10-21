@@ -16,6 +16,7 @@ import {
 import { personId, profileUrl, teamMembers } from "@/content/team";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./equipo.module.css";
+import { nosotrosSocialImage, twitterImage } from "@/lib/social-cards";
 
 /*
  * `/equipo` (octubre de 2026): la página de equipo, como la de primero.com.
@@ -39,29 +40,17 @@ export const metadata: Metadata = {
     description:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
     url: PAGE_URL,
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
-    images: [
-      {
-        url: "/brand/og/og-nosotros.png",
-        width: 1200,
-        height: 630,
-        alt: "INPLUX, el criterio detrás de la fábrica",
-      },
-    ],
+    images: [nosotrosSocialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Equipo | INPLUX",
     description:
       "Quién dirige INPLUX y responde por cada producto, con su trayectoria a la vista.",
-    images: [
-      {
-        url: "/brand/og/og-nosotros.png",
-        alt: "INPLUX, el criterio detrás de la fábrica",
-      },
-    ],
+    images: [twitterImage(nosotrosSocialImage)],
   },
 };
 
