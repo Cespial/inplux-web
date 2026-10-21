@@ -53,6 +53,11 @@ function profile(slug: WorkProfile["slug"]) {
   return found;
 }
 
+/** El directorio de productos en el idioma de la portada: `/trabajo` o `/en/work`. */
+function workPath(copy: HomeCopy) {
+  return copy.workPath ?? "/trabajo";
+}
+
 /* ---------------------------------------------------------------- hero */
 
 export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: ReactNode }) {
@@ -97,12 +102,12 @@ export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
       who: laudos.name,
       value: localNumber(laudos.interface.primaryMetric, lang),
       unit: copy.v5.proof.laudosUnit,
-      source: { href: "/trabajo/laudos", label: copy.v5.proof.sourceLabel },
+      source: { href: `${workPath(copy)}/laudos`, label: copy.v5.proof.sourceLabel },
     },
     {
       value: String(portfolio.length),
       unit: stats.products.label,
-      source: { href: "/trabajo", label: copy.v5.proof.portfolioSourceLabel },
+      source: { href: workPath(copy), label: copy.v5.proof.portfolioSourceLabel },
     },
     {
       value: String(clientWallCount),
@@ -181,7 +186,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
         }
         actions={
           <>
-            <Button href="/trabajo/tribai" variant="primary">
+            <Button href={`${workPath(copy)}/tribai`} variant="primary">
               {text.tribaiCta}
             </Button>
             <Chip>{text.tribaiTag}</Chip>
@@ -204,7 +209,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
         title={gobia.name}
         lead={headline(gobia)}
         actions={
-          <Button href="/trabajo/gobia" variant="ghost">
+          <Button href={`${workPath(copy)}/gobia`} variant="ghost">
             {text.openCta} <span aria-hidden="true">→</span>
           </Button>
         }
@@ -227,7 +232,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
           <Card
             key={item.slug}
             id={`p-${item.slug}`}
-            href={`/trabajo/${item.slug}`}
+            href={`${workPath(copy)}/${item.slug}`}
             media={
               <Image
                 src={workCaptures[item.slug].src}
@@ -262,7 +267,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
         ))}
       </CardGrid>
       <p className={styles.allLink}>
-        <Link href="/trabajo">
+        <Link href={workPath(copy)}>
           {text.allCta} <span aria-hidden="true">→</span>
         </Link>
       </p>

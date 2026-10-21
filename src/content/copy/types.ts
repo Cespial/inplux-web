@@ -582,6 +582,8 @@ export type HomeV5Copy = {
 export type HomeCopy = {
   locale: string;
   htmlLang: string;
+  /** Directorio de productos del idioma (`/trabajo` por defecto, `/en/work` en inglés). */
+  workPath?: string;
   header: HeaderCopy;
   footer: FooterCopy;
   contactDialog: ContactDialogCopy;

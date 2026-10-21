@@ -23,6 +23,7 @@ import type { HomeCopy } from "./types";
 export const homeCopyEn: HomeCopy = {
   locale: "en_US",
   htmlLang: "en-US",
+  workPath: "/en/work",
 
   header: {
     skipToContent: "Skip to content",
@@ -513,20 +514,20 @@ export const homeCopyEn: HomeCopy = {
     items: [
       {
         label: "Healthcare",
-        detail: "Software for healthcare providers: patient app, remote monitoring, integration with the clinical record, help desk. Published in Spanish.",
-        href: "/sectores/salud",
+        detail: "Software for healthcare providers: patient app, remote monitoring, integration with the clinical record, help desk.",
+        href: "/en/sectors/health",
         note: null,
       },
       {
         label: "Public sector",
-        detail: "Territorial entities, public finance and municipal management. Published in Spanish.",
-        href: "/sectores/publico",
+        detail: "Territorial entities, public finance and municipal management.",
+        href: "/en/sectors/public-sector",
         note: null,
       },
       {
         label: "Companies",
-        detail: "Operations, data and digital products for private companies. Published in Spanish.",
-        href: "/sectores/empresas",
+        detail: "Operations, data and digital products for private companies.",
+        href: "/en/sectors/business",
         note: null,
       },
     ],
@@ -1194,22 +1195,22 @@ export const homeCopyEn: HomeCopy = {
         {
           title: "Public sector",
           detail: "Municipalities, local governments and municipal finance: fiscal data, procurement and follow-up.",
-          href: "/sectores/publico",
+          href: "/en/sectors/public-sector",
         },
         {
           title: "Healthcare",
           detail: "Healthcare providers: patient app, remote monitoring, clinical record integration.",
-          href: "/sectores/salud",
+          href: "/en/sectors/health",
         },
         {
           title: "Legal and tax",
           detail: "Firms, accountants and legal teams: sourced answers, validity and case law.",
-          href: "/sectores/legal-tributario",
+          href: "/en/sectors/legal-tax",
         },
         {
           title: "Companies",
           detail: "Operations, data and digital products for private companies.",
-          href: "/sectores/empresas",
+          href: "/en/sectors/business",
         },
       ],
     },
