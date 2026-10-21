@@ -172,12 +172,36 @@ def historia():
 </div></body></html>"""
 
 
+def portada_nota(w=1600, h=900):
+    """Portada de la nota en inplux.co/prensa (y base de la imagen social 1200×630)."""
+    velo = (f"linear-gradient(90deg,{BLACK} 0%,rgba(12,12,11,.94) 38%,rgba(12,12,11,.55) 70%,rgba(12,12,11,.35) 100%),"
+            f"linear-gradient(0deg,rgba(12,12,11,.6) 0%,transparent 40%)")
+    return head(w, h) + fondo("69b6cfce_1.jpg", velo) + f"""
+<div class="capa" style="padding:{h*0.11:.0f}px 96px;justify-content:space-between">
+  <div class="micro">→ Proyecto · Johannesburgo</div>
+  <h1 class="titular" style="font-size:{h*0.088:.0f}px;max-width:760px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en <span class="za">Sudáfrica</span>.</h1>
+  <div style="display:flex;align-items:center;gap:18px"><span class="pill clara" style="font-size:24px;padding:12px 26px 12px 16px">{BANDERA_ZA.format(w=36, h=24)}seagricolas.com</span>
+    <span class="micro">SE Holdings</span></div>
+</div>
+<div style="position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:{w*0.47:.0f}px;border-radius:16px;overflow:hidden;border:1.5px solid {LINE};box-shadow:0 40px 120px rgba(0,0,0,.7)">
+  <div style="height:40px;background:#1c1c1a;display:flex;align-items:center;gap:8px;padding:0 16px">
+    <i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i>
+    <span style="margin-left:16px;flex:1;height:24px;border-radius:7px;background:#2a2927;color:{MUTED};font-size:14px;display:flex;align-items:center;padding:0 12px">seagricolas.com</span>
+  </div>
+  <img src="capturas/inicio.png" style="display:block;width:100%;height:{h*0.6:.0f}px;object-fit:cover;object-position:top left">
+</div>
+<img class="wordmark" src="assets/wordmark-white.svg" style="position:absolute;top:{h*0.11-4:.0f}px;right:96px;display:none">
+</div></body></html>"""
+
+
 PIEZAS = {
     "sudafrica_01_portada": (portada, 1080, 1350),
     "sudafrica_02_producto": (producto, 1080, 1350),
     "sudafrica_03_alcance": (lista, 1080, 1350),
     "sudafrica_04_cierre": (cierre, 1080, 1350),
     "historia_sudafrica": (historia, 1080, 1920),
+    "nota_portada": (portada_nota, 1600, 900),
+    "nota_social": (lambda: portada_nota(1600, 840), 1600, 840),
 }
 
 if __name__ == "__main__":

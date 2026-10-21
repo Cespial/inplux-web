@@ -1,0 +1,43 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1600px;height:900px;overflow:hidden;background:#0c0c0b}
+body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1600px;height:900px;overflow:hidden}
+.fondo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.velo{position:absolute;inset:0}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:.07;mix-blend-mode:overlay}
+.capa{position:absolute;inset:0;display:flex;flex-direction:column}
+.titular{font-weight:500;letter-spacing:-.025em;line-height:1.02}
+.titular .gris{color:#a39d94}
+/* Franjas de la bandera de Sudáfrica dentro de las letras: rojo, filete blanco, verde, filete blanco, azul.
+   El azul (#001489) se aclara un poco porque sobre el negro no se lee. */
+.za{background:linear-gradient(180deg,#E03C31 0 47%,#f6f2ec 47% 51%,#007749 51% 64%,#f6f2ec 64% 68%,#2f5fd0 68% 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.micro{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
+.wordmark{height:24px;display:block}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;white-space:nowrap}
+.pill.oscura{background:rgba(246,242,236,.07);border:1.5px solid rgba(246,242,236,.16);padding:18px 34px;font-size:30px}
+.pill.clara{background:#f6f2ec;color:#0c0c0b;padding:18px 36px 18px 22px;font-size:34px;font-weight:500;
+  box-shadow:0 0 0 8px rgba(246,242,236,.06),0 20px 60px rgba(0,0,0,.5)}
+.pill.rama{border:1.5px solid rgba(246,242,236,.16);background:rgba(12,12,11,.55);padding:12px 20px;font-size:20px;color:#f6f2ec}
+.nodo{width:124px;height:124px;border-radius:50%;background:#0c0c0b;border:1.5px solid rgba(246,242,236,.16);display:grid;place-items:center;
+  box-shadow:0 0 0 14px rgba(0,215,202,.05),0 0 80px rgba(0,215,202,.18)}
+.tallo{width:1.5px;background:rgba(246,242,236,.16);margin:0 auto}
+</style></head><body><div class="lienzo"><img class="fondo" src="mj/69b6cfce_1.jpg"><div class="velo" style="background:linear-gradient(90deg,#0c0c0b 0%,rgba(12,12,11,.94) 38%,rgba(12,12,11,.55) 70%,rgba(12,12,11,.35) 100%),linear-gradient(0deg,rgba(12,12,11,.6) 0%,transparent 40%)"></div><div class="grano"></div>
+<div class="capa" style="padding:99px 96px;justify-content:space-between">
+  <div class="micro">→ Proyecto · Johannesburgo</div>
+  <h1 class="titular" style="font-size:79px;max-width:760px"><span class="gris">Software de INPLUX,</span><br>en producción<br>en <span class="za">Sudáfrica</span>.</h1>
+  <div style="display:flex;align-items:center;gap:18px"><span class="pill clara" style="font-size:24px;padding:12px 26px 12px 16px"><svg viewBox="0 0 800 534" width="36" height="24" style="border-radius:4px;display:block"><rect width="800" height="534" fill="#001489"/><rect width="800" height="267" fill="#E03C31"/><path d="M0,0H133.5L400,178H800V356H400L133.5,534H0Z" fill="#fff"/><path d="M0,0H80L373.5,222.5H800V311.5H373.5L80,534H0Z" fill="#007749"/><path d="M0,60V474L310,267Z" fill="#FFB81C"/><path d="M0,89V445L267,267Z" fill="#000"/></svg>seagricolas.com</span>
+    <span class="micro">SE Holdings</span></div>
+</div>
+<div style="position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:752px;border-radius:16px;overflow:hidden;border:1.5px solid rgba(246,242,236,.16);box-shadow:0 40px 120px rgba(0,0,0,.7)">
+  <div style="height:40px;background:#1c1c1a;display:flex;align-items:center;gap:8px;padding:0 16px">
+    <i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3936"></i>
+    <span style="margin-left:16px;flex:1;height:24px;border-radius:7px;background:#2a2927;color:#a39d94;font-size:14px;display:flex;align-items:center;padding:0 12px">seagricolas.com</span>
+  </div>
+  <img src="capturas/inicio.png" style="display:block;width:100%;height:540px;object-fit:cover;object-position:top left">
+</div>
+<img class="wordmark" src="assets/wordmark-white.svg" style="position:absolute;top:95px;right:96px;display:none">
+</div></body></html>
