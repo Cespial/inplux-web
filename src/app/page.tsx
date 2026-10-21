@@ -54,9 +54,10 @@ const copy = homeCopyEs;
 
 /**
  * Portada v5 (20 de octubre de 2026): hero en video → con quién (muro) →
- * del diagnóstico a producción → productos → banda de video «Desde Medellín,
- * para Latinoamérica» con las cifras publicadas → tarjetas de sector →
- * auditoría y tecnología → prensa → quién responde → contacto. Las
+ * del diagnóstico a producción → cinco fichas de producto → banda de video
+ * «Desde Medellín, para Latinoamérica» → tarjetas de sector → evidencia
+ * (cifras con fuente, garantías y tecnología) → prensa → quién responde →
+ * contacto (PR S, 21-oct: una sola sección de evidencia). Las
  * secciones viven en `components/home/v5` y nada en ellas sale de otro lugar
  * que no sea un archivo de contenido.
  *
@@ -110,7 +111,7 @@ export default function Home() {
 
             {/* La tesis vive ahora en la banda de video: su fragmento sigue resolviendo. */}
             <Anchor id="tesis" />
-            <V5Latam copy={copy} lang="es" />
+            <V5Latam copy={copy} />
 
             {/* Fragmentos históricos de «Dónde trabajamos»: siguen resolviendo. */}
             <Anchor id="publico" />
@@ -118,7 +119,7 @@ export default function Home() {
             <Anchor id="empresas" />
             <V5Sectors copy={copy} />
 
-            <V5Audit copy={copy} />
+            <V5Audit copy={copy} lang="es" />
             <V5Press copy={copy} />
             <V5Team copy={copy} />
 

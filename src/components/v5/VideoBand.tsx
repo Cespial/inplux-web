@@ -13,6 +13,7 @@ import styles from "./VideoBand.module.css";
  */
 export function VideoBand({
   id,
+  className,
   eyebrow,
   title,
   lead,
@@ -21,6 +22,8 @@ export function VideoBand({
   children,
 }: {
   id: string;
+  /** Para ajustar una instancia (alto del escenario, aire inferior) sin tocar las demás. */
+  className?: string;
   eyebrow: string;
   title: ReactNode;
   lead: string;
@@ -30,7 +33,7 @@ export function VideoBand({
 }) {
   const titleId = `${id}-title`;
   return (
-    <section id={id} className={styles.band} aria-labelledby={titleId}>
+    <section id={id} className={cx(styles.band, className)} aria-labelledby={titleId}>
       <div className={styles.stage}>
         <HeroVideo poster={poster} sources={sources} lazy />
         <div className={cx(ui.wrap, styles.copy)} data-reveal-children="">

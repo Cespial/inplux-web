@@ -134,7 +134,52 @@
   margin: 1rem 0 clamp(2rem, 4vw, 3rem);
 }
 
+/* ------------------------------------------------------------------ tesis */
+
+/* La banda de tesis va sin cifras: escenario más bajo y sin aire debajo.
+   `section` y el hijo directo ganan a las reglas de la primitiva. */
+section.thesis {
+  padding-bottom: 0;
+}
+
+.thesis > div:first-child {
+  min-height: clamp(26rem, 38vw, 35rem);
+}
+
 /* ------------------------------------------------- auditoría y tecnología */
+
+/* Las cifras con fuente, sobre marfil: los tokens del StatRow toman la tinta. */
+.evidenceStats {
+  --line: var(--line-ink);
+  --fg-muted: var(--ink-muted);
+  --fg-dim: var(--ink-muted);
+  --stat-unit: var(--ink);
+  --teal: var(--teal-ink);
+  margin-bottom: clamp(2rem, 3.5vw, 2.5rem);
+}
+
+.evidenceStats > div {
+  margin-top: 0;
+}
+
+/* Más compactas que en la banda oscura: la sección ya trae su título. */
+.evidenceStats li {
+  padding-block: 1.3rem;
+}
+
+.evidenceStats li strong {
+  font-size: var(--step-2);
+}
+
+/* El encabezado centrado de la evidencia, con menos aire antes de las cifras. */
+.evidence [data-reveal] {
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.evidenceStats a:hover {
+  color: var(--black);
+}
+
 
 .audit {
   display: grid;
@@ -144,15 +189,16 @@
 
 .audit li {
   display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-content: start;
-  gap: 0.9rem;
-  padding-top: 1.4rem;
+  gap: 0.5rem 0.75rem;
+  padding-top: 1.2rem;
   border-top: 1px solid var(--line-ink);
 }
 
 .audit svg {
-  width: 2rem;
-  height: 2rem;
+  width: 1.6rem;
+  height: 1.6rem;
   color: var(--teal-ink);
 }
 
@@ -162,17 +208,16 @@
 }
 
 .audit p {
+  grid-column: 1 / -1;
   color: var(--ink-muted);
   font-size: var(--step-8);
 }
 
 .tech {
   display: grid;
-  gap: 1.2rem;
+  gap: 1rem;
   justify-items: center;
-  margin-top: clamp(3rem, 6vw, 5rem);
-  padding-top: 2rem;
-  border-top: 1px solid var(--line-ink);
+  margin-top: clamp(2rem, 3.5vw, 2.5rem);
   text-align: center;
 }
 
@@ -190,7 +235,7 @@
   --tech-logo-h: 1.5rem;
   display: grid;
   place-items: center;
-  min-height: clamp(4.5rem, 7vw, 6rem);
+  min-height: clamp(4.5rem, 6vw, 5rem);
   padding: 1rem;
   opacity: 0.72;
   transition: opacity 0.3s var(--ease-out);
@@ -239,7 +284,7 @@
 }
 
 .techNote {
-  max-width: 40rem;
+  max-width: 52rem;
 }
 
 /* ------------------------------------------------------------------ prensa */

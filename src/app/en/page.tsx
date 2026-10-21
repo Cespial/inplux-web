@@ -154,7 +154,7 @@ export default function EnglishHome() {
 
             {/* La tesis vive ahora en la banda de video: su fragmento sigue resolviendo. */}
             <Anchor id="tesis" />
-            <V5Latam copy={copy} lang="en" />
+            <V5Latam copy={copy} />
 
             {/* Fragmentos históricos de «Dónde trabajamos»: siguen resolviendo. */}
             <Anchor id="publico" />
@@ -162,7 +162,7 @@ export default function EnglishHome() {
             <Anchor id="empresas" />
             <V5Sectors copy={copy} />
 
-            <V5Audit copy={copy} />
+            <V5Audit copy={copy} lang="en" />
             <V5Press copy={copy} />
             <V5Team copy={copy} />
 

@@ -84,7 +84,7 @@ export function V5Hero({
   );
 }
 
-/* ------------------------------------- Latinoamérica: video y cifras */
+/* ------------------------------------------- tesis: «Desde Medellín» */
 
 /** El montaje «Desde Medellín, para Latinoamérica»: seis tomas de tres segundos. */
 const LATAM_VIDEO = {
@@ -97,10 +97,27 @@ const LATAM_VIDEO = {
   ],
 } as const;
 
-export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
+/** La banda de tesis: el montaje, el título y una frase. Las cifras van en la evidencia. */
+export function V5Latam({ copy }: { copy: HomeCopy }) {
+  const latam = copy.v5.latam;
+  return (
+    <VideoBand
+      id="latinoamerica"
+      className={styles.thesis}
+      eyebrow={latam.eyebrow}
+      title={latam.title}
+      lead={latam.lead}
+      poster={LATAM_VIDEO.poster}
+      sources={LATAM_VIDEO.sources}
+    />
+  );
+}
+
+/** Las tres cifras publicadas, cada una con el enlace a lo que la sustenta. */
+function proofStats(copy: HomeCopy, lang: Lang): Stat[] {
   const laudos = profile("laudos");
   const stats = copy.heroStats;
-  const proof: Stat[] = [
+  return [
     {
       who: laudos.name,
       value: localNumber(laudos.interface.primaryMetric, lang),
@@ -118,20 +135,6 @@ export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
       source: { href: "#clientes", label: copy.v5.proof.wallSourceLabel },
     },
   ];
-
-  const latam = copy.v5.latam;
-  return (
-    <VideoBand
-      id="latinoamerica"
-      eyebrow={latam.eyebrow}
-      title={latam.title}
-      lead={latam.lead}
-      poster={LATAM_VIDEO.poster}
-      sources={LATAM_VIDEO.sources}
-    >
-      <StatRow id="casos" ariaLabel={stats.ariaLabel} items={proof} />
-    </VideoBand>
-  );
 }
 
 /* ---------------------------------------------------------------- proceso */
@@ -252,11 +255,14 @@ const AUDIT_ICONS = [
  * recolorear; el énfasis al pasar el cursor es la opacidad de la celda.
  */
 
-export function V5Audit({ copy }: { copy: HomeCopy }) {
+export function V5Audit({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
   const audit = copy.v5.audit;
   return (
-    <Band id="auditoria" tone="light" labelledBy="v5-audit-title">
+    <Band id="auditoria" tone="light" className={styles.evidence} labelledBy="v5-audit-title">
       <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} />
+      <div className={styles.evidenceStats}>
+        <StatRow id="casos" ariaLabel={copy.heroStats.ariaLabel} items={proofStats(copy, lang)} />
+      </div>
       <ul className={styles.audit}>
         {audit.items.map((item, index) => (
           <li key={item.title}>
