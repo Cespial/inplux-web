@@ -15,8 +15,12 @@ export const FIELD = Object.freeze({
   organization: "organization",
   needType: "needType",
   message: "challenge",
-  /** Campo trampa: oculto fuera de pantalla, una persona nunca lo llena. */
-  honeypot: "empresa_web",
+  /**
+   * Campo trampa: oculto fuera de pantalla, una persona nunca lo llena. El
+   * nombre no significa nada a propósito: uno como «empresa» o «web» casa con
+   * las heurísticas de autocompletado y descartaría mensajes reales.
+   */
+  honeypot: "hp_ref_x7",
   /** Marca de tiempo firmada (la pone el navegador o, sin JS, la cookie). */
   token: "cf_token",
   /** Página desde donde se escribió. */

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import { buildEmail, escapeHtml, formatBogota, resolveMailConfig } from "../src/lib/contact/email.mjs";
 import { FIELD, LIMITS, TOKEN_WINDOW } from "../src/lib/contact/fields.mjs";
 import { processSubmission } from "../src/lib/contact/process.mjs";
@@ -68,6 +69,27 @@ test("asunto sin organización no deja un separador colgando", async () => {
   const { run, calls } = harness({ fields: { [FIELD.organization]: "" } });
   await run();
   assert.equal(calls[0].body.subject, "Contacto inplux.co · Ana Gómez");
+});
+
+test("el campo trampa no usa un nombre que el autocompletado reconozca", () => {
+  assert.equal(FIELD.honeypot, "hp_ref_x7");
+  assert.doesNotMatch(
+    FIELD.honeypot,
+    /name|nombre|mail|correo|org|empresa|company|web|url|site|sitio|phone|tel|address/i,
+  );
+});
+
+test("el campo trampa del formulario: sin etiqueta y fuera del alcance de autocompletado y gestores", () => {
+  const source = readFileSync(new URL("../src/components/site/ContactForm.tsx", import.meta.url), "utf8");
+  const trap = source.match(/<div className="site-form-trap"[\s\S]*?<\/div>/)?.[0] ?? "";
+  assert.match(trap, /aria-hidden="true"/);
+  assert.match(trap, /name=\{FIELD\.honeypot\}/);
+  assert.match(trap, /tabIndex=\{-1\}/);
+  assert.match(trap, /autoComplete="off"/);
+  assert.match(trap, /data-1p-ignore/);
+  assert.match(trap, /data-lpignore="true"/);
+  assert.match(trap, /data-form-type="other"/);
+  assert.doesNotMatch(trap, /<label|<span/);
 });
 
 test("trampa llena: responde ok sin enviar y sin datos personales en el log", async () => {

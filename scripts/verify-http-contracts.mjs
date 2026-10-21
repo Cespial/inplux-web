@@ -228,7 +228,7 @@ try {
   const contactTrap = await fetch(`${baseUrl}/api/contacto`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-forwarded-for": "192.0.2.250" },
-    body: JSON.stringify({ empresa_web: "http://spam.example" }),
+    body: JSON.stringify({ hp_ref_x7: "http://spam.example" }),
   });
   const trapBody = await contactTrap.json().catch(() => null);
   if (contactTrap.status !== 200 || trapBody?.ok !== true) {

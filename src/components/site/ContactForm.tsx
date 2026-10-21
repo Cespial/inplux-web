@@ -330,18 +330,20 @@ export function ContactForm({
       </div>
 
       {/* Campo trampa: fuera de pantalla, fuera del orden de tabulación y del
-          árbol de accesibilidad. Una persona no lo ve; un bot lo llena. */}
+          árbol de accesibilidad. Sin etiqueta ni nombre con significado para
+          que el autocompletado del navegador y los gestores de contraseñas no
+          lo llenen: si lo hicieran, un mensaje real se descartaría. */}
       <div className="site-form-trap" aria-hidden="true">
-        <label>
-          <span>Sitio web de la empresa</span>
-          <input
-            name={FIELD.honeypot}
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-            defaultValue=""
-          />
-        </label>
+        <input
+          name={FIELD.honeypot}
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+          data-1p-ignore=""
+          data-lpignore="true"
+          data-form-type="other"
+        />
       </div>
 
       <label>
