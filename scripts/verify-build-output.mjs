@@ -1,6 +1,7 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { countWords } from "./word-count.mjs";
 
 const root = process.cwd();
 const errors = [];
@@ -41,6 +42,20 @@ const teamProfiles = [
       "CTO de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
   },
 ];
+/*
+ * El equipo de /equipo (PR P, 20-oct-2026), copiado de `teamCrew` en
+ * `src/content/team.ts`. Sin página propia: cada persona tiene su retrato, su
+ * alt con el nombre y su `Person` en el JSON-LD de /equipo. Autorización de
+ * foto y nombre declarada por Cristian Espinal el 20-oct-2026.
+ */
+const teamCrewProfiles = [
+  { slug: "alejandro-estrada-gomez", name: "Alejandro Estrada Gómez" },
+  { slug: "daniel-alejandro-lopez-naranjo", name: "Daniel Alejandro López Naranjo" },
+  { slug: "cristian-david-ajavi-aguilar", name: "Cristian David Ajavi Aguilar" },
+];
+const maxCrewPhotoBytes = 150_000;
+const maxTeamPageWords = 450;
+
 const workSocialVersion = "2026-10-20.2";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
@@ -1658,6 +1673,56 @@ async function fileSize(relativePath) {
   }
 }
 
+/**
+ * /equipo: cada integrante de `teamCrew` con retrato existente ≤ 150 KB, alt
+ * con su nombre y `Person` en el JSON-LD; la página sigue corta (≤ 450 palabras).
+ */
+async function verifyTeamCrew() {
+  const html = await readFile(path.join(root, ".next/server/app/equipo.html"), "utf8");
+  const graph = [...html.matchAll(/<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)]
+    .flatMap((match) => {
+      try {
+        const data = JSON.parse(decodeHtml(match[1]));
+        return [data, ...(Array.isArray(data["@graph"]) ? data["@graph"] : [])];
+      } catch {
+        return [];
+      }
+    });
+
+  for (const { slug, name } of teamCrewProfiles) {
+    const photo = `public/brand/team/${slug}.jpg`;
+    const size = await fileSize(photo);
+    expect(size !== null, `equipo: falta el retrato ${photo}`);
+    if (size !== null) {
+      expect(
+        size <= maxCrewPhotoBytes,
+        `equipo: ${photo} pesa ${Math.round(size / 1024)} KB; el límite es ${maxCrewPhotoBytes / 1000} KB`,
+      );
+    }
+    expect(html.includes(`alt="${name}"`), `equipo: el retrato de ${name} debe llevar alt="${name}"`);
+    expect(html.includes(`id="${slug}"`), `equipo: falta el ancla #${slug} de la tarjeta de ${name}`);
+    const person = graph.find(
+      (entity) => entity["@type"] === "Person" && entity["@id"] === `${siteUrl}/equipo#${slug}`,
+    );
+    expect(Boolean(person), `equipo: el JSON-LD debe declarar a ${name} como Person con @id /equipo#${slug}`);
+    if (person) {
+      expectEqual(person.name, name, `equipo JSON-LD name de ${slug}`);
+      expectEqual(
+        person.worksFor?.["@id"],
+        `${siteUrl}/#organization`,
+        `equipo JSON-LD worksFor de ${slug}`,
+      );
+      expectEqual(person.image, `${siteUrl}/brand/team/${slug}.jpg`, `equipo JSON-LD image de ${slug}`);
+    }
+  }
+
+  const words = countWords(html);
+  expect(
+    words <= maxTeamPageWords,
+    `equipo: <main> tiene ${words} palabras; el tope es ${maxTeamPageWords}`,
+  );
+}
+
 async function verifySharedImages() {
   const pages = await collectBuiltPages(".next/server/app");
   const workKeys = new Set(["directorio", ...workProfiles.map((profile) => profile.slug)]);
@@ -1720,6 +1785,7 @@ async function verifySharedImages() {
 
 await verifySharedImages();
 await verifyGeneratedRoutes();
+await verifyTeamCrew();
 
 // ── Verificación de Search Console ──────────────────────────────────────────
 // Google avisa al verificar por etiqueta: si la meta desaparece de la home, la
