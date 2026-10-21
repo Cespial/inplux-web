@@ -1171,17 +1171,8 @@ export const homeCopyEn: HomeCopy = {
       eyebrow: "Our own products",
       title: "Five products built and run by INPLUX.",
       lead: "Each one started with a client's problem. Screenshots come from their public pages.",
-      tribaiLead:
-        "Our MCP server gives Claude and ChatGPT Colombia's current Tax Code, DIAN doctrine and Council of State case law, with the official source behind every answer.",
-      tribaiTag: "Tribai MCP · illustrative example",
-      tribaiCta: "See Tribai",
       openCta: "See product",
-      moreLabel: "We also build",
       allCta: "See all products",
-      inDevelopment: "In development",
-      terminalAriaLabel: "Example call to the Tribai MCP server",
-      terminalCall: "Claude calls the Tribai tool",
-      terminalAnswer: "Response, with the official source",
     },
     latam: {
       eyebrow: "Where we build",
