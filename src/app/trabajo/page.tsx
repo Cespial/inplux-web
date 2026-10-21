@@ -51,10 +51,10 @@ export const metadata: Metadata = {
     title: `${pageTitle} | INPLUX`,
     description: workSocialDescription,
     url: "https://inplux.co/trabajo",
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
-    images: [{ url: workSocialImage, width: 1200, height: 630, alt: workSocialImageAlt }],
+    images: [{ url: workSocialImage, width: 1200, height: 630, type: "image/png", alt: workSocialImageAlt }],
   },
   twitter: {
     card: "summary_large_image",

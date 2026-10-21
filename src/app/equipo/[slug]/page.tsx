@@ -67,7 +67,7 @@ export async function generateMetadata({
       title: `${member.name} — ${member.jobTitle} | INPLUX`,
       description,
       url,
-      siteName: "INPLUX S.A.S.",
+      siteName: "INPLUX",
       locale: "es_CO",
       type: "profile",
       images: [
@@ -75,6 +75,7 @@ export async function generateMetadata({
           url: `/brand/og/og-equipo-${member.slug}.jpg`,
           width: 1200,
           height: 630,
+          type: "image/jpeg",
           alt: `${member.name}, ${member.jobTitle} de INPLUX`,
         },
       ],

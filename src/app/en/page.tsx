@@ -16,6 +16,7 @@ import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
 import { V5Page } from "@/components/v5/V5Page";
 import { homeCopyEn } from "@/content/copy/en";
+import { homeSocialImageEn, socialSiteName, twitterImage } from "@/lib/social-cards";
 
 /**
  * HOME en inglés.
@@ -38,8 +39,6 @@ const languageAlternates = {
 };
 
 const socialTitle = "AI transformation that reaches production.";
-const socialImageAlt =
-  "INPLUX, from a real problem to software in production";
 
 export const metadata: Metadata = {
   title: {
@@ -56,22 +55,17 @@ export const metadata: Metadata = {
     description:
       "See the products INPLUX develops and implements with companies and institutions across Latin America.",
     url: "https://inplux.co/en",
-    siteName: "INPLUX S.A.S.",
+    siteName: socialSiteName,
     locale: "en_US",
+    alternateLocale: ["es_CO"],
     type: "website",
-    images: [
-      {
-        url: "/brand/og/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: socialImageAlt,
-      },
-    ],
+    images: [homeSocialImageEn],
   },
   twitter: {
+    card: "summary_large_image",
     title: socialTitle,
     description: "We develop and implement the AI transformation of companies and institutions across Latin America.",
-    images: [{ url: "/brand/og/og-default.png", alt: socialImageAlt }],
+    images: [twitterImage(homeSocialImageEn)],
   },
 };
 

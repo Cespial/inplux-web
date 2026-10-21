@@ -68,10 +68,10 @@ export async function generateMetadata({ params }: SectorPageProps): Promise<Met
       title: socialTitle,
       description: sector.description,
       url,
-      siteName: "INPLUX S.A.S.",
+      siteName: "INPLUX",
       locale: "es_CO",
       type: "website",
-      images: [{ url: socialImage, width: 1200, height: 630, alt: socialImageAlt }],
+      images: [{ url: socialImage, width: 1200, height: 630, type: "image/jpeg", alt: socialImageAlt }],
     },
     twitter: {
       card: "summary_large_image",

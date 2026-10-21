@@ -16,6 +16,7 @@ import {
 import { personId, profileUrl, teamMembers } from "@/content/team";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./nosotros.module.css";
+import { nosotrosSocialImage, twitterImage } from "@/lib/social-cards";
 
 /*
  * `/nosotros` (octubre de 2026): corta a propósito, como la página de compañía
@@ -28,40 +29,28 @@ import styles from "./nosotros.module.css";
  */
 
 export const metadata: Metadata = {
-  title: "Nosotros — el criterio detrás de la fábrica",
+  title: "Nosotros — construimos con criterio, desde Medellín",
   description:
-    "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
+    "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
   alternates: {
     canonical: "https://inplux.co/nosotros",
   },
   openGraph: {
-    title: "El criterio detrás de la fábrica | INPLUX",
+    title: "Construimos con criterio, desde Medellín | INPLUX",
     description:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     url: "https://inplux.co/nosotros",
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
-    images: [
-      {
-        url: "/brand/og/og-nosotros.png",
-        width: 1200,
-        height: 630,
-        alt: "INPLUX, el criterio detrás de la fábrica",
-      },
-    ],
+    images: [nosotrosSocialImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "El criterio detrás de la fábrica | INPLUX",
+    title: "Construimos con criterio, desde Medellín | INPLUX",
     description:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
-    images: [
-      {
-        url: "/brand/og/og-nosotros.png",
-        alt: "INPLUX, el criterio detrás de la fábrica",
-      },
-    ],
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
+    images: [twitterImage(nosotrosSocialImage)],
   },
 };
 
@@ -90,10 +79,10 @@ const aboutPageJsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   "@id": "https://inplux.co/nosotros#page",
-  name: "El criterio detrás de la fábrica",
+  name: "Construimos con criterio, desde Medellín",
   url: "https://inplux.co/nosotros",
   description:
-    "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+    "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
   mainEntity: {
     "@id": "https://inplux.co/#organization",
   },

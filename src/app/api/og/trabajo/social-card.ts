@@ -16,6 +16,9 @@ type DirectorySocialCard = {
   status: string;
   attribution: string;
   sourceCount: number;
+  /** La verificación de fuentes más reciente, la fecha que se imprime. */
+  verifiedAt: string;
+  /** La versión de la URL (`?v=`): la verificación o el diseño, la mayor. */
   version: string;
 };
 
@@ -29,6 +32,7 @@ type ProfileSocialCard = {
   status: string;
   attribution: string;
   attributionState: WorkProfile["attribution"]["state"];
+  verifiedAt: string;
   version: string;
 };
 
@@ -43,7 +47,10 @@ const siteUrl = "https://inplux.co";
  * quedaba cacheado con la versión vieja. Se compara con la verificación más
  * reciente y gana la fecha mayor.
  */
-export const workSocialDesignVersion = "2026-10-20";
+// «.2»: la segunda tarjeta del 20-oct-2026 (PR N), con la captura del
+// mockup. La comparación es de texto: «2026-10-20.2» gana a «2026-10-20» y
+// pierde contra cualquier verificación posterior.
+export const workSocialDesignVersion = "2026-10-20.2";
 
 function newer(a: string, b: string) {
   return a > b ? a : b;
@@ -85,6 +92,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
       status: `${workProfiles.length} PRODUCTOS DOCUMENTADOS`,
       attribution: "CADA DATO CON SU FUENTE",
       sourceCount,
+      verifiedAt: version,
       version: newer(version, workSocialDesignVersion),
     };
   }
@@ -106,6 +114,7 @@ export function getWorkSocialCard(key: WorkSocialKey): WorkSocialCard {
     status: profile.status.label,
     attribution: profile.attribution.label,
     attributionState: profile.attribution.state,
+    verifiedAt: latestVerification(profile),
     version: newer(latestVerification(profile), workSocialDesignVersion),
   };
 }

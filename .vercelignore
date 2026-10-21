@@ -3,8 +3,8 @@
 /outputs/
 /HANDOFF.md
 /README 2.md
-/public/brand/og/og-default 2.png
-/public/brand/og/og-nosotros 2.png
+# Fotos fuente de scripts/og-cards.mjs: se pintan en local, no se sirven.
+/public/brand/og/fuentes/
 /public/brand/about/contexto-medellin.png
 /public/brand/about/mesa-de-criterio.png
 /src/app/nosotros/page 2.tsx

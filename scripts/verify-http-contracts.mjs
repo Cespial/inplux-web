@@ -45,12 +45,12 @@ const expectedRoutes = [
 ];
 
 const expectedSocialImages = [
-  "/api/og/trabajo/directorio?v=2026-10-20",
-  "/api/og/trabajo/tribai?v=2026-10-20",
-  "/api/og/trabajo/gobia?v=2026-10-20",
-  "/api/og/trabajo/kelsen?v=2026-10-20",
-  "/api/og/trabajo/laudos?v=2026-10-20",
-  "/api/og/trabajo/porkia?v=2026-10-20",
+  "/api/og/trabajo/directorio?v=2026-10-20.2",
+  "/api/og/trabajo/tribai?v=2026-10-20.2",
+  "/api/og/trabajo/gobia?v=2026-10-20.2",
+  "/api/og/trabajo/kelsen?v=2026-10-20.2",
+  "/api/og/trabajo/laudos?v=2026-10-20.2",
+  "/api/og/trabajo/porkia?v=2026-10-20.2",
 ];
 
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es

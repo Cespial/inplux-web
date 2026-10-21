@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     description:
       "Cobertura, escenarios públicos, investigaciones y columnas del equipo, organizados por categoría y enlazados a su fuente original.",
     url: canonicalUrl,
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
     images: [
@@ -71,6 +71,7 @@ export const metadata: Metadata = {
         url: "/brand/og/og-prensa.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "INPLUX, prensa y conversaciones",
       },
     ],

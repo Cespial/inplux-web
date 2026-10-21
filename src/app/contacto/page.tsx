@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description:
       "Comparte el reto. INPLUX te ayuda a convertirlo en una primera decisión de producto.",
     url: "https://inplux.co/contacto",
-    siteName: "INPLUX S.A.S.",
+    siteName: "INPLUX",
     locale: "es_CO",
     type: "website",
     images: [
@@ -56,6 +56,7 @@ export const metadata: Metadata = {
         url: "/brand/og/og-contacto.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "INPLUX · Contacto. Empecemos por el problema.",
       },
     ],
