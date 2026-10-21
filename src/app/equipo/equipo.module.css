@@ -1,6 +1,7 @@
 /*
  * /equipo sobre las primitivas v5: las tarjetas de dirección (mismo dibujo que
- * la sección de equipo de la portada) y la fila de instituciones.
+ * la sección de equipo de la portada), las del equipo (el mismo dibujo, en
+ * tres columnas y más pequeño) y la fila de instituciones.
  */
 
 .root {
@@ -104,6 +105,49 @@
   text-decoration: none;
 }
 
+/* ------------------------------------------------------------------ equipo */
+
+/* Continúa la banda clara de dirección: sin el colchón superior completo. */
+.root .crewBand {
+  padding-top: clamp(1rem, 3vw, 2.5rem);
+}
+
+/*
+ * Cuatro columnas en escritorio: una sola fila, sin tarjeta huérfana, y más
+ * pequeñas que las dos de dirección para que la jerarquía se lea. Dos columnas
+ * en tabletas y una en móvil.
+ */
+.crew {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Retratos con camisa blanca: el degradado sube más para que el cargo se lea. */
+.crewPerson .caption {
+  padding: 3.5rem 1rem 0.95rem;
+  background: linear-gradient(180deg, transparent, rgba(12, 12, 11, 0.9) 60%);
+}
+
+.crewPerson .caption strong {
+  font-size: var(--step-6);
+}
+
+/* Primero lo que la persona hace; los títulos, debajo y más discretos. */
+.crewPerson > p {
+  color: var(--black);
+  font-size: var(--step-8);
+}
+
+.crewPerson > .crewCredentials {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line-ink);
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
 /* --------------------------------------------------------------- formación */
 
 .schoolList {
@@ -122,8 +166,15 @@
   font-size: var(--step-8);
 }
 
+@media (max-width: 1100px) {
+  .crew {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 760px) {
-  .people {
+  .people,
+  .crew {
     grid-template-columns: 1fr;
   }
 

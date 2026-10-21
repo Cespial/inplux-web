@@ -186,3 +186,114 @@ export function findTeamMemberInByline(
     ),
   );
 }
+
+/**
+ * Integrante del equipo de ingeniería. Tarjeta en /equipo, sin página propia:
+ * por eso no tiene `code`, `bio` ni `sameAs`, y su `@id` vive en /equipo.
+ */
+export type TeamCrewMember = {
+  /** Ancla `/equipo#<slug>`. Reproduce el nombre legal completo. */
+  slug: string;
+  name: string;
+  givenName: string;
+  familyName: string;
+  /*
+   * Cargo, foco y formación son opcionales: una persona puede entrar solo con
+   * foto y nombre (Alejandro López Durango, a pedido de Cristian). La tarjeta
+   * omite lo que falte sin dejar huecos y el JSON-LD no declara `jobTitle`.
+   */
+  jobTitle?: string;
+  /**
+   * Lo que la persona sabe hacer y hace en INPLUX: una o dos frases cortas, en
+   * tercera persona y sin adjetivos de autoelogio.
+   */
+  focus?: string;
+  /**
+   * Títulos y formación, tal como los declara la persona en LinkedIn. La
+   * tarjeta los muestra en una sola línea discreta, debajo del foco.
+   */
+  credentials?: readonly string[];
+  /** Retrato real, en blanco y negro, bajo `public/brand/team/` (≤ 150 KB). */
+  photo: {
+    src: string;
+    width: number;
+    height: number;
+  };
+  /** Solo si la URL respondió 200 y el nombre coincide. */
+  linkedin?: string;
+};
+
+/*
+ * El equipo que construye y opera los sistemas (PR P, 20-oct-2026).
+ *
+ * Autorización: Cristian Espinal Maya (cristian@inplux.co) declaró el
+ * 20-oct-2026 que Alejandro Estrada Gómez, Daniel Alejandro López Naranjo,
+ * Cristian David Ajavi Aguilar y Alejandro López Durango autorizaron que el
+ * sitio publique su foto y su nombre.
+ *
+ * Fuente única: el texto de LinkedIn de cada persona que pegó Cristian; el
+ * cargo de Alejandro Estrada y la maestría en curso de Cristian David los dio
+ * Cristian directamente. No se nombran empleadores ni cifras de logros. Sin
+ * `linkedin` porque las URL públicas no se pudieron confirmar; se añaden
+ * cuando Cristian las pase.
+ *
+ * Orden (pedido por Cristian): Alejandro Estrada, Alejandro López Durango,
+ * Daniel y Cristian David.
+ *
+ * Alejandro López Durango entra solo con foto y nombre, a pedido de Cristian
+ * (20-oct-2026): no se inventa cargo, foco, formación ni enlaces.
+ *
+ * Aparte de `teamMembers` a propósito: /equipo/[slug], el sitemap, la portada y
+ * `founder` siguen siendo solo la dirección.
+ */
+export const teamCrew = [
+  {
+    slug: "alejandro-estrada-gomez",
+    name: "Alejandro Estrada Gómez",
+    givenName: "Alejandro",
+    familyName: "Estrada Gómez",
+    jobTitle: "Coordinador de proyectos",
+    focus:
+      "Lleva los proyectos del plan a la entrega: planeación, cronograma y control de costos. Les hace seguimiento con análisis financiero y tableros en Power\u00a0BI.",
+    credentials: ["Contador público y Mercadólogo, Universidad de Medellín"],
+    photo: { src: "/brand/team/alejandro-estrada-gomez.jpg", width: 900, height: 1200 },
+  },
+  {
+    slug: "alejandro-lopez-durango",
+    name: "Alejandro López Durango",
+    givenName: "Alejandro",
+    familyName: "López Durango",
+    photo: { src: "/brand/team/alejandro-lopez-durango.jpg", width: 900, height: 1200 },
+  },
+  {
+    slug: "daniel-alejandro-lopez-naranjo",
+    name: "Daniel Alejandro López Naranjo",
+    givenName: "Daniel Alejandro",
+    familyName: "López Naranjo",
+    jobTitle: "Product Engineer",
+    focus:
+      "Construye producto de punta a punta: interfaces web y móviles, servicios y búsqueda con fuentes citadas, en React, React Native, NestJS y TypeScript.",
+    credentials: ["Técnico en Desarrollo de Software, CESDE"],
+    photo: { src: "/brand/team/daniel-alejandro-lopez-naranjo.jpg", width: 900, height: 1200 },
+  },
+  {
+    slug: "cristian-david-ajavi-aguilar",
+    name: "Cristian David Ajavi Aguilar",
+    givenName: "Cristian David",
+    familyName: "Ajavi Aguilar",
+    jobTitle: "Automation Engineer",
+    focus:
+      "Automatiza procesos con Python y modelos de lenguaje, en especial los financieros: pronósticos, presupuestos y reportes. Viene de la planeación y el análisis financiero.",
+    credentials: [
+      "Maestría en Ingeniería (en curso), Universidad EAFIT",
+      "Negocios Internacionales, Fundación Universitaria Luis Amigó",
+      "Diplomado en Mercado de Capitales, Universidad del Rosario",
+    ],
+    photo: { src: "/brand/team/cristian-david-ajavi-aguilar.jpg", width: 900, height: 1200 },
+  },
+] as const satisfies readonly TeamCrewMember[];
+
+/** `@id` de un integrante de `teamCrew`: se define en /equipo, no en un perfil. */
+export function crewPersonId(slug: string): string {
+  return `${SITE_URL}/equipo#${slug}`;
+}

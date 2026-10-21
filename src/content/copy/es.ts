@@ -136,7 +136,7 @@ export const homeCopyEs: HomeCopy = {
     primaryCta: "Empezar un proyecto",
     secondaryCta: "Ver trabajo real",
     statement: "EL SOFTWARE EMPIEZA EN EL PROBLEMA",
-    signalAriaLabel: "Visual interactivo del flujo de una fábrica de software",
+    signalAriaLabel: "Visual interactivo del flujo de un problema real a software en producción",
     signalMeta: [
       "ENTRADA / CONTEXTO",
       "MUEVE EL CURSOR PARA EXPLORAR",
@@ -883,7 +883,7 @@ export const homeCopyEs: HomeCopy = {
     eyebrow: "05 / QUIÉN RESPONDE",
     titleLead: "Dos direcciones: ",
     titleEmphasis: "criterio y producto.",
-    lead: "Fábrica de software con sede en Medellín, Colombia. Quien decide qué se construye y quien dirige cómo se construye.",
+    lead: "Desde Medellín, Colombia. Quien decide qué se construye y quien dirige cómo se construye.",
     profileCta: "Ver perfil",
     linkedInLabel: "LinkedIn",
     roles: {},
@@ -928,7 +928,7 @@ export const homeCopyEs: HomeCopy = {
     titleEmphasis: "sigue.",
     lead: "Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos.",
     entityStatement:
-      "INPLUX S.A.S. · NIT 901.784.448-8 · Fábrica de software con sede en Medellín, Colombia.",
+      "INPLUX S.A.S. · NIT 901.784.448-8 · Desarrollamos e implementamos transformación con IA, desde Medellín, Colombia.",
     cta: "Empezar un proyecto",
     heroCtaAriaLabel: "Empezar un proyecto",
     email: "gerencia@inplux.co",

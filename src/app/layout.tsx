@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { HtmlRoot } from "@/components/site/HtmlRoot.client";
-import { personId, teamMembers } from "@/content/team";
+import { crewPersonId, personId, teamCrew, teamMembers } from "@/content/team";
 import { homeOpenGraph, homeSocialImage, twitterImage } from "@/lib/social-cards";
 import "./globals.css";
 
@@ -118,7 +118,11 @@ export default function RootLayout({
     founder: teamMembers
       .filter((member) => member.jobTitle.toLowerCase().includes("fundador"))
       .map((member) => ({ "@id": personId(member.slug) })),
-    employee: teamMembers.map((member) => ({ "@id": personId(member.slug) })),
+    // El equipo (PR P) se cita por su `@id` en /equipo (`/equipo#<slug>`).
+    employee: [
+      ...teamMembers.map((member) => ({ "@id": personId(member.slug) })),
+      ...teamCrew.map((member) => ({ "@id": crewPersonId(member.slug) })),
+    ],
   };
 
   return (

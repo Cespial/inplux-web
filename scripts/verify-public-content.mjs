@@ -154,6 +154,24 @@ export const bannedPublicLanguageEn = [
 ];
 
 /**
+ * Posicionamiento retirado (PR P, 20-oct-2026): INPLUX ya no se presenta como
+ * «fábrica de software». Lista aparte para no tocar la lámina 6 del deck, que
+ * cuenta y enseña las frases de `bannedPublicLanguage`.
+ */
+export const bannedRetiredPositioning = [
+  {
+    motivo: "posicionamiento retirado",
+    patron: /f[áa]brica\s+de\s+software/giu,
+    ejemplo: "una fábrica de software a la medida",
+  },
+  {
+    motivo: "posicionamiento retirado (inglés)",
+    patron: /\bsoftware\s+factory\b/giu,
+    ejemplo: "a custom software factory",
+  },
+];
+
+/**
  * Títulos de PRIMERO (primero.com) que el sitio no puede reproducir.
  *
  * Esta lista es independiente de `bannedPublicLanguage`: no sale en la lámina
@@ -308,7 +326,7 @@ async function verifyPublicLanguage() {
             ),
           )
         : source;
-    for (const { motivo, patron } of [...bannedPublicLanguage, ...bannedPublicLanguageEn]) {
+    for (const { motivo, patron } of [...bannedPublicLanguage, ...bannedPublicLanguageEn, ...bannedRetiredPositioning]) {
       patron.lastIndex = 0;
       for (const match of sourceForLanguageCheck.matchAll(patron)) {
         errors.push(
@@ -334,7 +352,7 @@ async function verifyPublicLanguage() {
 function verifyBannedExamples() {
   const vistos = new Map();
 
-  for (const { motivo, patron, ejemplo } of [...bannedPublicLanguage, ...bannedPublicLanguageEn]) {
+  for (const { motivo, patron, ejemplo } of [...bannedPublicLanguage, ...bannedPublicLanguageEn, ...bannedRetiredPositioning]) {
     if (ejemplo === null) continue;
 
     patron.lastIndex = 0;
