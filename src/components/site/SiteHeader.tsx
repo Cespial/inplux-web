@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ContactLink } from "@/components/site/ContactLink";
 import type { ContactSource } from "@/components/site/ContactLink";
-import { homeCopyEs } from "@/content/copy/es";
+import { headerCopyEs } from "@/content/copy/es-chrome";
 import { pairedPath } from "@/content/i18n";
 import {
   isNavigationGroup,
@@ -217,7 +217,7 @@ function MobileEntry({
 }
 
 export function SiteHeader({
-  copy = homeCopyEs.header,
+  copy = headerCopyEs,
   desktopContactSource = "header-desktop",
   inverseOnTop = true,
   mobileContactSource = "header-mobile",

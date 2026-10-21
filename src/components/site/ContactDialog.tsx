@@ -14,7 +14,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import { ContactForm } from "@/components/site/ContactForm";
-import { homeCopyEs } from "@/content/copy/es";
+import { contactDialogCopyEs, contactFormCopyEs } from "@/content/copy/es-chrome";
 import type { ContactDialogCopy, ContactFormCopy } from "@/content/copy/types";
 
 type DialogPhase = "closed" | "open" | "closing";
@@ -55,8 +55,8 @@ type ContactDialogProviderProps = PropsWithChildren<{
 
 export function ContactDialogProvider({
   children,
-  copy = homeCopyEs.contactDialog,
-  formCopy = homeCopyEs.contactForm,
+  copy = contactDialogCopyEs,
+  formCopy = contactFormCopyEs,
 }: ContactDialogProviderProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
