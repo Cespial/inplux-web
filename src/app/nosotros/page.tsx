@@ -73,7 +73,7 @@ const reasons = [
     label: "Ingeniería local",
     title: "Dentro de tu equipo, no al otro lado de un ticket.",
     copy:
-      "Nuestros ingenieros trabajan en tus sistemas y con tus personas, desde el diagnóstico hasta que el sistema opera.",
+      "Nuestros ingenieros trabajan en tus sistemas y con tus personas, hasta que el sistema opera solo.",
   },
 ] as const;
 

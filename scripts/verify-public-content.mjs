@@ -172,6 +172,9 @@ export const bannedPrimeroPhrases = [
   "Sovereign AI for the modern institution",
   "Built for the reality of institutional operations",
   "We work with you from diagnosis to production",
+  // 20-oct-2026: el arranque de la frase basta para parecerse a PRIMERO.
+  "Trabajamos contigo desde el diagnóstico",
+  "We work with you from diagnosis",
 ];
 
 /** Minúsculas, sin diacríticos y con los espacios en blanco plegados a uno. */

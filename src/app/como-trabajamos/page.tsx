@@ -135,7 +135,7 @@ export default function ComoTrabajamosPage() {
               <PageHero
                 className={styles.hero}
                 eyebrow="Cómo trabajamos"
-                title={<span id="how-title">Trabajamos contigo desde el diagnóstico hasta que opera.</span>}
+                title={<span id="how-title">Nos quedamos hasta que el sistema opera solo.</span>}
                 lead="Nuestros ingenieros trabajan dentro de los sistemas y de los equipos del cliente."
                 leadMuted="Cada fase termina con algo que se puede usar y revisar, y la decisión sigue siendo de quien ya la tenía."
                 crumbs={crumbs}

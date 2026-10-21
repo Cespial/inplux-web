@@ -50,7 +50,7 @@ export const aboutEn = {
       {
         label: "Local engineering",
         title: "Inside your team, not on the other side of a ticket.",
-        copy: "Our engineers work in your systems and with your people, from diagnosis until the system runs.",
+        copy: "Our engineers work in your systems and with your people, until the system runs on its own.",
       },
     ],
   },

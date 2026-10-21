@@ -19,7 +19,7 @@ export const howWeWorkEn = {
   crumb: "How we work",
   hero: {
     eyebrow: "How we work",
-    title: "We stay with you from diagnosis until it runs.",
+    title: "We stay until the system runs on its own.",
     lead: "Our engineers work inside the client's systems and teams.",
     leadMuted:
       "Every phase ends with something you can use and review, and the decision stays with whoever already owned it.",
