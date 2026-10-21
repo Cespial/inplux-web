@@ -30,6 +30,7 @@ export function PageHero({
   crumbs,
   crumbsLabel = "Ruta",
   aside,
+  overlay,
   className,
 }: {
   id?: string;
@@ -44,6 +45,8 @@ export function PageHero({
   /** Nombre accesible de las migas, en el idioma de la página. */
   crumbsLabel?: string;
   aside?: ReactNode;
+  /** Algo posicionado sobre el hero, fuera del flujo del texto (la pestaña de noticia). */
+  overlay?: ReactNode;
   className?: string;
 }) {
   const text = (
@@ -111,6 +114,7 @@ export function PageHero({
       ) : (
         <div className={`${ui.wrap} ${ui.heroInner}`}>{text}</div>
       )}
+      {overlay}
     </div>
   );
 }

@@ -29,6 +29,7 @@ import { teamMembers } from "@/content/team";
 import { workProfiles, type WorkProfile } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
 import styles from "./home-v5.module.css";
+import { NewsTab } from "./NewsTab";
 import { SectorCards } from "./SectorCards";
 import { TribaiTerminal } from "./TribaiTerminal.client";
 
@@ -60,7 +61,15 @@ function workPath(copy: HomeCopy) {
 
 /* ---------------------------------------------------------------- hero */
 
-export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: ReactNode }) {
+export function V5Hero({
+  copy,
+  primaryCta,
+  lang,
+}: {
+  copy: HomeCopy;
+  primaryCta: ReactNode;
+  lang: Lang;
+}) {
   const hero = copy.hero;
   return (
     <PageHero
@@ -69,6 +78,7 @@ export function V5Hero({ copy, primaryCta }: { copy: HomeCopy; primaryCta: React
       lead={hero.leadSentences[0]}
       leadMuted={hero.leadSentences[1]}
       media={{ kind: "video" }}
+      overlay={<NewsTab lang={lang} />}
       actions={
         <>
           {primaryCta}
