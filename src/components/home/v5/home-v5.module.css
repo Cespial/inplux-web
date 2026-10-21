@@ -162,37 +162,15 @@ section.thesis {
 
 /* ------------------------------------------------- auditoría y tecnología */
 
-/* Las cifras con fuente, sobre marfil: los tokens del StatRow toman la tinta. */
-.evidenceStats {
-  --line: var(--line-ink);
-  --fg-muted: var(--ink-muted);
-  --fg-dim: var(--ink-muted);
-  --stat-unit: var(--ink);
-  --teal: var(--teal-ink);
-  margin-bottom: clamp(2rem, 3.5vw, 2.5rem);
-}
 
-.evidenceStats > div {
-  margin-top: 0;
-}
 
-/* Más compactas que en la banda oscura: la sección ya trae su título. */
-.evidenceStats li {
-  padding-block: 1.3rem;
-}
 
-.evidenceStats li strong {
-  font-size: var(--step-2);
-}
 
 /* El encabezado centrado de la evidencia, con menos aire antes de las cifras. */
 .evidence [data-reveal] {
   margin-bottom: clamp(2rem, 3.5vw, 3rem);
 }
 
-.evidenceStats a:hover {
-  color: var(--black);
-}
 
 
 .audit {

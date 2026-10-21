@@ -12,12 +12,9 @@ import {
   statusTone,
   v5 as ui,
 } from "@/components/v5/primitives";
-import { StatRow, type Stat } from "@/components/v5/StatRow";
 import { MOBILE_MEDIA } from "@/components/v5/HeroVideo.client";
 import { VideoBand } from "@/components/v5/VideoBand";
-import { clientWallCount } from "@/content/clients";
 import type { HomeCopy } from "@/content/copy/types";
-import { portfolio } from "@/content/home";
 import { featuredPressStories, isOwnStory, type PressStory } from "@/content/press";
 import { teamMembers } from "@/content/team";
 import { workProfiles, type WorkProfile } from "@/content/work";
@@ -34,12 +31,6 @@ import { SectorCards } from "./SectorCards";
  */
 
 type Lang = "es" | "en";
-
-/** «5.447» en español, «5,447» en inglés. */
-function localNumber(value: string | number, lang: Lang) {
-  const text = String(value);
-  return lang === "en" ? text.replace(/\./g, ",") : text;
-}
 
 function profile(slug: WorkProfile["slug"]) {
   const found = workProfiles.find((item) => item.slug === slug);
@@ -117,30 +108,6 @@ export function V5Latam({ copy }: { copy: HomeCopy }) {
       sources={LATAM_VIDEO.sources}
     />
   );
-}
-
-/** Las tres cifras publicadas, cada una con el enlace a lo que la sustenta. */
-function proofStats(copy: HomeCopy, lang: Lang): Stat[] {
-  const laudos = profile("laudos");
-  const stats = copy.heroStats;
-  return [
-    {
-      who: laudos.name,
-      value: localNumber(laudos.interface.primaryMetric, lang),
-      unit: copy.v5.proof.laudosUnit,
-      source: { href: `${workPath(copy)}/laudos`, label: copy.v5.proof.sourceLabel },
-    },
-    {
-      value: String(portfolio.length),
-      unit: stats.products.label,
-      source: { href: workPath(copy), label: copy.v5.proof.portfolioSourceLabel },
-    },
-    {
-      value: String(clientWallCount),
-      unit: stats.organizations.label,
-      source: { href: "#clientes", label: copy.v5.proof.wallSourceLabel },
-    },
-  ];
 }
 
 /* ---------------------------------------------------------------- proceso */
@@ -261,14 +228,11 @@ const AUDIT_ICONS = [
  * recolorear; el énfasis al pasar el cursor es la opacidad de la celda.
  */
 
-export function V5Audit({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
+export function V5Audit({ copy }: { copy: HomeCopy }) {
   const audit = copy.v5.audit;
   return (
     <Band id="auditoria" tone="light" className={styles.evidence} labelledBy="v5-audit-title">
       <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} />
-      <div className={styles.evidenceStats}>
-        <StatRow id="casos" ariaLabel={copy.heroStats.ariaLabel} items={proofStats(copy, lang)} />
-      </div>
       <ul className={styles.audit}>
         {audit.items.map((item, index) => (
           <li key={item.title}>
