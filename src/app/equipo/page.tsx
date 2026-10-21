@@ -13,7 +13,14 @@ import {
   SectionHead,
   buttonClass,
 } from "@/components/v5/primitives";
-import { personId, profileUrl, teamMembers } from "@/content/team";
+import {
+  crewPersonId,
+  personId,
+  profileUrl,
+  teamCrew,
+  teamMembers,
+  type TeamCrewMember,
+} from "@/content/team";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/breadcrumbs";
 import styles from "./equipo.module.css";
 import { nosotrosSocialImage, twitterImage } from "@/lib/social-cards";
@@ -21,7 +28,8 @@ import { nosotrosSocialImage, twitterImage } from "@/lib/social-cards";
 /*
  * `/equipo` (octubre de 2026): la página de equipo, como la de primero.com.
  * Las tarjetas de dirección (retrato real en blanco y negro, rol, nombre y tres
- * credenciales) y de dónde viene el equipo. Corta a propósito.
+ * credenciales), las del equipo que coordina y construye (PR P, 20-oct-2026,
+ * sin página propia) y de dónde viene el equipo. Corta a propósito.
  *
  * Pendiente: la foto de grupo a todo el ancho, cuando haya sesión real con
  * Jaime y Cristian. No se usa ninguna imagen generada.
@@ -60,6 +68,9 @@ const schools = [
   "Universidad Nacional de Colombia",
   "Universidad de Medellín",
   "University of Miami Herbert Business School",
+  "Universidad del Rosario",
+  "Fundación Universitaria Luis Amigó",
+  "CESDE",
 ] as const;
 
 const crumbs: Crumb[] = [
@@ -91,6 +102,18 @@ const jsonLd = {
       jobTitle: member.jobTitle,
       worksFor: { "@id": `${SITE_URL}/#organization` },
     })),
+    // El equipo no tiene perfil propio: su `@id` y su definición viven aquí.
+    ...teamCrew.map((member: TeamCrewMember) => ({
+      "@type": "Person",
+      "@id": crewPersonId(member.slug),
+      name: member.name,
+      givenName: member.givenName,
+      familyName: member.familyName,
+      url: `${PAGE_URL}#${member.slug}`,
+      ...(member.jobTitle ? { jobTitle: member.jobTitle } : {}),
+      image: `${SITE_URL}${member.photo.src}`,
+      worksFor: { "@id": `${SITE_URL}/#organization` },
+    })),
   ],
 };
 
@@ -110,7 +133,7 @@ export default function EquipoPage() {
                 eyebrow="Equipo"
                 title={<span id="team-title">Personas que pueden explicar, y asumir, cada decisión.</span>}
                 lead="No usamos retratos generados ni escondemos la responsabilidad detrás de la IA."
-                leadMuted="Quien decide qué se construye y quien dirige cómo se construye."
+                leadMuted="La dirección que decide qué se construye y el equipo que lo coordina, lo construye y lo opera."
                 crumbs={crumbs}
               />
             </section>
@@ -156,6 +179,54 @@ export default function EquipoPage() {
                         LinkedIn <span aria-hidden="true">↗</span>
                       </a>
                     </p>
+                  </article>
+                ))}
+              </div>
+            </Band>
+
+            <Band id="equipo" tone="light" labelledBy="crew-title" className={styles.crewBand}>
+              <SectionHead
+                id="crew-title"
+                eyebrow="Equipo"
+                title={
+                  <>
+                    Quienes coordinan y construyen <em>cada sistema.</em>
+                  </>
+                }
+              />
+              <div className={styles.crew}>
+                {teamCrew.map((member: TeamCrewMember) => (
+                  <article
+                    className={`${styles.person} ${styles.crewPerson}`}
+                    id={member.slug}
+                    key={member.slug}
+                  >
+                    <div className={styles.personPhoto}>
+                      <Image
+                        src={member.photo.src}
+                        alt={member.name}
+                        width={member.photo.width}
+                        height={member.photo.height}
+                        sizes="(max-width: 760px) 92vw, (max-width: 1100px) 44vw, 22vw"
+                      />
+                      <span className={styles.caption}>
+                        {member.jobTitle ? (
+                          <span className={styles.role}>{member.jobTitle}</span>
+                        ) : null}
+                        <strong>{member.name}</strong>
+                      </span>
+                    </div>
+                    {member.focus ? <p>{member.focus}</p> : null}
+                    {member.credentials?.length ? (
+                      <p className={styles.crewCredentials}>{member.credentials.join(" · ")}</p>
+                    ) : null}
+                    {member.linkedin ? (
+                      <p className={styles.links}>
+                        <a href={member.linkedin} target="_blank" rel="noreferrer">
+                          LinkedIn <span aria-hidden="true">↗</span>
+                        </a>
+                      </p>
+                    ) : null}
                   </article>
                 ))}
               </div>

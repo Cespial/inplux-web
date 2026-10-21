@@ -11,10 +11,11 @@
  *      palabras = texto.split() sobre espacios en blanco.
  *
  * Uso: node scripts/word-count.mjs <url|archivo.html> [...más]
- * Sin dependencias. No forma parte del gate.
+ * Sin dependencias. `verify-build-output.mjs` usa `countWords` para el tope de /equipo.
  */
 import { readFile } from "node:fs/promises";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 
 const ENTITIES = {
   amp: "&",
@@ -63,8 +64,12 @@ async function load(target) {
   return readFile(target, "utf8");
 }
 
-const targets = process.argv.slice(2);
-if (targets.length === 0) {
+// Solo como CLI: `verify-build-output.mjs` importa `countWords` sin argumentos.
+const isCli = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+const targets = isCli ? process.argv.slice(2) : null;
+if (!isCli) {
+  // Importado como módulo: nada que ejecutar.
+} else if (targets.length === 0) {
   console.error("Uso: node scripts/word-count.mjs <url|archivo.html> [...]");
   process.exitCode = 2;
 } else {

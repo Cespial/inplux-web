@@ -152,7 +152,7 @@ export const homeCopyEn: HomeCopy = {
     primaryCta: "Start a project",
     secondaryCta: "See real work",
     statement: "SOFTWARE STARTS WITH THE PROBLEM",
-    signalAriaLabel: "Interactive visual of the flow of a software factory",
+    signalAriaLabel: "Interactive visual of the flow from a real problem to software in production",
     signalMeta: [
       "INPUT / CONTEXT",
       "MOVE THE CURSOR TO EXPLORE",
@@ -970,7 +970,7 @@ export const homeCopyEn: HomeCopy = {
     eyebrow: "05 / WHO ANSWERS",
     titleLead: "Two directions: ",
     titleEmphasis: "judgment and product.",
-    lead: "A software factory based in Medellín, Colombia. One decides what gets built; the other directs how it gets built.",
+    lead: "Based in Medellín, Colombia. One decides what gets built; the other directs how it gets built.",
     profileCta: "See profile",
     linkedInLabel: "LinkedIn",
     roles: {
