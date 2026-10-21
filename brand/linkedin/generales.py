@@ -113,6 +113,57 @@ PIEZAS = {
     "general_6_mundo": (tierra, W * ESCALA, H * ESCALA),
 }
 
+
+# ---------------------------------------------------------------- serie LatAm
+# Cristian (21-oct): la 5 es la dirección. Que nos vean como grandes
+# implementadores y desarrolladores para toda Latinoamérica.
+
+def latam_oleo():
+    """Óleo teal a todo el ancho, frase centrada y la promesa completa debajo."""
+    fondo = """<div class="fondo" style="background-image:url(mj/pintura_1.jpeg);background-position:50% 50%;filter:saturate(.9) brightness(.8)"></div>
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse 42% 78% at 50% 52%,rgba(8,20,19,.82),rgba(8,20,19,.2))"></div>"""
+    return base(fondo, bloque("Desarrollo e implementación de IA",
+                              "IA para empresas e instituciones de Latinoamérica.",
+                              "La desarrollamos, la implementamos y la dejamos en producción.",
+                              centrado=True, tam=36, top=56)
+                .replace('class="s"', 'class="s" style="color:#c9d6d3"'))
+
+
+def latam_oleo_izq():
+    """Óleo teal intenso que entra por la derecha; texto a la izquierda, más de agencia."""
+    fondo = """<div class="fondo" style="left:860px;background-image:url(mj/pintura_3.jpeg);background-position:50% 50%;
+  filter:saturate(1) brightness(.9);-webkit-mask-image:linear-gradient(90deg,transparent,#000 45%)"></div>"""
+    return base(fondo, bloque("Productos propios · Equipos de implementación",
+                              'Desarrollamos e implementamos IA<br><span class="gris">para Latinoamérica.</span>',
+                              "", tam=38, top=58))
+
+
+def latam_tierra():
+    """Sudamérica de noche a la derecha: la región entera como mercado."""
+    fondo = """<div class="fondo" style="left:auto;right:-200px;width:1000px;background-image:url(mj/tierra_1.jpeg);
+  background-size:auto 100%;background-position:75% 0;filter:grayscale(1) brightness(1.1)"></div>
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,12,11,.95) 48%,transparent 70%)"></div>"""
+    return base(fondo, bloque("Desarrollo e implementación de IA",
+                              'IA para empresas e instituciones<br><span class="gris">de Latinoamérica.</span>',
+                              "", tam=38, top=58))
+
+
+def latam_en():
+    """Versión en inglés para el público de afuera (viaje a San Francisco)."""
+    fondo = """<div class="fondo" style="background-image:url(mj/pintura_1.jpeg);background-position:50% 50%;filter:saturate(.9) brightness(.8)"></div>
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse 42% 78% at 50% 52%,rgba(8,20,19,.82),rgba(8,20,19,.2))"></div>"""
+    return base(fondo, bloque("AI development and implementation",
+                              "We build and implement AI<br>for Latin America.",
+                              "", centrado=True, tam=38, top=58))
+
+
+PIEZAS.update({
+    "latam_1_oleo": (latam_oleo, W * ESCALA, H * ESCALA),
+    "latam_2_oleo_izquierda": (latam_oleo_izq, W * ESCALA, H * ESCALA),
+    "latam_3_sudamerica": (latam_tierra, W * ESCALA, H * ESCALA),
+    "latam_4_ingles": (latam_en, W * ESCALA, H * ESCALA),
+})
+
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():
         (AQUI / f"{nombre}.html").write_text(fn(), encoding="utf-8")
