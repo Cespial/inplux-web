@@ -52,3 +52,22 @@ descartó: las cuatro variantes miraban a cámara.
 | Legal y tributario | ec72287a-c6d0-462d-a6f6-b16224037303 | 1 | `card-legal-tributario.webp` |
 | Empresas | 5e8a4d41-956d-4b9c-9a7b-5aa1fd078c42 | 0 | `card-empresas.webp` |
 Originales PNG 1904×2544 en `~/Downloads/inplux-card-*.png`.
+
+## E12 · Foto de la tarjeta para compartir (20-oct-2026, PR N)
+
+Foto a sangre para la tarjeta Open Graph de la portada (`og-home.jpg`, `og-home-en.jpg`): gente trabajando,
+mitad izquierda tranquila para el título, Medellín reconocible por las montañas. Midjourney V8:
+`--ar 191:100 --style raw` (la proporción 1,91:1 de las tarjetas).
+
+| # | Uso | Prompt |
+|---|---|---|
+| E12-1 | Tarjeta de la portada | small team of three people working together at desks with large monitors… modern office in Medellin… --ar 191:100 --style raw |
+
+El prompt completo no quedó guardado en el repositorio; arriba va el extracto registrado al elegirla.
+
+### E12 generadas (Midjourney V8, cuenta INPLUX)
+| Uso | Job | Índice | Archivo |
+|---|---|---|---|
+| Portada | e1f2a514-d297-4967-a40e-5778c82b0f0c | 3 | `public/brand/og/fuentes/equipo-medellin.webp` |
+Originales PNG 3040×1600 en `~/Downloads/inplux-og-equipo-{0..3}.png`; Cristian eligió la opción 4 (índice 3).
+Imagen sintética: no representa la oficina ni el equipo de INPLUX.
