@@ -24,7 +24,7 @@ import { VideoBand } from "@/components/v5/VideoBand";
 import { clientWallCount } from "@/content/clients";
 import type { HomeCopy } from "@/content/copy/types";
 import { portfolio } from "@/content/home";
-import { featuredPressStories, type PressStory } from "@/content/press";
+import { featuredPressStories, isOwnStory, type PressStory } from "@/content/press";
 import { teamMembers } from "@/content/team";
 import { workProfiles, type WorkProfile } from "@/content/work";
 import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captures";
@@ -361,8 +361,13 @@ function PressFigure({ story, copy }: { story: PressStory; copy: HomeCopy }) {
   }
   if (story.image) {
     const alt = copy.press.imageAlts[story.slug] ?? story.imageAlt ?? "";
+    const figureClass = story.image.endsWith(".svg")
+      ? styles.markFigure
+      : story.visualKind === "cover"
+        ? styles.coverFigure
+        : undefined;
     return (
-      <figure className={story.image.endsWith(".svg") ? styles.markFigure : undefined}>
+      <figure className={figureClass}>
         <Image src={story.image} alt={alt} fill sizes="(max-width: 760px) 92vw, 34vw" />
       </figure>
     );
@@ -379,11 +384,13 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
   const press = copy.press;
   const featured = featuredPressStories();
   const visual = featured.filter((story) => story.image || story.visualKind === "clients");
-  // Una sola pieza en la portada: la primera con imagen o logos. El archivo completo vive en /prensa.
-  const top = [...visual, ...featured.filter((story) => !visual.includes(story))].slice(0, 1);
+  // Tres piezas con imagen o logos y, debajo, el resto de las destacadas en lista.
+  const top = [...visual, ...featured.filter((story) => !visual.includes(story))].slice(0, 3);
+  const rest = featured.filter((story) => !top.includes(story)).slice(0, 4);
   const format = (story: PressStory) => press.formats[story.format] ?? story.format;
   const date = (story: PressStory) => press.publishedLabels[story.slug] ?? story.publishedLabel;
   const titleLang = press.storyLang ?? undefined;
+  const target = (story: PressStory) => (isOwnStory(story) ? {} : { target: "_blank", rel: "noreferrer" });
 
   return (
     <Band id="prensa" tone="light" labelledBy="v5-press-title">
@@ -394,7 +401,7 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
         link={{ href: "/prensa", label: text.archiveCta }}
       />
       <div className={styles.pressGrid}>
-        {top.map((story) => (
+        {top.map((story, index) => (
           <article className={styles.story} key={story.slug}>
             <PressFigure story={story} copy={copy} />
             <div>
@@ -405,11 +412,22 @@ export function V5Press({ copy }: { copy: HomeCopy }) {
                 </span>
               </div>
               <h3 lang={titleLang}>{story.title}</h3>
-              <a className={styles.more} href={story.href} target="_blank" rel="noreferrer">
-                {text.readCta} <span aria-hidden="true">↗</span>
+              {index === 0 ? (
+                <p className={styles.summary}>{press.summaries[story.slug] ?? story.summary}</p>
+              ) : null}
+              <a className={styles.more} href={story.href} {...target(story)}>
+                {text.readCta} <span aria-hidden="true">{isOwnStory(story) ? "→" : "↗"}</span>
               </a>
             </div>
           </article>
+        ))}
+      </div>
+      <div className={styles.storyList}>
+        {rest.map((story) => (
+          <a href={story.href} {...target(story)} key={story.slug}>
+            <span>{story.outlet}</span>
+            <strong lang={titleLang}>{story.title}</strong>
+          </a>
         ))}
       </div>
     </Band>

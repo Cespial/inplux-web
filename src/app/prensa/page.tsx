@@ -6,6 +6,8 @@ import { NextPage } from "@/components/v5/NextPage";
 import { Band, SectionHead, v5 as ui } from "@/components/v5/primitives";
 import {
   eventFormats,
+  isOwnStory,
+  ownStoryUrl,
   pressCategories,
   pressStories,
   type PressStory,
@@ -133,8 +135,8 @@ const pressCollectionJsonLd = {
           story.category === "Investigación"
             ? {
                 "@type": "ScholarlyArticle",
-                "@id": story.href,
-                url: story.href,
+                "@id": ownStoryUrl(story),
+                url: ownStoryUrl(story),
                 name: story.sourceTitle ?? story.title,
                 headline: story.title,
                 datePublished: story.publishedAt,
@@ -151,8 +153,8 @@ const pressCollectionJsonLd = {
             : eventFormats.has(story.format)
               ? {
                   "@type": "Event",
-                  "@id": story.href,
-                  url: story.href,
+                  "@id": ownStoryUrl(story),
+                  url: ownStoryUrl(story),
                   name: story.sourceTitle ?? story.title,
                   startDate: story.publishedAt,
                   eventAttendanceMode:
@@ -169,8 +171,8 @@ const pressCollectionJsonLd = {
                 }
               : {
                   "@type": "Article",
-                  "@id": story.href,
-                  url: story.href,
+                  "@id": ownStoryUrl(story),
+                  url: ownStoryUrl(story),
                   name: story.sourceTitle ?? story.title,
                   headline: story.title,
                   datePublished: story.publishedAt,
@@ -195,8 +197,7 @@ function StoryCard({ story }: { story: PressStory }) {
     <li className={styles.card}>
       <a
         href={story.href}
-        target="_blank"
-        rel="noreferrer"
+        {...(isOwnStory(story) ? {} : { target: "_blank", rel: "noreferrer" })}
         aria-label={`${story.title} — ${story.outlet}`}
       >
         <span className={styles.outlet}>{story.outlet}</span>
@@ -210,7 +211,7 @@ function StoryCard({ story }: { story: PressStory }) {
           <time dateTime={story.publishedAt}>{story.publishedLabel}</time>
         </span>
         <span className={styles.arrow} aria-hidden="true">
-          ↗
+          {isOwnStory(story) ? "→" : "↗"}
         </span>
       </a>
     </li>

@@ -78,7 +78,26 @@ export type PressStory = {
    */
   homeRank?: number;
   homeFeature?: boolean;
+  /**
+   * Nota propia publicada en inplux.co/prensa/<slug>. Solo la llevan las
+   * piezas que escribimos nosotros; el resto del archivo enlaza a su fuente.
+   */
+  article?: {
+    dek: string;
+    body: readonly string[];
+    facts: readonly { label: string; value: string }[];
+    product: { label: string; href: string };
+    client: { name: string; place: string; logo: { src: string; width: number; height: number } };
+  };
 };
+
+/** La pieza vive en inplux.co y no en un medio externo. */
+export function isOwnStory(story: PressStory) {
+  return story.href.startsWith("/");
+}
+
+export const ownStoryUrl = (story: PressStory) =>
+  isOwnStory(story) ? `https://inplux.co${story.href}` : story.href;
 
 /**
  * Archivo editorial con enlaces externos verificables.
@@ -101,14 +120,38 @@ export const pressStories = [
     title: "Software de INPLUX en producción en Sudáfrica",
     summary:
       "Para SE Holdings, en Johannesburgo, construimos seagricolas.com: la plataforma con la que rentan su flota de maquinaria agrícola, siempre con operador. Catálogo de 37 unidades, tarifas por hectárea, mapa de las zonas donde trabaja la flota y solicitudes en línea que se piden por mes, porque la siembra espera la primera lluvia.",
-    href: "https://seagricolas.com",
-    visualKind: "clients",
+    href: "/prensa/seagricolas-sudafrica",
+    visualKind: "cover",
     visualSignal: "seagricolas.com · Johannesburgo",
     visualCode: "Cliente en Sudáfrica",
-    logos: [
-      { src: "/brand/press/se-holdings.png", alt: "SE Holdings", width: 900, height: 234 },
-    ],
-    featured: false,
+    image: "/brand/press/seagricolas-sudafrica.jpg",
+    imageAlt:
+      "Portada de la nota: «Software de INPLUX, en producción en Sudáfrica» junto a la página de inicio de seagricolas.com, sobre un campo de tierra roja.",
+    article: {
+      dek: "Para SE Holdings, en Johannesburgo, construimos seagricolas.com: la plataforma con la que rentan su flota de maquinaria agrícola, siempre con operador.",
+      body: [
+        "Servicios Empresaviales Holdings (SE Holdings) presta servicios de mecanización agrícola en Sudáfrica: siembra de precisión, labranza, cosecha, aspersión y transporte. Su flota estaba en un registro de activos pensado para la contabilidad, no para que un agricultor supiera qué podía rentar, dónde y a qué precio.",
+        "Construimos seagricolas.com, un catálogo público en inglés con 37 unidades. Cada ficha dice qué hace la máquina, si está disponible y cuánto cuesta el servicio por hectárea. Ninguna máquina sale sola: toda renta incluye su operador, y la tarifa ya trae el tractor cuando el implemento lo necesita.",
+        "El formulario de solicitud salió de cómo trabaja la operación. Allá nadie reserva por fecha, porque la siembra espera la primera lluvia buena. Por eso la plataforma pide el mes preferido y la flexibilidad en lugar de un día exacto, y la solicitud llega por correo al equipo de finanzas, que confirma la renta cuando recibe el pago.",
+        "El mapa muestra las zonas donde trabaja la flota hoy: North West, Zebediela, Bronkhorstspruit y la finca de SE Holdings en Gauteng. Las ubicaciones exactas se publican a medida que el equipo las confirma, y el sitio lo dice en cada caso en lugar de inventarlas.",
+      ],
+      facts: [
+        { label: "Cliente", value: "SE Holdings · Johannesburgo" },
+        { label: "Producto", value: "Renta de maquinaria agrícola con operador" },
+        { label: "Catálogo", value: "37 unidades" },
+        { label: "Tarifas", value: "Por hectárea, en rand" },
+        { label: "Zonas en el mapa", value: "4" },
+        { label: "Idioma", value: "Inglés" },
+      ],
+      product: { label: "seagricolas.com", href: "https://seagricolas.com" },
+      client: {
+        name: "SE Holdings",
+        place: "Johannesburgo, Sudáfrica",
+        logo: { src: "/brand/press/se-holdings.png", width: 900, height: 234 },
+      },
+    },
+    featured: true,
+    homeRank: 0,
   },
   {
     /*
@@ -603,7 +646,7 @@ export const pressCategories = [
   {
     id: "proyectos",
     label: "Proyectos",
-    description: "Lanzamientos de software que construimos y que ya está en producción, enlazados al producto en vivo.",
+    description: "Notas propias sobre software que construimos y que ya está en producción.",
   },
 ] as const satisfies readonly {
   id: string;

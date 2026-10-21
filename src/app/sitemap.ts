@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { pressStories } from "@/content/press";
 import { sectorProfiles } from "@/content/sectores";
 import { teamMembers } from "@/content/team";
 
@@ -25,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/equipo",
     ...teamMembers.map((member) => `/equipo/${member.slug}`),
     "/prensa",
+    ...pressStories.filter((story) => story.article).map((story) => story.href),
     "/contacto",
     "/seguridad",
   ];

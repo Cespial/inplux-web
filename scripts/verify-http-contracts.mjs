@@ -23,6 +23,7 @@ const expectedRoutes = [
   ["/equipo/cristian-espinal-maya", 200],
   ["/nosotros", 200],
   ["/prensa", 200],
+  ["/prensa/seagricolas-sudafrica", 200],
   ["/contacto", 200],
   ["/seguridad", 200],
   ["/sectores/sector-inexistente", 404],

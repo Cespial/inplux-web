@@ -1120,6 +1120,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/equipo/jaime-alonso-cano-pino`,
     `${siteUrl}/equipo/cristian-espinal-maya`,
     `${siteUrl}/prensa`,
+    `${siteUrl}/prensa/seagricolas-sudafrica`,
     `${siteUrl}/contacto`,
     `${siteUrl}/seguridad`,
   ];
