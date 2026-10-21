@@ -23,6 +23,9 @@ GRANO = ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
 # Gancho en marfil y propuesta en gris debajo.
 FRASES = {
     "es": ("No hacemos demos.", "Software con IA que llega a producción.", "Desarrollo e implementación de IA"),
+    # La versión general, con el titular del sitio en dos tonos y sin gancho.
+    "general": ('<span class="gris">Transformación con IA</span><br>que llega a producción.', "",
+                "Desarrollo e implementación de IA"),
     "en": ("We don\u2019t ship slides.", "AI transformation that reaches production.", "AI development and implementation"),
 }
 
@@ -40,6 +43,7 @@ body{{width:{W}px;height:{H}px;overflow:hidden;background:{BLACK};color:{IVORY};
 .fondo{{position:absolute;inset:0;background-size:cover;filter:grayscale(1) contrast(1.08)}}
 .grano{{position:absolute;inset:0;background-image:{GRANO};background-size:120px;opacity:.10;mix-blend-mode:overlay}}
 .gancho{{font-weight:500;font-size:50px;line-height:1;letter-spacing:-.03em}}
+.gancho.dos{{font-size:38px;line-height:1.08;letter-spacing:-.025em}}
 .propuesta{{font-weight:400;font-size:22px;line-height:1.2;letter-spacing:-.015em;color:{MUTED}}}
 .gris{{color:{MUTED}}}
 .micro{{font-size:10.5px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:{MUTED}}}
@@ -77,8 +81,8 @@ def texto(frase, centrado):
     return f"""
 <div style="position:absolute;{caja};top:58px;display:grid;gap:12px">
   <p class="micro"><b>→</b> {rotulo}</p>
-  <h1 class="gancho">{gancho}</h1>
-  <p class="propuesta">{propuesta}</p>
+  <h1 class="gancho{'' if propuesta else ' dos'}">{gancho}</h1>
+  {f'<p class="propuesta">{propuesta}</p>' if propuesta else ''}
 </div>
 <p class="micro" style="position:absolute;right:{W - x1 + 8}px;top:32px;color:{IVORY}">inplux.co</p>
 {capas(x0 + 8, 34, 40)}"""
