@@ -186,3 +186,76 @@ export function findTeamMemberInByline(
     ),
   );
 }
+
+/**
+ * Integrante del equipo de ingeniería. Tarjeta en /equipo, sin página propia:
+ * por eso no tiene `code`, `bio` ni `sameAs`, y su `@id` vive en /equipo.
+ */
+export type TeamCrewMember = {
+  /** Ancla `/equipo#<slug>`. Reproduce el nombre legal completo. */
+  slug: string;
+  name: string;
+  givenName: string;
+  familyName: string;
+  jobTitle: string;
+  focus: string;
+  /** Formación, tal como la declara la persona en LinkedIn. */
+  credentials: readonly string[];
+  /** Retrato real, en blanco y negro, bajo `public/brand/team/` (≤ 150 KB). */
+  photo: {
+    src: string;
+    width: number;
+    height: number;
+  };
+  /** Solo si la URL respondió 200 y el nombre coincide. */
+  linkedin?: string;
+};
+
+/*
+ * El equipo que construye y opera los sistemas (PR P, 20-oct-2026).
+ *
+ * Autorización: Cristian Espinal Maya declaró el 20-oct-2026 que Daniel
+ * Alejandro López Naranjo, Cristian David Ajavi Aguilar y Alejandro López
+ * Durango autorizaron que el sitio publique su foto y su nombre.
+ *
+ * Fuente única: el texto de LinkedIn de cada persona que pegó Cristian. No se
+ * nombran empleadores anteriores. Sin `linkedin` porque las URL públicas no se
+ * pudieron confirmar; se añaden cuando Cristian las pase.
+ *
+ * Alejandro López Durango entra cuando lleguen sus datos: no se inventa cargo,
+ * formación ni enlaces.
+ *
+ * Aparte de `teamMembers` a propósito: /equipo/[slug], el sitemap, la portada y
+ * `founder` siguen siendo solo la dirección.
+ */
+export const teamCrew = [
+  {
+    slug: "daniel-alejandro-lopez-naranjo",
+    name: "Daniel Alejandro López Naranjo",
+    givenName: "Daniel Alejandro",
+    familyName: "López Naranjo",
+    jobTitle: "Product Engineer",
+    focus:
+      "Producto de punta a punta: web, móvil y servicios con React, React Native, NestJS y TypeScript, y recuperación con fuentes (RAG).",
+    credentials: ["Técnico en Desarrollo de Software, CESDE"],
+    photo: { src: "/brand/team/daniel-alejandro-lopez-naranjo.jpg", width: 900, height: 1200 },
+  },
+  {
+    slug: "cristian-david-ajavi-aguilar",
+    name: "Cristian David Ajavi Aguilar",
+    givenName: "Cristian David",
+    familyName: "Ajavi Aguilar",
+    jobTitle: "Automation Engineer",
+    focus: "Automatización con Python y modelos de lenguaje en procesos financieros.",
+    credentials: [
+      "Negocios Internacionales, Fundación Universitaria Luis Amigó",
+      "Diplomado en Mercado de Capitales, Universidad del Rosario",
+    ],
+    photo: { src: "/brand/team/cristian-david-ajavi-aguilar.jpg", width: 900, height: 1200 },
+  },
+] as const satisfies readonly TeamCrewMember[];
+
+/** `@id` de un integrante de `teamCrew`: se define en /equipo, no en un perfil. */
+export function crewPersonId(slug: string): string {
+  return `${SITE_URL}/equipo#${slug}`;
+}
