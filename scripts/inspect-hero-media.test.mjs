@@ -106,7 +106,7 @@ function makeFixture() {
 
   const manifest = {
     schemaVersion: 1,
-    project: "INPLUX · Fábrica de software",
+    project: "INPLUX · Transformación con IA",
     concept: "La fábrica visible",
     status: "approved",
     generatedAt: "2026-07-16T12:00:00.000Z",
