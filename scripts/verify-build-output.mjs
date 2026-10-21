@@ -20,6 +20,21 @@ const aboutOgImageAlt = "Edificios entre árboles con las montañas de Medellín
 const sharedContact = { dialogs: 1, triggers: 1, dialogForms: 1, sectionForms: 0 };
 
 /*
+ * La pestaña de noticia del hero (PR Q): mientras la noticia esté vigente, la
+ * portada en los dos idiomas la lleva —y con ella un disparador de contacto
+ * más—; pasado el último día, el build ya no la incluye. La fecha se lee de
+ * `src/content/noticia.ts` (este script no importa TypeScript).
+ */
+const newsSource = await readFile(path.join(root, "src/content/noticia.ts"), "utf8");
+const newsExpiresMatch = newsSource.match(/NEWS_EXPIRES = Date\.parse\("([^"]+)"\)/);
+const newsExpires = newsExpiresMatch ? Date.parse(newsExpiresMatch[1]) : Number.NaN;
+if (!Number.isFinite(newsExpires)) {
+  errors.push("src/content/noticia.ts: no se pudo leer NEWS_EXPIRES como fecha");
+}
+const newsActive = Date.now() < newsExpires;
+const homeTriggers = newsActive ? 4 : 3;
+
+/*
  * Los dos perfiles de /equipo, copiados de `src/content/team.ts` (este script
  * no importa TypeScript). `og:type` es `profile` y cada uno enlaza al otro en
  * su bloque «Siguiente».
@@ -194,7 +209,8 @@ const pageDefinitions = {
       "empresas",
       "contacto",
     ],
-    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    contact: { dialogs: 1, triggers: homeTriggers, dialogForms: 1, sectionForms: 0 },
+    news: { tab: "San Francisco · Dic", source: "news-sf" },
     // La portada reparte autoridad hacia dentro: los dos perfiles de persona
     // —donde vive la identidad de cada dirección para los buscadores— y la
     // página del sector. Si un rediseño los quita, el build lo dice.
@@ -247,7 +263,8 @@ const pageDefinitions = {
       "en-US": `${siteUrl}/en`,
       "x-default": siteUrl,
     },
-    contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
+    contact: { dialogs: 1, triggers: homeTriggers, dialogForms: 1, sectionForms: 0 },
+    news: { tab: "San Francisco · Dec", source: "en-news-sf" },
     productFooter: { label: "Documented products", prefix: "/en/work" },
   },
   howWeWork: {
@@ -1058,6 +1075,26 @@ function verifyContactSurface(name, html, expected) {
   expect(count(html, "<dialog open") === 0, `${name}: el diálogo no puede salir abierto desde SSR`);
 }
 
+function verifyNewsTab(name, html, expected) {
+  const tabs = count(html, "data-news-tab=");
+  if (!newsActive) {
+    expectEqual(tabs, 0, `${name}: la pestaña de noticia caducó y no debe salir en el HTML`);
+    return;
+  }
+  expectEqual(tabs, 1, `${name}: pestaña de noticia vigente`);
+  expect(html.includes(expected.tab), `${name}: la pestaña de noticia no dice «${expected.tab}»`);
+  expect(
+    html.includes(`data-contact-trigger="${expected.source}"`),
+    `${name}: la tarjeta de noticia debe abrir el contacto con source=${expected.source}`,
+  );
+  expect(
+    html.includes('src="/brand/news/golden-gate.webp"'),
+    `${name}: falta la foto de la placa de la noticia`,
+  );
+  // Sin JS la tarjeta se ve abierta: el SSR no puede marcarla cerrada.
+  expect(!html.includes('data-open="false"'), `${name}: la tarjeta de noticia sale cerrada del SSR`);
+}
+
 function verifyJsonLd(name, html, definition) {
   const jsonLd = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
     .filter((match) => readAttributes(match[1]).type === "application/ld+json")
@@ -1578,6 +1615,7 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
 
   verifySocialMetadata(name, html, definition);
   verifyContactSurface(name, html, definition.contact);
+  if (definition.news) verifyNewsTab(name, html, definition.news);
   verifyJsonLd(name, html, definition);
   verifyIds(name, html, definition.legacyFragments);
   for (const link of definition.requiredLinks ?? []) {

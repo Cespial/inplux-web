@@ -139,7 +139,7 @@ export default function EnglishHome() {
         >
           <main id="main-content" tabIndex={-1}>
             <section id="inicio">
-              <V5Hero copy={copy} primaryCta={heroContactCta} />
+              <V5Hero copy={copy} primaryCta={heroContactCta} lang="en" />
             </section>
 
             <LogoWall copy={copy.experienceRail} heading={copy.clientWall} />

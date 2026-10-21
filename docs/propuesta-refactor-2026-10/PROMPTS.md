@@ -71,3 +71,22 @@ El prompt completo no quedó guardado en el repositorio; arriba va el extracto r
 | Portada | e1f2a514-d297-4967-a40e-5778c82b0f0c | 3 | `public/brand/og/fuentes/equipo-medellin.webp` |
 Originales PNG 3040×1600 en `~/Downloads/inplux-og-equipo-{0..3}.png`; Cristian eligió la opción 4 (índice 3).
 Imagen sintética: no representa la oficina ni el equipo de INPLUX.
+
+## E13 · Placa de la pestaña de noticia (20-oct-2026, PR Q)
+
+Foto panorámica para la placa de la tarjeta «vamos a San Francisco» del hero de la portada: el Golden Gate
+completo, con las dos torres dentro del encuadre para que no se corten en la placa de unos 312 px.
+Midjourney: `--ar 4:1 --style raw`.
+
+| # | Uso | Prompt |
+|---|---|---|
+| E13-1 | Placa de la noticia | panoramic view of the Golden Gate Bridge in San Francisco at golden hour, the full red-orange suspension span with both towers centered, soft low fog over the water, Marin headlands behind… --ar 4:1 --style raw |
+
+El prompt completo no quedó guardado en el repositorio; arriba va el extracto registrado al elegirla.
+
+### E13 generadas (Midjourney, cuenta INPLUX)
+| Uso | Job | Índice | Archivo |
+|---|---|---|---|
+| Placa de la noticia | fd2894ee-246f-4852-be17-397b03e87a7a | 3 | `public/brand/news/golden-gate.webp` |
+Original PNG 4096×1184 (≈ 3,46:1); la placa usa esa proporción natural en vez de 4:1 para no cortar las torres.
+Imagen sintética: no es una fotografía de archivo.

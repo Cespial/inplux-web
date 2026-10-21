@@ -35,7 +35,10 @@ export type ContactSource =
   | "en-how-we-work-closing"
   | "en-sector-hero"
   | "en-sector-closing"
-  | "en-work-closing";
+  | "en-work-closing"
+  // La pestaña de noticia del hero de la portada (viaje a San Francisco).
+  | "news-sf"
+  | "en-news-sf";
 
 type ContactLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   beforeOpen?: () => void | Promise<void>;
