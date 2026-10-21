@@ -1,22 +1,47 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 import {
   getWorkSocialCard,
   isWorkSocialKey,
 } from "../social-card";
 
-export const runtime = "edge";
+/*
+ * Node y no edge desde el PR N (20-oct-2026): la tarjeta de cada ficha lleva
+ * la captura del mockup del hero, y se lee del disco en vez de pedirla por
+ * red. `outputFileTracingIncludes` (next.config.ts) mete en la función las
+ * fuentes y las capturas.
+ */
+export const runtime = "nodejs";
 
 const imageSize = { width: 1200, height: 630 } as const;
+
+const root = process.cwd();
 
 // Rethink Sans, la familia única del sitio desde octubre de 2026. Son instancias
 // estáticas (400 y 500) sacadas de la variable con fontTools: satori no lee
 // woff2 ni resuelve ejes, así que la variable no sirve aquí.
-const fontRegular = fetch(
-  new URL("../../../../fonts/RethinkSans-Regular.ttf", import.meta.url),
-).then((response) => response.arrayBuffer());
-const fontMedium = fetch(
-  new URL("../../../../fonts/RethinkSans-Medium.ttf", import.meta.url),
-).then((response) => response.arrayBuffer());
+const fontRegular = readFile(path.join(root, "src/app/fonts/RethinkSans-Regular.ttf"));
+const fontMedium = readFile(path.join(root, "src/app/fonts/RethinkSans-Medium.ttf"));
+
+/** Ancho con que la captura entra en la tarjeta (la fuente mide 560 px). */
+const mockupWidth = 470;
+
+/**
+ * La captura del mockup del hero de la ficha, que pinta `scripts/og-mockups.mjs`
+ * en `public/brand/og/mockups/<slug>.png`. Se devuelve como data URI con su
+ * alto a la escala de la tarjeta; el tamaño sale de la cabecera del PNG.
+ */
+async function readMockup(slug: string) {
+  const buffer = await readFile(path.join(root, "public/brand/og/mockups", `${slug}.png`));
+  const width = buffer.readUInt32BE(16);
+  const height = buffer.readUInt32BE(20);
+  return {
+    src: `data:image/png;base64,${buffer.toString("base64")}`,
+    width: mockupWidth,
+    height: Math.round((height * mockupWidth) / width),
+  };
+}
 
 const ivory = "#f6f2ec";
 const black = "#0c0c0b";
@@ -40,7 +65,11 @@ export async function GET(
 
   const card = getWorkSocialCard(key);
   const requestedVersion = new URL(request.url).searchParams.get("v");
-  const [regular, medium] = await Promise.all([fontRegular, fontMedium]);
+  const [regular, medium, mockup] = await Promise.all([
+    fontRegular,
+    fontMedium,
+    card.kind === "profile" ? readMockup(card.key) : null,
+  ]);
   const accent =
     card.kind === "profile" && card.attributionState === "unconfirmed" ? "#b8aaa0" : teal;
 
@@ -134,11 +163,12 @@ export async function GET(
 
         <div
           style={{
-            alignItems: "flex-end",
+            alignItems: card.kind === "directory" ? "flex-end" : "center",
             display: "flex",
             flex: 1,
             justifyContent: "space-between",
-            paddingBottom: 34,
+            paddingBottom: card.kind === "directory" ? 34 : 22,
+            paddingTop: card.kind === "directory" ? 0 : 22,
             position: "relative",
           }}
         >
@@ -146,7 +176,7 @@ export async function GET(
             style={{
               display: "flex",
               flexDirection: "column",
-              maxWidth: card.kind === "directory" ? 780 : 720,
+              maxWidth: card.kind === "directory" ? 780 : 540,
             }}
           >
             <div
@@ -166,7 +196,7 @@ export async function GET(
             <div
               style={{
                 display: "flex",
-                fontSize: card.kind === "directory" ? 84 : 112,
+                fontSize: card.kind === "directory" ? 84 : 92,
                 fontWeight: 400,
                 letterSpacing: "-0.02em",
                 lineHeight: 0.98,
@@ -178,14 +208,43 @@ export async function GET(
               style={{
                 color: "rgba(246,242,236,0.78)",
                 display: "flex",
-                fontSize: 26,
+                fontSize: card.kind === "directory" ? 26 : 23,
                 lineHeight: 1.3,
-                marginTop: 24,
+                marginTop: card.kind === "directory" ? 24 : 18,
                 maxWidth: 700,
               }}
             >
               {card.description}
             </div>
+            {card.kind === "profile" ? (
+              <div
+                style={{
+                  alignItems: "center",
+                  alignSelf: "flex-start",
+                  border: `1px solid ${accent}`,
+                  borderRadius: 999,
+                  color: accent,
+                  display: "flex",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.1em",
+                  marginTop: 26,
+                  padding: "11px 18px",
+                }}
+              >
+                <span
+                  style={{
+                    backgroundColor: accent,
+                    borderRadius: 99,
+                    display: "flex",
+                    height: 8,
+                    marginRight: 10,
+                    width: 8,
+                  }}
+                />
+                {card.status.toUpperCase()}
+              </div>
+            ) : null}
           </div>
 
           {card.kind === "directory" ? (
@@ -216,35 +275,16 @@ export async function GET(
                 FUENTES PÚBLICAS
               </span>
             </div>
-          ) : (
-            <div
-              style={{
-                alignItems: "center",
-                border: `1px solid ${accent}`,
-                borderRadius: 999,
-                color: accent,
-                display: "flex",
-                fontSize: 15,
-                fontWeight: 500,
-                justifyContent: "center",
-                letterSpacing: "0.1em",
-                marginLeft: 40,
-                padding: "14px 22px",
-              }}
-            >
-              <span
-                style={{
-                  backgroundColor: accent,
-                  borderRadius: 99,
-                  display: "flex",
-                  height: 9,
-                  marginRight: 10,
-                  width: 9,
-                }}
-              />
-              {card.status.toUpperCase()}
-            </div>
-          )}
+          ) : mockup ? (
+            // eslint-disable-next-line @next/next/no-img-element -- satori pinta <img>, no next/image
+            <img
+              alt=""
+              height={mockup.height}
+              src={mockup.src}
+              style={{ marginLeft: 40 }}
+              width={mockup.width}
+            />
+          ) : null}
         </div>
 
         <div
@@ -262,7 +302,7 @@ export async function GET(
           }}
         >
           <div style={{ color: accent, display: "flex" }}>{card.attribution.toUpperCase()}</div>
-          <div style={{ display: "flex" }}>INPLUX.CO/TRABAJO · VERIFICADO {card.version}</div>
+          <div style={{ display: "flex" }}>INPLUX.CO/TRABAJO · VERIFICADO {card.verifiedAt}</div>
         </div>
       </div>
     ),

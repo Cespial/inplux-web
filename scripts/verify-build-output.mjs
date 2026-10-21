@@ -41,7 +41,7 @@ const teamProfiles = [
       "CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
   },
 ];
-const workSocialVersion = "2026-10-20";
+const workSocialVersion = "2026-10-20.2";
 const workSocialImage = (key) =>
   `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
 
