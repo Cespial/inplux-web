@@ -5,7 +5,8 @@ cuelga, así que corre con timeout y luego pkill; sips verifica el tamaño.
 """
 import subprocess, sys
 from pathlib import Path
-from build import PIEZAS
+import importlib, os
+PIEZAS = importlib.import_module(os.environ.get("PIEZAS", "build")).PIEZAS  # PIEZAS=generales para la serie general
 
 AQUI = Path(__file__).parent
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
