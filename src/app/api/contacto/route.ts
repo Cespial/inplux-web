@@ -71,8 +71,10 @@ function refererPath(request: Request) {
   const referer = request.headers.get("referer");
   if (!referer) return "";
   try {
+    // Se compara con `Host`: detrás de un proxy `request.url` puede traer otro
+    // nombre de host que el que vio el navegador.
     const url = new URL(referer);
-    return url.origin === new URL(request.url).origin ? url.pathname : "";
+    return url.host === request.headers.get("host") ? url.pathname : "";
   } catch {
     return "";
   }
