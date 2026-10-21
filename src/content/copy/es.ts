@@ -820,7 +820,12 @@ export const homeCopyEs: HomeCopy = {
     linkedInLabel: "LinkedIn",
     roles: {},
     focuses: {},
-    bios: {},
+    // La portada lleva una frase por dirección; la bio completa vive en /equipo.
+    bios: {
+      "jaime-alonso-cano-pino": "Dirige la estrategia y el criterio con el que INPLUX decide qué construir.",
+      "cristian-espinal-maya":
+        "Lidera la construcción de los productos: diseño, software, datos e inteligencia artificial como un solo sistema.",
+    },
   },
 
   press: {
@@ -858,7 +863,7 @@ export const homeCopyEs: HomeCopy = {
     eyebrow: "06 / EL SIGUIENTE PRODUCTO",
     titleLead: "Construyamos lo que ",
     titleEmphasis: "sigue.",
-    lead: "Cuéntanos el problema, quién lo vive y qué debería cambiar. No necesitas tener los requisitos ni el alcance definidos.",
+    lead: "Cuéntanos el problema, quién lo vive y qué debería cambiar.",
     entityStatement:
       "INPLUX S.A.S. · NIT 901.784.448-8 · Desarrollamos e implementamos transformación con IA, desde Medellín, Colombia.",
     cta: "Empezar un proyecto",
@@ -908,23 +913,14 @@ export const homeCopyEs: HomeCopy = {
     products: {
       eyebrow: "Productos propios",
       title: "Cinco productos construidos y operados por INPLUX.",
-      lead: "Cada uno nació del problema de un cliente. Las capturas son de sus páginas públicas.",
-      tribaiLead:
-        "Nuestro servidor MCP le da a Claude y a ChatGPT el Estatuto Tributario vigente, la doctrina de la DIAN y la jurisprudencia del Consejo de Estado, con la fuente oficial de cada respuesta.",
-      tribaiTag: "Tribai MCP · ejemplo ilustrativo",
-      tribaiCta: "Ver Tribai",
+      lead: "Cada uno nació del problema de un cliente.",
       openCta: "Ver producto",
-      moreLabel: "También construimos",
       allCta: "Ver todos los productos",
-      inDevelopment: "En desarrollo",
-      terminalAriaLabel: "Ejemplo de consulta al servidor MCP de Tribai",
-      terminalCall: "Claude llama la herramienta de Tribai",
-      terminalAnswer: "Respuesta, con la fuente oficial",
     },
     latam: {
       eyebrow: "Dónde estamos",
       title: "Desde Medellín, para Latinoamérica.",
-      lead: "Desarrollamos e implementamos la transformación con IA de empresas e instituciones de la región. La ingeniería se hace en Medellín; el trabajo, dentro de los sistemas y los equipos de cada cliente.",
+      lead: "La ingeniería se hace en Medellín; el trabajo, dentro de los sistemas y los equipos de cada cliente.",
     },
     sectors: {
       eyebrow: "Dónde trabajamos",
@@ -953,7 +949,7 @@ export const homeCopyEs: HomeCopy = {
       ],
     },
     audit: {
-      eyebrow: "Gobierno de la IA",
+      eyebrow: "Evidencia",
       title: "Lo que una entidad puede revisar, línea por línea.",
       items: [
         {

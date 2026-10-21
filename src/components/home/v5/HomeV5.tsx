@@ -6,15 +6,9 @@ import { PageHero } from "@/components/v5/PageHero";
 import {
   Band,
   Button,
-  Card,
-  CardGrid,
   Chip,
-  FeatureSplit,
-  Placeholder,
   SectionHead,
-  Shot,
   Timeline,
-  cx,
   statusTone,
   v5 as ui,
 } from "@/components/v5/primitives";
@@ -31,7 +25,6 @@ import { CAPTURA_ALTO, CAPTURA_ANCHO, workCaptures } from "@/content/work-captur
 import styles from "./home-v5.module.css";
 import { NewsTab } from "./NewsTab";
 import { SectorCards } from "./SectorCards";
-import { TribaiTerminal } from "./TribaiTerminal.client";
 
 /*
  * La portada v5 (octubre de 2026), sección por sección, compuesta con las
@@ -58,6 +51,12 @@ function profile(slug: WorkProfile["slug"]) {
 function workPath(copy: HomeCopy) {
   return copy.workPath ?? "/trabajo";
 }
+
+/**
+ * La clase de la raíz de la portada (`<V5Page className>`): el aire entre
+ * bandas y el ancho de los leads son de la portada, no del sistema.
+ */
+export const homeRhythm = styles.home;
 
 /* ---------------------------------------------------------------- hero */
 
@@ -91,7 +90,7 @@ export function V5Hero({
   );
 }
 
-/* ------------------------------------- Latinoamérica: video y cifras */
+/* ------------------------------------------- tesis: «Desde Medellín» */
 
 /** El montaje «Desde Medellín, para Latinoamérica»: seis tomas de tres segundos. */
 const LATAM_VIDEO = {
@@ -104,10 +103,27 @@ const LATAM_VIDEO = {
   ],
 } as const;
 
-export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
+/** La banda de tesis: el montaje, el título y una frase. Las cifras van en la evidencia. */
+export function V5Latam({ copy }: { copy: HomeCopy }) {
+  const latam = copy.v5.latam;
+  return (
+    <VideoBand
+      id="latinoamerica"
+      className={styles.thesis}
+      eyebrow={latam.eyebrow}
+      title={latam.title}
+      lead={latam.lead}
+      poster={LATAM_VIDEO.poster}
+      sources={LATAM_VIDEO.sources}
+    />
+  );
+}
+
+/** Las tres cifras publicadas, cada una con el enlace a lo que la sustenta. */
+function proofStats(copy: HomeCopy, lang: Lang): Stat[] {
   const laudos = profile("laudos");
   const stats = copy.heroStats;
-  const proof: Stat[] = [
+  return [
     {
       who: laudos.name,
       value: localNumber(laudos.interface.primaryMetric, lang),
@@ -125,20 +141,6 @@ export function V5Latam({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
       source: { href: "#clientes", label: copy.v5.proof.wallSourceLabel },
     },
   ];
-
-  const latam = copy.v5.latam;
-  return (
-    <VideoBand
-      id="latinoamerica"
-      eyebrow={latam.eyebrow}
-      title={latam.title}
-      lead={latam.lead}
-      poster={LATAM_VIDEO.poster}
-      sources={LATAM_VIDEO.sources}
-    >
-      <StatRow id="casos" ariaLabel={stats.ariaLabel} items={proof} />
-    </VideoBand>
-  );
 }
 
 /* ---------------------------------------------------------------- proceso */
@@ -164,6 +166,13 @@ export function V5Process({ copy }: { copy: HomeCopy }) {
 
 /* -------------------------------------------------------------- productos */
 
+/**
+ * Los cinco productos en fichas iguales: captura chica de la página pública,
+ * categoría y estado, nombre, una línea y el enlace. El detalle de cada uno
+ * vive en su perfil de `/trabajo`; la portada sólo los presenta.
+ */
+const PRODUCT_ORDER = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const;
+
 export function V5Products({ copy }: { copy: HomeCopy }) {
   const text = copy.v5.products;
   const rail = copy.experienceRail;
@@ -171,111 +180,37 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
   const category = (item: WorkProfile) => rail.productCategories[item.slug] ?? item.category;
   const status = (item: WorkProfile) => rail.productStatuses[item.slug] ?? item.status.label;
 
-  const tribai = profile("tribai");
-  const gobia = profile("gobia");
-  const minis = (["kelsen", "laudos", "porkia"] as const).map(profile);
-  const inDevelopment = portfolio.filter((item) => item.stage === "En desarrollo");
-
   return (
-    <Band id="productos" labelledBy="v5-products-title">
+    <Band id="productos" tone="light" labelledBy="v5-products-title">
       <SectionHead id="v5-products-title" eyebrow={text.eyebrow} title={text.title} lead={text.lead} />
-
-      <FeatureSplit
-        id="p-tribai"
-        kicker={
-          <>
-            {category(tribai)}{" "}
-            <Chip dot>{status(tribai)}</Chip>
-          </>
-        }
-        title={tribai.name}
-        lead={
-          <>
-            {headline(tribai)} {text.tribaiLead}
-          </>
-        }
-        actions={
-          <>
-            <Button href={`${workPath(copy)}/tribai`} variant="primary">
-              {text.tribaiCta}
-            </Button>
-            <Chip>{text.tribaiTag}</Chip>
-          </>
-        }
-        media={<TribaiTerminal copy={text} />}
-      />
-
-      <FeatureSplit
-        id="p-gobia"
-        reverse
-        kicker={
-          <>
-            {category(gobia)}{" "}
-            <Chip dot tone={statusTone(status(gobia))}>
-              {status(gobia)}
-            </Chip>
-          </>
-        }
-        title={gobia.name}
-        lead={headline(gobia)}
-        actions={
-          <Button href={`${workPath(copy)}/gobia`} variant="ghost">
-            {text.openCta} <span aria-hidden="true">→</span>
-          </Button>
-        }
-        media={
-          <Shot>
-            <Image
-              src={workCaptures.gobia.src}
-              alt={workCaptures.gobia.alt}
-              width={CAPTURA_ANCHO}
-              height={CAPTURA_ALTO}
-              sizes="(max-width: 760px) 92vw, 52vw"
-            />
-          </Shot>
-        }
-      />
-
-      <p className={`${ui.eyebrow} ${styles.moreTitle}`}>{text.moreLabel}</p>
-      <CardGrid>
-        {minis.map((item) => (
-          <Card
-            key={item.slug}
-            id={`p-${item.slug}`}
-            href={`${workPath(copy)}/${item.slug}`}
-            media={
-              <Image
-                src={workCaptures[item.slug].src}
-                alt=""
-                width={CAPTURA_ANCHO}
-                height={CAPTURA_ALTO}
-                sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 22vw"
-              />
-            }
-            meta={
-              <>
-                {category(item)} ·{" "}
-                <span className={cx(statusTone(status(item)) === "pilot" && ui.pilot)}>{status(item)}</span>
-              </>
-            }
-            title={item.name}
-            text={headline(item)}
-          />
+      <ul className={styles.productGrid} data-reveal-children="">
+        {PRODUCT_ORDER.map(profile).map((item) => (
+          <li key={item.slug}>
+            <Link className={styles.product} href={`${workPath(copy)}/${item.slug}`} id={`p-${item.slug}`}>
+              <span className={styles.productMedia}>
+                <Image
+                  src={workCaptures[item.slug].src}
+                  alt=""
+                  width={CAPTURA_ANCHO}
+                  height={CAPTURA_ALTO}
+                  sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 18vw"
+                />
+              </span>
+              <span className={styles.productMeta}>
+                {category(item)}
+                <Chip dot tone={statusTone(status(item))}>
+                  {status(item)}
+                </Chip>
+              </span>
+              <h3>{item.name}</h3>
+              <p>{headline(item)}</p>
+              <span className={styles.productCta}>
+                {text.openCta} <span aria-hidden="true">→</span>
+              </span>
+            </Link>
+          </li>
         ))}
-        {inDevelopment.map((item) => (
-          <Card
-            key={item.name}
-            media={<Placeholder>{text.inDevelopment}</Placeholder>}
-            meta={
-              <>
-                {item.category} · {text.inDevelopment}
-              </>
-            }
-            title={item.name}
-            text={item.description}
-          />
-        ))}
-      </CardGrid>
+      </ul>
       <p className={styles.allLink}>
         <Link href={workPath(copy)}>
           {text.allCta} <span aria-hidden="true">→</span>
@@ -326,11 +261,14 @@ const AUDIT_ICONS = [
  * recolorear; el énfasis al pasar el cursor es la opacidad de la celda.
  */
 
-export function V5Audit({ copy }: { copy: HomeCopy }) {
+export function V5Audit({ copy, lang }: { copy: HomeCopy; lang: Lang }) {
   const audit = copy.v5.audit;
   return (
-    <Band id="auditoria" tone="light" labelledBy="v5-audit-title">
+    <Band id="auditoria" tone="light" className={styles.evidence} labelledBy="v5-audit-title">
       <SectionHead id="v5-audit-title" align="center" eyebrow={audit.eyebrow} title={audit.title} />
+      <div className={styles.evidenceStats}>
+        <StatRow id="casos" ariaLabel={copy.heroStats.ariaLabel} items={proofStats(copy, lang)} />
+      </div>
       <ul className={styles.audit}>
         {audit.items.map((item, index) => (
           <li key={item.title}>

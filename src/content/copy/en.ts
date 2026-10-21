@@ -982,10 +982,9 @@ export const homeCopyEn: HomeCopy = {
       "cristian-espinal-maya": "Product, technology architecture and artificial intelligence.",
     },
     bios: {
-      "jaime-alonso-cano-pino":
-        "Directs the strategy and the judgment with which INPLUX turns experience from complex contexts into products that can operate and produce verifiable results.",
+      "jaime-alonso-cano-pino": "Directs the strategy and the judgment with which INPLUX decides what to build.",
       "cristian-espinal-maya":
-        "Leads the definition and construction of digital products. Coordinates how design, software, data and artificial intelligence work as a single delivery system.",
+        "Leads how the products get built: design, software, data and artificial intelligence as a single system.",
     },
   },
 
@@ -1120,7 +1119,7 @@ export const homeCopyEn: HomeCopy = {
     eyebrow: "06 / THE NEXT PRODUCT",
     titleLead: "Let's build what ",
     titleEmphasis: "comes next.",
-    lead: "Tell us the problem, who lives with it and what should change. You don't need to arrive with requirements or a defined scope.",
+    lead: "Tell us the problem, who lives with it and what should change.",
     entityStatement:
       "INPLUX LLC is a limited liability company with its office in Miami, Florida. From there we provide software services to clients abroad, with the engineering team of INPLUX S.A.S. in Medellín, Colombia.",
     cta: "Start a project",
@@ -1170,23 +1169,14 @@ export const homeCopyEn: HomeCopy = {
     products: {
       eyebrow: "Our own products",
       title: "Five products built and run by INPLUX.",
-      lead: "Each one started with a client's problem. Screenshots come from their public pages.",
-      tribaiLead:
-        "Our MCP server gives Claude and ChatGPT Colombia's current Tax Code, DIAN doctrine and Council of State case law, with the official source behind every answer.",
-      tribaiTag: "Tribai MCP · illustrative example",
-      tribaiCta: "See Tribai",
+      lead: "Each one started with a client's problem.",
       openCta: "See product",
-      moreLabel: "We also build",
       allCta: "See all products",
-      inDevelopment: "In development",
-      terminalAriaLabel: "Example call to the Tribai MCP server",
-      terminalCall: "Claude calls the Tribai tool",
-      terminalAnswer: "Response, with the official source",
     },
     latam: {
       eyebrow: "Where we build",
       title: "From Medellín, for Latin America.",
-      lead: "We develop and implement the AI transformation of companies and institutions across the region. Engineering happens in Medellín; the work happens inside each client's systems and teams.",
+      lead: "Engineering happens in Medellín; the work happens inside each client's systems and teams.",
     },
     sectors: {
       eyebrow: "Where we work",
@@ -1215,7 +1205,7 @@ export const homeCopyEn: HomeCopy = {
       ],
     },
     audit: {
-      eyebrow: "AI governance",
+      eyebrow: "Evidence",
       title: "What an institution can review, line by line.",
       items: [
         {

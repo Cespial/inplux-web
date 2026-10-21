@@ -545,16 +545,8 @@ export type HomeV5Copy = {
     eyebrow: string;
     title: string;
     lead: string;
-    tribaiLead: string;
-    tribaiTag: string;
-    tribaiCta: string;
     openCta: string;
-    moreLabel: string;
     allCta: string;
-    inDevelopment: string;
-    terminalAriaLabel: string;
-    terminalCall: string;
-    terminalAnswer: string;
   };
   /** La banda de video «Desde Medellín, para Latinoamérica», con las cifras con fuente debajo. */
   latam: {

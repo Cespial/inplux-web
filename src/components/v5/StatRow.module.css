@@ -39,7 +39,7 @@
 }
 
 .case .unit {
-  color: #e1dbd2;
+  color: var(--stat-unit, #e1dbd2);
   font-size: var(--step-6);
 }
 
