@@ -30,7 +30,7 @@ const teamProfiles = [
     name: "Jaime Alonso Cano Pino",
     jobTitle: "CEO y fundador",
     description:
-      "CEO y fundador de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
+      "CEO y fundador de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Autor de columnas sobre el sistema tributario colombiano y la inteligencia artificial aplicada en Al Poniente.",
   },
   {
     slug: "cristian-espinal-maya",
@@ -38,7 +38,7 @@ const teamProfiles = [
     name: "Cristian Espinal Maya",
     jobTitle: "CTO",
     description:
-      "CTO de INPLUX S.A.S., fábrica de software con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
+      "CTO de INPLUX S.A.S., empresa que desarrolla e implementa transformación con IA, con sede en Medellín, Colombia. Economista e investigador; autor de working papers en arXiv y SSRN sobre inteligencia artificial, trabajo y capital humano.",
   },
 ];
 const workSocialVersion = "2026-10-20.2";
@@ -455,17 +455,17 @@ const pageDefinitions = {
     file: ".next/server/app/nosotros.html",
     title: "Nosotros — construimos con criterio, desde Medellín | INPLUX",
     description:
-      "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     canonical: "https://inplux.co/nosotros",
     ogTitle: "Construimos con criterio, desde Medellín | INPLUX",
     ogDescription:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     ogUrl: "https://inplux.co/nosotros",
     ogImage: aboutOgImage,
     ogImageAlt: aboutOgImageAlt,
     twitterTitle: "Construimos con criterio, desde Medellín | INPLUX",
     twitterDescription:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     twitterImageAlt: aboutOgImageAlt,
     jsonLd: {
       type: "AboutPage",

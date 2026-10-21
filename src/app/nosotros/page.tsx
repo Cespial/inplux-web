@@ -31,14 +31,14 @@ import { nosotrosSocialImage, twitterImage } from "@/lib/social-cards";
 export const metadata: Metadata = {
   title: "Nosotros — construimos con criterio, desde Medellín",
   description:
-    "Conoce la trayectoria, los principios y las personas que convierten contexto, producto e ingeniería en software útil.",
+    "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
   alternates: {
     canonical: "https://inplux.co/nosotros",
   },
   openGraph: {
     title: "Construimos con criterio, desde Medellín | INPLUX",
     description:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     url: "https://inplux.co/nosotros",
     siteName: "INPLUX",
     locale: "es_CO",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Construimos con criterio, desde Medellín | INPLUX",
     description:
-      "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+      "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
     images: [twitterImage(nosotrosSocialImage)],
   },
 };
@@ -82,7 +82,7 @@ const aboutPageJsonLd = {
   name: "Construimos con criterio, desde Medellín",
   url: "https://inplux.co/nosotros",
   description:
-    "La trayectoria, los principios y las personas detrás de la fábrica de software de INPLUX.",
+    "INPLUX desarrolla e implementa la transformación con IA de empresas e instituciones en Latinoamérica.",
   mainEntity: {
     "@id": "https://inplux.co/#organization",
   },
