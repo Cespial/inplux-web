@@ -11,6 +11,7 @@ import {
   V5Products,
   V5Sectors,
   V5Team,
+  homeRhythm,
 } from "@/components/home/v5/HomeV5";
 import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
@@ -93,7 +94,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       <ContactDialogProvider>
-        <V5Page>
+        <V5Page className={homeRhythm}>
           <main id="main-content" tabIndex={-1}>
             <section id="inicio">
               <V5Hero copy={copy} primaryCta={heroContactCta} lang="es" />

@@ -52,6 +52,12 @@ function workPath(copy: HomeCopy) {
   return copy.workPath ?? "/trabajo";
 }
 
+/**
+ * La clase de la raíz de la portada (`<V5Page className>`): el aire entre
+ * bandas y el ancho de los leads son de la portada, no del sistema.
+ */
+export const homeRhythm = styles.home;
+
 /* ---------------------------------------------------------------- hero */
 
 export function V5Hero({

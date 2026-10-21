@@ -3,6 +3,20 @@
    botones, filas, bloque alternado, cierre) están en `components/v5`.
    =========================================================================== */
 
+/* ------------------------------------------------------------------ ritmo */
+
+/* Un paso más de aire entre bandas que el resto del sitio, y leads de una
+   frase que no pasan de 52 caracteres por línea. La cabecera de sección
+   (`SectionHead`) es el bloque con `data-reveal`; su último párrafo es el
+   lead. */
+.home {
+  --band: clamp(5rem, 9vw, 8rem);
+}
+
+.home [data-reveal] > p:last-child {
+  max-width: 52ch;
+}
+
 /* ---------------------------------------------------------------- proceso */
 
 .process {

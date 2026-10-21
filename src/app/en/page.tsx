@@ -11,6 +11,7 @@ import {
   V5Products,
   V5Sectors,
   V5Team,
+  homeRhythm,
 } from "@/components/home/v5/HomeV5";
 import { LogoWall } from "@/components/v5/LogoWall";
 import { Anchor, CloseBand, MailRow, buttonClass, v5 } from "@/components/v5/primitives";
@@ -131,6 +132,7 @@ export default function EnglishHome() {
         formCopy={copy.contactForm}
       >
         <V5Page
+          className={homeRhythm}
           lang={copy.htmlLang}
           headerCopy={copy.header}
           footerCopy={copy.footer}
