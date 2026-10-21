@@ -103,14 +103,14 @@ const jsonLd = {
       worksFor: { "@id": `${SITE_URL}/#organization` },
     })),
     // El equipo no tiene perfil propio: su `@id` y su definición viven aquí.
-    ...teamCrew.map((member) => ({
+    ...teamCrew.map((member: TeamCrewMember) => ({
       "@type": "Person",
       "@id": crewPersonId(member.slug),
       name: member.name,
       givenName: member.givenName,
       familyName: member.familyName,
       url: `${PAGE_URL}#${member.slug}`,
-      jobTitle: member.jobTitle,
+      ...(member.jobTitle ? { jobTitle: member.jobTitle } : {}),
       image: `${SITE_URL}${member.photo.src}`,
       worksFor: { "@id": `${SITE_URL}/#organization` },
     })),
@@ -207,19 +207,23 @@ export default function EquipoPage() {
                         alt={member.name}
                         width={member.photo.width}
                         height={member.photo.height}
-                        sizes="(max-width: 760px) 92vw, 28vw"
+                        sizes="(max-width: 760px) 92vw, (max-width: 1100px) 44vw, 22vw"
                       />
                       <span className={styles.caption}>
-                        <span className={styles.role}>{member.jobTitle}</span>
+                        {member.jobTitle ? (
+                          <span className={styles.role}>{member.jobTitle}</span>
+                        ) : null}
                         <strong>{member.name}</strong>
                       </span>
                     </div>
-                    <p>{member.focus}</p>
-                    <ul>
-                      {member.credentials.map((credential) => (
-                        <li key={credential}>{credential}</li>
-                      ))}
-                    </ul>
+                    {member.focus ? <p>{member.focus}</p> : null}
+                    {member.credentials?.length ? (
+                      <ul>
+                        {member.credentials.map((credential) => (
+                          <li key={credential}>{credential}</li>
+                        ))}
+                      </ul>
+                    ) : null}
                     {member.linkedin ? (
                       <p className={styles.links}>
                         <a href={member.linkedin} target="_blank" rel="noreferrer">

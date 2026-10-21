@@ -197,10 +197,15 @@ export type TeamCrewMember = {
   name: string;
   givenName: string;
   familyName: string;
-  jobTitle: string;
-  focus: string;
+  /*
+   * Cargo, foco y formación son opcionales: una persona puede entrar solo con
+   * foto y nombre (Alejandro López Durango, a pedido de Cristian). La tarjeta
+   * omite lo que falte sin dejar huecos y el JSON-LD no declara `jobTitle`.
+   */
+  jobTitle?: string;
+  focus?: string;
   /** Formación, tal como la declara la persona en LinkedIn. */
-  credentials: readonly string[];
+  credentials?: readonly string[];
   /** Retrato real, en blanco y negro, bajo `public/brand/team/` (≤ 150 KB). */
   photo: {
     src: string;
@@ -225,10 +230,11 @@ export type TeamCrewMember = {
  * `linkedin` porque las URL públicas no se pudieron confirmar; se añaden
  * cuando Cristian las pase.
  *
- * Orden: coordinación primero, después ingeniería.
+ * Orden (pedido por Cristian): Alejandro Estrada, Alejandro López Durango,
+ * Daniel y Cristian David.
  *
- * Alejandro López Durango entra cuando lleguen sus datos: no se inventa cargo,
- * formación ni enlaces.
+ * Alejandro López Durango entra solo con foto y nombre, a pedido de Cristian
+ * (20-oct-2026): no se inventa cargo, foco, formación ni enlaces.
  *
  * Aparte de `teamMembers` a propósito: /equipo/[slug], el sitemap, la portada y
  * `founder` siguen siendo solo la dirección.
@@ -247,6 +253,13 @@ export const teamCrew = [
       "Mercadólogo, Universidad de Medellín",
     ],
     photo: { src: "/brand/team/alejandro-estrada-gomez.jpg", width: 900, height: 1200 },
+  },
+  {
+    slug: "alejandro-lopez-durango",
+    name: "Alejandro López Durango",
+    givenName: "Alejandro",
+    familyName: "López Durango",
+    photo: { src: "/brand/team/alejandro-lopez-durango.jpg", width: 900, height: 1200 },
   },
   {
     slug: "daniel-alejandro-lopez-naranjo",

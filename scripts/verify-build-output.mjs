@@ -50,6 +50,8 @@ const teamProfiles = [
  */
 const teamCrewProfiles = [
   { slug: "alejandro-estrada-gomez", name: "Alejandro Estrada Gómez" },
+  // Solo foto y nombre, a pedido de Cristian: su Person no lleva jobTitle.
+  { slug: "alejandro-lopez-durango", name: "Alejandro López Durango" },
   { slug: "daniel-alejandro-lopez-naranjo", name: "Daniel Alejandro López Naranjo" },
   { slug: "cristian-david-ajavi-aguilar", name: "Cristian David Ajavi Aguilar" },
 ];
