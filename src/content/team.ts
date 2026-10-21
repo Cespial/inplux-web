@@ -203,8 +203,15 @@ export type TeamCrewMember = {
    * omite lo que falte sin dejar huecos y el JSON-LD no declara `jobTitle`.
    */
   jobTitle?: string;
+  /**
+   * Lo que la persona sabe hacer y hace en INPLUX: una o dos frases cortas, en
+   * tercera persona y sin adjetivos de autoelogio.
+   */
   focus?: string;
-  /** Formación, tal como la declara la persona en LinkedIn. */
+  /**
+   * Títulos y formación, tal como los declara la persona en LinkedIn. La
+   * tarjeta los muestra en una sola línea discreta, debajo del foco.
+   */
   credentials?: readonly string[];
   /** Retrato real, en blanco y negro, bajo `public/brand/team/` (≤ 150 KB). */
   photo: {
@@ -247,11 +254,8 @@ export const teamCrew = [
     familyName: "Estrada Gómez",
     jobTitle: "Coordinador de proyectos",
     focus:
-      "Planeación y seguimiento de proyectos, control de costos y análisis financiero con Power BI.",
-    credentials: [
-      "Contador público, Universidad de Medellín",
-      "Mercadólogo, Universidad de Medellín",
-    ],
+      "Lleva los proyectos del plan a la entrega: planeación, cronograma y control de costos. Les hace seguimiento con análisis financiero y tableros en Power\u00a0BI.",
+    credentials: ["Contador público y Mercadólogo, Universidad de Medellín"],
     photo: { src: "/brand/team/alejandro-estrada-gomez.jpg", width: 900, height: 1200 },
   },
   {
@@ -268,7 +272,7 @@ export const teamCrew = [
     familyName: "López Naranjo",
     jobTitle: "Product Engineer",
     focus:
-      "Producto de punta a punta: web, móvil y servicios con React, React Native, NestJS y TypeScript, y recuperación con fuentes (RAG).",
+      "Construye producto de punta a punta: interfaces web y móviles, servicios y búsqueda con fuentes citadas, en React, React Native, NestJS y TypeScript.",
     credentials: ["Técnico en Desarrollo de Software, CESDE"],
     photo: { src: "/brand/team/daniel-alejandro-lopez-naranjo.jpg", width: 900, height: 1200 },
   },
@@ -278,7 +282,8 @@ export const teamCrew = [
     givenName: "Cristian David",
     familyName: "Ajavi Aguilar",
     jobTitle: "Automation Engineer",
-    focus: "Automatización con Python y modelos de lenguaje en procesos financieros.",
+    focus:
+      "Automatiza procesos con Python y modelos de lenguaje, en especial los financieros: pronósticos, presupuestos y reportes. Viene de la planeación y el análisis financiero.",
     credentials: [
       "Maestría en Ingeniería (en curso), Universidad EAFIT",
       "Negocios Internacionales, Fundación Universitaria Luis Amigó",

@@ -134,8 +134,18 @@
   font-size: var(--step-6);
 }
 
+/* Primero lo que la persona hace; los títulos, debajo y más discretos. */
 .crewPerson > p {
+  color: var(--black);
   font-size: var(--step-8);
+}
+
+.crewPerson > .crewCredentials {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line-ink);
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
 
 /* --------------------------------------------------------------- formación */

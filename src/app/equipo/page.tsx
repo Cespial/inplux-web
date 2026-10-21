@@ -218,11 +218,7 @@ export default function EquipoPage() {
                     </div>
                     {member.focus ? <p>{member.focus}</p> : null}
                     {member.credentials?.length ? (
-                      <ul>
-                        {member.credentials.map((credential) => (
-                          <li key={credential}>{credential}</li>
-                        ))}
-                      </ul>
+                      <p className={styles.crewCredentials}>{member.credentials.join(" · ")}</p>
                     ) : null}
                     {member.linkedin ? (
                       <p className={styles.links}>
