@@ -52,7 +52,6 @@ export const metadata: Metadata = {
   keywords: [
     "transformación con IA",
     "desarrollo e implementación de IA",
-    "fábrica de software",
     "software a la medida",
     "desarrollo de software Colombia",
     "automatización",
