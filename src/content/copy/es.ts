@@ -97,6 +97,7 @@ export const homeCopyEs: HomeCopy = {
       "Cuéntanos el problema, quién lo vive y qué debería cambiar.",
     note: "Usamos estos datos solo para responderte.",
     privacyLink: "Cómo cuidamos los datos",
+    privacyHref: "/seguridad",
     submit: "Enviar mensaje",
     sending: "Enviando…",
     sent: "Recibimos tu mensaje. Una persona del equipo te responde a tu correo.",

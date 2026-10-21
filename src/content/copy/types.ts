@@ -47,8 +47,16 @@ export type HeaderCopy = {
   contactCtaMobile: string;
   menuNote: string;
   navigation: readonly NavigationEntry[];
-  /** Enlace al mismo contenido en el otro idioma. */
+  /**
+   * Etiqueta del selector de idioma («English» / «Español»). El destino no se
+   * escribe aquí: la cabecera lo calcula con `pairedPath()` para llevar a la
+   * página equivalente, y lo oculta en las páginas sin par.
+   */
   languageSwitch: NavigationItem | null;
+  /** Destino del logo; `/` por defecto. */
+  homeHref?: string;
+  /** Página de contacto cuando el diálogo no puede abrirse; `/contacto` por defecto. */
+  contactHref?: string;
 };
 
 export type FooterNavGroup = {
@@ -70,6 +78,8 @@ export type FooterCopy = {
   contactLabel: string;
   contactAriaLabel: string;
   contactCta: string;
+  /** Página de contacto del idioma; `/contacto` por defecto. */
+  contactHref?: string;
   email: string;
   linkedInLabel: string;
   locations: readonly string[];
@@ -104,6 +114,8 @@ export type ContactFormCopy = {
   note: string;
   /** Enlace a la página que explica cómo se cuidan los datos. */
   privacyLink: string;
+  /** Destino de ese enlace en el idioma del formulario. */
+  privacyHref: string;
   submit: string;
   sending: string;
   sent: string;

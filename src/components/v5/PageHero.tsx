@@ -28,6 +28,7 @@ export function PageHero({
   actions,
   media = { kind: "none" },
   crumbs,
+  crumbsLabel = "Ruta",
   aside,
   className,
 }: {
@@ -40,13 +41,15 @@ export function PageHero({
   actions?: ReactNode;
   media?: HeroMedia;
   crumbs?: readonly { label: string; href?: string }[];
+  /** Nombre accesible de las migas, en el idioma de la página. */
+  crumbsLabel?: string;
   aside?: ReactNode;
   className?: string;
 }) {
   const text = (
     <>
       {crumbs ? (
-        <nav className={ui.crumbs} aria-label="Ruta">
+        <nav className={ui.crumbs} aria-label={crumbsLabel}>
           {crumbs.map((crumb, index) => (
             <span key={crumb.label}>
               {index > 0 ? <span aria-hidden="true">/</span> : null}

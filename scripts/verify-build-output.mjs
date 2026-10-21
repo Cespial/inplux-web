@@ -190,6 +190,7 @@ const pageDefinitions = {
     description:
       "INPLUX LLC is a Miami-based AI development and implementation company. We develop and implement the AI transformation of companies and institutions across Latin America. Expert people direct the critical decisions.",
     canonical: `${siteUrl}/en`,
+    htmlLang: "en",
     contentLang: "en-US",
     ogLocale: "en_US",
     ogTitle: "AI transformation that reaches production.",
@@ -220,7 +221,7 @@ const pageDefinitions = {
       "x-default": siteUrl,
     },
     contact: { dialogs: 1, triggers: 3, dialogForms: 1, sectionForms: 0 },
-    productFooter: "Documented products",
+    productFooter: { label: "Documented products", prefix: "/en/work" },
   },
   howWeWork: {
     file: ".next/server/app/como-trabajamos.html",
@@ -463,7 +464,7 @@ const pageDefinitions = {
       url: `${siteUrl}/nosotros`,
     },
     contact: { dialogs: 1, triggers: 2, dialogForms: 1, sectionForms: 0 },
-    productFooter: "Productos documentados",
+    productFooter: { label: "Productos documentados", prefix: "/trabajo" },
     attribution: true,
   },
   team: {
@@ -1054,7 +1055,7 @@ function verifyDeckShape(name, html, { slides, profiles }) {
  * enlace sobra. Es ruidoso a propósito —Porkia se dio de alta como quinto
  * producto y nunca llegó a ninguno de los dos pies, en silencio—.
  */
-function verifyProductFooter(name, html, ariaLabel) {
+function verifyProductFooter(name, html, { label: ariaLabel, prefix }) {
   const links = readNavigationLinks(html, ariaLabel);
   if (links === null) {
     errors.push(
@@ -1064,7 +1065,7 @@ function verifyProductFooter(name, html, ariaLabel) {
   }
 
   const documented = workProfiles.map((profile) => ({
-    href: `/trabajo/${profile.slug}`,
+    href: `${prefix}/${profile.slug}`,
     label: profile.name,
   }));
   const surface = `${name}: el pie de productos (aria-label="${ariaLabel}")`;
@@ -1216,7 +1217,12 @@ for (const [name, definition] of Object.entries(pageDefinitions)) {
     continue;
   }
 
-  expect(/<html\b[^>]*\blang="es-CO"/i.test(html), `${name}: <html> debe declarar lang="es-CO"`);
+  // El layout raíz resuelve `lang` por ruta (`HtmlRoot`): `en` bajo `/en`.
+  const expectedLang = definition.htmlLang ?? "es-CO";
+  expect(
+    new RegExp(`<html\\b[^>]*\\blang="${expectedLang}"`, "i").test(html),
+    `${name}: <html> debe declarar lang="${expectedLang}"`,
+  );
   expectEqual(titleContent(html), definition.title, `${name} title`);
   expectEqual(metaContent(html, "name", "description"), definition.description, `${name} description`);
   expectEqual(linkHref(html, "canonical") ?? null, definition.canonical, `${name} canonical`);

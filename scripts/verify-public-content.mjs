@@ -645,7 +645,8 @@ async function verifyContactExperience() {
     [
       source.about.split('fallbackHref="/contacto"').length - 1 === 1 &&
         source.header.includes('const headerContactHref = "/contacto"') &&
-        source.header.split("fallbackHref={headerContactHref}").length - 1 === 2,
+        source.header.includes("const contactHref = copy.contactHref ?? headerContactHref") &&
+        source.header.split("fallbackHref={contactHref}").length - 1 === 2,
       "Header y Nosotros deben conservar la ruta estable /contacto como fallback",
     ],
     [
