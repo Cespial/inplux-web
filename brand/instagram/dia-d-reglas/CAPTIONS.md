@@ -1,6 +1,6 @@
 # Tres reglas de la comunidad 10ampro · colaboración
 
-Carrusel de 5 para publicar como **colaboración** con @10ampro (INPLUX invita, 10ampro acepta). Sin mención al Día D (pedido de Cristian, 22-oct-2026). Fondos de Midjourney: estatuaria romana en blanco y negro (atmósfera, no fotos reales). Logo de 10ampro: círculo de manifiesto.10am.pro/logo.jpg, sin alterar.
+Carrusel de 5 para publicar como **colaboración** con @10ampro (INPLUX invita, 10ampro acepta). Sin mención al Día D (pedido de Cristian, 22-oct-2026). Fondos de Midjourney: estatuaria romana en blanco y negro pasada a trama de puntos (`trama.py`), como la estatuaria de @use_croma (atmósfera, no fotos reales). Logo de 10ampro: círculo de manifiesto.10am.pro/logo.jpg, sin alterar.
 
 ### Carrusel
 `reglas10am_01_portada.jpg` · `02_open` · `03_collective` · `04_network` · `05_cierre`
@@ -18,8 +18,8 @@ inplux.co · 10am.pro
 Colaborador: @10ampro
 `#10ampro #comunidad #medellin #inplux #softwarealamedida`
 
-**Alt 1:** Hilera de bustos romanos de mármol en una galería oscura, en blanco y negro. Texto: «Tres reglas de la comunidad 10ampro». Logos de INPLUX y 10ampro.
-**Alt 2:** Estatua romana de un orador que sostiene un rollo abierto. Texto: «01 Open Source Capital. Compartir tesis y aprendizajes en vez de guardarlos».
-**Alt 3:** Estatuas de senadores romanos reunidos en círculo. Texto: «02 Collective Intelligence. La sincronización de personas inteligentes en un mismo lugar».
-**Alt 4:** Manos de mármol entrelazadas en cadena. Texto: «03 Network Sharing. Activar las redes propias para acelerar a la gente correcta».
-**Alt 5:** Una mano de mármol pasa una antorcha encendida a otra. Texto: «Las ideas crecen cuando se comparten». Logos de INPLUX y 10ampro, botones inplux.co y 10am.pro.
+**Alt 1:** Bustos romanos de mármol dibujados en trama de puntos sobre negro. Texto: «Tres reglas de la comunidad 10ampro». Tres píldoras: Open Source Capital, Collective Intelligence, Network Sharing. Logos de INPLUX y 10ampro.
+**Alt 2:** Estatua de un orador romano en trama de puntos. Texto: «Open Source Capital. Compartir tesis y aprendizajes en vez de guardarlos». Diagrama: una tesis pasa por el logo de 10ampro y se abre a founders, inversionistas, operadores y builders.
+**Alt 3:** Senadores romanos en trama de puntos. Texto: «Collective Intelligence. La sincronización de personas inteligentes en un mismo lugar». Diagrama: una pregunta, un dato, una duda y una apuesta convergen en el logo de 10ampro y llegan a «Un mismo lugar».
+**Alt 4:** Manos de mármol entrelazadas en trama de puntos. Texto: «Network Sharing. Activar las redes propias para acelerar a la gente correcta». Diagrama: «Tu red» pasa por el logo de 10ampro hasta «La gente correcta».
+**Alt 5:** Una mano pasa una antorcha encendida a otra, en trama de puntos. Texto: «Las ideas crecen cuando se comparten. Gracias a 10ampro por abrir la conversación». Botones 10am.pro e inplux.co.
