@@ -247,12 +247,9 @@ PIEZAS = {
                                                "La sincronización de <b>muchas mentes</b> en un mismo lugar.", d_collective()), 1080, 1350),
     "reglas10am_04_network": (lambda: regla(3, "manos", (-320, 560, 1720), "Network<br>Sharing.",
                                             "Activar <b>las redes propias</b> para acelerar a la gente correcta.", d_network()), 1080, 1350),
-    "reglas10am_05_cierre": (cierre, 1080, 1350),
-    "opcion_b_diagrama": (cierre_diagrama, 1080, 1350),
-    "opcion_c_sello": (cierre_sello, 1080, 1350),
+    "reglas10am_05_cierre": (cierre_sello, 1080, 1350),  # elegido por Cristian el 22-oct (opción C)
 }
-if (AQUI / "trama" / "toque.png").exists():
-    PIEZAS["opcion_a_manos"] = (cierre_manos, 1080, 1350)
+# Descartadas el 22-oct, se conservan por si se retoman: cierre (eclipse), cierre_manos (A), cierre_diagrama (B).
 
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():

@@ -23,33 +23,15 @@ body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:
   box-shadow:0 0 0 14px rgba(0,215,202,.05),0 0 80px rgba(0,215,202,.18)}
 .tallo{width:1.5px;background:rgba(246,242,236,.16);margin:0 auto}
 .tarjeta{background:#f6f2ec;color:#0c0c0b;border-radius:14px;display:flex;justify-content:space-between;align-items:center;padding:30px 36px}
-</style></head><body><div class="lienzo"><svg width="1080" height="1350" viewBox="0 0 1080 1350" style="position:absolute;inset:0">
-  <defs>
-    <linearGradient id="gi" gradientUnits="userSpaceOnUse" x1="-130" y1="0" x2="670" y2="0">
-      <stop offset="0" stop-color="#f6f2ec" stop-opacity=".04"/><stop offset=".62" stop-color="#f6f2ec" stop-opacity=".22"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="1"/></linearGradient>
-    <linearGradient id="gd" gradientUnits="userSpaceOnUse" x1="410" y1="0" x2="1210" y2="0">
-      <stop offset="0" stop-color="#7ffff4" stop-opacity="1"/><stop offset=".12" stop-color="#00d7ca" stop-opacity=".95"/>
-      <stop offset=".45" stop-color="#00d7ca" stop-opacity=".25"/><stop offset="1" stop-color="#00d7ca" stop-opacity=".05"/></linearGradient>
-    <filter id="halo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
-    <filter id="halo2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="40"/></filter>
-    <radialGradient id="lente" cx="540" cy="745" r="300.0" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#00d7ca" stop-opacity=".10"/><stop offset="1" stop-color="#00d7ca" stop-opacity="0"/></radialGradient>
-  </defs>
-  <ellipse cx="540" cy="745" rx="180.0" ry="380.0" fill="url(#lente)"/>
-  <g filter="url(#halo2)" opacity=".9"><circle cx="270" cy="745" r="400" fill="none" stroke="url(#gi)" stroke-width="10"/><circle cx="810" cy="745" r="400" fill="none" stroke="url(#gd)" stroke-width="12"/></g>
-  <g filter="url(#halo)" opacity=".9"><circle cx="270" cy="745" r="400" fill="none" stroke="url(#gi)" stroke-width="4"/><circle cx="810" cy="745" r="400" fill="none" stroke="url(#gd)" stroke-width="5"/></g>
-  <circle cx="270" cy="745" r="400" fill="none" stroke="url(#gi)" stroke-width="1.6"/><circle cx="810" cy="745" r="400" fill="none" stroke="url(#gd)" stroke-width="2"/>
-</svg>
-<div style="position:absolute;left:84px;right:84px;top:190px">
-  <h1 class="titular" style="font-size:64px">Las ideas crecen<br>cuando se comparten.</h1>
-</div>
-<div style="position:absolute;left:50px;width:340px;top:707px;display:flex;justify-content:center;align-items:center;gap:16px">
-  <svg viewBox="0 0 100 100" width="72" height="72"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg><img src="assets/wordmark-white.svg" style="height:42px;display:block"></div>
-<div style="position:absolute;left:690px;width:340px;top:650px;display:flex;justify-content:center">
-  <img src="assets/10ampro.png" style="width:190px;height:190px;display:block;box-shadow:0 0 0 1px rgba(246,242,236,.12),0 0 60px rgba(0,0,0,.6);border-radius:50%"></div>
-<div style="position:absolute;left:84px;right:84px;bottom:150px;display:flex;justify-content:space-between;align-items:center">
-  <span class="sub">Gracias a <b>10ampro</b> por abrir la conversación.</span>
+</style></head><body><div class="lienzo"><img class="trama" src="trama/galeria.png" style="left:150px;top:250px;width:1250px;opacity:0.28;-webkit-mask-image:none;mask-image:none"><div style="position:absolute;inset:0;background:linear-gradient(180deg,#0c0c0b 0%,rgba(12,12,11,.85) 14%,rgba(12,12,11,.25) 30%,transparent 45%,transparent 80%,rgba(12,12,11,.9) 92%,#0c0c0b 100%)"></div>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding-bottom:40px">
+  <div style="display:flex;align-items:center;gap:30px"><svg viewBox="0 0 100 100" width="150" height="150"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg><img src="assets/wordmark-white.svg" style="height:92px"></div>
+  <div style="display:flex;align-items:center;gap:28px;width:640px">
+    <i style="flex:1;height:1.5px;background:linear-gradient(90deg,transparent,rgba(246,242,236,.16))"></i>
+    <span style="font-size:88px;line-height:1;color:#00d7ca;font-weight:400">×</span>
+    <i style="flex:1;height:1.5px;background:linear-gradient(90deg,rgba(246,242,236,.16),transparent)"></i></div>
+  <img src="assets/10ampro.png" style="width:300px;height:300px;display:block;border-radius:50%;box-shadow:0 0 0 18px rgba(246,242,236,.03),0 0 0 19px rgba(246,242,236,.16)">
+  <p class="sub" style="margin-top:30px;text-align:center">Las ideas crecen <b>cuando se comparten</b>.</p>
 </div>
 <div class="grano"></div><div class="marco"></div><div class="cruz" style="top:21px;left:21px">+</div><div class="cruz" style="top:21px;right:21px">+</div><div class="cruz" style="bottom:21px;left:21px">+</div><div class="cruz" style="bottom:21px;right:21px">+</div>
 <div style="position:absolute;left:84px;top:70px"><div style="display:flex;align-items:center;gap:16px"><img src="assets/wordmark-white.svg" style="height:22px;display:block"><span style="color:#77726b;font-size:22px;line-height:1">×</span><img src="assets/10ampro.png" style="height:50px;width:50px;display:block"></div></div>
