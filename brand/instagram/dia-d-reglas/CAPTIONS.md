@@ -8,7 +8,7 @@ Carrusel de 5 para publicar como **colaboración** con @10ampro (INPLUX invita, 
 Tres reglas de la comunidad 10ampro.
 
 01 · Open Source Capital: compartir tesis y aprendizajes en vez de guardarlos.
-02 · Collective Intelligence: la sincronización de personas inteligentes en un mismo lugar.
+02 · Collective Intelligence: la sincronización de muchas mentes en un mismo lugar.
 03 · Network Sharing: activar las redes propias para acelerar a la gente correcta.
 
 Las ideas crecen cuando se comparten.
@@ -20,6 +20,6 @@ Colaborador: @10ampro
 
 **Alt 1:** Bustos romanos de mármol dibujados en trama de puntos sobre negro. Texto: «Tres reglas de la comunidad 10ampro». Tres píldoras: Open Source Capital, Collective Intelligence, Network Sharing. Logos de INPLUX y 10ampro.
 **Alt 2:** Estatua de un orador romano en trama de puntos. Texto: «Open Source Capital. Compartir tesis y aprendizajes en vez de guardarlos». Diagrama: una tesis pasa por el logo de 10ampro y se abre a founders, inversionistas, operadores y builders.
-**Alt 3:** Senadores romanos en trama de puntos. Texto: «Collective Intelligence. La sincronización de personas inteligentes en un mismo lugar». Diagrama: una pregunta, un dato, una duda y una apuesta convergen en el logo de 10ampro y llegan a «Un mismo lugar».
+**Alt 3:** Senadores romanos en trama de puntos. Texto: «Collective Intelligence. La sincronización de muchas mentes en un mismo lugar». Diagrama: una pregunta, un dato, una duda y una apuesta convergen en el logo de 10ampro y llegan a «Un mismo lugar».
 **Alt 4:** Manos de mármol entrelazadas en trama de puntos. Texto: «Network Sharing. Activar las redes propias para acelerar a la gente correcta». Diagrama: «Tu red» pasa por el logo de 10ampro hasta «La gente correcta».
 **Alt 5:** Dos círculos grandes que se cruzan sobre negro, con el borde iluminado en blanco y teal hacia la intersección. En uno el logo de INPLUX, en el otro el de 10ampro. Texto: «Las ideas crecen cuando se comparten. Gracias a 10ampro por abrir la conversación».

@@ -111,7 +111,7 @@ def portada():
     mascara = "linear-gradient(180deg,transparent 0%,#000 32%,#000 82%,transparent 100%)"
     return head() + trama("galeria", 150, 250, 1250, opacidad=.6) + encabezado(
         "Tres reglas de la<br>comunidad 10ampro.",
-        "La sincronización de <b>personas inteligentes</b> en un mismo lugar.", 92) + f"""
+        "Compartir lo que sabemos, <b>pensar juntos</b> y abrir la red.", 92) + f"""
 <div style="position:absolute;left:84px;bottom:150px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
   <span class="pill oscura"><span style="color:{TEAL};font-size:20px;letter-spacing:.1em">01</span>Open Source Capital</span>
   <span class="pill oscura"><span style="color:{TEAL};font-size:20px;letter-spacing:.1em">02</span>Collective Intelligence</span>
@@ -188,16 +188,71 @@ def cierre():
 """ + marco(5, "INPLUX × 10AMPRO") + "</div></body></html>"
 
 
+def nodo_grande(contenido, brillo=TEAL):
+    return (f'<div style="width:250px;height:250px;border-radius:50%;background:{BLACK};border:1.5px solid {LINE};display:grid;place-items:center;'
+            f'box-shadow:0 0 0 14px rgba(12,12,11,.9),0 0 0 15px {LINE},0 0 120px rgba(0,215,202,.16)">{contenido}</div>')
+
+
+def cierre_diagrama():
+    """Opción B: las dos comunidades como nodos unidos por una línea; de la unión salen las tres reglas."""
+    inplux = f'<div style="display:flex;flex-direction:column;align-items:center;gap:14px">{MARCA.format(s=86)}<img src="assets/wordmark-white.svg" style="height:26px"></div>'
+    diez = '<img src="assets/10ampro.png" style="width:200px;height:200px;display:block">'
+    linea = (f'<div style="position:relative;flex:1;height:2px;background:linear-gradient(90deg,{LINE},{TEAL},{LINE})">'
+             f'<i style="position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:{TEAL};'
+             f'box-shadow:0 0 0 8px rgba(0,215,202,.15),0 0 40px {TEAL}"></i></div>')
+    return head() + trama("senadores", -210, 560, 1500, opacidad=.22) + encabezado(
+        "Dos comunidades,<br>las mismas reglas.", "<b>INPLUX</b> y <b>10ampro</b>: construir en abierto, en grupo y en red.", 86) + f"""
+<div style="position:absolute;left:84px;right:84px;top:600px;display:flex;align-items:center">{nodo_grande(inplux)}{linea}{nodo_grande(diez)}</div>
+<div style="position:absolute;left:84px;right:84px;top:725px;display:flex;flex-direction:column;align-items:center">
+  <div style="height:150px"></div>{ramas(["Open Source Capital", "Collective Intelligence", "Network Sharing"], 912)}</div>
+""" + marco(5, "INPLUX × 10AMPRO") + "</div></body></html>"
+
+
+def cierre_sello():
+    """Opción C: sello tipográfico grande, una marca sobre otra, con el aspa teal como bisagra."""
+    return head() + trama("galeria", 150, 250, 1250, opacidad=.28) + f"""
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding-bottom:40px">
+  <div style="display:flex;align-items:center;gap:30px">{MARCA.format(s=150)}<img src="assets/wordmark-white.svg" style="height:92px"></div>
+  <div style="display:flex;align-items:center;gap:28px;width:640px">
+    <i style="flex:1;height:1.5px;background:linear-gradient(90deg,transparent,{LINE})"></i>
+    <span style="font-size:88px;line-height:1;color:{TEAL};font-weight:400">×</span>
+    <i style="flex:1;height:1.5px;background:linear-gradient(90deg,{LINE},transparent)"></i></div>
+  <img src="assets/10ampro.png" style="width:300px;height:300px;display:block;border-radius:50%;box-shadow:0 0 0 18px rgba(246,242,236,.03),0 0 0 19px {LINE}">
+  <p class="sub" style="margin-top:30px;text-align:center">Las ideas crecen <b>cuando se comparten</b>.</p>
+</div>
+""" + marco(5, "INPLUX × 10AMPRO") + "</div></body></html>"
+
+
+def cierre_manos():
+    """Opción A: dos manos de mármol a punto de tocarse, en trama; cada marca en su lado y un destello teal en el contacto."""
+    # el hueco entre los dedos está al 47 % del ancho y en la fila 320 de 662 de la trama (medido en trama/toque.png)
+    izq, arriba, ancho = -40, 600, 1160
+    k = ancho / 1967
+    tx, ty = izq + 0.47 * ancho, arriba + 320 * k
+    return head() + trama("toque", izq, arriba, ancho, opacidad=.8) + encabezado(
+        "Las ideas crecen<br>cuando se comparten.", "Gracias a <b>10ampro</b> por abrir la conversación.", 80) + f"""
+<div style="position:absolute;left:{tx - 90:.0f}px;top:{ty - 90:.0f}px;width:180px;height:180px;border-radius:50%;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(200,255,250,.95) 0%,rgba(0,215,202,.55) 10%,rgba(0,215,202,.12) 38%,rgba(0,215,202,0) 70%)"></div>
+<div style="position:absolute;left:84px;bottom:160px;display:flex;align-items:center;gap:16px">{MARCA.format(s=60)}<img src="assets/wordmark-white.svg" style="height:34px"></div>
+<div style="position:absolute;right:84px;bottom:140px"><img src="assets/10ampro.png" style="width:110px;height:110px;display:block"></div>
+""" + marco(5, "INPLUX × 10AMPRO") + "</div></body></html>"
+
+
+
 PIEZAS = {
     "reglas10am_01_portada": (portada, 1080, 1350),
     "reglas10am_02_open": (lambda: regla(1, "orador", (250, 250, 1100), "Open Source<br>Capital.",
                                          "Compartir <b>tesis y aprendizajes</b> en vez de guardarlos.", d_open()), 1080, 1350),
     "reglas10am_03_collective": (lambda: regla(2, "senadores", (-210, 430, 1500), "Collective<br>Intelligence.",
-                                               "La sincronización de <b>personas inteligentes</b> en un mismo lugar.", d_collective()), 1080, 1350),
+                                               "La sincronización de <b>muchas mentes</b> en un mismo lugar.", d_collective()), 1080, 1350),
     "reglas10am_04_network": (lambda: regla(3, "manos", (-320, 560, 1720), "Network<br>Sharing.",
                                             "Activar <b>las redes propias</b> para acelerar a la gente correcta.", d_network()), 1080, 1350),
     "reglas10am_05_cierre": (cierre, 1080, 1350),
+    "opcion_b_diagrama": (cierre_diagrama, 1080, 1350),
+    "opcion_c_sello": (cierre_sello, 1080, 1350),
 }
+if (AQUI / "trama" / "toque.png").exists():
+    PIEZAS["opcion_a_manos"] = (cierre_manos, 1080, 1350)
 
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():
