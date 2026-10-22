@@ -111,7 +111,7 @@ def portada():
     mascara = "linear-gradient(180deg,transparent 0%,#000 32%,#000 82%,transparent 100%)"
     return head() + trama("galeria", 150, 250, 1250, opacidad=.6) + encabezado(
         "Tres reglas de la<br>comunidad 10ampro.",
-        "Lo que <b>se comparte</b>, lo que <b>se piensa en grupo</b> y lo que <b>se mueve por la red</b>.", 92) + f"""
+        "La sincronización de <b>personas inteligentes</b> en un mismo lugar.", 92) + f"""
 <div style="position:absolute;left:84px;bottom:150px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
   <span class="pill oscura"><span style="color:{TEAL};font-size:20px;letter-spacing:.1em">01</span>Open Source Capital</span>
   <span class="pill oscura"><span style="color:{TEAL};font-size:20px;letter-spacing:.1em">02</span>Collective Intelligence</span>
