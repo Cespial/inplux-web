@@ -146,15 +146,46 @@ def d_network():
             f'<span class="pill clara">La gente correcta <span style="color:#007a72">→</span></span>')
 
 
+def eclipse(cy=700, r=400, dx=270):
+    """Dos círculos que se cruzan con el borde iluminado hacia la intersección (cierre de Croma × Platam).
+    Izquierdo en marfil (INPLUX), derecho en teal; el brillo vive en los arcos interiores."""
+    cx1, cx2 = 540 - dx, 540 + dx
+    aro = lambda cx, grad, w: f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="url(#{grad})" stroke-width="{w}"/>'
+    return f"""<svg width="1080" height="1350" viewBox="0 0 1080 1350" style="position:absolute;inset:0">
+  <defs>
+    <linearGradient id="gi" gradientUnits="userSpaceOnUse" x1="{cx1 - r}" y1="0" x2="{cx1 + r}" y2="0">
+      <stop offset="0" stop-color="{IVORY}" stop-opacity=".04"/><stop offset=".62" stop-color="{IVORY}" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="1"/></linearGradient>
+    <linearGradient id="gd" gradientUnits="userSpaceOnUse" x1="{cx2 - r}" y1="0" x2="{cx2 + r}" y2="0">
+      <stop offset="0" stop-color="#7ffff4" stop-opacity="1"/><stop offset=".12" stop-color="{TEAL}" stop-opacity=".95"/>
+      <stop offset=".45" stop-color="{TEAL}" stop-opacity=".25"/><stop offset="1" stop-color="{TEAL}" stop-opacity=".05"/></linearGradient>
+    <filter id="halo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="halo2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="40"/></filter>
+    <radialGradient id="lente" cx="540" cy="{cy}" r="{r*0.75}" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="{TEAL}" stop-opacity=".10"/><stop offset="1" stop-color="{TEAL}" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="540" cy="{cy}" rx="{r*0.45}" ry="{r*0.95}" fill="url(#lente)"/>
+  <g filter="url(#halo2)" opacity=".9">{aro(cx1, "gi", 10)}{aro(cx2, "gd", 12)}</g>
+  <g filter="url(#halo)" opacity=".9">{aro(cx1, "gi", 4)}{aro(cx2, "gd", 5)}</g>
+  {aro(cx1, "gi", 1.6)}{aro(cx2, "gd", 2)}
+</svg>"""
+
+
 def cierre():
-    return head() + trama("antorcha", 200, 470, 740, opacidad=.75) + encabezado(
-        "Las ideas crecen<br>cuando se comparten.",
-        "Gracias a <b>10ampro</b> por abrir la conversación. Seguimos <b>construyendo en comunidad</b>.", 90) + f"""
-<div style="position:absolute;left:84px;top:540px;display:flex;gap:16px;align-items:center">
-  <span class="pill clara" style="font-size:28px;padding:12px 28px 12px 12px"><img src="assets/10ampro.png" style="width:48px;height:48px">10am.pro</span>
-  <span class="pill oscura" style="font-size:28px;padding:14px 28px">{MARCA.format(s=36)}inplux.co</span>
+    cy = 745
+    # zona propia de cada círculo (fuera de la lente): izquierda 0–400 px, derecha 680–1080 px
+    return head() + eclipse(cy) + f"""
+<div style="position:absolute;left:84px;right:84px;top:190px">
+  <h1 class="titular" style="font-size:64px">Las ideas crecen<br>cuando se comparten.</h1>
 </div>
-""" + marco(5, "Juntos") + "</div></body></html>"
+<div style="position:absolute;left:50px;width:340px;top:{cy - 38}px;display:flex;justify-content:center;align-items:center;gap:16px">
+  {MARCA.format(s=72)}<img src="assets/wordmark-white.svg" style="height:42px;display:block"></div>
+<div style="position:absolute;left:690px;width:340px;top:{cy - 95}px;display:flex;justify-content:center">
+  <img src="assets/10ampro.png" style="width:190px;height:190px;display:block;box-shadow:0 0 0 1px rgba(246,242,236,.12),0 0 60px rgba(0,0,0,.6);border-radius:50%"></div>
+<div style="position:absolute;left:84px;right:84px;bottom:150px;display:flex;justify-content:space-between;align-items:center">
+  <span class="sub">Gracias a <b>10ampro</b> por abrir la conversación.</span>
+</div>
+""" + marco(5, "INPLUX × 10AMPRO") + "</div></body></html>"
 
 
 PIEZAS = {
