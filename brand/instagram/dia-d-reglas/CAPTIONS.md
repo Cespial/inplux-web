@@ -5,13 +5,18 @@ Carrusel de 5 para publicar como **colaboración** con @10ampro (INPLUX invita, 
 ### Carrusel
 `reglas10am_01_portada.jpg` · `02_open` · `03_collective` · `04_network` · `05_cierre`
 
-Tres reglas de la comunidad 10ampro.
+Tres reglas de la comunidad @10ampro.
 
-01 · Open Source Capital: compartir tesis y aprendizajes en vez de guardarlos.
-02 · Collective Intelligence: la sincronización de muchas mentes en un mismo lugar.
-03 · Network Sharing: activar las redes propias para acelerar a la gente correcta.
+01 · Open Source Capital
+Compartir tesis y aprendizajes en vez de guardarlos.
 
-Las ideas crecen cuando se comparten.
+02 · Collective Intelligence
+La sincronización de muchas mentes en un mismo lugar.
+
+03 · Network Sharing
+Activar las redes propias para acelerar a la gente correcta.
+
+En INPLUX creemos lo mismo: las ideas crecen cuando se comparten. Gracias, 10ampro, por abrir la conversación.
 
 inplux.co · 10am.pro
 
