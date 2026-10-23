@@ -14,8 +14,8 @@ Logos: los diez de HomeSections.tsx, «Organizaciones con las que INPLUX ha trab
 from pathlib import Path
 
 AQUI = Path(__file__).parent
-BLACK, IVORY, MUTED, DIM, TEAL, TEAL_OSC = "#0c0c0b", "#f6f2ec", "#a39d94", "#77726b", "#00d7ca", "#007a72"
-PAPEL, TINTA, GRIS = "#f3eee6", "#1a1916", "#8a847a"
+BLACK, IVORY, MUTED, DIM, TEAL, TEAL_OSC = "#0c0c0b", "#f6f2ec", "#a39d94", "#77726b", "#00d7ca", "#00706a"
+PAPEL, TINTA, GRIS = "#f3eee6", "#1a1916", "#625d55"  # contraste sobre PAPEL: TINTA 15,2 · GRIS 5,6 · TEAL_OSC 5,2
 MARCA = ('<svg viewBox="0 0 100 100" width="{s}" height="{s}"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="{c}"/>'
          '<rect x="29" y="39" width="42" height="13" rx="6.5" fill="{c}"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg>')
 GRANO = ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>"
@@ -24,15 +24,15 @@ GRANO = ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
          "<rect width='100%' height='100%' filter='url(%23n)'/></svg>\")")
 
 
-def head(claro=False):
+def head(claro=False, alto=1350):
     fondo, texto = (PAPEL, TINTA) if claro else (BLACK, IVORY)
     return f"""<!doctype html><html lang="es"><head><meta charset="utf-8">
 <style>
 @font-face{{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-html,body{{width:1080px;height:1350px;overflow:hidden;background:{fondo}}}
+html,body{{width:1080px;height:{alto}px;overflow:hidden;background:{fondo}}}
 body{{font-family:"Rethink Sans",sans-serif;color:{texto};-webkit-font-smoothing:antialiased}}
-.lienzo{{position:relative;width:1080px;height:1350px;overflow:hidden;background:{fondo}}}
+.lienzo{{position:relative;width:1080px;height:{alto}px;overflow:hidden;background:{fondo}}}
 .grano{{position:absolute;inset:0;background-image:{GRANO};opacity:{.10 if claro else .06};mix-blend-mode:{"multiply" if claro else "overlay"}}}
 .marco{{position:absolute;inset:30px;border:1px solid {"rgba(26,25,22,.12)" if claro else "rgba(246,242,236,.10)"}}}
 .cruz{{position:absolute;width:18px;height:18px;color:{"rgba(26,25,22,.45)" if claro else "rgba(246,242,236,.45)"};font-size:22px;line-height:18px;text-align:center;font-weight:300}}
@@ -55,22 +55,37 @@ body{{font-family:"Rethink Sans",sans-serif;color:{texto};-webkit-font-smoothing
 </style></head><body><div class="lienzo">"""
 
 
-def marco(pie, n=None, total=None, claro=False):
+def marco(pie, n=None, total=None, claro=False, alto=1350):
     c = TINTA if claro else "#fff"
     cruces = "".join(f'<div class="cruz" style="{v}:21px;{h}:21px">+</div>' for v in ("top", "bottom") for h in ("left", "right"))
     off, on = ("rgba(26,25,22,.25)", TINTA) if claro else ("rgba(246,242,236,.28)", IVORY)
-    contador = f'<div class="micro" style="position:absolute;right:84px;top:88px;letter-spacing:.2em">{n} / {total}</div>' if n else ""
+    m = 70 + (alto - 1350) // 2  # en 3:4 la cabeza y el pie se recogen hacia la zona segura
+    contador = f'<div class="micro" style="position:absolute;right:84px;top:{m + 18}px;letter-spacing:.2em">{n} / {total}</div>' if n else ""
+    derecha = "Desliza →" if n == 1 else "INPLUX.CO"
     puntos = "".join(f'<i style="width:9px;height:9px;border-radius:50%;background:{on if i == n else off}"></i>'
                      for i in range(1, total + 1)) if n else ""
     return f"""<div class="grano"></div><div class="marco"></div>{cruces}
-<div style="position:absolute;left:84px;top:70px;display:flex;align-items:center;gap:14px">{MARCA.format(s=40, c=c)}
+<div style="position:absolute;left:84px;top:{m}px;display:flex;align-items:center;gap:14px">{MARCA.format(s=40, c=c)}
   <img src="assets/wordmark-{"black" if claro else "white"}.svg" style="height:22px;display:block"></div>{contador}
-<div style="position:absolute;left:84px;right:84px;bottom:70px;display:flex;align-items:center;justify-content:space-between">
-  <div class="micro">{pie}</div><div style="display:flex;gap:9px">{puntos}</div><div class="micro">INPLUX.CO</div></div>"""
+<div style="position:absolute;left:84px;right:84px;bottom:{m}px;display:flex;align-items:center;justify-content:space-between">
+  <div class="micro">{pie}</div><div style="display:flex;gap:9px">{puntos}</div><div class="micro"{' style="color:' + (TINTA if claro else IVORY) + '"' if n == 1 else ""}>{derecha}</div></div>"""
 
 
-def pieza(cuerpo, pie, n=None, total=None, claro=False):
-    return head(claro) + cuerpo + marco(pie, n, total, claro) + "</div></body></html>"
+def pieza(cuerpo, pie, n=None, total=None, claro=False, alto=1350):
+    if alto != 1350:  # el cuerpo se diseña en 1350 y se centra: en 3:4 queda 45 px más adentro arriba y abajo
+        cuerpo = f'<div style="position:absolute;left:0;top:{(alto - 1350) // 2}px;width:1080px;height:1350px">{cuerpo}</div>'
+    return head(claro, alto) + cuerpo + marco(pie, n, total, claro, alto) + "</div></body></html>"
+
+
+ALTO = 1440  # julioiero (oct-2026): «usar el nuevo formato de Instagram», 1080 × 1440
+
+
+def cta(arriba=1110):
+    """Cierre sin oferta de venta: guardar y seguir."""
+    marcador = f'<svg width="20" height="26" viewBox="0 0 20 26"><path d="M2 2h16v22l-8-6-8 6z" fill="{PAPEL}"/></svg>'
+    return f"""<div style="position:absolute;left:84px;right:84px;top:{arriba}px;display:flex;gap:16px">
+  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">{marcador}Guarda este carrusel</span>
+  <span class="pill">Síguenos · @inplux_</span></div>"""
 
 
 def foto(nombre, velo="linear-gradient(180deg,rgba(12,12,11,.92) 0%,rgba(12,12,11,.35) 26%,rgba(12,12,11,.2) 45%,rgba(12,12,11,.88) 72%,#0c0c0b 100%)"):
@@ -163,7 +178,7 @@ TRAZO = f'fill="none" stroke="{TINTA}" stroke-width="3" stroke-linecap="round" s
 
 
 def fuente(arriba=1168):
-    return f'<p style="position:absolute;left:84px;right:84px;top:{arriba}px;font-size:16px;letter-spacing:.04em;color:{GRIS};line-height:1.5">Fuente: {FUENTE}</p>'
+    return f'<p style="position:absolute;left:84px;right:84px;top:{arriba}px;font-size:18px;letter-spacing:.02em;color:{GRIS};line-height:1.45">Fuente: {FUENTE}</p>'
 
 
 def barras():
@@ -228,6 +243,14 @@ def titulo_claro(t, sub=None, tam=84, arriba=190):
     return f'<div style="position:absolute;left:84px;right:84px;top:{arriba}px"><h1 class="titular" style="font-size:{tam}px">{t}</h1>{s}</div>'
 
 
+def practica(titulo, filas, nota=None, tam=80):
+    """Lámina de información práctica (julioiero: 6–9 «información práctica» antes del cierre)."""
+    f = "".join(f'<div class="fila"><div class="n">{n}</div><div><h3 style="font-size:36px">{t}</h3><p>{d}</p></div></div>' for n, t, d in filas)
+    nota = f'<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1060px;font-size:27px">{nota}</p>' if nota else ""
+    return titulo_claro(titulo, tam=tam) + f"""
+<div style="position:absolute;left:84px;right:84px;top:540px">{f}<div style="border-top:1px solid rgba(26,25,22,.14)"></div></div>""" + nota
+
+
 def lamina_cola(i):
     T = 5
     if i == 1:
@@ -250,10 +273,8 @@ def lamina_cola(i):
     else:
         cuerpo = titulo_claro("Antes de firmar,<br>pregunta qué pasa<br>si tu proyecto<br><em>cae en la cola.</em>", tam=88) + f"""
 <p class="cuerpo" style="position:absolute;left:84px;right:84px;top:740px">Así trabajamos: una primera versión útil en producción, <b>uso real observado</b> y decisiones tomadas contigo con esa evidencia.</p>
-<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
-  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
-  <span class="pill">Guárdalo para tu próximo contrato</span></div>"""
-    return pieza(cuerpo, "Riesgo en software", i, T, claro=True)
+""" + cta()
+    return pieza(cuerpo, "Riesgo en software", i, T, claro=True, alto=ALTO)
 
 
 # ---------- IA en producción · papel marfil · carrusel 5 ----------
@@ -265,7 +286,7 @@ DELOITTE = "Deloitte, «The State of AI in the Enterprise», 2026 · 3.235 líde
 
 
 def fuente_de(texto, arriba=1196):
-    return f'<p style="position:absolute;left:84px;right:84px;top:{arriba}px;font-size:16px;letter-spacing:.04em;color:{GRIS};line-height:1.5">Fuente: {texto}</p>'
+    return f'<p style="position:absolute;left:84px;right:84px;top:{arriba}px;font-size:18px;letter-spacing:.02em;color:{GRIS};line-height:1.45">Fuente: {texto}</p>'
 
 
 def puntos_100():
@@ -332,7 +353,7 @@ CAUSAS = [  # NANDA p. 3: «brittle workflows, lack of contextual learning, and 
 
 
 def lamina_ia(i):
-    T = 5
+    T = 6
     if i == 1:
         cuerpo = titulo_claro("De cada 100 empresas,<br><em>5</em> tienen IA a la medida<br>en producción.", tam=84) + f"""
 <div style="position:absolute;left:84px;top:530px">{puntos_100()}</div>""" + fuente_de(NANDA)
@@ -349,16 +370,20 @@ def lamina_ia(i):
         cuerpo = titulo_claro("2026: tres de cada cuatro<br>quieren crecer con IA.<br><em>Uno de cada cinco lo logra.</em>", tam=76) + f"""
 <div style="position:absolute;left:84px;top:560px">{brecha_2026()}</div>
 <p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">En la encuesta más reciente de Deloitte, la brecha sigue ahí. Dos de cada tres empresas ya ven <b>ganancias de productividad</b>; el crecimiento todavía es una aspiración.</p>""" + fuente_de(DELOITTE)
+    elif i == 5:
+        cuerpo = practica("Antes de tu piloto,<br><em>responde estas tres.</em>", [
+            ("01", "¿Qué proceso cambia y quién lo usa a diario?", "Si nadie lo usa el lunes, no es un piloto: es una demo."),
+            ("02", "¿De qué datos tuyos va a aprender?", "Sin contexto propio, se queda en chat genérico."),
+            ("03", "¿Qué número del negocio debería moverse?", "Escríbelo antes de empezar, no después."),
+        ], "Son las tres causas del estudio, <b>convertidas en preguntas</b>.")
     else:
         cuerpo = titulo_claro("Una IA que no aprende<br>de tu operación<br><em>se queda en piloto.</em>", tam=84) + f"""
 <p class="cuerpo" style="position:absolute;left:84px;right:84px;top:600px">Así trabajamos: la construimos dentro de tu operación, con <b>revisión humana donde importa</b>, y medimos su uso real para ajustarla.</p>
 <div style="position:absolute;left:84px;right:84px;top:820px;padding:30px 0;border-top:1px solid rgba(26,25,22,.14);border-bottom:1px solid rgba(26,25,22,.14);display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center">
   <div style="font-size:80px;font-weight:600;letter-spacing:-.03em;color:{TEAL_OSC};line-height:1">2×</div>
   <p style="font-size:24px;line-height:1.45;color:#4a463f">En el estudio, lo que se hizo con un aliado externo llegó a producción el doble de veces que lo construido solo en casa (≈67 % frente a ≈33 %, autorreportado).</p></div>
-<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
-  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
-  <span class="pill">Guárdalo para tu próximo proyecto de IA</span></div>"""
-    return pieza(cuerpo, "IA en producción", i, T, claro=True)
+""" + cta()
+    return pieza(cuerpo, "IA en producción", i, T, claro=True, alto=ALTO)
 
 
 # ---------- Medir la IA · papel marfil · carrusel 5 ----------
@@ -427,7 +452,7 @@ def dicen_vs_valor():
 
 
 def lamina_medir(i):
-    T = 5
+    T = 6
     if i == 1:
         cuerpo = titulo_claro("Creían ir 20 % más<br>rápido con IA.<br><em>Iban 19 % más lento.</em>", tam=86) + f"""
 <div style="position:absolute;left:84px;top:600px">{sentir_medir()}</div>
@@ -446,16 +471,164 @@ def lamina_medir(i):
         cuerpo = titulo_claro("Dicen ir 3× más rápido.<br><em>El valor, entre 1,4× y 2×.</em>", tam=80) + f"""
 <div style="position:absolute;left:84px;top:520px">{dicen_vs_valor()}</div>
 <p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">Es lo que reportan 349 personas técnicas en 2026. El propio METR advierte que <b>la velocidad suele exagerar el valor</b> y que estas respuestas no están necesariamente ancladas en la realidad.</p>""" + fuente_de(METR26E)
+    elif i == 5:
+        cuerpo = practica("Tres medidas<br><em>antes de lanzar.</em>", [
+            ("01", "Tiempo por tarea, antes y después", "Con cronómetro y casos reales, no con encuesta."),
+            ("02", "Errores que llegan a revisión humana", "Cuántos se atrapan y cuántos se escapan."),
+            ("03", "Uso real cada semana", "Quién la abre, para qué y cuántas veces vuelve."),
+        ], "La percepción sirve para preguntar. <b>La medida sirve para decidir.</b>", tam=88)
     else:
         cuerpo = titulo_claro("Si no lo mides,<br>lo que tienes<br><em>es una sensación.</em>", tam=88) + f"""
-<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:640px">Así trabajamos: antes de construir acordamos <b>qué vamos a medir</b>, y después de lanzar miramos el uso real, no la impresión.</p>
-<div style="position:absolute;left:84px;right:84px;top:850px;border-top:1px solid rgba(26,25,22,.14)">
-  <div class="fila" style="border-top:none"><div class="n">01</div><h3 style="font-size:32px">Tiempo por tarea, antes y después</h3></div>
-  <div class="fila"><div class="n">02</div><h3 style="font-size:32px">Errores que llegan a revisión humana</h3></div></div>
-<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
-  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
-  <span class="pill">Guárdalo para medir tu IA</span></div>"""
-    return pieza(cuerpo, "Medir la IA", i, T, claro=True)
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:640px">Así trabajamos en INPLUX: antes de construir acordamos <b>qué vamos a medir</b>, y después de lanzar miramos el uso real, no la impresión.</p>
+""" + cta()
+    return pieza(cuerpo, "Medir la IA", i, T, claro=True, alto=ALTO)
+
+
+# ---------- Agentes · papel marfil · carrusel 5 ----------
+# Fuentes primarias leídas el 23-oct-2026 en metr.org: «Time Horizon 1.1» (29-ene-2026; horizontes TH1.1 y
+# duplicación de 130,8 días desde 2023, 196,5 días 2019–2025) y «Frontier Risk Report» (19-may-2026; frontera
+# pública feb–mar 2026: ~12 h al 50 % [5–61 h] y ~1,5 h al 80 % [50 min–2 h 40]).
+
+METR_TH = "METR, «Time Horizon 1.1», ene-2026, y «Frontier Risk Report», may-2026 · tareas de software, ML y ciberseguridad; los intervalos son amplios"
+HORIZONTES = [  # (fecha decimal de lanzamiento, minutos al 50 %, etiqueta)
+    (2023.2, 3.5, "GPT-4"), (2025.15, 60, "Claude 3.7 Sonnet"), (2025.3, 121, "o3"),
+    (2025.6, 214, "GPT-5"), (2025.9, 320, "Claude Opus 4.5"), (2026.15, 720, "Frontera pública"),
+]
+
+
+def horizonte():
+    """Escala logarítmica de minutos contra fecha: la tarea que un agente completa la mitad de las veces."""
+    import math
+    x = lambda f: 30 + (f - 2023) * 270
+    y = lambda m: 440 - math.log10(m) * 140
+    marcas = [(1, "1 min"), (10, "10 min"), (60, "1 h"), (600, "10 h")]
+    rejilla = "".join(f'<line x1="20" y1="{y(m)}" x2="892" y2="{y(m)}" stroke="rgba(26,25,22,.10)" stroke-width="1.5"/>'
+                      f'<text x="20" y="{y(m) - 10}" font-family="Rethink Sans" font-size="19" fill="{GRIS}" letter-spacing="2">{t}</text>' for m, t in marcas)
+    anios = "".join(f'<text x="{x(a)}" y="482" text-anchor="middle" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">{a}</text>' for a in (2023, 2024, 2025, 2026))
+    d = "M" + " L".join(f"{x(f)},{y(m)}" for f, m, _ in HORIZONTES)
+    pts = ""
+    for k, (f, m, t) in enumerate(HORIZONTES):
+        ult = k == len(HORIZONTES) - 1
+        c = TEAL_OSC if ult else TINTA
+        pts += f'<circle cx="{x(f)}" cy="{y(m)}" r="{12 if ult else 8}" fill="{c}"/>'
+        if k in (0, 3, 5):
+            lab = {0: "3,5 min", 3: "3,6 h", 5: "~12 h"}[k]
+            dx, ancla = {0: (18, "start"), 3: (0, "middle"), 5: (-24, "end")}[k]
+            pts += (f'<text x="{x(f) + dx}" y="{y(m) - (8 if k == 5 else 26)}" text-anchor="{ancla}" font-family="Rethink Sans" font-size="28" font-weight="600" fill="{c}" stroke="{PAPEL}" stroke-width="10" paint-order="stroke">{lab}</text>'
+                    f'<text x="{x(f) + dx}" y="{y(m) + (24 if k == 5 else 40)}" text-anchor="{ancla}" font-family="Rethink Sans" font-size="19" fill="{GRIS}" stroke="{PAPEL}" stroke-width="8" paint-order="stroke">{t}</text>')
+    return f"""<svg width="912" height="500" viewBox="0 0 912 500" style="display:block;overflow:visible">{rejilla}
+  <line x1="20" y1="450" x2="892" y2="450" {TRAZO}/>{anios}
+  <path d="{d}" fill="none" stroke="{TINTA}" stroke-width="2.5" stroke-dasharray="2 8" stroke-linecap="round"/>{pts}
+</svg>"""
+
+
+def duplica():
+    """Cada ~4 meses se duplica: seis peldaños de 4 meses (dos años) multiplican por 64."""
+    w, h0 = 104, 4
+    pasos = ""
+    for k in range(7):
+        alto = h0 * 2 ** k
+        xx = 30 + k * (w + 22)
+        c = TEAL_OSC if k == 6 else TINTA
+        pasos += (f'<rect x="{xx}" y="{400 - alto * 1.4}" width="{w}" height="{alto * 1.4}" rx="6" fill="{c if k == 6 else "none"}" stroke="{c}" stroke-width="3"/>'
+                  f'<text x="{xx + w / 2}" y="{400 - alto * 1.4 - 16}" text-anchor="middle" font-family="Rethink Sans" font-size="28" font-weight="600" fill="{c}">×{2 ** k}</text>'
+                  f'<text x="{xx + w / 2}" y="440" text-anchor="middle" font-family="Rethink Sans" font-size="20" fill="{GRIS}">{"hoy" if k == 0 else f"+{4 * k} m"}</text>')
+    return f'<svg width="912" height="460" viewBox="0 0 912 460" style="display:block;overflow:visible"><line x1="20" y1="400" x2="892" y2="400" {TRAZO}/>{pasos}</svg>'
+
+
+def lamina_agentes(i):
+    T = 5
+    if i == 1:
+        cuerpo = titulo_claro("En tres años, la IA pasó<br>de tareas de 3,5 minutos<br><em>a tareas de 12 horas.</em>", "Lo que un experto tarda en una tarea que la IA completa la mitad de las veces", tam=76) + f"""
+<div style="position:absolute;left:84px;top:620px">{horizonte()}</div>""" + fuente_de(METR_TH)
+    elif i == 2:
+        cuerpo = titulo_claro("Se duplica<br><em>cada cuatro meses.</em>", tam=88) + f"""
+<div style="position:absolute;left:84px;top:450px">{duplica()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:960px;font-size:27px">Entre 2019 y 2025 se duplicaba cada siete meses. Desde 2023, <b>cada 131 días</b>. Si la tendencia sigue, en dos años lo que hoy es una hora serían 64.</p>""" + fuente_de(METR_TH)
+    elif i == 3:
+        cuerpo = titulo_claro("Pero «la mitad<br>de las veces»<br><em>no es un proceso.</em>", tam=88) + f"""
+<div style="position:absolute;left:84px;right:84px;top:600px;padding:34px 0;border-top:1px solid rgba(26,25,22,.14);border-bottom:1px solid rgba(26,25,22,.14);display:grid;grid-template-columns:1fr 1fr;gap:40px">
+  <div><div class="micro">Acierta 5 de 10</div><div style="font-size:120px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px">~12 h</div></div>
+  <div><div class="micro">Acierta 8 de 10</div><div style="font-size:120px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px;color:{TEAL_OSC}">~1,5 h</div></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">Cuando la tarea tiene que salir bien ocho de cada diez veces, <b>el horizonte es ocho veces más corto</b>. Tu operación necesita más que eso.</p>""" + fuente_de(METR_TH)
+    elif i == 4:
+        filas = "".join(f'<div class="fila"><div class="n">{n}</div><div><h3 style="font-size:36px">{t}</h3><p>{d}</p></div></div>' for n, t, d in [
+            ("01", "Que el modelo se pueda cambiar", "El de hoy no va a ser el mejor dentro de seis meses."),
+            ("02", "Medir el acierto, no la demo", "Cuántas veces sale bien con tus casos reales."),
+            ("03", "Revisión humana donde importa", "El sistema garantiza lo que el modelo todavía no."),
+        ])
+        cuerpo = titulo_claro("Tu proyecto va a durar<br><em>más que el modelo que usa.</em>", tam=76) + f"""
+<div style="position:absolute;left:84px;right:84px;top:470px">{filas}<div style="border-top:1px solid rgba(26,25,22,.14)"></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1030px;font-size:27px">Diseña para el modelo que viene, <b>con controles para el que tienes</b>.</p>""" + fuente_de(METR_TH)
+    else:
+        cuerpo = titulo_claro("Un agente que acierta<br>la mitad de las veces<br><em>necesita a alguien que<br>revise la otra mitad.</em>", tam=78) + f"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:720px">Así trabajamos: agentes dentro de tu operación, con <b>revisión humana donde importa</b> y el acierto medido con tus propios casos.</p>
+""" + cta()
+    return pieza(cuerpo, "Agentes", i, T, claro=True, alto=ALTO)
+
+
+# ---------- AI Index 2026 · papel marfil · carrusel 5 ----------
+# Fuente primaria leída el 23-oct-2026: hai.stanford.edu/ai-index/2026-ai-index-report (datos de 2025, «as of March 2026»).
+
+INDEX = "Stanford HAI, «The 2026 AI Index Report» · datos de 2025"
+
+
+def osworld():
+    """OSWorld: agentes 66,3 % en 2025 frente a 72,35 % de una persona (el índice da 12 % o ≈5 % de punto de partida; no se usa)."""
+    def barra(y, v, txt, color, lleno):
+        w = v * 10
+        rect = (f'<rect x="20" y="{y}" width="{w}" height="70" rx="8" fill="{color}"/>' if lleno else
+                f'<rect x="21.5" y="{y + 1.5}" width="{w - 3}" height="67" rx="8" fill="none" stroke="{color}" stroke-width="3"/>')
+        return (rect + f'<text x="{20 + w + 20}" y="{y + 50}" font-family="Rethink Sans" font-size="44" font-weight="600" fill="{color}">{str(v).replace(".", ",")} %</text>'
+                f'<text x="20" y="{y - 18}" font-family="Rethink Sans" font-size="24" fill="{GRIS}">{txt}</text>')
+    return (f'<svg width="912" height="460" viewBox="0 0 912 460" style="display:block;overflow:visible">'
+            + barra(60, 66.3, "Agentes de IA, 2025", TEAL_OSC, True)
+            + barra(240, 72.35, "Una persona", TINTA, False) + '</svg>')
+
+
+def incidentes():
+    def barra(x, v, anio, color, lleno):
+        h = v * 1.0
+        rect = (f'<rect x="{x}" y="{420 - h}" width="200" height="{h}" rx="8" fill="{color}"/>' if lleno else
+                f'<rect x="{x + 1.5}" y="{420 - h + 1.5}" width="197" height="{h - 3}" rx="8" fill="none" stroke="{color}" stroke-width="3"/>')
+        return (rect + f'<text x="{x + 100}" y="{420 - h - 20}" text-anchor="middle" font-family="Rethink Sans" font-size="48" font-weight="600" fill="{color}">{v}</text>'
+                f'<text x="{x + 100}" y="460" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="{GRIS}" letter-spacing="3">{anio}</text>')
+    return (f'<svg width="912" height="470" viewBox="0 0 912 470" style="display:block;overflow:visible"><line x1="20" y1="420" x2="892" y2="420" {TRAZO}/>'
+            + barra(160, 233, "2024", TINTA, False) + barra(520, 362, "2025", TEAL_OSC, True) + '</svg>')
+
+
+def lamina_index(i):
+    T = 6
+    if i == 1:
+        cuerpo = titulo_claro("Los agentes ya hacen<br>66 % de las tareas en<br>un computador. <em>Una<br>persona, 72 %.</em>", tam=78) + f"""
+<div style="position:absolute;left:84px;top:700px">{osworld()}</div>""" + fuente_de(INDEX + " · prueba OSWorld")
+    elif i == 2:
+        cuerpo = titulo_claro("En programación,<br>de 60 % a casi 100 %<br><em>en un solo año.</em>", "SWE-bench Verified: errores reales de código abierto", tam=84) + f"""
+<div style="position:absolute;left:84px;right:84px;top:640px;display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:34px 0;border-top:1px solid rgba(26,25,22,.14);border-bottom:1px solid rgba(26,25,22,.14)">
+  <div><div class="micro">Antes</div><div style="font-size:130px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px">60 %</div></div>
+  <div><div class="micro">Un año después</div><div style="font-size:130px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px;color:{TEAL_OSC}">~100 %</div></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1000px;font-size:27px">Cuando una prueba se llena, deja de medir. <b>La pregunta útil ya no es si el modelo pasa la prueba, sino si pasa tus casos.</b></p>""" + fuente_de(INDEX)
+    elif i == 3:
+        cuerpo = titulo_claro("Y aun así,<br><em>uno de cada tres<br>intentos falla.</em>", tam=88) + f"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:600px">El mismo informe lo dice: los agentes todavía fallan en tareas estructuradas <b>cerca de un tercio de las veces</b>.</p>
+<div style="position:absolute;left:84px;top:820px;display:flex;gap:28px">""" + "".join(
+            f'<div style="width:170px;height:170px;border-radius:50%;{"background:" + TEAL_OSC if k < 2 else "border:3px solid " + TINTA}"></div>' for k in range(3)) + f"""</div>
+<p class="micro" style="position:absolute;left:84px;top:1040px">Dos salen bien · una hay que revisarla</p>""" + fuente_de(INDEX)
+    elif i == 4:
+        cuerpo = titulo_claro("Los incidentes<br>documentados de IA<br><em>subieron 55 %.</em>", tam=84) + f"""
+<div style="position:absolute;left:84px;top:540px">{incidentes()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1050px;font-size:27px">Según el índice, la IA responsable <b>no va al ritmo de la capacidad</b>.</p>""" + fuente_de(INDEX)
+    elif i == 5:
+        cuerpo = practica("Antes de comprar<br><em>por un benchmark.</em>", [
+            ("01", "Pide la prueba con tus casos", "La prueba pública ya casi no distingue entre modelos."),
+            ("02", "Pregunta la tasa de acierto", "No el mejor resultado: cuántas de diez salen bien."),
+            ("03", "Define qué revisa una persona", "Y quién responde cuando el agente se equivoca."),
+        ], tam=88)
+    else:
+        cuerpo = titulo_claro("88 % de las<br>organizaciones ya usa IA.<br><em>Usarla dejó de ser<br>la ventaja.</em>", tam=80) + f"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:720px">La ventaja está en ponerla a trabajar dentro de tu operación, <b>medirla con tus casos</b> y saber qué revisa una persona.</p>
+""" + cta()
+    return pieza(cuerpo, "AI Index 2026", i, T, claro=True, alto=ALTO)
 
 
 PIEZAS = {}
@@ -463,11 +636,15 @@ for _i, _n in enumerate(["portada", "que-hacemos", "como-trabajamos", "quienes"]
     PIEZAS[f"somos_{_i}_{_n}"] = ((lambda i=_i: somos(i)), 1080, 1350)
 PIEZAS["clientes_muro"] = (clientes, 1080, 1350)
 for _i, _n in enumerate(["portada", "promedio", "problema", "preguntas", "cierre"], 1):
-    PIEZAS[f"cola_{_i}_{_n}"] = ((lambda i=_i: lamina_cola(i)), 1080, 1350)
-for _i, _n in enumerate(["portada", "chat-vs-sistema", "causas", "2026", "cierre"], 1):
-    PIEZAS[f"ia_{_i}_{_n}"] = ((lambda i=_i: lamina_ia(i)), 1080, 1350)
-for _i, _n in enumerate(["portada", "brecha", "2026", "encuesta", "cierre"], 1):
-    PIEZAS[f"medir_{_i}_{_n}"] = ((lambda i=_i: lamina_medir(i)), 1080, 1350)
+    PIEZAS[f"cola_{_i}_{_n}"] = ((lambda i=_i: lamina_cola(i)), 1080, ALTO)
+for _i, _n in enumerate(["portada", "chat-vs-sistema", "causas", "2026", "preguntas", "cierre"], 1):
+    PIEZAS[f"ia_{_i}_{_n}"] = ((lambda i=_i: lamina_ia(i)), 1080, ALTO)
+for _i, _n in enumerate(["portada", "brecha", "2026", "encuesta", "medidas", "cierre"], 1):
+    PIEZAS[f"medir_{_i}_{_n}"] = ((lambda i=_i: lamina_medir(i)), 1080, ALTO)
+for _i, _n in enumerate(["portada", "duplica", "confiabilidad", "diseno", "cierre"], 1):
+    PIEZAS[f"agentes_{_i}_{_n}"] = ((lambda i=_i: lamina_agentes(i)), 1080, ALTO)
+for _i, _n in enumerate(["portada", "codigo", "falla", "incidentes", "compra", "cierre"], 1):
+    PIEZAS[f"index_{_i}_{_n}"] = ((lambda i=_i: lamina_index(i)), 1080, ALTO)
 
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():

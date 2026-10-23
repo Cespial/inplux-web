@@ -13,3 +13,10 @@ como una sola cuenta. Regla del grid: nunca tres seguidas de la misma familia.
 
 Por qué: la estatua dice «idea»; si va detrás de un logo o de una cifra, compite con ella. La foto
 dice «personas y lugar». El marfil cambia el ritmo del grid y avisa «esto se guarda».
+
+
+## Formato y estructura (23-oct-2026, principios de @julioiero)
+- Las piezas nuevas van en 1080 × 1440 (3:4). Lo importante, dentro de 50 px a los lados y lejos de los bordes de arriba y abajo.
+- Contraste mínimo de 4,5:1 para cualquier texto (el gris del papel es `#625d55`, 5,6:1).
+- Carrusel: gancho → ejemplo → diagrama → información práctica → llamada a la acción simple. No vender antes de aportar valor; el cierre pide guardar y seguir, no otra oferta.
+- Las fotos se integran con el título (recorte que se cruza con el texto), no van pegadas como un rectángulo.
