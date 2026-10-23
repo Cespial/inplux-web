@@ -1,0 +1,36 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#0c0c0b}
+body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1350px;overflow:hidden;background:#0c0c0b}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:0.06;mix-blend-mode:overlay}
+.marco{position:absolute;inset:30px;border:1px solid rgba(246,242,236,.10)}
+.cruz{position:absolute;width:18px;height:18px;color:rgba(246,242,236,.45);font-size:22px;line-height:18px;text-align:center;font-weight:300}
+.titular{font-weight:500;letter-spacing:-.03em;line-height:1.0}
+.titular.funde{background:linear-gradient(90deg,#f6f2ec 0%,#f6f2ec 45%,#8d877e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.titular em{font-style:normal;color:#00d7ca}
+.sub{font-size:21px;letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#77726b;font-weight:500}
+.sub b{color:#f6f2ec;font-weight:600}
+.micro{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
+.cuerpo{font-size:31px;line-height:1.38;letter-spacing:-.005em;color:#cfc9bf}
+.cuerpo b{color:#f6f2ec;font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap;padding:13px 26px;font-size:25px;
+  border:1.5px solid rgba(246,242,236,.18);background:rgba(12,12,11,.6)}
+.pill i{font-style:normal;color:#00d7ca;font-size:19px;letter-spacing:.1em}
+.fila{display:grid;grid-template-columns:90px 1fr;padding:26px 0;border-top:1px solid rgba(246,242,236,.14)}
+.fila .n{font-size:20px;letter-spacing:.12em;color:#00d7ca;padding-top:8px}
+.fila h3{font-size:38px;font-weight:500;letter-spacing:-.02em}
+.fila p{font-size:24px;line-height:1.4;color:#bdb7ad;margin-top:8px}
+.foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
+</style></head><body><div class="lienzo">
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(0,215,202,.07),transparent 70%)"></div>
+<div style="position:absolute;left:84px;right:84px;top:190px">
+  <h1 class="titular funde" style="font-size:88px">Con quiénes<br>hemos trabajado.</h1>
+  <p class="sub" style="margin-top:26px">Empresas, entidades públicas y <b>municipios de Antioquia</b>.</p></div>
+<div style="position:absolute;left:84px;right:84px;top:500px;display:grid;grid-template-columns:1fr 1fr;gap:14px"><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/parque-arvi.png" alt="Parque Arví Corporación" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/think-it.png" alt="Think IT" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2) invert(1);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-03.png" alt="Corporación Interuniversitaria de Servicios" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/politecnico-jaime-isaza.png" alt="Politécnico Colombiano Jaime Isaza Cadavid" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-04.png" alt="Provincia del Agua, Bosques y el Turismo" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-05.png" alt="Rentan" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-06.png" alt="Empresa de Desarrollo Urbano" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-07.png" alt="Sistemas Aries" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/municipio-cisneros.png" alt="Municipio de Cisneros" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div><div style="background:#f6f2ec;border-radius:14px;height:116px;display:grid;place-items:center;padding:16px 34px"><img src="logos/experience-08.png" alt="Municipio de Vegachí" style="max-width:64%;max-height:88px;object-fit:contain;filter:grayscale(1) contrast(1.2);mix-blend-mode:multiply"></div></div><div class="grano"></div><div class="marco"></div><div class="cruz" style="top:21px;left:21px">+</div><div class="cruz" style="top:21px;right:21px">+</div><div class="cruz" style="bottom:21px;left:21px">+</div><div class="cruz" style="bottom:21px;right:21px">+</div>
+<div style="position:absolute;left:84px;top:70px;display:flex;align-items:center;gap:14px"><svg viewBox="0 0 100 100" width="40" height="40"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg>
+  <img src="assets/wordmark-white.svg" style="height:22px;display:block"></div>
+<div style="position:absolute;left:84px;right:84px;bottom:70px;display:flex;align-items:center;justify-content:space-between">
+  <div class="micro">Experiencia y alianzas</div><div style="display:flex;gap:9px"></div><div class="micro">INPLUX.CO</div></div></div></body></html>
