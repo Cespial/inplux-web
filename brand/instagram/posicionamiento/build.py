@@ -170,16 +170,20 @@ def barras():
     """Seis proyectos contra la línea del presupuesto: cinco rozan la línea, uno la triplica (200 % de sobrecosto)."""
     base, u, w, gap, x0 = 600, 150, 80, 36, 232  # u = alto de 1,0 × presupuesto
     linea = base - u
-    altos = [1.1, 0.95, 1.25, 1.05, 3.0, 1.2]
+    altos = [1.1, 0.95, 1.25, 1.05, 1.2, 3.0]
     barras_svg = "".join(
         f'<rect x="{x0 + k * (w + gap)}" y="{base - a * u}" width="{w}" height="{a * u}" rx="6" '
         f'fill="{TEAL_OSC if a > 2 else "none"}" stroke="{TEAL_OSC if a > 2 else TINTA}" stroke-width="3"/>' for k, a in enumerate(altos))
-    xl = x0 + 4 * (w + gap) + w / 2
+    xl = x0 + 5 * (w + gap) + w / 2
+    xa, xb = x0, x0 + 5 * (w + gap) - gap  # los cinco que rozan el presupuesto
     return f"""<svg width="912" height="640" viewBox="0 0 912 640" style="display:block;overflow:visible">
   <line x1="20" y1="{base}" x2="892" y2="{base}" {TRAZO}/>
   {barras_svg}
-  <line x1="20" y1="{linea}" x2="892" y2="{linea}" stroke="{TINTA}" stroke-width="2" stroke-dasharray="10 9"/>
-  <text x="20" y="{linea - 14}" text-anchor="start" font-family="Rethink Sans" font-size="22" fill="{GRIS}" letter-spacing="3">PRESUPUESTO</text>
+  <line x1="196" y1="{linea}" x2="892" y2="{linea}" stroke="{TINTA}" stroke-width="2" stroke-dasharray="10 9"/>
+  <text x="20" y="{linea + 8}" text-anchor="start" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">PRESUPUESTO</text>
+  <path d="M{xa},{base + 22} L{xa},{base + 32} L{xb},{base + 32} L{xb},{base + 22}" fill="none" stroke="{GRIS}" stroke-width="2"/>
+  <text x="{(xa + xb) / 2}" y="{base + 68}" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="{GRIS}">5 de cada 6 · cerca del presupuesto</text>
+  <text x="{xl}" y="{base + 68}" text-anchor="middle" font-family="Rethink Sans" font-size="22" font-weight="600" fill="{TEAL_OSC}">el triple</text>
   <text x="{xl}" y="{base - 3 * u - 22}" text-anchor="middle" font-family="Rethink Sans" font-size="30" font-weight="600" fill="{TEAL_OSC}">+200 %</text>
 </svg>"""
 
@@ -191,9 +195,9 @@ def cola():
   <path d="M30,378 C90,370 120,80 200,70 C280,60 300,300 420,340 C560,372 720,366 890,372" {TRAZO}/>
   <path d="M600,365 C700,366 800,368 890,372 L890,380 L600,380 Z" fill="{TEAL_OSC}" opacity=".85"/>
   <line x1="215" y1="40" x2="215" y2="380" stroke="{TINTA}" stroke-width="2" stroke-dasharray="8 8"/>
-  <text x="235" y="52" font-family="Rethink Sans" font-size="24" fill="{TINTA}">promedio · 27 %</text>
-  <text x="745" y="330" text-anchor="middle" font-family="Rethink Sans" font-size="24" font-weight="600" fill="{TEAL_OSC}">la cola · 200 %</text>
-  <path d="M745,342 C745,350 745,352 745,356" {TRAZO} stroke="{TEAL_OSC}"/>
+  <text x="235" y="52" font-family="Rethink Sans" font-size="24" fill="{TINTA}">lo típico · 27 %</text>
+  <path d="M600,318 L600,308 L890,308 L890,318" fill="none" stroke="{TEAL_OSC}" stroke-width="2.5"/>
+  <text x="745" y="290" text-anchor="middle" font-family="Rethink Sans" font-size="24" font-weight="600" fill="{TEAL_OSC}">1 de cada 6 · 200 %</text>
 </svg>"""
 
 
@@ -205,9 +209,9 @@ def caminos():
   <text x="34" y="30" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">COSTO DE CAMBIAR</text>
   <text x="892" y="392" text-anchor="end" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">TIEMPO →</text>
   <path d="M30,345 C300,340 560,300 700,190 C770,130 820,80 870,50" {TRAZO}/>
-  <text x="640" y="120" text-anchor="end" font-family="Rethink Sans" font-size="26" fill="{TINTA}">Requisito primero</text>
-  <path d="M30,250 C160,215 260,240 420,268 C600,296 760,300 870,302" {TRAZO} stroke="{TEAL_OSC}" stroke-width="4"/>
-  <text x="870" y="282" text-anchor="end" font-family="Rethink Sans" font-size="26" font-weight="600" fill="{TEAL_OSC}">Problema primero</text>
+  <text x="760" y="56" text-anchor="end" font-family="Rethink Sans" font-size="26" font-weight="600" fill="{TINTA}">Requisito primero</text>
+  <path d="M30,250 C160,215 260,240 420,268 C600,296 760,300 870,302" fill="none" stroke="{TEAL_OSC}" stroke-width="4" stroke-linecap="round"/>
+  <text x="870" y="340" text-anchor="end" font-family="Rethink Sans" font-size="26" font-weight="600" fill="{TEAL_OSC}">Problema primero</text>
 </svg>"""
 
 
@@ -228,10 +232,10 @@ def lamina_cola(i):
     T = 5
     if i == 1:
         cuerpo = titulo_claro("<em>1 de cada 6</em> proyectos<br>de TI termina costando,<br>en promedio, el triple.", tam=90) + f"""
-<div style="position:absolute;left:84px;top:500px">{barras()}</div>""" + fuente()
+<div style="position:absolute;left:84px;top:470px">{barras()}</div>""" + fuente(1196)
     elif i == 2:
         cuerpo = titulo_claro("El promedio<br>no es el riesgo.",
-                              "El sobrecosto típico es <b>27 %</b>. Uno de cada seis llega a <b>200 %</b>.") + f"""
+                              "Lo típico: <b>27 %</b> · La cola: <b>200 %</b>") + f"""
 <div style="position:absolute;left:84px;top:620px">{cola()}</div>
 <p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1080px;font-size:27px">Con un 27 % se puede vivir. El problema es la cola: <b>200 % de sobrecosto en promedio y casi 70 % de sobreplazo</b>.</p>""" + fuente(1196)
     elif i == 3:
@@ -241,12 +245,14 @@ def lamina_cola(i):
     elif i == 4:
         filas = "".join(f'<div class="fila"><div class="n">{n}</div><h3 style="font-size:36px">{t}</h3></div>' for n, t in PREGUNTAS)
         cuerpo = titulo_claro("Cuatro preguntas<br>antes de escribir<br>una línea de código.", tam=80) + f"""
-<div style="position:absolute;left:84px;right:84px;top:600px">{filas}</div>"""
+<div style="position:absolute;left:84px;right:84px;top:580px">{filas}<div style="border-top:1px solid rgba(26,25,22,.14)"></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1060px;font-size:27px">Si nadie las puede responder, el proyecto todavía no tiene un problema: <b>tiene una lista de requisitos</b>.</p>"""
     else:
         cuerpo = titulo_claro("Antes de firmar,<br>pregunta qué pasa<br>si tu proyecto<br><em>cae en la cola.</em>", tam=88) + f"""
-<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:760px">Así trabajamos: una primera versión útil en producción, <b>uso real observado</b> y decisiones tomadas contigo con esa evidencia.</p>
-<div style="position:absolute;left:84px;right:84px;bottom:150px;display:flex;justify-content:space-between;align-items:center">
-  <span class="cuerpo" style="color:{TINTA};font-weight:600">Hablemos.</span><span class="micro" style="color:{TINTA}">inplux.co</span></div>"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:740px">Así trabajamos: una primera versión útil en producción, <b>uso real observado</b> y decisiones tomadas contigo con esa evidencia.</p>
+<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
+  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
+  <span class="pill">Guárdalo para tu próximo contrato</span></div>"""
     return pieza(cuerpo, "Riesgo en software", i, T, claro=True)
 
 
