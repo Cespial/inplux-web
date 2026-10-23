@@ -256,12 +256,119 @@ def lamina_cola(i):
     return pieza(cuerpo, "Riesgo en software", i, T, claro=True)
 
 
+# ---------- IA en producción · papel marfil · carrusel 5 ----------
+# Fuentes primarias leídas el 23-oct-2026: MIT NANDA, «The GenAI Divide» (jul-2025, pp. 3, 6, 18, 23) y
+# deloitte.com «The State of AI in the Enterprise» 2026 (3.235 líderes, 24 países, ago–sep 2025).
+
+NANDA = "MIT NANDA, «The GenAI Divide: State of AI in Business 2025», jul-2025 · hallazgos preliminares: 52 entrevistas, 153 encuestas, 300+ iniciativas"
+DELOITTE = "Deloitte, «The State of AI in the Enterprise», 2026 · 3.235 líderes en 24 países, encuesta ago–sep 2025"
+
+
+def fuente_de(texto, arriba=1196):
+    return f'<p style="position:absolute;left:84px;right:84px;top:{arriba}px;font-size:16px;letter-spacing:.04em;color:{GRIS};line-height:1.5">Fuente: {texto}</p>'
+
+
+def puntos_100():
+    """De cada 100 organizaciones: 60 evaluaron IA a la medida, 20 la pilotearon, 5 llegaron a producción (NANDA p. 3)."""
+    c, r = 58, 19
+    celdas = []
+    for k in range(100):
+        x, y = 30 + (k % 10) * c, 30 + (k // 10) * c
+        if k < 5:
+            celdas.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{TEAL_OSC}"/>')
+        elif k < 20:
+            celdas.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{TINTA}"/>')
+        elif k < 60:
+            celdas.append(f'<circle cx="{x}" cy="{y}" r="{r - 1.5}" fill="none" stroke="{TINTA}" stroke-width="2.5"/>')
+        else:
+            celdas.append(f'<circle cx="{x}" cy="{y}" r="4" fill="{GRIS}" opacity=".55"/>')
+    def clave(y, num, txt, color, forma):
+        return (f'{forma.format(y=y)}<text x="700" y="{y + 16}" font-family="Rethink Sans" font-size="58" font-weight="600" fill="{color}" letter-spacing="-1">{num}</text>'
+                f'<text x="700" y="{y + 52}" font-family="Rethink Sans" font-size="23" fill="{GRIS}">{txt}</text>')
+    leyenda = (clave(20, "60", "evaluaron", TINTA, f'<circle cx="660" cy="{{y}}" r="15" fill="none" stroke="{TINTA}" stroke-width="2.5"/>')
+               + clave(190, "20", "hicieron piloto", TINTA, f'<circle cx="660" cy="{{y}}" r="16" fill="{TINTA}"/>')
+               + clave(360, "5", "en producción", TEAL_OSC, f'<circle cx="660" cy="{{y}}" r="16" fill="{TEAL_OSC}"/>'))
+    return f'<svg width="912" height="580" viewBox="0 0 912 580" style="display:block;overflow:visible">{"".join(celdas)}{leyenda}</svg>'
+
+
+def dos_embudos():
+    """Chat de uso general frente a IA a la medida, del interés a la producción (NANDA p. 6)."""
+    xs, y0, u = [60, 450, 840], 400, 4.2
+    def serie(vals, color, ancho):
+        pts = [(x, y0 - v * u) for x, v in zip(xs, vals)]
+        d = "M" + " L".join(f"{x},{y}" for x, y in pts)
+        nodos = "".join(f'<circle cx="{x}" cy="{y}" r="9" fill="{color}"/>'
+                        f'<text x="{x}" y="{y - 22}" text-anchor="middle" font-family="Rethink Sans" font-size="26" font-weight="600" fill="{color}">{v} %</text>'
+                        for (x, y), v in zip(pts, vals))
+        return f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{ancho}" stroke-linecap="round" stroke-linejoin="round"/>{nodos}'
+    ejes = "".join(f'<text x="{x}" y="{y0 + 50}" text-anchor="middle" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">{t}</text>'
+                   for x, t in zip(xs, ["EVALUARON", "PILOTO", "PRODUCCIÓN"]))
+    return f"""<svg width="912" height="470" viewBox="0 0 912 470" style="display:block;overflow:visible">
+  <line x1="20" y1="{y0}" x2="892" y2="{y0}" {TRAZO}/>{ejes}
+  {serie([80, 50, 40], TINTA, 3)}{serie([60, 20, 5], TEAL_OSC, 4)}
+  <text x="300" y="{y0 - 66 * u - 30}" text-anchor="middle" font-family="Rethink Sans" font-size="24" fill="{TINTA}">Chat de uso general</text>
+  <text x="235" y="{y0 - 38 * u + 52}" text-anchor="middle" font-family="Rethink Sans" font-size="24" font-weight="600" fill="{TEAL_OSC}">IA a la medida</text>
+</svg>"""
+
+
+def brecha_2026():
+    """Deloitte 2026: 74 % espera crecer en ingresos con IA; 20 % ya lo hace."""
+    def barra(y, v, txt, color, lleno):
+        w = v * 9
+        rect = (f'<rect x="20" y="{y}" width="{w}" height="70" rx="8" fill="{color}"/>' if lleno else
+                f'<rect x="21.5" y="{y + 1.5}" width="{w - 3}" height="67" rx="8" fill="none" stroke="{color}" stroke-width="3"/>')
+        return (rect + f'<text x="{20 + w + 22}" y="{y + 50}" font-family="Rethink Sans" font-size="48" font-weight="600" fill="{color}" letter-spacing="-1">{v} %</text>'
+                f'<text x="20" y="{y - 18}" font-family="Rethink Sans" font-size="24" fill="{GRIS}">{txt}</text>')
+    return (f'<svg width="912" height="300" viewBox="0 0 912 300" style="display:block;overflow:visible">'
+            + barra(40, 74, "Espera crecer en ingresos con IA", TINTA, False)
+            + barra(210, 20, "Ya crece en ingresos con IA", TEAL_OSC, True) + '</svg>')
+
+
+CAUSAS = [  # NANDA p. 3: «brittle workflows, lack of contextual learning, and misalignment with day-to-day operations»
+    ("01", "Flujos frágiles", "Funcionan en la demo y se rompen con el primer caso raro."),
+    ("02", "No aprende del contexto", "Olvida lo que el equipo ya le corrigió la semana pasada."),
+    ("03", "No encaja en la operación", "Vive al lado del trabajo, no dentro de él."),
+]
+
+
+def lamina_ia(i):
+    T = 5
+    if i == 1:
+        cuerpo = titulo_claro("De cada 100 empresas,<br><em>5</em> tienen IA a la medida<br>en producción.", tam=84) + f"""
+<div style="position:absolute;left:84px;top:530px">{puntos_100()}</div>""" + fuente_de(NANDA)
+    elif i == 2:
+        cuerpo = titulo_claro("El chat llega.<br><em>El sistema, casi nunca.</em>", "Del interés a la producción", tam=84) + f"""
+<div style="position:absolute;left:84px;top:520px">{dos_embudos()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1050px;font-size:27px">ChatGPT y Copilot ayudan a cada persona, pero <b>no mueven el estado de resultados</b>. Lo que sí lo mueve, la IA dentro de los procesos, es lo que se queda en piloto.</p>""" + fuente_de(NANDA)
+    elif i == 3:
+        filas = "".join(f'<div class="fila"><div class="n">{n}</div><div><h3 style="font-size:38px">{t}</h3><p>{d}</p></div></div>' for n, t, d in CAUSAS)
+        cuerpo = titulo_claro("El problema<br>no es el modelo.", "Es cómo se implementa") + f"""
+<div style="position:absolute;left:84px;right:84px;top:560px">{filas}<div style="border-top:1px solid rgba(26,25,22,.14)"></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1060px;font-size:27px">Según el estudio, la brecha no parece venir de la calidad del modelo ni de la regulación: <b>viene del enfoque</b>.</p>""" + fuente_de(NANDA)
+    elif i == 4:
+        cuerpo = titulo_claro("2026: tres de cada cuatro<br>quieren crecer con IA.<br><em>Uno de cada cinco lo logra.</em>", tam=76) + f"""
+<div style="position:absolute;left:84px;top:560px">{brecha_2026()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">En la encuesta más reciente de Deloitte, la brecha sigue ahí. Dos de cada tres empresas ya ven <b>ganancias de productividad</b>; el crecimiento todavía es una aspiración.</p>""" + fuente_de(DELOITTE)
+    else:
+        cuerpo = titulo_claro("Una IA que no aprende<br>de tu operación<br><em>se queda en piloto.</em>", tam=84) + f"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:600px">Así trabajamos: la construimos dentro de tu operación, con <b>revisión humana donde importa</b>, y medimos su uso real para ajustarla.</p>
+<div style="position:absolute;left:84px;right:84px;top:820px;padding:30px 0;border-top:1px solid rgba(26,25,22,.14);border-bottom:1px solid rgba(26,25,22,.14);display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center">
+  <div style="font-size:80px;font-weight:600;letter-spacing:-.03em;color:{TEAL_OSC};line-height:1">2×</div>
+  <p style="font-size:24px;line-height:1.45;color:#4a463f">En el estudio, lo que se hizo con un aliado externo llegó a producción el doble de veces que lo construido solo en casa (≈67 % frente a ≈33 %, autorreportado).</p></div>
+<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
+  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
+  <span class="pill">Guárdalo para tu próximo proyecto de IA</span></div>"""
+    return pieza(cuerpo, "IA en producción", i, T, claro=True)
+
+
 PIEZAS = {}
 for _i, _n in enumerate(["portada", "que-hacemos", "como-trabajamos", "quienes"], 1):
     PIEZAS[f"somos_{_i}_{_n}"] = ((lambda i=_i: somos(i)), 1080, 1350)
 PIEZAS["clientes_muro"] = (clientes, 1080, 1350)
 for _i, _n in enumerate(["portada", "promedio", "problema", "preguntas", "cierre"], 1):
     PIEZAS[f"cola_{_i}_{_n}"] = ((lambda i=_i: lamina_cola(i)), 1080, 1350)
+for _i, _n in enumerate(["portada", "chat-vs-sistema", "causas", "2026", "cierre"], 1):
+    PIEZAS[f"ia_{_i}_{_n}"] = ((lambda i=_i: lamina_ia(i)), 1080, 1350)
 
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():

@@ -59,3 +59,22 @@ Gracias por la confianza. inplux.co
 `#fábricadesoftware #medellín #antioquia #softwarealamedida`
 
 **Alt:** Fondo negro con el titular «Con quiénes hemos trabajado» y diez logos en escala de grises sobre tarjetas claras: Parque Arví, Think IT, Corporación Interuniversitaria de Servicios, Politécnico Colombiano Jaime Isaza Cadavid, Provincia del Agua, Bosques y el Turismo, Rentan, Empresa de Desarrollo Urbano, Sistemas Aries, Alcaldía de Cisneros y Municipio de Vegachí.
+
+## IA en producción · carrusel 5 · papel marfil (valor)
+`ia_1_portada.jpg` · `ia_2_chat-vs-sistema` · `ia_3_causas` · `ia_4_2026` · `ia_5_cierre`
+
+Fuentes primarias leídas el 23-oct-2026: MIT NANDA, «The GenAI Divide: State of AI in Business 2025» (jul-2025, hallazgos preliminares: 52 entrevistas, 153 encuestas, 300+ iniciativas; pp. 3, 6, 18) y Deloitte, «The State of AI in the Enterprise» 2026 (3.235 líderes, 24 países, encuesta ago–sep 2025). Se usa el embudo 60 → 20 → 5 de la p. 3, no el titular de prensa «95 % de los pilotos fracasa».
+
+De cada 100 empresas, 60 evaluaron una IA a la medida. 20 hicieron piloto. 5 la tienen en producción.
+
+El chat de uso general sí llega: ayuda a cada persona. Lo que mueve el estado de resultados, la IA dentro de los procesos, es lo que se queda en piloto. Según el MIT, no por el modelo: por flujos frágiles, herramientas que no aprenden del contexto y sistemas que no encajan en la operación diaria.
+
+En 2026 la brecha sigue: 74 % de las empresas espera crecer en ingresos con IA y 20 % ya lo logra (Deloitte).
+
+Así trabajamos en INPLUX: la IA se construye dentro de tu operación, con revisión humana donde importa, y se ajusta con uso real.
+
+Guárdalo para tu próximo proyecto de IA. inplux.co
+
+`#inteligenciaartificial #ia #transformaciondigital #inplux #medellin`
+
+**Alt 1:** Cuadrícula de 100 puntos sobre papel: 5 en teal, 15 negros, 40 círculos vacíos y 40 puntos tenues. Leyenda: 60 evaluaron, 20 hicieron piloto, 5 en producción. Texto: «De cada 100 empresas, 5 tienen IA a la medida en producción». **Alt 2:** Dos líneas del interés a la producción: el chat de uso general pasa de 80 % a 50 % y a 40 %; la IA a la medida, en teal, de 60 % a 20 % y a 5 %. Texto: «El chat llega. El sistema, casi nunca». **Alt 3:** «El problema no es el modelo. Es cómo se implementa». Tres causas: flujos frágiles, no aprende del contexto, no encaja en la operación. **Alt 4:** Dos barras: 74 % espera crecer en ingresos con IA; 20 % ya lo hace. Texto: «2026: tres de cada cuatro quieren crecer con IA. Uno de cada cinco lo logra». **Alt 5:** «Una IA que no aprende de tu operación se queda en piloto». Dato: con un aliado externo, el doble de proyectos llegó a producción (≈67 % frente a ≈33 %, autorreportado). Botones: «Hablemos» y «Guárdalo para tu próximo proyecto de IA».
