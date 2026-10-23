@@ -361,6 +361,103 @@ def lamina_ia(i):
     return pieza(cuerpo, "IA en producción", i, T, claro=True)
 
 
+# ---------- Medir la IA · papel marfil · carrusel 5 ----------
+# Fuentes primarias leídas el 23-oct-2026 en metr.org: estudio jul-2025 (16 desarrolladores, 246 tareas),
+# actualización 24-feb-2026 (57 desarrolladores, 800+ tareas) y encuesta 11-may-2026 (349 personas técnicas).
+
+METR25 = "METR, «Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity», jul-2025 · 16 desarrolladores, 246 tareas"
+METR26 = "METR, «We are Changing our Developer Productivity Experiment Design», feb-2026 · 57 desarrolladores, 800+ tareas · IC 95 %"
+METR26E = "METR, «Measuring the Self-Reported Impact of Early-2026 AI on Technical Worker Productivity», may-2026 · 349 personas, muestra por conveniencia"
+
+
+def sentir_medir():
+    """Barras divergentes desde cero: lo que esperaban (+24 %), lo que creyeron (+20 %) y lo que se midió (−19 %)."""
+    x0, u = 456, 12
+    def fila(y, v, txt, color, lleno):
+        w = abs(v) * u
+        x = x0 if v > 0 else x0 - w
+        rect = (f'<rect x="{x}" y="{y}" width="{w}" height="64" rx="8" fill="{color}"/>' if lleno else
+                f'<rect x="{x + 1.5}" y="{y + 1.5}" width="{w - 3}" height="61" rx="8" fill="none" stroke="{color}" stroke-width="3"/>')
+        num = (f'<text x="{x + w + 18}" y="{y + 46}" font-family="Rethink Sans" font-size="40" font-weight="600" fill="{color}">+{v} %</text>' if v > 0 else
+               f'<text x="{x - 18}" y="{y + 46}" text-anchor="end" font-family="Rethink Sans" font-size="40" font-weight="600" fill="{color}">−{-v} %</text>')
+        lab = (f'<text x="{x0 - 22}" y="{y + 42}" text-anchor="end" font-family="Rethink Sans" font-size="24" fill="{GRIS}">{txt}</text>' if v > 0 else
+               f'<text x="{x0 + 22}" y="{y + 42}" font-family="Rethink Sans" font-size="24" fill="{GRIS}">{txt}</text>')
+        return rect + num + lab
+    return f"""<svg width="912" height="420" viewBox="0 0 912 420" style="display:block;overflow:visible">
+  <line x1="{x0}" y1="0" x2="{x0}" y2="380" stroke="{TINTA}" stroke-width="2"/>
+  {fila(20, 24, "Esperaban, antes", TINTA, False)}{fila(140, 20, "Creyeron, después", TINTA, False)}{fila(260, -19, "Se midió", TEAL_OSC, True)}
+  <text x="{x0 - 20}" y="412" text-anchor="end" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">← MÁS LENTO</text>
+  <text x="{x0 + 20}" y="412" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">MÁS RÁPIDO →</text>
+</svg>"""
+
+
+def intervalos():
+    """Velocidad con IA (= −cambio en el tiempo por tarea que reporta METR), con su IC de 95 %; misma dirección que la portada."""
+    x0, u = 470, 9  # 0 % en x0; 1 punto = 9 px
+    X = lambda v: x0 + v * u
+    def fila(y, est, lo, hi, txt, color):
+        return (f'<line x1="{X(lo)}" y1="{y}" x2="{X(hi)}" y2="{y}" stroke="{color}" stroke-width="4" stroke-linecap="round"/>'
+                f'<line x1="{X(lo)}" y1="{y - 12}" x2="{X(lo)}" y2="{y + 12}" stroke="{color}" stroke-width="3"/>'
+                f'<line x1="{X(hi)}" y1="{y - 12}" x2="{X(hi)}" y2="{y + 12}" stroke="{color}" stroke-width="3"/>'
+                f'<circle cx="{X(est)}" cy="{y}" r="13" fill="{color}"/>'
+                f'<text x="{X(est)}" y="{y - 30}" text-anchor="middle" font-family="Rethink Sans" font-size="30" font-weight="600" fill="{color}" stroke="{PAPEL}" stroke-width="10" paint-order="stroke">{"+" if est > 0 else "−"}{abs(est)} %</text>'
+                f'<text x="20" y="{y + 56}" font-family="Rethink Sans" font-size="22" fill="{GRIS}">{txt}</text>')
+    return f"""<svg width="912" height="480" viewBox="0 0 912 480" style="display:block;overflow:visible">
+  <line x1="{x0}" y1="10" x2="{x0}" y2="440" stroke="{TINTA}" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="{x0 - 20}" y="472" text-anchor="end" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">← MÁS LENTO</text>
+  <text x="{x0 + 20}" y="472" font-family="Rethink Sans" font-size="20" fill="{GRIS}" letter-spacing="3">MÁS RÁPIDO →</text>
+  {fila(70, -19, -39, -2, "2025 · herramientas de inicios de 2025", TINTA)}
+  {fila(215, 18, -9, 38, "2026 · los mismos desarrolladores", TEAL_OSC)}
+  {fila(360, 4, -9, 15, "2026 · desarrolladores nuevos", TEAL_OSC)}
+</svg>"""
+
+
+def dicen_vs_valor():
+    """Encuesta METR 2026: mediana autorreportada de velocidad 3× y de valor 1,4–2×."""
+    u = 230
+    return f"""<svg width="912" height="330" viewBox="0 0 912 330" style="display:block;overflow:visible">
+  <text x="20" y="22" font-family="Rethink Sans" font-size="24" fill="{GRIS}">Velocidad que dicen tener</text>
+  <rect x="21.5" y="45.5" width="{3 * u - 3}" height="67" rx="8" fill="none" stroke="{TINTA}" stroke-width="3"/>
+  <text x="{20 + 3 * u + 22}" y="96" font-family="Rethink Sans" font-size="48" font-weight="600" fill="{TINTA}">3×</text>
+  <text x="20" y="202" font-family="Rethink Sans" font-size="24" fill="{GRIS}">Valor que dicen producir</text>
+  <rect x="20" y="225" width="{1.4 * u}" height="70" rx="8" fill="{TEAL_OSC}"/>
+  <rect x="{20 + 1.4 * u}" y="225" width="{0.6 * u}" height="70" rx="0" fill="{TEAL_OSC}" opacity=".35"/>
+  <text x="{20 + 2 * u + 22}" y="276" font-family="Rethink Sans" font-size="48" font-weight="600" fill="{TEAL_OSC}">1,4–2×</text>
+</svg>"""
+
+
+def lamina_medir(i):
+    T = 5
+    if i == 1:
+        cuerpo = titulo_claro("Creían ir 20 % más<br>rápido con IA.<br><em>Iban 19 % más lento.</em>", tam=86) + f"""
+<div style="position:absolute;left:84px;top:600px">{sentir_medir()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1060px;font-size:25px">Experimento controlado con programadores expertos en sus propios proyectos, usando Cursor con Claude 3.5 y 3.7 Sonnet.</p>""" + fuente_de(METR25)
+    elif i == 2:
+        cuerpo = titulo_claro("Casi 40 puntos entre<br>lo que se siente<br><em>y lo que se mide.</em>", tam=84) + f"""
+<div style="position:absolute;left:84px;right:84px;top:560px;padding:34px 0;border-top:1px solid rgba(26,25,22,.14);border-bottom:1px solid rgba(26,25,22,.14);display:grid;grid-template-columns:1fr 1fr;gap:40px">
+  <div><div class="micro">Sintieron</div><div style="font-size:120px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px">+20 %</div></div>
+  <div><div class="micro">Se midió</div><div style="font-size:120px;font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-top:10px;color:{TEAL_OSC}">−19 %</div></div></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:900px;font-size:27px">Los autores son claros: es una foto de inicios de 2025, en un solo contexto. <b>No prueba que la IA haga más lento a todo el mundo.</b> Prueba que la sensación no sirve como medida.</p>""" + fuente_de(METR25)
+    elif i == 3:
+        cuerpo = titulo_claro("En 2026 la IA<br>probablemente ya acelera.<br><em>Cuánto, aún no se sabe.</em>", tam=76) + f"""
+<div style="position:absolute;left:84px;top:520px">{intervalos()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:1040px;font-size:25px">Las barras de 2026 cruzan el cero. Y entre <b>30 % y 50 %</b> de los participantes dejó tareas por fuera porque no quería hacerlas sin IA.</p>""" + fuente_de(METR26)
+    elif i == 4:
+        cuerpo = titulo_claro("Dicen ir 3× más rápido.<br><em>El valor, entre 1,4× y 2×.</em>", tam=80) + f"""
+<div style="position:absolute;left:84px;top:520px">{dicen_vs_valor()}</div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">Es lo que reportan 349 personas técnicas en 2026. El propio METR advierte que <b>la velocidad suele exagerar el valor</b> y que estas respuestas no están necesariamente ancladas en la realidad.</p>""" + fuente_de(METR26E)
+    else:
+        cuerpo = titulo_claro("Si no lo mides,<br>lo que tienes<br><em>es una sensación.</em>", tam=88) + f"""
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:640px">Así trabajamos: antes de construir acordamos <b>qué vamos a medir</b>, y después de lanzar miramos el uso real, no la impresión.</p>
+<div style="position:absolute;left:84px;right:84px;top:850px;border-top:1px solid rgba(26,25,22,.14)">
+  <div class="fila" style="border-top:none"><div class="n">01</div><h3 style="font-size:32px">Tiempo por tarea, antes y después</h3></div>
+  <div class="fila"><div class="n">02</div><h3 style="font-size:32px">Errores que llegan a revisión humana</h3></div></div>
+<div style="position:absolute;left:84px;right:84px;top:1110px;display:flex;gap:16px">
+  <span class="pill" style="background:{TINTA};color:{PAPEL};border-color:{TINTA}">Hablemos</span>
+  <span class="pill">Guárdalo para medir tu IA</span></div>"""
+    return pieza(cuerpo, "Medir la IA", i, T, claro=True)
+
+
 PIEZAS = {}
 for _i, _n in enumerate(["portada", "que-hacemos", "como-trabajamos", "quienes"], 1):
     PIEZAS[f"somos_{_i}_{_n}"] = ((lambda i=_i: somos(i)), 1080, 1350)
@@ -369,6 +466,8 @@ for _i, _n in enumerate(["portada", "promedio", "problema", "preguntas", "cierre
     PIEZAS[f"cola_{_i}_{_n}"] = ((lambda i=_i: lamina_cola(i)), 1080, 1350)
 for _i, _n in enumerate(["portada", "chat-vs-sistema", "causas", "2026", "cierre"], 1):
     PIEZAS[f"ia_{_i}_{_n}"] = ((lambda i=_i: lamina_ia(i)), 1080, 1350)
+for _i, _n in enumerate(["portada", "brecha", "2026", "encuesta", "cierre"], 1):
+    PIEZAS[f"medir_{_i}_{_n}"] = ((lambda i=_i: lamina_medir(i)), 1080, 1350)
 
 if __name__ == "__main__":
     for nombre, (fn, _, _) in PIEZAS.items():

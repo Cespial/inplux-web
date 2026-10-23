@@ -1,0 +1,41 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#f3eee6}
+body{font-family:"Rethink Sans",sans-serif;color:#1a1916;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1350px;overflow:hidden;background:#f3eee6}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:0.1;mix-blend-mode:multiply}
+.marco{position:absolute;inset:30px;border:1px solid rgba(26,25,22,.12)}
+.cruz{position:absolute;width:18px;height:18px;color:rgba(26,25,22,.45);font-size:22px;line-height:18px;text-align:center;font-weight:300}
+.titular{font-weight:500;letter-spacing:-.03em;line-height:1.0}
+.titular.funde{background:linear-gradient(90deg,#f6f2ec 0%,#f6f2ec 45%,#8d877e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.titular em{font-style:normal;color:#007a72}
+.sub{font-size:21px;letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#8a847a;font-weight:500}
+.sub b{color:#1a1916;font-weight:600}
+.micro{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#8a847a;font-weight:500}
+.cuerpo{font-size:31px;line-height:1.38;letter-spacing:-.005em;color:#4a463f}
+.cuerpo b{color:#1a1916;font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap;padding:13px 26px;font-size:25px;
+  border:1.5px solid rgba(26,25,22,.18);background:rgba(255,255,255,.4)}
+.pill i{font-style:normal;color:#007a72;font-size:19px;letter-spacing:.1em}
+.fila{display:grid;grid-template-columns:90px 1fr;padding:26px 0;border-top:1px solid rgba(26,25,22,.14)}
+.fila .n{font-size:20px;letter-spacing:.12em;color:#007a72;padding-top:8px}
+.fila h3{font-size:38px;font-weight:500;letter-spacing:-.02em}
+.fila p{font-size:24px;line-height:1.4;color:#8a847a;margin-top:8px}
+.foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
+</style></head><body><div class="lienzo"><div style="position:absolute;left:84px;right:84px;top:190px"><h1 class="titular" style="font-size:80px">Dicen ir 3× más rápido.<br><em>El valor, entre 1,4× y 2×.</em></h1></div>
+<div style="position:absolute;left:84px;top:520px"><svg width="912" height="330" viewBox="0 0 912 330" style="display:block;overflow:visible">
+  <text x="20" y="22" font-family="Rethink Sans" font-size="24" fill="#8a847a">Velocidad que dicen tener</text>
+  <rect x="21.5" y="45.5" width="687" height="67" rx="8" fill="none" stroke="#1a1916" stroke-width="3"/>
+  <text x="732" y="96" font-family="Rethink Sans" font-size="48" font-weight="600" fill="#1a1916">3×</text>
+  <text x="20" y="202" font-family="Rethink Sans" font-size="24" fill="#8a847a">Valor que dicen producir</text>
+  <rect x="20" y="225" width="322.0" height="70" rx="8" fill="#007a72"/>
+  <rect x="342.0" y="225" width="138.0" height="70" rx="0" fill="#007a72" opacity=".35"/>
+  <text x="502" y="276" font-family="Rethink Sans" font-size="48" font-weight="600" fill="#007a72">1,4–2×</text>
+</svg></div>
+<p class="cuerpo" style="position:absolute;left:84px;right:84px;top:940px;font-size:27px">Es lo que reportan 349 personas técnicas en 2026. El propio METR advierte que <b>la velocidad suele exagerar el valor</b> y que estas respuestas no están necesariamente ancladas en la realidad.</p><p style="position:absolute;left:84px;right:84px;top:1196px;font-size:16px;letter-spacing:.04em;color:#8a847a;line-height:1.5">Fuente: METR, «Measuring the Self-Reported Impact of Early-2026 AI on Technical Worker Productivity», may-2026 · 349 personas, muestra por conveniencia</p><div class="grano"></div><div class="marco"></div><div class="cruz" style="top:21px;left:21px">+</div><div class="cruz" style="top:21px;right:21px">+</div><div class="cruz" style="bottom:21px;left:21px">+</div><div class="cruz" style="bottom:21px;right:21px">+</div>
+<div style="position:absolute;left:84px;top:70px;display:flex;align-items:center;gap:14px"><svg viewBox="0 0 100 100" width="40" height="40"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#1a1916"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#1a1916"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg>
+  <img src="assets/wordmark-black.svg" style="height:22px;display:block"></div><div class="micro" style="position:absolute;right:84px;top:88px;letter-spacing:.2em">4 / 5</div>
+<div style="position:absolute;left:84px;right:84px;bottom:70px;display:flex;align-items:center;justify-content:space-between">
+  <div class="micro">Medir la IA</div><div style="display:flex;gap:9px"><i style="width:9px;height:9px;border-radius:50%;background:rgba(26,25,22,.25)"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(26,25,22,.25)"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(26,25,22,.25)"></i><i style="width:9px;height:9px;border-radius:50%;background:#1a1916"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(26,25,22,.25)"></i></div><div class="micro">INPLUX.CO</div></div></div></body></html>
