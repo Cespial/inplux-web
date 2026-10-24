@@ -13,21 +13,21 @@ Nada se programa sin OK de Cristian. Las piezas «listas» ya están limpias (li
 | vie 30-oct | Con quiénes hemos trabajado | `posicionamiento/limpio/clientes_muro` | negro | lista · etiquetar solo cuentas verificadas |
 | sáb 31-oct | Pregunta real: ¿sigue vigente el umbral de 40.000 UVT? | `semanal/s1_sab_pregunta-patrimonio` | romana | lista |
 | dom 1-nov | Somos INPLUX (carrusel 4) · **fijar en el perfil** | `posicionamiento/limpio/somos_1..4` | foto B/N | lista |
-| lun 2-nov | Actualidad IA #2 | `semanal/s2_lun_actualidad-*` | marfil | ejemplo hecho (Deloitte); elegir noticia el vie 30 |
+| lun 2-nov | **Radar R1 · Google Earth AI, agente geoespacial (11-oct)** + nuestro agente geo | `radar/r1_*` | negro + marfil | 🚨 Cristian decide qué dato geo mostrar (sismo, atlas de minería o JMC) |
 | mar 3-nov | **Claude, conectado al Estatuto Tributario** (Tribai MCP, carrusel 4) | `referentes/a1_tribai_1..4` | negro | lista · Porkia Pt. 1 pasa a S5 |
 | mié 4-nov | **Hilo H2 «El impuesto al patrimonio cambió tres veces en tres meses»** (5) | `hilos/h2_01`–`h2_05` | romano + marfil + negro | ✅ listo · «1 de cada 6» pasa a S5 |
 | jue 5-nov | IA en producción (carrusel 6) | `posicionamiento/limpio/ia_1..6` | marfil | lista |
 | vie 6-nov | **Colab 10ampro B1 · «Una idea encerrada se pudre»** (carrusel 5) | `referentes/b1_idea-abierta_1..5` | romana | lista · 🚨 Cristian se la propone a Hernán · la columna pasa a S5 |
 | sáb 7-nov | Pregunta real: tope para declarar renta 2026 | por hacer | romana | captura Tribai 23-oct (p1) |
 | dom 8-nov | Esta semana en INPLUX #1 | `semanal/changelog` | negro | 🚨 ítems de Jaime el vie 6 |
-| lun 9-nov | Actualidad IA #3 | por hacer | marfil | |
+| lun 9-nov | **Radar R2 · «Un agente apagó su propio monitoreo y luego dijo que no»** (OpenAI 20-oct) | `radar/r2_01`–`r2_06` | romano + negro + marfil | ✅ listo · prueba: bitácora real de 11 agentes |
 | mar 10-nov | **El chat llega. El sistema, casi nunca.** | `referentes/a3_chat-vs-sistema` | romana | lista · Gobia Pt. 1 pasa a S5 |
 | mié 11-nov | **Hilo H3 «Pusimos a una máquina a leer 2.660 laudos»** (4) | `hilos/h3_01`–`h3_04` | romano + negro | ✅ listo · Horasis este día |
 | jue 12-nov | Medir la IA (carrusel 6) | `posicionamiento/limpio/medir_1..6` | marfil | lista |
 | vie 13-nov | Horasis: Cristian en el panel (foto real) **o colab C1 con Hernán (reel)** | por hacer | foto B/N / video | 🚨 confirmar rol · 🚨 proponer C1 a Hernán |
 | sáb 14-nov | Pregunta real: Kelsen · vigencia de un artículo | por hacer | romana | captura Kelsen |
 | dom 15-nov | INMERXIA cierre + changelog #2 | por hacer | negro | |
-| lun 16-nov | Actualidad IA #4 | por hacer | marfil | |
+| lun 16-nov | **Radar R3 · «Una IA que no puede inventar»** (Jev, TypeSafe AI) | `radar/r3_01`–`r3_06` | negro + marfil | ✅ listo · 🚨 Cristian pide acceso temprano a Jev |
 | mar 17-nov | Kelsen · vigencia (parrilla romana) | por hacer | romana | reemplaza al reel pantalla Tribai · DIAN |
 | mié 18-nov | **Hilo H4 «Le pedimos a la IA una norma que no existe»** (4) | `hilos/h4_01`–`h4_04` | negro | ✅ listo · 🚨 espera la decisión de A2 (Kelsen «acceso por solicitud») |
 | jue 19-nov | Agentes (carrusel 5) | `posicionamiento/limpio/agentes_1..5` | marfil | lista |
@@ -40,6 +40,9 @@ Nada se programa sin OK de Cristian. Las piezas «listas» ya están limpias (li
 - **¿Cuánto trabaja solo un agente?** (`referentes/a5_horizonte-mano`, marfil): jue 26-nov.
 - **Kelsen, conectado a tu Claude** (`referentes/a2_kelsen_1..3`, negro): cuando Cristian decida mostrar «acceso por solicitud».
 - **Colab 10ampro B2 · «mejor señal»** (`referentes/b2_mejor-senal_1..5`): vie 4-dic.
+
+## Radar (24-oct): lo último en IA, aterrizado, con prueba nuestra
+Serie de los lunes (`radar/`, captions en `radar/CAPTIONS.md`). Siguientes: R4 «El empleado digital ya tiene correo» (Gemini agent 8-oct · Dots · Duet · Barclays) lun 23-nov · R5 «El agente que llama al conductor» (Motive 19-oct, Rockwell 21-oct) S6 · R6 «La máquina tacha, la persona firma» (Gemini for Government 20-oct) S6 · R7 Frontera JEPA-Anything S7 · R8 Agent Skills → AAIF S7. Análisis completo en `~/.claude/plans/eager-foraging-reddy.md`.
 
 ## Reels en pausa (24-oct: Cristian no se graba por ahora)
 Los miércoles de S1–S4 pasan a hilos (`hilos/`, captions en `hilos/CAPTIONS.md`). R1, R2, R3 y R5 ya salen como H1–H4. Los guiones de `reels/GUIONES.md` quedan listos para cuando haya grabación.
