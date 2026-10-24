@@ -35,13 +35,13 @@ Flyvbjerg y Budzier estudiaron 1.471 proyectos. El sobrecosto promedio fue 27 %,
 
 Casi siempre empieza igual: un requisito escrito antes de entender el problema. Por eso nosotros arrancamos por cuatro preguntas, y no por el código.
 
-Guárdalo para el próximo proyecto que vayas a firmar.
+Guarda este carrusel y síguenos en @inplux_.
 
 Fuente: Flyvbjerg y Budzier, «Why Your IT Project Might Be Riskier Than You Think», arXiv:1304.0265.
 
 `#software #transformacióndigital #gestióndeproyectos #fábricadesoftware`
 
-**Alt 1:** Gráfico a línea sobre papel: seis barras contra la línea del presupuesto; cinco la rozan («5 de cada 6 · cerca del presupuesto») y la última, en teal, la triplica con la etiqueta «+200 %». Texto: «1 de cada 6 proyectos de TI termina costando, en promedio, el triple». **Alt 2:** Curva de distribución con cola larga: lo típico, 27 %, en la panza y la cola resaltada con una llave: «1 de cada 6 · 200 %». **Alt 3:** Dos curvas de costo de cambiar en el tiempo: «Requisito primero» sube al final; «Problema primero», en teal, cuesta un poco más al inicio y se mantiene baja. **Alt 4:** Cuatro preguntas antes de escribir código: quién decide y con qué información; qué versión mínima es útil este trimestre; cómo se integra con lo que ya opera; cómo se observa el uso real para ajustar. Cierre: «Si nadie las puede responder, el proyecto todavía no tiene un problema: tiene una lista de requisitos». **Alt 5:** «Antes de firmar, pregunta qué pasa si tu proyecto cae en la cola». Botones: «Hablemos» y «Guárdalo para tu próximo contrato».
+**Alt 1:** Gráfico a línea sobre papel: seis barras contra la línea del presupuesto; cinco la rozan («5 de cada 6 · cerca del presupuesto») y la última, en teal, la triplica con la etiqueta «+200 %». Texto: «1 de cada 6 proyectos de TI termina costando, en promedio, el triple». **Alt 2:** Curva de distribución con cola larga: lo típico, 27 %, en la panza y la cola resaltada con una llave: «1 de cada 6 · 200 %». **Alt 3:** Dos curvas de costo de cambiar en el tiempo: «Requisito primero» sube al final; «Problema primero», en teal, cuesta un poco más al inicio y se mantiene baja. **Alt 4:** Cuatro preguntas antes de escribir código: quién decide y con qué información; qué versión mínima es útil este trimestre; cómo se integra con lo que ya opera; cómo se observa el uso real para ajustar. Cierre: «Si nadie las puede responder, el proyecto todavía no tiene un problema: tiene una lista de requisitos». **Alt 5:** «Antes de firmar, pregunta qué pasa si tu proyecto cae en la cola». Botones: «Guarda este carrusel» y «Síguenos · @inplux_».
 
 ---
 
@@ -73,11 +73,11 @@ En 2026 la brecha sigue: 74 % de las empresas espera crecer en ingresos con IA y
 
 Así trabajamos en INPLUX: la IA se construye dentro de tu operación, con revisión humana donde importa, y se ajusta con uso real.
 
-Guárdalo para tu próximo proyecto de IA. inplux.co
+Guarda este carrusel y síguenos en @inplux_.
 
 `#inteligenciaartificial #ia #transformaciondigital #inplux #medellin`
 
-**Alt 1:** Cuadrícula de 100 puntos sobre papel: 5 en teal, 15 negros, 40 círculos vacíos y 40 puntos tenues. Leyenda: 60 evaluaron, 20 hicieron piloto, 5 en producción. Texto: «De cada 100 empresas, 5 tienen IA a la medida en producción». **Alt 2:** Dos líneas del interés a la producción: el chat de uso general pasa de 80 % a 50 % y a 40 %; la IA a la medida, en teal, de 60 % a 20 % y a 5 %. Texto: «El chat llega. El sistema, casi nunca». **Alt 3:** «El problema no es el modelo. Es cómo se implementa». Tres causas: flujos frágiles, no aprende del contexto, no encaja en la operación. **Alt 4:** Dos barras: 74 % espera crecer en ingresos con IA; 20 % ya lo hace. Texto: «2026: tres de cada cuatro quieren crecer con IA. Uno de cada cinco lo logra». **Alt 5:** «Una IA que no aprende de tu operación se queda en piloto». Dato: con un aliado externo, el doble de proyectos llegó a producción (≈67 % frente a ≈33 %, autorreportado). Botones: «Hablemos» y «Guárdalo para tu próximo proyecto de IA».
+**Alt 1:** Cuadrícula de 100 puntos sobre papel: 5 en teal, 15 negros, 40 círculos vacíos y 40 puntos tenues. Leyenda: 60 evaluaron, 20 hicieron piloto, 5 en producción. Texto: «De cada 100 empresas, 5 tienen IA a la medida en producción». **Alt 2:** Dos líneas del interés a la producción: el chat de uso general pasa de 80 % a 50 % y a 40 %; la IA a la medida, en teal, de 60 % a 20 % y a 5 %. Texto: «El chat llega. El sistema, casi nunca». **Alt 3:** «El problema no es el modelo. Es cómo se implementa». Tres causas: flujos frágiles, no aprende del contexto, no encaja en la operación. **Alt 4:** Dos barras: 74 % espera crecer en ingresos con IA; 20 % ya lo hace. Texto: «2026: tres de cada cuatro quieren crecer con IA. Uno de cada cinco lo logra». **Alt 5:** «Antes de tu piloto, responde estas tres»: qué proceso cambia y quién lo usa a diario; de qué datos tuyos va a aprender; qué número del negocio debería moverse. **Alt 6:** «Una IA que no aprende de tu operación se queda en piloto». Botones: «Guarda este carrusel» y «Síguenos · @inplux_».
 
 ## Medir la IA · carrusel 5 · papel marfil (valor)
 `medir_1_portada.jpg` · `medir_2_brecha` · `medir_3_2026` · `medir_4_encuesta` · `medir_5_medidas` · `medir_6_cierre`
@@ -92,11 +92,11 @@ En 2026 la IA probablemente ya acelera, pero los intervalos todavía cruzan el c
 
 En INPLUX acordamos qué medir antes de construir y miramos el uso real después de lanzar.
 
-Guárdalo para medir tu IA. inplux.co
+Guarda este carrusel y síguenos en @inplux_.
 
 `#inteligenciaartificial #ia #productividad #inplux #medellin`
 
-**Alt 1:** Barras divergentes desde cero: «Esperaban, antes» +24 %; «Creyeron, después» +20 %; «Se midió» −19 % en teal hacia el lado más lento. Texto: «Creían ir 20 % más rápido con IA. Iban 19 % más lento». **Alt 2:** Dos cifras grandes: sintieron +20 %, se midió −19 %. Texto: «Casi 40 puntos entre lo que se siente y lo que se mide». **Alt 3:** Tres estimaciones con su intervalo de confianza: 2025, −19 %; 2026 con los mismos desarrolladores, +18 %; 2026 con desarrolladores nuevos, +4 %. Las de 2026 cruzan el cero. Texto: «En 2026 la IA probablemente ya acelera. Cuánto, aún no se sabe». **Alt 4:** Dos barras: velocidad que dicen tener, 3×; valor que dicen producir, 1,4–2×. **Alt 5:** «Si no lo mides, lo que tienes es una sensación». Dos medidas: tiempo por tarea antes y después; errores que llegan a revisión humana. Botones: «Hablemos» y «Guárdalo para medir tu IA».
+**Alt 1:** Barras divergentes desde cero: «Esperaban, antes» +24 %; «Creyeron, después» +20 %; «Se midió» −19 % en teal hacia el lado más lento. Texto: «Creían ir 20 % más rápido con IA. Iban 19 % más lento». **Alt 2:** Dos cifras grandes: sintieron +20 %, se midió −19 %. Texto: «Casi 40 puntos entre lo que se siente y lo que se mide». **Alt 3:** Tres estimaciones con su intervalo de confianza: 2025, −19 %; 2026 con los mismos desarrolladores, +18 %; 2026 con desarrolladores nuevos, +4 %. Las de 2026 cruzan el cero. Texto: «En 2026 la IA probablemente ya acelera. Cuánto, aún no se sabe». **Alt 4:** Dos barras: velocidad que dicen tener, 3×; valor que dicen producir, 1,4–2×. **Alt 5:** «Tres medidas antes de lanzar»: tiempo por tarea antes y después; errores que llegan a revisión humana; uso real cada semana. **Alt 6:** «Si no lo mides, lo que tienes es una sensación». Botones: «Guarda este carrusel» y «Síguenos · @inplux_».
 
 
 ## Agentes · carrusel 5 · papel marfil (valor)
