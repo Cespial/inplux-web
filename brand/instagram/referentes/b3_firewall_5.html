@@ -1,0 +1,51 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1440px;overflow:hidden;background:#0c0c0b}
+body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1440px;overflow:hidden;background:#0c0c0b}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:0.06;mix-blend-mode:overlay}
+.marco{position:absolute;inset:30px;border:1px solid rgba(246,242,236,.10)}
+.cruz{position:absolute;width:18px;height:18px;color:rgba(246,242,236,.45);font-size:22px;line-height:18px;text-align:center;font-weight:300}
+.titular{font-weight:500;letter-spacing:-.03em;line-height:1.0}
+.titular.funde{background:linear-gradient(90deg,#f6f2ec 0%,#f6f2ec 45%,#8d877e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.titular em{font-style:normal;color:#00d7ca}
+.sub{font-size:21px;letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#77726b;font-weight:500}
+.sub b{color:#f6f2ec;font-weight:600}
+.micro{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
+.cuerpo{font-size:31px;line-height:1.38;letter-spacing:-.005em;color:#cfc9bf}
+.cuerpo b{color:#f6f2ec;font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap;padding:13px 26px;font-size:25px;
+  border:1.5px solid rgba(246,242,236,.18);background:rgba(12,12,11,.6)}
+.pill i{font-style:normal;color:#00d7ca;font-size:19px;letter-spacing:.1em}
+.fila{display:grid;grid-template-columns:90px 1fr;padding:26px 0;border-top:1px solid rgba(246,242,236,.14)}
+.fila .n{font-size:20px;letter-spacing:.12em;color:#00d7ca;padding-top:8px}
+.fila h3{font-size:38px;font-weight:500;letter-spacing:-.02em}
+.fila p{font-size:24px;line-height:1.4;color:#bdb7ad;margin-top:8px}
+.foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
+</style></head><body><div class="lienzo"><style>
+.chip{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap;padding:12px 22px;font-size:23px;
+  border:1.5px solid rgba(246,242,236,.16);background:rgba(12,12,11,.78);color:#f6f2ec}
+.chip.clara{background:#f6f2ec;color:#0c0c0b;border-color:#f6f2ec;font-weight:500;font-size:27px;padding:15px 30px}
+.nodo{border-radius:50%;background:#0c0c0b;border:1.5px solid rgba(246,242,236,.16);display:grid;place-items:center;
+  box-shadow:0 0 0 14px rgba(0,215,202,.05),0 0 90px rgba(0,215,202,.2)}
+.tallo{width:1.5px;background:rgba(246,242,236,.16);margin:0 auto}
+.term{background:#121210;border:1.5px solid rgba(246,242,236,.16);border-radius:16px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.7)}
+.term .barra{height:46px;display:flex;align-items:center;gap:8px;padding:0 20px;border-bottom:1px solid rgba(246,242,236,.16)}
+.term .barra i{width:11px;height:11px;border-radius:50%;background:rgba(246,242,236,.22)}
+.term pre{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:25px;line-height:1.7;padding:26px 30px;color:#d8d2c8;white-space:pre-wrap}
+.term .k{color:#a39d94} .term .v{color:#f6f2ec} .term .t{color:#00d7ca}
+.cita{font-weight:500;letter-spacing:-.03em;line-height:1.02}
+</style><div style="position:absolute;left:0;top:45px;width:1080px;height:1350px"><img src="trama/galeria.png" style="position:absolute;left:150px;top:260px;width:1250px;opacity:0.25"><div style="position:absolute;inset:0;background:linear-gradient(180deg,#0c0c0b 0%,rgba(12,12,11,.86) 15%,rgba(12,12,11,.25) 32%,transparent 46%,transparent 76%,rgba(12,12,11,.92) 91%,#0c0c0b 100%)"></div>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:38px;padding:0 84px 30px">
+  <div style="display:flex;align-items:center;gap:26px"><svg viewBox="0 0 100 100" width="110" height="110"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg><img src="assets/wordmark-white.svg" style="height:66px"></div>
+  <div style="display:flex;align-items:center;gap:26px;width:560px"><i style="flex:1;height:1.5px;background:linear-gradient(90deg,transparent,rgba(246,242,236,.16))"></i>
+    <span style="font-size:70px;line-height:1;color:#00d7ca">×</span><i style="flex:1;height:1.5px;background:linear-gradient(90deg,rgba(246,242,236,.16),transparent)"></i></div>
+  <img src="assets/10ampro.png" style="width:220px;height:220px;display:block;border-radius:50%;box-shadow:0 0 0 16px rgba(246,242,236,.03),0 0 0 17px rgba(246,242,236,.16)">
+  <h2 class="titular" style="font-size:52px;text-align:center;margin-top:20px">La IA acelera el trabajo.<br>Personas expertas lo validan.</h2>
+  <p class="sub" style="text-align:center">Gracias a <b>10ampro</b> por la regla de fondo.</p></div></div><div class="grano"></div><div class="marco"></div><div class="cruz" style="top:21px;left:21px">+</div><div class="cruz" style="top:21px;right:21px">+</div><div class="cruz" style="bottom:21px;left:21px">+</div><div class="cruz" style="bottom:21px;right:21px">+</div>
+<div style="position:absolute;left:84px;top:105px"><div style="display:flex;align-items:center;gap:16px"><svg viewBox="0 0 100 100" width="36" height="36"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg><img src="assets/wordmark-white.svg" style="height:22px;display:block"><span style="color:#77726b;font-size:22px;line-height:1">×</span><img src="assets/10ampro.png" style="height:50px;width:50px;display:block"></div></div>
+<div class="micro" style="position:absolute;right:84px;top:123px;letter-spacing:.2em">5 / 5</div>
+<div style="position:absolute;left:84px;right:84px;bottom:115px;display:flex;align-items:center;justify-content:space-between">
+  <div class="micro">El firewall</div><div style="display:flex;gap:9px"><i style="width:9px;height:9px;border-radius:50%;background:rgba(246,242,236,.28)"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(246,242,236,.28)"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(246,242,236,.28)"></i><i style="width:9px;height:9px;border-radius:50%;background:rgba(246,242,236,.28)"></i><i style="width:9px;height:9px;border-radius:50%;background:#f6f2ec"></i></div><div class="micro">INPLUX.CO · 10AM.PRO</div></div></div></body></html>

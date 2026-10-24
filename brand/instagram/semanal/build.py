@@ -112,7 +112,7 @@ PIEZAS = {
     "s1_sab_pregunta-patrimonio": (lambda: pregunta_real(
         "¿Sigue vigente el umbral<br>de 40.000 UVT del impuesto<br>al patrimonio para 2026?",
         "Tributario · Tribai", "tribai-patrimonio-2026-10-23.jpg", "app.tribai.co", "23 OCT 2026", alto_captura=280, respuesta=[
-            ("Respuesta", "No. Rige el de 72.000 UVT: $3.770.928.000 al 1 de enero de 2026."),
+            ("Respuesta", "No. Para personas naturales rige el de 72.000 UVT: $3.770.928.000 al 1 de enero de 2026."),
             ("Artículo", "Art. 294-3 del Estatuto Tributario, adicionado por la Ley 2277 de 2022."),
             ("Vigencia", "El Decreto 1474 de 2025, que lo bajaba a 40.000 UVT, fue declarado inexequible (C-079 de 2026)."),
         ]), 1080, ALTO),

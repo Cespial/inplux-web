@@ -1,0 +1,41 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1440px;overflow:hidden;background:#f3eee6}
+body{font-family:"Rethink Sans",sans-serif;color:#1a1916;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1440px;overflow:hidden;background:#f3eee6}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:0.1;mix-blend-mode:multiply}
+.marco{position:absolute;inset:30px;border:1px solid rgba(26,25,22,.12)}
+.cruz{position:absolute;width:18px;height:18px;color:rgba(26,25,22,.45);font-size:22px;line-height:18px;text-align:center;font-weight:300}
+.titular{font-weight:500;letter-spacing:-.03em;line-height:1.0}
+.titular.funde{background:linear-gradient(90deg,#f6f2ec 0%,#f6f2ec 45%,#8d877e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.titular em{font-style:normal;color:#00706a}
+.sub{font-size:21px;letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#625d55;font-weight:500}
+.sub b{color:#1a1916;font-weight:600}
+.micro{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#625d55;font-weight:500}
+.cuerpo{font-size:31px;line-height:1.38;letter-spacing:-.005em;color:#4a463f}
+.cuerpo b{color:#1a1916;font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap;padding:13px 26px;font-size:25px;
+  border:1.5px solid rgba(26,25,22,.18);background:rgba(255,255,255,.4)}
+.pill i{font-style:normal;color:#00706a;font-size:19px;letter-spacing:.1em}
+.fila{display:grid;grid-template-columns:90px 1fr;padding:26px 0;border-top:1px solid rgba(26,25,22,.14)}
+.fila .n{font-size:20px;letter-spacing:.12em;color:#00706a;padding-top:8px}
+.fila h3{font-size:38px;font-weight:500;letter-spacing:-.02em}
+.fila p{font-size:24px;line-height:1.4;color:#625d55;margin-top:8px}
+.foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
+</style></head><body><div class="lienzo"><div style="position:absolute;left:0;top:45px;width:1080px;height:1350px"><div style="position:absolute;left:84px;right:84px;top:190px"><h1 class="titular" style="font-size:84px">¿Cuánto trabaja solo<br><em>un agente de IA?</em></h1><p class="sub" style="margin-top:26px">Tareas que completa la mitad de las veces, medidas en el tiempo que le toman a una persona</p></div>
+<div style="position:absolute;left:84px;right:84px;top:470px"><svg width="912" height="560" viewBox="0 0 912 560" style="display:block;overflow:visible">
+  <defs><filter id="lapiz"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="5"/></filter></defs>
+  <path d="M40,500 L890,504" stroke="#1a1916" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#lapiz)"/><path d="M42,502 L38,40" stroke="#1a1916" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#lapiz)"/><path d="M28,58 L38,36 L50,58" stroke="#1a1916" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#lapiz)"/>
+  <text x="58" y="60" font-family="Rethink Sans" font-size="21" fill="#625d55">duración de la tarea (escala log)</text>
+  <path d="M111.0000000000116,393.8304737909614 Q396.9999999999942,298.7862727610373 722.9999999999768,143.74207173111324 Q741.25,161.5105373831632 799.5000000000232,119.27900303521318 Q811.3750000000232,124.62622676741779 863.2500000000232,69.9734504996224" stroke="#1a1916" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#lapiz)" stroke-dasharray="3 10" stroke-width="4"/><circle cx="111.0000000000116" cy="393.8304737909614" r="8" fill="#1a1916" filter="url(#lapiz)"/><text x="117.0000000000116" y="447.8304737909614" text-anchor="start" font-family="Rethink Sans" font-size="34" font-weight="600" fill="#1a1916">3,5 min</text><text x="117.0000000000116" y="477.8304737909614" text-anchor="start" font-family="Rethink Sans" font-size="21" fill="#625d55">GPT-4</text><circle cx="722.9999999999768" cy="143.74207173111324" r="8" fill="#1a1916" filter="url(#lapiz)"/><text x="700.9999999999768" y="113.74207173111324" text-anchor="end" font-family="Rethink Sans" font-size="34" font-weight="600" fill="#1a1916">3,6 h</text><text x="700.9999999999768" y="143.74207173111324" text-anchor="end" font-family="Rethink Sans" font-size="21" fill="#625d55">GPT-5</text><circle cx="799.5000000000232" cy="119.27900303521318" r="8" fill="#1a1916" filter="url(#lapiz)"/><text x="799.5000000000232" y="177.27900303521318" text-anchor="middle" font-family="Rethink Sans" font-size="34" font-weight="600" fill="#1a1916">5,3 h</text><text x="799.5000000000232" y="207.27900303521318" text-anchor="middle" font-family="Rethink Sans" font-size="21" fill="#625d55">Claude Opus 4.5</text><circle cx="863.2500000000232" cy="69.9734504996224" r="11" fill="#00706a" filter="url(#lapiz)"/><text x="837.2500000000232" y="35.9734504996224" text-anchor="end" font-family="Rethink Sans" font-size="34" font-weight="600" fill="#00706a">~12 h</text><text x="837.2500000000232" y="65.9734504996224" text-anchor="end" font-family="Rethink Sans" font-size="21" fill="#625d55">frontera pública</text><text x="60" y="540" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="#625d55" letter-spacing="3">2023</text><text x="315" y="540" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="#625d55" letter-spacing="3">2024</text><text x="570" y="540" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="#625d55" letter-spacing="3">2025</text><text x="825" y="540" text-anchor="middle" font-family="Rethink Sans" font-size="22" fill="#625d55" letter-spacing="3">2026</text>
+  </svg></div>
+<div style="position:absolute;left:84px;right:84px;top:1030px;display:flex;gap:28px;align-items:baseline">
+  <span style="white-space:nowrap;font-size:58px;font-weight:600;letter-spacing:-.03em;color:#00706a">131 días</span>
+  <span style="font-size:25px;line-height:1.35;color:#1a1916">es lo que tarda en duplicarse desde 2023. La otra mitad de las veces la revisa una persona.</span></div><p style="position:absolute;left:84px;right:84px;top:1170px;font-size:18px;letter-spacing:.02em;color:#625d55;line-height:1.45">Fuente: METR, «Time Horizon 1.1», ene-2026, y «Frontier Risk Report», may-2026 · tareas de software, ML y ciberseguridad; intervalos amplios</p></div><div class="grano"></div><div class="marco"></div><div class="cruz" style="top:21px;left:21px">+</div><div class="cruz" style="top:21px;right:21px">+</div><div class="cruz" style="bottom:21px;left:21px">+</div><div class="cruz" style="bottom:21px;right:21px">+</div>
+<div style="position:absolute;left:84px;top:115px;display:flex;align-items:center;gap:14px"><svg viewBox="0 0 100 100" width="40" height="40"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#1a1916"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#1a1916"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg>
+  <img src="assets/wordmark-black.svg" style="height:22px;display:block"></div>
+<div style="position:absolute;left:84px;right:84px;bottom:115px;display:flex;align-items:center;justify-content:space-between">
+  <div class="micro">Dibujado a mano</div><div style="display:flex;gap:9px"></div><div class="micro">INPLUX.CO</div></div></div></body></html>

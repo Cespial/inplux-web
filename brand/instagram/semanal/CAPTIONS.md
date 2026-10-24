@@ -5,7 +5,7 @@
 
 Pregunta real: ¿sigue vigente el umbral de 40.000 UVT del impuesto al patrimonio para 2026?
 
-Le preguntamos a Tribai el 23 de octubre. La respuesta, con el artículo y su vigencia: no. El Decreto 1474 de 2025, que bajaba el umbral a 40.000 UVT, fue declarado inexequible por la Corte Constitucional (Sentencia C-079 de 2026). Sigue rigiendo el Art. 294-3 del Estatuto Tributario: 72.000 UVT, es decir, $3.770.928.000 de patrimonio líquido al 1 de enero de 2026.
+Le preguntamos a Tribai el 23 de octubre. La respuesta, con el artículo y su vigencia: no. El Decreto 1474 de 2025, que bajaba el umbral a 40.000 UVT, fue declarado inexequible por la Corte Constitucional (Sentencia C-079 de 2026). Para personas naturales sigue rigiendo el Art. 294-3 del Estatuto Tributario: 72.000 UVT, es decir, $3.770.928.000 de patrimonio líquido al 1 de enero de 2026. (Las personas jurídicas tienen en 2026 un régimen aparte, con umbral de 200.000 UVT, por los Decretos 173 y 240 de 2026.)
 
 Así trabajamos la IA en lo legal: cada respuesta trae su fuente y dice si está vigente. Lo demás lo revisa el contador.
 
@@ -13,7 +13,7 @@ Guarda esta respuesta y síguenos en @inplux_. app.tribai.co
 
 `#impuestoalpatrimonio #renta2026 #tribai #inplux #medellin`
 
-**Alt:** Estatua de la Justicia en trama de puntos sobre negro. Pregunta: «¿Sigue vigente el umbral de 40.000 UVT del impuesto al patrimonio para 2026?». Captura real de app.tribai.co del 23 de octubre de 2026 con los datos clave (13 fuentes consultadas, 5 de 5 vigentes) y la respuesta. Tres filas: Respuesta, no, rige el de 72.000 UVT, $3.770.928.000; Artículo, Art. 294-3 ET, Ley 2277 de 2022; Vigencia, el Decreto 1474 de 2025 fue declarado inexequible (C-079 de 2026).
+**Alt:** Estatua de la Justicia en trama de puntos sobre negro. Pregunta: «¿Sigue vigente el umbral de 40.000 UVT del impuesto al patrimonio para 2026?». Captura real de app.tribai.co del 23 de octubre de 2026 con los datos clave (13 fuentes consultadas, 5 de 5 vigentes) y la respuesta. Tres filas: Respuesta, no, para personas naturales rige el de 72.000 UVT, $3.770.928.000; Artículo, Art. 294-3 ET, Ley 2277 de 2022; Vigencia, el Decreto 1474 de 2025 fue declarado inexequible (C-079 de 2026).
 
 ## S1 · mié 28-oct · Reel 1 · «Lo que la máquina no puede firmar»
 `s1_mie_portada-reel-01.jpg` (portada) + video vertical de 40 s

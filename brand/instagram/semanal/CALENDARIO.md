@@ -14,14 +14,14 @@ Nada se programa sin OK de Cristian. Las piezas «listas» ya están limpias (li
 | sáb 31-oct | Pregunta real: ¿sigue vigente el umbral de 40.000 UVT? | `semanal/s1_sab_pregunta-patrimonio` | romana | lista |
 | dom 1-nov | Somos INPLUX (carrusel 4) · **fijar en el perfil** | `posicionamiento/limpio/somos_1..4` | foto B/N | lista |
 | lun 2-nov | Actualidad IA #2 | `semanal/s2_lun_actualidad-*` | marfil | ejemplo hecho (Deloitte); elegir noticia el vie 30 |
-| mar 3-nov | Porkia Pt. 1 | `parrilla-romana/limpio/serie_porkia_1_problema` | romana | lista |
+| mar 3-nov | **Claude, conectado al Estatuto Tributario** (Tribai MCP, carrusel 4) | `referentes/a1_tribai_1..4` | negro | lista · Porkia Pt. 1 pasa a S5 |
 | mié 4-nov | Reel 2 «1 de cada 6» | video + portada | video | 🎥 |
 | jue 5-nov | IA en producción (carrusel 6) | `posicionamiento/limpio/ia_1..6` | marfil | lista |
-| vie 6-nov | Columna Al Poniente #2 | por hacer (press.ts) | negro | copy pendiente |
+| vie 6-nov | **Colab 10ampro B1 · «Una idea encerrada se pudre»** (carrusel 5) | `referentes/b1_idea-abierta_1..5` | romana | lista · 🚨 Cristian se la propone a Hernán · la columna pasa a S5 |
 | sáb 7-nov | Pregunta real: tope para declarar renta 2026 | por hacer | romana | captura Tribai 23-oct (p1) |
 | dom 8-nov | Esta semana en INPLUX #1 | `semanal/changelog` | negro | 🚨 ítems de Jaime el vie 6 |
 | lun 9-nov | Actualidad IA #3 | por hacer | marfil | |
-| mar 10-nov | Gobia Pt. 1 | `parrilla-romana/limpio/serie_gobia_1_problema` | romana | lista |
+| mar 10-nov | **El chat llega. El sistema, casi nunca.** | `referentes/a3_chat-vs-sistema` | romana | lista · Gobia Pt. 1 pasa a S5 |
 | mié 11-nov | Reel 3 «El chat llega. El sistema, casi nunca» | video + portada | video | 🎥 · Horasis este día |
 | jue 12-nov | Medir la IA (carrusel 6) | `posicionamiento/limpio/medir_1..6` | marfil | lista |
 | vie 13-nov | Horasis: Cristian en el panel (foto real) | por hacer | foto B/N | 🚨 confirmar rol · foto del 11 |
@@ -31,9 +31,15 @@ Nada se programa sin OK de Cristian. Las piezas «listas» ya están limpias (li
 | mar 17-nov | Reel pantalla Tribai · DIAN (30 s) | video | video | guion pendiente |
 | mié 18-nov | Reel 4 «Si no lo mides, es una sensación» | video + portada | video | 🎥 |
 | jue 19-nov | Agentes (carrusel 5) | `posicionamiento/limpio/agentes_1..5` | marfil | lista |
-| vie 20-nov | Nos mencionan · @egonomista | por hacer | negro | reel Dc6LheZxTgH |
+| vie 20-nov | **Colab 10ampro B3 · «La cultura es el firewall»** (carrusel 5) | `referentes/b3_firewall_1..5` | romana | lista · @egonomista pasa a S5 |
 | sáb 21-nov | Pregunta real: Laudos | por hacer | romana | captura Laudos |
 | dom 22-nov | Changelog #3 · **primera revisión de métricas** | por hacer | negro | |
+
+## Tanda «referentes» (24-oct) · lo que aún no tiene fecha fija
+- **Un modelo, un dato** (`referentes/a4_modelo_1..3`, negro): un viernes o lunes por semana en S5–S7.
+- **¿Cuánto trabaja solo un agente?** (`referentes/a5_horizonte-mano`, marfil): jue 26-nov.
+- **Kelsen, conectado a tu Claude** (`referentes/a2_kelsen_1..3`, negro): cuando Cristian decida mostrar «acceso por solicitud».
+- **Colab 10ampro B2 · «mejor señal»** (`referentes/b2_mejor-senal_1..5`): vie 4-dic.
 
 Quedan para S5–S8: Laudos Pt. 1, las Pt. 2 y 3 de las tres series, Kelsen · vigencia, Con qué construimos (si Jaime confirma), reel pantalla Kelsen, reels 5–8, columnas, aliados con logo, SF en diciembre.
 

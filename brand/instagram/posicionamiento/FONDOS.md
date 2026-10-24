@@ -20,3 +20,7 @@ dice «personas y lugar». El marfil cambia el ritmo del grid y avisa «esto se 
 - Contraste mínimo de 4,5:1 para cualquier texto (el gris del papel es `#625d55`, 5,6:1).
 - Carrusel: gancho → ejemplo → diagrama → información práctica → llamada a la acción simple. No vender antes de aportar valor; el cierre pide guardar y seguir, no otra oferta.
 - Las fotos se integran con el título (recorte que se cruza con el texto), no van pegadas como un rectángulo.
+
+## Dentro de un carrusel (24-oct-2026)
+- En las colabs con 10ampro el fondo cambia por lámina según lo que muestra: la cita va sobre estatua, el diagrama con logos y la terminal van en negro plano.
+- Los diagramas «X, conectado a Y» (patrón @use_croma) van siempre en negro plano: los logos compiten con la estatua.
