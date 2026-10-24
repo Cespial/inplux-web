@@ -1,0 +1,7 @@
+VOZ PROVISIONAL DEL SISTEMA (ElevenLabs no respondió): volver a correr montar.py cuando responda.
+[gancho] Una IA que no puede inventar. Setenta milisegundos por decisión y cuatro centavos de dólar por millón de tokens.
+[docs] Se llama Jev y la hizo TypeSafe, fundada por un ex OpenAI. No escribe: elige una opción, pone un puntaje o dice sí o no, con su probabilidad. Como no genera texto, no puede inventar una norma ni una cifra.
+[cajas] Entra un estado: el correo, la glosa, el pliego. Sale una respuesta tipada, lista para que el software la use.
+[prueba] Medimos nuestra torre de once agentes paso a paso. Solo el gate, la decisión de entrar o no, es un trabajo para Jev. Los otros diez redactan o ya corren en código sin IA.
+[aterriza] Glosas en salud, PQR en alcaldías, pliegos en contratación: decisiones pequeñas, mil veces al día. Calibrado no significa correcto: alguien sigue revisando los casos difíciles.
+[cierre] ¿Qué decisión repite tu empresa mil veces al día? Dinos cuál. El criterio es de quien firma.

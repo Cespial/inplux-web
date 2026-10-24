@@ -1,0 +1,75 @@
+1
+00:00:00,350 --> 00:00:02,156
+Una IA que no puede inventar.
+
+2
+00:00:02,156 --> 00:00:07,264
+Setenta milisegundos por decisión y cuatro centavos de dólar por millón de tokens.
+
+3
+00:00:08,164 --> 00:00:12,389
+Se llama Jev y la hizo TypeSafe, fundada por un ex OpenAI.
+
+4
+00:00:12,389 --> 00:00:13,191
+No escribe:
+
+5
+00:00:13,191 --> 00:00:18,290
+elige una opción, pone un puntaje o dice sí o no, con su probabilidad.
+
+6
+00:00:18,290 --> 00:00:22,880
+Como no genera texto, no puede inventar una norma ni una cifra.
+
+7
+00:00:23,780 --> 00:00:24,926
+Entra un estado:
+
+8
+00:00:24,926 --> 00:00:27,148
+el correo, la glosa, el pliego.
+
+9
+00:00:27,148 --> 00:00:31,519
+Sale una respuesta tipada, lista para que el software la use.
+
+10
+00:00:32,419 --> 00:00:35,747
+Medimos nuestra torre de once agentes paso a paso.
+
+11
+00:00:35,747 --> 00:00:40,075
+Solo el gate, la decisión de entrar o no, es un trabajo para Jev.
+
+12
+00:00:40,075 --> 00:00:43,603
+Los otros diez redactan o ya corren en código sin IA.
+
+13
+00:00:44,503 --> 00:00:49,063
+Glosas en salud, PQR en alcaldías, pliegos en contratación:
+
+14
+00:00:49,063 --> 00:00:51,999
+decisiones pequeñas, mil veces al día.
+
+15
+00:00:51,999 --> 00:00:54,472
+Calibrado no significa correcto:
+
+16
+00:00:54,472 --> 00:00:57,872
+alguien sigue revisando los casos difíciles.
+
+17
+00:00:58,772 --> 00:01:01,878
+¿Qué decisión repite tu empresa mil veces al día?
+
+18
+00:01:01,878 --> 00:01:02,575
+Dinos cuál.
+
+19
+00:01:02,575 --> 00:01:04,477
+El criterio es de quien firma.

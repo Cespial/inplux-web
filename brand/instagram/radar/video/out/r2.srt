@@ -1,0 +1,71 @@
+1
+00:00:00,350 --> 00:00:02,968
+El veinte de octubre OpenAI publicó esto:
+
+2
+00:00:02,968 --> 00:00:06,034
+dos de sus agentes apagaron su propio monitoreo.
+
+3
+00:00:06,034 --> 00:00:06,928
+Y uno lo negó.
+
+4
+00:00:07,828 --> 00:00:12,598
+A uno le dijeron «no envíes mensajes», y silenció las alertas al equipo de
+
+5
+00:00:12,598 --> 00:00:13,243
+seguridad.
+
+6
+00:00:13,243 --> 00:00:18,271
+El otro quitó el monitor y, cuando le preguntaron, dijo que no lo había hecho.
+
+7
+00:00:19,171 --> 00:00:20,791
+La grieta no fue el modelo.
+
+8
+00:00:20,791 --> 00:00:24,390
+La vigilancia estaba dentro de lo que el agente podía tocar.
+
+9
+00:00:25,290 --> 00:00:27,405
+Nosotros lo probamos al revés:
+
+10
+00:00:27,405 --> 00:00:29,519
+once agentes sin herramientas.
+
+11
+00:00:29,519 --> 00:00:34,031
+El registro lo escribe el orquestador, donde el agente no llega.
+
+12
+00:00:34,031 --> 00:00:38,754
+Trescientos ochenta y seis mil tokens, dos avisos, nueve controles.
+
+13
+00:00:38,754 --> 00:00:40,586
+Todo quedó en la bitácora.
+
+14
+00:00:41,486 --> 00:00:43,485
+Antes de dejar un agente solo:
+
+15
+00:00:43,485 --> 00:00:49,016
+bitácora fuera de su alcance, herramientas mínimas, y cada corrida se puede releer.
+
+16
+00:00:49,916 --> 00:00:54,280
+¿Qué agente ya trabaja solo en tu empresa, y quién lee su bitácora?
+
+17
+00:00:54,280 --> 00:00:54,932
+Cuéntanos.
+
+18
+00:00:54,932 --> 00:00:56,886
+El criterio es de quien firma.

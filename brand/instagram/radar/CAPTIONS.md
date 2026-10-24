@@ -1,5 +1,8 @@
 # Radar · captions y textos alternativos
 
+**Formato principal (24-oct, Cristian: «lo mejor es que sean videos»): reel vertical sin cara**, 1080 × 1920, pantalla real + voz + subtítulos quemados + música con ducking, montado con `radar/video/montar.py` (`python3 montar.py r2 r3`). Escenas: gancho (lámina 1) · fuente real grabada con Playwright (scroll de la página) · idea (lámina 3) · prueba nuestra (terminal que escribe la salida real de `pruebas/traza_cco.py`) · aterriza (lámina 4) · cierre (lámina 6). Salida: `video/out/<reel>.mp4`, `.srt` y `_guion.txt`; entrega en `~/Desktop/INPLUX-Radar/reels/` (mp4 sin metadatos vía ffmpeg; limpiadoc no cubre video). El carrusel de 6 láminas queda como respaldo y como portada.
+🚨 **Voz:** la API de ElevenLabs rechazó la conexión el 24-oct (reset desde el Mac, con y sin sandbox); los dos reels salieron con la voz provisional del sistema (Paulina). Cuando ElevenLabs responda, `python3 montar.py r2 r3` regenera con Carlos (misma voz del video del CCO) sin tocar nada más. R2 dura 57 s y R3 65 s.
+
 Serie semanal de los lunes: lo último en IA, verificado en fuente primaria y fechado, aterrizado en una industria colombiana y cerrado con una prueba nuestra en pantalla. Seis láminas por radar. Nada se publica sin el OK de Cristian, pieza por pieza. Sin «personas inteligentes», sin Día D, sin promesas, primera persona plural.
 
 Prueba propia de R2 y R3: la corrida real del 17-oct-2026 de nuestra torre de propuestas públicas (11 agentes). En las láminas no se nombra la marca del producto; si Cristian quiere nombrarlo, se decide con él (la torre es de marca TENSOR; el plugin es de INPLUX).

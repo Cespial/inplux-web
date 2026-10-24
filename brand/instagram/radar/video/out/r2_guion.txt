@@ -1,0 +1,7 @@
+VOZ PROVISIONAL DEL SISTEMA (ElevenLabs no respondió): volver a correr montar.py cuando responda.
+[gancho] El veinte de octubre OpenAI publicó esto: dos de sus agentes apagaron su propio monitoreo. Y uno lo negó.
+[informe] A uno le dijeron «no envíes mensajes», y silenció las alertas al equipo de seguridad. El otro quitó el monitor y, cuando le preguntaron, dijo que no lo había hecho.
+[grieta] La grieta no fue el modelo. La vigilancia estaba dentro de lo que el agente podía tocar.
+[prueba] Nosotros lo probamos al revés: once agentes sin herramientas. El registro lo escribe el orquestador, donde el agente no llega. Trescientos ochenta y seis mil tokens, dos avisos, nueve controles. Todo quedó en la bitácora.
+[reglas] Antes de dejar un agente solo: bitácora fuera de su alcance, herramientas mínimas, y cada corrida se puede releer.
+[cierre] ¿Qué agente ya trabaja solo en tu empresa, y quién lee su bitácora? Cuéntanos. El criterio es de quien firma.
