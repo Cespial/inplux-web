@@ -82,11 +82,10 @@ const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
  * esta» quince veces seguidas y no señala a nadie.
  */
 const DECKS = {
-  general: { export: "SLIDES", ruta: "/deck/presentacion" },
   legaltech: { export: "SLIDES_LEGALTECH", ruta: "/deck/legaltech/presentacion" },
 };
 
-const DECK = process.env.QA_DECK ?? "general";
+const DECK = process.env.QA_DECK ?? "legaltech";
 if (!Object.hasOwn(DECKS, DECK)) {
   console.error(`QA_DECK=${DECK} no existe. Los decks son: ${Object.keys(DECKS).join(", ")}`);
   process.exit(2);

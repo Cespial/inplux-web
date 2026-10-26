@@ -28,14 +28,16 @@ const PUERTO_CANONICO = 3210;
 const BASE = process.env.QA_BASE ?? `http://localhost:${PUERTO_CANONICO}`;
 
 // Los ids salen de `src/content/deck.ts`, que es quien manda en el orden.
+// /deck/presentacion se retiró (ahora /deck es el brochure estático): la
+// presentación por componentes que queda es la de legaltech.
 const r = spawnSync(
   "npx",
   [
     "tsx",
     "--eval",
     `
-    import { SLIDES } from "./src/content/deck.ts";
-    process.stdout.write(JSON.stringify(SLIDES.map((s) => s.id)));
+    import { SLIDES_LEGALTECH } from "./src/content/deck.ts";
+    process.stdout.write(JSON.stringify(SLIDES_LEGALTECH.map((s) => s.id)));
   `,
   ],
   { cwd: RAIZ, encoding: "utf8" },
@@ -59,7 +61,7 @@ try {
 }
 
 try {
-  const respuesta = await fetch(`${BASE}/deck/presentacion`, { redirect: "manual" });
+  const respuesta = await fetch(`${BASE}/deck/legaltech/presentacion`, { redirect: "manual" });
   if (respuesta.status >= 400) throw new Error(`respondió ${respuesta.status}`);
 } catch (e) {
   console.error(
@@ -130,7 +132,7 @@ for (const modo of ["reduce", "no-preference"]) {
   p.on("pageerror", (e) => errs.push(String(e).slice(0, 160)));
   p.on("console", (m) => m.type() === "error" && errs.push(m.text().slice(0, 160)));
 
-  await p.goto(`${BASE}/deck/presentacion#${IDS[0]}`, { waitUntil: "load" });
+  await p.goto(`${BASE}/deck/legaltech/presentacion#${IDS[0]}`, { waitUntil: "load" });
   const anomalias = [];
 
   const intentos = await despertar(p, IDS[0], IDS[IDS.length - 1]);
