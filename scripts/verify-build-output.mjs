@@ -89,12 +89,12 @@ const maxHomeWords = 780;
 /*
  * El `?v=` de cada tarjeta social de /trabajo, espejo de `getWorkSocialCard`:
  * la fecha mayor entre el diseño de la tarjeta (`workSocialDesignVersion`) y la
- * evidencia del perfil. Los cinco perfiles con fuentes siguen en la versión del
- * diseño; MiMotoYa, sin fuentes, lleva la fecha de su declaración, y el
- * directorio la más reciente de todas.
+ * evidencia del perfil. Los cinco perfiles verificados antes del diseño siguen
+ * en su versión; MiMotoYa lleva la verificación de mimotoya.co (2026-10-27),
+ * que es posterior, y el directorio la más reciente de todas.
  */
 const workSocialVersion = "2026-10-20.2";
-const workDirectorySocialVersion = "2026-10-26";
+const workDirectorySocialVersion = "2026-10-27";
 const workSocialVersionFor = (key) =>
   key === "directorio"
     ? workDirectorySocialVersion
@@ -164,17 +164,20 @@ const workProfiles = [
     name: "MiMotoYa",
     shortDescription:
       "Pedir un motocarro en Pácora, Caldas, con el precio claro antes de salir.",
-    status: "En desarrollo",
+    status: "Beta abierta",
     attribution: "Desarrollo de INPLUX",
-    socialAlt: "MiMotoYa: En desarrollo. Desarrollo de INPLUX.",
+    socialAlt: "MiMotoYa: Beta abierta. Desarrollo de INPLUX.",
     // No es una captura de navegador: tres pantallas entregadas por INPLUX.
     capture: "/work/real-pages/mimotoya-pantallas-2026-10-26.png",
-    // Sin fuentes públicas, la tarjeta se versiona con la fecha de la
-    // declaración de INPLUX, que es posterior al diseño.
-    socialVersion: "2026-10-26",
-    // Sin tienda, sin sitio y sin demo: la ficha no puede publicar ningún
-    // enlace de acceso ni una URL en su `SoftwareApplication`.
-    noPublicAccess: true,
+    // La tarjeta se versiona con la verificación de mimotoya.co, que es
+    // posterior al diseño. Hasta el 26-oct-2026 era la fecha de la declaración.
+    socialVersion: "2026-10-27",
+    // Desde el 27-oct-2026 el único acceso público es el sitio: las fichas de
+    // App Store y Google Play responden 404 sin sesión. La ficha enlaza el
+    // sitio y su `SoftwareApplication` lo publica como `url`, pero ninguna
+    // tienda. (`noPublicAccess` ya no aplica; la regla sigue para el próximo.)
+    publicAccess: "https://mimotoya.co",
+    noStoreLinks: true,
   },
 ];
 
@@ -337,7 +340,7 @@ const pageDefinitions = {
     file: ".next/server/app/trabajo.html",
     title: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa | INPLUX",
     description:
-      "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con su evidencia y la fecha en que la revisamos.",
+      "Seis productos construidos y operados por INPLUX, cada uno con su evidencia y la fecha en que la revisamos.",
     canonical: `${siteUrl}/trabajo`,
     ogTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa | INPLUX",
     ogDescription:
@@ -772,7 +775,7 @@ const workProfilesEn = {
   },
   mimotoya: {
     shortDescription: "Order a motocarro in Pácora, Caldas, with the price clear before you leave.",
-    status: "In development",
+    status: "Open beta",
     attribution: "Developed by INPLUX",
   },
 };
@@ -857,7 +860,7 @@ Object.assign(pageDefinitions, {
     ...englishBase("/trabajo", "/en/work"),
     title: `${enWorkTitle} | INPLUX`,
     description:
-      "Five products built and run by INPLUX, and one in development, each with its evidence and the date we reviewed it.",
+      "Six products built and run by INPLUX, each with its evidence and the date we reviewed it.",
     ...social(
       `${enWorkTitle} | INPLUX`,
       "Every documented product, with its evidence and review date.",
@@ -1882,37 +1885,75 @@ async function verifySharedImages() {
 }
 
 /**
- * Un perfil sin acceso público (MiMotoYa) no publica ningún acceso: ni botón,
- * ni enlace a tiendas o a un dominio propio, ni `url` en su
- * `SoftwareApplication`. Es la mitad del contrato que el tipo no puede
- * sujetar —`href: null` quita el botón, pero nada impedía que alguien lo
- * escribiera a mano en otra parte de la ficha—. Los perfiles con acceso no se
- * tocan aquí.
+ * Lo que una ficha puede enlazar como acceso, en dos reglas genéricas:
+ *
+ *   · `noPublicAccess`: un perfil sin acceso público no publica ningún acceso
+ *     —ni botón, ni enlace a tiendas o a un dominio propio, ni `url` en su
+ *     `SoftwareApplication`—. Es la mitad del contrato que el tipo no puede
+ *     sujetar: `href: null` quita el botón, pero nada impedía que alguien lo
+ *     escribiera a mano en otra parte de la ficha. MiMotoYa la usó del 26 al
+ *     27-oct-2026; hoy ningún perfil la declara y se conserva para el próximo.
+ *   · `noStoreLinks` (con `publicAccess`): el producto tiene un acceso público
+ *     propio, pero sus fichas de tienda no responden sin sesión. La ficha
+ *     publica ese acceso —botón y `url` del `SoftwareApplication`, idénticos a
+ *     `publicAccess`— y ningún enlace a App Store ni a Google Play.
+ *
+ * Los perfiles que no declaran ninguna de las dos no se tocan aquí.
  */
+const storeLink = /href="https?:\/\/(?:[a-z0-9-]+\.)*(?:apps\.apple\.com|play\.google\.com)/i;
+
+function softwareApplicationOf(html) {
+  return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+    .filter((match) => readAttributes(match[1]).type === "application/ld+json")
+    .map((match) => JSON.parse(decodeHtml(match[2])))
+    .map((data) => data?.mainEntity)
+    .find((entity) => entity?.["@type"] === "SoftwareApplication");
+}
+
+const profileFiles = (profile) => [
+  `.next/server/app/trabajo/${profile.slug}.html`,
+  `.next/server/app/en/work/${profile.slug}.html`,
+];
+
 async function verifyNoPublicAccess() {
-  const forbidden = /href="https?:\/\/(?:[a-z0-9-]+\.)*(?:apps\.apple\.com|play\.google\.com)|href="https?:\/\/(?:www\.)?SLUG\.[a-z]+/i;
+  const forbidden = new RegExp(`${storeLink.source}|href="https?:\\/\\/(?:www\\.)?SLUG\\.[a-z]+`, "i");
   for (const profile of workProfiles.filter((candidate) => candidate.noPublicAccess)) {
-    for (const file of [
-      `.next/server/app/trabajo/${profile.slug}.html`,
-      `.next/server/app/en/work/${profile.slug}.html`,
-    ]) {
+    for (const file of profileFiles(profile)) {
       const html = await readFile(path.join(root, file), "utf8");
       const pattern = new RegExp(forbidden.source.replace("SLUG", profile.slug), "i");
       expect(!pattern.test(html), `${file}: ${profile.name} no tiene acceso público y la ficha enlaza una tienda o un dominio propio`);
 
-      const app = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
-        .filter((match) => readAttributes(match[1]).type === "application/ld+json")
-        .map((match) => JSON.parse(decodeHtml(match[2])))
-        .map((data) => data?.mainEntity)
-        .find((entity) => entity?.["@type"] === "SoftwareApplication");
+      const app = softwareApplicationOf(html);
       expect(Boolean(app), `${file}: falta el SoftwareApplication del perfil`);
       expect(app && !("url" in app), `${file}: el SoftwareApplication de ${profile.name} publica una url y el producto no tiene acceso público`);
     }
   }
 }
 
+async function verifyNoStoreLinks() {
+  for (const profile of workProfiles.filter((candidate) => candidate.noStoreLinks)) {
+    expect(Boolean(profile.publicAccess), `${profile.name}: \`noStoreLinks\` exige declarar \`publicAccess\``);
+    for (const file of profileFiles(profile)) {
+      const html = await readFile(path.join(root, file), "utf8");
+      expect(!storeLink.test(html), `${file}: ${profile.name} enlaza una tienda y sus fichas no responden sin sesión`);
+      expect(
+        html.includes(`href="${profile.publicAccess}"`),
+        `${file}: ${profile.name} no enlaza su acceso público ${profile.publicAccess}`,
+      );
+
+      const app = softwareApplicationOf(html);
+      expect(Boolean(app), `${file}: falta el SoftwareApplication del perfil`);
+      expect(
+        app?.url === profile.publicAccess,
+        `${file}: el SoftwareApplication de ${profile.name} publica ${app?.url ?? "ninguna url"} y su acceso público es ${profile.publicAccess}`,
+      );
+    }
+  }
+}
+
 await verifySharedImages();
 await verifyNoPublicAccess();
+await verifyNoStoreLinks();
 await verifyGeneratedRoutes();
 await verifyTeamCrew();
 await verifyHomeShape();

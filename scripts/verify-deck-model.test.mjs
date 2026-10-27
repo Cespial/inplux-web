@@ -261,8 +261,8 @@ test("Porkia no entra en el deck de legaltech", () => {
 });
 
 test("MiMotoYa no entra en el deck de legaltech", () => {
-  // Movilidad, sin página pública: ni es terreno de esa sala ni tiene la
-  // captura de navegador y la fuente que la ficha del deck exige (ver
+  // Movilidad, con pantallas entregadas en vez de captura: ni es terreno de
+  // esa sala ni tiene la captura de navegador que la ficha del deck exige (ver
   // `ProductoSlide`, que revienta si se la monta).
   const deck = loadDeck();
   assert.ok(

@@ -83,11 +83,12 @@ export const portfolio: Array<{
     name: "MiMotoYa",
     category: "Movilidad",
     description: "Pedir un motocarro en Pácora, Caldas, con el precio claro antes de salir.",
-    stage: "En desarrollo",
+    // Beta abierta desde el 27-oct-2026, como Laudos: la etapa es «Beta» y el
+    // acceso «Abierto». La fecha es la verificación de mimotoya.co.
+    stage: "Beta",
+    access: "Abierto",
     href: "/trabajo/mimotoya",
-    // Fecha en que INPLUX entregó las pantallas y confirmó el alcance: no hay
-    // fuente pública que verificar todavía.
-    verifiedAt: "2026-10-26",
+    verifiedAt: "2026-10-27",
   },
 ];
 

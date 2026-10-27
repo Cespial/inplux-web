@@ -535,8 +535,9 @@ async function verifySourceFreshness() {
 
   for (const relativePath of ["src/content/deck.copy.ts", "src/content/work.ts"]) {
     const source = await readFile(path.join(root, relativePath), "utf8");
-    // `declaredAt` es la fecha de un perfil sin fuentes públicas (MiMotoYa):
-    // la ficha la publica en lugar de una verificación, así que caduca igual.
+    // `declaredAt` es la fecha de un perfil sin fuentes públicas (MiMotoYa
+    // la tuvo hasta el 27-oct-2026): la ficha la publica en lugar de una
+    // verificación, así que caduca igual.
     const fechas = [...source.matchAll(/(?:verifiedAt|declaredAt)\s*:\s*"([^"]+)"/g)];
 
     if (fechas.length === 0) {
@@ -558,6 +559,29 @@ async function verifySourceFreshness() {
       if (ageDays < -2) {
         errors.push(`Una fuente de ${relativePath} tiene verifiedAt en el futuro: ${verifiedAt}`);
       }
+    }
+  }
+}
+
+/**
+ * MiMotoYa: el único acceso público es mimotoya.co. Las fichas de App Store y
+ * Google Play que enlaza ese sitio respondían 404 sin sesión el 27-oct-2026, así
+ * que ni el sitio ni el deck las publican: un enlace a una tienda que no abre
+ * es un acceso que el perfil no puede sostener. Se buscan por su identificador
+ * —el de Apple y el paquete de Android—, no por dominio, para no tocar a
+ * ningún otro producto. Si las fichas abren algún día, esta regla se retira a
+ * la vez que se verifica la fuente.
+ */
+async function verifyMiMotoYaStoreLinks() {
+  const storeIds = /apps\.apple\.com\/[^"'\s]*id6823481945|play\.google\.com\/[^"'\s]*co\.mimotoya\.app/;
+  const files = [...(await collectTextFiles("src")), "public/deck/index.html"];
+  for (const relativePath of files) {
+    const text = await readFile(path.join(root, relativePath), "utf8");
+    const match = storeIds.exec(text);
+    if (match) {
+      errors.push(
+        `${relativePath}:${lineNumberFor(text, match.index)} enlaza una ficha de tienda de MiMotoYa; el único acceso público verificado es mimotoya.co`,
+      );
     }
   }
 }
@@ -851,6 +875,7 @@ if (isMain) {
   await verifySocialCards();
   await verifyPortfolio();
   await verifySourceFreshness();
+  await verifyMiMotoYaStoreLinks();
   await verifySecurityConfiguration();
   await verifyBrandSystem();
   await verifyLogoPermissions();

@@ -154,11 +154,27 @@ test("la URL que se enmarca es una fuente del perfil, y la visible se deriva de 
     if (captura.kind === "delivered") {
       // Solo un producto SIN fuentes públicas puede presentarse con imágenes
       // entregadas: si tiene una página que capturar, se captura.
-      assert.equal(
-        fuentes.length,
-        0,
-        `${slug}: tiene fuentes públicas y aun así se presenta con imágenes entregadas en vez de una captura`,
-      );
+      //
+      // La única salida es declarada y estrecha: una aplicación nativa cuyo
+      // sitio público la PRESENTA pero no es la aplicación (MiMotoYa desde el
+      // 27-oct-2026). Ese sitio tiene que estar escrito en el registro
+      // (`publicSite`), ser una fuente del perfil y el producto tiene que tener
+      // pantallas entregadas en el acta; si falta cualquiera de las tres, la
+      // regla de siempre manda.
+      if (fuentes.length > 0) {
+        assert.ok(
+          captura.publicSite,
+          `${slug}: tiene fuentes públicas y aun así se presenta con imágenes entregadas en vez de una captura`,
+        );
+        assert.ok(
+          fuentes.includes(captura.publicSite),
+          `${slug}: el sitio público declarado ${captura.publicSite} no es ninguna fuente del perfil (${fuentes.join(", ")})`,
+        );
+        assert.ok(
+          (registro.pantallas[slug] ?? []).length > 0,
+          `${slug}: declara un sitio público para seguir con imágenes entregadas, pero no tiene pantallas entregadas`,
+        );
+      }
       continue;
     }
     assert.ok(
@@ -210,6 +226,11 @@ test("las pantallas entregadas existen con el sha256 y el tamaño que declara el
     for (const [index, pantalla] of pantallas.entries()) {
       const entrada = entradas[index];
       assert.equal(pantalla.src, entrada.file, `${slug} ${index + 1}: el orden o la ruta no coinciden con el acta`);
+      assert.equal(
+        pantalla.deliveredAt,
+        entrada.deliveredAt,
+        `${slug} ${index + 1}: la fecha de entrega del registro no es la del acta`,
+      );
       assert.ok(pantalla.alt.es.trim() && pantalla.alt.en.trim(), `${slug} ${index + 1}: falta texto alternativo`);
 
       const buffer = readFileSync(path.join(root, "public", entrada.file));

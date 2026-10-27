@@ -47,9 +47,10 @@ export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
   const captura = workCaptures[perfil.slug];
 
   // La ficha del deck se sostiene en una página pública: la captura enmarcada
-  // en un navegador y la fuente que la cita. Un producto sin superficie
-  // pública (MiMotoYa) no tiene ni una ni otra, y en vez de pintar una ficha
-  // sin prueba —o una barra de navegador con una URL que no existe— revienta
+  // en un navegador y la fuente que la cita. Un producto que se presenta con
+  // pantallas entregadas (MiMotoYa, una app nativa: su sitio la presenta pero
+  // no es la aplicación) no tiene esa captura, y en vez de pintar una ficha
+  // sin prueba —o una barra de navegador que enmarca otra cosa— revienta
   // aquí. Hoy ningún deck que se publica lo monta: el de legaltech elige sus
   // cuatro productos y el deck general ya no se arma con este modelo.
   if (!fuente || captura.kind !== "page") {

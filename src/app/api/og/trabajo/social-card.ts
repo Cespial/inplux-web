@@ -44,8 +44,8 @@ export type WorkSocialCard = (DirectorySocialCard | ProfileSocialCard) & {
   /**
    * El pie de la tarjeta, ya escrito. «VERIFICADO <fecha>» cuando la fecha es
    * la de una fuente pública; «DECLARADO POR INPLUX <fecha>» cuando el perfil no
-   * tiene fuentes y la fecha es la de la declaración (MiMotoYa): la tarjeta no
-   * afirma una verificación que no hubo.
+   * tiene fuentes y la fecha es la de la declaración (MiMotoYa la tuvo hasta
+   * el 27-oct-2026): la tarjeta no afirma una verificación que no hubo.
    */
   footer: string;
   /** Las etiquetas fijas de la tarjeta, en su idioma. */
@@ -123,7 +123,8 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
     // de fuentes públicas más reciente: una declaración de INPLUX no es una
     // verificación y la tarjeta no la presenta como tal. La que mueve el `?v=`
     // incluye también las declaraciones, porque un perfil nuevo sin fuentes
-    // (MiMotoYa) cambia la tarjeta y las redes tienen que volver a pedirla.
+    // (así entró MiMotoYa) cambia la tarjeta y las redes tienen que volver a
+    // pedirla.
     const verifiedAt = workProfiles
       .flatMap((profile) => profile.sources.map((source) => source.verifiedAt))
       .reduce((latest, date) => newer(date, latest), "0000-00-00");

@@ -66,24 +66,24 @@ const expectedRoutes = [
   ["/en/team", 404],
 ];
 
-// MiMotoYa no tiene fuentes públicas: su `?v=` es la fecha de la declaración
-// de INPLUX (2026-10-26), posterior al diseño, y por eso también mueve la del
-// directorio.
+// MiMotoYa: su `?v=` es la verificación de su fuente, mimotoya.co
+// (2026-10-27), posterior al diseño, y por eso también mueve la del
+// directorio. Hasta el 26-oct-2026 era la fecha de la declaración de INPLUX.
 const expectedSocialImages = [
-  "/api/og/trabajo/directorio?v=2026-10-26",
+  "/api/og/trabajo/directorio?v=2026-10-27",
   "/api/og/trabajo/tribai?v=2026-10-20.2",
   "/api/og/trabajo/gobia?v=2026-10-20.2",
   "/api/og/trabajo/kelsen?v=2026-10-20.2",
   "/api/og/trabajo/laudos?v=2026-10-20.2",
   "/api/og/trabajo/porkia?v=2026-10-20.2",
-  "/api/og/trabajo/mimotoya?v=2026-10-26",
-  "/api/og/trabajo/directorio?lang=en&v=2026-10-26",
+  "/api/og/trabajo/mimotoya?v=2026-10-27",
+  "/api/og/trabajo/directorio?lang=en&v=2026-10-27",
   "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/gobia?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/kelsen?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/laudos?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/porkia?lang=en&v=2026-10-20.2",
-  "/api/og/trabajo/mimotoya?lang=en&v=2026-10-26",
+  "/api/og/trabajo/mimotoya?lang=en&v=2026-10-27",
 ];
 
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es

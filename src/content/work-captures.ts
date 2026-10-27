@@ -49,14 +49,25 @@ export type PageCapture = CaptureBase & {
 };
 
 /**
- * Una imagen hecha con pantallas que entregó INPLUX, de un producto que todavía
- * no tiene página pública que capturar (MiMotoYa). No lleva URL porque no la
- * hay: no se enmarca en un navegador ni se presenta como captura de una página.
- * El acta registra el archivo, su `sha256` y de qué pantallas sale.
+ * Una imagen hecha con pantallas que entregó INPLUX, de una aplicación cuya
+ * interfaz no se puede capturar en una página pública (MiMotoYa). No lleva URL
+ * de origen porque no la hay: no se enmarca en un navegador ni se presenta como
+ * captura de una página. El acta registra el archivo, su `sha256` y de qué
+ * pantallas sale.
  */
 export type DeliveredCapture = CaptureBase & {
   kind: "delivered";
   deliveredBy: "INPLUX";
+  /**
+   * El sitio público del producto, cuando lo tiene y aun así la serie sigue con
+   * las pantallas entregadas: un sitio que PRESENTA una aplicación nativa no es
+   * la aplicación, y capturarlo pondría una portada promocional donde las demás
+   * fichas muestran el producto en uso. Es una excepción declarada, no un
+   * permiso general: `verify-captures.test.mjs` exige que sea una fuente del
+   * perfil y que el producto tenga pantallas entregadas en el acta. Sin este
+   * campo, una imagen entregada sigue exigiendo un perfil sin fuentes.
+   */
+  publicSite?: string;
 };
 
 export type WorkCapture = PageCapture | DeliveredCapture;
@@ -110,7 +121,10 @@ export const workCaptures = {
     // Tres de las seis pantallas que entregó INPLUX el 26-oct-2026 (portada,
     // lugares con precio y tarifa), puestas lado a lado sobre el fondo de las
     // propias pantallas y al tamaño del resto de la serie. No es una captura de
-    // navegador: la aplicación no tiene página pública.
+    // navegador: es una aplicación nativa. Desde el 27-oct-2026 tiene sitio
+    // público, pero el sitio la presenta, no es la aplicación; la serie sigue
+    // con las pantallas y declara el sitio (ver `publicSite`).
+    publicSite: "https://mimotoya.co",
     src: "/work/real-pages/mimotoya-pantallas-2026-10-26.png",
     capturedAt: "2026-10-26",
     alt: "Tres pantallas reales de la aplicación MiMotoYa entregadas por INPLUX: la portada, los lugares del casco urbano con su precio y la tarifa antes de pedir.",
@@ -120,14 +134,20 @@ export const workCaptures = {
 /** Una pantalla de la aplicación, tal como la entregó INPLUX (reducida para web). */
 export type AppScreen = {
   src: string;
+  /**
+   * Fecha en que INPLUX entregó la pantalla. Del acta (`deliveredAt`). La ficha
+   * la publica en el encabezado de las pantallas: con fuentes públicas el
+   * perfil ya no tiene declaración de la que tomarla.
+   */
+  deliveredAt: `${number}-${number}-${number}`;
   width: number;
   height: number;
   alt: { es: string; en: string };
 };
 
 /**
- * Las pantallas de las aplicaciones que no tienen página pública, en el orden
- * en que las entregó INPLUX. Son las seis de MiMotoYa (iPhone, 1290×2796,
+ * Las pantallas de las aplicaciones cuya interfaz no se puede capturar en una
+ * página pública, en el orden en que las entregó INPLUX. Son las seis de MiMotoYa (iPhone, 1290×2796,
  * entregadas el 26-oct-2026), reducidas a 645×1398 en WebP; el acta registra
  * el `sha256` del original y el del archivo publicado.
  */
@@ -135,6 +155,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
   mimotoya: [
     {
       src: "/work/mimotoya/mimotoya-pantalla-01-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {
@@ -144,6 +165,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
     },
     {
       src: "/work/mimotoya/mimotoya-pantalla-02-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {
@@ -153,6 +175,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
     },
     {
       src: "/work/mimotoya/mimotoya-pantalla-03-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {
@@ -162,6 +185,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
     },
     {
       src: "/work/mimotoya/mimotoya-pantalla-04-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {
@@ -171,6 +195,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
     },
     {
       src: "/work/mimotoya/mimotoya-pantalla-05-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {
@@ -180,6 +205,7 @@ export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
     },
     {
       src: "/work/mimotoya/mimotoya-pantalla-06-2026-10-26.webp",
+      deliveredAt: "2026-10-26",
       width: 645,
       height: 1398,
       alt: {

@@ -80,7 +80,7 @@
   margin: 0;
   color: var(--fg-muted);
 }
-/* Las pantallas de una app sin página pública (MiMotoYa): un riel que se
+/* Las pantallas entregadas de una app nativa (MiMotoYa): un riel que se
    desliza en móvil y cabe entero en escritorio. */
 .screens {
   display: grid;

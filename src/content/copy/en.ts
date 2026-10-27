@@ -302,7 +302,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Public explorer",
       laudos: "Open beta",
       porkia: "Closed beta",
-      mimotoya: "In development",
+      mimotoya: "Open beta",
     },
   },
 
@@ -441,7 +441,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Open explorer",
       laudos: "Open lab",
       porkia: "Open demo",
-      mimotoya: "No public access",
+      mimotoya: "Open site",
     },
   },
 
