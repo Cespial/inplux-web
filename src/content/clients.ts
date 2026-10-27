@@ -79,6 +79,14 @@ export const clientLogos = [
     renderWidth: 140,
   },
   {
+    src: "/brand/clients/politecnico-tecnova.png",
+    name: "Politécnico Tecnova",
+    relation: "partner-experience",
+    width: 480,
+    height: 130,
+    renderWidth: 140,
+  },
+  {
     src: "/brand/clients/experience-04.png",
     name: "Provincia del Agua, Bosques y el Turismo",
     relation: "partner-experience",
