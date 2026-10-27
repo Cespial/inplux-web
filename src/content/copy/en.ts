@@ -281,6 +281,7 @@ export const homeCopyEn: HomeCopy = {
       "/brand/clients/parque-arvi.png": "Tourism, territory and sustainability",
       "/brand/clients/experience-03.png": "Inter-institutional services",
       "/brand/clients/politecnico-jaime-isaza.png": "Public higher education",
+      "/brand/clients/politecnico-tecnova.png": "Technical and technological education",
       "/brand/clients/experience-04.png": "Territorial cooperation",
       "/brand/clients/experience-05.png": "Business operations",
       "/brand/clients/experience-06-transparent.png": "Urban development",

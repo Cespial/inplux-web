@@ -198,6 +198,7 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/experience-03.png":
         "Gestión y servicios interinstitucionales",
       "/brand/clients/politecnico-jaime-isaza.png": "Educación superior pública",
+      "/brand/clients/politecnico-tecnova.png": "Educación técnica y tecnológica",
       "/brand/clients/experience-04.png": "Cooperación territorial",
       "/brand/clients/experience-05.png": "Operación empresarial",
       "/brand/clients/experience-06-transparent.png": "Desarrollo urbano",
