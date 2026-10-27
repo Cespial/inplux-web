@@ -46,6 +46,18 @@ export function ProductoSlide({ id, perfil }: { id: string; perfil: Perfil }) {
   const fuente = perfil.sources[0];
   const captura = workCaptures[perfil.slug];
 
+  // La ficha del deck se sostiene en una página pública: la captura enmarcada
+  // en un navegador y la fuente que la cita. Un producto sin superficie
+  // pública (MiMotoYa) no tiene ni una ni otra, y en vez de pintar una ficha
+  // sin prueba —o una barra de navegador con una URL que no existe— revienta
+  // aquí. Hoy ningún deck que se publica lo monta: el de legaltech elige sus
+  // cuatro productos y el deck general ya no se arma con este modelo.
+  if (!fuente || captura.kind !== "page") {
+    throw new Error(
+      `La ficha de producto del deck necesita una página pública y su fuente: ${perfil.slug} no la tiene`,
+    );
+  }
+
   // ⚠️ **`perfil.partners` NO se pinta en el deck, y es una divergencia
   // deliberada respecto del sitio.** El sitio conserva la atribución de las
   // partes —`/trabajo/laudos` nombra a REDEK y su papel— y el deck la omite:

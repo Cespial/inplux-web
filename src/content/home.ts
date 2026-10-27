@@ -82,9 +82,12 @@ export const portfolio: Array<{
   {
     name: "MiMotoYa",
     category: "Movilidad",
-    description: "Producto digital para una operación de movilidad.",
+    description: "Pedir un motocarro en Pácora, Caldas, con el precio claro antes de salir.",
     stage: "En desarrollo",
-    verifiedAt: "2026-07-15",
+    href: "/trabajo/mimotoya",
+    // Fecha en que INPLUX entregó las pantallas y confirmó el alcance: no hay
+    // fuente pública que verificar todavía.
+    verifiedAt: "2026-10-26",
   },
 ];
 

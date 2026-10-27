@@ -1,6 +1,7 @@
 import type { Lang } from "@/content/i18n";
 import {
   getWorkProfile,
+  profileEvidenceDate,
   workProfiles,
   type WorkProfile,
   type WorkSlug,
@@ -40,6 +41,13 @@ type ProfileSocialCard = {
 
 export type WorkSocialCard = (DirectorySocialCard | ProfileSocialCard) & {
   lang: Lang;
+  /**
+   * El pie de la tarjeta, ya escrito. «VERIFICADO <fecha>» cuando la fecha es
+   * la de una fuente pública; «DECLARADO POR INPLUX <fecha>» cuando el perfil no
+   * tiene fuentes y la fecha es la de la declaración (MiMotoYa): la tarjeta no
+   * afirma una verificación que no hubo.
+   */
+  footer: string;
   /** Las etiquetas fijas de la tarjeta, en su idioma. */
   labels: SocialCardLabels;
 };
@@ -49,6 +57,7 @@ type SocialCardLabels = {
   ownProducts: string;
   publicSources: string;
   footer: (verifiedAt: string) => string;
+  footerDeclared: (declaredAt: string) => string;
 };
 
 const cardLabels: Record<Lang, SocialCardLabels> = {
@@ -57,12 +66,14 @@ const cardLabels: Record<Lang, SocialCardLabels> = {
     ownProducts: "PRODUCTOS PROPIOS",
     publicSources: "FUENTES PÚBLICAS",
     footer: (verifiedAt) => `INPLUX.CO/TRABAJO · VERIFICADO ${verifiedAt}`,
+    footerDeclared: (declaredAt) => `INPLUX.CO/TRABAJO · DECLARADO POR INPLUX ${declaredAt}`,
   },
   en: {
     ownProduct: "OUR OWN PRODUCT",
     ownProducts: "OUR OWN PRODUCTS",
     publicSources: "PUBLIC SOURCES",
     footer: (verifiedAt) => `INPLUX.CO/EN/WORK · VERIFIED ${verifiedAt}`,
+    footerDeclared: (declaredAt) => `INPLUX.CO/EN/WORK · STATED BY INPLUX ${declaredAt}`,
   },
 };
 
@@ -89,12 +100,12 @@ function newer(a: string, b: string) {
   return a > b ? a : b;
 }
 
+/**
+ * La fecha del perfil: su verificación más reciente o, sin fuentes, la de la
+ * declaración de INPLUX (`profileEvidenceDate`). Mueve también el `?v=`.
+ */
 function latestVerification(profile: WorkProfile) {
-  return profile.sources.reduce(
-    (latest, source) =>
-      source.verifiedAt > latest ? source.verifiedAt : latest,
-    "0000-00-00",
-  );
+  return profileEvidenceDate(profile);
 }
 
 export function isWorkSocialKey(value: string): value is WorkSocialKey {
@@ -108,27 +119,31 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
       (total, profile) => total + profile.sources.length,
       0,
     );
+    // Dos fechas distintas a propósito. La que se IMPRIME es la verificación
+    // de fuentes públicas más reciente: una declaración de INPLUX no es una
+    // verificación y la tarjeta no la presenta como tal. La que mueve el `?v=`
+    // incluye también las declaraciones, porque un perfil nuevo sin fuentes
+    // (MiMotoYa) cambia la tarjeta y las redes tienen que volver a pedirla.
+    const verifiedAt = workProfiles
+      .flatMap((profile) => profile.sources.map((source) => source.verifiedAt))
+      .reduce((latest, date) => newer(date, latest), "0000-00-00");
     const version = workProfiles.reduce(
-      (latest, profile) => {
-        const profileVersion = latestVerification(profile);
-        return profileVersion > latest ? profileVersion : latest;
-      },
-      "0000-00-00",
+      (latest, profile) => newer(latestVerification(profile), latest),
+      verifiedAt,
     );
 
     const directory =
       lang === "en"
         ? {
             title: "Our own products",
-            description: "Every product, with its public sources and verification date.",
+            description: "Every product, with its evidence and the date we reviewed it.",
             eyebrow: "DIRECTORY / EVIDENCE",
             status: `${workProfiles.length} DOCUMENTED PRODUCTS`,
             attribution: "EVERY FACT WITH ITS SOURCE",
           }
         : {
             title: "Productos propios",
-            description:
-              "Cada producto, con sus fuentes públicas y su fecha de verificación.",
+            description: "Cada producto, con su evidencia y la fecha en que la revisamos.",
             eyebrow: "DIRECTORIO / EVIDENCIA",
             status: `${workProfiles.length} PRODUCTOS DOCUMENTADOS`,
             attribution: "CADA DATO CON SU FUENTE",
@@ -139,10 +154,11 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
       kind: "directory",
       ...directory,
       sourceCount,
-      verifiedAt: version,
+      verifiedAt,
       version: newer(version, workSocialDesignVersion),
       lang,
       labels,
+      footer: labels.footer(verifiedAt),
     };
   }
 
@@ -167,6 +183,10 @@ export function getWorkSocialCard(key: WorkSocialKey, lang: Lang = "es"): WorkSo
     version: newer(latestVerification(profile), workSocialDesignVersion),
     lang,
     labels,
+    footer:
+      profile.sources.length > 0
+        ? labels.footer(latestVerification(profile))
+        : labels.footerDeclared(latestVerification(profile)),
   };
 }
 

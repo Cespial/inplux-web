@@ -309,7 +309,7 @@ export async function GET(
           }}
         >
           <div style={{ color: accent, display: "flex" }}>{card.attribution.toUpperCase()}</div>
-          <div style={{ display: "flex" }}>{card.labels.footer(card.verifiedAt)}</div>
+          <div style={{ display: "flex" }}>{card.footer}</div>
         </div>
       </div>
     ),

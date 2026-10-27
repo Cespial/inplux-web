@@ -26,6 +26,8 @@ type ProfileText = {
     items: readonly { label: string; value: string }[];
   };
   sources: readonly { label: string; supports: string }[];
+  /** Solo para el perfil sin fuentes públicas: la declaración de INPLUX, traducida. */
+  declaration?: { label: string; supports: string };
 };
 
 const developedBy = (name: string, published: string) =>
@@ -333,6 +335,64 @@ const text: Record<WorkSlug, ProfileText> = {
       },
     ],
   },
+  mimotoya: {
+    category: "Mobility",
+    shortDescription: "Order a motocarro in Pácora, Caldas, with the price clear before you leave.",
+    headline: "Order a motocarro with the price clear from the start.",
+    description:
+      "MiMotoYa is an iOS and Android app that people in Pácora, Caldas, use to order a motocarro —the three-wheeled moto-taxi of the town—: they pick a place in the town centre or a route to the rural villages, see the fare before ordering, and the app notifies nearby drivers.",
+    status: {
+      label: "In development",
+      detail: "The app is in development and is not yet published in the app stores.",
+    },
+    access: {
+      label: "No public access",
+      detail:
+        "The app is not in the app stores yet and has no public site. The screens in this profile were provided by INPLUX.",
+    },
+    attribution: {
+      label: "Developed by INPLUX",
+      statement:
+        "MiMotoYa is developed by INPLUX. Since it has no public surface yet, there is no external source to cite: the authorship, scope and screens in this profile are stated by INPLUX.",
+    },
+    partnerRoles: [],
+    capabilities: [
+      {
+        title: "Places with a price",
+        description: "Every neighbourhood and spot in the town centre shows its fare before you order.",
+      },
+      {
+        title: "Routes to the villages",
+        description: "Rural routes list their stops, and the price changes with how far you go.",
+      },
+      {
+        title: "Fare before ordering",
+        description:
+          "You say how many people are going and the app shows the total fare before you confirm the trip.",
+      },
+      {
+        title: "A nearby driver",
+        description:
+          "When you order, the app notifies nearby motocarro drivers and shows how the search is going.",
+      },
+    ],
+    interface: {
+      eyebrow: "TRIP / MOTOCARRO",
+      primaryMetric: "FARE",
+      metricLabel: "in view before ordering",
+      items: [
+        { label: "Town centre", value: "Places with a price" },
+        { label: "Rural villages", value: "Routes by stop" },
+        { label: "Order", value: "Nearby drivers notified" },
+      ],
+    },
+    sources: [],
+    declaration: {
+      label: "App screens provided by INPLUX",
+      supports:
+        "INPLUX authorship, the app's scope (Pácora, Caldas; urban area and rural routes; fare before ordering; driver search) and the six screens shown in this profile.",
+    },
+  },
 };
 
 function translate(profile: WorkProfile): WorkProfile {
@@ -367,10 +427,13 @@ function translate(profile: WorkProfile): WorkProfile {
       label: t.sources[index]?.label ?? source.label,
       supports: t.sources[index]?.supports ?? source.supports,
     })),
+    ...(profile.declaration
+      ? { declaration: { ...profile.declaration, ...t.declaration } }
+      : {}),
   };
 }
 
-/** Los cinco perfiles en inglés, en el mismo orden que `workProfiles`. */
+/** Los perfiles en inglés, en el mismo orden que `workProfiles`. */
 export const workProfilesEn: readonly WorkProfile[] = workProfiles.map(translate);
 
 export function getWorkProfileEn(slug: string) {
@@ -378,13 +441,9 @@ export function getWorkProfileEn(slug: string) {
 }
 
 /** Lo que el directorio lista como «en desarrollo», en inglés (de `home.ts`). */
-export const inDevelopmentEn: Record<string, { category: string; stage: string; description: string }> = {
-  MiMotoYa: {
-    category: "Mobility",
-    stage: "In development",
-    description: "A digital product for a mobility operation.",
-  },
-};
+// Vacío desde el 26-oct-2026: MiMotoYa, el único producto que estaba aquí,
+// tiene perfil propio. Se conserva para el siguiente que entre sin perfil.
+export const inDevelopmentEn: Record<string, { category: string; stage: string; description: string }> = {};
 
 /** Estado de `workDirectory` en inglés, por nombre de producto (las tarjetas de sector). */
 export const directoryStatusEn: Record<string, string> = Object.fromEntries(

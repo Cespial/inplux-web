@@ -74,7 +74,7 @@ const maxCrewPhotoBytes = 150_000;
 const maxTeamPageWords = 450;
 
 /*
- * La portada clara (PR S, 21-oct-2026): nueve H2, cinco fichas de producto
+ * La portada clara (PR S, 21-oct-2026): nueve H2, una ficha de producto
  * (una por perfil de work.ts), las cifras con fuente dentro de la evidencia y
  * no en la banda de tesis, y un tope de palabras en <main> que sólo baja.
  * Medido con `word-count.mjs`, que cuenta también las capas ocultas.
@@ -86,9 +86,21 @@ const homeShape = [
 const homeH2Count = 9;
 const maxHomeWords = 780;
 
+/*
+ * El `?v=` de cada tarjeta social de /trabajo, espejo de `getWorkSocialCard`:
+ * la fecha mayor entre el diseño de la tarjeta (`workSocialDesignVersion`) y la
+ * evidencia del perfil. Los cinco perfiles con fuentes siguen en la versión del
+ * diseño; MiMotoYa, sin fuentes, lleva la fecha de su declaración, y el
+ * directorio la más reciente de todas.
+ */
 const workSocialVersion = "2026-10-20.2";
+const workDirectorySocialVersion = "2026-10-26";
+const workSocialVersionFor = (key) =>
+  key === "directorio"
+    ? workDirectorySocialVersion
+    : (workProfiles.find((profile) => profile.slug === key)?.socialVersion ?? workSocialVersion);
 const workSocialImage = (key) =>
-  `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersion}`;
+  `${siteUrl}/api/og/trabajo/${key}?v=${workSocialVersionFor(key)}`;
 
 /** Los nombres de una lista de perfiles, en prosa, como los publica el sitio. */
 const enProsa = (perfiles) =>
@@ -146,6 +158,23 @@ const workProfiles = [
     attribution: "Desarrollo de INPLUX",
     socialAlt: "Porkia: Beta cerrada. Desarrollo de INPLUX.",
     capture: "/work/real-pages/porkia-demo-2026-08-11.png",
+  },
+  {
+    slug: "mimotoya",
+    name: "MiMotoYa",
+    shortDescription:
+      "Pedir un motocarro en Pácora, Caldas, con el precio claro antes de salir.",
+    status: "En desarrollo",
+    attribution: "Desarrollo de INPLUX",
+    socialAlt: "MiMotoYa: En desarrollo. Desarrollo de INPLUX.",
+    // No es una captura de navegador: tres pantallas entregadas por INPLUX.
+    capture: "/work/real-pages/mimotoya-pantallas-2026-10-26.png",
+    // Sin fuentes públicas, la tarjeta se versiona con la fecha de la
+    // declaración de INPLUX, que es posterior al diseño.
+    socialVersion: "2026-10-26",
+    // Sin tienda, sin sitio y sin demo: la ficha no puede publicar ningún
+    // enlace de acceso ni una URL en su `SoftwareApplication`.
+    noPublicAccess: true,
   },
 ];
 
@@ -306,25 +335,25 @@ const pageDefinitions = {
   },
   work: {
     file: ".next/server/app/trabajo.html",
-    title: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
+    title: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa | INPLUX",
     description:
-      "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con sus fuentes públicas y la fecha en que las revisamos.",
+      "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con su evidencia y la fecha en que la revisamos.",
     canonical: `${siteUrl}/trabajo`,
-    ogTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
+    ogTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa | INPLUX",
     ogDescription:
-      "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
+      "Cada producto documentado, con su evidencia y su fecha de revisión.",
     ogUrl: `${siteUrl}/trabajo`,
     ogImage: workSocialImage("directorio"),
     ogImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
-    twitterTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia | INPLUX",
+    twitterTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa | INPLUX",
     twitterDescription:
-      "Cada producto documentado, con sus fuentes públicas y su fecha de verificación.",
+      "Cada producto documentado, con su evidencia y su fecha de revisión.",
     twitterImageAlt:
       "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     jsonLd: {
       type: "CollectionPage",
-      name: "Productos propios — Tribai, Gobia, Kelsen, Laudos y Porkia",
+      name: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa",
       url: `${siteUrl}/trabajo`,
     },
     // La cabecera más el CTA del cierre.
@@ -668,7 +697,7 @@ const pageDefinitions = {
 /*
  * ── El sitio en inglés (PR M, 20-oct-2026) ─────────────────────────────────
  *
- * Doce rutas bajo `/en` con par en español (catorce archivos: cinco fichas de
+ * Las rutas bajo `/en` con par en español (una ficha por perfil de
  * producto y cuatro sectores). Espejo de `src/content/i18n.ts`, como
  * `workProfiles` lo es de `work.ts`: una ruta nueva con par obliga a darla de
  * alta aquí. Cada par publica el MISMO bloque hreflang —recíproco por
@@ -741,6 +770,11 @@ const workProfilesEn = {
     status: "Closed beta",
     attribution: "Developed by INPLUX",
   },
+  mimotoya: {
+    shortDescription: "Order a motocarro in Pácora, Caldas, with the price clear before you leave.",
+    status: "In development",
+    attribution: "Developed by INPLUX",
+  },
 };
 
 /** Ruta española → ruta inglesa, en el orden del sitemap inglés. */
@@ -800,9 +834,9 @@ const social = (title, description, image, alt, twitterDescription = description
   twitterImageAlt: alt,
 });
 
-const enWorkTitle = "Our own products — Tribai, Gobia, Kelsen, Laudos and Porkia";
+const enWorkTitle = "Our own products — Tribai, Gobia, Kelsen, Laudos, Porkia and MiMotoYa";
 const workSocialImageEn = (key) =>
-  `${siteUrl}/api/og/trabajo/${key}?lang=en&v=${workSocialVersion}`;
+  `${siteUrl}/api/og/trabajo/${key}?lang=en&v=${workSocialVersionFor(key)}`;
 
 Object.assign(pageDefinitions, {
   enHowWeWork: {
@@ -823,10 +857,10 @@ Object.assign(pageDefinitions, {
     ...englishBase("/trabajo", "/en/work"),
     title: `${enWorkTitle} | INPLUX`,
     description:
-      "Five products built and run by INPLUX, and one in development, each with its public sources and the date we reviewed them.",
+      "Five products built and run by INPLUX, and one in development, each with its evidence and the date we reviewed it.",
     ...social(
       `${enWorkTitle} | INPLUX`,
-      "Every documented product, with its public sources and verification date.",
+      "Every documented product, with its evidence and review date.",
       workSocialImageEn("directorio"),
       "INPLUX, product directory with verified sources",
     ),
@@ -1459,6 +1493,7 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/kelsen`,
     `${siteUrl}/trabajo/laudos`,
     `${siteUrl}/trabajo/porkia`,
+    `${siteUrl}/trabajo/mimotoya`,
     `${siteUrl}/deck`,
     `${siteUrl}/sectores/salud`,
     `${siteUrl}/sectores/publico`,
@@ -1846,7 +1881,38 @@ async function verifySharedImages() {
   }
 }
 
+/**
+ * Un perfil sin acceso público (MiMotoYa) no publica ningún acceso: ni botón,
+ * ni enlace a tiendas o a un dominio propio, ni `url` en su
+ * `SoftwareApplication`. Es la mitad del contrato que el tipo no puede
+ * sujetar —`href: null` quita el botón, pero nada impedía que alguien lo
+ * escribiera a mano en otra parte de la ficha—. Los perfiles con acceso no se
+ * tocan aquí.
+ */
+async function verifyNoPublicAccess() {
+  const forbidden = /href="https?:\/\/(?:[a-z0-9-]+\.)*(?:apps\.apple\.com|play\.google\.com)|href="https?:\/\/(?:www\.)?SLUG\.[a-z]+/i;
+  for (const profile of workProfiles.filter((candidate) => candidate.noPublicAccess)) {
+    for (const file of [
+      `.next/server/app/trabajo/${profile.slug}.html`,
+      `.next/server/app/en/work/${profile.slug}.html`,
+    ]) {
+      const html = await readFile(path.join(root, file), "utf8");
+      const pattern = new RegExp(forbidden.source.replace("SLUG", profile.slug), "i");
+      expect(!pattern.test(html), `${file}: ${profile.name} no tiene acceso público y la ficha enlaza una tienda o un dominio propio`);
+
+      const app = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+        .filter((match) => readAttributes(match[1]).type === "application/ld+json")
+        .map((match) => JSON.parse(decodeHtml(match[2])))
+        .map((data) => data?.mainEntity)
+        .find((entity) => entity?.["@type"] === "SoftwareApplication");
+      expect(Boolean(app), `${file}: falta el SoftwareApplication del perfil`);
+      expect(app && !("url" in app), `${file}: el SoftwareApplication de ${profile.name} publica una url y el producto no tiene acceso público`);
+    }
+  }
+}
+
 await verifySharedImages();
+await verifyNoPublicAccess();
 await verifyGeneratedRoutes();
 await verifyTeamCrew();
 await verifyHomeShape();

@@ -61,6 +61,7 @@ export const productNavigationEn = [
   ["Kelsen", "/en/work/kelsen"],
   ["Laudos", "/en/work/laudos"],
   ["Porkia", "/en/work/porkia"],
+  ["MiMotoYa", "/en/work/mimotoya"],
 ] as const;
 
 const productDescriptionsEn: Record<(typeof productNavigationEn)[number][0], string> = {
@@ -69,6 +70,7 @@ const productDescriptionsEn: Record<(typeof productNavigationEn)[number][0], str
   Kelsen: "Legal knowledge with a verifiable path.",
   Laudos: "Arbitration knowledge, structured to predict and search.",
   Porkia: "A pig farm run without going back to the notebook.",
+  MiMotoYa: "A motocarro in Pácora, with the price clear before you leave.",
 };
 
 export const productMenuEn = productNavigationEn.map(([label, href]) => ({

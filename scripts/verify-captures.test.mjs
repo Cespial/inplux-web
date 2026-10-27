@@ -37,12 +37,13 @@ function leerRegistro() {
       "tsx",
       "--eval",
       `
-      import { workCaptures, urlVisible, CAPTURA_ANCHO, CAPTURA_ALTO }
+      import { workCaptures, appScreens, urlVisible, CAPTURA_ANCHO, CAPTURA_ALTO }
         from "./src/content/work-captures.ts";
       import { workProfiles } from "./src/content/work.ts";
 
       process.stdout.write(JSON.stringify({
         capturas: workCaptures,
+        pantallas: appScreens,
         ancho: CAPTURA_ANCHO,
         alto: CAPTURA_ALTO,
         // La URL enmarcada tiene que ser una fuente del perfil: es lo que hace
@@ -55,7 +56,9 @@ function leerRegistro() {
         // La URL visible se DERIVA, así que la prueba comprueba la derivación y
         // no una lista escrita: si alguien cambia \`urlVisible\`, se entera aquí.
         visibles: Object.fromEntries(
-          Object.entries(workCaptures).map(([slug, c]) => [slug, urlVisible(c.sourceUrl)]),
+          Object.entries(workCaptures)
+            .filter(([, c]) => c.kind === "page")
+            .map(([slug, c]) => [slug, urlVisible(c.sourceUrl)]),
         ),
       }));
     `,
@@ -115,11 +118,20 @@ test("el registro de capturas y el acta dicen lo mismo, sin sobrantes", () => {
       entrada.capturedAt,
       `${slug}: la fecha del registro no es la del acta`,
     );
-    assert.equal(
-      captura.capturedFrom,
-      entrada.sourceUrl,
-      `${slug}: la URL de origen del registro no es la del acta`,
-    );
+    if (captura.kind === "delivered") {
+      // Una imagen entregada no tiene URL de origen, y el acta tampoco puede
+      // inventarle una: lo que la respalda es quién la entregó.
+      assert.equal(entrada.origin, "delivered", `${slug}: el registro dice «entregada» y el acta no`);
+      assert.equal(entrada.deliveredBy, captura.deliveredBy, `${slug}: quien entregó la imagen no coincide`);
+      assert.ok(!("sourceUrl" in entrada), `${slug}: una imagen entregada no lleva sourceUrl en el acta`);
+    } else {
+      assert.ok(!entrada.origin, `${slug}: el acta la declara entregada y el registro la trata como captura`);
+      assert.equal(
+        captura.capturedFrom,
+        entrada.sourceUrl,
+        `${slug}: la URL de origen del registro no es la del acta`,
+      );
+    }
     assert.equal(
       captura.src,
       `/work/real-pages/${entrada.file}`,
@@ -139,6 +151,16 @@ test("la URL que se enmarca es una fuente del perfil, y la visible se deriva de 
   for (const [slug, captura] of Object.entries(registro.capturas)) {
     const fuentes = registro.fuentesPorSlug[slug];
     assert.ok(fuentes, `${slug}: no hay perfil en work.ts`);
+    if (captura.kind === "delivered") {
+      // Solo un producto SIN fuentes públicas puede presentarse con imágenes
+      // entregadas: si tiene una página que capturar, se captura.
+      assert.equal(
+        fuentes.length,
+        0,
+        `${slug}: tiene fuentes públicas y aun así se presenta con imágenes entregadas en vez de una captura`,
+      );
+      continue;
+    }
     assert.ok(
       fuentes.includes(captura.sourceUrl),
       `${slug}: la URL enmarcada ${captura.sourceUrl} no es ninguna fuente del perfil (${fuentes.join(", ")})`,
@@ -159,4 +181,53 @@ test("la URL que se enmarca es una fuente del perfil, y la visible se deriva de 
 test("el tamaño declarado de las capturas es el del acta", () => {
   assert.equal(registro.ancho, acta.viewport.width);
   assert.equal(registro.alto, acta.viewport.height);
+});
+
+/** Ancho y alto de cualquier imagen que lea sharp (las pantallas van en WebP). */
+async function medidas(buffer) {
+  const { default: sharp } = await import("sharp");
+  const { width, height } = await sharp(buffer).metadata();
+  return { width, height };
+}
+
+test("las pantallas entregadas existen con el sha256 y el tamaño que declara el acta, y el registro dice lo mismo", async () => {
+  const actaPantallas = acta.deliveredScreens ?? {};
+  assert.deepEqual(
+    new Set(Object.keys(registro.pantallas)),
+    new Set(Object.keys(actaPantallas).filter((key) => key !== "note")),
+    "el acta y el registro no cubren los mismos productos con pantallas entregadas",
+  );
+
+  for (const [slug, pantallas] of Object.entries(registro.pantallas)) {
+    const entradas = actaPantallas[slug];
+    assert.equal(pantallas.length, entradas.length, `${slug}: el registro y el acta no tienen las mismas pantallas`);
+    assert.equal(
+      registro.capturas[slug]?.kind,
+      "delivered",
+      `${slug}: tiene pantallas entregadas y su imagen de la serie no está declarada como entregada`,
+    );
+
+    for (const [index, pantalla] of pantallas.entries()) {
+      const entrada = entradas[index];
+      assert.equal(pantalla.src, entrada.file, `${slug} ${index + 1}: el orden o la ruta no coinciden con el acta`);
+      assert.ok(pantalla.alt.es.trim() && pantalla.alt.en.trim(), `${slug} ${index + 1}: falta texto alternativo`);
+
+      const buffer = readFileSync(path.join(root, "public", entrada.file));
+      assert.equal(
+        createHash("sha256").update(buffer).digest("hex"),
+        entrada.sha256,
+        `${entrada.file} no coincide con el sha256 del acta`,
+      );
+      assert.deepEqual(
+        await medidas(buffer),
+        { width: entrada.width, height: entrada.height },
+        `${entrada.file} no tiene el tamaño que declara el acta`,
+      );
+      assert.deepEqual(
+        { width: pantalla.width, height: pantalla.height },
+        { width: entrada.width, height: entrada.height },
+        `${slug} ${index + 1}: el registro declara otro tamaño`,
+      );
+    }
+  }
 });

@@ -8,6 +8,7 @@
  *
  *   node scripts/og-mockups.mjs http://127.0.0.1:3100
  *   node scripts/og-mockups.mjs http://127.0.0.1:3100 en
+ *   node scripts/og-mockups.mjs http://127.0.0.1:3100 es mimotoya   (solo esos slugs)
  *
  * Deja `public/brand/og/mockups/<slug>.png` (o `<slug>-en.png`, desde
  * `/en/work/<slug>`, con el segundo argumento `en`) a 560 px de ancho y fondo
@@ -24,7 +25,7 @@ import path from "node:path";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const baseUrl = process.argv[2] ?? "http://127.0.0.1:3100";
 const lang = process.argv[3] === "en" ? "en" : "es";
-const slugs = ["tribai", "gobia", "kelsen", "laudos", "porkia"];
+const slugs = (process.argv[4] ?? "tribai,gobia,kelsen,laudos,porkia,mimotoya").split(",");
 const width = 560;
 const maxBytes = 120_000;
 

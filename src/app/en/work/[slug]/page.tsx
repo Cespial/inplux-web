@@ -7,6 +7,7 @@ import { V5Page } from "@/components/v5/V5Page";
 import { SITE_URL, htmlLang } from "@/content/i18n";
 import { productProfileUi, workIndexUi } from "@/content/page-ui";
 import { enSite } from "@/content/site.en";
+import { profileEvidenceDate } from "@/content/work";
 import { getWorkProfileEn, workProfilesEn } from "@/content/work.en";
 import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 import { englishPageMetadata } from "@/lib/metadata.en";
@@ -78,12 +79,13 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
       url: `${SITE_URL}/en/work`,
     },
     about: { "@id": `${SITE_URL}/#organization` },
-    dateModified: profile.sources[0]?.verifiedAt,
+    dateModified: profileEvidenceDate(profile),
     mainEntity: {
       "@type": "SoftwareApplication",
       name: profile.name,
       applicationCategory: profile.category,
-      url: profile.access.href,
+      // Sin acceso público no hay URL que dar: la propiedad se omite.
+      ...(profile.access.href ? { url: profile.access.href } : {}),
       description: profile.shortDescription,
     },
   };

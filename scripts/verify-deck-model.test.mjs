@@ -109,10 +109,15 @@ test("cada perfil de work.ts tiene su lámina de producto", () => {
 // cuatro tiempos de `method` palabra por palabra —los mismos que la lámina del
 // método— y por eso se quitó. Si esta cifra vuelve a moverse, que sea porque
 // alguien la movió aquí a la vez.
-test("el deck tiene 14 láminas numeradas de 1 a 14 sin huecos", () => {
+//
+// Subió de 14 a 15 el 26-oct-2026 con la ficha de MiMotoYa, el sexto perfil de
+// `work.ts`: el modelo arma una lámina de producto por perfil. Ningún deck que
+// se publica la monta —el de legaltech elige sus cuatro y el general ya es
+// estático—, pero el modelo sigue siendo el que el resto de pruebas mide.
+test("el deck tiene 15 láminas numeradas de 1 a 15 sin huecos", () => {
   const deck = loadDeck();
-  assert.equal(deck.total, 14);
-  assert.deepEqual(deck.numbers, Array.from({ length: 14 }, (_, i) => i + 1));
+  assert.equal(deck.total, 15);
+  assert.deepEqual(deck.numbers, Array.from({ length: 15 }, (_, i) => i + 1));
 });
 
 test("`como-empezamos` está fuera del modelo, no escondida", () => {
@@ -253,6 +258,19 @@ test("Porkia no entra en el deck de legaltech", () => {
     !deck.legaltech.prosa.includes("Porkia"),
     "la prosa que publican las descripciones de la variante nombra a Porkia",
   );
+});
+
+test("MiMotoYa no entra en el deck de legaltech", () => {
+  // Movilidad, sin página pública: ni es terreno de esa sala ni tiene la
+  // captura de navegador y la fuente que la ficha del deck exige (ver
+  // `ProductoSlide`, que revienta si se la monta).
+  const deck = loadDeck();
+  assert.ok(
+    deck.profileSlugs.includes("mimotoya"),
+    "ya no hay perfil `mimotoya` en work.ts: esta prueba no vale",
+  );
+  assert.ok(!deck.legaltech.pedido.includes("mimotoya"), "MiMotoYa entró a la selección de legaltech");
+  assert.ok(!deck.legaltech.prosa.includes("MiMotoYa"), "la prosa de la variante nombra a MiMotoYa");
 });
 
 test("el deck de legaltech no lleva `puente`, y lleva todo lo demás", () => {

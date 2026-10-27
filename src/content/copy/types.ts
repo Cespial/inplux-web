@@ -161,7 +161,7 @@ export type HeroCopy = {
 };
 
 /**
- * O están los cinco, o no está ninguno.
+ * O están todos, o no está ninguno.
  *
  * El español los deja vacíos a propósito: `HomeV5` cae al valor de
  * `work.ts`, que ya está en español, y duplicarlo aquí crearía dos textos

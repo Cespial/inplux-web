@@ -28,11 +28,12 @@
 
 /* -------------------------------------------------------------- productos */
 
-/* Cinco fichas iguales sobre marfil: captura chica, categoría y estado,
-   nombre, una línea y el enlace. Toda la ficha es el enlace. */
+/* Seis fichas iguales sobre marfil: captura chica, categoría y estado,
+   nombre, una línea y el enlace. Toda la ficha es el enlace. Seis cierran
+   renglón en las tres retículas: 6, 3 × 2 y 2 × 3. */
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(1rem, 1.6vw, 1.5rem);
 }
 

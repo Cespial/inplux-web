@@ -41,6 +41,104 @@
       "sourceUrlNote": "La demostración vive en un ancla de la página principal: abrir la URL en frío aterriza en ella, y eso es lo que muestra la captura. El encuadre incluye el borde de la sección anterior porque es lo que se ve al abrir el enlace, no un recorte editorial.",
       "file": "porkia-demo-2026-08-11.png",
       "sha256": "5cd916565975744d2eb5083e33327761778f1b0c0d6be7befb198f4d951750d6"
+    },
+    {
+      "slug": "mimotoya",
+      "capturedAt": "2026-10-26",
+      "origin": "delivered",
+      "deliveredBy": "INPLUX",
+      "sourceUrlNote": "Sin URL: MiMotoYa no tiene página pública ni está en tiendas (mimotoya.co respondía vacío el 2026-10-26). No es una captura de navegador: es una composición de tres de las seis pantallas que entregó INPLUX el 2026-10-26 (01, 03 y 05 de deliveredScreens), a 415 px de ancho cada una sobre el fondo de las propias pantallas (#f7f8f3), para que la serie conserve el tamaño 1440×960.",
+      "file": "mimotoya-pantallas-2026-10-26.png",
+      "sha256": "2782985f21982ac57c87e301e3d14c0589b0fa0f0bd26c157109e99678550795"
     }
-  ]
+  ],
+  "deliveredScreens": {
+    "note": "Pantallas de aplicaciones sin página pública, tal como las entregó INPLUX. Cada una registra el sha256 del original entregado (PNG 1290×2796, iPhone) y el del archivo publicado (WebP 645×1398, reducido a la mitad con sharp, calidad 82). El orden es el de la entrega.",
+    "mimotoya": [
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-01-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "01.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "0f95db45a797b746214a20478e29ef44a39a418113b8f234878124f8d6b78c73"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "3ded84cfb0d9481310ae11837ff29266078ed7c568a9816b5493e01791399db5"
+      },
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-02-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "02.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "3badad6ea2c370dc076ad5b52c59bfa7fa5a55de01e56c134b71cb6ad0c4e600"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "d0b43fb546be915c73b67e7eb26d1a9a71e1b1f8a59e349212c9ffdf9a5755ea"
+      },
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-03-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "03.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "74407fbd2789a7cd6d3f4853f769a5b87d886782d54dbc4e021ea5a41182a391"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "8e640033702f7f98e1ef4a0ebe030944106bb32d4f1b500d6d0fdb92d9d40b9a"
+      },
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-04-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "04.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "14dabe30928eb7d1a6ef3a343fb1eae18fbd679e9e857d444e42771baef68a22"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "66e03460e9a0b76af1b880af933db77fe9e9115ce12ce1db593ca9bdfaa213b1"
+      },
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-05-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "05.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "6df365d6908bdce02f6bb2bfc18cce284f14009e428b757d988d69dc6f35d8f0"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "d26ce8aa90f2af68929da234f15745e3698c6df65e7a92885fff1272c212a858"
+      },
+      {
+        "file": "/work/mimotoya/mimotoya-pantalla-06-2026-10-26.webp",
+        "deliveredAt": "2026-10-26",
+        "deliveredBy": "INPLUX",
+        "original": {
+          "file": "06.png",
+          "width": 1290,
+          "height": 2796,
+          "sha256": "1705138fcb940fcb792ee4d7ba4f02534e56d36babc335f5e7770b115250dff5"
+        },
+        "width": 645,
+        "height": 1398,
+        "sha256": "776fd5c30b9abb1d5b25272a828992078fc041a8afdef3c49f2dd67bd7a5849c"
+      }
+    ]
+  }
 }

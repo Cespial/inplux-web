@@ -32,6 +32,7 @@ const expectedRoutes = [
   ["/trabajo/kelsen", 200],
   ["/trabajo/laudos", 200],
   ["/trabajo/porkia", 200],
+  ["/trabajo/mimotoya", 200],
   ["/deck", 200],
   ["/deck/presentacion", 308],
   // El deck dirigido a legaltech. No está en el sitemap —no es una página
@@ -50,6 +51,7 @@ const expectedRoutes = [
   ["/en/work/kelsen", 200],
   ["/en/work/laudos", 200],
   ["/en/work/porkia", 200],
+  ["/en/work/mimotoya", 200],
   ["/en/sectors/public-sector", 200],
   ["/en/sectors/health", 200],
   ["/en/sectors/legal-tax", 200],
@@ -64,19 +66,24 @@ const expectedRoutes = [
   ["/en/team", 404],
 ];
 
+// MiMotoYa no tiene fuentes públicas: su `?v=` es la fecha de la declaración
+// de INPLUX (2026-10-26), posterior al diseño, y por eso también mueve la del
+// directorio.
 const expectedSocialImages = [
-  "/api/og/trabajo/directorio?v=2026-10-20.2",
+  "/api/og/trabajo/directorio?v=2026-10-26",
   "/api/og/trabajo/tribai?v=2026-10-20.2",
   "/api/og/trabajo/gobia?v=2026-10-20.2",
   "/api/og/trabajo/kelsen?v=2026-10-20.2",
   "/api/og/trabajo/laudos?v=2026-10-20.2",
   "/api/og/trabajo/porkia?v=2026-10-20.2",
-  "/api/og/trabajo/directorio?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/mimotoya?v=2026-10-26",
+  "/api/og/trabajo/directorio?lang=en&v=2026-10-26",
   "/api/og/trabajo/tribai?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/gobia?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/kelsen?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/laudos?lang=en&v=2026-10-20.2",
   "/api/og/trabajo/porkia?lang=en&v=2026-10-20.2",
+  "/api/og/trabajo/mimotoya?lang=en&v=2026-10-26",
 ];
 
 // Caché por carpeta (`next.config.ts`): lo que se versiona por nombre es

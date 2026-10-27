@@ -80,6 +80,39 @@
   margin: 0;
   color: var(--fg-muted);
 }
+/* Las pantallas de una app sin página pública (MiMotoYa): un riel que se
+   desliza en móvil y cabe entero en escritorio. */
+.screens {
+  display: grid;
+  /* Sin `minmax(0, 1fr)` la pista crece hasta el ancho del riel y empuja el
+     texto de la cabecera fuera de la pantalla en móvil. */
+  grid-template-columns: minmax(0, 1fr);
+}
+.screenRail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(10rem, 1fr);
+  gap: 1rem;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+}
+.screenRail li {
+  scroll-snap-align: start;
+}
+.screenRail img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+@media (max-width: 760px) {
+  .screenRail {
+    grid-auto-columns: 62vw;
+  }
+}
 .tableWrap {
   overflow-x: auto;
 }
