@@ -49,14 +49,25 @@ export type PageCapture = CaptureBase & {
 };
 
 /**
- * Una imagen hecha con pantallas que entregó INPLUX, de un producto que todavía
- * no tiene página pública que capturar (MiMotoYa). No lleva URL porque no la
- * hay: no se enmarca en un navegador ni se presenta como captura de una página.
- * El acta registra el archivo, su `sha256` y de qué pantallas sale.
+ * Una imagen hecha con pantallas que entregó INPLUX, de una aplicación cuya
+ * interfaz no se puede capturar en una página pública (MiMotoYa). No lleva URL
+ * de origen porque no la hay: no se enmarca en un navegador ni se presenta como
+ * captura de una página. El acta registra el archivo, su `sha256` y de qué
+ * pantallas sale.
  */
 export type DeliveredCapture = CaptureBase & {
   kind: "delivered";
   deliveredBy: "INPLUX";
+  /**
+   * El sitio público del producto, cuando lo tiene y aun así la serie sigue con
+   * las pantallas entregadas: un sitio que PRESENTA una aplicación nativa no es
+   * la aplicación, y capturarlo pondría una portada promocional donde las demás
+   * fichas muestran el producto en uso. Es una excepción declarada, no un
+   * permiso general: `verify-captures.test.mjs` exige que sea una fuente del
+   * perfil y que el producto tenga pantallas entregadas en el acta. Sin este
+   * campo, una imagen entregada sigue exigiendo un perfil sin fuentes.
+   */
+  publicSite?: string;
 };
 
 export type WorkCapture = PageCapture | DeliveredCapture;
