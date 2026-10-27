@@ -61,7 +61,7 @@ export const companyNavigation = [
  *
  * No se derivan de `workProfiles` a propósito: `src/content/copy/es.ts`
  * importa este módulo y a su vez lo importa la cabecera (cliente), así que un
- * import de valor de `work.ts` desde aquí arrastraría los cinco perfiles
+ * import de valor de `work.ts` desde aquí arrastraría los perfiles
  * enteros al navegador.
  *
  * Lo que impide que esta lista se desincronice de `work.ts` es
@@ -76,6 +76,7 @@ export const productNavigation = [
   ["Kelsen", "/trabajo/kelsen"],
   ["Laudos", "/trabajo/laudos"],
   ["Porkia", "/trabajo/porkia"],
+  ["MiMotoYa", "/trabajo/mimotoya"],
 ] as const;
 
 /** Una línea por producto para el desplegable; el nombre sale de `productNavigation`. */
@@ -85,6 +86,7 @@ const productDescriptions: Record<(typeof productNavigation)[number][0], string>
   Kelsen: "Conocimiento jurídico con una ruta verificable.",
   Laudos: "Conocimiento arbitral con estructura para predecir y buscar.",
   Porkia: "Una finca porcícola sin volver al cuaderno.",
+  MiMotoYa: "Un motocarro en Pácora, con el precio claro antes de salir.",
 };
 
 export const productMenu = productNavigation.map(([label, href]) => ({

@@ -31,6 +31,10 @@
   --accent: var(--mint);
   --accent-rgb: 133, 237, 165;
 }
+.mock[data-theme="mobility"] {
+  --accent: #2bc48a;
+  --accent-rgb: 43, 196, 138;
+}
 
 .bar {
   display: grid;
@@ -263,6 +267,30 @@
   color: #f6f2ec;
   box-shadow: 0 0.6rem 0 -0.5rem var(--accent);
 }
+/* MiMotoYa: tres pantallas reales de la app, en fila. Cada marco recorta el
+   titular de la pantalla entregada (los 540 px de arriba de 2.796) y deja el
+   teléfono: `object-position: bottom` sobre una caja con la proporción del
+   teléfono. */
+.phones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+.phone {
+  display: block;
+  aspect-ratio: 1290 / 2256;
+  overflow: hidden;
+  border-radius: 0.7rem;
+  background: #f7f8f3;
+}
+.phone img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
 /* Porkia publica una palabra, no una cifra: va en el cuerpo de la escala. */
 .farm .metric strong {
   font-size: var(--step-3);
@@ -280,6 +308,19 @@
   .mock[data-animate] .meter b {
     transform-origin: left center;
     animation: mockFill 1.2s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .mock[data-animate] .phone {
+    animation: mockLift 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: 0.45s;
+  }
+
+  .mock[data-animate] .phone:nth-child(2) {
+    animation-delay: 0.55s;
+  }
+
+  .mock[data-animate] .phone:nth-child(3) {
+    animation-delay: 0.65s;
   }
 
   .mock[data-animate] :is(.rows > div, .results li, .filters li, .hl) {

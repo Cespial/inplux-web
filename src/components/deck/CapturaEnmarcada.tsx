@@ -4,7 +4,7 @@ import {
   CAPTURA_ALTO,
   CAPTURA_ANCHO,
   urlVisible,
-  type WorkCapture,
+  type PageCapture,
 } from "@/content/work-captures";
 import { formatShortDate, verificationDateFor } from "@/content/work-format";
 import styles from "./captura-enmarcada.module.css";
@@ -66,7 +66,7 @@ export function CapturaEnmarcada({
   captura,
   sources,
 }: {
-  captura: WorkCapture;
+  captura: PageCapture;
   sources: readonly WorkSource[];
 }) {
   const fuentes = sources.length;

@@ -18,14 +18,16 @@ const workSocialDescription = ui.socialDescription;
 const workSocialImageAlt = ui.socialImageAlt;
 
 // El orden editorial: Tribai abre porque es el producto público más usado y
-// cierra Porkia, el perfil más nuevo. No es el orden de `work.ts`.
-const order = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const satisfies readonly WorkSlug[];
+// cierra MiMotoYa, el perfil más nuevo. No es el orden de `work.ts`.
+const order = ["tribai", "gobia", "kelsen", "laudos", "porkia", "mimotoya"] as const satisfies readonly WorkSlug[];
 const products = order.flatMap((slug) => {
   const profile = workProfiles.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
 });
 const inDevelopment = portfolio
-  .filter((item) => item.stage === "En desarrollo")
+  // Solo lo que está en desarrollo Y no tiene ficha: un producto con perfil
+  // (MiMotoYa, desde el 26-oct-2026) ya sale en el índice con su estado.
+  .filter((item) => item.stage === "En desarrollo" && !item.href)
   .map((item) => ({
     name: item.name,
     category: item.category,

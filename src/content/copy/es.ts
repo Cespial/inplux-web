@@ -912,7 +912,7 @@ export const homeCopyEs: HomeCopy = {
     },
     products: {
       eyebrow: "Productos propios",
-      title: "Cinco productos construidos y operados por INPLUX.",
+      title: "Seis productos construidos por INPLUX.",
       lead: "Cada uno nació del problema de un cliente.",
       openCta: "Ver producto",
       allCta: "Ver todos los productos",

@@ -1,4 +1,4 @@
-export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos" | "porkia";
+export type WorkSlug = "tribai" | "gobia" | "kelsen" | "laudos" | "porkia" | "mimotoya";
 
 export type WorkSource = {
   label: string;
@@ -20,9 +20,14 @@ export type WorkProfile = {
     label: string;
     detail: string;
   };
+  /**
+   * `href: null` es un producto que todavía no tiene nada que abrir —ni tienda,
+   * ni sitio, ni demo—. La ficha entonces no pinta botón ni enlace: dice que no
+   * hay acceso público y por qué, en vez de mandar a una URL que no responde.
+   */
   access: {
     label: string;
-    href: string;
+    href: string | null;
     detail: string;
   };
   attribution: {
@@ -39,7 +44,7 @@ export type WorkProfile = {
     description: string;
   }[];
   interface: {
-    theme: "tributary" | "civic" | "legal" | "arbitration" | "livestock";
+    theme: "tributary" | "civic" | "legal" | "arbitration" | "livestock" | "mobility";
     eyebrow: string;
     primaryMetric: string;
     metricLabel: string;
@@ -49,7 +54,24 @@ export type WorkProfile = {
       state?: "accent" | "muted";
     }[];
   };
+  /**
+   * Las fuentes públicas que respaldan lo que dice el perfil. Un producto sin
+   * superficie pública (MiMotoYa, hoy) no tiene ninguna que citar: la lista va
+   * VACÍA —no se inventa una URL para llenarla— y lo que el perfil publica lo
+   * respalda `declaration`. Las dos cosas a la vez no: o hay fuentes, o hay
+   * declaración (ver `profileEvidenceDate`).
+   */
   sources: readonly WorkSource[];
+  /**
+   * Lo que declara INPLUX cuando no hay fuente pública: qué respalda y en qué
+   * fecha se entregó. Es la fecha que publica el perfil en lugar de una
+   * verificación, y la ficha la imprime como declaración, nunca como fuente.
+   */
+  declaration?: {
+    label: string;
+    supports: string;
+    declaredAt: `${number}-${number}-${number}`;
+  };
 };
 
 export const workProfiles = [
@@ -465,6 +487,80 @@ export const workProfiles = [
       },
     ],
   },
+  {
+    kind: "product-profile",
+    slug: "mimotoya",
+    number: "06",
+    name: "MiMotoYa",
+    category: "Movilidad",
+    shortDescription:
+      "Pedir un motocarro en Pácora, Caldas, con el precio claro antes de salir.",
+    headline: "Pedir un motocarro con el precio claro desde el principio.",
+    description:
+      "MiMotoYa es una aplicación para iOS y Android con la que los habitantes de Pácora, Caldas, piden un motocarro: eligen un lugar del casco urbano o una ruta a las veredas, ven la tarifa antes de pedir y la aplicación avisa a los conductores cercanos.",
+    status: {
+      label: "En desarrollo",
+      detail: "La aplicación está en desarrollo y todavía no se publica en las tiendas.",
+    },
+    // No hay nada público que abrir: ni tiendas, ni sitio (mimotoya.co responde
+    // vacío el 26-oct-2026), ni demostración. `href: null` quita el botón y el
+    // enlace de la ficha; lo que queda es decir por qué.
+    access: {
+      label: "Sin acceso público",
+      href: null,
+      detail:
+        "La aplicación todavía no está en las tiendas ni tiene sitio público. Las pantallas de esta ficha las entregó INPLUX.",
+    },
+    attribution: {
+      state: "confirmed",
+      label: "Desarrollo de INPLUX",
+      statement:
+        "MiMotoYa es un desarrollo de INPLUX. Como todavía no tiene superficie pública, no hay fuente externa que citar: la autoría, el alcance y las pantallas de esta ficha los declara INPLUX.",
+    },
+    partners: [],
+    capabilities: [
+      {
+        title: "Lugares con precio",
+        description:
+          "Cada barrio y sitio del casco urbano muestra su tarifa antes de pedir.",
+      },
+      {
+        title: "Rutas a las veredas",
+        description:
+          "Las rutas rurales listan sus paradas, y el precio cambia según hasta dónde se va.",
+      },
+      {
+        title: "Tarifa antes de pedir",
+        description:
+          "Se indica cuántas personas van y la aplicación muestra la tarifa total antes de confirmar el viaje.",
+      },
+      {
+        title: "Conductor cercano",
+        description:
+          "Al pedir, la aplicación avisa a los motocarros cercanos y muestra el estado de la búsqueda.",
+      },
+    ],
+    interface: {
+      theme: "mobility",
+      eyebrow: "VIAJE / MOTOCARRO",
+      // Las pantallas muestran tarifas de un municipio concreto; este bloque
+      // no las repite: usa etiquetas cualitativas, como Kelsen y Porkia.
+      primaryMetric: "TARIFA",
+      metricLabel: "a la vista antes de pedir",
+      items: [
+        { label: "Casco urbano", value: "Lugares con precio" },
+        { label: "Veredas", value: "Rutas por paradas", state: "accent" },
+        { label: "Pedido", value: "Aviso a conductores" },
+      ],
+    },
+    sources: [],
+    declaration: {
+      label: "Pantallas de la aplicación entregadas por INPLUX",
+      supports:
+        "Autoría de INPLUX, alcance de la aplicación (Pácora, Caldas; zona urbana y rutas rurales; tarifa antes de pedir; búsqueda de conductor) y las seis pantallas que muestra esta ficha.",
+      declaredAt: "2026-10-26",
+    },
+  },
 ] as const satisfies readonly WorkProfile[];
 
 export const workDirectory = [
@@ -476,18 +572,25 @@ export const workDirectory = [
     href: `/trabajo/${profile.slug}` as const,
     hasProfile: true as const,
   })),
-  {
-    name: "MiMotoYa",
-    category: "Movilidad",
-    status: "En desarrollo",
-    // Es un desarrollo de INPLUX como los perfiles anteriores; lo que todavía
-    // no tiene es una superficie pública que citar, y por eso `hasProfile` es
-    // falso y no hay `href`.
-    attribution: "Desarrollo de INPLUX",
-    href: null,
-    hasProfile: false as const,
-  },
 ] as const;
+
+/**
+ * La fecha que publica un perfil: la verificación más reciente de sus fuentes
+ * o, si no tiene ninguna, la de la declaración de INPLUX. Un perfil sin las dos
+ * no compila nada útil y revienta aquí en vez de publicar «0000-00-00».
+ */
+export function profileEvidenceDate(profile: WorkProfile): `${number}-${number}-${number}` {
+  if (profile.sources.length > 0) {
+    return profile.sources.reduce(
+      (latest, source) => (source.verifiedAt > latest ? source.verifiedAt : latest),
+      profile.sources[0].verifiedAt,
+    );
+  }
+  if (profile.declaration) {
+    return profile.declaration.declaredAt;
+  }
+  throw new Error(`El perfil ${profile.slug} no tiene fuentes ni declaración`);
+}
 
 export function getWorkProfile(slug: string) {
   return workProfiles.find((profile) => profile.slug === slug);

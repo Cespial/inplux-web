@@ -21,7 +21,17 @@ import type { WorkSlug } from "./work";
  * es un componente cliente, y cualquiera de las dos cosas viajaría entera al
  * navegador. Es el mismo motivo por el que `work-format.ts` vive separado.
  */
-export type WorkCapture = {
+type CaptureBase = {
+  /** Ruta del PNG bajo `public/`. Del acta. */
+  src: string;
+  /** Fecha en que se tomó (o se entregó) la imagen, en ISO. Del acta. */
+  capturedAt: `${number}-${number}-${number}`;
+  alt: string;
+};
+
+/** Una captura de navegador de una página pública del producto. */
+export type PageCapture = CaptureBase & {
+  kind: "page";
   /**
    * La URL viva que enmarca la captura, y la que se pinta en la barra del
    * navegador. **Tiene que ser una `source` del perfil**: `verificationDateFor`
@@ -29,10 +39,6 @@ export type WorkCapture = {
    * escribirse a mano.
    */
   sourceUrl: string;
-  /** Ruta del PNG bajo `public/`. Del acta. */
-  src: string;
-  /** Fecha en que se tomó la captura, en ISO. Del acta. */
-  capturedAt: `${number}-${number}-${number}`;
   /**
    * URL contra la que se tomó la captura, que no siempre es la de hoy. Del
    * acta. En Tribai difieren —se capturó `tribai.co/asistente`, que hoy
@@ -40,11 +46,24 @@ export type WorkCapture = {
    * separadas es lo que permite que la prueba compare cada una con la suya.
    */
   capturedFrom: string;
-  alt: string;
 };
+
+/**
+ * Una imagen hecha con pantallas que entregó INPLUX, de un producto que todavía
+ * no tiene página pública que capturar (MiMotoYa). No lleva URL porque no la
+ * hay: no se enmarca en un navegador ni se presenta como captura de una página.
+ * El acta registra el archivo, su `sha256` y de qué pantallas sale.
+ */
+export type DeliveredCapture = CaptureBase & {
+  kind: "delivered";
+  deliveredBy: "INPLUX";
+};
+
+export type WorkCapture = PageCapture | DeliveredCapture;
 
 export const workCaptures = {
   gobia: {
+    kind: "page",
     sourceUrl: "https://www.gobia.co/demo",
     src: "/work/real-pages/gobia-demo-2026-07-21.png",
     capturedAt: "2026-07-21",
@@ -52,6 +71,7 @@ export const workCaptures = {
     alt: "Captura real de la demo pública de Gobia, con el mapa de Medellín y su panel fiscal.",
   },
   laudos: {
+    kind: "page",
     sourceUrl: "https://laudos.co/?view=predecir",
     src: "/work/real-pages/laudos-prediccion-2026-07-21.png",
     capturedAt: "2026-07-21",
@@ -59,6 +79,7 @@ export const workCaptures = {
     alt: "Captura real del Laboratorio de Predicción público de Laudos.",
   },
   tribai: {
+    kind: "page",
     sourceUrl: "https://app.tribai.co/",
     src: "/work/real-pages/tribai-asistente-2026-07-21.png",
     capturedAt: "2026-07-21",
@@ -66,6 +87,7 @@ export const workCaptures = {
     alt: "Captura real del Asistente Tributario público de Tribai.",
   },
   kelsen: {
+    kind: "page",
     sourceUrl: "https://kelsen.io/explorador?vigencia=modificado",
     src: "/work/real-pages/kelsen-explorador-2026-07-21.png",
     capturedAt: "2026-07-21",
@@ -73,6 +95,7 @@ export const workCaptures = {
     alt: "Captura real de la Biblioteca Legal pública de Kelsen con resultados del corpus jurídico.",
   },
   porkia: {
+    kind: "page",
     sourceUrl: "https://porkia.co/#demo",
     src: "/work/real-pages/porkia-demo-2026-08-11.png",
     capturedAt: "2026-08-11",
@@ -81,11 +104,95 @@ export const workCaptures = {
     // recrea ninguna interfaz, retrata la página pública tal como responde.
     alt: "Captura real de la demostración pública de Porkia, con las pantallas de la app recorribles desde el navegador.",
   },
+  mimotoya: {
+    kind: "delivered",
+    deliveredBy: "INPLUX",
+    // Tres de las seis pantallas que entregó INPLUX el 26-oct-2026 (portada,
+    // lugares con precio y tarifa), puestas lado a lado sobre el fondo de las
+    // propias pantallas y al tamaño del resto de la serie. No es una captura de
+    // navegador: la aplicación no tiene página pública.
+    src: "/work/real-pages/mimotoya-pantallas-2026-10-26.png",
+    capturedAt: "2026-10-26",
+    alt: "Tres pantallas reales de la aplicación MiMotoYa entregadas por INPLUX: la portada, los lugares del casco urbano con su precio y la tarifa antes de pedir.",
+  },
 } as const satisfies Record<WorkSlug, WorkCapture>;
+
+/** Una pantalla de la aplicación, tal como la entregó INPLUX (reducida para web). */
+export type AppScreen = {
+  src: string;
+  width: number;
+  height: number;
+  alt: { es: string; en: string };
+};
+
+/**
+ * Las pantallas de las aplicaciones que no tienen página pública, en el orden
+ * en que las entregó INPLUX. Son las seis de MiMotoYa (iPhone, 1290×2796,
+ * entregadas el 26-oct-2026), reducidas a 645×1398 en WebP; el acta registra
+ * el `sha256` del original y el del archivo publicado.
+ */
+export const appScreens: Partial<Record<WorkSlug, readonly AppScreen[]>> = {
+  mimotoya: [
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-01-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "Portada de MiMotoYa: «El Motocarro de tu Municipio», Pácora, Caldas.",
+        en: "MiMotoYa's opening screen: “El Motocarro de tu Municipio”, Pácora, Caldas.",
+      },
+    },
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-02-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "Pantalla «¿A dónde vas?», con la elección entre zona urbana y zona rural.",
+        en: "The “Where are you going?” screen, choosing between the urban area and the rural area.",
+      },
+    },
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-03-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "Lugares del casco urbano, cada uno con su precio.",
+        en: "Places in the town centre, each one with its price.",
+      },
+    },
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-04-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "Rutas a las veredas, con sus paradas y el precio de cada una.",
+        en: "Routes to the rural villages, with their stops and the price of each one.",
+      },
+    },
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-05-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "El viaje en el mapa, cuántas personas van y la tarifa total antes de pedir.",
+        en: "The trip on the map, how many people are going and the total fare before ordering.",
+      },
+    },
+    {
+      src: "/work/mimotoya/mimotoya-pantalla-06-2026-10-26.webp",
+      width: 645,
+      height: 1398,
+      alt: {
+        es: "Buscando conductor: la aplicación avisa a los motocarros cercanos.",
+        en: "Looking for a driver: the app notifies nearby motocarro drivers.",
+      },
+    },
+  ],
+};
 
 /**
  * El tamaño real del archivo, que es también el techo: el optimizador no
- * amplía, así que pedirle `w=3840` a cualquiera de las cinco devuelve estos
+ * amplía, así que pedirle `w=3840` a cualquiera de ellas devuelve estos
  * mismos 1440×960. Va aquí y no escrito en cada `<Image>` porque es un dato del
  * conjunto, no de la pantalla que lo enmarca.
  */

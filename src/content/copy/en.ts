@@ -293,6 +293,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Law",
       laudos: "Arbitration",
       porkia: "Pig farming",
+      mimotoya: "Mobility",
     },
     productStatuses: {
       tribai: "Public product",
@@ -300,6 +301,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Public explorer",
       laudos: "Open beta",
       porkia: "Closed beta",
+      mimotoya: "In development",
     },
   },
 
@@ -379,6 +381,10 @@ export const homeCopyEn: HomeCopy = {
       "porkia:1": "Feed and storeroom",
       "porkia:2": "Health plan",
       "porkia:3": "Accounts per batch",
+      "mimotoya:0": "Places with a price",
+      "mimotoya:1": "Routes to the villages",
+      "mimotoya:2": "Fare before ordering",
+      "mimotoya:3": "A nearby driver",
     },
     capabilityDescriptions: {
       "tribai:0": "The answer comes with references that allow the review to continue.",
@@ -401,6 +407,10 @@ export const homeCopyEn: HomeCopy = {
       "porkia:1": "Keeps the inventory of feed sacks and their use per batch, and warns when the storeroom runs low.",
       "porkia:2": "Schedules vaccines, deworming and inspections, and reminds you of each one on its day.",
       "porkia:3": "Gathers sales, kilos delivered and income to read what each batch returned.",
+      "mimotoya:0": "Every neighbourhood and spot in the town centre shows its fare before you order.",
+      "mimotoya:1": "Rural routes list their stops, and the price changes with how far you go.",
+      "mimotoya:2": "You say how many people are going and the app shows the total fare before you confirm the trip.",
+      "mimotoya:3": "When you order, the app notifies nearby motocarro drivers and shows how the search is going.",
     },
     headlines: {
       tribai: "Finding tax judgment without losing the source.",
@@ -408,6 +418,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Working with legal knowledge along a verifiable route.",
       laudos: "Exploring arbitral knowledge with structure.",
       porkia: "Running a pig farm without going back to the notebook.",
+      mimotoya: "Ordering a motocarro with the price clear from the start.",
     },
     descriptions: {
       tribai:
@@ -420,6 +431,8 @@ export const homeCopyEn: HomeCopy = {
         "Laudos offers search over arbitral awards and case law. Its site attributes the technical development to INPLUX and the legal judgment to REDEK, and presents the product as an open beta.",
       porkia:
         "Porkia gathers batch tracking, feed, animal health and the accounts of a pig farm in a mobile app that works offline and keeps the data on the phone.",
+      mimotoya:
+        "MiMotoYa is an iOS and Android app that people in Pácora, Caldas, use to order a motocarro: they pick a place in the town centre or a route to the rural villages, see the fare before ordering, and the app notifies nearby drivers.",
     },
     accessLabels: {
       tribai: "Open assistant",
@@ -427,6 +440,7 @@ export const homeCopyEn: HomeCopy = {
       kelsen: "Open explorer",
       laudos: "Open lab",
       porkia: "Open demo",
+      mimotoya: "No public access",
     },
   },
 
@@ -1168,7 +1182,7 @@ export const homeCopyEn: HomeCopy = {
     },
     products: {
       eyebrow: "Our own products",
-      title: "Five products built and run by INPLUX.",
+      title: "Six products built by INPLUX.",
       lead: "Each one started with a client's problem.",
       openCta: "See product",
       allCta: "See all products",

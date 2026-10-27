@@ -157,8 +157,9 @@ export function ProductInterface({ profile, lang = "es" }: ProductInterfaceProps
                 estas filas la demuestra por sí sola.
               */}
                 <b>
-                  {profile.sources.length}{" "}
-                  {profile.sources.length === 1 ? ui.sourceOne : ui.sourceMany}
+                  {profile.sources.length === 0 && profile.declaration
+                    ? ui.declarationOnly
+                    : `${profile.sources.length} ${profile.sources.length === 1 ? ui.sourceOne : ui.sourceMany}`}
                 </b>
               </div>
               <div className={styles.evidenceStatement}>
@@ -179,6 +180,18 @@ export function ProductInterface({ profile, lang = "es" }: ProductInterfaceProps
                     </time>
                   </li>
                 ))}
+                {profile.sources.length === 0 && profile.declaration ? (
+                  <li>
+                    <span>01</span>
+                    <div>
+                      <strong>{profile.declaration.label}</strong>
+                      <p>{profile.declaration.supports}</p>
+                    </div>
+                    <time dateTime={profile.declaration.declaredAt}>
+                      {profile.declaration.declaredAt}
+                    </time>
+                  </li>
+                ) : null}
               </ol>
             </div>
           ) : null}

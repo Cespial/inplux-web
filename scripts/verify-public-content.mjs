@@ -535,7 +535,9 @@ async function verifySourceFreshness() {
 
   for (const relativePath of ["src/content/deck.copy.ts", "src/content/work.ts"]) {
     const source = await readFile(path.join(root, relativePath), "utf8");
-    const fechas = [...source.matchAll(/verifiedAt\s*:\s*"([^"]+)"/g)];
+    // `declaredAt` es la fecha de un perfil sin fuentes públicas (MiMotoYa):
+    // la ficha la publica en lugar de una verificación, así que caduca igual.
+    const fechas = [...source.matchAll(/(?:verifiedAt|declaredAt)\s*:\s*"([^"]+)"/g)];
 
     if (fechas.length === 0) {
       errors.push(`${relativePath} no declara ninguna fecha de verificación`);

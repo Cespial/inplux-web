@@ -48,7 +48,7 @@ export function sectorSlugToEs(slug: string): SectorSlugEs | undefined {
 }
 
 /** Los productos que tienen ficha en los dos idiomas, con el mismo slug. */
-const productSlugs = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const;
+const productSlugs = ["tribai", "gobia", "kelsen", "laudos", "porkia", "mimotoya"] as const;
 
 /** Rutas fijas con par: español → inglés. */
 const staticPairs: ReadonlyArray<readonly [string, string]> = [

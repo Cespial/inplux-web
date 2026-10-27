@@ -6,7 +6,7 @@ import { ContactDialogProvider } from "@/components/site/ContactDialog";
 import { V5Page } from "@/components/v5/V5Page";
 import { languageAlternates } from "@/content/i18n";
 import { productProfileUi, workIndexUi } from "@/content/page-ui";
-import { getWorkProfile, workProfiles } from "@/content/work";
+import { getWorkProfile, profileEvidenceDate, workProfiles } from "@/content/work";
 import { breadcrumbJsonLdDocument, type Crumb } from "@/lib/breadcrumbs";
 
 const ui = productProfileUi.es;
@@ -90,12 +90,13 @@ export default async function ProductProfilePage({ params }: ProfilePageProps) {
       name: workIndexUi.es.pageTitle,
       url: "https://inplux.co/trabajo",
     },
-    dateModified: profile.sources[0]?.verifiedAt,
+    dateModified: profileEvidenceDate(profile),
     mainEntity: {
       "@type": "SoftwareApplication",
       name: profile.name,
       applicationCategory: profile.category,
-      url: profile.access.href,
+      // Sin acceso público no hay URL que dar: la propiedad se omite.
+      ...(profile.access.href ? { url: profile.access.href } : {}),
       description: profile.shortDescription,
     },
   };

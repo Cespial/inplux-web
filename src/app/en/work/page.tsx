@@ -20,13 +20,15 @@ import { englishPageMetadata } from "@/lib/metadata.en";
 const ui = workIndexUi.en;
 const PAGE_URL = `${SITE_URL}/en/work`;
 
-const order = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const satisfies readonly WorkSlug[];
+const order = ["tribai", "gobia", "kelsen", "laudos", "porkia", "mimotoya"] as const satisfies readonly WorkSlug[];
 const products = order.flatMap((slug) => {
   const profile = workProfilesEn.find((candidate) => candidate.slug === slug);
   return profile ? [profile] : [];
 });
 const inDevelopment = portfolio
-  .filter((item) => item.stage === "En desarrollo")
+  // Solo lo que está en desarrollo Y no tiene ficha: un producto con perfil
+  // (MiMotoYa, desde el 26-oct-2026) ya sale en el índice con su estado.
+  .filter((item) => item.stage === "En desarrollo" && !item.href)
   .flatMap((item) => {
     const text = inDevelopmentEn[item.name];
     return text ? [{ name: item.name, ...text }] : [];

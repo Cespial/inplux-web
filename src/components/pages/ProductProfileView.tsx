@@ -13,10 +13,12 @@ import {
 import { CapabilityRail } from "@/components/work/CapabilityRail.client";
 import { ProductInterface } from "@/components/work/ProductInterface.client";
 import { productMockups } from "@/components/work/ProductMockups";
+import Image from "next/image";
 import type { Lang } from "@/content/i18n";
 import { productProfileUi } from "@/content/page-ui";
 import type { WorkProfile } from "@/content/work";
-import { formatShortDate } from "@/content/work-format";
+import { appScreens } from "@/content/work-captures";
+import { formatLongDateEn, formatShortDate } from "@/content/work-format";
 import type { Crumb } from "@/lib/breadcrumbs";
 import styles from "./ProductProfile.module.css";
 
@@ -47,6 +49,8 @@ export function ProductProfileView({
 }) {
   const ui = productProfileUi[lang];
   const Mockup = productMockups[profile.slug];
+  const screens = appScreens[profile.slug] ?? [];
+  const declaration = profile.sources.length === 0 ? profile.declaration : undefined;
 
   return (
     <>
@@ -60,9 +64,12 @@ export function ProductProfileView({
         aside={<Mockup profile={profile} animate lang={lang} />}
         actions={
           <>
-            <Button href={profile.access.href} variant="primary" external>
-              {profile.access.label}
-            </Button>
+            {/* Sin `href` no hay nada público que abrir: no se pinta botón. */}
+            {profile.access.href ? (
+              <Button href={profile.access.href} variant="primary" external>
+                {profile.access.label}
+              </Button>
+            ) : null}
             <Chip dot tone={statusTone(profile.status.label)}>
               {profile.status.label}
             </Chip>
@@ -83,6 +90,7 @@ export function ProductProfileView({
           <div>
             <dt>{ui.access}</dt>
             <dd>{profile.access.label}</dd>
+            {profile.access.href ? null : <p>{profile.access.detail}</p>}
           </div>
           <div data-attribution={profile.attribution.state}>
             <dt>{ui.attribution}</dt>
@@ -108,6 +116,34 @@ export function ProductProfileView({
         />
       </Band>
 
+      {screens.length > 0 ? (
+        <Band labelledBy="screens-title" className={styles.screens}>
+          <SectionHead
+            id="screens-title"
+            eyebrow={ui.screensEyebrow}
+            title={ui.screensTitle(profile.name)}
+            lead={ui.screensLead(
+              lang === "en"
+                ? formatLongDateEn(profile.declaration?.declaredAt ?? "")
+                : formatShortDate(profile.declaration?.declaredAt ?? ""),
+            )}
+          />
+          <ol className={styles.screenRail} aria-label={ui.screensLabel(profile.name)}>
+            {screens.map((screen) => (
+              <li key={screen.src}>
+                <Image
+                  src={screen.src}
+                  alt={screen.alt[lang]}
+                  width={screen.width}
+                  height={screen.height}
+                  sizes="(max-width: 760px) 62vw, (max-width: 1100px) 30vw, 15vw"
+                />
+              </li>
+            ))}
+          </ol>
+        </Band>
+      ) : null}
+
       {profile.partners.length > 0 ? (
         <Band labelledBy="partners-title">
           <SectionHead
@@ -132,7 +168,7 @@ export function ProductProfileView({
           id="evidence-title"
           eyebrow={ui.evidenceEyebrow}
           title={ui.evidenceTitle}
-          lead={ui.evidenceLead}
+          lead={declaration ? ui.evidenceDeclaredLead : ui.evidenceLead}
         />
         <div className={styles.tableWrap}>
           <table className={styles.evidence} aria-labelledby="evidence-title">
@@ -140,7 +176,7 @@ export function ProductProfileView({
               <tr>
                 <th scope="col">{ui.evidenceSource}</th>
                 <th scope="col">{ui.evidenceSupports}</th>
-                <th scope="col">{ui.evidenceVerified}</th>
+                <th scope="col">{declaration ? ui.evidenceDeclared : ui.evidenceVerified}</th>
               </tr>
             </thead>
             <tbody>
@@ -158,6 +194,21 @@ export function ProductProfileView({
                   </td>
                 </tr>
               ))}
+              {/* Sin fuentes públicas, la única fila es la declaración de
+                  INPLUX: sin enlace, porque no hay URL que citar. */}
+              {declaration ? (
+                <tr>
+                  <th scope="row">
+                    <small aria-hidden="true">01</small>
+                    {declaration.label}
+                    <small>{ui.evidenceDeclaredBy}</small>
+                  </th>
+                  <td>{declaration.supports}</td>
+                  <td>
+                    <time dateTime={declaration.declaredAt}>{formatShortDate(declaration.declaredAt, lang)}</time>
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

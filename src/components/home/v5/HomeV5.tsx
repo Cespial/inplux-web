@@ -134,11 +134,12 @@ export function V5Process({ copy }: { copy: HomeCopy }) {
 /* -------------------------------------------------------------- productos */
 
 /**
- * Los cinco productos en fichas iguales: captura chica de la página pública,
+ * Los productos en fichas iguales: captura chica de la página pública (o, en
+ * MiMotoYa, que no tiene página pública, sus pantallas entregadas por INPLUX),
  * categoría y estado, nombre, una línea y el enlace. El detalle de cada uno
  * vive en su perfil de `/trabajo`; la portada sólo los presenta.
  */
-const PRODUCT_ORDER = ["tribai", "gobia", "kelsen", "laudos", "porkia"] as const;
+const PRODUCT_ORDER = ["tribai", "gobia", "kelsen", "laudos", "porkia", "mimotoya"] as const;
 
 export function V5Products({ copy }: { copy: HomeCopy }) {
   const text = copy.v5.products;
@@ -160,7 +161,7 @@ export function V5Products({ copy }: { copy: HomeCopy }) {
                   alt=""
                   width={CAPTURA_ANCHO}
                   height={CAPTURA_ALTO}
-                  sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 18vw"
+                  sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 15vw"
                 />
               </span>
               <span className={styles.productMeta}>

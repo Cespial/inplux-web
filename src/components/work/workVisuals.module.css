@@ -33,6 +33,13 @@
   --work-wash: #1d3018;
 }
 
+[data-theme="mobility"].preview,
+[data-theme="mobility"].interfaceStage {
+  --work-accent: #2bc48a;
+  --work-accent-rgb: 43, 196, 138;
+  --work-wash: #0f2c24;
+}
+
 .preview {
   position: relative;
   display: flex;

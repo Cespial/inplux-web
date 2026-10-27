@@ -1,6 +1,8 @@
+import Image from "next/image";
 import type { Lang } from "@/content/i18n";
 import { mockupUi } from "@/content/page-ui";
 import type { WorkProfile } from "@/content/work";
+import { appScreens } from "@/content/work-captures";
 import { formatLongDateEn, verificationDateFor, verifiedAtFor } from "@/content/work-format";
 import styles from "./ProductMockups.module.css";
 
@@ -255,10 +257,52 @@ export function PorkiaMockup({ profile, animate, lang = "es" }: MockupProps) {
   );
 }
 
+/**
+ * MiMotoYa: tres pantallas reales de la app, no una figura. Es el único perfil
+ * sin página pública que dibujar o fotografiar, y lo que sí hay son las
+ * pantallas que entregó INPLUX; la ventana las enseña tal cual —recortado solo
+ * el titular que las acompaña— en vez de recrear una interfaz que no se puede
+ * comprobar.
+ */
+const MIMOTOYA_PICKS = [0, 2, 4] as const;
+
+export function MiMotoYaMockup({ profile, animate, lang = "es" }: MockupProps) {
+  const ui = mockupUi[lang].mimotoya;
+  const screens = appScreens[profile.slug] ?? [];
+  return (
+    <Window
+      animate={animate}
+      name={ui.window}
+      status={profile.status.label}
+      theme={profile.interface.theme}
+      label={ui.label}
+      footer={ui.footer}
+    >
+      <div className={styles.phones}>
+        {MIMOTOYA_PICKS.map((index) => screens[index]).flatMap((screen) =>
+          screen ? (
+            <span key={screen.src} className={styles.phone}>
+              <Image
+                src={screen.src}
+                alt=""
+                width={screen.width}
+                height={screen.height}
+                sizes="(max-width: 760px) 28vw, 11rem"
+                priority={animate}
+              />
+            </span>
+          ) : [],
+        )}
+      </div>
+    </Window>
+  );
+}
+
 export const productMockups = {
   tribai: TribaiMockup,
   gobia: GobiaMockup,
   kelsen: KelsenMockup,
   laudos: LaudosMockup,
   porkia: PorkiaMockup,
+  mimotoya: MiMotoYaMockup,
 } as const satisfies Record<WorkProfile["slug"], (props: MockupProps) => React.ReactNode>;
