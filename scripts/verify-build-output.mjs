@@ -356,22 +356,9 @@ const pageDefinitions = {
       },
     ]),
   ),
-  deck: {
-    file: ".next/server/app/deck.html",
-    title: "Deck — de un problema real a software en producción | INPLUX",
-    description: `El índice de la presentación de INPLUX en ${deckSlideCount} láminas: la tesis, el método, los productos y sus fuentes.`,
-    canonical: `${siteUrl}/deck`,
-    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
-  },
-  deckPresentacion: {
-    file: ".next/server/app/deck/presentacion.html",
-    title:
-      "Presentación — de un problema real a software en producción | INPLUX",
-    description: `Cómo INPLUX convierte un problema concreto en software que funciona en producción, en ${deckSlideCount} láminas.`,
-    canonical: `${siteUrl}/deck/presentacion`,
-    contact: { dialogs: 0, triggers: 0, dialogForms: 0, sectionForms: 0 },
-    deck: { slides: deckSlideCount, profiles: workProfiles },
-  },
+  // `/deck` ya no es una ruta de Next: es el brochure estático de
+  // `public/deck/index.html` (reescrito en next.config.ts). `/deck/presentacion`
+  // redirige allí. El deck por componentes sigue vivo en /deck/legaltech.
   // ── El deck dirigido ───────────────────────────────────────────────────────
   // Dos rutas fuera del índice y fuera del sitemap. Se dan de alta aquí, y no
   // solo en `verify-http-contracts.mjs`, porque un 200 no dice qué se está
@@ -1473,7 +1460,6 @@ async function verifyGeneratedRoutes() {
     `${siteUrl}/trabajo/laudos`,
     `${siteUrl}/trabajo/porkia`,
     `${siteUrl}/deck`,
-    `${siteUrl}/deck/presentacion`,
     `${siteUrl}/sectores/salud`,
     `${siteUrl}/sectores/publico`,
     `${siteUrl}/sectores/legal-tributario`,

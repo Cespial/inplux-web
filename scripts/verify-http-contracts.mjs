@@ -33,7 +33,7 @@ const expectedRoutes = [
   ["/trabajo/laudos", 200],
   ["/trabajo/porkia", 200],
   ["/deck", 200],
-  ["/deck/presentacion", 200],
+  ["/deck/presentacion", 308],
   // El deck dirigido a legaltech. No está en el sitemap —no es una página
   // pública— pero se manda por enlace, así que tiene que contestar 200: una
   // ruta que solo existe en un enlace es justo la que nadie prueba hasta que

@@ -40,7 +40,17 @@ const nextConfig: NextConfig = {
     return [
       { source: "/fabrica", destination: "/como-trabajamos", permanent: true },
       { source: "/capacidades", destination: "/como-trabajamos", permanent: true },
+      // La presentación por componentes se retiró (octubre de 2026): /deck es
+      // ahora el brochure estático de public/deck.
+      { source: "/deck/presentacion", destination: "/deck", permanent: true },
     ];
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/deck", destination: "/deck/index.html" }],
+      afterFiles: [],
+      fallback: [],
+    };
   },
   async headers() {
     return [
