@@ -124,8 +124,8 @@ export function ProductProfileView({
             title={ui.screensTitle(profile.name)}
             lead={ui.screensLead(
               lang === "en"
-                ? formatLongDateEn(profile.declaration?.declaredAt ?? "")
-                : formatShortDate(profile.declaration?.declaredAt ?? ""),
+                ? formatLongDateEn(screens[0].deliveredAt)
+                : formatShortDate(screens[0].deliveredAt),
             )}
           />
           <ol className={styles.screenRail} aria-label={ui.screensLabel(profile.name)}>

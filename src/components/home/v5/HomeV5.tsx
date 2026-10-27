@@ -135,7 +135,7 @@ export function V5Process({ copy }: { copy: HomeCopy }) {
 
 /**
  * Los productos en fichas iguales: captura chica de la página pública (o, en
- * MiMotoYa, que no tiene página pública, sus pantallas entregadas por INPLUX),
+ * MiMotoYa, que es una app nativa, sus pantallas entregadas por INPLUX),
  * categoría y estado, nombre, una línea y el enlace. El detalle de cada uno
  * vive en su perfil de `/trabajo`; la portada sólo los presenta.
  */

@@ -47,7 +47,7 @@
       "capturedAt": "2026-10-26",
       "origin": "delivered",
       "deliveredBy": "INPLUX",
-      "sourceUrlNote": "Sin URL: MiMotoYa no tiene página pública ni está en tiendas (mimotoya.co respondía vacío el 2026-10-26). No es una captura de navegador: es una composición de tres de las seis pantallas que entregó INPLUX el 2026-10-26 (01, 03 y 05 de deliveredScreens), a 415 px de ancho cada una sobre el fondo de las propias pantallas (#f7f8f3), para que la serie conserve el tamaño 1440×960.",
+      "sourceUrlNote": "Sin URL: MiMotoYa no tiene página pública ni está en tiendas (mimotoya.co respondía vacío el 2026-10-26; desde el 2026-10-27 publica un sitio que presenta la aplicación, y la serie sigue con estas pantallas porque el sitio no es la aplicación: ver publicSite en work-captures.ts). No es una captura de navegador: es una composición de tres de las seis pantallas que entregó INPLUX el 2026-10-26 (01, 03 y 05 de deliveredScreens), a 415 px de ancho cada una sobre el fondo de las propias pantallas (#f7f8f3), para que la serie conserve el tamaño 1440×960.",
       "file": "mimotoya-pantallas-2026-10-26.png",
       "sha256": "2782985f21982ac57c87e301e3d14c0589b0fa0f0bd26c157109e99678550795"
     }

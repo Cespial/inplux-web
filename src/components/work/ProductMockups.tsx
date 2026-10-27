@@ -258,11 +258,11 @@ export function PorkiaMockup({ profile, animate, lang = "es" }: MockupProps) {
 }
 
 /**
- * MiMotoYa: tres pantallas reales de la app, no una figura. Es el único perfil
- * sin página pública que dibujar o fotografiar, y lo que sí hay son las
- * pantallas que entregó INPLUX; la ventana las enseña tal cual —recortado solo
- * el titular que las acompaña— en vez de recrear una interfaz que no se puede
- * comprobar.
+ * MiMotoYa: tres pantallas reales de la app, no una figura. Es una aplicación
+ * nativa: su sitio público (mimotoya.co) la presenta, pero no es la aplicación,
+ * y lo que la muestra en uso son las pantallas que entregó INPLUX; la ventana
+ * las enseña tal cual —recortado solo el titular que las acompaña— en vez de
+ * recrear una interfaz que no se puede comprobar.
  */
 const MIMOTOYA_PICKS = [0, 2, 4] as const;
 

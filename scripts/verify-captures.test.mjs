@@ -226,6 +226,11 @@ test("las pantallas entregadas existen con el sha256 y el tamaño que declara el
     for (const [index, pantalla] of pantallas.entries()) {
       const entrada = entradas[index];
       assert.equal(pantalla.src, entrada.file, `${slug} ${index + 1}: el orden o la ruta no coinciden con el acta`);
+      assert.equal(
+        pantalla.deliveredAt,
+        entrada.deliveredAt,
+        `${slug} ${index + 1}: la fecha de entrega del registro no es la del acta`,
+      );
       assert.ok(pantalla.alt.es.trim() && pantalla.alt.en.trim(), `${slug} ${index + 1}: falta texto alternativo`);
 
       const buffer = readFileSync(path.join(root, "public", entrada.file));

@@ -24,6 +24,7 @@ export type WorkProfile = {
    * `href: null` es un producto que todavía no tiene nada que abrir —ni tienda,
    * ni sitio, ni demo—. La ficha entonces no pinta botón ni enlace: dice que no
    * hay acceso público y por qué, en vez de mandar a una URL que no responde.
+   * Hoy ningún perfil lo usa; se conserva para el siguiente que entre así.
    */
   access: {
     label: string;
@@ -56,9 +57,10 @@ export type WorkProfile = {
   };
   /**
    * Las fuentes públicas que respaldan lo que dice el perfil. Un producto sin
-   * superficie pública (MiMotoYa, hoy) no tiene ninguna que citar: la lista va
-   * VACÍA —no se inventa una URL para llenarla— y lo que el perfil publica lo
-   * respalda `declaration`. Las dos cosas a la vez no: o hay fuentes, o hay
+   * superficie pública no tiene ninguna que citar: la lista va VACÍA —no se
+   * inventa una URL para llenarla— y lo que el perfil publica lo respalda
+   * `declaration`. Así entró MiMotoYa el 26-oct-2026, hasta que tuvo sitio
+   * público al día siguiente. Las dos cosas a la vez no: o hay fuentes, o hay
    * declaración (ver `profileEvidenceDate`).
    */
   sources: readonly WorkSource[];
@@ -499,23 +501,25 @@ export const workProfiles = [
     description:
       "MiMotoYa es una aplicación para iOS y Android con la que los habitantes de Pácora, Caldas, piden un motocarro: eligen un lugar del casco urbano o una ruta a las veredas, ven la tarifa antes de pedir y la aplicación avisa a los conductores cercanos.",
     status: {
-      label: "En desarrollo",
-      detail: "La aplicación está en desarrollo y todavía no se publica en las tiendas.",
-    },
-    // No hay nada público que abrir: ni tiendas, ni sitio (mimotoya.co responde
-    // vacío el 26-oct-2026), ni demostración. `href: null` quita el botón y el
-    // enlace de la ficha; lo que queda es decir por qué.
-    access: {
-      label: "Sin acceso público",
-      href: null,
+      label: "Beta abierta",
       detail:
-        "La aplicación todavía no está en las tiendas ni tiene sitio público. Las pantallas de esta ficha las entregó INPLUX.",
+        "La aplicación está en beta abierta y se prueba con los conductores de Pácora antes de abrirse a todo el municipio.",
+    },
+    // Desde el 27-oct-2026 mimotoya.co responde con el sitio de la aplicación:
+    // es el único acceso público. Las fichas de App Store y Google Play que
+    // enlaza ese sitio responden 404 sin sesión, así que el perfil no las
+    // enlaza: el botón lleva al sitio, nunca a una tienda.
+    access: {
+      label: "Abrir sitio",
+      href: "https://mimotoya.co",
+      detail:
+        "El sitio público presenta la aplicación, sus tarifas y el municipio donde funciona.",
     },
     attribution: {
       state: "confirmed",
       label: "Desarrollo de INPLUX",
       statement:
-        "MiMotoYa es un desarrollo de INPLUX. Como todavía no tiene superficie pública, no hay fuente externa que citar: la autoría, el alcance y las pantallas de esta ficha los declara INPLUX.",
+        "MiMotoYa es un desarrollo de INPLUX, y su sitio público lo indica al pie. Las pantallas de esta ficha las entregó INPLUX.",
     },
     partners: [],
     capabilities: [
@@ -553,13 +557,18 @@ export const workProfiles = [
         { label: "Pedido", value: "Aviso a conductores" },
       ],
     },
-    sources: [],
-    declaration: {
-      label: "Pantallas de la aplicación entregadas por INPLUX",
-      supports:
-        "Autoría de INPLUX, alcance de la aplicación (Pácora, Caldas; zona urbana y rutas rurales; tarifa antes de pedir; búsqueda de conductor) y las seis pantallas que muestra esta ficha.",
-      declaredAt: "2026-10-26",
-    },
+    // Hasta el 26-oct-2026 este perfil no tenía fuentes y lo sostenía una
+    // declaración de INPLUX. Con el sitio público pasa a tener fuente, y la
+    // declaración sale: el perfil lleva una u otra, nunca las dos.
+    sources: [
+      {
+        label: "Sitio oficial de MiMotoYa",
+        url: "https://mimotoya.co",
+        supports:
+          "Existencia pública de la aplicación, la prueba con los conductores de Pácora antes de abrirse a todo el municipio, la tarifa oficial fijada por la Alcaldía con pago en efectivo, la elección de lugar o ruta antes de pedir y la atribución del desarrollo a INPLUX.",
+        verifiedAt: "2026-10-27",
+      },
+    ],
   },
 ] as const satisfies readonly WorkProfile[];
 

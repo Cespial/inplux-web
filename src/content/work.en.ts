@@ -342,18 +342,18 @@ const text: Record<WorkSlug, ProfileText> = {
     description:
       "MiMotoYa is an iOS and Android app that people in Pácora, Caldas, use to order a motocarro —the three-wheeled moto-taxi of the town—: they pick a place in the town centre or a route to the rural villages, see the fare before ordering, and the app notifies nearby drivers.",
     status: {
-      label: "In development",
-      detail: "The app is in development and is not yet published in the app stores.",
+      label: "Open beta",
+      detail:
+        "The app is in open beta and is being tested with drivers in Pácora before it opens to the whole municipality.",
     },
     access: {
-      label: "No public access",
-      detail:
-        "The app is not in the app stores yet and has no public site. The screens in this profile were provided by INPLUX.",
+      label: "Open site",
+      detail: "The public site presents the app, its fares and the municipality where it runs.",
     },
     attribution: {
       label: "Developed by INPLUX",
       statement:
-        "MiMotoYa is developed by INPLUX. Since it has no public surface yet, there is no external source to cite: the authorship, scope and screens in this profile are stated by INPLUX.",
+        "MiMotoYa is developed by INPLUX, and its public site says so in the footer. The screens in this profile were provided by INPLUX.",
     },
     partnerRoles: [],
     capabilities: [
@@ -386,12 +386,13 @@ const text: Record<WorkSlug, ProfileText> = {
         { label: "Order", value: "Nearby drivers notified" },
       ],
     },
-    sources: [],
-    declaration: {
-      label: "App screens provided by INPLUX",
-      supports:
-        "INPLUX authorship, the app's scope (Pácora, Caldas; urban area and rural routes; fare before ordering; driver search) and the six screens shown in this profile.",
-    },
+    sources: [
+      {
+        label: "MiMotoYa official site",
+        supports:
+          "Public existence of the app, the test with drivers in Pácora before it opens to the whole municipality, the official fare set by the mayor's office with cash payment, choosing a place or route before ordering, and the attribution of the development to INPLUX.",
+      },
+    ],
   },
 };
 
@@ -442,7 +443,8 @@ export function getWorkProfileEn(slug: string) {
 
 /** Lo que el directorio lista como «en desarrollo», en inglés (de `home.ts`). */
 // Vacío desde el 26-oct-2026: MiMotoYa, el único producto que estaba aquí,
-// tiene perfil propio. Se conserva para el siguiente que entre sin perfil.
+// tiene perfil propio (y desde el 27-oct-2026 está en beta abierta). Se
+// conserva para el siguiente que entre sin perfil.
 export const inDevelopmentEn: Record<string, { category: string; stage: string; description: string }> = {};
 
 /** Estado de `workDirectory` en inglés, por nombre de producto (las tarjetas de sector). */

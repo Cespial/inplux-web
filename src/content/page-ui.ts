@@ -76,7 +76,7 @@ export const mockupUi = {
     },
     mimotoya: {
       label: "Tres pantallas reales de la aplicación MiMotoYa: la portada, los lugares con su precio y la tarifa antes de pedir",
-      footer: "Pantallas reales de la aplicación, entregadas por INPLUX. Todavía no está en las tiendas.",
+      footer: "Pantallas reales de la aplicación, entregadas por INPLUX.",
       window: "MiMotoYa · iOS y Android",
     },
   },
@@ -111,7 +111,7 @@ export const mockupUi = {
     },
     mimotoya: {
       label: "Three real screens of the MiMotoYa app: the opening screen, places with their price and the fare before ordering",
-      footer: "Real app screens, provided by INPLUX. It is not in the app stores yet.",
+      footer: "Real app screens, provided by INPLUX.",
       window: "MiMotoYa · iOS and Android",
     },
   },
@@ -209,14 +209,14 @@ export const workIndexUi = {
     crumbsLabel: "Ruta",
     pageTitle: "Productos propios — Tribai, Gobia, Kelsen, Laudos, Porkia y MiMotoYa",
     pageDescription:
-      "Cinco productos construidos y operados por INPLUX, y uno en desarrollo, cada uno con su evidencia y la fecha en que la revisamos.",
+      "Seis productos construidos y operados por INPLUX, cada uno con su evidencia y la fecha en que la revisamos.",
     socialDescription: "Cada producto documentado, con su evidencia y su fecha de revisión.",
     socialImageAlt: "INPLUX, directorio de trabajo y productos con fuentes verificadas",
     eyebrow: "Productos propios",
     title: "Seis productos construidos por INPLUX.",
-    lead: "Cada uno nació de un problema de un cliente; cinco ya funcionan por su cuenta y uno está en desarrollo.",
+    lead: "Cada uno nació de un problema de un cliente, y los seis ya funcionan por su cuenta.",
     leadMuted:
-      "Lo que ves abajo sale de sus páginas públicas —o, si todavía no tienen, de lo que declara INPLUX—, con la fecha en que lo revisamos.",
+      "Lo que ves abajo sale de sus páginas públicas, con la fecha en que lo revisamos.",
     productsCta: "Ver los productos",
     projectCta: "Empezar un proyecto",
     statementLead: "Cada producto, con su ",
@@ -238,14 +238,14 @@ export const workIndexUi = {
     crumbsLabel: "Breadcrumb",
     pageTitle: "Our own products — Tribai, Gobia, Kelsen, Laudos, Porkia and MiMotoYa",
     pageDescription:
-      "Five products built and run by INPLUX, and one in development, each with its evidence and the date we reviewed it.",
+      "Six products built and run by INPLUX, each with its evidence and the date we reviewed it.",
     socialDescription: "Every documented product, with its evidence and review date.",
     socialImageAlt: "INPLUX, product directory with verified sources",
     eyebrow: "Our own products",
     title: "Six products built by INPLUX.",
-    lead: "Each one started with a client's problem; five already run on their own and one is in development.",
+    lead: "Each one started with a client's problem, and all six already run on their own.",
     leadMuted:
-      "What you see below comes from their public pages —or, where there is none yet, from what INPLUX states—, with the date we reviewed it.",
+      "What you see below comes from their public pages, with the date we reviewed it.",
     productsCta: "See the products",
     projectCta: "Start a project",
     statementLead: "Every product, with its ",
