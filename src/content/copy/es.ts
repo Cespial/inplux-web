@@ -160,7 +160,14 @@ export const homeCopyEs: HomeCopy = {
   clientWall: {
     eyebrow: "RELACIONES REALES",
     title: "Con quiénes hemos trabajado.",
-    lead: "Entidades públicas, empresas y organizaciones con las que el equipo ha construido, operado o acompañado sistemas. Cada logotipo lleva la relación que lo respalda.",
+    lead: "Entidades públicas, empresas y organizaciones con las que el equipo ha construido, operado o acompañado sistemas.",
+    groups: {
+      public: "Instituciones públicas",
+      private: "IPS y empresas privadas",
+      municipal: "Alcaldías",
+    },
+    pause: "Pausar logos",
+    play: "Mover logos",
   },
 
   experienceRail: {

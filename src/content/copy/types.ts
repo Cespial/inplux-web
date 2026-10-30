@@ -389,6 +389,11 @@ export type ClientWallCopy = {
   eyebrow: string;
   title: string;
   lead: string;
+  /** Rótulo de cada cinta, por grupo de `clientGroups` en `content/clients.ts`. */
+  groups: { public: string; private: string; municipal: string };
+  /** El botón que detiene y reanuda las cintas (WCAG 2.2.2). */
+  pause: string;
+  play: string;
 };
 
 export type ProductBlocksCopy = {
