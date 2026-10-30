@@ -9,6 +9,8 @@
   overflow: hidden;
   border-bottom: 1px solid var(--line);
   background: var(--black);
+  /* El mismo aire que deja la cabecera arriba (3rem): el bloque queda centrado. */
+  padding-bottom: 3rem;
   scroll-margin-top: 4rem;
 }
 
@@ -75,6 +77,10 @@
 }
 
 @media (max-width: 767px) {
+  .wall {
+    padding-bottom: 2.4rem;
+  }
+
   .wallHead {
     padding-top: 2.4rem;
   }
