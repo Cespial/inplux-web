@@ -1,8 +1,8 @@
 /*
- * El muro de relaciones (clientes) y su cabecera. Sale del `home.module.css`
- * de la portada v2 con los tokens v5; conserva su propia medianil porque el
- * muro es más ancho que el `wrap` del sistema: cierra casi a sangre, como en
- * producción desde la portada v2.
+ * El muro de relaciones (clientes) y su cabecera. Desde oct-2026 son tres
+ * cintas, una por grupo, con el rótulo fijo a la izquierda; conserva su
+ * propia medianil porque el muro es más ancho que el `wrap` del sistema:
+ * cierra casi a sangre, como en producción desde la portada v2.
  */
 .wall {
   --wall-gutter: clamp(1.5rem, 6.35vw, 6rem);
@@ -25,7 +25,7 @@
 }
 
 /* El ojo del muro va en bloque: la cabecera no es una retícula como `.head`. */
-.wallHead > div > p {
+.wallHead > div > p:first-child {
   display: flex;
 }
 
@@ -35,11 +35,43 @@
   letter-spacing: -0.04em;
 }
 
-.wallHead > p {
+.wallLead {
+  display: grid;
   max-width: 36rem;
+  justify-items: start;
+  gap: 0.85rem;
+}
+
+.wallLead p {
   color: var(--fg-muted);
   font-size: 0.9rem;
   line-height: 1.55;
+}
+
+.pause {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  font: 500 0.66rem/1 var(--sans);
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.8rem;
+  text-transform: uppercase;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.pause:hover,
+.pause[aria-pressed="true"] {
+  border-color: rgba(246, 242, 236, 0.32);
+  color: var(--ivory);
+}
+
+.pause:focus-visible {
+  outline: 1px solid var(--teal);
+  outline-offset: 2px;
 }
 
 @media (max-width: 767px) {
@@ -48,42 +80,133 @@
   }
 }
 
-.logoWall {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+/* Las tres filas: rótulo fijo y cinta. */
+.rows {
   width: calc(100% - (var(--wall-gutter) * 1.16));
   max-width: 1400px;
   margin-inline: auto;
+  border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
 
-.logoCell {
-  position: relative;
+.row {
   display: grid;
-  min-width: 0;
-  height: 7.75rem;
-  place-items: center;
-  overflow: hidden;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding-inline: 1.25rem;
-  color: var(--fg-muted);
-  outline: none;
+}
+
+.rowLabel {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--line);
+  padding-inline: 1.5rem;
+  color: var(--ivory);
+  font: 600 0.68rem/1.25 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.rail {
+  display: flex;
+  width: max-content;
+  animation: wall-slide var(--marquee-duration, 50s) linear infinite;
+}
+
+.row[data-reverse] .rail {
+  animation-direction: reverse;
+}
+
+/* Se detiene bajo el cursor, con el foco dentro y con el botón de pausa. */
+.row:hover .rail,
+.row:focus-within .rail,
+.wall[data-paused] .rail {
+  animation-play-state: paused;
+}
+
+/*
+ * Las cintas arrancan cuando el muro entra en pantalla (`Reveal` marca
+ * `data-revealed`): así lo primero que se ve de cada grupo son sus
+ * organizaciones más grandes, no un punto cualquiera del bucle. Sin
+ * JavaScript `data-motion` no existe y corren desde el principio.
+ */
+:global(html[data-motion]) .rows:not([data-revealed]) .rail {
+  animation-play-state: paused;
+}
+
+@keyframes wall-slide {
+  to {
+    transform: translate3d(calc(-100% / 3), 0, 0);
+  }
+}
+
+.track {
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  height: 5.4rem;
+  flex: none;
+  place-items: center;
+  padding-inline: 2.1rem;
+}
+
+.item img {
+  width: var(--logo-w);
+  max-width: none;
+  height: auto;
+  max-height: 3.1rem;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.74;
+  transition: opacity 200ms ease;
+}
+
+/* Las tres primeras de cada grupo: más grandes y con tinta casi plena. */
+.leading img {
+  max-height: 4rem;
+  opacity: 0.95;
+}
+
+/*
+ * Los logotipos no se piden antes de hidratar. El muro empieza justo debajo
+ * del pliegue y sus imágenes perezosas caen dentro del margen con el que el
+ * navegador adelanta la carga: se pedían en el mismo instante del primer
+ * pintado y competían por las conexiones con los chunks de JavaScript, y el
+ * LCP (el logo del encabezado) se medía después de todo eso. Con la imagen en
+ * `display: none` el navegador no la pide; `Reveal`
+ * marca `html[data-motion-ready]` al montar y entonces entran. Sin JavaScript
+ * `data-motion` nunca existe y nada se oculta; si `Reveal` no monta, el script
+ * del layout retira `data-motion` a los 2,6 s. La celda tiene alto fijo y el
+ * ancho lo reserva `--logo-w`: ocultarlo no mueve la cinta.
+ */
+:global(html[data-motion]:not([data-motion-ready])) .item img {
+  display: none;
+}
+
+:global(html[data-motion]:not([data-motion-ready])) .item:has(img) {
+  min-width: calc(var(--logo-w) + 4.2rem);
 }
 
 /*
  * La celda nombrada: las entidades acreditadas en el RUP no traen marca que
- * sobreviva a esta altura de celda, así que se componen con el mismo tono y la
- * misma mono que el resto del muro. No lleva la ficha de detalle del hover
- * porque no esconde nada: el nombre ya está a la vista.
+ * sobreviva a esta altura, así que se componen con el mismo tono del muro.
  */
-.logoNamed {
-  /* el rótulo de la relación va posicionado arriba: se le reserva su banda */
-  padding-block: 1.85rem 0.6rem;
-}
-
 .logoName {
   display: grid;
+  max-width: 11rem;
   gap: 0.28rem;
   text-align: center;
   color: var(--ivory);
@@ -104,104 +227,10 @@
   text-transform: uppercase;
 }
 
-.logoStatement {
-  grid-column: span var(--wall-fill-3, 1);
-  justify-items: start;
-  padding-inline: 1.35rem;
-  text-align: left;
-}
-
-.logoStatement p {
-  text-align: left;
-}
-
-@media (max-width: 639px) {
-  /* Tres columnas en móvil: el conjunto completo cabe en dos pantallas. */
-  .logoCell {
-    height: 5.75rem;
-    padding-inline: 0.8rem;
-  }
-
-  .logoCell img {
-    max-height: 3.4rem;
-  }
-}
-
-@media (min-width: 640px) {
-  .logoWall {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .logoStatement {
-    grid-column: span var(--wall-fill-4, 1);
-  }
-}
-
-@media (min-width: 1024px) {
-  .logoWall {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-
-  .logoStatement {
-    grid-column: span var(--wall-fill-6, 1);
-  }
-}
-
-.logoRelation {
-  position: absolute;
-  z-index: 2;
-  top: 0.55rem;
-  left: 0.65rem;
-  color: #aaa49c;
-  font: 500 0.625rem/1 var(--sans);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.logoCell img {
-  width: auto;
-  /*
-   * Dos topes, no uno: 8.75rem es el tamaño óptico al que se acuerdan todas
-   * las marcas entre sí, y 100% es el ancho útil de la celda. El segundo es
-   * el que manda cuando la celda es más angosta que el tope óptico — sin él
-   * los logos anchos se salían de su celda y `overflow: hidden` los cortaba.
-   */
-  max-width: min(8.75rem, 100%);
-  height: auto;
-  /*
-   * 4.25rem y no 3.25: los lockups de alcaldía apilan escudo sobre nombre, y a
-   * 52px de alto el nombre queda ilegible —el tope de ancho ni siquiera llega a
-   * aplicarse—. Los logotipos apaisados no cambian: a ellos los sigue limitando
-   * el ancho.
-   */
-  max-height: 4.25rem;
-  object-fit: contain;
-  filter: grayscale(1) brightness(0) invert(1);
-  opacity: 0.74;
-  transition:
-    filter 200ms ease,
-    opacity 200ms ease;
-}
-
-/*
- * Los logotipos no se piden antes de hidratar. El muro empieza justo debajo
- * del pliegue y sus 27 imágenes perezosas caen dentro del margen con el que
- * el navegador adelanta la carga: se pedían en el mismo instante del primer
- * pintado y competían por las conexiones con los chunks de JavaScript, y el
- * LCP (el logo del encabezado) se medía después de todo eso. Con la imagen en
- * `display: none` el navegador no la pide; `Reveal` marca
- * `html[data-motion-ready]` al montar y entonces entran. Sin JavaScript
- * `data-motion` nunca existe y nada se oculta; si `Reveal` no monta, el script
- * del layout retira `data-motion` a los 2,6 s. La celda tiene alto fijo y el
- * logo va centrado en ella: ocultarlo no mueve nada.
- */
-:global(html[data-motion]:not([data-motion-ready])) .logoCell img {
-  display: none;
-}
-
+/* La ficha del hover: nombre y nota sobre el logo, con la cinta detenida. */
 .logoProof {
   position: absolute;
-  inset: 0.35rem;
+  inset: 0.6rem 0.4rem;
   display: grid;
   align-content: center;
   justify-items: center;
@@ -223,40 +252,77 @@
 .logoProof::before {
   content: attr(data-name);
   color: var(--ivory);
-  font: 500 0.55rem/1.15 var(--sans);
+  font: 500 0.6rem/1.15 var(--sans);
   letter-spacing: 0.035em;
 }
 
 .logoProof::after {
   content: attr(data-note);
   color: var(--fg-muted);
-  font: 500 0.47rem/1.2 var(--sans);
+  font: 500 0.52rem/1.2 var(--sans);
 }
 
-.logoCell:focus-visible {
-  outline: 1px solid var(--teal);
-  outline-offset: -2px;
+@media (hover: hover) {
+  .item:hover .logoProof {
+    opacity: 1;
+    transform: none;
+  }
+
+  .item:hover img {
+    opacity: 0.16;
+  }
 }
 
-.logoCell:focus img {
-  filter: grayscale(1) brightness(0) invert(1) blur(7px);
-  opacity: 0.16;
+@media (max-width: 767px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rowLabel {
+    border-right: 0;
+    padding: 0.9rem 1rem 0;
+  }
+
+  .item {
+    height: 4.4rem;
+    padding-inline: 1.4rem;
+  }
+
+  .item img {
+    width: calc(var(--logo-w) * 0.8);
+    max-height: 2.6rem;
+  }
+
+  .leading img {
+    max-height: 3.2rem;
+  }
 }
 
-.logoCell:focus .logoProof {
-  opacity: 1;
-  transform: none;
-}
+/*
+ * Con «reducir movimiento» la cinta no corre: se muestra la primera copia
+ * entera, en renglones, y las otras dos se retiran.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    mask-image: none;
+  }
 
-.logoCell p {
-  display: grid;
-  gap: 0.22rem;
-  text-align: center;
-  font: 500 0.58rem/1.2 var(--sans);
-  letter-spacing: 0.08em;
-}
+  .rail {
+    width: auto;
+    animation: none;
+  }
 
-.logoCell strong {
-  color: var(--ivory);
-  font-weight: 500;
+  .track {
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .track[aria-hidden] {
+    display: none;
+  }
+
+  .pause {
+    display: none;
+  }
 }

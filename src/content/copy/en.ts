@@ -244,7 +244,14 @@ export const homeCopyEn: HomeCopy = {
   clientWall: {
     eyebrow: "REAL RELATIONSHIPS",
     title: "Who we have worked with.",
-    lead: "Public institutions, companies and organizations the team has built, operated or supported systems for. Each logo carries the relationship behind it.",
+    lead: "Public institutions, companies and organizations the team has built, operated or supported systems for.",
+    groups: {
+      public: "Public institutions",
+      private: "Healthcare providers and private companies",
+      municipal: "Municipalities",
+    },
+    pause: "Pause logos",
+    play: "Play logos",
   },
 
   experienceRail: {
