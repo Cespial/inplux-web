@@ -1,206 +1,95 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const read = (file) => readFileSync(path.join(root, file), "utf8");
 
 /**
- * La puerta de las dos retículas de la portada: el ribbon de «Lo que hemos
- * construido» y el muro de logos que lo cierra.
+ * La puerta del muro de relaciones de la portada.
  *
- * El ribbon se dibujaba con `display: flex` + `flex-wrap` para no reservar
- * columnas que se quedaran a medio llenar cuando cambiara el número de
- * productos. El efecto era el contrario del buscado: como la intro medía
- * 17rem y las tarjetas 15.5rem y ninguna crecía, cada renglón terminaba en una
- * x distinta, las líneas verticales no se alineaban entre renglones y el
- * rectángulo nunca cerraba a la derecha —a 1440px el segundo renglón moría a
- * mitad de la sección dejando medio ancho en negro.
+ * Hasta oct-2026 el muro era una retícula quieta y esta prueba vigilaba que su
+ * último renglón cerrara y que nunca volviera a ser un carrusel. Cristian
+ * eligió después (29-oct-2026, opción B del banco de pruebas) tres cintas en
+ * movimiento, una por grupo y con el rótulo fijo, así que la prueba vigila
+ * ahora lo que esa forma necesita para no romperse:
  *
- * Ahora las dos son retículas de verdad y el renglón final lo cierra una celda
- * designada estirándose sobre las columnas que sobran: en el ribbon, la última
- * tarjeta; en el muro, el rótulo. Eso acopla tres cosas que viven en archivos
- * distintos:
- *
- *   · el CONTEO de celdas —las tarjetas salen de `src/content/work.ts`, los
- *     logos de la lista de relaciones del componente—;
- *   · los CONTEOS DE COLUMNA declarados en `home.module.css`, uno por
- *     breakpoint;
- *   · los tramos `--ribbon-fill-N` y `--wall-fill-N` que el componente publica.
- *
- * Si alguien añade un breakpoint de 5 columnas al CSS y no publica su tramo,
- * la variable cae al valor por defecto (1) y el renglón final vuelve a quedar
- * corto sin que falle ninguna prueba ni el build. Esta prueba cierra ese hueco
- * por los dos lados: comprueba la aritmética del tramo y comprueba que las
- * listas de conteos coincidan.
+ *   · cada relación pertenece a un grupo conocido, y cada grupo tiene rótulo
+ *     en los dos idiomas;
+ *   · el bucle es continuo: el desplazamiento del CSS es exactamente una de
+ *     las copias que pinta el componente;
+ *   · sólo una copia es legible para el lector de pantalla;
+ *   · el movimiento se puede detener (botón, cursor, foco) y desaparece con
+ *     «reducir movimiento».
  */
 
-/*
- * Desde la capa compartida v5 (oct-2026) el muro vive en `components/v5` y
- * sus relaciones en `content/clients.ts`; el ribbon de productos se retiró
- * con la portada v5, así que la única retícula vigilada es el muro.
- */
-const css = readFileSync(
-  path.join(root, "src/components/v5/LogoWall.module.css"),
-  "utf8",
-);
-const tsx = readFileSync(
-  path.join(root, "src/components/v5/LogoWall.tsx"),
-  "utf8",
+const css = read("src/components/v5/LogoWall.module.css");
+const tsx = read("src/components/v5/LogoWall.tsx");
+const clients = read("src/content/clients.ts");
+const copies = { es: read("src/content/copy/es.ts"), en: read("src/content/copy/en.ts") };
+
+const grupos = JSON.parse(
+  /clientGroups = (\[[^\]]*\])/.exec(clients)[1].replace(/'/g, '"'),
 );
 
-/** La retícula del muro, con el selector que declara sus columnas. */
-const RETICULAS = [
-  { nombre: "muro de logos", selector: "logoWall", variable: "wall-fill" },
-];
+test("los grupos del muro abren con las instituciones públicas", () => {
+  assert.deepEqual(grupos, ["public", "private", "municipal"]);
+});
 
-function bloques(selector) {
-  const out = [];
-  const re = new RegExp("\\." + selector + "(?![\\w-])[^{}]*\\{([^{}]*)\\}", "g");
-  let match;
-  while ((match = re.exec(css)) !== null) out.push(match[1]);
-  return out;
-}
+test("cada relación del muro lleva un grupo conocido", () => {
+  const conLogo = clients.split('src: "/brand/clients/').length - 1;
+  const nombradas = clients.split("place: ").length - 1;
+  const asignados = [...clients.matchAll(/group: "([a-z]+)"/g)].map((m) => m[1]);
 
-function columnasDeclaradas(selector) {
-  const cols = new Set();
-  for (const body of bloques(selector)) {
-    const m = /grid-template-columns:\s*repeat\(\s*(\d+)/.exec(body);
-    if (m) cols.add(Number(m[1]));
-  }
-  return [...cols].sort((a, b) => a - b);
-}
-
-for (const { nombre, selector, variable } of RETICULAS) {
-  test(`el CSS declara una retícula explícita para el ${nombre}`, () => {
-    assert.ok(bloques(selector).length > 0, `no se encontró ninguna regla .${selector}`);
+  assert.ok(conLogo >= 20, `el muro quedó con ${conLogo} logos: revisar clientLogos`);
+  assert.equal(
+    asignados.length,
+    conLogo + nombradas,
+    "hay relaciones sin grupo: no aparecerían en ninguna cinta",
+  );
+  for (const g of asignados) assert.ok(grupos.includes(g), `grupo desconocido «${g}»`);
+  for (const g of grupos) {
     assert.ok(
-      columnasDeclaradas(selector).length > 0,
-      `el ${nombre} dejó de declarar grid-template-columns: volvió a ser un flujo que se acomoda`,
+      asignados.filter((x) => x === g).length >= 6,
+      `la cinta «${g}» tiene menos de seis relaciones: tres copias ya no llenan la fila`,
     );
-  });
-
-  test(`cada conteo de columnas del ${nombre} tiene su tramo publicado por el componente`, () => {
-    const declaradas = columnasDeclaradas(selector);
-    const usadasEnCss = [
-      ...new Set([...css.matchAll(new RegExp(`var\\(--${variable}-(\\d+)`, "g"))].map((m) => Number(m[1]))),
-    ].sort((a, b) => a - b);
-    const publicadas = [
-      ...new Set([...tsx.matchAll(new RegExp(`"--${variable}-(\\d+)"`, "g"))].map((m) => Number(m[1]))),
-    ].sort((a, b) => a - b);
-
-    assert.deepEqual(
-      usadasEnCss,
-      declaradas,
-      `en el ${nombre} hay un conteo de columnas sin su var(--${variable}-N) —o al revés— en el CSS`,
-    );
-    assert.deepEqual(
-      publicadas,
-      declaradas,
-      `el componente no publica un tramo para cada conteo de columnas del ${nombre}`,
-    );
-  });
-}
-
-test("el muro de logos no vuelve a ser un carrusel", () => {
-  const cuerpos = bloques("logoWall").join("\n");
-  assert.ok(
-    !/overflow-x:\s*auto|scroll-snap-type/.test(cuerpos),
-    "el muro volvió a desplazarse: se ven las relaciones a medias y el argumento del conjunto se pierde",
-  );
-});
-
-function loadRibbon() {
-  const result = spawnSync(
-    "npx",
-    [
-      "tsx",
-      "--eval",
-      `
-      import { readFileSync } from "node:fs";
-      import { fillSpan } from "./src/components/home/gridFill.ts";
-
-      // El muro: una celda por relación —con logotipo o nombrada— más el
-      // rótulo que cierra el renglón. Se cuenta partiendo la fuente, no con una
-      // expresión regular: este código viaja dentro de una plantilla de JS y
-      // ahí las barras invertidas se cuecen antes de llegar a esbuild.
-      const fuente = readFileSync("src/content/clients.ts", "utf8");
-      const conLogo = fuente.split('src: "/brand/clients/').length - 1;
-      const nombradas = fuente.split("place: ").length - 1;
-      const celdasMuro = conLogo + nombradas + 1;
-
-      // Se interroga el conteo REAL y, en la misma pasada, todos los conteos
-      // que el ribbon podría llegar a tener: la retícula tiene que cerrar
-      // igual hoy que cuando work.ts sume o quite un producto.
-      const tramos = {};
-      for (const columnas of [2, 3, 4, 5, 6]) {
-        tramos[columnas] = [];
-        for (let celdas = 1; celdas <= 40; celdas += 1) {
-          tramos[columnas].push(fillSpan(celdas, columnas));
-        }
-      }
-
-      process.stdout.write(JSON.stringify({ celdasMuro, tramos }));
-    `,
-    ],
-    { cwd: root, encoding: "utf8" },
-  );
-
-  assert.equal(
-    result.status,
-    0,
-    `no se pudo cargar el modelo del ribbon:\n${result.stderr}`,
-  );
-  return JSON.parse(result.stdout);
-}
-
-test("el tramo de relleno cierra el último renglón para cualquier conteo de tarjetas", () => {
-  const { tramos } = loadRibbon();
-
-  for (const [columnasStr, spans] of Object.entries(tramos)) {
-    const columnas = Number(columnasStr);
-    spans.forEach((span, index) => {
-      const celdas = index + 1;
-      const donde = `${celdas} celdas en ${columnas} columnas`;
-
-      assert.ok(
-        Number.isInteger(span) && span >= 1 && span <= columnas,
-        `${donde}: el tramo ${span} se sale del rango [1, ${columnas}]`,
-      );
-
-      // Las celdas menos la última ocupan una columna cada una; la última, `span`.
-      const unidades = celdas - 1 + span;
-      assert.equal(
-        unidades % columnas,
-        0,
-        `${donde}: la retícula cierra con ${unidades} unidades, que no es múltiplo de ${columnas} —el último renglón quedaría corto`,
-      );
-    });
   }
 });
 
-test("el conteo real de logos cierra la retícula del muro", () => {
-  const { celdasMuro, tramos } = loadRibbon();
-
-  // Guarda contra un conteo obsoleto: el muro mezcla celdas con logotipo y
-  // celdas nombradas, y una prueba que sólo contara las primeras pasaría por
-  // casualidad mientras la retícula real se rompe.
-  const enDom = (tsx.match(/<Client(Logo|Name)Cell/g) || []).length;
-  assert.equal(
-    enDom,
-    2,
-    "el muro dejó de pintar los dos tipos de celda: revisar el conteo de esta prueba",
-  );
-  assert.ok(celdasMuro >= 20, `el muro quedó con ${celdasMuro} celdas: revisar clientLogos y clientNames`);
-
-  for (const columnas of columnasDeclaradas("logoWall").filter((n) => tramos[n])) {
-    const span = tramos[columnas][celdasMuro - 1];
-    assert.equal(
-      (celdasMuro - 1 + span) % columnas,
-      0,
-      `con ${celdasMuro} celdas y ${columnas} columnas el último renglón del muro no cierra`,
-    );
+test("cada grupo tiene rótulo en español y en inglés", () => {
+  for (const [lang, source] of Object.entries(copies)) {
+    const bloque = /clientWall: \{[\s\S]*?groups: \{([\s\S]*?)\}/.exec(source);
+    assert.ok(bloque, `${lang}: clientWall no declara groups`);
+    for (const g of grupos) {
+      assert.match(bloque[1], new RegExp(`\\b${g}: "[^"]+"`), `${lang}: falta el rótulo de «${g}»`);
+    }
   }
+});
+
+test("el bucle desplaza exactamente una de las copias que pinta el componente", () => {
+  const n = Number(/const COPIES = (\d+);/.exec(tsx)?.[1]);
+  assert.ok(n >= 2, "el componente debe pintar al menos dos copias de cada cinta");
+  assert.match(
+    css,
+    new RegExp(`translate3d\\(calc\\(-100% / ${n}\\)`),
+    `el desplazamiento del CSS no es 1/${n}: la cinta saltaría al reiniciar`,
+  );
+});
+
+test("sólo la primera copia de cada cinta es legible para el lector de pantalla", () => {
+  assert.match(tsx, /aria-hidden=\{copyIndex === 0 \? undefined : true\}/);
+  assert.match(tsx, /alt=\{hidden \? "" : client\.name\}/);
+});
+
+test("el movimiento se puede detener y respeta «reducir movimiento»", () => {
+  assert.match(tsx, /<WallPause /, "falta el botón de pausa (WCAG 2.2.2)");
+  for (const selector of [".row:hover .rail", ".row:focus-within .rail", ".wall[data-paused] .rail"]) {
+    assert.ok(css.includes(selector), `falta la pausa por ${selector}`);
+  }
+  const reduce = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*)\}\s*$/.exec(css);
+  assert.ok(reduce, "falta el bloque de «reducir movimiento»");
+  assert.match(reduce[1], /animation: none/);
+  assert.match(reduce[1], /\.track\[aria-hidden\] \{\s*display: none;/);
 });
