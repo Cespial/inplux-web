@@ -193,7 +193,7 @@ export default function EnglishHome() {
                 />
                 <a
                   className={buttonClass("ghost")}
-                  href="https://www.linkedin.com/company/inplux"
+                  href="https://www.linkedin.com/company/inpluxco"
                   target="_blank"
                   rel="noreferrer"
                 >
