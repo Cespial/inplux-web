@@ -23,29 +23,20 @@ p{color:var(--body);text-wrap:pretty}
 .foot span{text-align:right;max-width:880px}
 
 /* portada y cierre */
-.hero .txt{position:absolute;left:var(--pad);top:150px;width:570px;display:flex;flex-direction:column;gap:22px}
+.hero .txt{position:absolute;left:var(--pad);top:150px;width:520px;display:flex;flex-direction:column;gap:22px}
 .hero .fig{left:600px;top:40px;width:650px;height:600px}
 .hero .logo{position:absolute;left:var(--pad);top:56px;height:24px;width:auto}
 .hero .pie{position:absolute;left:var(--pad);bottom:28px;font-size:12px;color:var(--muted);max-width:600px}
 .hero .cue{position:absolute;right:var(--pad);bottom:28px;font-size:12px;color:var(--muted)}
 
 /* lo que leímos */
-#leimos .txt{position:absolute;left:var(--pad);top:62px;width:520px;display:flex;flex-direction:column;gap:16px}
-#leimos .fig{left:640px;top:70px;width:580px;height:360px}
-#leimos .nota{position:absolute;left:640px;top:446px;width:580px;font-size:13px;color:var(--muted)}
+#leimos .txt,#rup .txt{position:absolute;left:var(--pad);top:62px;width:520px;display:flex;flex-direction:column;gap:16px}
+#leimos .fig,#rup .fig{left:640px;top:70px;width:580px;height:360px}
+#leimos .nota,#rup .nota{position:absolute;left:640px;top:446px;width:580px;font-size:13px;color:var(--muted)}
 .cifras{position:absolute;left:var(--pad);right:var(--pad);top:510px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
 .cifras div{padding:16px 24px 0 0}
 .cifras strong{display:block;font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.05}
 .cifras span{display:block;margin-top:6px;font-size:13px;color:var(--body);max-width:250px;line-height:1.35}
-
-/* qué hacemos */
-#hacemos .head{position:absolute;left:var(--pad);top:70px;width:680px;display:flex;flex-direction:column;gap:18px}
-#hacemos h2{font-size:48px}
-#hacemos .fig{left:790px;top:48px;width:430px;height:280px}
-.tres{position:absolute;left:var(--pad);right:var(--pad);top:372px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-.tres>div{border-top:1px solid var(--line);padding-top:16px}
-.tres h3,.fases h3{font-weight:500;font-size:24px;letter-spacing:-.01em;margin-bottom:8px}
-.tres p{font-size:17px}
 
 /* relaciones: lámina clara y quieta */
 .s.light{background:var(--off);color:#1a1918}
@@ -61,50 +52,75 @@ p{color:var(--body);text-wrap:pretty}
 .muro img{max-height:68px;max-width:100%;object-fit:contain}
 .muro div.osc{background:#131311}
 
-/* separadores: la figura manda */
-.sep .fig{left:40px;right:40px;top:44px;height:440px;width:1200px}
-.sep .txt{position:absolute;left:var(--pad);right:var(--pad);top:500px;display:grid;grid-template-columns:560px 1fr;gap:48px;align-items:end}
-.sep .kicker{grid-column:1/3}
-.sep h2{font-size:50px}
-.sep .lead{font-size:17px}
+/* portada: qué va a encontrar quien decide */
+.hero .ruta{font-size:14px;line-height:1.45;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;max-width:500px}
 
-/* capacidades */
-.cap .txt{position:absolute;left:var(--pad);top:64px;width:510px;display:flex;flex-direction:column;gap:18px}
-.cap h2{font-size:48px}
-.cap .lead{font-size:18.5px}
-.cap ul{list-style:none;margin-top:4px;border-top:1px solid var(--line)}
-.cap li{border-bottom:1px solid var(--line);padding:14px 0;font-size:15.5px;line-height:1.35;color:var(--body)}
-.cap .fig{left:620px;top:44px;width:600px;height:330px}
-.cap .figcap{position:absolute;left:620px;width:600px;top:378px;font-size:12px;color:var(--muted);text-align:center}
-.cap .abajo{position:absolute;left:620px;width:596px;top:410px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
-.abajo b{display:block;font-weight:500;font-size:13px;color:var(--teal-b);margin-bottom:6px}
-.abajo p{font-size:13.5px;line-height:1.4}
-.abajo .pr img{width:100%;height:76px;object-fit:cover;object-position:top;border-radius:4px;margin-bottom:8px;border:1px solid var(--line)}
-.abajo .estado{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
-.logos{display:flex;gap:18px;align-items:center;height:40px;margin-bottom:8px}
-.abajo .pr .logos img{height:24px;width:auto;flex:none;max-width:none;border:0;border-radius:0;margin:0;object-fit:contain}
+/* quiénes somos: la ficha jurídica */
+#quienes .txt{position:absolute;left:var(--pad);top:60px;width:660px;display:flex;flex-direction:column;gap:16px}
+#quienes .fig{left:830px;top:36px;width:386px;height:300px}
+.ficha{position:absolute;left:var(--pad);right:var(--pad);top:356px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.ficha h3{font-weight:500;font-size:13px;color:var(--teal-b);padding-bottom:10px}
+.ficha dl{border-top:1px solid var(--line)}
+.ficha dt{font-size:12px;color:var(--muted);padding-top:7px}
+.ficha dd{font-size:16px;line-height:1.25;padding-bottom:7px;border-bottom:1px solid var(--line)}
 
-/* cómo trabajamos */
-#garantias .txt{position:absolute;left:var(--pad);top:56px;width:610px;display:flex;flex-direction:column;gap:14px}
-#garantias .fig{left:730px;top:48px;width:490px;height:215px}
-#garantias ul{list-style:none;border-top:1px solid var(--line)}
-#garantias li{border-bottom:1px solid var(--line);padding:9px 0;font-size:14px;line-height:1.35;color:var(--body)}
-#garantias li b{font-weight:500;color:var(--off)}
-.fases{position:absolute;left:var(--pad);right:var(--pad);top:424px}
-.fases>h3{margin-bottom:14px}
+/* experiencia inscrita en el RUP */
+#rup .fig{top:92px;height:290px}
+#rup .nota{top:400px}
+#rup .cifras{top:492px}
+
+/* la oferta en una lámina */
+#oferta .txt{position:absolute;left:var(--pad);top:56px;width:720px;display:flex;flex-direction:column;gap:16px}
+#oferta h2{font-size:46px}
+#oferta .fig{left:870px;top:40px;width:346px;height:200px}
+.frentes{position:absolute;left:var(--pad);right:var(--pad);top:268px;display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.frentes>div{border-top:2px solid var(--teal-b);padding-top:14px}
+.frentes h3{font-weight:500;font-size:25px;letter-spacing:-.01em;margin-bottom:10px}
+.frentes ul{list-style:none;border-top:1px solid var(--line);min-height:130px}
+.frentes li{border-bottom:1px solid var(--line);padding:10px 0;font-size:15.5px;line-height:1.3}
+.frentes p{margin-top:14px;font-size:14.5px;line-height:1.4}
+.frentes p b,.modos b{font-weight:500;color:var(--teal-b)}
+.modos{position:absolute;left:var(--pad);right:var(--pad);top:574px;display:grid;grid-template-columns:170px repeat(3,1fr);gap:28px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;line-height:1.4;color:var(--body)}
+.modos b{font-size:13px}
+.modos i{font-style:normal;font-weight:500;color:var(--off)}
+
+/* los tres frentes: el respaldo de la oferta */
+.frente .txt{position:absolute;left:var(--pad);top:52px;width:550px;display:flex;flex-direction:column;gap:16px}
+.frente h2{font-size:48px}
+.frente .lead{font-size:17.5px}
+.frente .fig{left:660px;top:30px;width:556px;height:212px}
+.frente .figcap{position:absolute;left:660px;width:556px;top:248px;font-size:12px;color:var(--muted);text-align:center}
+.cols{position:absolute;left:var(--pad);right:var(--pad);top:288px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.frente.n2 .cols{grid-template-columns:repeat(2,1fr);gap:56px}
+.cols>div{border-top:1px solid var(--line);padding-top:13px}
+.cols h3{font-weight:500;font-size:21px;line-height:1.15;letter-spacing:-.01em;min-height:50px}
+.cols .que{font-size:15px;line-height:1.4;min-height:86px;color:var(--off)}
+.frente.n2 .cols .que{min-height:44px}
+.frente.n2 .cols h3{min-height:0;margin-bottom:8px}
+.cols b{display:block;font-weight:500;font-size:13px;color:var(--teal-b);margin:13px 0 3px}
+.cols p{font-size:14px;line-height:1.4}
+.cols .estado{display:block;margin-top:5px;font-size:12.5px;color:var(--muted)}
+.logos{display:flex;gap:18px;align-items:center;height:34px;margin:4px 0}
+.cols .logos img{height:22px;width:auto;flex:none;max-width:none}
+
+/* cierre: contacto, reglas y primer paso */
+#cierre .fig{left:300px;top:28px;width:680px;height:186px}
+#cierre .txt{position:absolute;left:var(--pad);top:244px;width:540px;display:flex;flex-direction:column;gap:14px}
+#cierre h2{font-size:46px}
+.pills{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.pills a{border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;text-decoration:none}
+.pills a:first-child{background:var(--teal-b);border-color:var(--teal-b);color:var(--ink);font-weight:500}
+.pills a:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
+.reglas{position:absolute;left:680px;width:536px;top:244px}
+.reglas h3,.fases h3{font-weight:500;font-size:20px;letter-spacing:-.01em;margin-bottom:10px}
+.reglas ul{list-style:none;border-top:1px solid var(--line)}
+.reglas li{border-bottom:1px solid var(--line);padding:8px 0;font-size:13.5px;line-height:1.35;color:var(--body)}
+.reglas li b{font-weight:500;color:var(--off)}
+.fases{position:absolute;left:var(--pad);right:var(--pad);top:508px}
 .fases>div{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 .fases section{border-top:2px solid var(--teal-b);padding-top:10px}
 .fases b{display:block;font-weight:500;font-size:16px;margin-bottom:4px}
 .fases p{font-size:13.5px;line-height:1.38}
-
-/* cierre */
-#cierre .fig{left:140px;top:70px;width:1000px;height:290px}
-#cierre .txt{position:absolute;left:var(--pad);right:var(--pad);width:auto;top:388px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
-#cierre p{max-width:640px}
-.pills{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center}
-.pills a{border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;text-decoration:none}
-.pills a:first-child{background:var(--teal-b);border-color:var(--teal-b);color:var(--ink);font-weight:500}
-.pills a:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
 #cierre .foot{justify-content:center;text-align:center}
 
 /* impresión: una lámina por página */
@@ -138,18 +154,18 @@ html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
   html.arena .s>*{position:static!important;width:auto!important;max-width:100%}
   html.arena .fig{order:-1;width:100%!important;height:34svh!important;flex:none}
   html.arena .hero .logo{order:-2;height:20px;width:auto!important;align-self:flex-start}
-  html.arena h1{font-size:40px}html.arena h2,html.arena .sep h2,html.arena .cap h2{font-size:31px}
+  html.arena h1{font-size:40px}html.arena h2,html.arena #oferta h2,html.arena .frente h2,html.arena #cierre h2{font-size:31px}
   html.arena .lead{font-size:16px}
-  html.arena #hacemos h2{font-size:31px}
   html.arena .cifras strong{font-size:24px}
-  html.arena .cifras,html.arena .tres,html.arena .fases>div{grid-template-columns:1fr 1fr;gap:16px}
-  html.arena .tres{grid-template-columns:1fr}
+  html.arena .cifras,html.arena .fases>div,html.arena .ficha{grid-template-columns:1fr 1fr;gap:16px}
   html.arena .muro{grid-template-columns:repeat(3,1fr)}
   html.arena .muro div{height:70px;padding:7px}
   html.arena .muro img{max-height:48px}
-  html.arena .sep .txt{grid-template-columns:1fr;gap:12px}
-  html.arena .sep .kicker{grid-column:auto}
-  html.arena .cap .abajo{grid-template-columns:1fr;gap:18px}
+  html.arena .frentes,html.arena .cols,html.arena .frente.n2 .cols,html.arena .modos{grid-template-columns:1fr;gap:22px}
+  html.arena .frentes ul,html.arena .cols h3,html.arena .cols .que{min-height:0}
+  html.arena .cols h3{margin-bottom:8px}
+  html.arena .modos{gap:10px}
+  html.arena .ficha dd{font-size:15px}
   html.arena .figcap{text-align:left}
   html.arena .foot{flex-direction:column;align-items:flex-start;gap:10px}
   html.arena .foot span{text-align:left}
@@ -157,5 +173,4 @@ html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
   html.arena #relaciones .head h2{margin-bottom:10px}
   html.arena .hero .cue,.ui-nav{display:none}
   .ui-pista{right:auto;left:22px;bottom:16px}
-  html.arena #cierre .foot{align-items:center}
 }
