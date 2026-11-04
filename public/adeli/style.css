@@ -1,0 +1,161 @@
+/* INPLUX para ADELI · tokens del sitio v5: Rethink Sans sola, tinta y marfil, teal como único acento.
+   Lo memorable es la arena; todo lo demás se queda quieto. */
+@font-face{font-family:"Rethink";src:url(/adeli/assets/fonts/RethinkSans-Regular.ttf) format("truetype");font-weight:400;font-display:swap}
+@font-face{font-family:"Rethink";src:url(/adeli/assets/fonts/RethinkSans-Medium.ttf) format("truetype");font-weight:500;font-display:swap}
+:root{--ink:#131311;--off:#f8f8f7;--teal:#0d7d74;--teal-b:#00d7ca;--body:rgba(248,248,247,.8);--muted:rgba(248,248,247,.6);--line:rgba(255,255,255,.16);--pad:64px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink)}
+body{font-family:"Rethink",ui-sans-serif,system-ui,sans-serif;color:var(--off);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--ink)}
+img{display:block;max-width:100%}
+a{color:inherit}
+.s{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--ink);font-size:15px;line-height:1.45}
+.s:not(.light){color:var(--off)}
+.kicker{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:500;color:var(--teal-b);display:flex;gap:8px}
+.kicker::before{content:"→"}
+h1,h2{font-weight:400;letter-spacing:-.025em;line-height:1;text-wrap:balance}
+h1{font-size:68px}h2{font-size:42px}
+p{color:var(--body);text-wrap:pretty}
+.lead{font-size:18px;line-height:1.42}
+.fig{position:absolute}
+.fig img{width:100%;height:100%;object-fit:contain}
+.foot{position:absolute;left:var(--pad);right:var(--pad);bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px;font-size:11.5px;letter-spacing:.02em;color:var(--muted)}
+.foot img{height:15px;width:auto;flex:none}
+.foot span{text-align:right;max-width:880px}
+
+/* portada y cierre */
+.hero .txt{position:absolute;left:var(--pad);top:150px;width:570px;display:flex;flex-direction:column;gap:22px}
+.hero .fig{left:600px;top:40px;width:650px;height:600px}
+.hero .logo{position:absolute;left:var(--pad);top:56px;height:24px;width:auto}
+.hero .pie{position:absolute;left:var(--pad);bottom:28px;font-size:12px;color:var(--muted);max-width:600px}
+.hero .cue{position:absolute;right:var(--pad);bottom:28px;font-size:12px;color:var(--muted)}
+
+/* lo que leímos */
+#leimos .txt{position:absolute;left:var(--pad);top:62px;width:520px;display:flex;flex-direction:column;gap:16px}
+#leimos .fig{left:640px;top:70px;width:580px;height:360px}
+#leimos .nota{position:absolute;left:640px;top:446px;width:580px;font-size:13px;color:var(--muted)}
+.cifras{position:absolute;left:var(--pad);right:var(--pad);top:510px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.cifras div{padding:16px 24px 0 0}
+.cifras strong{display:block;font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.05}
+.cifras span{display:block;margin-top:6px;font-size:13px;color:var(--body);max-width:250px;line-height:1.35}
+
+/* qué hacemos */
+#hacemos .head{position:absolute;left:var(--pad);top:70px;width:680px;display:flex;flex-direction:column;gap:18px}
+#hacemos h2{font-size:48px}
+#hacemos .fig{left:790px;top:48px;width:430px;height:280px}
+.tres{position:absolute;left:var(--pad);right:var(--pad);top:372px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.tres>div{border-top:1px solid var(--line);padding-top:16px}
+.tres h3,.fases h3{font-weight:500;font-size:24px;letter-spacing:-.01em;margin-bottom:8px}
+.tres p{font-size:17px}
+
+/* relaciones: lámina clara y quieta */
+.s.light{background:var(--off);color:#1a1918}
+.s.light p{color:#3d3a35}
+.s.light .kicker{color:var(--teal)}
+.s.light .foot{color:#5d5851}
+#relaciones .head{position:absolute;left:var(--pad);right:var(--pad);top:46px;display:flex;flex-direction:column;gap:12px}
+#relaciones .head>div:not(.kicker){display:flex;gap:48px;align-items:flex-end}
+#relaciones h2{flex:0 0 480px}
+#relaciones .head p{font-size:14.5px;max-width:560px}
+.muro{position:absolute;left:var(--pad);right:var(--pad);top:168px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.muro div{height:102px;border:1px solid rgba(12,12,11,.13);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;padding:12px;font-size:12px;text-align:center;line-height:1.2}
+.muro img{max-height:68px;max-width:100%;object-fit:contain}
+.muro div.osc{background:#131311}
+
+/* separadores: la figura manda */
+.sep .fig{left:40px;right:40px;top:44px;height:440px;width:1200px}
+.sep .txt{position:absolute;left:var(--pad);right:var(--pad);top:500px;display:grid;grid-template-columns:560px 1fr;gap:48px;align-items:end}
+.sep .kicker{grid-column:1/3}
+.sep h2{font-size:50px}
+.sep .lead{font-size:17px}
+
+/* capacidades */
+.cap .txt{position:absolute;left:var(--pad);top:64px;width:510px;display:flex;flex-direction:column;gap:18px}
+.cap h2{font-size:48px}
+.cap .lead{font-size:18.5px}
+.cap ul{list-style:none;margin-top:4px;border-top:1px solid var(--line)}
+.cap li{border-bottom:1px solid var(--line);padding:14px 0;font-size:15.5px;line-height:1.35;color:var(--body)}
+.cap .fig{left:620px;top:44px;width:600px;height:330px}
+.cap .figcap{position:absolute;left:620px;width:600px;top:378px;font-size:12px;color:var(--muted);text-align:center}
+.cap .abajo{position:absolute;left:620px;width:596px;top:410px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.abajo b{display:block;font-weight:500;font-size:13px;color:var(--teal-b);margin-bottom:6px}
+.abajo p{font-size:13.5px;line-height:1.4}
+.abajo .pr img{width:100%;height:76px;object-fit:cover;object-position:top;border-radius:4px;margin-bottom:8px;border:1px solid var(--line)}
+.abajo .estado{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.logos{display:flex;gap:18px;align-items:center;height:40px;margin-bottom:8px}
+.abajo .pr .logos img{height:24px;width:auto;flex:none;max-width:none;border:0;border-radius:0;margin:0;object-fit:contain}
+
+/* cómo trabajamos */
+#garantias .txt{position:absolute;left:var(--pad);top:56px;width:610px;display:flex;flex-direction:column;gap:14px}
+#garantias .fig{left:730px;top:48px;width:490px;height:215px}
+#garantias ul{list-style:none;border-top:1px solid var(--line)}
+#garantias li{border-bottom:1px solid var(--line);padding:9px 0;font-size:14px;line-height:1.35;color:var(--body)}
+#garantias li b{font-weight:500;color:var(--off)}
+.fases{position:absolute;left:var(--pad);right:var(--pad);top:424px}
+.fases>h3{margin-bottom:14px}
+.fases>div{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.fases section{border-top:2px solid var(--teal-b);padding-top:10px}
+.fases b{display:block;font-weight:500;font-size:16px;margin-bottom:4px}
+.fases p{font-size:13.5px;line-height:1.38}
+
+/* cierre */
+#cierre .fig{left:140px;top:70px;width:1000px;height:290px}
+#cierre .txt{position:absolute;left:var(--pad);right:var(--pad);width:auto;top:388px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+#cierre p{max-width:640px}
+.pills{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center}
+.pills a{border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;text-decoration:none}
+.pills a:first-child{background:var(--teal-b);border-color:var(--teal-b);color:var(--ink);font-weight:500}
+.pills a:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
+#cierre .foot{justify-content:center;text-align:center}
+
+/* impresión: una lámina por página */
+@page{size:13.333in 7.5in;margin:0}
+@media print{body{background:none}.s{break-after:page;page-break-after:always}}
+html.p1 .s{display:none}html.p1 .s:target{display:block}
+
+/* ── arena (solo con JS) ── */
+html.arena{scroll-snap-type:y mandatory;scrollbar-width:none}
+html.arena::-webkit-scrollbar{display:none}
+#arena{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+html.arena .stage{position:relative;z-index:1;height:100vh;height:100svh;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always}
+html.arena .s{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1))}
+html.arena .s:not(.light){background:transparent}
+html.arena .fig img{visibility:hidden}
+html.arena:not(.calm) .s:not(.in)>*:not(.fig){opacity:0}
+html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
+.ui-bar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:var(--teal-b);z-index:5;transition:transform .5s}
+.ui-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:7px}
+.ui-nav a{width:6px;height:6px;border-radius:50%;background:rgba(150,150,150,.5)}
+.ui-nav a.on{background:var(--teal-b);height:18px;border-radius:4px}
+.ui-nav a:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
+.ui-pista{position:fixed;right:64px;bottom:28px;z-index:5;font-size:12px;color:var(--muted);transition:opacity .5s;pointer-events:none;white-space:nowrap}
+.ui-pista.off{opacity:0}
+
+/* teléfono vertical: las láminas se vuelven páginas que fluyen */
+@media (max-aspect-ratio:1/1){
+  html.arena{scroll-snap-type:y proximity}
+  html.arena .stage{height:auto;min-height:100svh;overflow:visible}
+  html.arena .s,html.arena .s.light{position:relative;left:auto;top:auto;transform:none;width:100%;height:auto;min-height:100svh;padding:28px 22px 64px;display:flex;flex-direction:column;gap:18px;overflow:visible}
+  html.arena .s>*{position:static!important;width:auto!important;max-width:100%}
+  html.arena .fig{order:-1;width:100%!important;height:34svh!important;flex:none}
+  html.arena .hero .logo{order:-2;height:20px;width:auto!important;align-self:flex-start}
+  html.arena h1{font-size:40px}html.arena h2,html.arena .sep h2,html.arena .cap h2{font-size:31px}
+  html.arena .lead{font-size:16px}
+  html.arena #hacemos h2{font-size:31px}
+  html.arena .cifras strong{font-size:24px}
+  html.arena .cifras,html.arena .tres,html.arena .fases>div{grid-template-columns:1fr 1fr;gap:16px}
+  html.arena .tres{grid-template-columns:1fr}
+  html.arena .muro{grid-template-columns:repeat(3,1fr)}
+  html.arena .muro div{height:70px;padding:7px}
+  html.arena .muro img{max-height:48px}
+  html.arena .sep .txt{grid-template-columns:1fr;gap:12px}
+  html.arena .sep .kicker{grid-column:auto}
+  html.arena .cap .abajo{grid-template-columns:1fr;gap:18px}
+  html.arena .figcap{text-align:left}
+  html.arena .foot{flex-direction:column;align-items:flex-start;gap:10px}
+  html.arena .foot span{text-align:left}
+  html.arena #relaciones .head>div{display:block}
+  html.arena #relaciones .head h2{margin-bottom:10px}
+  html.arena .hero .cue,.ui-nav{display:none}
+  .ui-pista{right:auto;left:22px;bottom:16px}
+  html.arena #cierre .foot{align-items:center}
+}
