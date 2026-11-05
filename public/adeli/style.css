@@ -29,14 +29,13 @@ p{color:var(--body);text-wrap:pretty}
 .hero .pie{position:absolute;left:var(--pad);bottom:28px;font-size:12px;color:var(--muted);max-width:600px}
 .hero .cue{position:absolute;right:var(--pad);bottom:28px;font-size:12px;color:var(--muted)}
 
-/* lo que leímos */
-#leimos .txt,#rup .txt{position:absolute;left:var(--pad);top:62px;width:520px;display:flex;flex-direction:column;gap:16px}
-#leimos .fig,#rup .fig{left:640px;top:70px;width:580px;height:360px}
-#leimos .nota,#rup .nota{position:absolute;left:640px;top:446px;width:580px;font-size:13px;color:var(--muted)}
-.cifras{position:absolute;left:var(--pad);right:var(--pad);top:510px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
-.cifras div{padding:16px 24px 0 0}
-.cifras strong{display:block;font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.05}
-.cifras span{display:block;margin-top:6px;font-size:13px;color:var(--body);max-width:250px;line-height:1.35}
+/* láminas de un mensaje: titular grande, figura y cuatro datos */
+.grande .txt{position:absolute;left:var(--pad);top:64px;width:600px;display:flex;flex-direction:column;gap:22px}
+.grande h2{font-size:58px;line-height:1.02}
+.cifras{position:absolute;left:var(--pad);right:var(--pad);top:478px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.cifras div{padding:20px 24px 0 0}
+.cifras strong{display:block;font-weight:400;font-size:46px;letter-spacing:-.025em;line-height:1.05;white-space:nowrap}
+.cifras span{display:block;margin-top:8px;font-size:16px;color:var(--body);max-width:250px;line-height:1.3}
 
 /* relaciones: lámina clara y quieta */
 .s.light{background:var(--off);color:#1a1918}
@@ -44,93 +43,114 @@ p{color:var(--body);text-wrap:pretty}
 .s.light .kicker{color:var(--teal)}
 .s.light .foot{color:#5d5851}
 #relaciones .head{position:absolute;left:var(--pad);right:var(--pad);top:46px;display:flex;flex-direction:column;gap:12px}
-#relaciones .head>div:not(.kicker){display:flex;gap:48px;align-items:flex-end}
-#relaciones h2{flex:0 0 480px}
-#relaciones .head p{font-size:14.5px;max-width:560px}
+#relaciones h2{font-size:50px}
 .muro{position:absolute;left:var(--pad);right:var(--pad);top:168px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .muro div{height:102px;border:1px solid rgba(12,12,11,.13);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;padding:12px;font-size:12px;text-align:center;line-height:1.2}
 .muro img{max-height:68px;max-width:100%;object-fit:contain}
 .muro div.osc{background:#131311}
 
-/* portada: qué va a encontrar quien decide */
-.hero .ruta{font-size:14px;line-height:1.45;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;max-width:500px}
-
-/* quiénes somos: la ficha jurídica */
-#quienes .txt{position:absolute;left:var(--pad);top:60px;width:660px;display:flex;flex-direction:column;gap:16px}
-#quienes .fig{left:830px;top:36px;width:386px;height:300px}
-.ficha{position:absolute;left:var(--pad);right:var(--pad);top:356px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.ficha h3{font-weight:500;font-size:13px;color:var(--teal-b);padding-bottom:10px}
-.ficha dl{border-top:1px solid var(--line)}
-.ficha dt{font-size:12px;color:var(--muted);padding-top:7px}
-.ficha dd{font-size:16px;line-height:1.25;padding-bottom:7px;border-bottom:1px solid var(--line)}
+/* quiénes somos */
+#quienes .txt{width:700px}
+#quienes h2{font-size:68px}
+#quienes .cifras strong{font-size:38px}
+#quienes .fig{left:800px;top:44px;width:416px;height:390px}
 
 /* experiencia inscrita en el RUP */
-#rup .fig{top:92px;height:290px}
-#rup .nota{top:400px}
-#rup .cifras{top:492px}
+#rup .txt{width:520px}
+#rup h2{font-size:52px;line-height:1.04}
+#rup h2 b{display:block;font-weight:400;font-size:190px;line-height:.86;letter-spacing:-.05em;margin:0 0 14px -8px}
+#rup .fig{left:620px;top:74px;width:600px;height:280px}
+#rup .nota{position:absolute;left:620px;width:600px;top:372px;font-size:14px;color:var(--muted)}
 
-/* la oferta en una lámina */
-#oferta .txt{position:absolute;left:var(--pad);top:56px;width:720px;display:flex;flex-direction:column;gap:16px}
-#oferta h2{font-size:46px}
-#oferta .fig{left:870px;top:40px;width:346px;height:200px}
-.frentes{position:absolute;left:var(--pad);right:var(--pad);top:268px;display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
-.frentes>div{border-top:2px solid var(--teal-b);padding-top:14px}
-.frentes h3{font-weight:500;font-size:25px;letter-spacing:-.01em;margin-bottom:10px}
-.frentes ul{list-style:none;border-top:1px solid var(--line);min-height:130px}
-.frentes li{border-bottom:1px solid var(--line);padding:10px 0;font-size:15.5px;line-height:1.3}
-.frentes p{margin-top:14px;font-size:14.5px;line-height:1.4}
-.frentes p b,.modos b{font-weight:500;color:var(--teal-b)}
-.modos{position:absolute;left:var(--pad);right:var(--pad);top:574px;display:grid;grid-template-columns:170px repeat(3,1fr);gap:28px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;line-height:1.4;color:var(--body)}
-.modos b{font-size:13px}
-.modos i{font-style:normal;font-weight:500;color:var(--off)}
+/* la oferta */
+#oferta .txt{width:760px}
+#oferta h2{font-size:62px}
+#oferta .fig{left:880px;top:48px;width:336px;height:210px}
+.frentes{position:absolute;left:var(--pad);right:var(--pad);top:308px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.frentes>div{border-top:2px solid var(--teal-b);padding-top:18px}
+.frentes h3{font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.05;margin-bottom:14px}
+.frentes p{font-size:21px;line-height:1.35}
+.modos{position:absolute;left:var(--pad);right:var(--pad);top:548px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;border-top:1px solid var(--line);padding-top:20px;font-size:26px;letter-spacing:-.015em}
+.modos span::before{content:"→ ";color:var(--teal-b)}
 
-/* los tres frentes: el respaldo de la oferta */
-.frente .txt{position:absolute;left:var(--pad);top:52px;width:550px;display:flex;flex-direction:column;gap:16px}
-.frente h2{font-size:48px}
-.frente .lead{font-size:17.5px}
-.frente .fig{left:660px;top:30px;width:556px;height:212px}
-.frente .figcap{position:absolute;left:660px;width:556px;top:248px;font-size:12px;color:var(--muted);text-align:center}
-.cols{position:absolute;left:var(--pad);right:var(--pad);top:288px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.frente.n2 .cols{grid-template-columns:repeat(2,1fr);gap:56px}
-.cols>div{border-top:1px solid var(--line);padding-top:13px}
-.cols h3{font-weight:500;font-size:21px;line-height:1.15;letter-spacing:-.01em;min-height:50px}
-.cols .que{font-size:15px;line-height:1.4;min-height:86px;color:var(--off)}
-.frente.n2 .cols .que{min-height:44px}
-.frente.n2 .cols h3{min-height:0;margin-bottom:8px}
-.cols b{display:block;font-weight:500;font-size:13px;color:var(--teal-b);margin:13px 0 3px}
-.cols p{font-size:14px;line-height:1.4}
-.cols .estado{display:block;margin-top:5px;font-size:12.5px;color:var(--muted)}
-.logos{display:flex;gap:18px;align-items:center;height:34px;margin:4px 0}
-.cols .logos img{height:22px;width:auto;flex:none;max-width:none}
+/* los tres frentes */
+.frente .txt{position:absolute;left:var(--pad);top:64px;width:570px;display:flex;flex-direction:column;gap:22px}
+.frente h2{font-size:70px;line-height:1.02}
+.frente ul{list-style:none;border-top:1px solid var(--line);margin-top:6px}
+.frente li{border-bottom:1px solid var(--line);padding:18px 0;font-size:30px;letter-spacing:-.015em;line-height:1.15}
+.prueba{font-size:17px;color:var(--muted)}
+.frente .fig{left:690px;top:70px;width:530px;height:440px}
+.frente .figcap{position:absolute;left:690px;width:530px;top:528px;font-size:13px;color:var(--muted);text-align:center}
+.logos{display:flex;gap:22px;align-items:center;height:30px}
+.logos img{height:24px;width:auto;flex:none;max-width:none}
 
-/* cierre: contacto, reglas y primer paso */
-#cierre .fig{left:300px;top:28px;width:680px;height:186px}
-#cierre .txt{position:absolute;left:var(--pad);top:244px;width:540px;display:flex;flex-direction:column;gap:14px}
-#cierre h2{font-size:46px}
-.pills{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
-.pills a{border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;text-decoration:none}
+/* cierre */
+#cierre .fig{left:190px;top:64px;width:900px;height:250px}
+#cierre .txt{position:absolute;left:var(--pad);right:var(--pad);top:348px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+#cierre h2{font-size:60px}
+#cierre .lead{font-size:20px}
+.pills{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center}
+.pills a{border:1px solid var(--line);border-radius:999px;padding:11px 22px;font-size:16px;text-decoration:none}
 .pills a:first-child{background:var(--teal-b);border-color:var(--teal-b);color:var(--ink);font-weight:500}
 .pills a:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
-.reglas{position:absolute;left:680px;width:536px;top:244px}
-.reglas h3,.fases h3{font-weight:500;font-size:20px;letter-spacing:-.01em;margin-bottom:10px}
-.reglas ul{list-style:none;border-top:1px solid var(--line)}
-.reglas li{border-bottom:1px solid var(--line);padding:8px 0;font-size:13.5px;line-height:1.35;color:var(--body)}
+.pasos{list-style:none;display:flex;gap:14px;margin-top:22px;font-size:17px;color:var(--body)}
+.pasos li+li::before{content:"→";color:var(--teal-b);margin-right:14px}
+#cierre .foot{justify-content:center;text-align:center}
+
+/* detalle a pedido */
+.mas summary{position:absolute;left:var(--pad);bottom:62px;z-index:3;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13.5px;color:var(--off);background:var(--ink)}
+.mas summary::-webkit-details-marker{display:none}
+.mas summary:hover{border-color:var(--teal-b)}
+.mas summary:focus-visible{outline:2px solid var(--teal-b);outline-offset:3px}
+.mas .abrir::after{content:" +";color:var(--teal-b)}
+.mas .cerrar,.mas[open] .abrir{display:none}
+.mas[open] .cerrar{display:inline}
+.panel{position:absolute;inset:0;z-index:2;background:var(--ink);padding:60px var(--pad) 110px;overflow:auto}
+.panel>h3{font-weight:400;font-size:38px;letter-spacing:-.02em;margin-bottom:26px}
+h4{font-weight:500;font-size:13px;color:var(--teal-b);margin:0 0 10px}
+.panel>h4:not(:first-of-type){margin-top:26px}
+.ficha{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.ficha dl{border-top:1px solid var(--line)}
+.ficha dt{font-size:12px;color:var(--muted);padding-top:8px}
+.ficha dd{font-size:16px;line-height:1.25;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.reglas{list-style:none;border-top:1px solid var(--line)}
+.reglas li{border-bottom:1px solid var(--line);padding:9px 0;font-size:14.5px;line-height:1.35;color:var(--body)}
 .reglas li b{font-weight:500;color:var(--off)}
-.fases{position:absolute;left:var(--pad);right:var(--pad);top:508px}
-.fases>div{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.fases{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 .fases section{border-top:2px solid var(--teal-b);padding-top:10px}
 .fases b{display:block;font-weight:500;font-size:16px;margin-bottom:4px}
 .fases p{font-size:13.5px;line-height:1.38}
-#cierre .foot{justify-content:center;text-align:center}
+.tabla{width:100%;border-collapse:collapse;text-align:left}
+.tabla thead th{font-weight:500;font-size:13px;color:var(--teal-b);padding:0 24px 10px 0}
+.tabla td,.tabla tbody th{border-top:1px solid var(--line);padding:14px 24px 14px 0;vertical-align:top;font-size:14.5px;line-height:1.4;color:var(--body);font-weight:400}
+.tabla tbody th{width:31%;font-size:19px;line-height:1.2;color:var(--off);letter-spacing:-.01em}
+.tabla td{width:34.5%}
+.tabla span{display:block;margin-top:6px;font-size:13px;color:var(--muted);letter-spacing:0}
+
+/* anexos: solo en el PDF */
+.anexo{padding:42px var(--pad) 0}
+.anexo h2{font-size:36px;margin:10px 0 16px}
+.anexo .dos{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;margin-top:18px}
+.anexo .ficha dt{padding-top:5px;font-size:11.5px}
+.anexo .ficha dd{padding-bottom:5px;font-size:15px}
+.anexo .reglas li{padding:6px 0;font-size:13px}
+.anexo h4{margin-bottom:6px}
+.anexo .fases{grid-template-columns:1fr 1fr;gap:16px 28px}
+.anexo .tabla td,.anexo .tabla tbody th{padding:6px 22px 6px 0;font-size:12.5px;line-height:1.32}
+.anexo .tabla tbody th{font-size:15px;width:22%}
+.anexo .tabla td{width:39%}
+.anexo .tabla span{display:inline;margin:0 0 0 6px;font-size:12px}
+.anexo .tabla thead th{padding-bottom:6px}
 
 /* impresión: una lámina por página */
 @page{size:13.333in 7.5in;margin:0}
-@media print{body{background:none}.s{break-after:page;page-break-after:always}}
-html.p1 .s{display:none}html.p1 .s:target{display:block}
+@media print{body{background:none}.s{break-after:page;page-break-after:always}.mas{display:none}}
+html.p1 .s{display:none}html.p1 .s:target{display:block}html.p1 .mas{display:none}
 
 /* ── arena (solo con JS) ── */
 html.arena{scroll-snap-type:y mandatory;scrollbar-width:none}
 html.arena::-webkit-scrollbar{display:none}
+html.arena .anexo{display:none}
 #arena{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 html.arena .stage{position:relative;z-index:1;height:100vh;height:100svh;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always}
 html.arena .s{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1))}
@@ -154,23 +174,39 @@ html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
   html.arena .s>*{position:static!important;width:auto!important;max-width:100%}
   html.arena .fig{order:-1;width:100%!important;height:34svh!important;flex:none}
   html.arena .hero .logo{order:-2;height:20px;width:auto!important;align-self:flex-start}
-  html.arena h1{font-size:40px}html.arena h2,html.arena #oferta h2,html.arena .frente h2,html.arena #cierre h2{font-size:31px}
-  html.arena .lead{font-size:16px}
-  html.arena .cifras strong{font-size:24px}
-  html.arena .cifras,html.arena .fases>div,html.arena .ficha{grid-template-columns:1fr 1fr;gap:16px}
+  html.arena h1{font-size:42px}html.arena h2,html.arena .grande h2,html.arena #quienes h2,html.arena #rup h2,html.arena #oferta h2,html.arena .frente h2,html.arena #cierre h2,html.arena #relaciones h2{font-size:38px}
+  html.arena .lead{font-size:17px}
+  html.arena .cifras{grid-template-columns:1fr 1fr;gap:6px 16px}
+  html.arena .cifras strong{font-size:29px}
+  html.arena .cifras span{font-size:15px}
   html.arena .muro{grid-template-columns:repeat(3,1fr)}
   html.arena .muro div{height:70px;padding:7px}
   html.arena .muro img{max-height:48px}
-  html.arena .frentes,html.arena .cols,html.arena .frente.n2 .cols,html.arena .modos{grid-template-columns:1fr;gap:22px}
-  html.arena .frentes ul,html.arena .cols h3,html.arena .cols .que{min-height:0}
-  html.arena .cols h3{margin-bottom:8px}
-  html.arena .modos{gap:10px}
-  html.arena .ficha dd{font-size:15px}
-  html.arena .figcap{text-align:left}
+  html.arena .frentes,html.arena .modos{grid-template-columns:1fr;gap:22px}
+  html.arena .frentes h3{font-size:28px;margin-bottom:8px}
+  html.arena .frentes p{font-size:17px}
+  html.arena .modos{gap:8px;font-size:19px}
+  html.arena .frente li{font-size:22px;padding:14px 0}
+  html.arena #rup h2 b{font-size:120px}
+  html.arena #quienes .cifras strong{font-size:25px}
+  html.arena .figcap,html.arena #rup .nota{text-align:left}
+  html.arena #cierre .txt{text-align:left;align-items:flex-start}
+  html.arena .pills{justify-content:flex-start}
+  html.arena .pasos{flex-wrap:wrap;gap:6px 12px}
+  html.arena .pasos li+li::before{margin-right:12px}
+  html.arena .mas summary{position:static!important;display:inline-block}
+  html.arena .mas .panel{position:static;padding:22px 0 0;overflow:visible;background:none}
+  html.arena .panel>h3{font-size:26px;margin-bottom:16px}
+  html.arena .ficha,html.arena .fases{grid-template-columns:1fr 1fr;gap:16px}
+  html.arena .tabla thead{display:none}
+  html.arena .tabla,html.arena .tabla tbody,html.arena .tabla tr,html.arena .tabla td,html.arena .tabla tbody th{display:block;width:auto}
+  html.arena .tabla td{border-top:0;padding:0 0 12px}
+  html.arena .tabla td::before{display:block;font-size:12.5px;font-weight:500;color:var(--teal-b);margin-bottom:3px}
+  html.arena .tabla td:nth-child(2)::before{content:"Lo que vimos en ADELI"}
+  html.arena .tabla td:nth-child(3)::before{content:"Dónde lo hemos hecho"}
+  html.arena .tabla tbody th{padding:14px 0 8px}
   html.arena .foot{flex-direction:column;align-items:flex-start;gap:10px}
   html.arena .foot span{text-align:left}
-  html.arena #relaciones .head>div{display:block}
-  html.arena #relaciones .head h2{margin-bottom:10px}
   html.arena .hero .cue,.ui-nav{display:none}
   .ui-pista{right:auto;left:22px;bottom:16px}
 }

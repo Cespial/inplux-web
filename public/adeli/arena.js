@@ -5,7 +5,7 @@ const D=document.documentElement;
 if(location.search.includes('print=1')){D.classList.add('p1');return}
 const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
 D.classList.add('arena');if(calm)D.classList.add('calm');
-const S=[...document.querySelectorAll('.s')];
+const S=[...document.querySelectorAll('.s:not(.anexo)')];
 S.forEach(s=>{const st=document.createElement('div');st.className='stage';s.before(st);st.append(s)});
 
 /* escala de lámina en horizontal */
@@ -101,10 +101,13 @@ const ir=k=>{k=Math.max(0,Math.min(S.length-1,k));S[k].parentElement.scrollIntoV
 S.forEach((s,k)=>{const a=document.createElement('a');a.href='#'+s.id;a.title=(s.querySelector('h1,h2')?.textContent||'').trim();a.setAttribute('aria-label',a.title);a.onclick=e=>{e.preventDefault();ir(k)};nav.append(a)});
 
 let cur_k=-1;
-const marcar=(k,inicial)=>{if(k===cur_k)return;cur_k=k;S[k].classList.add('in');bar.style.setProperty('--p',(k+1)/S.length);[...nav.children].forEach((a,j)=>a.classList.toggle('on',j===k));if(k>0)pista.classList.add('off');history.replaceState(null,'','#'+S[k].id);hacia(S[k],inicial)};
+const cerrar=()=>document.querySelectorAll('details.mas[open]').forEach(d=>d.open=false);
+const marcar=(k,inicial)=>{if(k===cur_k)return;cerrar();cur_k=k;S[k].classList.add('in');bar.style.setProperty('--p',(k+1)/S.length);[...nav.children].forEach((a,j)=>a.classList.toggle('on',j===k));if(k>0)pista.classList.add('off');history.replaceState(null,'','#'+S[k].id);hacia(S[k],inicial)};
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)marcar(S.indexOf(e.target))}),{rootMargin:'-50% 0px -50% 0px'});
 
 addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==='Escape'){cerrar();return}
+  if(e.key===' '&&e.target.closest&&e.target.closest('summary,a,button'))return;
   if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();ir(cur_k+1)}
   else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();ir(cur_k-1)}
   else if(e.key==='Home'){e.preventDefault();ir(0)}else if(e.key==='End'){e.preventDefault();ir(S.length-1)}});
