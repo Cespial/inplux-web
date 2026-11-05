@@ -50,8 +50,12 @@ p{color:var(--body);text-wrap:pretty}
 .muro div.osc{background:#131311}
 
 /* quiénes somos */
-#quienes .txt{width:700px}
-#quienes h2{font-size:68px}
+#quienes .txt{width:710px;gap:18px}
+#quienes .lead{font-size:22px;max-width:560px}
+#quienes h2{font-size:46px;line-height:1.05}
+#quienes h2 b{display:block;font-weight:400;font-size:176px;line-height:.86;letter-spacing:-.05em;margin:4px 0 14px -8px;white-space:nowrap}
+#quienes .base{font-size:14px;color:var(--muted);margin-top:-4px}
+#quienes .cifras{top:508px}
 #quienes .cifras strong{font-size:38px}
 #quienes .fig{left:800px;top:44px;width:416px;height:390px}
 
@@ -188,6 +192,7 @@ html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
   html.arena .modos{gap:8px;font-size:19px}
   html.arena .frente li{font-size:22px;padding:14px 0}
   html.arena #rup h2 b{font-size:120px}
+  html.arena #quienes h2 b{font-size:92px;margin-left:-4px}
   html.arena #quienes .cifras strong{font-size:25px}
   html.arena .figcap,html.arena #rup .nota{text-align:left}
   html.arena #cierre .txt{text-align:left;align-items:flex-start}
