@@ -144,8 +144,19 @@ h4{font-weight:500;font-size:13px;color:var(--teal-b);margin:0 0 10px}
 .uno-dos figure:not(.mayor) img{aspect-ratio:16/9;object-fit:cover;object-position:60% 50%}
 .tres .shots{grid-template-columns:repeat(3,1fr);top:214px}
 .tres .shots figcaption{font-size:17px}
-.mixto .shots{grid-template-columns:1fr 1fr 1.43fr;top:190px;align-items:start}
+.cuadros .shots{top:146px;gap:28px}
+.cuadros .shots figcaption{font-size:15.5px}
+.chat .shots{grid-template-columns:600px 1fr;grid-template-rows:auto auto;top:150px;align-items:start}
+.chat .mayor{grid-row:1/3}
+.uno .shots{grid-template-columns:1fr;top:138px}
+.uno .shots img{max-height:478px;object-fit:contain;object-position:left top;background:none;border:0}
+.uno .shots figcaption{font-size:17px;max-width:900px}
+.mixto-final .shots{grid-template-columns:2.72fr 1fr 1fr 1fr;top:160px;align-items:start}
+.mixto-final figure:not(.ancho) img{border-radius:20px}
+.mixto-final figure:not(.ancho) figcaption{font-size:14px;text-align:center}
 .moviles .shots{grid-template-columns:repeat(5,1fr);gap:26px;top:156px;left:112px;right:112px}
+.moviles.cuatro .shots{grid-template-columns:repeat(4,1fr);gap:40px;left:170px;right:170px;top:150px}
+.moviles.cuatro .shots img{aspect-ratio:9/19;object-fit:cover;object-position:top}
 .moviles .shots img{border-radius:22px}
 .moviles .shots figcaption{font-size:14px;text-align:center}
 
@@ -218,9 +229,11 @@ html.arena:not(.calm) .s>*:not(.fig){transition:opacity .7s .35s}
   html.arena .pasos{flex-wrap:wrap;gap:6px 12px}
   html.arena .pasos li+li::before{margin-right:12px}
   html.arena .ev h2{font-size:34px}
-  html.arena .shots,html.arena .uno-dos .shots,html.arena .tres .shots,html.arena .mixto .shots{grid-template-columns:1fr;gap:22px}
-  html.arena .uno-dos .mayor{grid-row:auto}
-  html.arena .moviles .shots{grid-template-columns:1fr 1fr;gap:18px}
+  html.arena .shots,html.arena .uno-dos .shots,html.arena .tres .shots,html.arena .chat .shots,html.arena .cuadros .shots{grid-template-columns:1fr;gap:22px}
+  html.arena .uno-dos .mayor,html.arena .chat .mayor{grid-row:auto}
+  html.arena .moviles .shots,html.arena .moviles.cuatro .shots,html.arena .mixto-final .shots{grid-template-columns:1fr 1fr;gap:18px}
+  html.arena .mixto-final .ancho{grid-column:1/3}
+  html.arena .uno .shots img{max-height:none}
   html.arena .mas summary{position:static!important;display:inline-block}
   html.arena .mas .panel{position:static;padding:22px 0 0;overflow:visible;background:none}
   html.arena .panel>h3{font-size:26px;margin-bottom:16px}
