@@ -51,7 +51,7 @@ export function SiteFooter({ copy = homeCopyEs.footer }: { copy?: FooterCopy }) 
             <p>{copy.contactLabel}</p>
             <Link href={copy.contactHref ?? "/contacto"} prefetch={false}>{copy.contactCta}</Link>
             <a href={`mailto:${copy.email}`}>{copy.email}</a>
-            <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noreferrer">{copy.linkedInLabel}</a>
+            <a href="https://www.linkedin.com/company/inpluxco" target="_blank" rel="noreferrer">{copy.linkedInLabel}</a>
             {copy.locations.map((location) => (
               <span key={location}>{location}</span>
             ))}

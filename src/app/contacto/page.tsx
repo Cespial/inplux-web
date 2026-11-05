@@ -126,7 +126,7 @@ export default function ContactoPage() {
                       <a href="mailto:gerencia@inplux.co">gerencia@inplux.co</a>
                     </li>
                     <li>
-                      <a href="https://www.linkedin.com/company/inplux" target="_blank" rel="noreferrer">
+                      <a href="https://www.linkedin.com/company/inpluxco" target="_blank" rel="noreferrer">
                         LinkedIn <span aria-hidden="true">↗</span>
                       </a>
                     </li>
