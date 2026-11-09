@@ -4,7 +4,10 @@ Regla: Midjourney **nunca** genera el logo. Cada escena trae una superficie vac�
 (alrededor de y ≈ 1010 de 1920) donde `componer.py` pone el símbolo con perspectiva. Sin texto, letras, logos ni
 rostros. Si una salida trae algo de eso, se descarta.
 
-Parámetros comunes: `--ar 9:16 --style raw --v 7 --no text, letters, logo, watermark, face`
+Parámetros comunes (enviados el 8-nov, modelo por defecto de la cuenta): `--ar 9:16 --style raw --no text, letters, logo,
+watermark, face`; además `apple` en portátil, `head, print` en camiseta y `drawing` en cuaderno.
+Elegidas: papel 2 · portátil 1 · letrero 2 · camiseta 2 · placa 1 · cuaderno 1 · Medellín 2. Cristian aprobó la
+propuesta el 9-nov con portátil 2; al componer se cambió a la 1 porque la 2 deja la tapa de canto (símbolo de 43 px).
 
 | Escena | Prompt |
 |---|---|

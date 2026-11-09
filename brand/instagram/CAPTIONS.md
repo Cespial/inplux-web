@@ -578,3 +578,26 @@ de Instagram se sube la plantilla como fondo y encima se pega la foto recortada 
 así el tipográfico y el lockup quedan iguales en todas.
 
 Guardar todas las historias del Día D en un highlight nuevo llamado **«Día D»**.
+
+---
+
+## Fuera de calendario · 16 de octubre de 2026
+
+### Clientes · Las 5.000 empresas más grandes (Semana · Dinero)
+`2026-10-16_semana-5000-clientes.jpg` (feed 1080×1350) · `historia_semana-5000-clientes.jpg` (historia 1080×1920). Llevan fotografía, así que se sube el **JPG**.
+Fondo: fachada de la clínica Oncolife en blanco y negro, foto institucional de oncolife.com.co (`canvas/oncolife-fachada.jpg`, original `oncolife-portada.jpg`, 1000×1186). Pedir el visto bueno de Oncolife para usar su fachada.
+Artboards: `canvas/Semana5000.dc.html`, `canvas/StSemana5000.dc.html`. Copias en `~/Desktop/INPLUX Instagram - Semana 5000/`.
+
+Dos de nuestros clientes están entre las 5.000 empresas más grandes de Colombia.
+
+Semana publicó el ranking anual de Dinero por ventas de 2025: entraron las compañías que vendieron más de $62.164 millones. En la lista están Oncolife, institución oncológica de Bogotá, e IPSmedic, IPS con 23 sedes en el Valle del Cauca. Con las dos trabajamos.
+
+Fuente: Semana, 20 de septiembre de 2026.
+
+`#fábricadesoftware #salud #colombia`
+
+**Alt:** Fachada de vidrio de la clínica Oncolife en blanco y negro con el titular «Dos de nuestros clientes están entre las 5.000 empresas más grandes de Colombia» y los logos de Oncolife e IPSmedic en blanco.
+
+**Historia:** misma pieza vertical; sin sticker de enlace salvo que se enlace el artículo de Semana. Mencionar @ de cada empresa solo si tienen cuenta y lo autorizan.
+
+> ⚠️ Antes de publicar: la lista completa del ranking no está en línea (Semana solo publica el artículo). Confirmar en la edición impresa de Dinero que Oncolife e IPSmedic aparecen, y avisar a las dos empresas antes de nombrarlas como clientes.
