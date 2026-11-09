@@ -1,42 +1,43 @@
-# Reel «Así nació el símbolo»
+# Reel «Así nació el símbolo» (v2, logo actual)
 
-Referente: reel de Vetric (After Effects: el logo se dibuja con guías y cotas, se rellena y siguen cortes
-rápidos de aplicaciones con el logo siempre centrado; mismo patrón que @obrazur).
-Pieza: 1080×1920, 18 s, 30 fps, audio sintetizado. Todo renderizado (sin celular ni grabación de pantalla).
+Referente: reel de Vetric (After Effects: el logo se dibuja con guías y cotas y siguen cortes rápidos con el
+logo siempre centrado) + la arena de puntos de inplux.co/adeli (`~/inplux-adeli/deck/arena.js`).
+Pieza: 1080×1920, 20 s, 30 fps, audio sintetizado con pulso de 128 BPM. Todo renderizado.
 
-## Qué es (y qué no)
+## Qué es
 
-Es el **lanzamiento del símbolo E1 «Masa»** (Exploración 3 «una tinta», lockup horizontal asta 10).
-Publicarlo = publicar el logo nuevo: antes hay que cambiarlo en inplux.co, en el avatar de IG y en LinkedIn.
-
-Las nueve aplicaciones son renders «así se vería»; los textos que aparecen son reales del sitio y no hay
-cifras inventadas (sin seguidores). La foto de la tarjeta web es el hero real de inplux.co recortado bajo la
-cabecera. La camiseta sale de `~/inplux-camisetas-sf/build/mockups.py`.
+El símbolo vigente de INPLUX (`~/inplux-web/public/brand/logos/inplux-mark-*.svg`: tres barras 42×13, r 6,5,
+paso 21×18, la superior teal) nace de una pila de arena y se construye con sus cotas reales. Las nueve
+aplicaciones son renders «así se vería»; los textos de las tarjetas son reales del sitio y no hay cifras
+inventadas. La v1 (símbolo E1 «Masa») está en el historial de git (commit 532c189).
 
 ## Guion
 
 | t (s) | |
 |---|---|
-| 0–2,8 | «Un símbolo.» · retícula: 6 horizontales punteadas, cotas 74,4 · 14,61 · 5,58 · 55, diagonales 1/φ · 1/φ² |
-| 2,8–4,8 | contorno de las tres plantas con punta de pluma (54,2 · 34) · corte a 45° de la cima |
-| 4,8–7,0 | relleno marfil por barrido · «Tres estratos.» · respira · se aleja de 500 a 200 px |
-| 7,0–13,75 | 9 cortes cada 0,75 s, el símbolo clavado en (540, 1010): favicon, web, Instagram, tríptico, LinkedIn, sticker, camiseta, app, membrete |
-| 13,75–18 | el símbolo baja a 130 px y se corre; el wordmark a10 entra letra por letra · «Hecho en Medellín.» · inplux.co |
+| 0–1,6 | «Un símbolo.» · una pila de granos sube y forma las 6 horizontales punteadas; cotas 84 · 13 · 18 · 49 |
+| 1,6–4,6 | verticales, diagonal de 40,6° por los centros, contorno de las barras con punta de pluma (21 · r 6,5 · 42) |
+| 4,6–5,25 | la arena se vierte dentro de las barras (trama Bayer, de abajo arriba) |
+| 5,25 | GOLPE: cuajan, destello, onda teal, sacudida, «Tres estratos.» · respira · se aleja a 170 px |
+| 7,125–13,69 | 9 cortes al pulso (2·2·2·2·1,5·1,5·1·1·1 tiempos), símbolo clavado en (540, 1010) |
+| 13,69–15,56 | el símbolo estalla en granos que viajan y forman el lockup horizontal; cuajan con campana |
+| 15,9–20 | «Hecho en Medellín.» · inplux.co · push-in lento |
 
-## Geometría
+## Archivos
 
-`geometria.py`: dos variantes del mismo símbolo, las dos leídas de `~/inplux-web-marca/brand/refinamiento/exploracion/`.
-«claro» (plantas 14,61, hueco 5,58 = planta/φ²) es la que se dibuja con cotas; «oscuro» (14,17, corrección
-óptica de claro sobre oscuro, la del lockup a10) se usa en las aplicaciones marfil y en el cierre.
+- `geometria.py`: barras, retícula, diagonal, perímetro de estadio para la pluma.
+- `arena.py`: trama Bayer 4×4 (receta de `~/inplux-adeli/scripts/formas.py`), `emparejar` por franjas
+  (copiado de `soon-sf/reel/reel2.py`), pila, vuelo con arco lateral, pintado de granos en numpy.
+- `escenas.py`: marco, rótulos, lockup a 4 px/unidad y las 9 tarjetas (Chrome).
+- `montar.py`: construcción, aplicaciones, cierre, cámara, sonido.
 
 ## Rehacer
 
 ```
-python3 escenas.py         # marco, rótulos, wordmark y 9 tarjetas (Chrome); necesita ../agentes/out/hero.png
+python3 escenas.py         # necesita ../agentes/out/hero.png y ~/inplux-camisetas-sf/build/mockups.py
 python3 montar.py audio
 python3 montar.py todo     # out/simbolo_inplux.mp4 + out/portada.jpg
-python3 montar.py previa 2.5 4.6 10.8   # cuadros sueltos en out/previa/
+python3 montar.py previa 1.0 5.0 15.2
 ```
 
-Post 3:4: `ffmpeg -i out/simbolo_inplux.mp4 -vf crop=1080:1440:0:180 …` (sin barras laterales: las tarjetas
-son a sangre).
+Post 3:4: `ffmpeg -i out/simbolo_inplux.mp4 -vf crop=1080:1440:0:180 …`.

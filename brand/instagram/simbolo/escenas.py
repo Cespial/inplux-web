@@ -1,6 +1,6 @@
 """Capas de Chrome para el reel «Así nació el símbolo» (1080×1920).
 
-Escribe en out/: marco.png, rotulo_{1,2,3}.png, inplux_co.png, lockup_2x.png (wordmark del lockup a10),
+Escribe en out/: marco.png, rotulo_{1,2,3}.png, inplux_co.png, lockup_4x.png (lockup horizontal inverso actual),
 tarjeta_<nombre>.png (9 aplicaciones, opacas, con el hueco del símbolo vacío) y tarjetas.json.
 El símbolo NUNCA va en una tarjeta: montar.py lo pinta encima, en el mismo píxel, en todas.
 
@@ -8,18 +8,17 @@ Uso: python3 escenas.py
 """
 import json, sys
 from pathlib import Path
-from geometria import mapa, poligono, ANCHO, ALTO
+from geometria import mapa, BARRAS, BW, BH, R, X0, Y0, X1, Y1
 
 D = Path(__file__).parent
 OUT = D / "out"
 W, H = 1080, 1920
-ALTO_APP = 200                       # alto del símbolo en las aplicaciones
+ALTO_APP = 170                       # alto del símbolo en las aplicaciones
 f_app, k_app = mapa(ALTO_APP)
-SX0, SY0 = f_app(0, 0)
-SX1, SY1 = f_app(ANCHO, ALTO)        # caja del símbolo: 404,7–675,3 × 910–1110
+SX0, SY0 = f_app(X0, Y0)
+SX1, SY1 = f_app(X1, Y1)             # caja del símbolo: 394,3–685,7 × 925–1095
 
-LOCKUP_K = 4.0                       # px por unidad del lockup en lockup_2x.png (130 px de símbolo × 2 / 55 ≈ 4,73)
-LOCKUP_W = 324.91
+LOCKUP_K = 4.0                       # px por unidad del viewBox del lockup en lockup_4x.png
 
 CSS = """
 @font-face{font-family:"Rethink Sans";src:url(../assets/RethinkSans.woff2);font-weight:400 800}
@@ -32,27 +31,34 @@ html,body{margin:0;width:1080px;height:1920px;background:transparent;font-family
 .cruz{position:absolute;color:rgba(246,242,236,.35);font-size:22px;font-weight:300;line-height:1}
 """
 
-LOCKUP_SVG = (D / "assets/lockup3-E1-a10-horizontal-oscuro.svg").read_text()
-WORDMARK_D = LOCKUP_SVG.split('<path d="')[4].split('"')[0]     # 4.º path = las seis letras
+LOCKUP_SVG = (D / "assets/inplux-logo-horizontal-inverse.svg").read_text()
+WORDMARK_SVG = (D / "assets/inplux-wordmark-white.svg").read_text()
 
 
 def wordmark(color, alto_px):
-    """Solo las letras del lockup a10 (sin símbolo), a `alto_px` de alto de mayúscula."""
-    k = alto_px / 55.0
-    return (f'<svg viewBox="95.39 0 229.52 55.66" width="{229.52 * k:.2f}" height="{55.66 * k:.2f}" style="display:block;overflow:visible">'
-            f'<path d="{WORDMARK_D}" fill="{color}"/></svg>')
+    """Wordmark actual (inplux-wordmark-white.svg): las mayúsculas miden 60 unidades, de y 16 a 76."""
+    k = alto_px / 60.0
+    svg = WORDMARK_SVG.replace('fill="#ffffff"', f'fill="{color}"')
+    svg = svg.replace('viewBox="0 0 333.2 92.0"', f'viewBox="16 16 301.2 60" width="{301.2 * k:.2f}" height="{60 * k:.2f}" style="display:block;overflow:visible"')
+    return svg
 
 
 def sticker_svg():
     """Troquel con la silueta del símbolo dilatada (placa negra + borde blanco), en px del lienzo."""
-    pts = lambda i: " ".join(f"{f_app(x, y)[0]:.2f},{f_app(x, y)[1]:.2f}" for x, y in poligono(i, "claro"))
-    polys = "".join(f'<polygon points="{pts(i)}"/>' for i in range(3))
-    borde, placa = 19 * k_app, 11 * k_app
+    def barras(d):
+        out = ""
+        for x, y in BARRAS:
+            (ax, ay), (bx, by) = f_app(x - d, y - d), f_app(x + BW + d, y + BH + d)
+            out += f'<rect x="{ax:.2f}" y="{ay:.2f}" width="{bx - ax:.2f}" height="{by - ay:.2f}" rx="{(R + d) * k_app:.2f}"/>'
+        return out
+    puente = lambda d: "".join(  # une las barras con el escalón entre ellas para que el troquel sea una sola pieza
+        f'<rect x="{f_app(BARRAS[i + 1][0], BARRAS[i + 1][1] + BH / 2)[0]:.2f}" y="{f_app(0, BARRAS[i + 1][1] + BH / 2)[1]:.2f}" '
+        f'width="{(BARRAS[i][0] + BW - BARRAS[i + 1][0]) * k_app:.2f}" height="{(BARRAS[i][1] - BARRAS[i + 1][1]) * k_app:.2f}"/>' for i in range(2))
     return (f'<svg class="abs" style="left:0;top:0" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
             f'<defs><filter id="s" x="-30%" y="-30%" width="160%" height="160%">'
             f'<feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000" flood-opacity=".55"/></filter></defs>'
-            f'<g filter="url(#s)" fill="#ffffff" stroke="#ffffff" stroke-width="{borde:.1f}" stroke-linejoin="round">{polys}</g>'
-            f'<g fill="#0c0c0b" stroke="#0c0c0b" stroke-width="{placa:.1f}" stroke-linejoin="round">{polys}</g></svg>')
+            f'<g filter="url(#s)" fill="#ffffff">{barras(13)}{puente(13)}</g>'
+            f'<g fill="#0c0c0b">{barras(8)}{puente(8)}</g></svg>')
 
 
 def camiseta():
@@ -132,7 +138,7 @@ def tarjetas():
 <div class="abs" style="left:24px;top:600px;width:240px;height:820px;transform-origin:right center;transform:perspective(1400px) rotateY(-38deg);background:linear-gradient(90deg,#cfc9bf,#e9e4dc)"></div>
 <div class="abs" style="left:816px;top:600px;width:240px;height:820px;transform-origin:left center;transform:perspective(1400px) rotateY(38deg);background:linear-gradient(90deg,#ddd8cf,#bdb7ad)"></div>
 <div class="abs" style="left:250px;top:600px;width:580px;height:820px;background:linear-gradient(90deg,rgba(0,0,0,.07),rgba(0,0,0,0) 8%,rgba(0,0,0,0) 92%,rgba(0,0,0,.07))"></div>
-<div class="abs" style="left:{cx - 229.52 * 26 / 55 / 2:.1f}px;top:1300px">{wordmark('#1a1918', 26)}</div>
+<div class="abs" style="left:{cx - 301.2 * 26 / 60 / 2:.1f}px;top:1300px">{wordmark('#1a1918', 26)}</div>
 """)
 
     # 5 · linkedin: banner 4:1 a sangre
@@ -218,9 +224,10 @@ def capas():
         for i, r in enumerate(rotulos, 1):
             toma(f"rotulo_{i}", f'<div class="abs" style="left:84px;right:84px;top:284px"><h1 class="titular">{r}</h1></div>')
         toma("inplux_co", '<div class="abs" style="left:0;right:0;top:0;text-align:center;font-size:40px;color:#a39d94;letter-spacing:.01em">inplux.co</div>')
-        # wordmark del lockup a10 a LOCKUP_K px/unidad, desde x = 95,39 (borde izquierdo de la I)
-        ww, wh = round(229.52 * LOCKUP_K), round(55.66 * LOCKUP_K) + 2
-        toma("lockup_2x", f'<div class="abs" style="left:0;top:0">{wordmark("#f6f2ec", 55 * LOCKUP_K)}</div>', vista={"width": ww, "height": wh})
+        # lockup horizontal inverso actual, entero (símbolo con barra teal + letras), a LOCKUP_K px por unidad
+        lw, lh = round(403 * LOCKUP_K), round(112 * LOCKUP_K)
+        svg = LOCKUP_SVG.replace('viewBox="0 0 403.0 112.0"', f'viewBox="0 0 403.0 112.0" width="{lw}" height="{lh}" style="display:block"')
+        toma("lockup_4x", f'<div class="abs" style="left:0;top:0">{svg}</div>', vista={"width": lw, "height": lh})
         for nombre, color, html in lista:
             toma(f"tarjeta_{nombre}", html, fondo=True)
         br.close()
