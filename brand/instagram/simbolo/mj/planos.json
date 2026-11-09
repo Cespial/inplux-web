@@ -1,0 +1,194 @@
+{
+ "_nota": "Esquinas en píxeles de la imagen original (1648×2944), orden TL TR BR BL del plano local (w × h). centro y ancho del símbolo en fracciones del plano.",
+ "papel": {
+  "img": "mj-papel-2.png",
+  "quad": [
+   [
+    160,
+    850
+   ],
+   [
+    1150,
+    693
+   ],
+   [
+    1557,
+    2010
+   ],
+   [
+    507,
+    2283
+   ]
+  ],
+  "wh": [
+   210,
+   297
+  ],
+  "centro": [
+   0.5,
+   0.45
+  ],
+  "ancho": 0.56,
+  "modo": "tinta"
+ },
+ "portatil": {
+  "img": "mj-portatil-1.png",
+  "quad": [
+   [
+    395,
+    2030
+   ],
+   [
+    1152,
+    2062
+   ],
+   [
+    1157,
+    2635
+   ],
+   [
+    400,
+    2575
+   ]
+  ],
+  "wh": [
+   757,
+   560
+  ],
+  "centro": [
+   0.5,
+   0.47
+  ],
+  "ancho": 0.3,
+  "modo": "sticker"
+ },
+ "letrero": {
+  "img": "mj-letrero-2.png",
+  "quad": [
+   [
+    663,
+    350
+   ],
+   [
+    1107,
+    350
+   ],
+   [
+    1107,
+    940
+   ],
+   [
+    663,
+    940
+   ]
+  ],
+  "wh": [
+   444,
+   590
+  ],
+  "centro": [
+   0.5,
+   0.5
+  ],
+  "ancho": 0.72,
+  "modo": "tinta"
+ },
+ "camiseta": {
+  "img": "mj-camiseta-2.png",
+  "quad": [
+   [
+    470,
+    900
+   ],
+   [
+    1170,
+    900
+   ],
+   [
+    1170,
+    1400
+   ],
+   [
+    470,
+    1400
+   ]
+  ],
+  "wh": [
+   700,
+   500
+  ],
+  "centro": [
+   0.5,
+   0.5
+  ],
+  "ancho": 0.32,
+  "modo": "serigrafia",
+  "ocultar_y": 420
+ },
+ "placa": {
+  "img": "mj-placa-1.png",
+  "quad": [
+   [
+    630,
+    1253
+   ],
+   [
+    1233,
+    1253
+   ],
+   [
+    1233,
+    1860
+   ],
+   [
+    630,
+    1860
+   ]
+  ],
+  "wh": [
+   603,
+   607
+  ],
+  "centro": [
+   0.5,
+   0.5
+  ],
+  "ancho": 0.64,
+  "modo": "grabado"
+ },
+ "cuaderno": {
+  "img": "mj-cuaderno-1.png",
+  "quad": [
+   [
+    767,
+    943
+   ],
+   [
+    1307,
+    943
+   ],
+   [
+    1307,
+    2267
+   ],
+   [
+    767,
+    2267
+   ]
+  ],
+  "wh": [
+   540,
+   1324
+  ],
+  "centro": [
+   0.5,
+   0.42
+  ],
+  "ancho": 0.8,
+  "modo": "lapiz"
+ },
+ "medellin": {
+  "img": "mj-medellin-2.png",
+  "fondo": true
+ }
+}

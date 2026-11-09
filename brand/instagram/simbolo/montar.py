@@ -1,4 +1,9 @@
-"""Monta el reel «Así nació el símbolo» v2 (1080×1920, 30 fps, 20 s, pulso 128 BPM).
+"""Monta el reel «Así nació el símbolo» v3 (1080×1920, 30 fps, 16 s, pulso 140 BPM).
+
+v3: construcción el doble de rápida; en el golpe el símbolo plano se vuelve 3D (Blender, `tres_d.py`:
+placas de metal oscuro y vidrio teal); doce cortes que mezclan render 3D, escenas de Midjourney con el
+símbolo compuesto encima (`mj/componer.py`) y tres tarjetas de la v2; cierre sobre Medellín de noche.
+
 
 El símbolo actual de INPLUX (tres barras 42×13, la superior teal) nace de una pila de arena: los granos
 forman la retícula, la pluma traza las barras, la arena las llena y en el golpe cuajan. Después queda
@@ -22,28 +27,32 @@ import arena
 
 D = Path(__file__).parent
 OUT = D / "out"
-W, H, FPS, DUR = 1080, 1920, 30, 20.0
+W, H, FPS, DUR = 1080, 1920, 30, 16.0
 BLACK, IVORY, TINTA = (12, 12, 11), (246, 242, 236), (26, 25, 24)
 TEAL, TEAL_OSC, TEAL_UI = (21, 220, 196), (13, 125, 116), (0, 215, 202)
 CX, CY = 540, 1010
 ALTO_C, ALTO_A = 440, 170                     # construcción · aplicaciones
 
-# ---- guion (s); a partir del golpe, todo cae en el pulso de 128 BPM
-BEAT = 60 / 128
-H_INI = [0.3 + i * .18 for i in range(6)]     # los granos forman las horizontales, de abajo arriba
-V_INI = [1.6 + i * .16 for i in range(4)]     # verticales con pluma
-T_DIAG = (2.4, .55)
-PER = [(3.0 + i * .5, .45) for i in range(3)] # contorno de las barras, de abajo arriba
-T_VIERTE = 4.6                                # la arena se vierte dentro de las barras
-T_GOLPE = 5.25
-T_ZOOM = (6.6, T_GOLPE + 4 * BEAT)            # 6,6 → 7,125
-T_APP = T_GOLPE + 4 * BEAT
-CORTES = [2, 2, 2, 2, 1.5, 1.5, 1, 1, 1]      # duración de cada aplicación en tiempos
-T_CORTE = [T_APP + sum(CORTES[:j]) * BEAT for j in range(9)]
-T_CIERRE = T_APP + sum(CORTES) * BEAT         # 13,6875
-T_VIAJE = T_CIERRE + .375
-T_CUAJA = T_CIERRE + 4 * BEAT                 # 15,5625
-T_R3, T_URL = T_CUAJA + .375, T_CUAJA + .85
+# ---- guion (s); 140 BPM, B = 0,4286 s; la construcción de la v2 comprimida ×0,65
+BEAT = 60 / 140
+K = .65
+H_INI = [0.2 + i * .117 for i in range(6)]    # los granos forman las horizontales, de abajo arriba
+V_INI = [1.04 + i * .104 for i in range(4)]   # verticales con pluma
+T_DIAG = (1.56, .36)
+PER = [(1.95 + i * .325, .3) for i in range(3)]  # contorno de las barras, de abajo arriba
+T_VIERTE = 2.93                               # la arena se vierte dentro de las barras
+T_GOLPE = 8 * BEAT                            # 3,43: cuaja y se vuelve 3D
+T_APP = 11 * BEAT                             # 4,71: empiezan los cortes
+T_ZOOM = (T_GOLPE + 2 * BEAT, T_APP)          # (solo para el sonido: subida antes de los cortes)
+CORTES = [2, 2, 1.5, 1.5, 1, 1, 1, 1, 1, 1, 1, 1]
+ESCENAS = [("3d", "macro"), ("mj", "papel"), ("tarjeta", "web"), ("mj", "portatil"), ("tarjeta", "instagram"),
+           ("mj", "letrero"), ("3d", "marmol"), ("mj", "camiseta"), ("tarjeta", "app"), ("mj", "placa"),
+           ("mj", "cuaderno"), ("3d", "vuelta")]
+T_CORTE = [T_APP + sum(CORTES[:j]) * BEAT for j in range(len(CORTES))]
+T_CIERRE = T_APP + sum(CORTES) * BEAT         # 26 B = 11,14: estallido
+T_VIAJE = T_CIERRE + .3
+T_CUAJA = 30 * BEAT                           # 12,86
+T_R3, T_URL = T_CUAJA + .45, T_CUAJA + .95
 
 # cotas: (texto, valor o None, ancla en unidades, ancla PIL, t de entrada, decimales)
 COTAS = [
@@ -64,6 +73,9 @@ LINEAS_COTA = [                               # (a, b, t de entrada, duración) 
     ((29, 17.6), (50, 17.6), 2.1, .25),
     ((50, 25.4), (92, 25.4), 4.15, .25),
 ]
+
+COTAS = [(tx, v, an, ap, t0 * K, d) for tx, v, an, ap, t0, d in COTAS]
+LINEAS_COTA = [(a, b, t0 * K, du * K) for a, b, t0, du in LINEAS_COTA]
 
 FUENTE = str(D / "assets/RethinkSans-Medium.ttf")
 FUENTE_R = str(D / "assets/RethinkSans-Regular.ttf")
@@ -121,8 +133,15 @@ def mascara_simbolo(alto, cx, cy):
 class Escena:
     def __init__(self):
         tj = json.loads((OUT / "tarjetas.json").read_text(encoding="utf-8"))
-        self.orden = tj["orden"]
-        self.tarjetas = [Image.open(OUT / f"tarjeta_{n}.png").convert("RGB") for n, _ in self.orden]
+        self.color = dict(tj["orden"])
+        self.tarjetas = {n: Image.open(OUT / f"tarjeta_{n}.png").convert("RGB") for k, n in ESCENAS if k == "tarjeta"}
+        self.mj = {n: Image.open(OUT / f"escena_{n}.png").convert("RGB") for k, n in ESCENAS if k == "mj"}
+        self.n3d = {n: len(list((OUT / "3d" / n).glob("*.png"))) for n in ("reveal", "macro", "marmol", "vuelta")}
+        med = Image.open(OUT / "fondo_medellin.png").convert("RGB")
+        yy, xx = np.mgrid[0:H, 0:W]
+        vin = 1 - .55 * np.clip(np.hypot((xx - CX) / 760, (yy - CY) / 1100), 0, 1) ** 2
+        calla = 1 - .5 * np.exp(-(((xx - CX) / 520) ** 2 + ((yy - CY) / 170) ** 2))   # oscurece detrás del lockup
+        self.medellin = Image.fromarray(np.clip(np.asarray(med, float) * (.5 * vin * calla)[..., None], 0, 255).astype(np.uint8))
         self.marco = Image.open(OUT / "marco.png").convert("RGBA")
         self.rotulos = [Image.open(OUT / f"rotulo_{i}.png").convert("RGBA") for i in (1, 2, 3)]
         self.url = Image.open(OUT / "inplux_co.png").convert("RGBA")
@@ -138,6 +157,10 @@ class Escena:
         self._granos_construccion()
         self._lockup()
         self._granos_cierre()
+
+    @staticmethod
+    def frame3d(nombre, k):
+        return Image.open(OUT / "3d" / nombre / f"{k:04d}.png").convert("RGBA")
 
     # ------------------------------------------------------------ granos de la construcción
     def _granos_construccion(self):
@@ -157,11 +180,11 @@ class Escena:
         lx, ly, li = np.array(lx, np.float32), np.array(ly, np.float32), np.array(li)
         fuente, _ = arena.emparejar(px, py, lx, ly, 3)
         t1x, t1y = rng.uniform(0, W, N).astype(np.float32), rng.uniform(430, 1590, N).astype(np.float32)
-        ret1 = .3 + rng.uniform(0, 1.0, N); dur1 = rng.uniform(1.1, 1.8, N)
+        ret1 = .2 + rng.uniform(0, .65, N); dur1 = rng.uniform(.7, 1.15, N)
         es_linea = np.zeros(N, bool); es_linea[fuente] = True
         t1x[fuente], t1y[fuente] = lx, ly
-        ret1[fuente] = np.array([H_INI[i] for i in li]) + (lx - xa) / (xb - xa) * .22
-        dur1[fuente] = rng.uniform(.45, .6, len(fuente))
+        ret1[fuente] = np.array([H_INI[i] for i in li]) + (lx - xa) / (xb - xa) * .15
+        dur1[fuente] = rng.uniform(.3, .4, len(fuente))
         self.g1 = dict(sx=px, sy=py, tx=t1x, ty=t1y, ret=ret1, dur=dur1, cur=rng.normal(0, 70, N).astype(np.float32),
                        linea=es_linea, fase=rng.uniform(0, 6.28, N), vel=rng.uniform(.4, 1.0, N))
         # etapa 2: la arena se vierte en las barras (trama Bayer de la máscara del símbolo)
@@ -173,7 +196,7 @@ class Escena:
         # barrido de abajo arriba: cada barra entra a su turno
         fila = np.where(by > f(0, BARRAS[1][1] + BH)[1], 0, np.where(by > f(0, BARRAS[2][1] + BH)[1], 1, 2))
         self.g2 = dict(sx=ox[fuente2], sy=oy[fuente2], tx=bx, ty=by, teal=bt,
-                       ret=T_VIERTE + fila * .15 + rng.uniform(0, .08, len(bx)), dur=rng.uniform(.24, .3, len(bx)),
+                       ret=T_VIERTE + fila * .1 + rng.uniform(0, .06, len(bx)), dur=rng.uniform(.17, .21, len(bx)),
                        cur=rng.normal(0, 60, len(bx)).astype(np.float32))
         usados = np.zeros(N, bool); usados[fuente2] = True
         self.polvo2 = ~usados
@@ -242,8 +265,8 @@ class Escena:
         fuente, resto = arena.emparejar(ex, ey, tx, ty, 6)
         bot, top = ty.max(), ty.min()
         self.gc = dict(sx=sx, sy=sy, ex=ex, ey=ey, st=st, src=fuente, tx=tx, ty=ty, tt=tt,
-                       ret=T_VIAJE + (1 - (ty - top) / max(1, bot - top)) * .45 + rng.uniform(0, .25, len(tx)),
-                       dur=rng.uniform(.6, .8, len(tx)), cur=rng.normal(0, 110, len(tx)).astype(np.float32),
+                       ret=T_VIAJE + (1 - (ty - top) / max(1, bot - top)) * .45 + rng.uniform(0, .2, len(tx)),
+                       dur=rng.uniform(.55, .72, len(tx)), cur=rng.normal(0, 110, len(tx)).astype(np.float32),
                        resto=resto, caida=rng.uniform(40, 160, len(resto)), fase=rng.uniform(0, 6.28, len(resto)))
 
     def granos_cierre(self, arr, t):
@@ -351,12 +374,8 @@ class Escena:
             self.vectores(f, t)
             arr = np.array(f); self.granos_construccion(arr, t)
             return Image.fromarray(arr)
-        # golpe: el símbolo cuaja, pulso de escala con sobrepaso, respira y se aleja
-        x = t - T_GOLPE
-        alto = ALTO_C * (1 + .1 * math.exp(-x * 7) * math.cos(x * 18))
-        alto *= 1 - .012 * math.sin(math.pi * prog(t, T_GOLPE + .5, T_ZOOM[0] - T_GOLPE - .5))
-        if t >= T_ZOOM[0]:
-            alto = ALTO_C + (ALTO_A - ALTO_C) * ease_io(prog(t, T_ZOOM[0], T_ZOOM[1] - T_ZOOM[0]))
+        # golpe: cuaja y se vuelve 3D (cuadro 0 de Blender = el símbolo plano al píxel)
+        k = min(self.n3d["reveal"] - 1, int(round((t - T_GOLPE) * FPS)))
         uo = prog(t, T_GOLPE, .6)
         if uo < 1:                                   # onda teal
             capa = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(capa)
@@ -365,36 +384,50 @@ class Escena:
             f.paste(capa, (0, 0), capa)
         self.vectores(f, t)
         arr = np.array(f); self.granos_construccion(arr, t); f = Image.fromarray(arr)
-        sim, pos = simbolo(alto, CX, CY, IVORY, TEAL)
-        f.paste(sim, pos, sim)
+        td = self.frame3d("reveal", k)
+        f.paste(td, (0, 0), td)
+        if k < 3:                                    # fundido de 3 cuadros del plano marfil al metal
+            sim, pos = simbolo(ALTO_C, CX, CY, IVORY, TEAL, alfa=1 - k / 3)
+            f.paste(sim, pos, sim)
         return f
 
     # ------------------------------------------------------------ aplicaciones
     def aplicacion(self, t):
-        j = max(i for i in range(9) if T_CORTE[i] <= t + 1e-6)
+        j = max(i for i in range(len(CORTES)) if T_CORTE[i] <= t + 1e-6)
         t0 = T_CORTE[j]
-        nombre, color = self.orden[j]
-        tar = self.tarjetas[j]
-        amp = .08 if CORTES[j] == 1 else .05
-        s = 1 + amp * (1 - ease_out((t - t0) / .3))
-        if s > 1.0005:
-            w2, h2 = round(W * s), round(H * s)
-            big = tar.resize((w2, h2), Image.BICUBIC)
-            ox, oy = round(CX * s - CX), round(CY * s - CY)
-            tar = big.crop((ox, oy, ox + W, oy + H))
-        f = tar.copy()
-        clave = (color, nombre == "camiseta")
-        if clave not in self.cache:
-            base, cima = (IVORY, TEAL) if color == "marfil" else (TINTA, TEAL_OSC)
-            self.cache[clave] = simbolo(ALTO_A, CX, CY, base, cima, alfa=.9 if nombre == "camiseta" else 1.0)
-        sim, pos = self.cache[clave]
-        f.paste(sim, pos, sim)
-        if j >= 6 and t - t0 < 1 / FPS:
+        tipo, nombre = ESCENAS[j]
+        if tipo == "3d":                             # el render trae su propio movimiento de cámara
+            k = min(self.n3d[nombre] - 1, int((t - t0) * FPS + 1e-6))
+            f = self.fondo.copy(); td = self.frame3d(nombre, k)
+            f.paste(td, (0, 0), td)
+        else:
+            tar = self.mj[nombre] if tipo == "mj" else self.tarjetas[nombre]
+            amp = .08 if CORTES[j] == 1 else .05
+            s = 1 + amp * (1 - ease_out((t - t0) / .3))
+            if s > 1.0005:
+                w2, h2 = round(W * s), round(H * s)
+                big = tar.resize((w2, h2), Image.BICUBIC)
+                ox, oy = round(CX * s - CX), round(CY * s - CY)
+                tar = big.crop((ox, oy, ox + W, oy + H))
+            f = tar.copy()
+            if tipo == "tarjeta":
+                color = self.color[nombre]
+                if color not in self.cache:
+                    base, cima = (IVORY, TEAL) if color == "marfil" else (TINTA, TEAL_OSC)
+                    self.cache[color] = simbolo(ALTO_A, CX, CY, base, cima)
+                sim, pos = self.cache[color]
+                f.paste(sim, pos, sim)
+        if j >= 8 and t - t0 < 1 / FPS:
             f = Image.blend(f, Image.new("RGB", (W, H), (255, 255, 255)), .35)
         return f
 
     # ------------------------------------------------------------ cierre
     def cierre(self, f, t):
+        am = ease(prog(t, T_CUAJA - .1, .7))
+        if am > 0:                                   # Medellín de noche entra al cuajar, con push-in propio
+            z = 1 + .05 * ease(prog(t, T_CUAJA, DUR - T_CUAJA))
+            fondo = self.camara(self.medellin, z)
+            f = Image.blend(f, fondo, am)
         if t < T_CUAJA:
             arr = np.array(f); self.granos_cierre(arr, t); return Image.fromarray(arr)
         a = ease(prog(t, T_CUAJA, .25))
@@ -425,8 +458,6 @@ class Escena:
         f = self.construccion(f, t) if t < T_APP else self.cierre(f, t)
         # cámara: push-in lento tras el golpe y al final; sacudidas en el golpe, el estallido y al cuajar
         s, dx, dy = 1.0, 0.0, 0.0
-        if T_GOLPE <= t < T_APP:
-            s = 1 + .03 * ease(prog(t, T_GOLPE, T_ZOOM[0] - T_GOLPE)) * (1 - ease_io(prog(t, T_ZOOM[0], T_ZOOM[1] - T_ZOOM[0])))
         if t >= T_URL:
             s = 1 + .03 * ease(prog(t, T_URL, DUR - T_URL))
         for t0, amp in ((T_GOLPE, 7), (T_CIERRE, 9), (T_CUAJA, 4)):
@@ -527,6 +558,15 @@ def audio():
     for c in (0, 1): seco[:, c] += filtro(acorde, baja=1200) * ease_np((t - T_GOLPE) / .3) * (1 - ease_np((t - T_ZOOM[0]) / .4)) * .04
     # pulso a 128 BPM desde el golpe
     for en in np.arange(T_GOLPE + BEAT, T_APP - .01, BEAT): pone(golpe(.3, 130, 46), en, .55, 0, rev=.1)
+    u = np.arange(int(2.4 * SR)) / SR             # reveal 3D: brillo metálico + soplo filtrado
+    brillo = sum(np.sin(2 * np.pi * fq * u) * np.exp(-u * d) for fq, d in ((1046.5, 2.0), (1568.0, 2.8), (2093.0, 3.6), (3136.0, 5.0)))
+    pone(brillo, T_GOLPE + 2 / FPS, .2, .2, rev=.9)
+    u = np.arange(int(1.3 * SR)) / SR
+    pone(ruido(1.3, baja=9000, alta=5000) * np.sin(np.pi * np.clip(u / 1.3, 0, 1)) ** 2, T_GOLPE + .05, .5, -.2, rev=.6)
+    for i in range(4):                            # redoble de 4 golpes antes del estallido
+        u = np.arange(int(.14 * SR)) / SR
+        sn = ruido(.14, baja=7000, alta=1200) * np.exp(-u * 28) + golpe(.14, 230, 185, 26) * .5
+        pone(sn, T_CIERRE - (4 - i) * BEAT / 2, .3 + .1 * i, 0, rev=.25)
     bar = ease_np((t - T_ZOOM[0]) / (T_APP - T_ZOOM[0])) ** 2 * (1 - ease_np((t - T_APP + .02) / .03))
     for c in (0, 1): seco[:, c] += filtro(rng.normal(size=n), baja=5000) * bar * .15
     # aplicaciones: bombo fuerte en cada corte, suave en los tiempos intermedios, hat a contratiempo
