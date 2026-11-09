@@ -1,0 +1,41 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#0c0c0b}
+body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1350px;overflow:hidden}
+.fondo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.velo{position:absolute;inset:0}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:.07;mix-blend-mode:overlay}
+.capa{position:absolute;inset:0;display:flex;flex-direction:column}
+.titular{font-weight:500;letter-spacing:-.025em;line-height:1.02}
+.titular .gris{color:#a39d94}
+/* Franjas de la bandera de Sudáfrica dentro de las letras: rojo, filete blanco, verde, filete blanco, azul.
+   El azul (#001489) se aclara un poco porque sobre el negro no se lee. */
+.za{background:linear-gradient(180deg,#E03C31 0 47%,#f6f2ec 47% 51%,#007749 51% 64%,#f6f2ec 64% 68%,#2f5fd0 68% 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.micro{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
+.wordmark{height:24px;display:block}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;white-space:nowrap}
+.pill.oscura{background:rgba(246,242,236,.07);border:1.5px solid rgba(246,242,236,.16);padding:18px 34px;font-size:30px}
+.pill.clara{background:#f6f2ec;color:#0c0c0b;padding:18px 36px 18px 22px;font-size:34px;font-weight:500;
+  box-shadow:0 0 0 8px rgba(246,242,236,.06),0 20px 60px rgba(0,0,0,.5)}
+.pill.rama{border:1.5px solid rgba(246,242,236,.16);background:rgba(12,12,11,.55);padding:12px 20px;font-size:20px;color:#f6f2ec}
+.nodo{width:124px;height:124px;border-radius:50%;background:#0c0c0b;border:1.5px solid rgba(246,242,236,.16);display:grid;place-items:center;
+  box-shadow:0 0 0 14px rgba(0,215,202,.05),0 0 80px rgba(0,215,202,.18)}
+.tallo{width:1.5px;background:rgba(246,242,236,.16);margin:0 auto}
+</style></head><body><div class="lienzo"><div class="velo" style="background:#0c0c0b"></div><img src="trama/manos.png" style="position:absolute;left:-80px;top:760px;width:1240px;opacity:0.55"><div class="grano"></div>
+<div class="velo" style="background:linear-gradient(180deg,#0c0c0b 52%,rgba(12,12,11,0) 72%,rgba(12,12,11,.35) 100%)"></div>
+<div class="capa" style="padding:150px 84px 0">
+  <h1 class="titular" style="font-size:100px"><span class="gris">INPLUX ahora es</span><br>partner oficial<br>de SONDA.</h1>
+  <div style="margin-top:72px">
+<div style="display:flex;align-items:center;gap:0;transform:scale(1.0);transform-origin:left center">
+  <div class="nodo"><svg viewBox="0 0 100 100" width="62" height="62"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#fff"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#fff"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#15dcc4"/></svg></div>
+  <div style="position:relative;width:120px;height:1.5px;background:rgba(246,242,236,.16)">
+    <i style="position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:#00d7ca;
+      box-shadow:0 0 0 8px rgba(0,215,202,.12)"></i></div>
+  <div class="pill oscura" style="padding:30px 44px"><img src="assets/sonda-white.png" style="height:44px;display:block"></div>
+</div></div>
+</div><img class="wordmark" src="assets/wordmark-white.svg" style="position:absolute;top:84px;right:84px"><div class="micro" style="position:absolute;left:84px;bottom:80px">INPLUX.CO</div><div class="micro" style="position:absolute;left:84px;top:84px">→ Alianza</div>
+<div class="micro" style="position:absolute;right:84px;bottom:80px">Desliza →</div></div></body></html>
