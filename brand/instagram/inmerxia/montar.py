@@ -34,8 +34,8 @@ PLANOS = [
     (7, 9,   "mapa-03.jpg",           .45, .55, 1.12, 1.04, "paises"),
     (9, 10,  ("v", "vid-v-01", 8.6),  .5, .5, 1.00, 1.00, "paises"),
     (10, 11, ("v", "vid-v-02", 3.0),  .5, .5, 1.00, 1.00, "paises"),
-    (11, 13, "flujo-03.jpg",          .52, .62, 1.05, 1.12, "agentes"),
-    (13, 14, "flujo-02.jpg",          .40, .62, 1.10, 1.06, "agentes"),
+    (11, 13, "flujo-03.jpg",          .40, .90, 1.32, 1.40, "agentes"),
+    (13, 14, "flujo-02.jpg",          .40, .90, 1.36, 1.30, "agentes"),
     (14, 15, "conectores-03.jpg",     .50, .66, 1.08, 1.12, "agentes"),
     (15, 17, "pantalla-conectores.jpg", .64, .62, 1.30, 1.45, "vivo"),
     (17, 19, "agentes-persona.jpg",   .55, .66, 1.12, 1.24, "persona"),
@@ -43,10 +43,10 @@ PLANOS = [
     (21, 23, ("h", "vid-h-01", 8.9),  .5, .5, 1.00, 1.00, "demo"),
     (23, 25, ("v", "vid-h-02", 4.7),  .5, .5, 1.00, 1.00, "demo"),
     (25, 27, "charla-08.jpg",         .48, .62, 1.05, 1.12, "despues"),
-    (27, 29, "charla-04.jpg",         .50, .60, 1.12, 1.05, "despues"),
+    (27, 29, "ponente-botella.jpg",   .52, .56, 1.04, 1.12, "gracias"),
     (29, 32.5, None,                  0, 0, 0, 0, "cierre"),
 ]
-FLASH_BEATS = (3, 7, 15, 21, 25, 29)
+FLASH_BEATS = (3, 7, 15, 21, 25, 27, 29)
 
 # Textos por bloque: (micro, titular, acento_teal)
 TEXTOS = {
@@ -59,6 +59,7 @@ TEXTOS = {
     "torre":   ("TORRE DE CONTROL", "Cada paso del método,\nencendido en orden.", None),
     "demo":    ("C4TA · MEDELLÍN", "Del pliego\nal pago.", None),
     "despues": ("Y DESPUÉS", "La conversación\nsigue.", None),
+    "gracias": ("10 NOV 2026", "Gracias,\nINMERXIA.", None),
 }
 
 
@@ -170,7 +171,7 @@ def bloque_texto(clave):
     if clave in _tcache:
         return _tcache[clave]
     micro, tit, acento = TEXTOS[clave]
-    size = 104 if clave in ("abre", "titulo", "demo") else 84
+    size = 104 if clave in ("abre", "titulo", "demo", "gracias") else 84
     cap = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(cap)
     lineas = tit.split("\n") + (acento.split("\n") if acento else [])
     alto = int(size * 1.0) * len(lineas)
