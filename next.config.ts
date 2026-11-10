@@ -18,6 +18,10 @@ const contentSecurityPolicy = [
   "manifest-src 'self'",
 ].join("; ");
 
+// La charla «Del pliego al pago» (/inmerxia) incrusta en vivo el formulador MGA
+// de INPLUX; solo esa ruta permite ese iframe.
+const cspInmerxia = contentSecurityPolicy + "; frame-src 'self' https://mga-automatizada.vercel.app";
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   allowedDevOrigins: ["127.0.0.1"],
@@ -50,6 +54,7 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         { source: "/deck", destination: "/deck/index.html" },
         { source: "/adeli", destination: "/adeli/index.html" },
+        { source: "/inmerxia", destination: "/inmerxia/index.html" },
       ],
       afterFiles: [],
       fallback: [],
@@ -99,6 +104,10 @@ const nextConfig: NextConfig = {
       {
         source: "/brand/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
+      {
+        source: "/inmerxia",
+        headers: [{ key: "Content-Security-Policy", value: cspInmerxia }],
       },
     ];
   },
