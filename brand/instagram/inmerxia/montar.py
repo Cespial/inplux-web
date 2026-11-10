@@ -42,11 +42,10 @@ PLANOS = [
     (19, 21, "torre-4k.jpg",          .58, .74, 1.55, 1.70, "torre"),
     (21, 23, ("h", "vid-h-01", 8.9),  .5, .5, 1.00, 1.00, "demo"),
     (23, 25, ("v", "vid-h-02", 4.7),  .5, .5, 1.00, 1.00, "demo"),
-    (25, 27, "charla-08.jpg",         .48, .62, 1.05, 1.12, "despues"),
-    (27, 29, "ponente-botella.jpg",   .52, .56, 1.04, 1.12, "gracias"),
+    (25, 29, "ponente-botella.jpg",   .52, .56, 1.02, 1.16, "gracias"),
     (29, 32.5, None,                  0, 0, 0, 0, "cierre"),
 ]
-FLASH_BEATS = (3, 7, 15, 21, 25, 27, 29)
+FLASH_BEATS = (3, 7, 15, 21, 25, 29)
 
 # Textos por bloque: (micro, titular, acento_teal)
 TEXTOS = {
@@ -58,7 +57,6 @@ TEXTOS = {
     "persona": ("GOBIA", "Agentes para toda\nla contratación,", "y una persona\nque decide."),
     "torre":   ("TORRE DE CONTROL", "Cada paso del método,\nencendido en orden.", None),
     "demo":    ("C4TA · MEDELLÍN", "Del pliego\nal pago.", None),
-    "despues": ("Y DESPUÉS", "La conversación\nsigue.", None),
     "gracias": ("10 NOV 2026", "Gracias,\nINMERXIA.", None),
 }
 
