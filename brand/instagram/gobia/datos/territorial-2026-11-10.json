@@ -1,0 +1,159 @@
+{
+ "corte_consulta": "2026-11-10",
+ "anio": 2026,
+ "filtro": "orden='Territorial'",
+ "fuente": "https://www.datos.gov.co/resource/jbjy-vk9h.json",
+ "total": {
+  "n": "676388",
+  "ultima_firma": "2026-11-05T12:50:22.146"
+ },
+ "modalidad": [
+  {
+   "k": "Contratación directa",
+   "n": "524070"
+  },
+  {
+   "k": "Contratación régimen especial",
+   "n": "106619"
+  },
+  {
+   "k": "Mínima cuantía",
+   "n": "24832"
+  },
+  {
+   "k": "Contratación régimen especial (con ofertas)",
+   "n": "6314"
+  },
+  {
+   "k": "Selección Abreviada de Menor Cuantía",
+   "n": "5258"
+  },
+  {
+   "k": "Selección abreviada subasta inversa",
+   "n": "2981"
+  },
+  {
+   "k": "Contratación Directa (con ofertas)",
+   "n": "2957"
+  },
+  {
+   "k": "Concurso de méritos abierto",
+   "n": "1339"
+  },
+  {
+   "k": "Licitación pública",
+   "n": "1097"
+  },
+  {
+   "k": "Licitación pública Obra Publica",
+   "n": "805"
+  },
+  {
+   "k": "Seleccion Abreviada Menor Cuantia Sin Manifestacion Interes",
+   "n": "43"
+  },
+  {
+   "k": "Enajenación de bienes con sobre cerrado",
+   "n": "37"
+  },
+  {
+   "k": "Enajenación de bienes con subasta",
+   "n": "34"
+  },
+  {
+   "k": "No Definido",
+   "n": "2"
+  }
+ ],
+ "tipo": [
+  {
+   "k": "Prestación de servicios",
+   "n": "600156"
+  },
+  {
+   "k": "Decreto 092 de 2017",
+   "n": "32148"
+  },
+  {
+   "k": "Suministros",
+   "n": "13107"
+  },
+  {
+   "k": "Otro",
+   "n": "12217"
+  },
+  {
+   "k": "Obra",
+   "n": "5504"
+  },
+  {
+   "k": "Compraventa",
+   "n": "4780"
+  },
+  {
+   "k": "Arrendamiento de inmuebles",
+   "n": "3467"
+  },
+  {
+   "k": "Seguros",
+   "n": "1431"
+  },
+  {
+   "k": "Interventoría",
+   "n": "1165"
+  },
+  {
+   "k": "Consultoría",
+   "n": "1007"
+  }
+ ],
+ "mes": [
+  {
+   "k": "2026-01-01T00:00:00.000",
+   "n": "314247"
+  },
+  {
+   "k": "2026-02-01T00:00:00.000",
+   "n": "18502"
+  },
+  {
+   "k": "2026-03-01T00:00:00.000",
+   "n": "13754"
+  },
+  {
+   "k": "2026-04-01T00:00:00.000",
+   "n": "11939"
+  },
+  {
+   "k": "2026-05-01T00:00:00.000",
+   "n": "10969"
+  },
+  {
+   "k": "2026-06-01T00:00:00.000",
+   "n": "15443"
+  },
+  {
+   "k": "2026-07-01T00:00:00.000",
+   "n": "75536"
+  },
+  {
+   "k": "2026-08-01T00:00:00.000",
+   "n": "78818"
+  },
+  {
+   "k": "2026-09-01T00:00:00.000",
+   "n": "68183"
+  },
+  {
+   "k": "2026-10-01T00:00:00.000",
+   "n": "63631"
+  },
+  {
+   "k": "2026-11-01T00:00:00.000",
+   "n": "5366"
+  }
+ ],
+ "directa_ps": {
+  "n": "511295"
+ }
+}

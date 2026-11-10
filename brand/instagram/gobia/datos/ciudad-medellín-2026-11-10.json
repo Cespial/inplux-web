@@ -1,0 +1,147 @@
+{
+ "corte_consulta": "2026-11-10",
+ "anio": 2026,
+ "filtro": "orden='Territorial' and upper(ciudad)=upper('Medellín')",
+ "fuente": "https://www.datos.gov.co/resource/jbjy-vk9h.json",
+ "total": {
+  "n": "16897",
+  "ultima_firma": "2026-11-05T11:39:40.142"
+ },
+ "modalidad": [
+  {
+   "k": "Contratación directa",
+   "n": "14412"
+  },
+  {
+   "k": "Contratación régimen especial",
+   "n": "1077"
+  },
+  {
+   "k": "Contratación Directa (con ofertas)",
+   "n": "517"
+  },
+  {
+   "k": "Mínima cuantía",
+   "n": "330"
+  },
+  {
+   "k": "Contratación régimen especial (con ofertas)",
+   "n": "188"
+  },
+  {
+   "k": "Selección abreviada subasta inversa",
+   "n": "179"
+  },
+  {
+   "k": "Concurso de méritos abierto",
+   "n": "59"
+  },
+  {
+   "k": "Selección Abreviada de Menor Cuantía",
+   "n": "50"
+  },
+  {
+   "k": "Licitación pública",
+   "n": "43"
+  },
+  {
+   "k": "Licitación pública Obra Publica",
+   "n": "40"
+  },
+  {
+   "k": "Seleccion Abreviada Menor Cuantia Sin Manifestacion Interes",
+   "n": "2"
+  }
+ ],
+ "tipo": [
+  {
+   "k": "Prestación de servicios",
+   "n": "14566"
+  },
+  {
+   "k": "Otro",
+   "n": "983"
+  },
+  {
+   "k": "Arrendamiento de inmuebles",
+   "n": "509"
+  },
+  {
+   "k": "Obra",
+   "n": "232"
+  },
+  {
+   "k": "Suministros",
+   "n": "216"
+  },
+  {
+   "k": "Decreto 092 de 2017",
+   "n": "147"
+  },
+  {
+   "k": "Compraventa",
+   "n": "120"
+  },
+  {
+   "k": "Interventoría",
+   "n": "47"
+  },
+  {
+   "k": "Seguros",
+   "n": "34"
+  },
+  {
+   "k": "Consultoría",
+   "n": "18"
+  }
+ ],
+ "mes": [
+  {
+   "k": "2026-01-01T00:00:00.000",
+   "n": "7484"
+  },
+  {
+   "k": "2026-02-01T00:00:00.000",
+   "n": "101"
+  },
+  {
+   "k": "2026-03-01T00:00:00.000",
+   "n": "122"
+  },
+  {
+   "k": "2026-04-01T00:00:00.000",
+   "n": "120"
+  },
+  {
+   "k": "2026-05-01T00:00:00.000",
+   "n": "120"
+  },
+  {
+   "k": "2026-06-01T00:00:00.000",
+   "n": "275"
+  },
+  {
+   "k": "2026-07-01T00:00:00.000",
+   "n": "3589"
+  },
+  {
+   "k": "2026-08-01T00:00:00.000",
+   "n": "1585"
+  },
+  {
+   "k": "2026-09-01T00:00:00.000",
+   "n": "1007"
+  },
+  {
+   "k": "2026-10-01T00:00:00.000",
+   "n": "2393"
+  },
+  {
+   "k": "2026-11-01T00:00:00.000",
+   "n": "101"
+  }
+ ],
+ "directa_ps": {
+  "n": "13417"
+ }
+}
