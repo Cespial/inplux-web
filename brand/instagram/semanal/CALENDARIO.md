@@ -1,5 +1,7 @@
 # Calendario diario · 26-oct → 22-nov-2026 (semanas 1–4)
 
+> 🚨 **11 al 16-nov:** manda `PARRILLA-11-16-nov.md` (seis videos sin grabación, aprobada el 10-nov). Las filas de esos días aquí abajo quedan como reserva.
+
 Plan aprobado el 24-oct (`~/.claude/plans/eager-foraging-reddy.md`). Semana tipo: lun actualidad · mar trabajo · mié reel ·
 jue carrusel educativo · vie que lo digan otros · sáb pregunta real · dom esta semana en INPLUX. Nunca tres fondos iguales seguidos.
 Nada se programa sin OK de Cristian. Las piezas «listas» ya están limpias (limpiadoc 0) en las carpetas indicadas.

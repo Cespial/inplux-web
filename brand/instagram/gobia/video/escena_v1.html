@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"SG";src:url(SpaceGrotesk-500.ttf);font-weight:500}
+@font-face{font-family:"SG";src:url(SpaceGrotesk-700.ttf);font-weight:700}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-500.ttf);font-weight:500}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-600.ttf);font-weight:600}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-700.ttf);font-weight:700}
+:root{--tinta:#14120E;--cream:#F8F8F6;--ocre:#B8956A;--ocre2:#D9B788;--gris:#8E887C}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--tinta)}
+body{font-family:"PJ",sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;position:relative}
+#fondo{position:absolute;inset:0;background:radial-gradient(1200px 900px at 20% 62%,#221D15 0%,#14120E 62%)}
+canvas{position:absolute;left:0;top:0}
+.abs{position:absolute}
+#firma{left:162px;top:212px;display:flex;align-items:center;gap:14px;font:500 26px "PJ";color:var(--gris)}
+#firma b{font:700 30px "SG";color:var(--cream);letter-spacing:-.01em}
+#firma img{width:38px;height:38px}
+#titulo{left:162px;top:300px;width:860px;font:700 62px/1.04 "SG";letter-spacing:-.015em;text-transform:uppercase}
+#titulo em{font-style:normal;color:var(--ocre2)}
+#sub{left:162px;top:574px;font:500 28px "PJ";color:var(--gris)}
+#sub b{color:var(--cream);font-weight:700}
+#cont{left:162px;top:668px}
+#cont .et{font:700 24px "PJ";letter-spacing:.22em;color:var(--ocre2);text-transform:uppercase}
+#num{font:700 168px/1 "SG";letter-spacing:-.04em;color:var(--ocre2);font-variant-numeric:tabular-nums;margin-top:6px}
+#pct{font:600 36px "PJ";margin-top:10px}
+#pct b{font:700 44px "SG";color:var(--ocre2)}
+#meses{left:0;top:1346px;width:1080px;height:30px}
+#meses span{position:absolute;width:82px;text-align:center;font:600 22px "PJ";color:var(--gris)}
+#meses span.e{color:var(--ocre2)}
+#base{left:50px;top:1336px;width:902px;height:2px;background:rgba(248,248,246,.16)}
+#banda{left:128px;top:1150px;width:418px;height:186px;border-radius:10px;
+  background:repeating-linear-gradient(135deg,rgba(217,183,136,.20) 0 10px,rgba(217,183,136,.07) 10px 20px);border:1.5px solid rgba(217,183,136,.55)}
+#fj{left:128px;top:1166px;width:418px;text-align:center;font:600 24px "PJ";color:var(--cream)}
+#fj b{font:700 30px "SG";color:var(--ocre2)}
+#ley{left:128px;top:986px;width:420px}
+#ley .a{font:700 34px/1.08 "SG";text-transform:uppercase;letter-spacing:-.005em}
+#ley .b{font:500 23px/1.3 "PJ";color:var(--gris);margin-top:10px}
+#ley i{position:absolute;left:0;top:-18px;width:64px;height:4px;background:var(--ocre2)}
+#jul{left:560px;top:1010px;width:160px}
+#jul b{display:block;font:700 40px/1 "SG";color:var(--cream)}
+#jul span{font:600 22px "PJ";color:var(--gris)}
+#jul i{position:absolute;left:20px;top:74px;width:2px;height:26px;background:var(--gris)}
+#card{left:190px;top:330px;width:820px;height:690px;background:var(--cream);color:var(--tinta);border-radius:30px;padding:54px 56px;transform-origin:-88px 420px}
+#card .k{font:700 22px "PJ";letter-spacing:.2em;color:#8A6A3F;text-transform:uppercase}
+#card h3{font:700 60px/1.04 "SG";letter-spacing:-.02em;margin-top:14px}
+#card ul{list-style:none;margin-top:30px}
+#card li{display:flex;align-items:center;gap:20px;font:600 38px "PJ";padding:15px 0;border-top:1.5px solid rgba(20,18,14,.12)}
+#card li u{width:30px;height:30px;border-radius:8px;background:var(--ocre);flex:none;text-decoration:none}
+#card .x{position:absolute;left:56px;bottom:46px;right:56px;display:flex;justify-content:space-between;align-items:baseline;font:600 30px "PJ";color:#5B564C}
+#card .x b{font:700 54px "SG";color:#8A6A3F;letter-spacing:-.02em}
+#fin{left:162px;top:420px;width:860px}
+#fin .q{font:700 112px/1 "SG";letter-spacing:-.03em}
+#fin .r{font:700 58px/1.08 "SG";color:var(--ocre2);margin-top:26px;letter-spacing:-.015em}
+#fin .f{display:flex;align-items:center;gap:16px;margin-top:70px;font:500 30px "PJ";color:var(--gris)}
+#fin .f b{font:700 40px "SG";color:var(--cream)}
+#fin .f img{width:52px;height:52px}
+#subt{left:70px;right:70px;top:1424px;display:flex;justify-content:center}
+#subt span{display:inline-block;background:rgba(10,9,7,.88);color:var(--cream);font:600 42px/1.24 "PJ";letter-spacing:-.012em;padding:16px 28px;border-radius:18px;text-align:center;max-width:900px}
+#pie{left:70px;right:70px;top:1590px;text-align:center;font:500 20px "PJ";color:var(--gris);letter-spacing:.01em}
+</style></head><body>
+<div id="fondo"></div>
+<canvas id="cv" width="1080" height="1920"></canvas>
+<div class="abs" id="base"></div><div class="abs" id="meses"></div>
+<div class="abs" id="firma"><img src="gobia-inverso.svg"><b>Gobia</b><span>· un producto de INPLUX</span></div>
+<div class="abs" id="titulo">Casi la mitad de los contratos de 2026 se firmaron en <em>enero</em></div>
+<div class="abs" id="sub"></div>
+<div class="abs" id="cont"><div class="et">Firmados en enero</div><div id="num">0</div><div id="pct"></div></div>
+<div class="abs" id="banda"></div><div class="abs" id="fj"></div>
+<div class="abs" id="ley"><i></i><div class="a">Contratación directa prohibida</div><div class="b">Ley 996 de 2005, artículo 33</div></div>
+<div class="abs" id="jul"><b></b><span>en julio</span><i></i></div>
+<div class="abs" id="card"><div class="k">1 punto = 1.000 contratos</div><h3>Y cada contrato trae:</h3>
+<ul><li><u></u>Estudios previos</li><li><u></u>Hoja de vida y soportes</li><li><u></u>Seguridad social</li><li><u></u>Un supervisor</li></ul>
+<div class="x"><span>en un solo mes</span><b id="cx"></b></div></div>
+<div class="abs" id="fin"><div class="q">¿Y tu municipio?</div><div class="r">Coméntalo y lo abrimos.</div><div class="f"><img src="gobia-inverso.svg"><b>Gobia</b><span>· un producto de INPLUX</span></div></div>
+<div class="abs" id="subt"><span></span></div>
+<div class="abs" id="pie"></div>
+<script>
+const D=/*DATOS*/null, C=D.c, E=D.esc, T=D.txt;
+const $=id=>document.getElementById(id), cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const pr=(t,t0,d)=>cl((t-t0)/d), eo=x=>1-Math.pow(1-x,3), eb=x=>{const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+// geometría
+const X0=50, CW=82, CEL=14, R=5, BASE=1330, NOM="EFMAMJJASOND";
+// tiempos
+const d2=E[1].voz_fin-E[1].voz_ini, d3=E[2].voz_fin-E[2].voz_ini, d4=E[3].voz_fin-E[3].voz_ini;
+const R0=0.35, RE=E[1].voz_ini+0.42*d2, CAE=0.5;
+const tPct=RE+0.15, tBr=E[1].voz_ini+0.55*d2, tBanda=E[2].voz_ini+0.30*d3, tJul=E[2].voz_ini+0.80*d3;
+const tCard=E[3].ini+0.05, tGob=E[3].voz_ini+0.66*d4, tFin=E[4].ini;
+// puntos
+const rnd=rng(20261110), P=[]; const dt=(RE-R0-CAE)/C.puntos[0];
+C.puntos.forEach((n,c)=>{for(let k=0;k<n;k++){const row=Math.floor(k/5), j=k%5;
+  P.push({c,x:X0+c*CW+9+j*CEL,y:BASE-8-row*CEL,st:R0+k*dt+rnd()*0.05,dx:(rnd()-.5)*26,y0:-40-rnd()*260})}});
+const nEne=C.puntos[0];
+const ms=$('meses'); C.meses.forEach((m,c)=>{const s=document.createElement('span');s.textContent=NOM[+m-1];s.style.left=(X0+c*CW-4)+'px';if(c==0)s.className='e';ms.appendChild(s)});
+$('sub').innerHTML=`<b>${T.tot}</b> contratos de municipios y departamentos`;
+$('fj').innerHTML=`febrero a junio: <b>${T.fj}</b>`; $('jul').querySelector('b').textContent=T.jul; $('cx').textContent='× '+T.ene;
+$('pie').textContent=`Fuente: SECOP II · datos.gov.co · entidades territoriales · firmados en 2026 · corte ${T.corte}`;
+const cv=$('cv'), g=cv.getContext('2d'), fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const op=(id,v)=>{$(id).style.opacity=cl(v)};
+window.chequeo=()=>({puntos:P.length,ene:T.ene,enero_puntos:nEne});
+window.seek=t=>{
+  // --- puntos
+  g.clearRect(0,0,1080,1920);
+  const atenua=1-0.62*pr(t,tCard,0.5)-0.1*pr(t,tFin,0.4); let ene=0;
+  for(const p of P){ if(t<p.st) continue; const q=(t-p.st)/CAE; let x=p.x,y=p.y,fl=0;
+    if(q<1){const e=q*q; y=p.y0+(p.y-p.y0)*e; x=p.x+p.dx*(1-e)} else {fl=cl(1-(q-1)/0.5); if(p.c==0) ene++}
+    const jan=p.c==0; let a=(jan?1:0.82)*atenua; if(!jan&&p.c>=1&&p.c<=5) a*=1-0.25*pr(t,tBanda,0.4);
+    g.globalAlpha=a; g.fillStyle=jan?(fl>0?`rgb(${217+Math.round(30*fl)},${183+Math.round(40*fl)},${136+Math.round(60*fl)})`:'#C9A273'):(fl>0?'#FFFFFF':'#F8F8F6');
+    g.beginPath(); g.arc(x,y,R+(q>=1?fl*1.6:0),0,6.2832); g.fill(); }
+  g.globalAlpha=1;
+  // julio resaltado
+  const pj=pr(t,tJul,0.4)*(1-pr(t,tCard,0.3));
+  if(pj>0){g.globalAlpha=0.9*pj;g.strokeStyle='#F8F8F6';g.lineWidth=2;const n=C.puntos[6],h=Math.ceil(n/5)*CEL;g.strokeRect(X0+6*CW+1,BASE-h-6,5*CEL+2,h+10);g.globalAlpha=1}
+  // --- textos
+  const fuera=1-pr(t,tCard,0.35);
+  op('titulo',fuera); op('sub',fuera); op('firma',1-pr(t,tFin,0.3));
+  op('cont',pr(t,R0+0.3,0.4)*fuera); $('num').textContent=ene>=nEne?T.ene:fmt(Math.round(C.ene*ene/nEne));
+  const pp=pr(t,tPct,0.45); $('pct').style.opacity=pp; $('pct').style.transform=`translateY(${(1-eo(pp))*14}px)`;
+  $('pct').innerHTML=`<b>${T.pct} %</b> de todo lo firmado en el año`;
+  const s=ene>=nEne?1+0.05*(1-pr(t,RE+0.02,0.5)):1; $('num').style.transform=`scale(${s})`; $('num').style.transformOrigin='left center';
+  op('fj',pr(t,tBr,0.35)*fuera); $('fj').style.transform=`translateY(${(1-eo(pr(t,tBr,0.35)))*10}px)`;
+  op('banda',pr(t,tBanda,0.5)*fuera); const pl=pr(t,tBanda+0.15,0.5); op('ley',pl*fuera); $('ley').style.transform=`translateX(${(1-eo(pl))*-18}px)`;
+  op('jul',pj);
+  // tarjeta
+  const pc=pr(t,tCard+0.1,0.6), sal=1-pr(t,tFin-0.05,0.35), card=$('card');
+  card.style.opacity=pc>0?sal:0; card.style.transform=`scale(${0.015+0.985*eb(pc)})`; card.style.borderRadius=(30+300*(1-pc))+'px';
+  card.querySelector('.k').style.opacity=pr(t,tCard+0.55,0.3); card.querySelector('h3').style.opacity=pr(t,tCard+0.6,0.3);
+  card.querySelectorAll('li').forEach((li,i)=>{const a=pr(t,tCard+1.0+i*0.5,0.3);li.style.opacity=a;li.style.transform=`translateX(${(1-eo(a))*-16}px)`});
+  card.querySelector('.x').style.opacity=pr(t,tGob-0.5,0.4);
+  // cierre
+  const pf=pr(t,tFin+0.1,0.45), fin=$('fin'); fin.style.opacity=pf;
+  fin.querySelector('.q').style.transform=`translateY(${(1-eo(pf))*24}px)`;
+  fin.querySelector('.r').style.opacity=pr(t,tFin+0.55,0.4); fin.querySelector('.f').style.opacity=pr(t,tFin+1.1,0.5);
+  // subtítulos
+  const cue=window.SIN_SUB?null:D.cues.find(c=>t>=c[0]&&t<c[1]); const sb=$('subt');
+  sb.style.display=cue?'flex':'none'; if(cue) sb.firstChild.textContent=cue[2];
+};
+window.seek(0);
+</script></body></html>

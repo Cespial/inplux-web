@@ -1,0 +1,9 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="gobia-title">
+  <title id="gobia-title">Gobia — Plaza Cívica</title>
+  <g fill="#F8F8F6">
+    <path d="M7 4.5h15.6a4.9 4.9 0 0 1 4.9 4.9v2.1H13.1a1.6 1.6 0 0 0-1.6 1.6V16h-7V7A2.5 2.5 0 0 1 7 4.5Z"/>
+    <path d="M4.5 17.8h7v1.1a1.6 1.6 0 0 0 1.6 1.6H16v7H7A2.5 2.5 0 0 1 4.5 25v-7.2Z"/>
+    <path d="M17.8 20.5h9.7V25a2.5 2.5 0 0 1-2.5 2.5h-7.2v-7Z"/>
+  </g>
+  <path d="M18.1 16H28" fill="none" stroke="#D9B788" stroke-width="3" stroke-linecap="round"/>
+</svg>
