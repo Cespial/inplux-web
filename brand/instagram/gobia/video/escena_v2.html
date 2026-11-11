@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"SG";src:url(SpaceGrotesk-500.ttf);font-weight:500}
+@font-face{font-family:"SG";src:url(SpaceGrotesk-700.ttf);font-weight:700}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-500.ttf);font-weight:500}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-600.ttf);font-weight:600}
+@font-face{font-family:"PJ";src:url(PlusJakartaSans-700.ttf);font-weight:700}
+:root{--tinta:#14120E;--cream:#F8F8F6;--ocre:#B8956A;--ocre2:#D9B788;--gris:#8E887C}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--tinta)}
+body{font-family:"PJ",sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;position:relative}
+canvas{position:absolute;left:0;top:0}
+.abs{position:absolute}
+#velo{left:0;top:0;width:1080px;height:760px;background:linear-gradient(rgba(20,18,14,.96) 0,rgba(20,18,14,.88) 52%,rgba(20,18,14,0) 100%)}
+#vin{inset:0;background:radial-gradient(ellipse 80% 60% at 50% 48%,transparent 60%,rgba(6,5,4,.6) 100%)}
+#velo2{left:0;top:1340px;width:1080px;height:580px;background:linear-gradient(rgba(20,18,14,0),rgba(20,18,14,.85) 45%)}
+#firma{left:64px;top:168px;display:flex;align-items:center;gap:12px;font:500 25px "PJ";color:var(--gris)}
+#firma b{font:700 29px "SG";color:var(--cream);letter-spacing:-.01em}
+#firma img{width:36px;height:36px}
+#sello{right:64px;top:170px;font:600 21px "PJ";color:var(--ocre2);border:1.5px solid rgba(217,183,136,.5);padding:7px 16px;border-radius:999px;letter-spacing:.02em}
+.bloque{left:64px;top:250px;width:952px}
+#titulo{font:700 70px/1.0 "SG";letter-spacing:-.02em;text-transform:uppercase}
+#titulo em{font-style:normal;color:var(--ocre2)}
+.et{font:700 24px "PJ";letter-spacing:.24em;color:var(--ocre2);text-transform:uppercase}
+.big{font:700 200px/0.92 "SG";letter-spacing:-.045em;color:var(--ocre2);font-variant-numeric:tabular-nums;margin-top:8px}
+.med{font:700 128px/0.95 "SG";letter-spacing:-.04em;color:var(--cream);font-variant-numeric:tabular-nums;margin-top:8px}
+.lin{font:600 36px/1.2 "PJ";margin-top:14px;color:var(--cream)}
+.lin b{font:700 44px "SG";color:var(--ocre2)}
+#ley{margin-top:26px;padding-left:22px;border-left:5px solid var(--ocre2)}
+#ley .a{font:700 40px/1.05 "SG";text-transform:uppercase}
+#ley .b{font:500 26px/1.3 "PJ";color:var(--gris);margin-top:8px}
+#q{left:96px;top:1120px;width:888px;background:rgba(16,14,11,.94);border:1.5px solid rgba(217,183,136,.5);border-radius:26px;padding:26px 34px 28px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#q .k{font:700 21px "PJ";letter-spacing:.22em;color:var(--ocre2);text-transform:uppercase}
+#q .f{font:500 27px "PJ";color:#CFC9BD;margin-top:10px}
+#q .f i{font-style:normal;color:var(--cream);background:rgba(217,183,136,.16);border-radius:8px;padding:2px 10px}
+#q .n{display:flex;align-items:baseline;gap:18px;margin-top:10px}
+#q .n b{font:700 112px/1 "SG";letter-spacing:-.04em;color:var(--ocre2);font-variant-numeric:tabular-nums}
+#q .n span{font:600 32px "PJ"}
+#cur{display:inline-block;width:3px;height:30px;background:var(--ocre2);vertical-align:-5px;margin-left:2px}
+#meses span,#topes span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap}
+#meses span{font:700 22px "PJ";letter-spacing:.08em;color:#BDB6A8}
+#meses span.e{color:var(--ocre2)}
+#topes span{font:700 30px "SG";color:var(--cream);background:rgba(16,14,11,.82);padding:4px 12px;border-radius:10px}
+#topes span.e{color:var(--tinta);background:var(--ocre2)}
+#card{left:130px;top:560px;width:820px;height:700px;background:var(--cream);color:var(--tinta);border-radius:30px;padding:52px 56px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+#card .k{font:700 22px "PJ";letter-spacing:.2em;color:#8A6A3F;text-transform:uppercase}
+#card h3{font:700 60px/1.04 "SG";letter-spacing:-.02em;margin-top:14px}
+#card ul{list-style:none;margin-top:28px}
+#card li{display:flex;align-items:center;gap:20px;font:600 38px "PJ";padding:15px 0;border-top:1.5px solid rgba(20,18,14,.12)}
+#card li u{width:30px;height:30px;border-radius:8px;background:var(--ocre);flex:none}
+#card .x{position:absolute;left:56px;bottom:46px;right:56px;display:flex;justify-content:space-between;align-items:baseline;font:600 30px "PJ";color:#5B564C}
+#card .x b{font:700 58px "SG";color:#8A6A3F;letter-spacing:-.02em}
+#lock .l{display:flex;align-items:center;gap:26px}
+#lock img{width:118px;height:118px}
+#lock .g{font:700 150px/1 "SG";letter-spacing:-.04em}
+#lock .r{font:500 32px "PJ";color:var(--gris);margin-top:16px}
+#lock .s{font:700 46px/1.1 "SG";color:var(--ocre2);margin-top:18px;letter-spacing:-.01em}
+.lab{font:700 64px/1.02 "SG";letter-spacing:-.02em}
+.lab small{display:block;font:600 28px/1.3 "PJ";color:var(--gris);letter-spacing:0;margin-top:14px}
+.lab i{display:inline-block;width:22px;height:22px;border-radius:50%;margin-right:8px;vertical-align:4px}
+#prod{left:0;top:620px;width:1080px;height:800px;perspective:1700px}
+.pc{position:absolute;left:50%;top:50%;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 50px 110px rgba(0,0,0,.6),0 0 0 1.5px rgba(255,255,255,.08);transform-style:preserve-3d;opacity:0}
+.pc img{display:block;width:100%;height:100%}
+.hl{position:absolute;border:4px solid var(--ocre);border-radius:14px;box-shadow:0 0 0 6px rgba(184,149,106,.22),0 0 30px rgba(184,149,106,.55);opacity:0}
+.bar{position:absolute;left:0;right:0;background:rgba(184,149,106,.28);opacity:0}
+.chip{position:absolute;right:22px;bottom:22px;background:var(--tinta);color:var(--cream);font:700 26px "PJ";padding:12px 20px;border-radius:14px;opacity:0}
+.chip b{color:var(--ocre2)}
+#fin .q{font:700 116px/1 "SG";letter-spacing:-.03em}
+#fin .r{font:700 60px/1.08 "SG";color:var(--ocre2);margin-top:28px;letter-spacing:-.015em}
+#fin .f{display:flex;align-items:center;gap:16px;margin-top:64px;font:500 30px "PJ";color:var(--gris)}
+#fin .f b{font:700 40px "SG";color:var(--cream)}
+#fin .f img{width:52px;height:52px}
+#subt{left:60px;right:60px;top:1432px;display:flex;justify-content:center}
+#subt .box{display:inline-block;background:rgba(10,9,7,.9);padding:16px 28px 18px;border-radius:20px;text-align:center;max-width:960px;font:700 46px/1.22 "PJ";letter-spacing:-.012em}
+#subt w{color:rgba(248,248,246,.38);display:inline-block;margin:0 .13em}
+#subt w.d{color:var(--cream)}
+#subt w.a{color:var(--ocre2)}
+#pie{left:60px;right:60px;top:1606px;text-align:center;font:500 20px "PJ";color:var(--gris)}
+#flash{inset:0;background:#F8F8F6;opacity:0}
+</style></head><body>
+<div class="abs" id="vin"></div>
+<div class="abs" id="meses"></div><div class="abs" id="topes"></div>
+<div class="abs" id="velo"></div><div class="abs" id="velo2"></div>
+<div class="abs" id="firma"><img src="gobia-inverso.svg"><b>Gobia</b><span>· un producto de INPLUX</span></div>
+<div class="abs" id="sello">Gobia abre el SECOP · n.º 1</div>
+<div class="abs bloque" id="b0"><div id="titulo">Casi la mitad de los contratos de 2026 se firmaron en <em>enero</em></div></div>
+<div class="abs" id="q"><div class="k">Abrimos el SECOP II · datos.gov.co</div>
+  <div class="f"><i>entidades territoriales</i> · <i>firmados en 2026</i><span id="cur"></span></div>
+  <div class="n"><b id="qn">0</b><span>contratos</span></div></div>
+<div class="abs bloque" id="b1"><div class="et">Firmados en enero</div><div class="big" id="num">0</div><div class="lin" id="pct"></div></div>
+<div class="abs bloque" id="b2"><div class="et">Febrero a junio, sumados</div><div class="med" id="fjn"></div>
+  <div id="ley"><div class="a">Contratación directa prohibida</div><div class="b">Ley 996 de 2005, artículo 33 · año de elección presidencial</div></div></div>
+<div class="abs" id="card"><div class="k">1 hoja = 1.000 contratos</div><h3>Y cada contrato trae:</h3>
+<ul><li><u></u>Estudios previos</li><li><u></u>Hoja de vida y soportes</li><li><u></u>Seguridad social</li><li><u></u>Un supervisor</li></ul>
+<div class="x"><span>en un solo mes</span><b id="cx"></b></div></div>
+<div class="abs bloque" id="lock"><div class="l"><img src="gobia-inverso.svg"><div class="g">Gobia</div></div>
+  <div class="r">un producto de INPLUX</div><div class="s">Para que una alcaldía contrate en orden.</div></div>
+<div class="abs bloque lab" id="l1"><i style="background:#3FA34D"></i><i style="background:#D9A23A"></i><i style="background:#C9473D"></i><br>Cada carpeta, con semáforo<small>Verde: listo. Amarillo: decide una persona. Rojo: falta o venció.</small></div>
+<div class="abs bloque lab" id="l2"><span style="color:var(--ocre2)">20</span> documentos, de una vez<small>Números seguidos, en Word y PDF, en un solo ZIP.</small></div>
+<div class="abs bloque lab" id="l3">Cada uno se verifica <span style="color:var(--ocre2)">con un QR</span><small>Cualquiera lo lee con el celular, sin iniciar sesión.</small></div>
+<div class="abs" id="prod">
+  <div class="pc" id="pBan" style="width:960px;height:417px"><img src="bandeja.jpg"><div class="hl" style="left:2%;top:4%;width:52%;height:13%"></div></div>
+  <div class="pc" id="pSem" style="width:960px;height:536px"><img src="semaforo.jpg">
+    <div class="hl" style="left:1%;top:3.5%;width:70%;height:11%"></div><div class="hl" style="left:2%;top:81%;width:19%;height:11%"></div></div>
+  <div class="pc" id="pLot" style="width:960px;height:547px"><img src="lote.jpg"><div class="bar" style="height:6.6%"></div>
+    <div class="hl" style="left:65.5%;top:8%;width:15%;height:91%"></div><div class="chip" style="right:auto;left:22px"><b>20</b> documentos · números seguidos</div></div>
+  <div class="pc" id="pQr" style="width:960px;height:557px"><img src="qr.jpg"><div class="hl" style="left:3.5%;top:63%;width:17.5%;height:30%"></div></div>
+  <div class="pc" id="pVer" style="width:640px;height:768px"><img src="verif.jpg"><div class="hl" style="left:1%;top:41%;width:98%;height:7.5%"></div>
+    <div class="chip" style="right:18px;bottom:18px">✓ Emitido en Gobia</div></div>
+</div>
+<div class="abs bloque" id="fin" style="top:470px"><div class="q">¿Y tu municipio?</div><div class="r">Coméntalo y lo abrimos.</div>
+  <div class="f"><img src="gobia-inverso.svg"><b>Gobia</b><span>· un producto de INPLUX</span></div></div>
+<div class="abs" id="subt"><div class="box"></div></div>
+<div class="abs" id="pie"></div>
+<div class="abs" id="flash"></div>
+<script type="importmap">{"imports":{"three":"./three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const D=/*DATOS*/null, C=D.c, T=D.txt, K=D.k;
+const $=id=>document.getElementById(id), cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const pr=(t,t0,d)=>cl((t-t0)/d), eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eb=x=>{const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const ven=(t,a,b,fi=.35,fo=.3)=>Math.min(pr(t,a,fi),1-pr(t,b-fo,fo));   // ventana con entrada y salida
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const op=(el,v)=>{(typeof el=='string'?$(el):el).style.opacity=cl(v)};
+
+// ---------- escena
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+R.setPixelRatio(1); R.setSize(1080,1920); R.shadowMap.enabled=true; R.shadowMap.type=THREE.PCFSoftShadowMap;
+R.outputColorSpace=THREE.SRGBColorSpace; document.body.prepend(R.domElement);
+const S=new THREE.Scene(); const BG=new THREE.Color('#14120E'); S.background=BG; S.fog=new THREE.Fog(BG,46,110);
+const cam=new THREE.PerspectiveCamera(35,1080/1920,0.1,300);
+S.add(new THREE.HemisphereLight('#FFF6E8','#2A2318',1.0));
+const key=new THREE.DirectionalLight('#FFF1DC',2.4); key.position.set(-10,24,16); key.target.position.set(10,0,0);
+key.castShadow=true; key.shadow.mapSize.set(2048,2048); Object.assign(key.shadow.camera,{left:-22,right:22,top:22,bottom:-22,near:1,far:80}); key.shadow.bias=-0.0006;
+S.add(key,key.target);
+const rim=new THREE.DirectionalLight('#D9B788',1.3); rim.position.set(26,8,-18); S.add(rim);
+const piso=new THREE.Mesh(new THREE.PlaneGeometry(260,260),new THREE.MeshStandardMaterial({color:'#1F1A13',roughness:1}));
+piso.rotation.x=-Math.PI/2; piso.receiveShadow=true; S.add(piso);
+
+const L=new THREE.TextureLoader();
+const [texS,texG]=await Promise.all([L.loadAsync('secop.jpg'),L.loadAsync('gobia.jpg')]);
+for(const x of [texS,texG]){x.colorSpace=THREE.SRGBColorSpace; x.anisotropy=8}
+const frente=new THREE.MeshBasicMaterial({map:texS, toneMapped:false});
+const papel=new THREE.MeshStandardMaterial({color:'#EEEAE0',roughness:.85});
+const papelE=new THREE.MeshStandardMaterial({color:'#D9B788',roughness:.7});
+
+// franja de la prohibición (febrero a junio)
+const cv=document.createElement('canvas'); cv.width=1024; cv.height=256; const g=cv.getContext('2d');
+g.fillStyle='rgba(217,183,136,0.10)'; g.fillRect(0,0,1024,256);
+g.strokeStyle='rgba(217,183,136,0.55)'; g.lineWidth=26; for(let x=-300;x<1324;x+=70){g.beginPath();g.moveTo(x,256);g.lineTo(x+256,0);g.stroke()}
+g.strokeStyle='#D9B788'; g.lineWidth=10; g.strokeRect(5,5,1014,246);
+const texF=new THREE.CanvasTexture(cv); texF.colorSpace=THREE.SRGBColorSpace;
+const SP=2.3, TH=0.036, N=26;
+const franja=new THREE.Mesh(new THREE.PlaneGeometry(5*SP+0.6,3.2),new THREE.MeshBasicMaterial({map:texF,transparent:true,opacity:0,depthWrite:false}));
+franja.rotation.x=-Math.PI/2; franja.position.set(3*SP,0.02,0); S.add(franja);
+
+// ---------- hojas: 676 = 26 × 26 trozos de la pantalla
+const PS=new THREE.Vector3(11.5,10.2,-8), SS=12;              // pantalla del SECOP
+const PW=new THREE.Vector3(11.5,7.6,-4), WW=15.2, WH=WW*880/1920; // pantalla de Gobia
+const rnd=rng(20261111), V=(x,y,z)=>new THREE.Vector3(x,y,z);
+const hojas=[]; C.puntos.forEach((n,c)=>{for(let k=0;k<n;k++) hojas.push({c,k})});
+const tiles=[]; for(let r=0;r<N;r++) for(let q=0;q<N;q++) tiles.push({r,q,w:rnd()});
+// la pantalla se desarma de abajo hacia arriba, con ruido
+tiles.sort((a,b)=>(a.r*-1+a.w*7)-(b.r*-1+b.w*7));
+const n0=C.puntos[0], FLY=0.95, rate=n0/Math.max(0.8,K.eneFin-K.rompe-FLY);
+hojas.sort((a,b)=>a.k-b.k||a.c-b.c);
+const qFlat=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI/2,0,0));
+const qWall=new THREE.Quaternion();
+const HJ=[];
+hojas.forEach((h,i)=>{
+  const tl=tiles[i], geo=new THREE.BoxGeometry(1,1,1), uv=geo.attributes.uv;
+  for(let v=16;v<20;v++){const u0=uv.getX(v), v0=uv.getY(v); uv.setXY(v,(tl.q+u0)/N,1-(tl.r+1-v0)/N)}
+  const pm=h.c==0?papelE:papel, m=new THREE.Mesh(geo,[pm,pm,pm,pm,frente,pm]); m.castShadow=true; m.receiveShadow=true; S.add(m);
+  const home=V(PS.x+((tl.q+.5)/N-.5)*SS, PS.y+(.5-(tl.r+.5)/N)*SS, PS.z);
+  const yaw=(rnd()-.5)*0.14;
+  const pila=V(h.c*SP+(rnd()-.5)*0.09, h.k*TH+TH/2, (rnd()-.5)*0.09);
+  const qP=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,yaw,0)).multiply(qFlat);
+  const muro=V(PW.x+((tl.q+.5)/N-.5)*WW, PW.y+(.5-(tl.r+.5)/N)*WH, PW.z);
+  const ax=V(rnd()-.5,rnd()-.5,rnd()-.5).normalize();
+  HJ.push({m,h,tl,home,pila,muro,qP,ax,spin:(2+rnd()*3)*(rnd()<.5?-1:1),
+    t0:K.rompe+h.k/rate+(rnd()*0.06), ctl:V((rnd()-.5)*3,2+rnd()*2.5,3+rnd()*3),
+    t1:K.arma+(tl.q+tl.r)*0.011+rnd()*0.05, ctl2:V((rnd()-.5)*4,3+rnd()*3,4+rnd()*3)});
+});
+const sc0=V(SS/N,SS/N,0.02), scP=V(1.6,1.1,TH*0.92), scW=V(WW/N,WH/N,0.03);
+const _q=new THREE.Quaternion(), _q2=new THREE.Quaternion(), _p=new THREE.Vector3();
+function bez(a,c,b,e,o){o.set(0,0,0).addScaledVector(a,(1-e)*(1-e)).addScaledVector(c,2*(1-e)*e).addScaledVector(b,e*e);return o}
+function pose(H,t){
+  const m=H.m;
+  if(t<H.t0){m.position.copy(H.home); m.quaternion.identity(); m.scale.copy(sc0); return}
+  if(t<H.t1){
+    const u=cl((t-H.t0)/FLY), e=eio(u);
+    if(u<1){const c=H.home.clone().lerp(H.pila,.35).add(H.ctl); bez(H.home,c,H.pila,e,m.position);
+      _q.identity().slerp(H.qP,e); _q2.setFromAxisAngle(H.ax,H.spin*Math.sin(Math.PI*e)); m.quaternion.copy(_q).multiply(_q2);
+      m.scale.copy(sc0).lerp(scP,eo(u)); return}
+    m.position.copy(H.pila); m.quaternion.copy(H.qP); m.scale.copy(scP); return }
+  const u=cl((t-H.t1)/1.05), e=eio(u);
+  if(u<1){const c=H.pila.clone().lerp(H.muro,.5).add(H.ctl2); bez(H.pila,c,H.muro,e,m.position);
+    _q.copy(H.qP).slerp(qWall,e); _q2.setFromAxisAngle(H.ax,H.spin*.6*Math.sin(Math.PI*e)); m.quaternion.copy(_q).multiply(_q2);
+    m.scale.copy(scP).lerp(scW,e); return}
+  m.position.copy(H.muro); m.position.z+=0.04*Math.sin(t*2.2+H.tl.q*.45+H.tl.r*.3)*(1-pr(t,H.t1+1.6,1)); m.quaternion.copy(qWall); m.scale.copy(scW);
+}
+
+// ---------- cámara por tramos
+const LK=new THREE.Vector3();
+const CK=[
+  [0,            V(11.5,12.0,25.5), V(11.5,12.0,-8)],
+  [K.rompe,      V(11.5,11.6,23.0), V(11.5,11.4,-8)],
+  [K.rompe+1.25, V(-7.5,9.0,17.5),  V(8.5,3.2,0)],
+  [K.e1+0.15,    V(3.6,1.6,6.4),    V(0,3.2,0)],
+  [K.eneFin+0.5, V(3.9,12.8,7.0),   V(0,11.2,0)],
+  [K.e2+0.5,     V(-6.5,13.5,15.5), V(8.6,1.2,0)],
+  [K.e2fin,      V(-5.0,12.0,14.0), V(9.2,1.0,0)],
+  [K.card+0.7,   V(2.6,9.4,4.6),    V(0,8.6,0)],
+  [K.arma,       V(3.2,9.0,5.2),    V(0,8.2,0)],
+  [K.arma+1.5,   V(11.5,7.9,40.0),  V(11.5,7.6,-4)],
+  [K.sem,        V(11.5,7.7,36.0),  V(11.5,7.6,-4)],
+  [K.fin,        V(11.5,7.6,33.0),  V(11.5,7.6,-4)],
+  [K.total+1,    V(11.5,7.6,31.0),  V(11.5,7.6,-4)],
+];
+function camara(t){
+  let i=0; while(i<CK.length-2&&t>=CK[i+1][0]) i++;
+  const [ta,pa,la]=CK[i],[tb,pb,lb]=CK[i+1], e=eio(cl((t-ta)/Math.max(.001,tb-ta)));
+  cam.position.copy(pa).lerp(pb,e); LK.copy(la).lerp(lb,e);
+  cam.position.x+=0.05*Math.sin(t*0.9); cam.position.y+=0.04*Math.sin(t*1.3+1);   // respiración de cámara en mano
+  cam.lookAt(LK);
+}
+
+// ---------- DOM
+const NOM=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV'];
+const ms=$('meses'), tp=$('topes'), lbl=C.meses.map((m,c)=>{const s=document.createElement('span');s.textContent=NOM[+m-1];if(c==0)s.className='e';ms.appendChild(s);return s});
+const tops=[[0,T.ene,'e',0],[6,T.jul,'',0],[3,'feb–jun: '+T.fj,'e',1]].map(([c,txt,cls,fj])=>{const s=document.createElement('span');s.textContent=txt;s.className=cls;tp.appendChild(s);return [c,s,fj]});
+$('fjn').textContent=T.fj; $('cx').textContent='× '+T.ene;
+const pieDatos=`Fuente: SECOP II · datos.gov.co · entidades territoriales · firmados en 2026 · corte ${T.corte}`;
+const pieDemo='Pantallas de la demostración de Gobia · municipio y datos ficticios';
+const _v=new THREE.Vector3();
+function proy(x,y,z){_v.set(x,y,z).project(cam); return [(_v.x+1)/2*1080,(1-_v.y)/2*1920]}
+
+// subtítulos palabra por palabra
+const sbox=document.querySelector('#subt .box');
+let chunkAct=-1;
+function subt(t){
+  const ch=window.SIN_SUB?-1:D.chunks.findIndex(c=>t>=c.t0&&t<c.t1);
+  $('subt').style.display=ch<0?'none':'flex'; if(ch<0) return;
+  if(ch!==chunkAct){sbox.innerHTML=D.chunks[ch].w.map(w=>`<w>${w[0]}</w>`).join(''); chunkAct=ch}
+  const ws=sbox.children; D.chunks[ch].w.forEach((w,i)=>{ws[i].className=t>=w[2]?'d':(t>=w[1]?'a':'')});
+}
+function tarjeta(id,ti,to,{dx=760,rot=34}={}){
+  const el=$(id), a=pr(t_,ti,0.5), b=pr(t_,to-0.38,0.38);
+  if(t_<ti||t_>to){el.style.opacity=0;return 0}
+  const e=eb(a), x=(1-e)*dx - eio(b)*dx, r=(1-e)*-rot + eio(b)*rot, z=(1-eo(a))*-260 - b*260;
+  const fl=Math.sin((t_-ti)*1.3)*2.5;
+  el.style.opacity=Math.min(1,a*3)*(1-b);
+  el.style.transform=`translate(-50%,-50%) translate3d(${x}px,${Math.sin((t_-ti)*1.1)*6}px,${z}px) rotateY(${r+fl}deg) rotateX(${2+Math.sin((t_-ti)*.8)*1.5}deg)`;
+  return a;
+}
+let t_=0;
+window.chequeo=()=>({hojas:HJ.length,ene:T.ene,enero_hojas:n0});
+window.seek=t=>{
+  t_=t;
+  for(const H of HJ) pose(H,t);
+  frente.map=t<K.arma?texS:texG;
+  camara(t);
+  franja.material.opacity=0.95*ven(t,K.ley,K.card+0.3,0.5,0.4);
+  R.domElement.style.filter=`blur(${10*pr(t,K.band-0.2,0.6)}px) brightness(${1-0.45*pr(t,K.band-0.2,0.6)})`;
+  R.render(S,cam);
+  // aterrizadas de enero
+  let ene=0; for(const H of HJ) if(H.h.c==0&&t>=H.t0+FLY) ene++;
+  // textos superiores
+  op('b0',1-pr(t,K.e1-0.1,0.3));
+  const pq=ven(t,-1,K.rompe+0.35,0.01,0.3); op('q',pq); $('q').style.transform=`translateY(${pr(t,K.rompe,0.35)*40}px)`;
+  $('qn').textContent=fmt(Math.round(C.total*eo(pr(t,0.15,1.6)))); op('cur',Math.floor(t*2.4)%2?0.2:1);
+  op('b1',ven(t,K.e1-0.1,K.e2+0.1,0.3,0.3));
+  $('num').textContent=ene>=n0?T.ene:fmt(Math.round(C.ene*ene/n0));
+  $('num').style.transform=`scale(${ene>=n0?1+0.07*(1-eo(pr(t,K.eneFin,0.45))):1})`; $('num').style.transformOrigin='left center';
+  const pp=pr(t,K.eneFin+0.1,0.4); op('pct',pp); $('pct').style.transform=`translateY(${(1-eo(pp))*16}px)`;
+  $('pct').innerHTML=`<b>${T.pct} %</b> de todo lo firmado en el año`;
+  op('b2',ven(t,K.e2+0.05,K.card,0.35,0.3)); const pl=pr(t,K.ley,0.45); op('ley',pl); $('ley').style.transform=`translateX(${(1-eo(pl))*-24}px)`;
+  op('firma',1-pr(t,K.lock-0.3,0.3)*(1-pr(t,K.fin+1.2,0.4)));
+  op('sello',1-pr(t,K.lock-0.3,0.3));
+  // velo superior más denso cuando hay bloque de texto
+  op('velo',1);
+  // etiquetas de mes y topes (proyectadas desde la escena 3D)
+  const pm=ven(t,K.rompe+0.9,K.card+0.2,0.4,0.3)*(1-0.0);
+  lbl.forEach((s,c)=>{const [x,y]=proy(c*SP,0,1.35); s.style.left=x+'px'; s.style.top=y+'px'; s.style.opacity=pm*(x>20&&x<1060?1:0)});
+  const ptp=ven(t,K.e2+0.3,K.card,0.4,0.3);
+  tops.forEach(([c,s,fj])=>{const n=fj?40:C.puntos[c]; const [x,y]=proy(c*SP,n*TH+0.7,0); s.style.left=x+'px'; s.style.top=y+'px'; s.style.opacity=fj?ven(t,K.fj,K.e2+0.2,0.3,0.3):ptp});
+  // tarjeta de lo que trae cada contrato
+  const card=$('card'), pc=pr(t,K.card+0.15,0.6), sal=1-pr(t,K.arma-0.25,0.35);
+  card.style.opacity=pc>0?Math.min(1,pc*3)*sal:0; card.style.transform=`perspective(1600px) translateY(${(1-eo(pc))*260}px) rotateX(${(1-eo(pc))*40}deg) scale(${0.6+0.4*eb(pc)})`;
+  card.querySelector('.k').style.opacity=pr(t,K.card+0.5,0.3); card.querySelector('h3').style.opacity=pr(t,K.card+0.55,0.3);
+  card.querySelectorAll('li').forEach((li,i)=>{const a=pr(t,K.card+0.85+i*0.32,0.3);li.style.opacity=a;li.style.transform=`translateX(${(1-eo(a))*-20}px)`});
+  const px=pr(t,K.card+2.3,0.4); card.querySelector('.x').style.opacity=px; card.querySelector('.x b').style.transform=`scale(${1+0.12*(1-eo(px))})`;
+  // Gobia
+  const pk=ven(t,K.lock,K.sem,0.45,0.3); op('lock',pk); $('lock').style.transform=`translateY(${(1-eo(pr(t,K.lock,0.45)))*30}px)`;
+  $('lock').querySelector('.s').style.opacity=pr(t,K.band,0.4);
+  op('flash',0.55*(1-pr(t,K.lock,0.35))*(t>=K.lock?1:0));
+  [['l1',K.sem,K.lote],['l2',K.lote,K.qr],['l3',K.qr,K.fin]].forEach(([id,a,b])=>{const v=ven(t,a,b,0.35,0.25); op(id,v); $(id).style.transform=`translateY(${(1-eo(pr(t,a,0.35)))*24}px)`});
+  tarjeta('pBan',K.band,K.sem);
+  const as=tarjeta('pSem',K.sem,K.lote); const hs=$('pSem').querySelectorAll('.hl');
+  hs[0].style.opacity=pr(t,K.sem+0.55,0.25); hs[1].style.opacity=pr(t,K.sem+1.1,0.25);
+  tarjeta('pLot',K.lote,K.qr); const lp=$('pLot'), bar=lp.querySelector('.bar'), sw=pr(t,K.lote+0.45,1.3);
+  bar.style.opacity=sw>0&&sw<1?1:0; bar.style.top=(8+sw*86)+'%'; lp.querySelector('.hl').style.opacity=pr(t,K.lote+0.5,0.25);
+  lp.querySelector('.chip').style.opacity=pr(t,K.lote+1.2,0.3); lp.querySelector('img').style.transform=`scale(${1+0.06*pr(t,K.lote,2.5)})`;
+  // QR → página de verificación (giro)
+  const qe=$('pQr'), ve=$('pVer'), tf=K.ver;
+  if(t<tf){tarjeta('pQr',K.qr,tf+0.4); const g1=pr(t,tf-0.01,0.25); if(g1>0){qe.style.transform+=` rotateY(${g1*90}deg)`}
+    qe.querySelector('.hl').style.opacity=pr(t,K.qr+0.5,0.25); ve.style.opacity=0}
+  else{qe.style.opacity=0; const g2=pr(t,tf,0.3);
+    ve.style.opacity=t<K.fin?1:1-pr(t,K.fin,0.3);
+    ve.style.transform=`translate(-50%,-50%) translateZ(${-pr(t,K.fin,0.3)*300}px) rotateY(${(1-eo(g2))*-90+Math.sin((t-tf)*1.3)*2.5}deg) rotateX(2deg)`;
+    ve.querySelector('.hl').style.opacity=pr(t,tf+0.45,0.25); ve.querySelector('.chip').style.opacity=pr(t,tf+0.7,0.3)}
+  // cierre
+  const pf=pr(t,K.fin+0.15,0.45), fin=$('fin'); fin.style.opacity=pf;
+  fin.querySelector('.q').style.transform=`translateY(${(1-eo(pf))*28}px)`;
+  fin.querySelector('.r').style.opacity=pr(t,K.fin+0.6,0.4); fin.querySelector('.f').style.opacity=pr(t,K.fin+1.1,0.5);
+  // pie y subtítulos
+  const demo=t>=K.lock-0.3&&t<K.fin; $('pie').textContent=demo?pieDemo:pieDatos; op('pie',t<K.card||demo?1:0);
+  subt(t);
+};
+window.listo=true; window.seek(0);
+</script></body></html>
