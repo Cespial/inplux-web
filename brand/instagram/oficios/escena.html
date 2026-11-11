@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Tres oficios INPLUX</title>
+<style>
+@font-face{font-family:R;src:url(RethinkSans-Regular.ttf);font-weight:400}
+@font-face{font-family:R;src:url(RethinkSans-Medium.ttf);font-weight:500}
+:root{--negro:#0c0c0b;--marfil:#f6f2ec;--gris:#a39d94;--dim:#77726b;--teal:#00d7ca}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--negro);font-family:R,sans-serif;color:var(--marfil)}
+#gl{position:absolute;inset:0}
+#velo{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 70% at 50% 42%,rgba(12,12,11,0) 62%,rgba(12,12,11,.45) 100%),
+             linear-gradient(180deg,rgba(12,12,11,0) 70%,rgba(12,12,11,.86) 80%,rgba(12,12,11,.96) 100%)}
+#flash{position:absolute;inset:0;background:var(--marfil);opacity:0;pointer-events:none}
+.ui{position:absolute;inset:0;pointer-events:none}
+.ui>*{position:absolute}
+#marca{left:72px;top:118px;width:150px;opacity:0}
+#cont{right:72px;top:126px;font-size:24px;letter-spacing:.22em;color:var(--gris)}
+#cont b{color:var(--teal);font-weight:500}
+.op{opacity:0}
+.big{left:72px;right:72px;font-size:124px;font-weight:500;line-height:.95;letter-spacing:-.02em}
+.big em{font-style:normal;color:var(--teal)}
+.rot{left:72px;right:72px;top:1500px}
+.rot .n{font-size:26px;letter-spacing:.26em;color:var(--teal);margin-bottom:16px}
+.rot .w{font-size:122px;font-weight:500;line-height:.95;letter-spacing:-.02em;transform-origin:0 100%}
+.copy{left:72px;right:110px;top:1530px;font-size:46px;line-height:1.2}
+.copy span{display:inline-block}
+.pie{font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:var(--gris)}
+.pil{display:inline-flex;align-items:center;gap:14px;padding:12px 24px;border:2px solid var(--teal);border-radius:999px;
+  font-size:30px;color:var(--marfil);background:rgba(12,12,11,.82)}
+.pil b{font-weight:500;color:var(--teal);font-size:22px;letter-spacing:.18em}
+.burb{right:40px;width:0;border-radius:16px;overflow:hidden;box-shadow:0 0 0 2px rgba(0,215,202,.35)}
+.burb img{display:block;width:100%}
+.pant{border:3px solid var(--teal);border-radius:16px;overflow:hidden;background:#000;transform-origin:0 0}
+.pant img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(1) contrast(1.05)}
+.pant .et{position:absolute;left:14px;bottom:12px;padding:6px 14px;border-radius:999px;background:rgba(12,12,11,.88);border:1.5px solid var(--teal);
+  font-size:22px;font-weight:500;letter-spacing:.02em}
+#wf{left:60px;top:300px;width:960px;height:600px}
+#wf rect,#wf path{fill:none;stroke:var(--teal);stroke-width:3}
+.ins{font-size:27px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--marfil);
+  background:rgba(12,12,11,.8);padding:6px 14px;border-radius:6px}
+.ins b{color:var(--teal);font-weight:500;margin-right:14px}
+.fmt{left:72px;right:72px;top:1560px;display:flex;justify-content:space-between}
+.fmt div{font-size:44px;font-weight:500;opacity:0}
+.fmt div:not(:last-child)::after{content:"·";color:var(--teal);margin-left:22px}
+.ped{top:1355px;width:330px;text-align:center}
+.ped b{display:block;font-size:24px;letter-spacing:.24em;color:var(--teal);font-weight:500}
+.ped span{font-size:34px;font-weight:500}
+.lock{left:0;right:0;text-align:center}
+svg#lin{left:0;top:0}
+</style></head>
+<body>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="velo"></div>
+<div class="ui" id="ui">
+  <img id="marca" src="inplux-logo-horizontal-inverse.svg" alt="">
+  <div id="cont"></div>
+  <svg id="lin" width="1080" height="1920"></svg>
+</div>
+<div id="flash"></div>
+<script type="importmap">{"imports":{"three":"./three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+const D = await (await fetch("datos.json")).json();
+const B = 60 / D.bpm;
+const W = 1080, H = 1920, REG = 9;
+
+// ---------- formas ----------
+const nombres = Object.keys(D.formas);
+const crudo = {};
+for (const n of nombres) crudo[n] = new DataView(await (await fetch(`formas/${n}.bin`)).arrayBuffer());
+const N = Math.max(...nombres.map(n => D.formas[n]));
+const F = {};
+for (const n of nombres) {
+  const dv = crudo[n], c = D.formas[n];
+  const x = new Float32Array(N), y = new Float32Array(N), z = new Float32Array(N), s = new Float32Array(N), o = new Float32Array(N), a = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const j = i < c ? i : (i * 7919) % c, k = j * REG;
+    x[i] = dv.getInt16(k, true); y[i] = dv.getInt16(k + 2, true); z[i] = dv.getInt16(k + 4, true);
+    s[i] = i < c ? dv.getUint8(k + 6) / 10 : 0; o[i] = dv.getUint8(k + 7); a[i] = dv.getUint8(k + 8);
+  }
+  F[n] = { x, y, z, s, o, a };
+}
+const R1 = new Float32Array(N), R2 = new Float32Array(N), R3 = new Float32Array(N), R4 = new Float32Array(N);
+let semilla = 4242; const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < N; i++) { R1[i] = rnd(); R2[i] = rnd(); R3[i] = rnd(); R4[i] = rnd(); }
+
+// ---------- three ----------
+const ren = new THREE.WebGLRenderer({ canvas: document.getElementById("gl"), antialias: true, preserveDrawingBuffer: true });
+ren.setPixelRatio(1); ren.setSize(W, H, false); ren.setClearColor(0x0c0c0b, 1);
+const escena = new THREE.Scene();
+const FOV = 30, DC = (H / 2) / Math.tan(FOV / 2 * Math.PI / 180);
+const cam = new THREE.PerspectiveCamera(FOV, W / H, 10, 20000); cam.position.set(0, 0, DC);
+const geo = new THREE.BufferGeometry();
+const P = new Float32Array(N * 3), S = new Float32Array(N), O = new Float32Array(N);
+geo.setAttribute("position", new THREE.BufferAttribute(P, 3));
+geo.setAttribute("aS", new THREE.BufferAttribute(S, 1));
+geo.setAttribute("aO", new THREE.BufferAttribute(O, 1));
+const mat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false,
+  uniforms: { uDC: { value: DC }, uPulso: { value: 1 }, uGlow: { value: 0 }, uAlfa: { value: 1 },
+              uMarfil: { value: new THREE.Color(0xf6f2ec) }, uTeal: { value: new THREE.Color(0x00d7ca) } },
+  vertexShader: `attribute float aS; attribute float aO; uniform float uDC; uniform float uPulso; uniform float uGlow; varying float vO;
+    void main(){ vec4 mv = modelViewMatrix*vec4(position,1.0); gl_Position = projectionMatrix*mv; vO = aO*uGlow;
+      gl_PointSize = aS*uPulso*(1.0+0.35*vO)*uDC/(-mv.z); }`,
+  fragmentShader: `uniform vec3 uMarfil; uniform vec3 uTeal; uniform float uAlfa; varying float vO;
+    void main(){ float d = length(gl_PointCoord-0.5); float a = smoothstep(0.5,0.40,d); if(a<0.01) discard;
+      gl_FragColor = vec4(mix(uMarfil,uTeal,vO), a*uAlfa); }`,
+});
+const pts = new THREE.Points(geo, mat); pts.frustumCulled = false;
+const grupo = new THREE.Group(); grupo.add(pts); escena.add(grupo);
+
+// ---------- utilidades ----------
+const cl = v => Math.max(0, Math.min(1, v));
+const ap = (t, t0, d) => cl((t - t0) / d);
+const eOut = v => 1 - Math.pow(1 - v, 3), eExpo = v => v >= 1 ? 1 : 1 - Math.pow(2, -10 * v);
+const eIO = v => v < .5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2;
+const lerp = (a, b, v) => a + (b - a) * v;
+
+function forma(n) { const f = F[n]; for (let i = 0; i < N; i++) { P[3*i] = f.x[i]; P[3*i+1] = f.y[i]; P[3*i+2] = f.z[i]; S[i] = f.s[i]; O[i] = f.o[i]; } }
+// A se deshace y la arena se rearma en B (de panteón). v ∈ [0,1].
+function transicion(a, b, v, fuerza = 1) {
+  const A = F[a], Bf = F[b];
+  for (let i = 0; i < N; i++) {
+    const u = cl(v * 1.7), w = eIO(cl((v - 0.18 - 0.30 * R1[i]) / 0.52));
+    const ang = R2[i] * 6.2832, rad = (380 + 620 * R3[i]) * fuerza;
+    const ux = eOut(u), giro = u * 1.6 * (R4[i] - .5);
+    const ex = A.x[i] + Math.cos(ang + giro) * rad * ux + A.y[i] * giro * 0.25;
+    const ey = A.y[i] + Math.sin(ang + giro) * rad * ux * 0.8 + 180 * ux * ux * fuerza;
+    const ez = A.z[i] + (R1[i] - .3) * 900 * ux * fuerza;
+    P[3*i] = lerp(ex, Bf.x[i], w); P[3*i+1] = lerp(ey, Bf.y[i], w); P[3*i+2] = lerp(ez, Bf.z[i], w);
+    const sA = A.s[i] * (1 - 0.35 * ux), sB = Bf.s[i];
+    S[i] = lerp(sA, sB, w) * (0.75 + 0.25 * Math.abs(1 - 2 * w)) + (A.s[i] + Bf.s[i] > 0 ? 0.6 * Math.sin(w * Math.PI) : 0);
+    O[i] = w > .5 ? Bf.o[i] : A.o[i];
+  }
+}
+// gancho: tres chispas (golpes 0,1,2) y el primer arco armado en el golpe 3
+const CHISPA = [[-250, 430], [290, -90], [-90, -560]];
+function chispas(g) {
+  const A = F.arco1;
+  for (let i = 0; i < N; i++) {
+    const k = i % 3, [px, py] = CHISPA[k];
+    if (g < k || A.s[i] === 0) { S[i] = 0; P[3*i] = px; P[3*i+1] = py; P[3*i+2] = 0; continue; }
+    const u = eOut(ap(g, k, 1.1)), r = (30 + 560 * R3[i] * R3[i]) * u, an = R2[i] * 6.2832;
+    const sx = px + Math.cos(an) * r, sy = py + Math.sin(an) * r * 0.85 - 140 * u * u, sz = (R1[i] - .5) * 500 * u;
+    const w = eIO(cl((g - 2.35 - 0.3 * R1[i]) / (0.65 - 0.3 * R1[i])));
+    P[3*i] = lerp(sx, A.x[i], w); P[3*i+1] = lerp(sy, A.y[i], w); P[3*i+2] = lerp(sz, A.z[i], w);
+    S[i] = lerp(A.s[i] * (1.1 - 0.5 * u), A.s[i], w); O[i] = 0;
+  }
+}
+// acto I: el rostro se vuelve arena al pie del cuadro y cada grupo de arcos sube y se apila en su golpe
+function construir(src, dst, g, g0) {
+  const A = F[src], Z = F[dst];
+  for (let i = 0; i < N; i++) {
+    const dx = (R1[i] - .5) * 1250, dy = -1060 - R2[i] * 260, dz = (R3[i] - .5) * 300;
+    const wa = eIO(cl((g - (g0 - 1) - 0.25 * R4[i]) / 0.6));           // rostro → arena
+    const cx = lerp(A.x[i], dx, wa), cy = lerp(A.y[i], dy, wa) , cz = lerp(A.z[i], dz, wa);
+    const tl = g0 + Z.a[i] - 0.18 * R4[i];                                 // llega en su golpe
+    const wb = Z.s[i] > 0 ? eOut(cl((g - (tl - 0.9)) / 0.9)) : 0;
+    const arc = Math.sin(wb * Math.PI) * 120 * (R3[i] - .2);
+    P[3*i] = lerp(cx, Z.x[i], wb) + arc; P[3*i+1] = lerp(cy, Z.y[i], wb); P[3*i+2] = lerp(cz, Z.z[i], wb);
+    const sArena = Z.s[i] > 0 ? 3.0 : 0;
+    S[i] = lerp(lerp(A.s[i], sArena, wa), Z.s[i], wb) + (wb > 0 && wb < 1 ? 0.8 * Math.sin(wb * Math.PI) : 0);
+    O[i] = 0;
+  }
+}
+
+// ---------- capa de texto ----------
+const ui = document.getElementById("ui"), svg = document.getElementById("lin");
+const el = (tag, cls, html, padre = ui) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; padre.appendChild(e); return e; };
+const sv = (tag, at, padre = svg) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in at) e.setAttribute(k, at[k]); padre.appendChild(e); return e; };
+const palabras = t => t.split(" ").map(w => `<span>${w}&nbsp;</span>`).join("");
+const pos = (e, x, y) => { if (x != null) e.style.left = x + "px"; if (y != null) e.style.top = y + "px"; return e; };
+
+const titulo = D.titulo.map((w, i) => pos(el("div", "big op", w), null, 1450 + i * 124));
+const rot = D.oficios.map(o => { const r = el("div", "rot op"); el("div", "n", `${o.n} / 03`, r); el("div", "w", o.verbo, r); return r; });
+const copy = D.oficios.map(o => el("div", "copy op", palabras(o.copy)));
+const pie1 = pos(el("div", "pie op", D.pieChat), 560, 900);
+const burb = D.burbujas.map(b => { const e = el("div", "burb op"); e.style.width = b.w + "px"; e.style.top = b.y + "px"; el("img", null, null, e).src = b.src; return e; });
+const pasos = D.pasos.map((p, i) => pos(el("div", "pil op", `<b>${String(i + 1).padStart(2, "0")}</b>${p}`), 72 + (i % 2) * 470, 1530 + Math.floor(i / 2) * 92));
+const lpasos = D.pasos.map(() => [sv("path", { stroke: "#00d7ca", "stroke-width": 2, fill: "none" }), sv("circle", { r: 7, fill: "#00d7ca" })]);
+// plano (wireframe) de la pantalla real de Gobia
+const WF = document.createElementNS("http://www.w3.org/2000/svg", "svg"); WF.id = "wf"; WF.setAttribute("viewBox", "0 0 960 600"); ui.appendChild(WF);
+const BLOQ = [
+  [["rect", { x: 14, y: 10, width: 932, height: 44, rx: 10 }], ["rect", { x: 30, y: 22, width: 72, height: 20, rx: 4 }], ["path", { d: "M360 32H394M412 32H464M484 32H520M540 32H604" }], ["rect", { x: 826, y: 18, width: 112, height: 28, rx: 6 }]],
+  [["path", { d: "M30 236H46" }], ["rect", { x: 54, y: 231, width: 232, height: 10, rx: 2 }]],
+  [["rect", { x: 30, y: 258, width: 640, height: 64, rx: 6 }]],
+  [["rect", { x: 30, y: 332, width: 440, height: 54, rx: 6 }]],
+  [["path", { d: "M30 418H432M30 440H220" }]],
+  [["rect", { x: 29, y: 471, width: 126, height: 33, rx: 6 }], ["rect", { x: 164, y: 471, width: 115, height: 33, rx: 6 }], ["path", { d: "M30 562H930" }]],
+].map(b => b.map(([tag, at]) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in at) e.setAttribute(k, at[k]); e.setAttribute("pathLength", "1"); e.setAttribute("stroke-dasharray", "1 1"); WF.appendChild(e); return e; }));
+const marcoWF = (() => { const e = document.createElementNS("http://www.w3.org/2000/svg", "rect"); for (const [k, v] of Object.entries({ x: 1.5, y: 1.5, width: 957, height: 597, rx: 16 })) e.setAttribute(k, v); e.setAttribute("stroke-dasharray", "6 10"); e.style.stroke = "rgba(0,215,202,.5)"; WF.appendChild(e); return e; })();
+const pant = D.productos.map(p => { const e = el("div", "pant op"); el("img", null, null, e).src = p.pantalla; el("div", "et", p.nombre, e); return e; });
+const VENT = D.ventanas, WF0 = [60, 300, 960, 600];
+const lemas = D.lemas.map((l, i) => pos(el("div", "pil op", l), 72, 1520 + i * 78));
+const pieDev = pos(el("div", "pie op", D.pieDev), 72, 1762);
+const ins = D.lugares.map((n, i) => el("div", "ins op", `<b>${String(i + 1).padStart(2, "0")}</b>${n}`));
+const fmt = el("div", "fmt"); const fmts = D.formatos.map(f => el("div", null, f, fmt));
+const peds = D.oficios.map((o, k) => pos(el("div", "ped op", `<b>${o.n}</b><span>${o.verbo}</span>`), 20 + k * 355, null));
+const cierreF = el("div", "copy op", palabras(D.cierreFrase)); cierreF.style.top = "300px"; cierreF.style.fontSize = "52px"; cierreF.style.textAlign = "center"; cierreF.style.left = "90px"; cierreF.style.right = "90px";
+const lock = D.cierre.map(f => { const e = el("div", "lock op", f.texto); e.style.top = f.y + "px"; e.style.fontSize = f.tam + "px"; e.style.color = f.color; e.style.letterSpacing = f.esp; e.style.fontWeight = f.peso || 400; e.style.padding = "0 90px"; e.style.lineHeight = 1.2; return e; });
+const marca = document.getElementById("marca"), cont = document.getElementById("cont"), flash = document.getElementById("flash");
+
+// ---------- utilidades de texto ----------
+const entra = (e, g, g0, sale = 1e9, dy = 30, d = 0.6) => { const a = eExpo(ap(g, g0, d)), z = ap(g, sale, 0.5); e.style.opacity = a * (1 - z); e.style.transform = `translateY(${(1 - a) * dy - z * 20}px)`; return a * (1 - z); };
+const porPalabra = (e, g, g0, sale) => { const sp = [...e.children]; sp.forEach((s, j) => { const a = eOut(ap(g, g0 + j * 0.12, 0.5)); s.style.opacity = a; s.style.transform = `translateY(${(1 - a) * 24}px)`; }); const z = ap(g, sale, 0.5); e.style.opacity = 1 - z; e.style.transform = `translateY(${-z * 24}px)`; };
+function pulso(t, fuerza) { const b = t / B, f = b - Math.floor(b); return 1 + fuerza * Math.exp(-9 * f); }
+function canal(g, g0) { // ola teal por la hilada superior del acueducto, de izquierda a derecha
+  const A = F.acueducto, fr = lerp(-620, 640, eIO(ap(g, g0, 1.6)));
+  for (let i = 0; i < N; i++) O[i] = A.o[i] ? cl((fr - A.x[i]) / 90) * (0.8 + 0.2 * Math.sin(A.x[i] * 0.045 - g * 7.5)) : 0;
+}
+
+// ---------- línea de tiempo (en golpes; golpe = 0,4 s) ----------
+window.seek = t => {
+  const g = t / B;
+  let rotY = 0, rotX = 0, esc = 1, glow = 1, alfa = 1, pul = pulso(t, 0.16), fl = 0, fy = 0;
+  const golpeFl = (g0, f = 0.12) => g >= g0 && g < g0 + 0.5 ? f * Math.exp(-14 * (g - g0)) : 0;
+  if (g < 4) { // gancho
+    if (g < 3) { chispas(g); pul = pulso(t, 0.3); fl = Math.max(golpeFl(0, .10), golpeFl(1, .10), golpeFl(2, .10)); }
+    else { forma("arco1"); esc = lerp(1.14, 1.0, eExpo(ap(g, 3, 1))); fl = golpeFl(3, .25); pul = pulso(t, 0.25); }
+  } else if (g < 8) { // acueducto fantasma; «Tres oficios. Un equipo.»; golpe 7: la cámara se lanza
+    if (g < 4.9) transicion("arco1", "acueducto", ap(g, 4, 0.9), 0.5); else if (g < 7) forma("acueducto");
+    else transicion("acueducto", "ingeniero_cara", ap(g, 7, 1), 0.7);
+    alfa = g < 7 ? lerp(1, 0.42, eIO(ap(g, 4, 0.9))) : lerp(0.42, 1, eIO(ap(g, 7, 1)));
+    esc = g < 7 ? lerp(0.98, 0.92, ap(g, 4.5, 2.5)) : lerp(0.92, 1.05, eIO(ap(g, 7, 1)));
+    for (let i = 0; i < N; i++) O[i] = 0;
+  } else if (g < 12) { // ACTO I: ingeniero
+    if (g < 11) { forma("ingeniero_cara"); esc = 1.05 + 0.06 * eIO(ap(g, 8, 3)) + 0.02 * Math.exp(-7 * (g % 1)); rotY = lerp(-0.08, 0.06, eIO(ap(g, 8, 3))); rotX = 0.03; fl = golpeFl(8, .14); }
+    else { construir("ingeniero_cara", "acueducto", g, 12); esc = 1; rotX = lerp(0.03, 0.10, eIO(ap(g, 10.5, 1))); }
+  } else if (g < 28) { // acueducto: se construye (12–20), corre el flujo (20–24), cuatro pasos (24–27), sube (27–28)
+    if (g < 20) { construir("ingeniero_cara", "acueducto", g, 12); rotX = lerp(0.10, 0, eIO(ap(g, 12, 6))); rotY = lerp(-0.10, 0.06, ap(g, 12, 8)); }
+    else if (g < 27) { forma("acueducto"); rotY = lerp(0.06, 0.10, ap(g, 20, 7)); if (g >= 20) canal(g, 20); }
+    else { transicion("acueducto", "escriba_cara", ap(g, 27, 1), 0.8); fy = -260 * Math.sin(Math.PI * ap(g, 27, 1)); rotX = -0.12 * Math.sin(Math.PI * ap(g, 27, 1)); }
+    esc = 1 + 0.015 * Math.exp(-7 * (g % 1));
+    fl = g < 20 ? golpeFl(Math.floor(g), 0.05) : 0;
+  } else if (g < 32) { // ACTO II: escriba
+    if (g < 31) { forma("escriba_cara"); esc = 1.04 + 0.06 * eIO(ap(g, 28, 3)) + 0.02 * Math.exp(-7 * (g % 1)); rotY = lerp(0.08, -0.05, eIO(ap(g, 28, 3))); fl = golpeFl(28, .14); }
+    else transicion("escriba_cara", "escriba", ap(g, 31, 1), 0.5);
+  } else if (g < 48) { // plano → pantallas → fachada
+    if (g < 44) { forma("escriba"); alfa = lerp(1, 0.35, eIO(ap(g, 38, 2))); esc = 1 + 0.01 * Math.exp(-7 * (g % 1)); }
+    else if (g < 47) { if (g < 45) transicion("escriba", "fachada", ap(g, 44, 1), 0.45); else forma("fachada"); alfa = lerp(0.35, 1, ap(g, 44, 0.6)); }
+    else transicion("fachada", "orador_cara", ap(g, 47, 1), 0.8);
+    for (let i = 0; i < N; i++) O[i] = 0;
+  } else if (g < 52) { // ACTO III: orador
+    if (g < 51) { forma("orador_cara"); esc = 1.04 + 0.06 * eIO(ap(g, 48, 3)) + 0.02 * Math.exp(-7 * (g % 1)); rotY = lerp(-0.07, 0.05, eIO(ap(g, 48, 3))); fl = golpeFl(48, .14); }
+    else transicion("orador_cara", "anfiteatro", ap(g, 51, 1), 0.6);
+    for (let i = 0; i < N; i++) O[i] = 0;
+  } else if (g < 72) { // anfiteatro: una grada por golpe (52–59), inscripciones (60–67), formatos y apagado (68–72)
+    if (g < 71) forma("anfiteatro"); else transicion("anfiteatro", "friso3", ap(g, 71, 1), 0.55);
+    const A = F.anfiteatro;
+    if (g < 71) for (let i = 0; i < N; i++) {
+      const k = A.a[i]; if (k === 255 || A.s[i] === 0) { O[i] = 0; continue; }
+      const on = eExpo(ap(g, 52 + k, 0.35)), off = ap(g, 69 + (7 - k) * 0.25, 0.4);
+      O[i] = on * (1 - off) * (0.85 + 0.15 * Math.sin(A.x[i] * 0.03 + g * 3));
+      S[i] = A.s[i] * (1 + 0.25 * on * Math.exp(-6 * Math.max(0, g - 52 - k)) );
+    }
+    esc = lerp(1.0, 1.06, eIO(ap(g, 52, 18))); rotX = lerp(0.06, 0.0, ap(g, 52, 18));
+    fl = g < 60 ? golpeFl(Math.floor(g), 0.025) : 0;
+  } else if (g < 76) { // friso triple
+    if (g < 75) forma("friso3"); else transicion("friso3", "logo", ap(g, 75, 1), 0.8);
+    esc = lerp(1.08, 0.98, eIO(ap(g, 72, 3))); for (let i = 0; i < N; i++) O[i] = 0;
+  } else { // logo, invitación, impacto final (golpe 80)
+    forma("logo"); esc = 1 + 0.02 * eOut(ap(g, 76, 4)) + 0.03 * Math.exp(-6 * Math.max(0, g - 80)) * (g >= 80); pul = pulso(t, 0.10);
+    fl = Math.max(golpeFl(76, .12), golpeFl(80, .22)); alfa = 1 - ap(g, 82.6, 1.2);
+  }
+  geo.attributes.position.needsUpdate = true; geo.attributes.aS.needsUpdate = true; geo.attributes.aO.needsUpdate = true;
+  grupo.rotation.set(rotX, rotY, 0); grupo.scale.setScalar(esc); grupo.position.set(0, fy, 0);
+  mat.uniforms.uPulso.value = pul; mat.uniforms.uGlow.value = glow; mat.uniforms.uAlfa.value = alfa;
+  ren.render(escena, cam);
+  flash.style.opacity = fl;
+
+  // marca y contador de oficio
+  const oficio = g >= 8 && g < 28 ? 0 : g >= 28 && g < 48 ? 1 : g >= 48 && g < 72 ? 2 : -1;
+  marca.style.opacity = (g >= 8 && g < 72 ? 0.9 : 0);
+  cont.style.opacity = oficio >= 0 ? 1 : 0; cont.innerHTML = oficio >= 0 ? `<b>${D.oficios[oficio].n}</b> / 03` : "";
+
+  // «Tres oficios. Un equipo.»
+  titulo.forEach((e, i) => entra(e, g, 4 + i, 7.2, 40, 0.5));
+  // rótulos de cada oficio
+  [8, 28, 48].forEach((g0, k) => { const e = rot[k], a = entra(e, g, g0 + 1, g0 + 3.3, 40, 0.5); const w = e.querySelector(".w"), n = eExpo(ap(g, g0 + 1, 0.5)); w.style.transform = `scale(${lerp(1.18, 1, n)})`; w.style.filter = `blur(${(1 - n) * 8}px)`; });
+  // copy literal de cada oficio
+  porPalabra(copy[0], g, 12.3, 19.6); porPalabra(copy[1], g, 32.3, 43.6); porPalabra(copy[2], g, 52.3, 59.6);
+  copy.forEach((e, k) => { if (g < [12, 32, 52][k]) e.style.opacity = 0; });
+
+  // acto I: burbujas del chat por el canal (golpes 20–23), pie, cuatro pasos (24–27)
+  burb.forEach((e, i) => { const b = D.burbujas[i]; const a = eExpo(ap(g, b.g, 0.4)), z = ap(g, 26.6, 0.5); e.style.opacity = a * (1 - z); e.style.transform = `translateX(${(1 - a) * 80}px) scale(${lerp(0.9, 1, a)})`; });
+  const cf = D.burbujas.at(-1); pie1.style.top = (cf.y + cf.h + 16) + "px"; pie1.style.left = (1080 - 40 - cf.w) + "px"; entra(pie1, g, 22.5, 26.6, 10, 0.5);
+  // «Del primer flujo al día en que opera solo.» va en el bloque de copy del acto I a partir del golpe 20
+  pasos.forEach((e, i) => entra(e, g, 24 + i, 26.8, 20, 0.4));
+  lpasos.forEach(([ln, pt], i) => { const [ax, ay] = D.arcos[i], e = pasos[i]; const bx = 72 + (i % 2) * 470 + 40, by = 1530 + Math.floor(i / 2) * 92;
+    const l = eOut(ap(g, 24.2 + i, 0.5)) * (1 - ap(g, 26.7, 0.3)); const mx = lerp(bx, ax, l), my = lerp(by, ay, l);
+    ln.setAttribute("d", l > 0 ? `M${bx},${by} L${mx},${my}` : ""); pt.setAttribute("cx", mx); pt.setAttribute("cy", my); pt.setAttribute("opacity", l > 0.97 ? 1 : 0); });
+  flujo.style.opacity = 0; porPalabra(flujo, g, 20.2, 23.5); if (g < 20) flujo.style.opacity = 0;
+
+  // acto II: plano de Gobia, golpes 32–37 un bloque por golpe; 38 se rellena; 39 Tribai; 40–43 cascada; 44 fachada
+  const wfa = (g >= 31.6 && g < 38.6) ? 1 - ap(g, 38, 0.5) : 0; WF.style.opacity = wfa;
+  BLOQ.forEach((b, k) => { const v = eOut(ap(g, 32 + k, 0.7)); b.forEach(e => e.setAttribute("stroke-dashoffset", 1 - v)); });
+  marcoWF.style.opacity = eOut(ap(g, 31.6, 0.4));
+  pant.forEach((e, k) => {
+    const g0 = k === 0 ? 38 : 38 + k, [vx, vy, vw, vh] = VENT[k];
+    const a = k === 0 ? eExpo(ap(g, 38, 0.5)) : eExpo(ap(g, g0, 0.45));
+    const m = k === 0 ? eIO(ap(g, 39, 0.6)) : 1;              // Gobia: del plano grande a su ventana
+    const x = lerp(WF0[0], vx, m), y = lerp(WF0[1], vy, m), w = lerp(WF0[2], vw, m), h = lerp(WF0[3], vh, m);
+    const z = ap(g, 47, 0.6);
+    e.style.left = x + "px"; e.style.top = y + "px"; e.style.width = w + "px"; e.style.height = h + "px";
+    e.style.opacity = (g >= 37.5 ? a : 0) * (1 - z);
+    e.style.transform = k === 0 ? "" : `translateY(${(1 - a) * 60}px) scale(${lerp(0.86, 1, a)})`;
+    e.querySelector(".et").style.opacity = eOut(ap(g, g0 + 0.3, 0.4));
+  });
+  lemas.forEach((e, i) => entra(e, g, 45 + i, 47.4, 20, 0.45));
+  entra(pieDev, g, 45.5, 47.4, 10, 0.5);
+  if (g >= 44 && g < 47.4) copy[1].style.opacity = 0;
+
+  // acto III: inscripciones en las gradas (60–67), formatos (68–71)
+  ins.forEach((e, i) => { const [x, y, lado] = D.inscripciones[i]; e.style.top = y + "px"; if (lado === "i") { e.style.left = x + "px"; e.style.right = ""; } else if (lado === "d") { e.style.right = x + "px"; e.style.left = ""; } else { e.style.left = "0px"; e.style.right = "0px"; e.style.textAlign = "center"; }
+    const a = eExpo(ap(g, 60 + i, 0.35)), z = ap(g, 70.5, 0.5); e.style.opacity = a * (1 - z); e.style.clipPath = `inset(0 ${(1 - a) * 100}% 0 0)`; });
+  fmts.forEach((e, i) => { const a = eExpo(ap(g, 68 + i, 0.35)), z = ap(g, 71.3, 0.5); e.style.opacity = a * (1 - z); e.style.transform = `translateY(${(1 - a) * 30}px)`; });
+
+  // friso: pedestales 01·02·03 (72–74) y la frase del sitio (73)
+  peds.forEach((e, k) => entra(e, g, 72 + k * 0.5, 75.3, 20, 0.4));
+  porPalabra(cierreF, g, 73, 75.3); if (g < 73) cierreF.style.opacity = 0;
+
+  // cierre: invitación (77) e INPLUX.CO (79)
+  lock.forEach((e, i) => { const f = D.cierre[i]; const a = eExpo(ap(g, f.g, 0.5)); e.style.opacity = a * (1 - ap(g, 82.6, 1.2)); e.style.transform = `translateY(${(1 - a) * 30}px)`; });
+};
+const flujo = el("div", "copy op", palabras(D.flujo));
+window.chequeo = () => ({ N, formas: D.formas });
+await document.fonts.ready;
+for (const im of document.images) if (!im.complete) await new Promise(r => { im.onload = im.onerror = r; });
+window.seek(0); window.listo = true;
+</script>
+</body></html>
