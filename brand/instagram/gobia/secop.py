@@ -3,7 +3,12 @@
 contratación territorial que usan los reels de Gobia y las guarda con fecha de corte.
 
     python3 secop.py                 # panorama nacional territorial del año
-    python3 secop.py "MEDELLÍN"      # además, ficha de las entidades de esa ciudad
+    python3 secop.py "Medellín"      # además, ficha de las entidades con esa ciudad registrada
+    python3 secop.py "=Segovia"      # con «=», busca por NOMBRE de entidad (contiene «SEGOVIA»)
+
+El campo «ciudad» viene como «No Definido» en unos 100 mil contratos territoriales de 2026
+(la Alcaldía de Segovia, por ejemplo): para municipios pequeños buscar siempre por nombre.
+SECOP I dejó de recibir contratos de estos municipios hacia 2022: no hace falta sumarlo.
 
 Los valores en pesos del conjunto traen errores de digitación (contratos de mínima
 cuantía por billones): los rótulos usan CONTEOS y medianas, no sumas, salvo revisión manual.
@@ -50,9 +55,14 @@ if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
     resumen(panorama("orden='Territorial'", "territorial"), "Entidades territoriales")
     for ciudad in sys.argv[1:]:
+        por_nombre = ciudad.startswith("=")
+        ciudad = ciudad.lstrip("=")
         c = ciudad.replace("'", "''")
-        f = f"orden='Territorial' and upper(ciudad)=upper('{c}')"
-        d = panorama(f, "ciudad-" + ciudad.lower().replace(" ", "-"))
+        if por_nombre:
+            f = f"orden='Territorial' and upper(nombre_entidad) like upper('%{c}%')"
+        else:
+            f = f"orden='Territorial' and upper(ciudad)=upper('{c}')"
+        d = panorama(f, ("entidad-" if por_nombre else "ciudad-") + ciudad.lower().replace(" ", "-"))
         d["entidades"] = q(f"select nombre_entidad as k, count(*) as n where {DESDE} and {f} group by k order by n desc limit 8")
         resumen(d, ciudad)
         for r in d["entidades"]:

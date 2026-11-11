@@ -1,0 +1,119 @@
+{
+ "corte_consulta": "2026-11-10",
+ "anio": 2026,
+ "filtro": "orden='Territorial' and upper(nombre_entidad) like upper('%Municipio de Segovia%')",
+ "fuente": "https://www.datos.gov.co/resource/jbjy-vk9h.json",
+ "total": {
+  "n": "465",
+  "ultima_firma": "2026-11-05T09:19:46.073"
+ },
+ "modalidad": [
+  {
+   "k": "Contratación directa",
+   "n": "397"
+  },
+  {
+   "k": "Mínima cuantía",
+   "n": "37"
+  },
+  {
+   "k": "Selección abreviada subasta inversa",
+   "n": "26"
+  },
+  {
+   "k": "Concurso de méritos abierto",
+   "n": "3"
+  },
+  {
+   "k": "Licitación pública Obra Publica",
+   "n": "1"
+  },
+  {
+   "k": "Selección Abreviada de Menor Cuantía",
+   "n": "1"
+  }
+ ],
+ "tipo": [
+  {
+   "k": "Prestación de servicios",
+   "n": "407"
+  },
+  {
+   "k": "Suministros",
+   "n": "32"
+  },
+  {
+   "k": "Otro",
+   "n": "17"
+  },
+  {
+   "k": "Arrendamiento de inmuebles",
+   "n": "3"
+  },
+  {
+   "k": "Seguros",
+   "n": "2"
+  },
+  {
+   "k": "Consultoría",
+   "n": "2"
+  },
+  {
+   "k": "Obra",
+   "n": "1"
+  },
+  {
+   "k": "Interventoría",
+   "n": "1"
+  }
+ ],
+ "mes": [
+  {
+   "k": "2026-01-01T00:00:00.000",
+   "n": "262"
+  },
+  {
+   "k": "2026-02-01T00:00:00.000",
+   "n": "1"
+  },
+  {
+   "k": "2026-03-01T00:00:00.000",
+   "n": "10"
+  },
+  {
+   "k": "2026-04-01T00:00:00.000",
+   "n": "6"
+  },
+  {
+   "k": "2026-05-01T00:00:00.000",
+   "n": "9"
+  },
+  {
+   "k": "2026-06-01T00:00:00.000",
+   "n": "14"
+  },
+  {
+   "k": "2026-07-01T00:00:00.000",
+   "n": "24"
+  },
+  {
+   "k": "2026-08-01T00:00:00.000",
+   "n": "36"
+  },
+  {
+   "k": "2026-09-01T00:00:00.000",
+   "n": "49"
+  },
+  {
+   "k": "2026-10-01T00:00:00.000",
+   "n": "48"
+  },
+  {
+   "k": "2026-11-01T00:00:00.000",
+   "n": "6"
+  }
+ ],
+ "directa_ps": {
+  "n": "377"
+ }
+}

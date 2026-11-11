@@ -125,3 +125,6 @@ incoherentes el 24-oct).
 - Medición semanal desde la pestaña de Reels (mismo método de este estudio): vistas por reel,
   comentarios por palabra, seguidores. Referencias a superar: mediana de 1.262 (EstadoX) y
   1.396 (Croma) por reel; primera meta, un reel de Gobia sobre 10 mil vistas antes del 18-dic.
+
+
+> Mantra y filtro de publicación: ver `MANTRA.md`. Medición: `MEDICION.md`.

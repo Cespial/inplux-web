@@ -7,8 +7,9 @@ Decir la cifra completa y despacio. Si una toma sale mal, repetir solo la frase.
 Fuente de las cifras: SECOP II · Contratos Electrónicos (datos.gov.co, conjunto `jbjy-vk9h`),
 entidades de orden territorial, contratos firmados en 2026, consulta del 10-nov-2026 (última
 firma registrada: 5-nov). Se regeneran con `python3 secop.py "Ciudad"`; los JSON con fecha
-quedan en `datos/`. **Siempre decir «en SECOP II»**: muchos municipios pequeños publican en
-SECOP I y no aparecen aquí (la Alcaldía de Segovia, por ejemplo, no figura).
+quedan en `datos/`. **Siempre decir «en SECOP II»**. El campo «ciudad» viene como «No Definido» en unos
+100 mil contratos territoriales (la Alcaldía de Segovia, por ejemplo, con 465 contratos): para
+municipios pequeños se busca por nombre de entidad (`python3 secop.py "=Segovia"`).
 Los valores en pesos del conjunto traen errores de digitación: esta tanda usa solo conteos.
 
 ---
@@ -65,5 +66,21 @@ provisional). Se graba solo la entrada y el cierre con rostro:
 
 ## Pedidos de la audiencia (serie «Abrimos el SECOP de…»)
 Cada comentario con un municipio entra a `datos/pedidos.md` (municipio, usuario, fecha). El reel
-de respuesta se abre mostrando el comentario en pantalla. Si el municipio no está en SECOP II, se
-dice y se muestra lo que sí hay (hospital, concejo, personería).
+de respuesta se abre mostrando el comentario en pantalla. Se busca primero por nombre de entidad
+(«MUNICIPIO DE …») y después por ciudad; si no hay registros, se dice en el reel.
+
+---
+
+## Filtro del mantra «No lo digas: ábrelo.» (ver `../MANTRA.md`)
+
+| Clip | Alcance: ¿lo enviaría? | Enganche: ¿cifra o pantalla en 2 s? | Valor: ¿sirve el lunes? | Marca: ¿solo nosotros? | Venta: ¿siguiente paso? | Resultado |
+|---|---|---|---|---|---|---|
+| G1 enero | Sí: dato que nadie ha visto junto | Sí: 314.247 en el rótulo | Parcial: explica, no entrega herramienta | Sí: consulta propia | Sí: «comenta tu municipio» | Pasa. Mejora: cerrar con un consejo para planear enero de 2027 |
+| G2 Medellín | Sí: ciudad con nombre propio | Sí: 16.897 en el rótulo | Parcial | Sí | Sí | Pasa |
+| G3 personas | Medio: menos sorpresa | Sí: «9 de cada 10» | Sí: lista de chequeo | Sí: muestra Gobia | Sí: MANUAL | Pasa, depende del recurso |
+| I1 construido | No, como está: enumera, no abre | No | No | Sí | No | **No pasa.** Rehacer: abrir en pantalla UNA cosa que salió a producción y cerrar con dónde verla |
+| I2 Radar | Sí: hecho sorprendente con fuente | Sí: la fuente en pantalla | Medio | Sí: bitácora propia | Falta | Pasa si se añade cierre: «comenta AGENTES y te mando la bitácora» |
+
+**I1 rehecho (30 s):** 1. «Esto salió de INPLUX esta semana, y te lo abro.» 2. (pantalla del
+producto o entrega, 15 s) «Aquí está: ____. Hace ____.» 3. «Lo que más costó: ____.»
+4. «Está en ____. El lunes abro otra.»

@@ -234,3 +234,6 @@ publicación.
 después se cuelga. El script corre cada render con `timeout` y mata el proceso; si además
 el artboard lleva una captura o una foto, el archivo tiene que estar **junto** al `.dc.html`
 para que el render local lo resuelva.
+
+
+> Antes de diseñar una pieza: pasa el filtro de `MANTRA.md` («No lo digas: ábrelo.»).
