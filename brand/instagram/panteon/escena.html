@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Panteón INPLUX</title>
+<style>
+@font-face{font-family:R;src:url(RethinkSans-Regular.ttf);font-weight:400}
+@font-face{font-family:R;src:url(RethinkSans-Medium.ttf);font-weight:500}
+:root{--negro:#0c0c0b;--marfil:#f6f2ec;--gris:#a39d94;--dim:#77726b;--teal:#00d7ca}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--negro);font-family:R,sans-serif;color:var(--marfil)}
+#gl{position:absolute;inset:0}
+#velo{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 70% at 50% 42%,rgba(12,12,11,0) 62%,rgba(12,12,11,.5) 100%),
+             linear-gradient(180deg,rgba(12,12,11,0) 58%,rgba(12,12,11,.88) 76%,rgba(12,12,11,.96) 100%)}
+#flash{position:absolute;inset:0;background:var(--marfil);opacity:0;pointer-events:none}
+.ui{position:absolute;inset:0;pointer-events:none}
+#marca{position:absolute;left:72px;top:118px;width:150px;opacity:.9}
+#cont{position:absolute;right:72px;top:126px;font-size:24px;letter-spacing:.22em;color:var(--gris)}
+#cont b{color:var(--teal);font-weight:500}
+.prod{position:absolute;left:72px;right:150px;top:1290px;opacity:0}
+.idx{font-size:24px;letter-spacing:.24em;color:var(--teal);text-transform:uppercase;margin-bottom:14px}
+.nom{font-size:156px;font-weight:500;line-height:.95;letter-spacing:-.02em;transform-origin:0 100%}
+.rol{font-size:46px;line-height:1.18;margin-top:26px;color:var(--marfil);max-width:860px}
+.rol span{display:inline-block}
+.est{display:inline-flex;align-items:center;gap:14px;margin-top:34px;padding:12px 24px;border:2px solid var(--teal);border-radius:999px;
+  font-size:24px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
+.est i{width:12px;height:12px;border-radius:50%;background:var(--teal);display:block}
+.card{position:absolute;opacity:0;border-radius:30px;overflow:hidden;border:3px solid var(--teal);background:#000;
+  box-shadow:0 0 0 10px rgba(0,215,202,.10)}
+.card img{display:block;width:100%;filter:grayscale(1) contrast(1.06) brightness(.97)}
+.url{position:absolute;opacity:0;font-size:22px;letter-spacing:.18em;color:var(--teal);text-transform:uppercase}
+svg#lineas{position:absolute;inset:0}
+.frase{position:absolute;left:0;right:0;text-align:center;font-size:64px;font-weight:500;letter-spacing:-.01em;opacity:0}
+.linea3{position:absolute;left:120px;right:120px;font-size:70px;font-weight:500;opacity:0;display:flex;gap:28px;align-items:baseline}
+.linea3 small{font-size:30px;letter-spacing:.2em;color:var(--teal);font-weight:500}
+#riel{position:absolute;left:84px;top:1180px;width:6px;height:0;background:linear-gradient(var(--teal),var(--teal));opacity:0}
+.lock{position:absolute;left:0;right:0;text-align:center;opacity:0}
+</style></head>
+<body>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="velo"></div>
+<div class="ui" id="ui">
+  <img id="marca" src="inplux-logo-horizontal-inverse.svg" alt="">
+  <div id="cont"></div>
+  <svg id="lineas" width="1080" height="1920"></svg>
+</div>
+<div id="flash"></div>
+<script type="importmap">{"imports":{"three":"./three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+const D = await (await fetch("datos.json")).json();
+const B = 60 / D.bpm, BAR = 4 * B;
+const W = 1080, H = 1920;
+
+// ---------- formas ----------
+const nombres = Object.keys(D.formas);
+const crudo = {};
+for (const n of nombres) crudo[n] = new DataView(await (await fetch(`formas/${n}.bin`)).arrayBuffer());
+const N = Math.max(...nombres.map(n => D.formas[n]));
+const F = {};
+for (const n of nombres) {
+  const dv = crudo[n], c = D.formas[n];
+  const x = new Float32Array(N), y = new Float32Array(N), z = new Float32Array(N), s = new Float32Array(N), o = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const j = i < c ? i : (i * 7919) % c, k = j * 8;
+    x[i] = dv.getInt16(k, true); y[i] = dv.getInt16(k + 2, true); z[i] = dv.getInt16(k + 4, true);
+    s[i] = i < c ? dv.getUint8(k + 6) / 10 : 0; o[i] = dv.getUint8(k + 7);
+  }
+  F[n] = { x, y, z, s, o };
+}
+// azar fijo por punto
+const R1 = new Float32Array(N), R2 = new Float32Array(N), R3 = new Float32Array(N), R4 = new Float32Array(N);
+let semilla = 12345; const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < N; i++) { R1[i] = rnd(); R2[i] = rnd(); R3[i] = rnd(); R4[i] = rnd(); }
+
+// ---------- three ----------
+const ren = new THREE.WebGLRenderer({ canvas: document.getElementById("gl"), antialias: true, preserveDrawingBuffer: true });
+ren.setPixelRatio(1); ren.setSize(W, H, false); ren.setClearColor(0x0c0c0b, 1);
+const escena = new THREE.Scene();
+const FOV = 30, DC = (H / 2) / Math.tan(FOV / 2 * Math.PI / 180);
+const cam = new THREE.PerspectiveCamera(FOV, W / H, 10, 20000); cam.position.set(0, 0, DC);
+const geo = new THREE.BufferGeometry();
+const P = new Float32Array(N * 3), S = new Float32Array(N), O = new Float32Array(N);
+geo.setAttribute("position", new THREE.BufferAttribute(P, 3));
+geo.setAttribute("aS", new THREE.BufferAttribute(S, 1));
+geo.setAttribute("aO", new THREE.BufferAttribute(O, 1));
+const mat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false,
+  uniforms: { uDC: { value: DC }, uPulso: { value: 1 }, uGlow: { value: 0 }, uAlfa: { value: 1 },
+              uMarfil: { value: new THREE.Color(0xf6f2ec) }, uTeal: { value: new THREE.Color(0x00d7ca) } },
+  vertexShader: `attribute float aS; attribute float aO; uniform float uDC; uniform float uPulso; uniform float uGlow; varying float vO;
+    void main(){ vec4 mv = modelViewMatrix*vec4(position,1.0); gl_Position = projectionMatrix*mv; vO = aO*uGlow;
+      gl_PointSize = aS*uPulso*(1.0+0.35*vO)*uDC/(-mv.z); }`,
+  fragmentShader: `uniform vec3 uMarfil; uniform vec3 uTeal; uniform float uAlfa; varying float vO;
+    void main(){ float d = length(gl_PointCoord-0.5); float a = smoothstep(0.5,0.40,d); if(a<0.01) discard;
+      gl_FragColor = vec4(mix(uMarfil,uTeal,vO), a*uAlfa); }`,
+});
+const pts = new THREE.Points(geo, mat); pts.frustumCulled = false;
+const grupo = new THREE.Group(); grupo.add(pts); escena.add(grupo);
+
+// ---------- utilidades ----------
+const cl = v => Math.max(0, Math.min(1, v));
+const ap = (t, t0, d) => cl((t - t0) / d);
+const eOut = v => 1 - Math.pow(1 - v, 3), eExpo = v => v >= 1 ? 1 : 1 - Math.pow(2, -10 * v);
+const eIO = v => v < .5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2;
+const lerp = (a, b, v) => a + (b - a) * v;
+
+function forma(n) { const f = F[n]; for (let i = 0; i < N; i++) { P[3*i] = f.x[i]; P[3*i+1] = f.y[i]; P[3*i+2] = f.z[i]; S[i] = f.s[i]; O[i] = f.o[i]; } }
+// A estalla y la arena se rearma en B. v ∈ [0,1].
+function transicion(a, b, v, fuerza = 1) {
+  const A = F[a], Bf = F[b];
+  for (let i = 0; i < N; i++) {
+    const u = cl(v * 1.7), w = eIO(cl((v - 0.18 - 0.30 * R1[i]) / 0.52));
+    const ang = R2[i] * 6.2832, rad = (380 + 620 * R3[i]) * fuerza;
+    const ux = eOut(u), giro = u * 1.6 * (R4[i] - .5);
+    const ex = A.x[i] + Math.cos(ang + giro) * rad * ux + A.y[i] * giro * 0.25;
+    const ey = A.y[i] + Math.sin(ang + giro) * rad * ux * 0.8 + 180 * ux * ux;
+    const ez = A.z[i] + (R1[i] - .3) * 900 * ux;
+    P[3*i] = lerp(ex, Bf.x[i], w); P[3*i+1] = lerp(ey, Bf.y[i], w); P[3*i+2] = lerp(ez, Bf.z[i], w);
+    const sA = A.s[i] * (1 - 0.35 * ux), sB = Bf.s[i];
+    S[i] = lerp(sA, sB, w) * (0.75 + 0.25 * Math.abs(1 - 2 * w)) + (A.s[i] + Bf.s[i] > 0 ? 0.6 * Math.sin(w * Math.PI) : 0);
+    O[i] = w > .5 ? Bf.o[i] : A.o[i];
+  }
+}
+
+// ---------- capa de texto ----------
+const ui = document.getElementById("ui"), svg = document.getElementById("lineas");
+const el = (tag, cls, html, padre = ui) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; padre.appendChild(e); return e; };
+const PR = D.productos.map((p, k) => {
+  const bloque = el("div", "prod");
+  el("div", "idx", `Producto ${String(k + 1).padStart(2, "0")} / 06 · ${p.categoria}`, bloque);
+  const nom = el("div", "nom", p.nombre, bloque);
+  const rol = el("div", "rol", p.rol.split(" ").map(w => `<span>${w}&nbsp;</span>`).join(""), bloque);
+  const est = el("div", "est", `<i></i>${p.estado}`, bloque);
+  const card = el("div", "card"); card.style.left = p.card[0] + "px"; card.style.top = p.card[1] + "px"; card.style.width = p.card[2] + "px";
+  if (p.card[3]) { card.style.height = p.card[3] + "px"; }
+  el("img", null, null, card).src = p.pantalla;
+  const url = el("div", "url", p.url); url.style.left = p.card[0] + "px";
+  const ln = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  ln.setAttribute("stroke", "#00d7ca"); ln.setAttribute("stroke-width", "3"); ln.setAttribute("fill", "none"); svg.appendChild(ln);
+  const pt = document.createElementNS("http://www.w3.org/2000/svg", "circle"); pt.setAttribute("r", "9"); pt.setAttribute("fill", "#00d7ca"); svg.appendChild(pt);
+  return { p, bloque, nom, rol: [...rol.children], est, card, url, ln, pt };
+});
+const frases = D.frases.map(f => { const e = el("div", "frase", f.texto); e.style.top = f.y + "px"; return e; });
+const lineas3 = D.lineas.map((f, i) => { const e = el("div", "linea3", `<small>${f[0]}</small>${f[1]}`); e.style.top = (300 + i * 110) + "px"; return e; });
+const lock = D.cierre.map(f => { const e = el("div", "lock", f.texto); e.style.top = f.y + "px"; e.style.fontSize = f.tam + "px"; e.style.color = f.color; e.style.letterSpacing = f.esp; return e; });
+const marca = document.getElementById("marca"), cont = document.getElementById("cont"), flash = document.getElementById("flash");
+
+// ---------- línea de tiempo ----------
+const T = D.t; // tiempos clave en s
+const GANCHO = ["g1", "g2", "g3", "g4"];
+
+function pulso(t, fuerza) { const b = t / B, f = b - Math.floor(b); return 1 + fuerza * Math.exp(-9 * f); }
+
+window.seek = t => {
+  let foco = [0, 0], rotY = 0, rotX = 0, esc = 1, glow = 0, alfa = 1, pul = pulso(t, 0.16), fl = 0, cam_y = 0;
+  // --- gancho: cuatro cortes duros, uno por golpe ---
+  if (t < T.logo0) {
+    const k = Math.min(3, Math.floor(t / B)), lt = t - k * B;
+    if (t < T.gancho1) { forma(GANCHO[k]); esc = lerp(1.16, 1.0, eExpo(lt / B)); rotY = (k % 2 ? -1 : 1) * lerp(0.10, 0.02, eOut(lt / B)); fl = 0.22 * Math.exp(-35 * lt); pul = pulso(t, 0.28); }
+    else { // g4 estalla y se arma el logo en el golpe 4 del compás 2
+      transicion("g4", "logo", ap(t, T.gancho1, T.logo - T.gancho1), 1.2); rotY = lerp(0.25, 0, eIO(ap(t, T.gancho1, T.logo - T.gancho1))); }
+    glow = 1;
+  } else if (t < T.p0) {
+    // logo armado; frases; el logo se deshace hacia Gobia
+    if (t < T.logoSale) { forma("logo"); esc = 1 + 0.03 * eOut(ap(t, T.logo, 1.6)); fl = t < T.logo + .12 ? 0.12 * Math.exp(-25 * (t - T.logo)) : 0; }
+    else transicion("logo", D.productos[0].forma + "_cara", ap(t, T.logoSale, T.p0 - T.logoSale), 1.1);
+    glow = 1; pul = pulso(t, 0.22);
+  } else if (t < T.friso) {
+    const k = Math.min(5, Math.floor((t - T.p0) / (2 * BAR))), t0 = T.p0 + k * 2 * BAR, b = (t - t0) / B;
+    const p = D.productos[k], sig = k < 5 ? D.productos[k + 1].forma + "_cara" : "friso", cara = p.forma + "_cara";
+    // b 0–3.5: primer plano del rostro · 3.5–4: la arena se rearma en la figura completa · 4: se enciende el objeto · 7: estalla
+    if (b < 3.5) { forma(cara); esc = 1.0 + 0.10 * eIO(cl(b / 3.5)) + 0.025 * Math.exp(-7 * (b % 1)); rotY = lerp(-0.10, 0.10, eIO(cl(b / 3.5))) * (k % 2 ? -1 : 1); rotX = 0.03; }
+    else if (b < 4) { transicion(cara, p.forma, ap(b, 3.5, 0.5), 0.55); esc = 1.04; }
+    else { if (b < 7) forma(p.forma); else transicion(p.forma, sig, ap(t, t0 + 7 * B, B + 0.02), 1.0);
+      rotY = lerp(0.12, -0.06, eIO(cl((b - 4) / 3))) * (k % 2 ? -1 : 1); rotX = lerp(0.04, -0.01, eIO(cl((b - 4) / 3)));
+      esc = lerp(1.07, 1.0, eExpo(cl((b - 4) / 0.8))) + 0.02 * Math.exp(-7 * (b % 1)); }
+    if (b < 0.25 || (b >= 4 && b < 4.25)) fl = 0.10 * Math.exp(-35 * ((b % 4) * B));
+    glow = eExpo(ap(b, 4, 0.5)) * (1 - ap(b, 7, 0.5));
+    pul = pulso(t, 0.2);
+  } else if (t < T.lock) {
+    if (t < T.frisoSale) forma("friso"); else transicion("friso", "logo", ap(t, T.frisoSale, T.lock - T.frisoSale), 0.9);
+    esc = lerp(0.98, 1.04, eIO(ap(t, T.friso, T.frisoSale - T.friso))); glow = 1; pul = pulso(t, 0.12); cam_y = 0;
+  } else { forma("logo"); glow = 1; esc = 1 + 0.025 * eOut(ap(t, T.lock, 2)); pul = pulso(t, 0.10) ; alfa = 1 - ap(t, T.fin - 0.5, 0.5); fl = t < T.lock + .12 ? 0.12 * Math.exp(-25 * (t - T.lock)) : 0; }
+
+  geo.attributes.position.needsUpdate = true; geo.attributes.aS.needsUpdate = true; geo.attributes.aO.needsUpdate = true;
+  grupo.rotation.set(rotX, rotY, 0); grupo.scale.setScalar(esc); grupo.position.set(foco[0], foco[1] + cam_y, 0);
+  mat.uniforms.uPulso.value = pul; mat.uniforms.uGlow.value = glow; mat.uniforms.uAlfa.value = alfa;
+  ren.render(escena, cam);
+  flash.style.opacity = fl;
+
+  // marca y contador
+  const enProd = t >= T.p0 && t < T.friso;
+  marca.style.opacity = (t >= T.p0 - 0.2 && t < T.frisoSale ? 0.9 : 0) * (1 - ap(t, T.frisoSale - .3, .3));
+  const kk = Math.min(5, Math.max(0, Math.floor((t - T.p0) / (2 * BAR))));
+  cont.innerHTML = enProd ? `<b>${String(kk + 1).padStart(2, "0")}</b> / 06` : ""; cont.style.opacity = enProd ? 1 : 0;
+
+  // frases del compás 3
+  frases.forEach((e, i) => { const f = D.frases[i]; const a = eExpo(ap(t, f.t, 0.25)), z = ap(t, f.sale, 0.25);
+    e.style.opacity = a * (1 - z); e.style.transform = `translateY(${(1 - a) * 40 - z * 30}px)`; });
+
+  // productos
+  PR.forEach((r, k) => {
+    const t0 = T.p0 + k * 2 * BAR, b = (t - t0) / B, sale = ap(b, 6.5, 0.35);
+    const vis = b > -0.5 && b < 8;
+    r.bloque.style.opacity = vis ? 1 - sale : 0; r.bloque.style.transform = `translateY(${-sale * 40}px)`;
+    const n = eExpo(ap(b, 1, 0.3)); r.nom.style.opacity = n; r.nom.style.transform = `scale(${lerp(1.22, 1, n)})`; r.nom.style.filter = `blur(${(1 - n) * 10}px)`;
+    r.bloque.querySelector(".idx").style.opacity = eExpo(ap(b, 0.5, 0.4));
+    r.rol.forEach((s, j) => { const a = eOut(ap(b, 2 + j * 0.12, 0.35)); s.style.opacity = a; s.style.transform = `translateY(${(1 - a) * 24}px)`; });
+    const e = eExpo(ap(b, 5, 0.35)); r.est.style.opacity = e; r.est.style.transform = `translateX(${(1 - e) * -30}px)`;
+    // tarjeta con la pantalla real, al golpe 5 (b=4)
+    const c = eExpo(ap(b, 4, 0.45)), cs = ap(b, 6.6, 0.3);
+    r.card.style.opacity = vis ? c * (1 - cs) : 0; r.card.style.transform = `translateY(${(1 - c) * 60}px) scale(${lerp(0.9, 1, c)})`;
+    const [cx, cy, cw] = r.p.card, chh = r.card.offsetHeight || r.p.card[3] || cw * 2.16;
+    r.url.style.top = (cy + chh + 18) + "px"; r.url.style.opacity = vis ? eOut(ap(b, 4.4, 0.3)) * (1 - cs) : 0;
+    // línea de la tarjeta al objeto
+    const [ox, oy] = r.p.ancla, ax = cx + (ox > cx + cw / 2 ? cw : 0), ay = cy + chh * 0.55;
+    const l = eOut(ap(b, 4.2, 0.4)) * (1 - cs);
+    const mx = lerp(ax, ox, l), my = lerp(ay, oy, l);
+    r.ln.setAttribute("d", vis && l > 0 ? `M${ax},${ay} L${mx},${my}` : ""); r.pt.setAttribute("cx", mx); r.pt.setAttribute("cy", my); r.pt.setAttribute("opacity", vis && l > 0.98 ? 1 : 0);
+  });
+
+  // 01 · 02 · 03
+  lineas3.forEach((e, i) => { const a = eExpo(ap(t, T.friso + i * B, 0.3)), z = ap(t, T.frisoSale - 0.1, 0.3);
+    e.style.opacity = a * (1 - z); e.style.transform = `translateX(${(1 - a) * -60}px)`; });
+
+  // cierre
+  lock.forEach((e, i) => { const f = D.cierre[i]; const a = eExpo(ap(t, f.t, 0.35)); e.style.opacity = a * (1 - ap(t, T.fin - 0.5, 0.5)); e.style.transform = `translateY(${(1 - a) * 30}px)`; });
+};
+window.chequeo = () => ({ N, formas: D.formas, productos: D.productos.map(p => p.nombre) });
+await document.fonts.ready;
+for (const im of document.images) if (!im.complete) await new Promise(r => { im.onload = im.onerror = r; });
+window.seek(0); window.listo = true;
+</script>
+</body></html>
