@@ -80,7 +80,24 @@ def mapa(k=6.4, celda=8, radio=2.5, sup=4):
     print("mapa", ancho, alto, len(x), "puntos;", int((cod == "COL").sum()), "de Colombia")
 
 
+def logo_cancilleria():
+    """Logo «Cancillería» tal como lo usa el sitio del Consulado (sanfrancisco.consulado.gov.co, visto el 17-nov-2026).
+    color: el original recortado a su caja, sin tocar. blanco: versión en negativo para fondo oscuro
+    (escudo y palabra en blanco, la barra tricolor conserva sus colores)."""
+    im = Image.open(AQUI / "assets/cancilleria-original.png").convert("RGBA")
+    a = np.asarray(im).copy()
+    ys, xs = np.nonzero(a[..., 3] > 8)
+    caja = (xs.min() - 2, ys.min() - 2, xs.max() + 3, ys.max() + 3)
+    im.crop(caja).save(AQUI / "assets/cancilleria-color.png", optimize=True)
+    vacias = [y for y in range(300, int(ys.max())) if not (a[y, :, 3] > 8).any()]   # hueco entre la palabra y la barra tricolor
+    corte = max(vacias)
+    a[:corte, :, :3] = 255
+    Image.fromarray(a).crop(caja).save(AQUI / "assets/cancilleria-blanco.png", optimize=True)
+    print("logo cancillería", caja, "barra desde fila", corte)
+
+
 if __name__ == "__main__":
+    logo_cancilleria()
     for n in CABEZA:
         figura(n); avatar(n)
     mapa()

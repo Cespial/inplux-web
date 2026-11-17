@@ -30,17 +30,23 @@ FECHA, FECHA_CORTA, CIUDAD = "Thu, Dec 10, 2026", "Dec 10", "San Francisco"
 SEDE = "Consulate General of Colombia"
 ALIADO = "Cancillería de Colombia"
 FORMATO = "Talk · Panel · Networking"
+ALTO_SELLO = 86  # alto de la cabecera de logos
 ASOMA = 124  # px que la cabeza sobresale por encima de la tarjeta
 CUANDO = f'<b>{FECHA}</b> <span style="color:{TEAL}">→</span> <b>{CIUDAD}</b>'
 
 
 def sello(claro=False):
-    """INPLUX × Cancillería de Colombia. El segundo nombre es texto, no logo (ver la nota de arriba)."""
-    marca, tinta, aspa = ("wordmark-black", TINTA, GRIS) if claro else ("wordmark-white", IVORY, DIM)
-    return (f'<div style="display:flex;align-items:center;gap:16px">'
-            f'<img src="assets/{marca}.svg" style="height:22px;display:block">'
-            f'<span style="color:{aspa};font-size:22px;line-height:1">×</span>'
-            f'<span style="font-size:21px;font-weight:600;letter-spacing:.01em;color:{tinta};white-space:nowrap">{ALIADO}</span></div>')
+    """Cabecera conjunta: símbolo Estratos + INPLUX | logo de la Cancillería, que es el que usa el Consulado en su sitio.
+    Los dos a la misma altura óptica. En oscuro, el de la Cancillería va en negativo (blanco) con su barra tricolor."""
+    if claro:
+        simbolo = g.MARCA.format(s=46).replace("#fff", TINTA).replace("#15dcc4", "#0d7d74")
+        marca, canc, raya = "wordmark-black", "cancilleria-color", "rgba(18,17,15,.22)"
+    else:
+        simbolo, marca, canc, raya = g.MARCA.format(s=46), "wordmark-white", "cancilleria-blanco", "rgba(246,242,236,.24)"
+    return (f'<div style="display:flex;align-items:center;gap:26px;height:{ALTO_SELLO}px">'
+            f'<div style="display:flex;align-items:center;gap:10px">{simbolo}<img src="assets/{marca}.svg" style="height:27px;display:block"></div>'
+            f'<i style="width:1.5px;height:58px;background:{raya}"></i>'
+            f'<img src="assets/{canc}.png" style="height:{ALTO_SELLO}px;display:block"></div>')
 
 
 def marco(derecha, pie_izq, pie_der="INPLUX.CO", claro=False):
@@ -48,8 +54,8 @@ def marco(derecha, pie_izq, pie_der="INPLUX.CO", claro=False):
                           else ("rgba(246,242,236,.10)", "rgba(246,242,236,.45)", MUTED))
     cruces = "".join(f'<div class="cruz" style="{v}:21px;{h}:21px;color:{cruz}">+</div>' for v in ("top", "bottom") for h in ("left", "right"))
     return f"""<div class="grano"></div><div class="marco" style="border-color:{borde}"></div>{cruces}
-<div style="position:absolute;left:84px;top:82px">{sello(claro)}</div>
-<div class="micro" style="position:absolute;right:84px;top:86px;letter-spacing:.2em;color:{micro}">{derecha}</div>
+<div style="position:absolute;left:84px;top:66px">{sello(claro)}</div>
+<div class="micro" style="position:absolute;right:84px;top:100px;letter-spacing:.2em;color:{micro}">{derecha}</div>
 <div style="position:absolute;left:84px;right:84px;bottom:70px;display:flex;align-items:center;justify-content:space-between">
   <div class="micro" style="color:{micro};letter-spacing:.2em">{pie_izq}</div><div class="micro" style="color:{micro}">{pie_der}</div>
 </div>"""
@@ -82,11 +88,11 @@ def a_alineacion():
 </div>"""
     fila = "".join(tarjeta(i, *p) for i, p in enumerate(PONENTES, 1))
     return fin(f"""
-<div style="position:absolute;left:560px;top:120px;width:547px;height:592px;opacity:.16;background:{IVORY};
+<div style="position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.16;background:{IVORY};
   -webkit-mask-image:url(trama/mapa_base.png);mask-image:url(trama/mapa_base.png)"></div>
-<div style="position:absolute;left:560px;top:120px;width:547px;height:592px;opacity:.9;background:{TEAL};
+<div style="position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.9;background:{TEAL};
   -webkit-mask-image:url(trama/mapa_col.png);mask-image:url(trama/mapa_col.png)"></div>
-<div style="position:absolute;left:78px;right:84px;top:176px">
+<div style="position:absolute;left:78px;right:84px;top:200px">
   <h1 class="titular" style="font-size:122px;letter-spacing:-.045em;line-height:.98;padding-bottom:.1em">The State of<br>the Art of AI<br>in <span style="color:{TEAL};-webkit-text-fill-color:{TEAL}">LATAM.</span></h1>
   <p class="sub" style="margin:22px 0 0 6px">{CUANDO}</p>
 </div>
@@ -98,7 +104,7 @@ def a_alineacion():
 def b_editorial():
     """La lámina que se guarda: papel marfil, titular en tinta, mapa en puntos y los ponentes como lista."""
     def renglon(i, clave, nombre, cargo, casa):
-        return f"""<div style="display:flex;align-items:center;gap:26px;height:124px;border-top:1.5px solid {FILETE}">
+        return f"""<div style="display:flex;align-items:center;gap:26px;height:120px;border-top:1.5px solid {FILETE}">
   <img src="recortes/av_{clave}.png" style="width:88px;height:88px;display:block">
   <div style="flex:1">
     <div style="font-size:40px;font-weight:600;letter-spacing:-.025em;line-height:1;color:{TINTA}">{nombre}</div>
@@ -108,16 +114,16 @@ def b_editorial():
 </div>"""
     lista = "".join(renglon(i, *p) for i, p in enumerate(PONENTES, 1))
     return fin(f"""
-<div style="position:absolute;left:520px;top:128px;width:547px;height:592px;opacity:.5;background:{TINTA};
+<div style="position:absolute;left:520px;top:152px;width:547px;height:592px;opacity:.5;background:{TINTA};
   -webkit-mask-image:url(trama/mapa_base.png);mask-image:url(trama/mapa_base.png)"></div>
-<div style="position:absolute;left:520px;top:128px;width:547px;height:592px;background:{TEAL_OSC};
+<div style="position:absolute;left:520px;top:152px;width:547px;height:592px;background:{TEAL_OSC};
   -webkit-mask-image:url(trama/mapa_col.png);mask-image:url(trama/mapa_col.png)"></div>
-<div style="position:absolute;left:78px;top:178px">
+<div style="position:absolute;left:78px;top:198px">
   <h1 style="font-size:124px;font-weight:500;letter-spacing:-.05em;line-height:.96;color:{TINTA}">The State<br>of the Art<br>of AI in<br><span style="color:{TEAL_OSC}">LATAM.</span></h1>
 </div>
-<div style="position:absolute;left:84px;top:700px;font-size:17px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:{GRIS}">Speakers</div>
-<div style="position:absolute;left:84px;right:84px;top:738px;border-bottom:1.5px solid {FILETE}">{lista}</div>
-<div style="position:absolute;left:84px;right:84px;top:1140px;display:flex;justify-content:space-between;align-items:flex-end">
+<div style="position:absolute;left:84px;top:716px;font-size:17px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:{GRIS}">Speakers</div>
+<div style="position:absolute;left:84px;right:84px;top:752px;border-bottom:1.5px solid {FILETE}">{lista}</div>
+<div style="position:absolute;left:84px;right:84px;top:1146px;display:flex;justify-content:space-between;align-items:flex-end">
   <div style="font-size:54px;font-weight:500;letter-spacing:-.035em;line-height:1;color:{TINTA}">{FECHA}</div>
   <div style="font-size:54px;font-weight:500;letter-spacing:-.035em;line-height:1;color:{TEAL_OSC}">{CIUDAD}</div>
 </div>
@@ -136,7 +142,7 @@ def c_torre():
         f'<img class="trama" src="trama/torre.png" style="left:215px;top:-250px;opacity:.74">' + g.VELOS,
         f'<div style="position:absolute;left:0;right:0;top:0;height:640px;background:linear-gradient(180deg,{BLACK} 66%,rgba(12,12,11,0) 100%)"></div>',
         f'<div style="position:absolute;left:0;top:0;bottom:0;width:800px;background:linear-gradient(90deg,{BLACK} 46%,rgba(12,12,11,0) 100%)"></div>',
-        f"""<div style="position:absolute;left:78px;right:84px;top:176px">
+        f"""<div style="position:absolute;left:78px;right:84px;top:200px">
   <h1 class="titular" style="font-size:122px;letter-spacing:-.045em;line-height:.98;padding-bottom:.1em">The State of<br>the Art of AI<br>in <span style="color:{TEAL};-webkit-text-fill-color:{TEAL}">LATAM.</span></h1>
   <p class="sub" style="margin:22px 0 0 6px">{CUANDO}</p>
 </div>
