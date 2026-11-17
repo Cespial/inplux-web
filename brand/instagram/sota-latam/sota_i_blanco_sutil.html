@@ -1,0 +1,60 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Rethink Sans";src:url(assets/RethinkSans.woff2) format("woff2");font-weight:400 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#ffffff}
+body{font-family:"Rethink Sans",sans-serif;color:#f6f2ec;-webkit-font-smoothing:antialiased}
+.lienzo{position:relative;width:1080px;height:1350px;overflow:hidden;background:#ffffff}
+.trama{position:absolute;display:block}
+.grano{position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:.06;mix-blend-mode:overlay}
+.marco{position:absolute;inset:30px;border:1px solid rgba(246,242,236,.10)}
+.cruz{position:absolute;width:18px;height:18px;color:rgba(246,242,236,.45);font-size:22px;line-height:18px;text-align:center;font-weight:300}
+.titular{font-weight:500;letter-spacing:-.03em;line-height:1.0;
+  background:linear-gradient(90deg,#f6f2ec 0%,#f6f2ec 45%,#8d877e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:21px;letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#77726b;font-weight:500}
+.sub b{color:#f6f2ec;font-weight:600}
+.micro{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#a39d94;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:12px;border-radius:999px;white-space:nowrap}
+.pill.oscura{background:rgba(12,12,11,.7);border:1.5px solid rgba(246,242,236,.16);padding:14px 28px;font-size:26px;backdrop-filter:blur(2px)}
+.pill.rama{border:1.5px solid rgba(246,242,236,.16);background:rgba(12,12,11,.72);padding:11px 20px;font-size:21px}
+.pill.clara{background:#f6f2ec;color:#0c0c0b;padding:16px 32px;font-size:30px;font-weight:500;
+  box-shadow:0 0 0 8px rgba(246,242,236,.06),0 20px 60px rgba(0,0,0,.6)}
+.nodo{width:116px;height:116px;border-radius:50%;background:#0c0c0b;border:1.5px solid rgba(246,242,236,.16);display:grid;place-items:center;
+  box-shadow:0 0 0 14px rgba(0,215,202,.05),0 0 80px rgba(0,215,202,.18)}
+.tallo{width:1.5px;background:rgba(246,242,236,.16);margin:0 auto}
+.tarjeta{background:#f6f2ec;color:#0c0c0b;border-radius:14px;display:flex;justify-content:space-between;align-items:center;padding:30px 36px}
+</style></head><body><div class="lienzo"><img src="trama/fondo_sutil_claro.jpg" style="position:absolute;left:0;top:0;width:1080px;height:1350px;display:block"><div style="position:absolute;left:72px;right:72px;top:52px;height:104px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:11px"><svg viewBox="0 0 100 100" width="50" height="50"><rect x="8" y="57" width="42" height="13" rx="6.5" fill="#12110f"/><rect x="29" y="39" width="42" height="13" rx="6.5" fill="#12110f"/><rect x="50" y="21" width="42" height="13" rx="6.5" fill="#0d7d74"/></svg><img src="assets/wordmark-black.svg" style="height:30px;display:block"></div>
+  <img src="assets/consulado-sf.png" style="height:104px;display:block">
+</div>
+<div style="position:absolute;left:72px;right:72px;top:178px;height:1.5px;background:rgba(18,17,15,.16)"></div><div style="position:absolute;left:68px;top:206px;font-size:78px;font-weight:500;letter-spacing:-.045em;line-height:1;color:#12110f">The State of the Art<br>of AI in</div>
+<div style="position:absolute;right:72px;top:206px;text-align:right;font-size:78px;font-weight:500;letter-spacing:-.045em;line-height:1;color:#a8a39b">Dec 10<br>2026</div>
+<div style="position:absolute;left:53px;top:332px;font-size:329px;font-weight:700;letter-spacing:-.055em;line-height:1;color:#00706a;white-space:nowrap">LATAM</div><div style="position:absolute;left:48px;top:520px;width:380px;height:408px;overflow:hidden;z-index:1;"><img src="recortes/pie_santiago.png" style="width:380px;height:440px;display:block"></div><div style="position:absolute;left:350px;top:520px;width:380px;height:408px;overflow:hidden;z-index:3;"><img src="recortes/pie_cristian.png" style="width:380px;height:440px;display:block"></div><div style="position:absolute;left:652px;top:520px;width:380px;height:408px;overflow:hidden;z-index:2;-webkit-mask-image:linear-gradient(90deg,#000 89%,transparent 98%);mask-image:linear-gradient(90deg,#000 89%,transparent 98%)"><img src="recortes/pie_jaime.png" style="width:380px;height:440px;display:block"></div><div style="position:absolute;left:72px;right:72px;top:928px;height:2px;background:#12110f;z-index:4"></div><div style="position:absolute;left:72px;right:72px;top:952px;display:flex"><div style="flex:1;padding-right:14px">
+  <div style="font-size:15px;font-weight:600;letter-spacing:.2em;color:#00706a">01</div>
+  <div style="margin-top:10px;font-size:35px;font-weight:600;letter-spacing:-.03em;line-height:1;color:#12110f;white-space:nowrap">Santiago Jiménez</div>
+  <div style="margin-top:11px;font-size:15px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#625d55;white-space:nowrap">Researcher · <span style="color:#12110f">EAFIT</span></div>
+</div><div style="flex:1;padding-right:14px">
+  <div style="font-size:15px;font-weight:600;letter-spacing:.2em;color:#00706a">02</div>
+  <div style="margin-top:10px;font-size:35px;font-weight:600;letter-spacing:-.03em;line-height:1;color:#12110f;white-space:nowrap">Cristian Espinal</div>
+  <div style="margin-top:11px;font-size:15px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#625d55;white-space:nowrap">CTO · <span style="color:#12110f">INPLUX</span></div>
+</div><div style="flex:1;padding-right:14px">
+  <div style="font-size:15px;font-weight:600;letter-spacing:.2em;color:#00706a">03</div>
+  <div style="margin-top:10px;font-size:35px;font-weight:600;letter-spacing:-.03em;line-height:1;color:#12110f;white-space:nowrap">Jaime Cano</div>
+  <div style="margin-top:11px;font-size:15px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#625d55;white-space:nowrap">CEO · <span style="color:#12110f">INPLUX</span></div>
+</div></div><div style="position:absolute;left:72px;right:72px;top:1084px;display:flex;border-top:1.5px solid rgba(18,17,15,.16)"><div style="flex:1.0;padding:22px 22px 0 0">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#625d55">When</div>
+  <div style="margin-top:11px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:#12110f">Thu, Dec 10, 2026</div>
+  <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:#625d55">Evening event</div>
+</div><div style="flex:1.25;padding:22px 22px 0 0">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#625d55">Where</div>
+  <div style="margin-top:11px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:#12110f">Consulate of Colombia</div>
+  <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:#625d55">111 Pine St, Suite 1400 · San Francisco</div>
+</div><div style="flex:0.75;padding:22px 22px 0 0">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#625d55">Format</div>
+  <div style="margin-top:11px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:#12110f">Talk · Panel</div>
+  <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:#625d55">+ Networking</div>
+</div></div><div style="position:absolute;left:72px;right:72px;bottom:44px;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#625d55">INPLUX × Consulado de Colombia en San Francisco</div>
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;color:#625d55">INPLUX.CO</div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0"><div style="display:flex;height:12px;width:100%"><i style="flex:2;background:#fcd116"></i><i style="flex:1;background:#003893"></i><i style="flex:1;background:#ce1126"></i></div></div></div></body></html>

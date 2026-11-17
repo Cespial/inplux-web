@@ -30,6 +30,7 @@ FECHA, FECHA_CORTA, CIUDAD = "Thu, Dec 10, 2026", "Dec 10", "San Francisco"
 SEDE = "Consulate General of Colombia"
 ALIADO = "Cancillería de Colombia"
 FORMATO = "Talk · Panel · Networking"
+SUTIL = '<img src="trama/fondo_sutil_{}.jpg" style="position:absolute;left:0;top:0;width:1080px;height:1350px;display:block">'
 ALTO_SELLO = 86  # alto de la cabecera de logos
 ASOMA = 124  # px que la cabeza sobresale por encima de la tarjeta
 CUANDO = f'<b>{FECHA}</b> <span style="color:{TEAL}">→</span> <b>{CIUDAD}</b>'
@@ -69,7 +70,7 @@ def fin(*partes, claro=False):
 
 
 # ───────────────────────── A · Alineación (tinta, retratos recortados) ─────────────────────────
-def a_alineacion():
+def a_alineacion(sutil=False):
     """El cartel de evento de startup: titular gigante y los tres ponentes asomando por encima de su tarjeta."""
     def tarjeta(i, clave, nombre, cargo, casa):
         img = f'<img src="recortes/fig_{clave}.png" style="position:absolute;left:0;top:{{}}px;width:290px;height:420px;display:block">'
@@ -87,10 +88,10 @@ def a_alineacion():
   <div class="micro" style="margin-top:12px;font-size:16px;letter-spacing:.2em;white-space:nowrap">{cargo} · <span style="color:{IVORY}">{casa}</span></div>
 </div>"""
     fila = "".join(tarjeta(i, *p) for i, p in enumerate(PONENTES, 1))
-    return fin(f"""
-<div style="position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.16;background:{IVORY};
+    return fin(SUTIL.format("noche") if sutil else "", f"""
+<div style="display:{"none" if sutil else "block"};position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.16;background:{IVORY};
   -webkit-mask-image:url(trama/mapa_base.png);mask-image:url(trama/mapa_base.png)"></div>
-<div style="position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.9;background:{TEAL};
+<div style="display:{"none" if sutil else "block"};position:absolute;left:560px;top:142px;width:547px;height:592px;opacity:.9;background:{TEAL};
   -webkit-mask-image:url(trama/mapa_col.png);mask-image:url(trama/mapa_col.png)"></div>
 <div style="position:absolute;left:78px;right:84px;top:200px">
   <h1 class="titular" style="font-size:122px;letter-spacing:-.045em;line-height:.98;padding-bottom:.1em">The State of<br>the Art of AI<br>in <span style="color:{TEAL};-webkit-text-fill-color:{TEAL}">LATAM.</span></h1>
@@ -158,7 +159,7 @@ TRICOLOR = ('<div style="display:flex;height:{h}px;width:{w}"><i style="flex:2;b
 DIRECCION = "111 Pine St, Suite 1400"
 
 
-def d_blanco():
+def d_blanco(sutil=False):
     """Blanco, como diagrama el Consulado sus piezas (@consulcolsfo: fondo blanco, logo arriba, barra tricolor),
     con la tipografía y el teal de INPLUX. La palabra LATAM va gigante y los tres ponentes se paran delante de ella."""
     simbolo = g.MARCA.format(s=50).replace("#fff", TINTA).replace("#15dcc4", "#0d7d74")
@@ -209,7 +210,8 @@ def d_blanco():
 <div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>"""
 
     cabeza = g.head().replace(f"background:{BLACK}}}", f"background:{BLANCO}}}")
-    return cabeza + cabecera + titulo + banda + figuras + linea + fichas + franja + pie + "</div></body></html>"
+    fondo = SUTIL.format("claro") if sutil else ""
+    return cabeza + fondo + cabecera + titulo + ("" if sutil else banda) + figuras + linea + fichas + franja + pie + "</div></body></html>"
 
 
 # la foto de Jaime está cortada en el borde derecho: se funde en vez de dejar el corte recto
@@ -322,6 +324,8 @@ PIEZAS = {
     "sota_f_noche": (lambda: e_niebla(noche=True), 1080, 1350),
     "sota_g_combinada": (g_combinada, 1080, 1350),
     "sota_h_combinada_noche": (lambda: g_combinada(noche=True), 1080, 1350),
+    "sota_i_blanco_sutil": (lambda: d_blanco(sutil=True), 1080, 1350),
+    "sota_j_alineacion_sutil": (lambda: a_alineacion(sutil=True), 1080, 1350),
 }
 
 if __name__ == "__main__":

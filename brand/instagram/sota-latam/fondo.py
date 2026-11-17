@@ -112,7 +112,28 @@ def capas(papel, acero, espacio, sufijo, fuerza=1.0, cima=962):
     print("capa", f"puente_{sufijo}.png")
 
 
+def sutil(nombre, papel, acero, cuerpo, luz, f_puente, f_planeta, cima, y_puente=(170, 300, 560, 760), k_luces=1.0):
+    """Degradado que casi no se nota: arriba a la derecha asoma el Golden Gate (San Francisco) y abajo la Tierra de noche
+    con Sudamérica (LATAM). Todo a muy bajo contraste para ir DETRÁS de una pieza que ya tiene protagonistas.
+    cuerpo: tono del disco del planeta; luz: tono hacia el que tiran las luces de las ciudades."""
+    ys, xs = np.mgrid[0:H, 0:W]
+    a, b, c, d = y_puente
+    est = puente()
+    pres = suave(rampa(xs, 470, 720)) * suave(rampa(ys, a, b)) * (1 - suave(rampa(ys, c, d)))
+    t = (est * pres * f_puente)[..., None]
+    img = np.array(papel)[None, None] * (1 - t) + np.array(acero)[None, None] * t
+    g, ver = tierra(cima=cima, velo=190)
+    luces = (np.clip(g * 1.55, 0, 1) ** .9)[..., None]
+    v = (ver * f_planeta)[..., None]
+    img = img * (1 - v) + np.array(cuerpo)[None, None] * v
+    img = img + (np.array(luz)[None, None] - img) * luces * v * k_luces
+    guardar(img, nombre)
+
+
 if __name__ == "__main__":
+    sutil("fondo_sutil_claro.jpg", (1, 1, 1), (.33, .39, .43), (.80, .82, .83), (.10, .14, .16), .46, .42, cima=850, k_luces=.5)
+    sutil("fondo_sutil_noche.jpg", (.047, .047, .043), (.60, .61, .59), (.047, .047, .043), (.985, .98, .96), .30, .5, cima=780,
+          y_puente=(110, 240, 600, 800), k_luces=.55)
     claro(); noche()
     capas((1, 1, 1), (.33, .39, .43), (.045, .047, .05), "claro")
     capas((.047, .047, .043), (.60, .61, .59), (.047, .047, .043), "noche", fuerza=.9)
