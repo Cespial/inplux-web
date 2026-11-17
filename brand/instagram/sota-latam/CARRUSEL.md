@@ -16,6 +16,11 @@ Seis láminas 1080 × 1350 (`carrusel.py` → `exports/carrusel/`). Público: fu
 **Headline:** The State of the Art of AI in LATAM
 **Botón:** Sign Up / Learn More → enlace de registro (PENDIENTE)
 
+## Versión en español
+`python3 carrusel.py es` → `exports/carrusel/*/carrusel_es_*`. El nombre del evento se deja en inglés; lo demás se traduce
+(cifras con coma decimal, «7:00 p. m.», «Investigador · EAFIT»).
+**Texto del anuncio:** América Latina compra 15 veces más IA de la que financia. El 10 de diciembre, fundadores que construyen allá cuentan de primera mano dónde están las oportunidades. Charla, panel y networking en el Consulado General de Colombia en San Francisco. 7:00 p. m. Cupos limitados.
+
 ## Pendientes antes de pautar
 - Enlace de registro y confirmar que el registro es obligatorio («Limited seats. RSVP at the link.» lo puse yo).
 - Visto bueno del Consulado al logo (hoy es una captura de su Instagram) y a pautar con su nombre.
