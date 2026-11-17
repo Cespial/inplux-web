@@ -95,5 +95,24 @@ def noche():
     componer((.047, .047, .043), (.60, .61, .59), (.047, .047, .043), "fondo_noche.jpg", fuerza=.9)
 
 
+def capas(papel, acero, espacio, sufijo, fuerza=1.0, cima=962):
+    """Para la versión con «LATAM» gigante: el planeta va en el fondo y el puente en una capa aparte con transparencia,
+    de modo que la palabra queda ENTRE los dos (detrás de la torre, delante del papel)."""
+    ys, xs = np.mgrid[0:H, 0:W]
+    g, ver = tierra(cima=cima)
+    luces = (np.clip(g * 1.55, 0, 1) ** .9)[..., None]
+    planeta = np.array(espacio)[None, None] + luces * (np.array([.985, .98, .96])[None, None] - np.array(espacio)[None, None])
+    img = np.array(papel)[None, None] * (1 - ver[..., None]) + planeta * ver[..., None]
+    guardar(img, f"planeta_{sufijo}.jpg")
+    est = puente()
+    pres = suave(rampa(xs, 500, 690)) * suave(rampa(ys, 215, 330)) * (1 - suave(rampa(ys, cima - 80, cima + 30)))
+    alfa = np.clip(est * pres * fuerza, 0, 1)
+    rgba = np.dstack([np.broadcast_to(np.array(acero)[None, None], (H, W, 3)), alfa])
+    Image.fromarray((rgba * 255).astype(np.uint8), "RGBA").save(AQUI / "trama" / f"puente_{sufijo}.png", optimize=True)
+    print("capa", f"puente_{sufijo}.png")
+
+
 if __name__ == "__main__":
     claro(); noche()
+    capas((1, 1, 1), (.33, .39, .43), (.045, .047, .05), "claro")
+    capas((.047, .047, .043), (.60, .61, .59), (.047, .047, .043), "noche", fuerza=.9)

@@ -265,6 +265,54 @@ def e_niebla(noche=False):
             + cabecera + titulo + lista + datos + pie + "</div></body></html>")
 
 
+# ───────────────────────── G · Combinada (niebla + «LATAM» gigante) ─────────────────────────
+def g_combinada(noche=False):
+    """Une las dos que le gustaron a Cristian: el fondo de niebla (E) y la palabra LATAM a todo el ancho (D).
+    La palabra va en medio de las capas: delante del papel y del planeta, detrás del puente, que la cruza por la derecha."""
+    if noche:
+        suf, tinta, gris, acento, filete, papel = "noche", IVORY, MUTED, TEAL, LINE, BLACK
+        simbolo, marca = g.MARCA.format(s=50), "wordmark-white"
+        consulado = '<div style="background:#fff;border-radius:10px;padding:10px 16px"><img src="assets/consulado-sf.png" style="height:86px;display:block"></div>'
+    else:
+        suf, tinta, gris, acento, filete, papel = "claro", TINTA, GRIS, TEAL_OSC, FILETE, BLANCO
+        simbolo = g.MARCA.format(s=50).replace("#fff", TINTA).replace("#15dcc4", "#0d7d74")
+        marca, consulado = "wordmark-black", '<img src="assets/consulado-sf.png" style="height:104px;display:block">'
+    capa = 'position:absolute;left:0;top:0;width:1080px;height:1350px;display:block'
+    cabecera = f"""<div style="position:absolute;left:72px;right:72px;top:52px;height:104px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:11px">{simbolo}<img src="assets/{marca}.svg" style="height:30px;display:block"></div>
+  {consulado}
+</div>"""
+    titulo = f"""<div style="position:absolute;left:72px;top:198px;font-size:15px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{acento}">{FORMATO}</div>
+<div style="position:absolute;left:68px;top:230px;font-size:78px;font-weight:500;letter-spacing:-.045em;line-height:1;color:{tinta}">The State of the Art<br>of AI in</div>"""
+    palabra = f'<div style="position:absolute;left:53px;top:352px;font-size:329px;font-weight:700;letter-spacing:-.055em;line-height:1;color:{acento};white-space:nowrap">LATAM</div>'
+
+    def renglon(i, clave, nombre, cargo, casa):
+        return f"""<div style="display:flex;align-items:center;gap:18px;height:64px;border-top:1.5px solid {filete}">
+  <img src="recortes/av_{clave}.png" style="width:46px;height:46px;display:block;border-radius:50%">
+  <div style="font-size:27px;font-weight:600;letter-spacing:-.025em;color:{tinta};white-space:nowrap">{nombre}</div>
+  <div style="font-size:14px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:{gris};white-space:nowrap;margin-left:auto">{cargo} · <span style="color:{tinta}">{casa}</span></div>
+</div>"""
+    lista = (f'<div style="position:absolute;left:72px;top:672px;width:500px">'
+             f'<div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{gris};margin-bottom:13px">Speakers</div>'
+             + "".join(renglon(i, *p) for i, p in enumerate(PONENTES, 1))
+             + f'<div style="border-top:1.5px solid {filete}"></div></div>')
+
+    def celda(rotulo, valor, detalle):
+        return f"""<div>
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{gris}">{rotulo}</div>
+  <div style="margin-top:9px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:{tinta};white-space:nowrap">{valor}</div>
+  <div style="margin-top:4px;font-size:18px;line-height:1.25;color:{gris};white-space:nowrap">{detalle}</div>
+</div>"""
+    datos = (f'<div style="position:absolute;left:72px;top:918px;display:flex;gap:46px">'
+             + celda("When", FECHA, "Evening event")
+             + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}") + '</div>')
+    pie = f'<div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>'
+    cabeza = g.head().replace(f"background:{BLACK}}}", f"background:{papel}}}")
+    return (cabeza + f'<img src="trama/planeta_{suf}.jpg" style="{capa}">' + palabra
+            + f'<img src="trama/puente_{suf}.png" style="{capa}">'
+            + cabecera + titulo + lista + datos + pie + "</div></body></html>")
+
+
 PIEZAS = {
     "sota_a_alineacion": (a_alineacion, 1080, 1350),
     "sota_b_editorial": (b_editorial, 1080, 1350),
@@ -272,6 +320,8 @@ PIEZAS = {
     "sota_d_blanco": (d_blanco, 1080, 1350),
     "sota_e_niebla": (e_niebla, 1080, 1350),
     "sota_f_noche": (lambda: e_niebla(noche=True), 1080, 1350),
+    "sota_g_combinada": (g_combinada, 1080, 1350),
+    "sota_h_combinada_noche": (lambda: g_combinada(noche=True), 1080, 1350),
 }
 
 if __name__ == "__main__":
