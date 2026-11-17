@@ -103,7 +103,7 @@ export default function RootLayout({
       addressRegion: "Antioquia",
       addressCountry: "CO",
     },
-    sameAs: ["https://www.linkedin.com/company/inplux"],
+    sameAs: ["https://www.linkedin.com/company/inpluxco"],
     knowsAbout: [
       "Desarrollo de software a la medida",
       "Productos digitales",
