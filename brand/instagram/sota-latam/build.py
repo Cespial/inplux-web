@@ -160,7 +160,7 @@ TRICOLOR = ('<div style="display:flex;height:{h}px;width:{w}"><i style="flex:2;b
 DIRECCION = "111 Pine St, Suite 1400"
 
 
-def d_blanco(sutil=False, alto=None, techo=None, aire=0):
+def d_blanco(sutil=False, alto=None, techo=None, aire=0, remate=None, contador=None):
     """Blanco, como diagrama el Consulado sus piezas (@consulcolsfo: fondo blanco, logo arriba, barra tricolor),
     con la tipografía y el teal de INPLUX. La palabra LATAM va gigante y los tres ponentes se paran delante de ella."""
     alto, techo = alto or ALTO_D, techo or TECHO_D   # alto visible de las figuras y altura de la coronilla
@@ -204,10 +204,12 @@ def d_blanco(sutil=False, alto=None, techo=None, aire=0):
               + celda("When", FECHA, f'<span style="color:{TINTA};font-weight:600">{HORA}</span>', 1.0)
               + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}", 1.25)
               + celda("Format", "Talk · Panel", "+ Networking", .75) + '</div>')
+    if remate:                      # el carrusel cambia la franja de datos por su propio remate (recibe la y de la línea)
+        franja = remate(suelo)
 
     pie = f"""<div style="position:absolute;left:72px;right:72px;bottom:44px;display:flex;justify-content:space-between;align-items:center">
   <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{GRIS}">INPLUX × Consulado de Colombia en San Francisco</div>
-  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;color:{GRIS}">INPLUX.CO</div>
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;color:{GRIS}">{contador or "INPLUX.CO"}</div>
 </div>
 <div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>"""
 
