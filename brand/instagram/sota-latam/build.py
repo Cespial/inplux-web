@@ -27,13 +27,14 @@ PONENTES = [
     ("jaime", "Jaime Cano", "CEO", "INPLUX"),
 ]
 FECHA, FECHA_CORTA, CIUDAD = "Thu, Dec 10, 2026", "Dec 10", "San Francisco"
+HORA, HORA_CORTA = "7:00 PM", "7 PM"   # confirmada por Cristian el 17-nov-2026
 SEDE = "Consulate General of Colombia"
 ALIADO = "Cancillería de Colombia"
 FORMATO = "Talk · Panel · Networking"
 SUTIL = '<img src="trama/fondo_sutil_{}.jpg" style="position:absolute;left:0;top:0;width:1080px;height:1350px;display:block">'
 ALTO_SELLO = 86  # alto de la cabecera de logos
 ASOMA = 124  # px que la cabeza sobresale por encima de la tarjeta
-CUANDO = f'<b>{FECHA}</b> <span style="color:{TEAL}">→</span> <b>{CIUDAD}</b>'
+CUANDO = f'<b>{FECHA} · {HORA_CORTA}</b> <span style="color:{TEAL}">→</span> <b>{CIUDAD}</b>'
 
 
 def sello(claro=False):
@@ -125,7 +126,7 @@ def b_editorial():
 <div style="position:absolute;left:84px;top:716px;font-size:17px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:{GRIS}">Speakers</div>
 <div style="position:absolute;left:84px;right:84px;top:752px;border-bottom:1.5px solid {FILETE}">{lista}</div>
 <div style="position:absolute;left:84px;right:84px;top:1146px;display:flex;justify-content:space-between;align-items:flex-end">
-  <div style="font-size:54px;font-weight:500;letter-spacing:-.035em;line-height:1;color:{TINTA}">{FECHA}</div>
+  <div style="font-size:54px;font-weight:500;letter-spacing:-.035em;line-height:1;color:{TINTA}">{FECHA_CORTA}, 2026 · {HORA_CORTA}</div>
   <div style="font-size:54px;font-weight:500;letter-spacing:-.035em;line-height:1;color:{TEAL_OSC}">{CIUDAD}</div>
 </div>
 """, marco(FORMATO, SEDE, claro=True), claro=True)
@@ -200,7 +201,7 @@ def d_blanco(sutil=False, alto=None, techo=None, aire=0):
   <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:{GRIS}">{detalle}</div>
 </div>"""
     franja = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 156 + aire}px;display:flex;border-top:1.5px solid {FILETE}">'
-              + celda("When", FECHA, "Evening event", 1.0)
+              + celda("When", FECHA, f'<span style="color:{TINTA};font-weight:600">{HORA}</span>', 1.0)
               + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}", 1.25)
               + celda("Format", "Talk · Panel", "+ Networking", .75) + '</div>')
 
@@ -260,7 +261,7 @@ def e_niebla(noche=False):
   <div style="margin-top:4px;font-size:18px;line-height:1.25;color:{gris};white-space:nowrap">{detalle}</div>
 </div>"""
     datos = (f'<div style="position:absolute;left:72px;top:850px;display:flex;gap:46px">'
-             + celda("When", FECHA, "Evening event")
+             + celda("When", FECHA, f'<span style="color:{tinta};font-weight:600">{HORA}</span>')
              + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}") + '</div>')
     pie = f'<div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>'
     cabeza = g.head().replace(f"background:{BLACK}}}", f"background:{papel}}}")
@@ -307,7 +308,7 @@ def g_combinada(noche=False):
   <div style="margin-top:4px;font-size:18px;line-height:1.25;color:{gris};white-space:nowrap">{detalle}</div>
 </div>"""
     datos = (f'<div style="position:absolute;left:72px;top:918px;display:flex;gap:46px">'
-             + celda("When", FECHA, "Evening event")
+             + celda("When", FECHA, f'<span style="color:{tinta};font-weight:600">{HORA}</span>')
              + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}") + '</div>')
     pie = f'<div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>'
     cabeza = g.head().replace(f"background:{BLACK}}}", f"background:{papel}}}")
