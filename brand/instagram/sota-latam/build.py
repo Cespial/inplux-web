@@ -159,9 +159,10 @@ TRICOLOR = ('<div style="display:flex;height:{h}px;width:{w}"><i style="flex:2;b
 DIRECCION = "111 Pine St, Suite 1400"
 
 
-def d_blanco(sutil=False):
+def d_blanco(sutil=False, alto=None, techo=None, aire=0):
     """Blanco, como diagrama el Consulado sus piezas (@consulcolsfo: fondo blanco, logo arriba, barra tricolor),
     con la tipografía y el teal de INPLUX. La palabra LATAM va gigante y los tres ponentes se paran delante de ella."""
+    alto, techo = alto or ALTO_D, techo or TECHO_D   # alto visible de las figuras y altura de la coronilla
     simbolo = g.MARCA.format(s=50).replace("#fff", TINTA).replace("#15dcc4", "#0d7d74")
     cabecera = f"""<div style="position:absolute;left:72px;right:72px;top:52px;height:104px;display:flex;align-items:center;justify-content:space-between">
   <div style="display:flex;align-items:center;gap:11px">{simbolo}<img src="assets/wordmark-black.svg" style="height:30px;display:block"></div>
@@ -175,10 +176,10 @@ def d_blanco(sutil=False):
 
     centros = (238, 540, 842)
     figuras = "".join(
-        f'<div style="position:absolute;left:{cx - 190}px;top:{TECHO_D}px;width:380px;height:{ALTO_D}px;overflow:hidden;z-index:{z};{FUNDIDO.get(clave, "")}">'
+        f'<div style="position:absolute;left:{cx - 190}px;top:{techo}px;width:380px;height:{alto}px;overflow:hidden;z-index:{z};{FUNDIDO.get(clave, "")}">'
         f'<img src="recortes/pie_{clave}.png" style="width:380px;height:440px;display:block"></div>'
         for cx, z, (clave, *_r) in zip(centros, (1, 3, 2), PONENTES))
-    suelo = TECHO_D + ALTO_D
+    suelo = techo + alto
     banda = (f'<div style="position:absolute;left:0;right:0;top:{suelo - 250}px;height:250px;'
              f'background:linear-gradient(180deg,rgba(236,234,229,0) 0%,#eceae5 70%)"></div>')
     linea = f'<div style="position:absolute;left:72px;right:72px;top:{suelo}px;height:2px;background:{TINTA};z-index:4"></div>'
@@ -189,7 +190,7 @@ def d_blanco(sutil=False):
   <div style="margin-top:10px;font-size:35px;font-weight:600;letter-spacing:-.03em;line-height:1;color:{TINTA};white-space:nowrap">{nombre}</div>
   <div style="margin-top:11px;font-size:15px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:{GRIS};white-space:nowrap">{cargo} · <span style="color:{TINTA}">{casa}</span></div>
 </div>"""
-    fichas = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 24}px;display:flex">'
+    fichas = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 24 + aire // 3}px;display:flex">'
               + "".join(ficha(i, *p) for i, p in enumerate(PONENTES, 1)) + '</div>')
 
     def celda(rotulo, valor, detalle, ancho):
@@ -198,7 +199,7 @@ def d_blanco(sutil=False):
   <div style="margin-top:11px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:{TINTA}">{valor}</div>
   <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:{GRIS}">{detalle}</div>
 </div>"""
-    franja = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 156}px;display:flex;border-top:1.5px solid {FILETE}">'
+    franja = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 156 + aire}px;display:flex;border-top:1.5px solid {FILETE}">'
               + celda("When", FECHA, "Evening event", 1.0)
               + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}", 1.25)
               + celda("Format", "Talk · Panel", "+ Networking", .75) + '</div>')
@@ -325,6 +326,8 @@ PIEZAS = {
     "sota_g_combinada": (g_combinada, 1080, 1350),
     "sota_h_combinada_noche": (lambda: g_combinada(noche=True), 1080, 1350),
     "sota_i_blanco_sutil": (lambda: d_blanco(sutil=True), 1080, 1350),
+    # K · como I, con los cuerpos recortados a la altura del pecho (pedido de Cristian, 17-nov)
+    "sota_k_blanco_busto": (lambda: d_blanco(sutil=True, alto=318, techo=552, aire=24), 1080, 1350),
     "sota_j_alineacion_sutil": (lambda: a_alineacion(sutil=True), 1080, 1350),
 }
 
