@@ -151,10 +151,78 @@ def c_torre():
 """, marco(FORMATO, SEDE))
 
 
+# ───────────────────────── D · Institucional (blanco, pieza conjunta) ─────────────────────────
+BLANCO, AZUL = "#ffffff", "#1d3466"
+TRICOLOR = ('<div style="display:flex;height:{h}px;width:{w}"><i style="flex:2;background:#fcd116"></i>'
+            '<i style="flex:1;background:#003893"></i><i style="flex:1;background:#ce1126"></i></div>')
+DIRECCION = "111 Pine St, Suite 1400"
+
+
+def d_blanco():
+    """Blanco, como diagrama el Consulado sus piezas (@consulcolsfo: fondo blanco, logo arriba, barra tricolor),
+    con la tipografía y el teal de INPLUX. La palabra LATAM va gigante y los tres ponentes se paran delante de ella."""
+    simbolo = g.MARCA.format(s=50).replace("#fff", TINTA).replace("#15dcc4", "#0d7d74")
+    cabecera = f"""<div style="position:absolute;left:72px;right:72px;top:52px;height:104px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:11px">{simbolo}<img src="assets/wordmark-black.svg" style="height:30px;display:block"></div>
+  <img src="assets/consulado-sf.png" style="height:104px;display:block">
+</div>
+<div style="position:absolute;left:72px;right:72px;top:178px;height:1.5px;background:{FILETE}"></div>"""
+
+    titulo = f"""<div style="position:absolute;left:68px;top:206px;font-size:78px;font-weight:500;letter-spacing:-.045em;line-height:1;color:{TINTA}">The State of the Art<br>of AI in</div>
+<div style="position:absolute;right:72px;top:206px;text-align:right;font-size:78px;font-weight:500;letter-spacing:-.045em;line-height:1;color:#a8a39b">Dec 10<br>2026</div>
+<div style="position:absolute;left:53px;top:332px;font-size:329px;font-weight:700;letter-spacing:-.055em;line-height:1;color:{TEAL_OSC};white-space:nowrap">LATAM</div>"""
+
+    centros = (238, 540, 842)
+    figuras = "".join(
+        f'<div style="position:absolute;left:{cx - 190}px;top:{TECHO_D}px;width:380px;height:{ALTO_D}px;overflow:hidden;z-index:{z};{FUNDIDO.get(clave, "")}">'
+        f'<img src="recortes/pie_{clave}.png" style="width:380px;height:440px;display:block"></div>'
+        for cx, z, (clave, *_r) in zip(centros, (1, 3, 2), PONENTES))
+    suelo = TECHO_D + ALTO_D
+    banda = (f'<div style="position:absolute;left:0;right:0;top:{suelo - 250}px;height:250px;'
+             f'background:linear-gradient(180deg,rgba(236,234,229,0) 0%,#eceae5 70%)"></div>')
+    linea = f'<div style="position:absolute;left:72px;right:72px;top:{suelo}px;height:2px;background:{TINTA};z-index:4"></div>'
+
+    def ficha(i, _clave, nombre, cargo, casa):
+        return f"""<div style="flex:1;padding-right:14px">
+  <div style="font-size:15px;font-weight:600;letter-spacing:.2em;color:{TEAL_OSC}">0{i}</div>
+  <div style="margin-top:10px;font-size:35px;font-weight:600;letter-spacing:-.03em;line-height:1;color:{TINTA};white-space:nowrap">{nombre}</div>
+  <div style="margin-top:11px;font-size:15px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:{GRIS};white-space:nowrap">{cargo} · <span style="color:{TINTA}">{casa}</span></div>
+</div>"""
+    fichas = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 24}px;display:flex">'
+              + "".join(ficha(i, *p) for i, p in enumerate(PONENTES, 1)) + '</div>')
+
+    def celda(rotulo, valor, detalle, ancho):
+        return f"""<div style="flex:{ancho};padding:22px 22px 0 0">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{GRIS}">{rotulo}</div>
+  <div style="margin-top:11px;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:{TINTA}">{valor}</div>
+  <div style="margin-top:5px;font-size:19px;font-weight:400;line-height:1.25;color:{GRIS}">{detalle}</div>
+</div>"""
+    franja = (f'<div style="position:absolute;left:72px;right:72px;top:{suelo + 156}px;display:flex;border-top:1.5px solid {FILETE}">'
+              + celda("When", FECHA, "Evening event", 1.0)
+              + celda("Where", "Consulate of Colombia", f"{DIRECCION} · {CIUDAD}", 1.25)
+              + celda("Format", "Talk · Panel", "+ Networking", .75) + '</div>')
+
+    pie = f"""<div style="position:absolute;left:72px;right:72px;bottom:44px;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:{GRIS}">INPLUX × Consulado de Colombia en San Francisco</div>
+  <div style="font-size:14px;font-weight:600;letter-spacing:.24em;color:{GRIS}">INPLUX.CO</div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0">{TRICOLOR.format(h=12, w="100%")}</div>"""
+
+    cabeza = g.head().replace(f"background:{BLACK}}}", f"background:{BLANCO}}}")
+    return cabeza + cabecera + titulo + banda + figuras + linea + fichas + franja + pie + "</div></body></html>"
+
+
+# la foto de Jaime está cortada en el borde derecho: se funde en vez de dejar el corte recto
+FUNDIDO = {"jaime": "-webkit-mask-image:linear-gradient(90deg,#000 89%,transparent 98%);mask-image:linear-gradient(90deg,#000 89%,transparent 98%)"}
+ALTO_D = 408   # alto visible de las figuras: el de la más corta (Santiago), para que todas lleguen a la línea
+TECHO_D = 520  # y de la coronilla de las figuras en la versión blanca (pisan el pie de «LATAM»)
+
+
 PIEZAS = {
     "sota_a_alineacion": (a_alineacion, 1080, 1350),
     "sota_b_editorial": (b_editorial, 1080, 1350),
     "sota_c_torre": (c_torre, 1080, 1350),
+    "sota_d_blanco": (d_blanco, 1080, 1350),
 }
 
 if __name__ == "__main__":

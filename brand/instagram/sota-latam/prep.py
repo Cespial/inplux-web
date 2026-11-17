@@ -30,7 +30,7 @@ def grano(g, fuerza, semilla):
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
-def figura(n, ancho=290, alto=420, cabeza=150, techo=30):
+def figura(n, ancho=290, alto=420, cabeza=150, techo=30, nombre="fig"):
     g, alfa = gris(n)
     cx, y0, y1 = CABEZA[n]
     k = cabeza / (y1 - y0)
@@ -38,11 +38,12 @@ def figura(n, ancho=290, alto=420, cabeza=150, techo=30):
     g, alfa = g.resize(tam, Image.LANCZOS), alfa.resize(tam, Image.LANCZOS)
     if k > 1:
         g = g.filter(ImageFilter.UnsharpMask(1.6, 90, 2))
+        alfa = alfa.filter(ImageFilter.MinFilter(7)).filter(ImageFilter.GaussianBlur(1.3))   # quita el borde claro del recorte ampliado
     g = grano(g, 7, 3)
     out = Image.new("RGBA", (ancho, alto), (0, 0, 0, 0))
     capa = Image.merge("RGBA", (g, g, g, alfa))
     out.paste(capa, (round(ancho / 2 - cx * k), round(techo - y0 * k)), capa)
-    out.save(AQUI / "recortes" / f"fig_{n}.png", optimize=True)
+    out.save(AQUI / "recortes" / f"{nombre}_{n}.png", optimize=True)
     print("figura", n, f"escala {k:.2f}")
 
 
@@ -96,8 +97,31 @@ def logo_cancilleria():
     print("logo cancillería", caja, "barra desde fila", corte)
 
 
+def logo_consulado():
+    """Logo propio del Consulado (escudo a color + «Consulado de Colombia en San Francisco» + barra tricolor).
+    PROVISIONAL: es una captura de su publicación de Instagram del 18-oct-2026 (@consulcolsfo, «Consulados móviles»),
+    986 px de ancho y con compresión. Sirve para la maqueta; para publicar hay que pedirles el archivo oficial.
+    Solo se limpia el fondo (casi blanco → transparente) y se recorta a su caja; no se redibuja nada."""
+    im = Image.open(AQUI / "assets/consulado-sf-captura.png").convert("RGB")
+    a = np.asarray(im, dtype=float)
+    fondo = np.median(a[:12].reshape(-1, 3), 0)                       # el blanco de la publicación no es 255 exacto
+    dist = np.abs(a - fondo).max(-1)
+    alfa = np.clip((dist - 6) / 26, 0, 1)
+    ys, xs = np.nonzero(alfa > .5)
+    caja = (max(xs.min() - 6, 0), max(ys.min() - 6, 0), xs.max() + 7, ys.max() + 7)
+    # quita el velo del fondo: color = (pixel − fondo·(1−α)) / α
+    al = np.maximum(alfa, 1e-3)[..., None]
+    color = np.clip((a - 255 * (1 - al) * (fondo / 255)) / al, 0, 255)
+    out = Image.fromarray(np.dstack([color, alfa * 255]).astype(np.uint8), "RGBA").crop(caja)
+    out.save(AQUI / "assets/consulado-sf.png", optimize=True)
+    print("logo consulado", out.size)
+
+
 if __name__ == "__main__":
     logo_cancilleria()
+    logo_consulado()
+    for n in CABEZA:
+        figura(n, ancho=380, alto=440, cabeza=165, techo=8, nombre="pie")
     for n in CABEZA:
         figura(n); avatar(n)
     mapa()
