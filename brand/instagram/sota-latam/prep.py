@@ -38,7 +38,12 @@ def figura(n, ancho=290, alto=420, cabeza=150, techo=30, nombre="fig"):
     g, alfa = g.resize(tam, Image.LANCZOS), alfa.resize(tam, Image.LANCZOS)
     if k > 1:
         g = g.filter(ImageFilter.UnsharpMask(1.6, 90, 2))
-        alfa = alfa.filter(ImageFilter.MinFilter(7)).filter(ImageFilter.GaussianBlur(1.3))   # quita el borde claro del recorte ampliado
+        # quita el borde claro del recorte ampliado, pero SOLO del mentón hacia abajo (camisa contra el follaje):
+        # en la cabeza ese mismo ajuste se comía el contorno del pelo y Santiago quedaba «calvo» (17-nov)
+        fino = alfa.filter(ImageFilter.MinFilter(7)).filter(ImageFilter.GaussianBlur(1.3))
+        fila = np.arange(alfa.height)[:, None]
+        peso = np.clip((fila - y1 * k) / 26, 0, 1)                      # 0 en la cabeza, 1 desde 26 px bajo el mentón
+        alfa = Image.fromarray((np.asarray(alfa) * (1 - peso) + np.asarray(fino) * peso).astype(np.uint8))
     g = grano(g, 7, 3)
     out = Image.new("RGBA", (ancho, alto), (0, 0, 0, 0))
     capa = Image.merge("RGBA", (g, g, g, alfa))
