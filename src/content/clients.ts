@@ -36,15 +36,6 @@ export const clientLogos = [
     renderWidth: 70,
   },
   {
-    src: "/brand/clients/experience-06-transparent.png",
-    name: "Empresa de Desarrollo Urbano",
-    relation: "partner-experience",
-    group: "public",
-    width: 367,
-    height: 138,
-    renderWidth: 138,
-  },
-  {
     src: "/brand/clients/politecnico-jaime-isaza.png",
     name: "Politécnico Colombiano Jaime Isaza Cadavid",
     relation: "partner-experience",

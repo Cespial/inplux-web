@@ -208,7 +208,6 @@ export const homeCopyEs: HomeCopy = {
       "/brand/clients/politecnico-tecnova.png": "Educación técnica y tecnológica",
       "/brand/clients/experience-04.png": "Cooperación territorial",
       "/brand/clients/experience-05.png": "Operación empresarial",
-      "/brand/clients/experience-06-transparent.png": "Desarrollo urbano",
       "/brand/clients/experience-07.png": "Tecnología para la gestión pública",
       "/brand/clients/municipio-cisneros.png": "Gestión pública territorial",
     },

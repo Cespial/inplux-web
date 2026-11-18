@@ -291,7 +291,6 @@ export const homeCopyEn: HomeCopy = {
       "/brand/clients/politecnico-tecnova.png": "Technical and technological education",
       "/brand/clients/experience-04.png": "Territorial cooperation",
       "/brand/clients/experience-05.png": "Business operations",
-      "/brand/clients/experience-06-transparent.png": "Urban development",
       "/brand/clients/experience-07.png": "Technology for public management",
       "/brand/clients/municipio-cisneros.png": "Territorial public management",
     },
