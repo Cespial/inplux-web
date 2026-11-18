@@ -27,11 +27,14 @@ const read = (file) => readFileSync(path.join(root, file), "utf8");
 
 const css = read("src/components/v5/LogoWall.module.css");
 const tsx = read("src/components/v5/LogoWall.tsx");
-const clients = read("src/content/clients.ts");
+const clientsFile = read("src/content/clients.ts");
+// Las alianzas (`partnerLogos`) van en una fila fija, fuera de las cintas: la
+// cuenta de las cintas empieza donde termina esa lista.
+const clients = clientsFile.slice(clientsFile.indexOf("export const clientLogos"));
 const copies = { es: read("src/content/copy/es.ts"), en: read("src/content/copy/en.ts") };
 
 const grupos = JSON.parse(
-  /clientGroups = (\[[^\]]*\])/.exec(clients)[1].replace(/'/g, '"'),
+  /clientGroups = (\[[^\]]*\])/.exec(clientsFile)[1].replace(/'/g, '"'),
 );
 
 test("los grupos del muro abren con las instituciones públicas", () => {

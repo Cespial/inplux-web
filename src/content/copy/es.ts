@@ -161,6 +161,7 @@ export const homeCopyEs: HomeCopy = {
     eyebrow: "RELACIONES REALES",
     title: "Con quiénes hemos trabajado.",
     lead: "Entidades públicas, empresas y organizaciones con las que el equipo ha construido, operado o acompañado sistemas.",
+    partners: "Partnerships",
     groups: {
       public: "Instituciones públicas",
       private: "IPS y empresas privadas",
@@ -182,6 +183,7 @@ export const homeCopyEs: HomeCopy = {
     statementTitle: "EXPERIENCIA Y ALIANZAS",
     relationExperience: "Experiencia",
     clientNotes: {
+      "/brand/clients/sonda.png": "Aliado de tecnología",
       "/brand/clients/alcaldia-buritica.png": "Gestión pública territorial",
       "/brand/clients/alcaldia-yali.png": "Gestión pública territorial",
       "/brand/clients/alcaldia-santo-domingo.png": "Gestión pública territorial",

@@ -1,6 +1,12 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { clientGroups, clientLogos, clientNames, type ClientGroup } from "@/content/clients";
+import {
+  clientGroups,
+  clientLogos,
+  clientNames,
+  partnerLogos,
+  type ClientGroup,
+} from "@/content/clients";
 import { homeCopyEs } from "@/content/copy/es";
 import type { ClientWallCopy, ExperienceRailCopy } from "@/content/copy/types";
 import ui from "./v5.module.css";
@@ -8,6 +14,8 @@ import styles from "./LogoWall.module.css";
 import { WallPause } from "./WallPause.client";
 
 /**
+ * Encima va una fila fija, sin movimiento, con las alianzas (`partnerLogos`).
+ *
  * El muro de relaciones en tres cintas, una por grupo (instituciones públicas,
  * IPS y empresas privadas, alcaldías), cada una con su rótulo fijo. El orden
  * de `content/clients.ts` es el de cada cinta: abre la organización más grande
@@ -27,7 +35,10 @@ const SECONDS_PER_ITEM = 5.5;
 /** Cuántos logos abren cada grupo en tamaño grande. */
 const LEADING = 3;
 
-type Logo = (typeof clientLogos)[number];
+type Logo = Pick<
+  (typeof clientLogos)[number] | (typeof partnerLogos)[number],
+  "src" | "name" | "width" | "height" | "renderWidth"
+>;
 type Named = (typeof clientNames)[number];
 type Entry = { kind: "logo"; client: Logo } | { kind: "named"; client: Named };
 
@@ -116,6 +127,24 @@ export function LogoWall({
         aria-label={copy.logoWallAriaLabel}
         data-reveal="quiet"
       >
+        {partnerLogos.length > 0 ? (
+          <div className={styles.row}>
+            <h3 className={styles.rowLabel} id={`${id}-partners`}>
+              {heading.partners}
+            </h3>
+            <ul className={styles.partnerTrack} aria-labelledby={`${id}-partners`}>
+              {partnerLogos.map((client) => (
+                <WallItem
+                  entry={{ kind: "logo", client }}
+                  leading
+                  copy={copy}
+                  hidden={false}
+                  key={client.name}
+                />
+              ))}
+            </ul>
+          </div>
+        ) : null}
         {clientGroups.map((group, index) => {
           const entries = entriesFor(group);
           if (entries.length === 0) return null;

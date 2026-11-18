@@ -245,6 +245,7 @@ export const homeCopyEn: HomeCopy = {
     eyebrow: "REAL RELATIONSHIPS",
     title: "Who we have worked with.",
     lead: "Public institutions, companies and organizations the team has built, operated or supported systems for.",
+    partners: "Partnerships",
     groups: {
       public: "Public institutions",
       private: "Healthcare providers and private companies",
@@ -266,6 +267,7 @@ export const homeCopyEn: HomeCopy = {
     statementTitle: "EXPERIENCE AND ALLIANCES",
     relationExperience: "Experience",
     clientNotes: {
+      "/brand/clients/sonda.png": "Technology partner",
       "/brand/clients/alcaldia-buritica.png": "Territorial public management",
       "/brand/clients/alcaldia-yali.png": "Territorial public management",
       "/brand/clients/alcaldia-santo-domingo.png": "Territorial public management",
