@@ -1,7 +1,8 @@
 """Carrusel para pauta · «The State of the Art of AI in LATAM» · 10-dic-2026, 7:00 PM, Consulado de Colombia en San Francisco.
 
-Seis láminas de 1080 × 1350 en el sistema blanco de la pieza elegida (build.d_blanco, versión «busto»):
-  1 portada → 2 el gancho (15×) → 3 adopción vs. capital → 4 cinco brechas por sector → 5 quiénes hablan → 6 cierre.
+Siete láminas de 1080 × 1350 en el sistema blanco de la pieza elegida (build.d_blanco, versión «busto»):
+  1 portada → 2 el gancho (15×) → 3 adopción vs. capital → 4 cinco brechas por sector → 5 gobierno (vertical principal
+  de INPLUX) → 6 quiénes hablan → 7 cierre.
 Público: fundadores e inversionistas en San Francisco que quieren entender el ecosistema; por eso va en inglés.
 Promesa: oírlo de primera mano de fundadores que construyen en América Latina, con los datos como gancho.
 
@@ -16,7 +17,7 @@ AQUI = Path(__file__).parent
 _spec = importlib.util.spec_from_file_location("build", AQUI / "build.py")
 b = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(b)
 TINTA, GRIS, TEAL, FILETE, BLANCO = b.TINTA, b.GRIS, b.TEAL_OSC, b.FILETE, b.BLANCO
-N = 6
+N = 7
 EVENTO = "The State of the Art of AI in LATAM"   # el nombre del evento no se traduce
 IDIOMA = "en"
 
@@ -170,7 +171,41 @@ def l4_brechas():
                     f'{t("We’ll walk through each one on Dec 10.", "El 10 de diciembre recorremos cada una.")}</div>')
 
 
-# ───────── 5 · quiénes hablan ─────────
+# ───────── 5 · gobierno, la vertical principal de INPLUX ─────────
+def l5_gobierno():
+    """Cifras: OCDE, Government at a Glance: Latin America and the Caribbean 2024, sección 7.1 «Size of public procurement»
+    (leída el 17-nov-2026): compras públicas = 17,4 % del gasto público total (2021) y 6,6 % del PIB (2019-2021);
+    41,7 % de esas compras las hacen los gobiernos locales y 33,5 % el nivel central (2021).
+    Gobia: «Hacer visible la operación de un municipio» y «centro de mando» son textos del sitio (src/content/work.ts)."""
+    def dato(y, num, texto, nota):
+        return f"""<div style="position:absolute;left:72px;right:72px;top:{y}px;height:222px;border-top:1.5px solid {FILETE};display:flex;align-items:center;gap:36px">
+  <div style="width:{t(410, 450)}px;font-size:150px;font-weight:700;letter-spacing:-.055em;line-height:1;color:{TINTA};white-space:nowrap">{num}</div>
+  <div style="flex:1">
+    <div style="font-size:33px;font-weight:600;letter-spacing:-.025em;line-height:1.14;color:{TINTA}">{texto}</div>
+    <div style="margin-top:10px;font-size:22px;line-height:1.3;color:{GRIS}">{nota}</div>
+  </div>
+</div>"""
+    tarjeta = f"""<div style="position:absolute;left:72px;right:72px;top:872px;background:{TINTA};border-radius:18px;padding:34px 40px">
+  <div style="{MICRO};color:#15dcc4">{t("That’s where INPLUX works", "Ahí trabaja INPLUX")}</div>
+  <div style="margin-top:14px;font-size:35px;font-weight:500;letter-spacing:-.025em;line-height:1.16;color:#fff">{t(
+      "We build Gobia: a command center that makes a municipality’s operation visible.",
+      "Construimos Gobia: un centro de mando que hace visible la operación de un municipio.")}</div>
+</div>"""
+    return lamina(5, kicker(t("Government · INPLUX’s main vertical", "Gobierno · la vertical principal de INPLUX"))
+                  + titular(t("The biggest buyer in the region<br>is the State.", "El mayor comprador de la región<br>es el Estado."), 232, 66)
+                  + dato(400, t("17.4%", "17,4\u202f%"), t("of all government spending is public procurement.", "de todo el gasto público son compras públicas."),
+                         t("That is 6.6% of the region’s GDP.", "Es el 6,6 % del PIB de la región."))
+                  + dato(622, t("41.7%", "41,7\u202f%"), t("of that procurement is done by local governments.", "de esas compras las hacen los gobiernos locales."),
+                         t("Central governments: 33.5%.", "Los gobiernos centrales: 33,5 %."))
+                  + f'<div style="position:absolute;left:72px;right:72px;top:844px;height:1.5px;background:{FILETE}"></div>'
+                  + tarjeta
+                  + f'<div style="position:absolute;left:72px;right:72px;top:1118px;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.25;color:{TINTA}">'
+                    f'{t("On Dec 10: what it takes to sell and ship AI to governments in Latin America.", "El 10 de diciembre: qué exige venderle y entregarle IA al Estado en América Latina.")}</div>'
+                  + fuente(t("Source: OECD, Government at a Glance: Latin America and the Caribbean 2024, section 7.1 (2021 data).",
+                             "Fuente: OCDE, Government at a Glance: Latin America and the Caribbean 2024, sección 7.1 (datos de 2021)."), 1218))
+
+
+# ───────── 6 · quiénes hablan ─────────
 TEMAS = [  # PROPUESTA de Claude: confirmar con Cristian, Jaime y Santiago que este es el temario
     "Where the demand is, sector by sector",
     "What it takes to ship AI in production in the region",
@@ -196,7 +231,7 @@ def l5_quienes():
     personas = "".join(persona(i, *p) for i, p in enumerate(ponentes(), 1))
     temas = "".join(f'<div style="display:flex;gap:16px;margin-top:18px;font-size:33px;line-height:1.25;color:{TINTA}">'
                     f'<span style="color:{TEAL};font-weight:600">→</span><span>{x}</span></div>' for x in t(TEMAS, TEMAS_ES))
-    return lamina(5, kicker(t("Who you’ll hear from", "A quiénes vas a oír"))
+    return lamina(6, kicker(t("Who you’ll hear from", "A quiénes vas a oír"))
                   + titular(t("Not a report.<br>Founders who build there.", "No es un informe.<br>Fundadores que construyen allá."), 232, t(74, 66))
                   + f'<div style="position:absolute;left:72px;right:72px;top:404px;font-size:28px;line-height:1.32;color:{GRIS}">'
                     f'{t("A talk, a panel and an open conversation with people building and studying AI in Latin America.", "Una charla, un panel y una conversación abierta con quienes construyen y estudian la IA en América Latina.")}</div>'
@@ -204,7 +239,7 @@ def l5_quienes():
                   + f'<div style="position:absolute;left:72px;right:72px;top:1030px"><div style="{MICRO};color:{GRIS}">{t("What you’ll leave with", "Lo que te llevas")}</div>{temas}</div>')
 
 
-# ───────── 6 · cierre ─────────
+# ───────── 7 · cierre ─────────
 def l6_cierre():
     def celda(rotulo, valor, detalle):
         return f"""<div style="padding:26px 0;border-top:1.5px solid {FILETE};display:flex;align-items:baseline">
@@ -212,7 +247,7 @@ def l6_cierre():
   <div><div style="font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1.05;color:{TINTA}">{valor}</div>
   <div style="margin-top:8px;font-size:25px;color:{GRIS}">{detalle}</div></div>
 </div>"""
-    return lamina(6, kicker(t("Join us", "Te esperamos"))
+    return lamina(7, kicker(t("Join us", "Te esperamos"))
                   + titular(t("Come hear it<br>first-hand.", "Ven a oírlo<br>de primera mano."), 232, t(128, 112))
                   + f'<div style="position:absolute;left:72px;right:72px;top:560px;border-bottom:1.5px solid {FILETE}">'
                   + celda(t("When", "Cuándo"), f"{fecha()} · {hora()}", t("Talk · Panel · Networking", "Charla · Panel · Networking"))
@@ -225,7 +260,8 @@ def l6_cierre():
 
 PIEZAS = {
     "carrusel_1_portada": l1_portada, "carrusel_2_gancho": l2_gancho, "carrusel_3_adopcion": l3_adopcion,
-    "carrusel_4_brechas": l4_brechas, "carrusel_5_quienes": l5_quienes, "carrusel_6_cierre": l6_cierre,
+    "carrusel_4_brechas": l4_brechas, "carrusel_5_gobierno": l5_gobierno, "carrusel_6_quienes": l5_quienes,
+    "carrusel_7_cierre": l6_cierre,
 }
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
