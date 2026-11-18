@@ -17,6 +17,21 @@ export const clientGroups = ["public", "private", "municipal"] as const;
 export type ClientGroup = (typeof clientGroups)[number];
 
 /**
+ * Las alianzas (partnerships): van en una fila fija encima de las cintas, sin
+ * movimiento. No pertenecen a ningún grupo de cinta. SONDA autorizó mencionarla
+ * como aliado y usar su logo (Cristian, 12-nov-2026).
+ */
+export const partnerLogos = [
+  {
+    src: "/brand/clients/sonda.png",
+    name: "SONDA",
+    width: 600,
+    height: 114,
+    renderWidth: 150,
+  },
+] as const;
+
+/**
  * El orden de la lista ES el orden de cada cinta: dentro de su grupo va
  * primero la organización de mayor tamaño (las alcaldías, por población del
  * municipio), y las tres primeras de cada grupo se dibujan más grandes.
@@ -34,15 +49,6 @@ export const clientLogos = [
     width: 300,
     height: 222,
     renderWidth: 70,
-  },
-  {
-    src: "/brand/clients/experience-06-transparent.png",
-    name: "Empresa de Desarrollo Urbano",
-    relation: "partner-experience",
-    group: "public",
-    width: 367,
-    height: 138,
-    renderWidth: 138,
   },
   {
     src: "/brand/clients/politecnico-jaime-isaza.png",

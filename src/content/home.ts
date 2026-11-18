@@ -40,7 +40,7 @@ export const portfolio: Array<{
     description: "Consulta y herramientas tributarias con fuentes visibles.",
     access: "Público",
     href: "/trabajo/tribai",
-    verifiedAt: "2026-07-15",
+    verifiedAt: "2026-11-18",
   },
   {
     name: "Gobia",
@@ -48,7 +48,7 @@ export const portfolio: Array<{
     description: "Información y seguimiento municipal en un solo entorno.",
     stage: "Piloto activo",
     href: "/trabajo/gobia",
-    verifiedAt: "2026-07-15",
+    verifiedAt: "2026-11-18",
   },
   {
     name: "Kelsen",
@@ -56,7 +56,7 @@ export const portfolio: Array<{
     description: "Investigación jurídica con trazabilidad a la fuente.",
     access: "Por solicitud",
     href: "/trabajo/kelsen",
-    verifiedAt: "2026-07-15",
+    verifiedAt: "2026-11-18",
   },
   {
     name: "Laudos",
@@ -65,7 +65,7 @@ export const portfolio: Array<{
     stage: "Beta",
     access: "Abierto",
     href: "/trabajo/laudos",
-    verifiedAt: "2026-07-15",
+    verifiedAt: "2026-11-18",
   },
   {
     name: "Porkia",
