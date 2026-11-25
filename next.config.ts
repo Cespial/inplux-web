@@ -55,6 +55,10 @@ const nextConfig: NextConfig = {
         { source: "/deck", destination: "/deck/index.html" },
         { source: "/adeli", destination: "/adeli/index.html" },
         { source: "/inmerxia", destination: "/inmerxia/index.html" },
+        // Invitaciones a «The State of the Art of AI in LATAM» (SF, 10-dic-2026):
+        // el sitio estático vive en el proyecto Vercel invite-inplux, servido bajo /sf.
+        { source: "/sf", destination: "https://invite-inplux.vercel.app/sf/" },
+        { source: "/sf/:path*", destination: "https://invite-inplux.vercel.app/sf/:path*" },
       ],
       afterFiles: [],
       fallback: [],
